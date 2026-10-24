@@ -4646,3 +4646,9 @@ Trading ha anche i future e l'accesso da programma (`demo-fapi.binance.com`). Pr
 decisione di G1 ordini veri sul conto demo (limite al mark per un'ora, poi a mercato), il conto letto ogni ora, in dashboard
 accanto al paper (voce P25). Il codice parla solo con l'indirizzo demo e lavora solo con la chiave del conto demo nel `.env` della
 macchina, che deve creare il proprietario. Test in `tests/test_demo_binance.py`.
+**Programma 8, lo spot** (24 ottobre; il proprietario: «abbiamo sempre operato in future ma mai in spot [...] possiamo rieseguire le
+strategie anche in spot e vedere cosa cambia?»; `research/programma8/`): nello spot si può solo comprare (niente lato short, niente
+N3 ed E4), le commissioni sono lo 0,10% e non c'è il funding. Il lato long di F5 comprato a pronti: Sharpe 0,43 a settimana e 0,44
+ogni giorno, con discese del 90% (2022, 2025); il paniere delle stesse monete 0,36, il Bitcoin tenuto 0,58. La scelta delle monete
+aggiunge 4-6 punti l'anno ma non in modo sicuro. Capito: F5 guadagna perché tiene insieme long e short (il mercato si annulla); senza
+la copertura resta il rischio delle altcoin. Le strategie restano sui future. Nel conto: 139 prove.

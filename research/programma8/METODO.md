@@ -20,3 +20,12 @@ una mia precisa richiesta, possiamo per favore rieseguire le strategie anche in 
   giorno come G1 (**S2**).
 * Gli indicatori tecnici e lo scalping non si rifanno: nelle prove sui future perdevano già **prima** dei costi (prove 34-39, 46,
   54, 58, 60), e nello spot i costi sono più alti. Scritto qui per non perderlo.
+
+## 3. Cosa è venuto fuori (prova 73, `RISULTATI_PRIMA.md`)
+
+Comprare a pronti il lato long di F5 rende come il mercato delle altcoin, con le sue cadute: Sharpe 0,43 (a settimana) e 0,44 (ogni
+giorno), discesa del 90-91% (2022 e 2025), contro 0,36 del paniere delle stesse monete e 0,58 del Bitcoin tenuto. La scelta delle
+monete dal funding aggiunge 4-6 punti l'anno sul paniere, ma non in modo sicuro (p 0,21-0,25). **Il vantaggio di F5 sta nel tenere
+insieme long e short** (il mercato si annulla e resta la differenza fra monete affollate e trascurate): nello spot, senza vendite
+allo scoperto, resta solo il rischio del mercato. Per questo le strategie restano sui future; nello spot servirebbero idee diverse
+(che non abbiano bisogno di vendere), da scrivere nella coda unica.
