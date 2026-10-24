@@ -117,7 +117,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa abbiamo capito il 24 ottobre
 
-* **Sul 2016-2024 nessuna delle 8 idee batte il comprare e tenere** (13 prove nel conto, più l'apertura del periodo chiuso). Gli effetti
+* **Sul 2016-2024 nessuna delle 8 idee batte il comprare e tenere** (14 prove più l'apertura del periodo chiuso: 15 nel conto). Gli effetti
   studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
   rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
   durissimo: tenere le 10 più scambiate a pesi uguali ha fatto Sharpe 0,94, più dello SPY (0,87).
