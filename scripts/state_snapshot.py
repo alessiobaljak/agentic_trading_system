@@ -111,6 +111,7 @@ def build() -> str:
     lines += sezione_paper_f5(fb, ramo="/paper_g11", titolo="## Paper G11 (G1 con il funding fresco, a confronto con G1)",
                               interruttore="ops/paper_g11_acceso")
     lines += sezione_paper_eventi(fb)
+    lines += sezione_demo_binance(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -587,6 +588,33 @@ def sezione_paper_eventi(fb) -> list:
     if isinstance(aperte, dict) and aperte:
         righe.append("- aperte: " + ", ".join(f"{p.get('tipo')} {p.get('simbolo')} {100 * float(p.get('rendimento_ora') or 0):+.1f}% "
                                               f"(fino al {p.get('uscita_giorno')})" for p in aperte.values() if isinstance(p, dict)))
+    return righe + [""]
+
+
+def sezione_demo_binance(fb) -> list:
+    """Le righe di G1 sul conto demo di Binance (RTDB /demo_binance): stato, equity, ordini limite, ultimo errore."""
+    titolo = "## G1 sul conto demo di Binance (ordini veri, soldi finti)"
+    st = fb.get_rtdb("/demo_binance/stato") or {}
+    if not isinstance(st, dict) or not st:
+        return [titolo, "- spento o mai partito (manca `ops/demo_binance_acceso`, o il bot non è stato riavviato)", ""]
+    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    if st.get("equity") is not None:
+        righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
+                     f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short · "
+                     f"ordini limite eseguiti {st.get('limite_eseguiti', 0)} su {st.get('limite_totali', 0)} · in attesa "
+                     f"{st.get('ordini_in_attesa', 0)}")
+    rib = fb.get_rtdb("/demo_binance/ribilanciamenti") or {}
+    if isinstance(rib, dict) and rib:
+        g = max(rib)
+        x = rib[g] if isinstance(rib[g], dict) else {}
+        lim = x.get("limite") or {}
+        righe.append(f"- ultima decisione {g}: {x.get('ordini', 0)} ordini"
+                     + (f", eseguiti a limite {lim.get('eseguiti_a_limite', 0)}, a mercato {lim.get('a_mercato', 0)}" if lim else "")
+                     + (f"; monete che sul demo non ci sono: {', '.join(x['monete_mancanti_sul_demo'])}"
+                        if x.get("monete_mancanti_sul_demo") else ""))
+    err = fb.get_rtdb("/demo_binance/errore") or {}
+    if isinstance(err, dict) and err:
+        righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
     return righe + [""]
 
 
