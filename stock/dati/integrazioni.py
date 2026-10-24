@@ -69,3 +69,24 @@ def confronta_dividendi(nostri: pd.DataFrame, altri: dict[date, float], fraziona
         elif abs(a - b) > tolleranza * max(abs(a), 1e-9):
             out.append({"data": d, "nostro": a, "altro": b, "tipo": "importo diverso"})
     return out
+
+
+def valuta_scissioni(azioni: pd.DataFrame, apertura) -> tuple[pd.DataFrame, list[str]]:
+    """Le scissioni diventano un incasso in contanti il giorno di stacco: rapporto × apertura del titolo
+    nuovo quel giorno (chi le riceve potrebbe venderle subito). `apertura(simbolo, giorno)` restituisce
+    il prezzo o None. Restituisce le azioni societarie con le scissioni trasformate in dividendi, e
+    l'elenco di quelle senza prezzo (che restano fuori e vanno dette)."""
+    if azioni.empty or "nuovo" not in azioni or not (azioni["tipo"] == "scissione").any():
+        return azioni, []
+    righe, mancanti = [], []
+    for _, a in azioni.iterrows():
+        if a["tipo"] != "scissione":
+            righe.append(a.to_dict())
+            continue
+        p = apertura(a["nuovo"], a["data"])
+        if p is None:
+            mancanti.append(f"{a['data']} {a['nuovo']}")
+            continue
+        righe.append({"data": a["data"], "tipo": "dividendo", "rapporto": 1.0, "importo": float(a["rapporto"]) * p,
+                      "nuovo": a["nuovo"]})
+    return pd.DataFrame(righe).sort_values(["data", "tipo"]).reset_index(drop=True), mancanti

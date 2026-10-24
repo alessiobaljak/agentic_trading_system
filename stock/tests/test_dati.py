@@ -192,3 +192,15 @@ def test_confronto_dividendi_riporta_gli_importi_divisi_per_i_frazionamenti():
     altri = {date(2020, 8, 7): 0.205, date(2020, 11, 6): 0.205, date(2021, 5, 7): 0.22}
     d = confronta_dividendi(nostri, altri, {date(2020, 8, 31): 4.0})
     assert [(str(x["data"]), x["tipo"]) for x in d] == [("2021-02-05", "manca a loro"), ("2021-05-07", "manca a noi")]
+
+
+def test_scissione_valutata_come_incasso():
+    from stock.dati.integrazioni import valuta_scissioni
+    a = pd.DataFrame([{"data": date(2023, 1, 4), "tipo": "scissione", "rapporto": 1 / 3, "importo": 0.0, "nuovo": "GEHC"},
+                      {"data": date(2023, 3, 1), "tipo": "dividendo", "rapporto": 1.0, "importo": 0.08, "nuovo": ""},
+                      {"data": date(2024, 4, 2), "tipo": "scissione", "rapporto": 0.25, "importo": 0.0, "nuovo": "GEV"}])
+    prezzi = {("GEHC", date(2023, 1, 4)): 60.0}
+    v, mancanti = valuta_scissioni(a, lambda s, d: prezzi.get((s, d)))
+    assert list(v["tipo"]) == ["dividendo", "dividendo"]
+    assert v["importo"].iloc[0] == pytest.approx(20.0)
+    assert mancanti == ["2024-04-02 GEV"]

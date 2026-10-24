@@ -127,17 +127,18 @@ def quotazioni(simbolo: str, inizio: datetime, fine: datetime, feed: str = "sip"
 
 
 def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.DataFrame:
-    """Frazionamenti (anche inversi) e dividendi in contanti, con la data di stacco.
+    """Frazionamenti (anche inversi), dividendi in contanti e scissioni, con la data di stacco.
 
-    Colonne: data (giorno di stacco, New York), tipo ("frazionamento" o "dividendo"),
-    rapporto (azioni nuove per azione vecchia, solo frazionamenti), importo (dollari per azione,
-    solo dividendi). Alpaca accetta al massimo un anno per richiesta: si va a pezzi."""
+    Colonne: data (giorno di stacco, New York), tipo ("frazionamento", "dividendo" o "scissione"),
+    rapporto (azioni nuove per azione vecchia: del titolo stesso per i frazionamenti, del titolo
+    nuovo per le scissioni), importo (dollari per azione, solo dividendi), nuovo (il simbolo del
+    titolo staccato, solo scissioni). Alpaca accetta al massimo un anno per richiesta: si va a pezzi."""
     righe: list[dict] = []
     da = inizio.date() if isinstance(inizio, datetime) else inizio
     a = fine.date() if isinstance(fine, datetime) else fine
     while da <= a:
         fino = min(a, da + timedelta(days=360))
-        parametri = {"symbols": simbolo, "types": "forward_split,reverse_split,cash_dividend",
+        parametri = {"symbols": simbolo, "types": "forward_split,reverse_split,cash_dividend,spin_off",
                      "start": da.isoformat(), "end": fino.isoformat(), "limit": 1000}
         while True:
             j = _get(f"{DATI_URL}/v1/corporate-actions", parametri)
@@ -149,12 +150,19 @@ def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.Data
             for x in ca.get("cash_dividends", []):
                 righe.append({"data": x["ex_date"], "tipo": "dividendo", "rapporto": 1.0,
                               "importo": float(x["rate"])})
+            for x in ca.get("spin_offs", []):
+                if x.get("source_symbol") != simbolo:
+                    continue
+                righe.append({"data": x["ex_date"], "tipo": "scissione",
+                              "rapporto": float(x["new_rate"]) / float(x["source_rate"]), "importo": 0.0,
+                              "nuovo": x["new_symbol"]})
             token = j.get("next_page_token")
             if not token:
                 break
             parametri["page_token"] = token
         da = fino + timedelta(days=1)
-    df = pd.DataFrame(righe, columns=["data", "tipo", "rapporto", "importo"])
+    df = pd.DataFrame(righe, columns=["data", "tipo", "rapporto", "importo", "nuovo"])
+    df["nuovo"] = df["nuovo"].fillna("")
     if not df.empty:
         df["data"] = pd.to_datetime(df["data"]).dt.date
         df = df.drop_duplicates().sort_values(["data", "tipo"]).reset_index(drop=True)
