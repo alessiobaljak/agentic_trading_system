@@ -1,55 +1,72 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-21.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-22.zip",
  "procedure": {
   "N-001": {
-   "trade": 3,
+   "trade": 9,
    "netto": {
-    "n": 3,
-    "media": NaN,
-    "basso": NaN,
-    "alto": NaN,
-    "p": NaN
+    "n": 9,
+    "giorni": 3,
+    "media": 0.005259426894471739,
+    "basso": -0.11329880388756029,
+    "alto": 0.38873489350587626,
+    "p": 0.41405859414058593
    },
-   "netto_doppio": 0.2168610640655695,
-   "caso_netto": -0.003647685300813782,
-   "senza_migliore": -0.0818204627618527,
+   "netto_doppio": 0.0034594268944717396,
+   "caso_netto": -0.007906031585848865,
+   "senza_migliore": -0.10430499213735814,
    "per_moneta": {
     "AVAUSDT": {
+     "trade": 2,
+     "netto": -0.0589136315462718
+    },
+    "GUSDT": {
      "trade": 1,
-     "netto": -0.16443787843229282
+     "netto": -0.06388588957055205
     },
     "IOSTUSDT": {
+     "trade": 2,
+     "netto": 0.21702571856578728
+    },
+    "LITUSDT": {
      "trade": 1,
-     "netto": 0.819624117720414
+     "netto": -0.056705537459283396
     },
     "PHAUSDT": {
      "trade": 1,
      "netto": 0.0007969529085874133
+    },
+    "REZUSDT": {
+     "trade": 1,
+     "netto": -0.04215433070866146
+    },
+    "VTHOUSDT": {
+     "trade": 1,
+     "netto": -0.10694052715887578
     }
    },
-   "esito": "in corso (3 trade chiusi su 400)"
+   "esito": "in corso (9 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 6,
+   "trade": 7,
    "netto": {
-    "n": 6,
+    "n": 7,
     "giorni": 2,
-    "media": 0.037470510349123215,
-    "basso": 0.008502864408317237,
-    "alto": 0.09540580223073516,
+    "media": 0.00609584290136046,
+    "basso": 0.002886480892084755,
+    "alto": 0.008502864408317237,
     "p": 9.999000099990002e-05
    },
-   "netto_doppio": 0.03567051034912321,
-   "caso_netto": -0.0011649671849651296,
-   "senza_migliore": 0.008502864408317237,
+   "netto_doppio": 0.004295842901360454,
+   "caso_netto": -0.0013999631587293655,
+   "senza_migliore": 0.002886480892084755,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
      "netto": -0.004693975269665838
     },
     "IOSTUSDT": {
-     "trade": 2,
-     "netto": 0.09540580223073516
+     "trade": 3,
+     "netto": 0.002886480892084755
     },
     "LITUSDT": {
      "trade": 1,
@@ -64,7 +81,7 @@
      "netto": 0.015867844522968324
     }
    },
-   "esito": "in corso (6 trade chiusi su 400)"
+   "esito": "in corso (7 trade chiusi su 400)"
   },
   "N-003": {
    "trade": 0,
