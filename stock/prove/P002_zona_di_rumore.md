@@ -45,3 +45,16 @@ con il conto di tutte le prove delle azioni (le 2 della prova 1 e queste 2), gru
 (3) Sharpe sopra zero con i costi doppi; (4) almeno il 60% dei trimestri di prova in guadagno. **In più** (dal `METODO.md`, sezione 1,
 che la prova 1 non controllava per QQQ): lo Sharpe deve battere anche il comprare e tenere **lo stesso titolo** (SPY per lo SPY, QQQ
 per QQQ).
+
+## L'esame nel periodo chiuso (scritto il 24 ottobre 2026, dopo la revisione e prima di aprirlo)
+
+Solo per QQQ (lo SPY è bocciato). Periodo: dal 2 gennaio 2025 al 30 settembre 2026. Stesso programma, stesse regole, stessi costi (lo
+scarto è quello misurato sul 2016-2024, non lo si rimisura sul periodo chiuso prima del calcolo). Si apre **una volta sola**: il
+risultato vale com'è, senza ritocchi. QQQ passa se sono vere **tutte**:
+
+1. Sharpe annuo con i costi più alto di quello del comprare e tenere lo SPY e del comprare e tenere QQQ sugli stessi giorni (`METODO.md`,
+   sezione 7: al demo va una strategia che batte l'indice dopo i costi).
+2. Sharpe annuo con i costi raddoppiati sopra zero.
+3. Almeno 4 trimestri su 7 in guadagno dopo i costi.
+
+Se passa, la strategia può andare sul conto demo (quando ci sarà). Se non passa, è bocciata e si scrive nel registro.
