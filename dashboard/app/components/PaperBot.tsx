@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
+import AndamentoPaper from './AndamentoPaper';
 
 /**
  * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5, G1 e G11 (bot/portafoglio/f5.py) e le monete
@@ -151,6 +152,9 @@ export default function PaperBot() {
       <p className="muted" style={{ margin: '0 0 8px', fontSize: 12.5 }}>
         Le strategie nuove eseguite dal bot sulla macchina con i prezzi del momento, ognuna con 10.000 dollari virtuali.
       </p>
+
+      <AndamentoPaper />
+      <div style={{ marginTop: 10 }} />
 
       <Portafoglio ramo="paper_f5" titolo="Funding con la banda, cambio ogni lunedì (F5)"
         inizio="il primo cambio vero è il lunedì alle 00:05 UTC." />
