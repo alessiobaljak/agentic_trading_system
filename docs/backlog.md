@@ -152,7 +152,7 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
-### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; CODICE PRONTO, aspetta la chiave
+### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; ACCESO dal 24 ott, 09:11 UTC
 **Perché:** il proprietario (24 ott): «perché per le crypto non usiamo Binance demo per simulare i nostri ordini (un paper live)?».
 Binance Demo Trading ha i future USDⓈ-M e l'accesso da programma (`demo-fapi.binance.com`, documentazione ufficiale): gli ordini
 veri mostrano quello che il nostro paper solo ipotizza (esecuzione degli ordini limite, dimensioni minime, rifiuti, saldo e funding
@@ -163,6 +163,7 @@ l'indirizzo demo (`_url` rifiuta gli altri). **Manca:** la chiave del conto demo
 API Management, solo trading dei future, niente prelievi, e la mette nel `.env` della macchina come `BINANCE_DEMO_API_KEY` e
 `BINANCE_DEMO_API_SECRET`), poi un riavvio del bot. **Metro:** G1 sul demo contro G1 nel paper, settimana per settimana; la quota
 di ordini limite eseguiti sul demo contro quella del paper (40 su 40 il 24 ottobre).
+**Acceso** (24 ott): chiave messa dal proprietario, bot riavviato alle 08:25 UTC. Due errori al primo ribilancio, corretti in giornata: l'identificativo degli ordini con i caratteri di una moneta dal nome cinese (rifiutato da Binance, il ribilancio si fermava) e il secondo tentativo con lo stesso identificativo («ClientOrderId is duplicated»); ora gli ordini aperti di un tentativo interrotto si annullano prima, l'identificativo cambia a ogni tentativo e un rifiuto non ferma gli altri. Alle 09:11 UTC: 20 long e 18 short, equity 4.993,15 USDT; 龙虾USDT rifiutata («Invalid symbol»), da capire. **Non si possono mettere tutte le strategie sullo stesso conto**: un conto tiene una posizione per moneta, e F5, G1 e G11 hanno spesso le stesse monete.
 
 ### P24. Niente entrate del paper su contratti in chiusura — trovata e FATTA il 23 ott 2026 (revisione di G12)
 **Perché:** due eventi di E4 erano su contratti che Binance ha tolto dal listino il giorno stesso (`research/programma7/

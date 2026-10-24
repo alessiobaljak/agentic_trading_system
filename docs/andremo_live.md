@@ -4668,3 +4668,10 @@ sblocchi) sui perpetui di Binance non si vede contro il Bitcoin e dopo i costi; 
 segno che molti si coprono già), e il giorno dello sblocco la moneta risale (−0,83% per lo short). Capito: una regolarità famosa e
 con le date pubbliche è già nei prezzi. Nel conto: 140 prove (17 a eventi). Correzione nel conto: le serie delle prove 70-73 non
 entravano nello Sharpe corretto delle prove dopo (`asticella.serie_programma7`); ora ci sono, anche G15.
+**G1 sul conto demo di Binance: acceso** (24 ottobre, 09:11 UTC; ops 0655-0662). Il proprietario ha messo la chiave e riavviato
+il bot alle 08:25 UTC. Il primo ribilancio si è fermato due volte: Binance rifiuta negli identificativi degli ordini i caratteri di
+una moneta con il nome cinese, e al secondo tentativo rifiuta lo stesso identificativo («ClientOrderId is duplicated»); i primi
+ordini però erano già partiti. Corretto: prima di contare le posizioni si annullano gli ordini rimasti aperti, l'identificativo
+cambia a ogni tentativo, un ordine rifiutato non ferma gli altri. Alle 09:11 il conto demo ha 20 long e 18 short, 4.993,15 USDT; una
+moneta rifiutata (龙虾USDT, «Invalid symbol»). Capito: il conto vero di Binance ha regole che il nostro paper non vede (i nomi
+ammessi, gli identificativi unici); è il motivo per cui serve il demo accanto al paper.
