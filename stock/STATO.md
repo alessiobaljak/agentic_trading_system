@@ -128,6 +128,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   trovati in automatico (`stock/universo/cambi_di_nome.csv`), azioni societarie dei 717 titoli. Restano piccoli difetti noti dei dati
   (fusioni con un simbolo nuovo e una storia diversa, per esempio Discovery → Warner Bros. Discovery: il titolo resta valutato all'ultima
   chiusura) che non cambiano gli esiti, bocciati con margini larghi.
+* **Le prove 14 e 15** (24 ottobre): la leva prima della banca centrale, giudicata solo sul periodo chiuso, è **bocciata** (nel 2025-2026
+  le 14 finestre con la leva hanno perso: +30,1% contro +32,7% del tenere lo SPY). **La prova 15 (più investiti quando il mercato è calmo)
+  è la prima che batte il tenere sullo Sharpe** (QQQ 1,08 contro 0,99; SPY 0,95 contro 0,93; perdite massime −23/24% contro circa −33%),
+  ma **non passa l'asticella corretta per i tentativi** (0,79 e 0,67 contro 0,95, con 27 prove nel conto): bocciata, come vuole il metodo.
+  Da proporre al proprietario: se aprire il periodo chiuso anche per lei (la regola dice di no).
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
@@ -135,7 +140,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa abbiamo capito il 24 ottobre
 
-* **Sul 2016-2024 nessuna delle 13 idee batte il comprare e tenere** (22 nel conto, comprese 2 aperture del periodo chiuso), né sulle 10 più grandi né su tutto l'S&P 500. Gli effetti
+* **Sul 2016-2024 solo un'idea su 15 batte il comprare e tenere sullo Sharpe** (la prova 15, più investiti quando il mercato è calmo), e non abbastanza per l'asticella (27 nel conto, comprese 3 aperture del periodo chiuso). La direzione del mercato non si indovina; la sua agitazione sì. Gli effetti
   studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
   rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
   durissimo: tenere le 10 più scambiate a pesi uguali ha fatto Sharpe 0,94, più dello SPY (0,87).
