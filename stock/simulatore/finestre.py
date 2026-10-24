@@ -1,8 +1,8 @@
 """Le finestre che avanzano (`METODO.md`, sezione 4) e la difesa del periodo chiuso.
 
 Le regole si scelgono su `mesi_scelta` mesi e si provano sui `mesi_prova` dopo; poi si avanza di
-`passo` mesi. Il periodo chiuso (la bozza propone dal 1 gennaio 2025, in attesa del sì del
-proprietario) non entra in nessuna finestra di ricerca.
+`passo` mesi. Il periodo chiuso (dal 1 gennaio 2025, approvato dal proprietario il 24 ottobre 2026)
+non entra in nessuna finestra di ricerca.
 """
 from __future__ import annotations
 

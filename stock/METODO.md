@@ -1,11 +1,11 @@
-# Il metodo delle azioni (bozza del 24 ottobre 2026)
+# Il metodo delle azioni (approvato il 24 ottobre 2026)
 
 Proposta della sessione «trading stock» dopo le indicazioni del proprietario del 24 ottobre 2026: «i mercati stock direi America …
 obbiettivo è di creare profitto ovviamente, sempre back testing se possibile poi paper demo live e poi soldi veri, non ho una strategia
 particolare puoi vendere e comprare in giornata puoi tenere per più giorni [...] per le strategie di ingresso e uscita o indicatori da
 usare scegli tu [...] direi di concentrarci per il momento sulle 10 top stock e poi capire se estendere».
 
-È una **bozza**: le parti segnate **(proposta)** cambiano rispetto a quello che ha chiesto il proprietario e aspettano il suo sì o no.
+Le parti segnate **(approvato)** sono state **approvate dal proprietario il 24 ottobre 2026** («Sì alle proposte del metodo»).
 Nessun calcolo è stato fatto: le regole di ogni prova si scrivono prima, in un file loro, con la riga in `REGISTRO.md`.
 
 ## 1. L'asticella: battere chi compra e tiene
@@ -18,7 +18,7 @@ ci riusciamo la risposta onesta è «compra l'indice».
 Accanto all'asticella dell'indice resta quella delle crypto: lo Sharpe corretto per i tentativi, con il conto di tutte le prove (anche le
 bocciate) in `REGISTRO.md` (`LEZIONI_DALLE_CRYPTO.md`, punto 2).
 
-## 2. I titoli **(proposta)**
+## 2. I titoli **(approvato)**
 
 * **Per il paper e il conto vero:** le 10 azioni americane più scambiate, come chiesto. Sono anche le più economiche da comprare e
   vendere (lo scarto fra acquisto e vendita è il più piccolo del mercato).
@@ -53,7 +53,7 @@ bocciate) in `REGISTRO.md` (`LEZIONI_DALLE_CRYPTO.md`, punto 2).
   l'indice i dividendi mancanti vanno presi da una seconda fonte (per lo SPY, lo storico delle distribuzioni pubblicato
   dall'emittente) e scritti a mano, con la fonte.
 
-## 4. I periodi **(proposta)**
+## 4. I periodi **(approvato)**
 
 * **Ricerca: gennaio 2016 → dicembre 2024**, con le finestre che avanzano come sulle crypto: le regole si scelgono su 12 mesi e si
   provano sui 3 dopo, poi si avanza di 3 mesi.
@@ -73,7 +73,7 @@ Non si parte dagli indicatori in sé (sulle crypto le regole con gli indicatori 
 prove: `LEZIONI_DALLE_CRYPTO.md`), ma da **effetti studiati con una ragione economica**; gli indicatori servono a misurarli. La coda,
 con l'ordine e il motivo, è in `REGISTRO.md`, sezione 2.
 
-## 7. Dal passato al demo, dal demo ai soldi veri **(proposta)**
+## 7. Dal passato al demo, dal demo ai soldi veri **(approvato)**
 
 Le condizioni si scrivono **adesso**, prima di vedere qualsiasi risultato:
 

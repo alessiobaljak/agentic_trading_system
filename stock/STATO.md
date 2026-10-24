@@ -12,12 +12,25 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 * Prezzi storici: conto demo gratuito di **Alpaca** (Trading API), chiavi messe dal proprietario nell'ambiente con i nomi
   `ALPACA_API_KEY_ID` e `ALPACA_API_SECRET_KEY` (24 ottobre). Mai scriverle, stamparle o committarle.
 
+* **Sì alle proposte di `METODO.md`** (24 ottobre): nelle prove sul passato le 10 azioni più scambiate *di allora* più SPY e QQQ;
+  l'indice come asticella; il periodo chiuso da gennaio 2025 a settembre 2026; le condizioni per il demo e per i soldi veri.
+* **Piattaforma del demo: Interactive Brokers** (24 ottobre).
+
 ## Cosa aspetta il proprietario
 
-1. **La piattaforma del demo**: Interactive Brokers (serve un deposito su un conto vero, che non verrà usato) o Saxo (gratis, prezzi
-   in ritardo di 15 minuti). Confronto in `piattaforme.md`.
-2. **Il sì o no alle proposte di `METODO.md`**: le 10 azioni *di allora* più SPY e QQQ nelle prove sul passato; l'indice come
-   asticella; il periodo chiuso (gennaio 2025 → settembre 2026); le condizioni per il demo e per i soldi veri.
+1. **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
+   farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
+   conto di paper trading: lì c'è il **nome utente del demo**, diverso da quello del conto vero, e conviene dargli una password sua
+   («Reset Paper Trading Password») [IB2]. Le credenziali non vanno mai scritte in chat né nel repository.
+2. **Dove gira il collegamento**, da decidere più avanti. Interactive Brokers non dà una chiave come Alpaca: per un conto privato il
+   programma parla con un piccolo programma di Interactive Brokers (il «Gateway»), che deve restare acceso su una macchina e fare il
+   login col nome utente del demo [IB3]. Questa sessione vive in un contenitore che si spegne: non può ospitarlo. Serve una macchina
+   sempre accesa (la VPS delle crypto, toccando la loro cartella `ops/` d'accordo con la loro sessione, o una macchina a parte).
+   Esiste anche un accesso senza Gateway (OAuth 1.0a); se valga per i conti privati è **da verificare** con Interactive Brokers.
+   Non serve adesso: il demo si usa solo quando una strategia avrà passato le prove sul passato (`METODO.md`, sezione 7).
+
+Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https://www.interactivebrokers.com/docs/web-api/authentication/paper ;
+[IB3] https://www.interactivebrokers.com/docs/web-api/web-api-v-1-0-documentation/authentication (lette tramite i risultati della ricerca, 24 ottobre).
 
 ## Cosa è fatto (24 ottobre, sessione nuova con le chiavi)
 
@@ -56,10 +69,10 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 
 ## Cosa non è fatto, e perché
 
-* **Nessuna prova di strategia**: aspetta il punto 2 qui sopra.
+* **Nessuna prova di strategia ancora**: il sì è arrivato il 24 ottobre; prima vanno sistemati i dividendi dello SPY e costruito l'universo «di allora».
 * **I prezzi del periodo chiuso** (dal 2025) non sono stati scaricati: per i controlli non servono, e così nessuno li vede.
 * **L'universo «di allora»** (le 10 più scambiate di ogni mese fra quelle allora nell'S&P 500) non è costruito: serve l'elenco
-  storico dei titoli dell'indice e il sì al punto 2. I 12 titoli di oggi sopra sono solo un banco di prova dei controlli.
+  storico dei titoli dell'indice (il sì è arrivato). I 12 titoli di oggi sopra sono solo un banco di prova dei controlli.
 * Il simulatore gira su un titolo alla volta e in Python puro: per due milioni di barre al minuto sarà lento (da misurare).
 
 ## Cosa si può fare senza aspettare
@@ -67,4 +80,6 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 * Prendere i dividendi mancanti dello SPY da una seconda fonte, scritta.
 * Verificare il salto di NVDA e il dividendo in più di QQQ su una seconda fonte.
 * Misurare lo scarto anche nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
-* Nessuna prova di strategia finché il proprietario non ha risposto al punto 2.
+* **Il prossimo passo**: l'elenco storico dei titoli dell'S&P 500 (https://github.com/fja05680/sp500, raggiungibile), da cui le 10
+  più scambiate di ogni mese; i dividendi mancanti dello SPY da una seconda fonte; poi la prima prova, con le regole scritte prima nel
+  registro.
