@@ -4695,3 +4695,8 @@ proposta al proprietario la copia simulata. Nel conto: 142 prove (19 a eventi).
 giorni [...] usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi se funziona andiamo live».
 Registrato come piano (voce P26 del backlog): G1 sul demo e nel paper per 1-2 settimane, poi il passaggio con una cifra piccola se
 lo chiede lui esplicitamente (la regola di `DRY_RUN` resta).
+**Prova 77, G18** (`programma7/VENTESIMA.md`): lo schema del trader 3 sul Bitcoin (vendere in alto nell'intervallo delle 4 ore dopo
+una salita, comprare in basso, obiettivo +0,3%, protezione −1,8%) con le candele a 1 minuto dal 2021: 16.214 operazioni, 85% vinte,
+zero prima dei costi e −0,09% dopo, ogni anno; anche nel periodo del trader −0,087%. Capito: con un obiettivo piccolo e una protezione
+larga si vince spesso per costruzione (una passeggiata a caso vince l'86% delle volte); il +0,31% del trader viene da qualcosa che le
+candele non mostrano (livelli, libro degli ordini, notizie). Nel conto: 143 prove.
