@@ -4709,3 +4709,8 @@ le monete che hanno già perso la leva quando il mercato scende): +0,40% in 3 gi
 Capito: con 10.000 caselle, i t intorno a 4-5 escono anche per caso, e le combinazioni del 2022-2023 non valgono nel 2024-2026 (nel
 2025 i massimi hanno continuato a salire). Il metodo con i due periodi separati ha fatto il suo lavoro: le ha fermate prima del
 paper. Nel conto: 146 prove.
+**Prova 78, G19** (`programma7/VENTUNESIMA.md`): comprare le monete piccole crollate in giornata (il lato long del trader 2), gennaio
+2025 – giugno 2026: 11.638 operazioni, 81% vinte, −0,25% a operazione; entrare a caso negli stessi giorni −3,41%; senza protezione
++0,76% ma con perdite fino a −95%; nel periodo del trader −0,70%. Capito: nei due versi (fiammate e crolli) il trader sceglie bene
+il minuto, ma un'uscita fissa piccola non basta a pagare le volte in cui il movimento continua; il suo guadagno dipende da come
+gestisce a giudizio le operazioni andate male. Nel conto: 146 prove (20 a eventi).
