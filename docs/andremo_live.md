@@ -4628,3 +4628,9 @@ Riavvio con la misura dello scarto (ops 0653, commit e2a07656): la prima misura 
 Giro della ricerca delle 00:18 senza una prova nuova: le idee rimaste in coda sono a probabilità bassa (scritte con il perché) o
 aspettano dati (il canale Telegram, il libro degli ordini, le date di chiusura dei future); il lavoro di questo giro è stato il
 controllo delle prime decisioni del paper e la misura dello scarto.
+**Sedicesima prova del programma 7, G14** (`programma7/SEDICESIMA.md`, giro delle 04:20): il premio di Coinbase sul Bitcoin, con
+le candele di Coinbase scaricate per la prima volta (50.508 ore). Long il Bitcoin quando il premio delle 24 ore prima è positivo,
+short quando è negativo: Sharpe 0,45, meno del Bitcoin tenuto (0,58). Il Bitcoin nei giorni a premio positivo fa +0,12% al giorno,
+in quelli a premio negativo +0,03%: un po' di informazione c'è, ma vendere nei giorni a premio negativo perde (il Bitcoin sale lo
+stesso). Capito: l'indicatore più seguito dai trader sulla domanda americana dice poco, e non abbastanza per batterla tenendo il
+Bitcoin. Nel conto: 137 prove.
