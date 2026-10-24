@@ -199,3 +199,26 @@ def test_prima_della_fed_entra_alle_14_del_giorno_prima_ed_esce_prima_del_comuni
     assert r.valore.iloc[-1] == pytest.approx(10_000 + q * (102 - 101))
     # un comunicato senza il giorno prima nel calendario salta
     assert c.prepara_prima_della_fed(b, cal, [pd.Timestamp("2020-01-28").date()], set())["saltati"]
+
+
+def test_giorni_speciali_unione_delle_due_finestre():
+    from stock.strategie import calendario as c
+    # gennaio 2020 con un comunicato il 29 (mercoledì): giorni di borsa = feriali (senza festività in questo caso finto)
+    giorni = [d.date() for d in pd.bdate_range("2020-01-02", "2020-02-28")]
+    cal = calendario([str(d) for d in giorni])
+    b = pd.concat([giornata(str(d), lambda i: 100.0) for d in giorni])
+    seg = c.prepara_giorni_speciali(b, cal, [pd.Timestamp("2020-01-29").date()])
+    t = b.index.tz_convert(NY)
+    dentro = pd.Series(seg["dentro"], index=t)
+    assert dentro[pd.Timestamp("2020-01-28 13:59", tz=NY)] == False      # noqa: E712
+    assert dentro[pd.Timestamp("2020-01-28 14:00", tz=NY)] and dentro[pd.Timestamp("2020-01-29 13:58", tz=NY)]
+    assert dentro[pd.Timestamp("2020-01-29 13:59", tz=NY)] == False      # noqa: E712
+    # gennaio 2020 feriale: 23 giorni, penultimo il 30; febbraio: dentro fino al 5 (terzo giorno), fuori il 6
+    assert dentro[pd.Timestamp("2020-01-30 09:30", tz=NY)] and dentro[pd.Timestamp("2020-02-05 15:59", tz=NY)]
+    assert dentro[pd.Timestamp("2020-02-06 09:30", tz=NY)] == False      # noqa: E712
+    assert dentro[pd.Timestamp("2020-01-29 15:00", tz=NY)] == False      # noqa: E712
+    r = simula(b, c.strategia_dentro(seg), Costi(), capitale=10_000)
+    ore = list(r.esecuzioni["t"].dt.tz_convert(NY).dt.strftime("%m-%d %H:%M"))
+    # nei primi giorni di gennaio (k ≤ 3) si è dentro dall'inizio: si compra alla seconda barra
+    assert ore[:3] == ["01-02 09:31", "01-07 09:30", "01-28 14:00"]
+    assert ore[3:6] == ["01-29 13:59", "01-30 09:30", "02-06 09:30"]

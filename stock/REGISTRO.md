@@ -17,7 +17,7 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 | 7 | Le 24 ore prima del comunicato della banca centrale, SPY e QQQ (`prove/P007_prima_della_fed.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe con i costi SPY 0,84, QQQ 0,89 (tenere 0,87 e 0,92) stando investiti 71 giorni su 2264; per evento +0,23% e +0,34% (t 2,9 e 3,0), 65% in guadagno; Sharpe corretto 0,75 e 0,81 (`prove/P007_risultati.md`) | **bocciata** su tutti e due, per poco: l'effetto c'è ancora |
 | 8 | I titoli appena tolti dall'S&P 500, tenuti 20 sedute (`prove/P008_usciti_dall_indice.md`, scritto il 24 ott 2026 prima del calcolo) | 1 | Per evento −1,56% (t −0,8) su 109, in guadagno 35%; Sharpe con i costi −0,27; anche senza costi −13% (`prove/P008_risultati.md`) | **bocciata**: i titoli tolti continuano a scendere, il recupero del lavoro del 2004 non c'è più |
 | 9 | I giorni speciali insieme (cambio del mese + prima della banca centrale), SPY e QQQ, giudicata solo sul periodo chiuso (`prove/P009_giorni_speciali.md`, scritto il 24 ott 2026 prima del calcolo) | 3 | (in corso) | (in corso) |
-Totale nel conto: **18** (le 16 prove e le 2 aperture del periodo chiuso; prima: 15, le 14 prove più l'apertura del periodo chiuso per la prova 2 su QQQ, che conta come una prova: decisione del 24 ottobre).
+Totale nel conto: **18** (16 prove e 2 aperture del periodo chiuso: per la prova 2 su QQQ e per la prova 9; ogni apertura conta come una prova, decisione del 24 ottobre).
 
 ## 2. Idee in coda
 

@@ -82,3 +82,49 @@ def strategia_finestre(seg: dict, quota: float = 0.98):
             return [Ordine(q, "mercato", etichetta="ingresso")] if q > 0 else []
         return []
     return decidi
+
+
+def prepara_giorni_speciali(barre, cal, comunicati) -> dict:
+    """`dentro[j]`: la barra j sta nella finestra del cambio del mese o in quella prima della banca centrale
+    (`stock/prove/P009_giorni_speciali.md`)."""
+    import numpy as np
+    import pandas as pd
+    t = barre.index.tz_convert(NY)
+    giorni_barra = np.array(t.date)
+    ore = np.array(t.strftime("%H:%M"))
+    giorni = sorted(cal.index)
+    pos = posizione_nel_mese(giorni)
+    dentro = np.zeros(len(barre), dtype=bool)
+    # cambio del mese: dal penultimo giorno del mese (k = n - 1) al terzo del mese dopo (k ≤ 3)
+    tom = {d for d, (k, n) in pos.items() if k >= n - 1 or k <= 3}
+    dentro |= np.isin(giorni_barra, list(tom))
+    prima = dict(zip(giorni[1:], giorni[:-1]))
+    for d in comunicati:
+        p = prima.get(d)
+        if p is None:
+            continue
+        dentro |= (giorni_barra == p) & (ore >= "14:00")
+        dentro |= (giorni_barra == d) & (ore <= "13:58")
+    return {"dentro": dentro}
+
+
+def strategia_dentro(seg: dict, quota: float = 0.98):
+    """Alla chiusura della barra i: compra se la barra dopo è dentro, vende se è fuori."""
+    import math
+
+    from stock.simulatore.motore import Ordine
+    dentro = seg["dentro"]
+    n = len(dentro)
+
+    def decidi(storia, stato) -> list:
+        i = len(storia) - 1
+        if i + 1 >= n:
+            return []
+        if dentro[i + 1] and stato.azioni == 0:
+            c = float(storia["close"].iat[-1])
+            q = math.floor(quota * stato.valore(c) / c)
+            return [Ordine(q, "mercato", etichetta="dentro")] if q > 0 else []
+        if not dentro[i + 1] and stato.azioni > 0:
+            return [Ordine(-stato.azioni, "mercato", etichetta="fuori")]
+        return []
+    return decidi
