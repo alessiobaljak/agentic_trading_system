@@ -18,3 +18,10 @@ COMUNICATI = [date(*x) for x in [
     (2023, 2, 1), (2023, 3, 22), (2023, 5, 3), (2023, 6, 14), (2023, 7, 26), (2023, 9, 20), (2023, 11, 1), (2023, 12, 13),
     (2024, 1, 31), (2024, 3, 20), (2024, 5, 1), (2024, 6, 12), (2024, 7, 31), (2024, 9, 18), (2024, 11, 7), (2024, 12, 18),
 ]]
+
+# Il periodo chiuso (2 gennaio 2025 → 30 settembre 2026), dalla stessa pagina letta il 24 ottobre 2026
+# (https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm); nessuna riunione straordinaria nel periodo.
+COMUNICATI_CHIUSO = [date(*x) for x in [
+    (2025, 1, 29), (2025, 3, 19), (2025, 5, 7), (2025, 6, 18), (2025, 7, 30), (2025, 9, 17), (2025, 10, 29), (2025, 12, 10),
+    (2026, 1, 28), (2026, 3, 18), (2026, 4, 29), (2026, 6, 17), (2026, 7, 29), (2026, 9, 16),
+]]
