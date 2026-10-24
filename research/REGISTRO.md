@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 144 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 146 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -103,8 +103,10 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 76 | G17: G16 senza protezione (obiettivo −5%, al massimo 7 giorni) con l'1% del conto a operazione, sul 2023-2024 (anni mai usati per l'idea) (`programma7/DICIANNOVESIMA.md`); ipotesi nata dalla parte descrittiva della prova 75 | 1 a eventi + 1 portafoglio | 630 giorni-moneta, **393 operazioni** su 156 monete, obiettivo 93%, a tempo 7%; **+0,30% a operazione** (p 0,36), vinte 91%, metà −0,11% e +0,70%; 2023 +1,44%, **2024 −0,56%**; 4 operazioni oltre −100% (la peggiore 1000FLOKI −166%); il conto con l'1% a operazione **+1% in due anni** (discesa −5,1%), Sharpe 0,22, corretto 0,03 (`programma7/RISULTATI_DICIANNOVESIMA.md`) | no: sugli anni non usati il vantaggio sparisce; il +1,65% del 2025-2026 era di quel periodo (molte più fiammate) |
 | 77 | G18: sul Bitcoin, short nella parte alta dell'intervallo delle 4 ore dopo una salita (long nella parte bassa dopo una discesa), obiettivo 0,3% a limite, protezione 1,8%, al massimo 24 ore; 2021 – giugno 2026 (`programma7/VENTESIMA.md`); idea del trader da copiare n. 3 | 1 | **16.214 operazioni** (8 al giorno, durata mediana 24 minuti), obiettivo 85%, protezione 14%; **−0,090% a operazione** dopo i costi (prezzo −0,004%, costi 0,086%), ogni anno negativo; il caso −0,156%; nel periodo del trader −0,087% (`programma7/RISULTATI_VENTESIMA.md`) | no: la regola dalle candele vince l'85% delle volte come una passeggiata a caso con quell'obiettivo e quella protezione, cioè zero prima dei costi; il vantaggio vero del trader 3 (+0,31% a operazione) non sta in questo schema |
 | 78 | G19: long sulle monete piccole crollate in giornata (−20% in 24 ore, −2% nei 15 minuti, volume 2 volte), obiettivo +3% a limite, protezione −15%, al massimo 24 ore; gennaio 2025 – giugno 2026 (`programma7/VENTUNESIMA.md`); il lato long del trader n. 2 | 1 a eventi + 1 portafoglio | in calcolo | |
+| 79 | **Programma 9, esplorazione larga** (31 ingredienti, ogni coppia, 2022-2023, `programma9/ESPLORAZIONE.md`) → P9A: short le monete vicino al massimo dei 30 giorni dove i conti piccoli sono più long dei grandi, 7 giorni (`programma9/PRIMA.md`) | 1 | in calcolo | |
+| 80 | P9B: long le monete che hanno perso più interesse aperto in 30 giorni quando il Bitcoin è sceso più del 6% in 30 giorni, 3 giorni (`programma9/PRIMA.md`) | 1 | in calcolo | |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 = **144** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **146** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
