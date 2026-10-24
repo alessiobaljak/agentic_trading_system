@@ -47,9 +47,9 @@ def funding_prima(reg: pd.DataFrame, t: int) -> float | None:
     return float(x["tasso"]) * 8.0 / ore
 
 
-def esegui(log=print) -> dict:
-    g16.DA, g16.A = DA, A
-    pan = sc.pannello()
+def operazioni(pan: dict, da: int, a: int, log=print) -> pd.DataFrame:
+    """Le operazioni della regola delle fiammate (prova 75) fra ``da`` e ``a``, con il funding dell'ultimo regolamento."""
+    g16.DA, g16.A = da, a
     t0, simboli = pan["t0"], pan["simboli"]
     cand = g16.candidati(pan)
     log(f"[p9 seconda] {len(cand)} giorni-moneta candidati su {len({j for j, _ in cand})} monete")
@@ -81,6 +81,13 @@ def esegui(log=print) -> dict:
                           **op, "funding": f, "r": op["r_prezzo"] - op["costi"] + f, "funding_8h": funding_prima(reg, t)})
             libero_da = op["uscita_min"] + g16.PAUSA
     df = pd.DataFrame(righe).sort_values(["data", "segnale_min"]).reset_index(drop=True)
+    df.attrs["candidati"] = len(cand)
+    return df
+
+
+def esegui(log=print) -> dict:
+    pan = sc.pannello()
+    df = operazioni(pan, DA, A, log)
     RIS.mkdir(exist_ok=True)
     df.to_csv(RIS / "eventi_P9C.csv", index=False)
     noto = df["funding_8h"].notna()
@@ -93,7 +100,7 @@ def esegui(log=print) -> dict:
                 "protezione": float((d["motivo"] == "protezione").mean()) if len(d) else None,
                 "oltre_meno_30": int((d["r_prezzo"] < -0.3).sum()) if len(d) else 0}
 
-    out = {"candidati": len(cand), "operazioni": len(df), "senza_funding": int((~noto).sum()), "affollati": breve(affollati),
+    out = {"candidati": df.attrs.get("candidati", 0), "operazioni": len(df), "senza_funding": int((~noto).sum()), "affollati": breve(affollati),
            "altri": breve(altri), "tutte": breve(df), "esame": ex_, "soglia_tutte": 0.01 / PROVE_A_EVENTI}
     if ex_ is None:
         out["esito"] = "troppo poche operazioni"
@@ -106,7 +113,7 @@ def esegui(log=print) -> dict:
     pct = lambda x: "—" if x is None else f"{100 * x:+.2f}%"  # noqa: E731
     righe_t = ["# Programma 9 — risultati della seconda prova (P9C: le fiammate con i long affollati)", "",
                "Regole in `SECONDA.md` (scritte prima). Dal 27 giugno al 30 settembre 2026, candele a 1 minuto e funding dell'archivio.", "",
-               f"* {len(cand)} giorni-moneta candidati; {len(df)} operazioni della regola delle fiammate (senza il funding noto: {out['senza_funding']}).",
+               f"* {out['candidati']} giorni-moneta candidati; {len(df)} operazioni della regola delle fiammate (senza il funding noto: {out['senza_funding']}).",
                f"* **Con i long affollati** (funding almeno +0,01% per 8 ore): {a['n']} operazioni, **{pct(a['media'])} a operazione**, vinte "
                f"{pct(a['vinte'])}, alla protezione {pct(a['protezione'])}, prezzo oltre −30%: {a['oltre_meno_30']}.",
                f"* Con il funding sotto la soglia: {b['n']} operazioni, {pct(b['media'])} a operazione, alla protezione {pct(b['protezione'])}, "
