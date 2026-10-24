@@ -140,3 +140,19 @@ def test_cambio_del_mese_entra_al_penultimo_ed_esce_al_quarto():
     # gennaio 2020 (giorni feriali): penultimo 30 gennaio; febbraio: quarto giorno 6 febbraio
     assert list(e["giorno"])[:2] == [D(2020, 1, 30), D(2020, 2, 6)]   # (il calendario tagliato al 14 febbraio fa poi un altro giro)
     assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[1] < 0
+
+
+def test_usciti_dall_indice_compra_il_giorno_dell_uscita_e_vende_dopo_20_sedute():
+    from datetime import date as D
+    from stock.strategie import usciti
+    giorni = list(pd.bdate_range("2020-01-02", periods=40).date)
+    comp = [(D(2019, 12, 1), frozenset({"A", "B"})), (D(2020, 1, 6), frozenset({"B"}))]   # A esce il 6 gennaio
+    ev = usciti.eventi_di_uscita(comp, D(2020, 1, 1), D(2020, 12, 31))
+    assert ev == [(D(2020, 1, 6), "A")]
+    p = [100.0] * 40
+    df = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                      index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+    r = simula_conto({"A": df}, usciti.strategia(ev, giorni), Costi())
+    e = r.esecuzioni
+    assert list(e["giorno"]) == [D(2020, 1, 6), giorni[giorni.index(D(2020, 1, 6)) + 20]]
+    assert e["quantita"].iloc[0] == 100      # il 10% di 100'000 a 100 dollari
