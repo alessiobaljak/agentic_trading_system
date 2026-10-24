@@ -101,6 +101,8 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   passa, p 0,28); seconda tornata: N-001 2 trade chiusi, N-002 4, N-003 0.
   Aggiornamento del 23 ottobre (dati fino al 21 ottobre): M-001c 165 su 400 (−0,70%, in corso); M-002 1.088 (+1,09%, non passa,
   p 0,09); M-003 433 (−1,66%, verdetto già dato: non passa); seconda tornata: N-001 3 trade chiusi, N-002 6, N-003 0.
+  Aggiornamento del 24 ottobre (dati fino al 22 ottobre): M-001c 165 su 400 (in corso); M-002 1.135 (non passa, p 0,11); M-003 446
+  (non passa); seconda tornata: N-001 9 trade chiusi, N-002 7, N-003 0.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 

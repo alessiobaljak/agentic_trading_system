@@ -4652,3 +4652,7 @@ N3 ed E4), le commissioni sono lo 0,10% e non c'è il funding. Il lato long di F
 ogni giorno, con discese del 90% (2022, 2025); il paniere delle stesse monete 0,36, il Bitcoin tenuto 0,58. La scelta delle monete
 aggiunge 4-6 punti l'anno ma non in modo sicuro. Capito: F5 guadagna perché tiene insieme long e short (il mercato si annulla); senza
 la copertura resta il rischio delle altcoin. Le strategie restano sui future. Nel conto: 139 prove.
+**Aggiornamento del 24 ottobre, mattina** (dati fino al 22 ottobre). Prova in avanti del programma 5: M-001c 165 trade su 400,
+M-002 non passa (p 0,11), M-003 bocciata; seconda tornata 9 e 7 trade. Paper di ricerca: A1 −0,16% in tre giorni; le settimane si
+misurano dal 26 ottobre; nessun evento N3 nel paper di ricerca; le monete entrate nell'universo sono le stesse dei giorni scorsi, tutte
+monete.

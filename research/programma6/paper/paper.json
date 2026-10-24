@@ -1,5 +1,5 @@
 {
- "dati_fino_al": "2026-10-21",
+ "dati_fino_al": "2026-10-22",
  "funding_stimato_dal": "2026-09-01",
  "candidate": {
   "F3": {
@@ -75,12 +75,13 @@
   "A1": {
    "giorni": {
     "2026-10-20": 0.0029,
-    "2026-10-21": 0.002002
+    "2026-10-21": 0.002004,
+    "2026-10-22": -0.006525
    },
-   "periodi": 2,
-   "totale": 0.004907483474303476,
-   "media": 0.0024508393104921834,
-   "sharpe": 73.7103935674148
+   "periodi": 3,
+   "totale": -0.0016477974399603523,
+   "media": -0.0005405242976438915,
+   "sharpe": -1.9850553743200696
   }
  },
  "eventi_N3": [],
@@ -379,28 +380,26 @@
    ]
   },
   "A1": {
-   "giorno": "2026-10-21",
+   "giorno": "2026-10-22",
    "pesi": {
-    "BTCUSDT": 0.0182,
-    "BNBUSDT": 0.0154,
-    "HYPEUSDT": 0.0096,
+    "BTCUSDT": 0.0108,
     "1000PEPEUSDT": 0.0079,
-    "LINKUSDT": 0.0078,
-    "ETHUSDT": 0.0077,
-    "UNIUSDT": 0.0077,
-    "ZECUSDT": 0.0076,
-    "SOLUSDT": 0.0073,
-    "NEARUSDT": 0.0069,
-    "XRPUSDT": 0.006,
-    "WLDUSDT": 0.005,
-    "PUMPUSDT": 0.0048,
-    "TAOUSDT": 0.0048,
-    "ENAUSDT": 0.0041,
+    "BNBUSDT": 0.0076,
+    "HYPEUSDT": 0.0076,
+    "LINKUSDT": 0.0058,
+    "NEARUSDT": 0.0057,
+    "ZECUSDT": 0.0054,
+    "ETHUSDT": 0.0051,
+    "UNIUSDT": 0.0051,
+    "WLDUSDT": 0.0051,
+    "SOLUSDT": 0.0049,
     "FILUSDT": 0.0041,
+    "XRPUSDT": 0.004,
     "ARBUSDT": 0.0038,
-    "SUIUSDT": 0.0031,
-    "DOGEUSDT": 0.0021,
-    "ADAUSDT": 0.0018
+    "PUMPUSDT": 0.0038,
+    "TAOUSDT": 0.0032,
+    "ENAUSDT": 0.0031,
+    "SUIUSDT": 0.0015
    }
   }
  },
@@ -427,8 +426,8 @@
  "settimana_in_corso": {
   "F5": {
    "lunedi": "2026-10-19",
-   "fino_al": "2026-10-21",
-   "netto_senza_costi": -0.008578086398051776
+   "fino_al": "2026-10-22",
+   "netto_senza_costi": 0.004050601712956629
   }
  },
  "passato": {
