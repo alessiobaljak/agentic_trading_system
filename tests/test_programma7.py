@@ -205,3 +205,17 @@ def test_g13_sigle_del_titolo():
     assert g13.sigle_del_titolo("Binance Futures Will Delist PTBUSDT and MITOUSDT USDⓈ-M Perpetual Contracts (2026-10-23)") == ["PTB", "MITO"]
     assert g13.sigle_del_titolo("Binance Futures Will Delist Multiple USDⓈ-M Perpetual Contracts (2026-10-05)") == []
     assert g13.sigle_del_titolo("Binance Futures Will Delist USDT-Margined ANC Perpetual Contract") == ["ANC"]
+
+
+def test_g14_segnale_e_conto():
+    import pandas as pd
+    from research.programma7 import sedicesima as g14
+    g = 20000
+    ore = np.arange(g * 24 - 24, g * 24 + 24)
+    bn = pd.Series(100.0, index=ore)
+    cb = pd.Series(100.1, index=ore)                 # premio +0,1% tutto il giorno prima
+    s = g14.segnale_giornaliero(cb, bn, np.array([g, g + 2]))
+    assert abs(s[0] - 0.001) < 1e-12 and np.isnan(s[1])
+    d = g14.conto(np.array([1.0, 1.0, -1.0]), np.array([0.01, -0.02, 0.03]), np.array([0.0001, 0.0001, 0.0001]))
+    assert list(d["giro"]) == [1.0, 0.0, 2.0]
+    assert abs(d["netto"].iloc[2] - (-0.03 - 2 * g14.COSTO + 0.0001)) < 1e-12
