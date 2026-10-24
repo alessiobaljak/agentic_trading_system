@@ -115,6 +115,8 @@ M7 0,32; nessuna arriva a 0,95 al taglio scelto (al taglio 0,3, solo per capire:
 asticella pubblicata, il t dello Sharpe contro 3,0 (Harvey, Liu e Zhu 2016), passano F5 (4,66), F5 + M7 + K2 (4,62), F6, F5 + M7,
 K2, R1, M7 + M8; M7 no (2,73). **Da qui si usa il calcolo rivisto** (gruppi), con la soglia 0,95.
 
+**La decisione del proprietario del 24 ottobre** («non bocciare 0,91 se ogni anno si alza la soglia»): lo Sharpe corretto si calcola e si riporta come prima, ma **una strategia con lo Sharpe corretto da 0,90 in su, positiva in ogni anno e con il t dello Sharpe sopra 3 non si boccia**: passa al conto demo e al paper, e poi ai soldi veri se il proprietario lo chiede (voce P26 del backlog). Oggi ci rientrano **G1** (0,913, t 4,71, ogni anno positivo, sul demo dal 24 ottobre), **G11** (0,948) e **F5** (0,90). Le altre regole del metodo restano (regole scritte prima, conto delle prove, revisore separato).
+
 **L'aggiunta del 23 ottobre** (`programma6/ASTICELLA.md`, sezione 5, scritta prima del calcolo; risultati in
 `programma6/RISULTATI_ASTICELLA_23.md`). Le cinque serie dello scalping (prova 54, Sharpe fino a −13,6: perdono di sicuro per i
 costi) portavano la deviazione da 0,62 a 2,56 e lo Sharpe corretto di **ogni** candidata a 0,00: un'asticella che si alza a

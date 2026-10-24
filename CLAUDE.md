@@ -65,7 +65,7 @@ limitazioni su quali strategie adottare, scalping oppure settimana oppure nuovi 
 idee per strada, prova di tutto sempre con il criterio che ci siamo dati ma non lasciare nulla al caso [...] il trading giornaliero
 non può essere escluso». Quindi: **l'obiettivo è il profitto, con qualunque tipo di strategia** (in giornata, scalping, a
 settimana, eventi e nuove quotazioni), sempre con il metodo (regole prima, conto delle prove, asticella, revisore separato); il
-trading di ogni giorno ha il suo filone, il **programma 7** (`research/programma7/METODO.md`), e non va mai lasciato indietro.
+trading di ogni giorno ha il suo filone, il **programma 7** (`research/programma7/METODO.md`), e non va mai lasciato indietro. **Il proprietario, 24 ott 2026:** «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi se funziona andiamo live» e «non bocciare 0,91 se ogni anno si alza la soglia»: una strategia con lo Sharpe corretto da 0,90 in su, ogni anno positiva e con il t sopra 3 non si boccia, va sul demo di Binance e nel paper, e poi ai soldi veri quando il proprietario lo chiede esplicitamente (`docs/backlog.md`, P26; `research/REGISTRO.md`, sezione 1). Le idee si prendono anche dai trader da copiare (`research/trader_copiati/`).
 **Tutte le idee**, di ogni tipo e anche quelle del proprietario, stanno nella coda unica di `research/REGISTRO.md` (sezione 5):
 nessuna si perde, ognuna o si prova o si scrive perché no. **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
