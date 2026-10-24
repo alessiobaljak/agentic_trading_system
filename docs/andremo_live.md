@@ -4675,3 +4675,12 @@ ordini però erano già partiti. Corretto: prima di contare le posizioni si annu
 cambia a ogni tentativo, un ordine rifiutato non ferma gli altri. Alle 09:11 il conto demo ha 20 long e 18 short, 4.993,15 USDT; una
 moneta rifiutata (龙虾USDT, «Invalid symbol»). Capito: il conto vero di Binance ha regole che il nostro paper non vede (i nomi
 ammessi, gli identificativi unici); è il motivo per cui serve il demo accanto al paper.
+**I due trader da copiare** (24 ottobre; schermate e trade mandati dal proprietario; `research/trader_copiati/`). Il primo punta sulla
+direzione di tutto il mercato e aggiunge quando il prezzo va contro (idee già provate). Il secondo fa scalping sulle fiammate delle
+monete piccole: 178 posizioni controllate tutte sui prezzi a 1 minuto, 95,5% vinte ma 8 perse che valgono metà dei guadagni; le
+vinte durano 2 minuti, le perse 10 ore. **Prova 75, G16** (`programma7/DICIOTTESIMA.md`): la sua idea come regola fissa sul
+gennaio 2025 – giugno 2026, 3.494 operazioni su 405 monete. Con la protezione a +30%: −0,88% a operazione. Senza protezione (come
+lui): +1,65% e 97% vinte, ma tre operazioni a −1.511%, −972% e −628%, e una settimana che con il 5% a operazione perde il 154% del
+conto. Entrare a caso negli stessi giorni fa −9,43%: il momento lui lo sa scegliere. Capito: le classifiche dei trader da copiare
+premiano chi vende un'assicurazione (vince quasi sempre, poi salta); la quota di vinte e la discesa massima del profilo non lo
+mostrano. Nel conto: 141 prove (18 a eventi).

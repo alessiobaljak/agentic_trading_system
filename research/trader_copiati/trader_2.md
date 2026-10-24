@@ -39,3 +39,17 @@ minuti in cui era aperta (178 su 178), con l'ora delle schermate letta come ora 
   sulle monete piccole del 2025-2026 con un'uscita rapida e una protezione.
 * Si prova come regola fissa sul passato **che lui non ha toccato** (gennaio 2025 – maggio 2026, tutte le monete), con regole
   scritte prima e una protezione obbligatoria (lui non ce l'ha: è quello che lo fa saltare prima o poi).
+
+## La prova sul passato (prova 75, `research/programma7/RISULTATI_DICIOTTESIMA.md`)
+
+La sua idea come regola fissa, su tutte le monete tranne le 30 più grandi, dal gennaio 2025 al 26 giugno 2026 (prima dei suoi trade
+che abbiamo visto): 3.494 operazioni su 405 monete.
+
+* **Con la protezione a +30%: −0,88% a operazione.** Vince l'83% delle volte (+4,8%), ma il 15% finisce alla protezione (−30%).
+* **Senza protezione, come fa lui** (si tiene finché scende del 5%, al massimo 7 giorni): +1,65% a operazione e 97% di vinte, ma
+  non sicuro (p 0,074); e le tre peggiori fanno −1.511%, −972%, −628%: monete salite di 10-15 volte dopo l'entrata. Con il 5% del
+  conto a operazione, **una sola settimana perde il 154% del conto**.
+* **Il momento conta**: entrare a caso negli stessi giorni sulle stesse monete fa −9,43% a operazione. Lui sa scegliere il minuto;
+  ma il guadagno di ogni volta (+5%) è più piccolo del rischio che la fiammata continui.
+* Quindi il suo +37.782 in un anno è vero ma è il premio di un'assicurazione venduta: guadagna poco quasi sempre e prima o poi
+  arriva la moneta che sale di 10 volte. Con 20.000 dollari di margine, una sola di quelle azzera il conto.
