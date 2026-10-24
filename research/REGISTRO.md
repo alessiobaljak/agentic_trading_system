@@ -243,10 +243,12 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    cercare cosa si ripete alle entrate con regole scritte prima, e seguirli 30-60 giorni in avanti senza soldi. Riserve scritte
    prima: i primi in classifica fra migliaia sono in parte fortuna; il ROI dipende dalla leva; le posizioni chiuse non mostrano le
    perdite tenute aperte.
+   **Primo trader arrivato** (24 ottobre, `trader_copiati/trader_1.md`): scommesse sulla direzione di tutto il mercato tenute settimane, aggiunte quando il prezzo va contro, chiusura di tutto insieme quando la somma è positiva, azioni e petrolio in giornata; le idee sono quelle già provate a regole fisse. Servono la copia simulata di Binance («Mock Copy») e lo storico completo delle posizioni.
 38. **Idee per lo spot che non hanno bisogno di vendere** (lezione del programma 8: senza copertura resta il rischio delle altcoin):
    da scrivere con un perché prima di provarle; per ora nessuna con buona probabilità.
 39. ~~**Vendere prima degli sblocchi dei token**~~ → prova 74 (G15). (Keyrock 2024: il calo comincia fino a 30 giorni prima degli sblocchi di squadra e investitori; i calendari sono pubblici su DefiLlama, gratis).
 40. **Il carry (comprato a pronti, venduto il perpetuo)**: non si prova per ora. Il 18 ottobre il proprietario non lo voleva («voglio fare trading»); il 23 ha tolto i limiti sui tipi di strategia, ma la letteratura dice che dal 2025 non rende più (Borri, Liu, Tsyvinski e Wu 2025: Sharpe negativo nel 2025) e il funding di base di Binance (0,01% ogni 8 ore) dà circa l'11% l'anno sul valore coperto prima dei costi. Torna in coda se il funding medio risale (si guarda ogni mese).
+41. **I perpetui di Binance su azioni, petrolio e oro (TradFi)**: li usa il trader 1 (SMCI, SPCX, META, petrolio, in giornata intorno all'apertura di Wall Street). Per ora no: esistono dal 2026 (troppo pochi mesi per scegliere su 12 e provare sui 3 dopo), sono fuori dall'universo per scelta (`programma6/SECONDA.md`, sezione 9), e le azioni sono della sessione delle azioni (`stock/`). Si riguarda quando avranno un anno di storia.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
    appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
