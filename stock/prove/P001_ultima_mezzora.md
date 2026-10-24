@@ -25,8 +25,10 @@ pubblicato da anni (potrebbe essere stato consumato).
   barra dopo (le 15:30).
 * **Uscita:** ordine a mercato deciso alla chiusura della penultima barra della seduta, eseguito all'apertura dell'ultima (le 15:59).
   Nessuna posizione resta aperta di notte.
-* **Quanto:** tutto il valore del conto diviso per il prezzo della decisione, azioni intere, senza leva (il simulatore rifiuta
-  l'ordine se, al prezzo eseguito, servirebbe leva: in quel caso la giornata salta e viene contata).
+* **Quanto:** il 98% del valore del conto diviso per il prezzo della decisione, azioni intere, senza leva (il simulatore rifiuta
+  l'ordine se, al prezzo eseguito, servirebbe leva: in quel caso la giornata salta e viene contata). *Correzione del 24 ottobre,
+  scritta prima del calcolo: la prima versione diceva «tutto il valore del conto», ma così ogni volta che il prezzo dell'ingresso è
+  anche di poco più alto di quello della decisione servirebbe leva e l'ordine verrebbe rifiutato; il 2% di margine lo evita.*
 * **Giorni esclusi:** il primo giorno (non c'è ieri), e i giorni segnalati dal controllo dei minuti (`stock/dati/ESITO_MINUTI.md`:
   SPY 12 agosto 2019, QQQ 22 febbraio 2016), o un giorno in cui manca la barra del segnale, dell'ingresso o dell'uscita.
 
