@@ -38,6 +38,11 @@ bocciate) in `REGISTRO.md` (`LEZIONI_DALLE_CRYPTO.md`, punto 2).
 * Verificato il 24 ottobre da questa sessione: Alpaca risponde ma chiede la chiave (codice 401); Yahoo rifiuta per troppe richieste
   (429); Stooq non è raggiungibile; GitHub sì.
 * Ogni prezzo va corretto per frazionamenti e dividendi; il dato di un giorno si usa solo dopo che è stato pubblicato.
+* **I prezzi scaricati non entrano nel repository**: sono grandi, e di regola la licenza dei dati di borsa non permette di
+  ripubblicarli (il repository è pubblico; i termini di Alpaca sono da verificare). Ogni sessione li scarica e li tiene in locale; nel
+  repository vanno solo il programma che li scarica, i controlli e i risultati.
+* Le chiavi le legge solo una sessione aperta **dopo** che sono state messe nell'ambiente: il 24 ottobre questa sessione (aperta prima)
+  non le vedeva, e Alpaca rispondeva 401.
 
 ## 4. I periodi **(proposta)**
 

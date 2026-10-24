@@ -17,6 +17,8 @@ toccando il resto della dashboard il meno possibile (solo per aggiungere la sche
 
 * Si parte da zero: niente dati, niente codice, niente strategie. Si porta dalle crypto solo il **metodo** e le **lezioni**
   (`LEZIONI_DALLE_CRYPTO.md`).
+* **Lo stato aggiornato** (decisioni del proprietario, cosa aspetta una risposta, cosa si può fare) è in `stock/STATO.md`; il metodo in
+  `stock/METODO.md`; il confronto delle piattaforme in `stock/piattaforme.md`.
 * Il registro unico delle prove sulle azioni è `stock/REGISTRO.md` (un conto delle prove suo, che parte da zero).
 * Il paper si fa su un **conto demo vero** di una piattaforma (da scegliere: è il primo compito della sessione, con il proprietario).
 
