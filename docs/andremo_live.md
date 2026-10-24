@@ -4634,3 +4634,9 @@ short quando è negativo: Sharpe 0,45, meno del Bitcoin tenuto (0,58). Il Bitcoi
 in quelli a premio negativo +0,03%: un po' di informazione c'è, ma vendere nei giorni a premio negativo perde (il Bitcoin sale lo
 stesso). Capito: l'indicatore più seguito dai trader sulla domanda americana dice poco, e non abbastanza per batterla tenendo il
 Bitcoin. Nel conto: 137 prove.
+**Il paper del bot, 24 ottobre alle 06:15 UTC** (ops 0654): G1 9.996,41 dollari (−0,04%), G11 10.049,51 (+0,50%), dopo la prima
+decisione delle 00:05; **gli ordini limite: 40 eseguiti su 40** per tutte e due (tutto a mercato sarebbe costato 14 dollari invece di
+4). E4 su IRYS aperto, −0,1% (fino al 31 ottobre). F5 settimanale in attesa di lunedì; nella prova a secco TRX pesa il 38% del lato
+long (la concentrazione nota, voce P19). G1 e G11 tengono monete in parte diverse: G11 ha TRX al 38% e il Bitcoin short al 16%.
+Nota: il vecchio sistema ha aperto un'operazione il 21 ottobre (SYRUP long, `Ultima decisione` dello stato): è ancora acceso, si
+ferma solo con il pulsante STOP della dashboard.
