@@ -182,3 +182,20 @@ def test_notte_compra_alla_sera_vende_alla_mattina_e_incassa_il_dividendo():
     assert e["t"].dt.tz_convert(NY).iloc[1].strftime("%Y-%m-%d %H:%M") == "2020-01-03 09:30"
     q = math.floor(0.98 * 10_000 / 100)
     assert r.valore.iloc[-1] == pytest.approx(10_000 + q * (103 - 101) + q * 0.5)
+
+
+def test_prima_della_fed_entra_alle_14_del_giorno_prima_ed_esce_prima_del_comunicato():
+    from stock.strategie import calendario as c
+    g1 = giornata("2020-01-28", lambda i: 100.0 if i < 270 else 101.0)     # dalle 14:00 il prezzo è 101
+    g2 = giornata("2020-01-29", lambda i: 102.0)
+    b = pd.concat([g1, g2])
+    cal = calendario(["2020-01-28", "2020-01-29"])
+    seg = c.prepara_prima_della_fed(b, cal, [pd.Timestamp("2020-01-29").date()], set())
+    r = simula(b, c.strategia_finestre(seg), Costi(), capitale=10_000)
+    e = r.esecuzioni
+    ore = list(e["t"].dt.tz_convert(NY).dt.strftime("%Y-%m-%d %H:%M"))
+    assert ore == ["2020-01-28 14:00", "2020-01-29 13:59"]
+    q = math.floor(0.98 * 10_000 / 100)
+    assert r.valore.iloc[-1] == pytest.approx(10_000 + q * (102 - 101))
+    # un comunicato senza il giorno prima nel calendario salta
+    assert c.prepara_prima_della_fed(b, cal, [pd.Timestamp("2020-01-28").date()], set())["saltati"]

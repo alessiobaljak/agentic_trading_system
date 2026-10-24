@@ -33,3 +33,52 @@ def strategia_cambio_del_mese(simbolo: str, calendario: list[date]):
             return verso_pesi(stato, {}, prezzo, etichetta="uscita")
         return []
     return decidi
+
+
+NY = "America/New_York"
+
+
+def prepara_prima_della_fed(barre, cal, comunicati, giorni_esclusi: set) -> dict:
+    """Barre al minuto di seduta: decisione d'acquisto alla barra delle 13:59 del giorno di borsa prima del comunicato,
+    decisione di vendita alla barra delle 13:58 del giorno del comunicato (`stock/prove/P007_prima_della_fed.md`)."""
+    import numpy as np
+    import pandas as pd
+    t = barre.index.tz_convert(NY)
+    pos = {x: i for i, x in enumerate(t)}
+    giorni = sorted(cal.index)
+    prima = dict(zip(giorni[1:], giorni[:-1]))
+    compra = np.zeros(len(barre), dtype=bool)
+    vendi = np.zeros(len(barre), dtype=bool)
+    saltati = []
+    for d in comunicati:
+        p = prima.get(d)
+        if p is None or d in giorni_esclusi or p in giorni_esclusi:
+            saltati.append(d)
+            continue
+        servono = [pd.Timestamp(f"{p} 13:59", tz=NY), pd.Timestamp(f"{p} 14:00", tz=NY),
+                   pd.Timestamp(f"{d} 13:58", tz=NY), pd.Timestamp(f"{d} 13:59", tz=NY)]
+        if not all(x in pos for x in servono):
+            saltati.append(d)
+            continue
+        compra[pos[servono[0]]] = True
+        vendi[pos[servono[2]]] = True
+    return {"compra": compra, "vendi": vendi, "saltati": saltati}
+
+
+def strategia_finestre(seg: dict, quota: float = 0.98):
+    """Compra alle barre segnate `compra`, vende alle barre segnate `vendi` (esecuzione alla barra dopo)."""
+    import math
+
+    from stock.simulatore.motore import Ordine
+    compra, vendi = seg["compra"], seg["vendi"]
+
+    def decidi(storia, stato) -> list:
+        i = len(storia) - 1
+        if vendi[i] and stato.azioni > 0:
+            return [Ordine(-stato.azioni, "mercato", etichetta="uscita")]
+        if compra[i] and stato.azioni == 0:
+            c = float(storia["close"].iat[-1])
+            q = math.floor(quota * stato.valore(c) / c)
+            return [Ordine(q, "mercato", etichetta="ingresso")] if q > 0 else []
+        return []
+    return decidi
