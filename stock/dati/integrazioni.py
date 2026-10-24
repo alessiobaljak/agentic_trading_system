@@ -21,6 +21,12 @@ DIVIDENDI_AGGIUNTI: dict[str, list[tuple[date, float, str, str]]] = {
         (date(2018, 6, 15), 1.246, FONTE_YAHOO, "manca anche nei prezzi rettificati di Alpaca"),
         (date(2024, 12, 20), 1.966, FONTE_YAHOO,
          "c'è nei prezzi rettificati di Alpaca (passo dello 0,336%, circa 1,97 dollari): due fonti d'accordo"),
+        (date(2026, 9, 18), 1.889, FONTE_YAHOO,
+         "trovato nel controllo dei prezzi del periodo chiuso, prima del calcolo della prova 2"),
+    ],
+    "QQQ": [
+        (date(2026, 9, 21), 0.751, "Yahoo, query1.finance.yahoo.com/v8/finance/chart/QQQ (events=div), letto il 24 ott 2026",
+         "trovato nel controllo dei prezzi del periodo chiuso, prima del calcolo della prova 2"),
     ],
 }
 

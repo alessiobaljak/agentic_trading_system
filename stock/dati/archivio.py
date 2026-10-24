@@ -34,7 +34,7 @@ def percorso(simbolo: str, tipo: str, cartella=None) -> Path:
 def salva(df: pd.DataFrame, simbolo: str, tipo: str, cartella=None) -> Path:
     p = percorso(simbolo, tipo, cartella)
     p.parent.mkdir(parents=True, exist_ok=True)
-    if tipo != "azioni":
+    if not tipo.startswith("azioni"):
         df = df.rename_axis("t")
     df.to_csv(p, compression="gzip")
     return p
@@ -44,7 +44,7 @@ def carica(simbolo: str, tipo: str, cartella=None) -> pd.DataFrame | None:
     p = percorso(simbolo, tipo, cartella)
     if not p.exists():
         return None
-    if tipo == "azioni":
+    if tipo.startswith("azioni"):
         df = pd.read_csv(p, index_col=0)
         df["data"] = pd.to_datetime(df["data"]).dt.date
         return df

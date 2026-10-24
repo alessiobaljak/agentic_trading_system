@@ -26,7 +26,7 @@ from stock.strategie import ultima_mezzora as um
 from stock.strategie import zona_di_rumore as zr
 
 INIZIO_DATI = datetime(2024, 11, 1, 4, tzinfo=UTC)
-FINE = datetime(2026, 10, 1, 4, tzinfo=UTC)          # fino al 30 settembre 2026 compreso (mezzanotte di New York)
+FINE = datetime(2026, 10, 1, 3, 59, tzinfo=UTC)      # fino al 30 settembre 2026 compreso (la barra del 1 ottobre è alle 04:00 UTC)
 PRIMO = date(2025, 1, 2)
 ULTIMO = date(2026, 9, 30)
 TRIMESTRI = [(date(2025, 1, 1), date(2025, 4, 1)), (date(2025, 4, 1), date(2025, 7, 1)), (date(2025, 7, 1), date(2025, 10, 1)),

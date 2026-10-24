@@ -174,10 +174,10 @@ def test_inizio_e_fine_alla_mezzanotte_di_new_york():
 
 
 def test_dividendi_aggiunti_solo_dove_mancano():
-    from stock.dati.integrazioni import azioni_complete
+    from stock.dati.integrazioni import DIVIDENDI_AGGIUNTI, azioni_complete
     a = azioni((date(2016, 6, 17), "dividendo", 1.0, 1.078))
     c = azioni_complete("SPY", a)
-    assert date(2016, 3, 18) in set(c["data"]) and len(c) == 4
+    assert date(2016, 3, 18) in set(c["data"]) and len(c) == 1 + len(DIVIDENDI_AGGIUNTI["SPY"])
     assert azioni_complete("QQQ", a) is a
     # se Alpaca un giorno lo avesse, non si raddoppia
     b = azioni((date(2016, 3, 18), "dividendo", 1.0, 1.05))
