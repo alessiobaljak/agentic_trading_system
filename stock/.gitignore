@@ -3,3 +3,4 @@
 *.csv
 *.csv.gz
 *.parquet
+!universo/dieci_di_allora.csv

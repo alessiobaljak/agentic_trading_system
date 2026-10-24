@@ -64,22 +64,41 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   prima dell'obiettivo se si toccano tutti e due; commissioni con minimo e massimo, metà dello scarto, slittamento, costo del prestito
   per lo scoperto, dividendi e frazionamenti; ogni prova anche con i costi raddoppiati; le finestre che avanzano (12 mesi di scelta, 3
   di prova) che rifiutano il periodo chiuso. Nessuna commissione predefinita: il broker non è scelto.
-* **I test**: 30, tutti su casi costruiti a mano (`python -m pytest stock/tests -q`), verdi. Ho controllato che un errore voluto (il
+* **I test**: 41 (al 24 ottobre sera), tutti su casi costruiti a mano (`python -m pytest stock/tests -q`), verdi. Ho controllato che un errore voluto (il
   limite eseguito al semplice tocco) faccia fallire il test giusto.
+
+* **I dividendi dello SPY sistemati** (24 ottobre): confronto con Yahoo su 12 titoli (`stock/dati/ESITO_DIVIDENDI.md`). Yahoo
+  conferma 33 dei 33 dividendi dello SPY che ha Alpaca e ha i 3 che mancano, ora aggiunti a mano con la fonte
+  (`stock/dati/integrazioni.py`). Yahoo non è perfetto (gli manca un dividendo di QQQ del 2020, due importi di AVGO del 2018 sono
+  il doppio del vero): per questo si aggiunge solo ciò che manca ad Alpaca, non si sostituisce una fonte con l'altra.
+* **L'universo «di allora»** (`stock/universo/`, esito in `ESITO_UNIVERSO.md`, elenco in `dieci_di_allora.csv`): 104 mesi, da maggio
+  2016 (servono 63 giorni di borsa prima, e i dati partono il 4 gennaio 2016) a dicembre 2024; 717 simboli passati per l'indice, 34
+  entrati almeno una volta fra i 10. Alpaca ha anche i titoli tolti dal listino e i simboli vecchi (FB fino al giugno 2022, poi META):
+  i «titoli sopravvissuti» sono evitati. Ne mancano 5 (CMCSK, HCBK, HSP, SIAL, SNDK), tutti usciti dall'indice entro maggio 2016 e
+  troppo piccoli per stare fra i 10.
+* **La prova 1** (`stock/prove/P001_ultima_mezzora.md`, regole committate prima; risultati in `P001_risultati.md`): l'ultima mezz'ora
+  segue la giornata, SPY e QQQ, 2016-2024. **Bocciata su tutti e due.** Sharpe annuo con i costi −0,60 (SPY) e −0,30 (QQQ), contro 0,87
+  del comprare e tenere lo SPY; trimestri in guadagno 28% e 38%.
+
+## Cosa abbiamo capito il 24 ottobre
+
+* **L'effetto dell'ultima mezz'ora c'è, ma è più piccolo dei costi.** Senza costi la prova guadagna (Sharpe annuo 0,31 sullo SPY, 0,67
+  su QQQ): circa 0,5 punti base al giorno sullo SPY (12,4% in 2259 giorni). Ogni giornata costa circa 1,7 punti base fra commissioni
+  (0,3), scarto (0,37) e lo slittamento messo per prudenza (1,0). Anche senza lo slittamento i costi (circa 0,7) superano il guadagno.
+  Lezione per tutte le idee in giornata: un'operazione al giorno deve rendere **più di circa 0,7 punti base** solo per pareggiare sullo
+  SPY, e di più sulle azioni singole (scarto da 0,8 a 5,8 punti base).
+* **I dati di Alpaca vanno sempre confrontati con una seconda fonte**: senza, l'asticella sarebbe stata più bassa del vero.
 
 ## Cosa non è fatto, e perché
 
-* **Nessuna prova di strategia ancora**: il sì è arrivato il 24 ottobre; prima vanno sistemati i dividendi dello SPY e costruito l'universo «di allora».
-* **I prezzi del periodo chiuso** (dal 2025) non sono stati scaricati: per i controlli non servono, e così nessuno li vede.
-* **L'universo «di allora»** (le 10 più scambiate di ogni mese fra quelle allora nell'S&P 500) non è costruito: serve l'elenco
-  storico dei titoli dell'indice (il sì è arrivato). I 12 titoli di oggi sopra sono solo un banco di prova dei controlli.
-* Il simulatore gira su un titolo alla volta e in Python puro: per due milioni di barre al minuto sarà lento (da misurare).
+* **I prezzi del periodo chiuso** (dal 2025) non sono stati scaricati: nessuno li ha visti.
+* Il simulatore gira su un titolo alla volta: la prova 1 (2 titoli × 3 varianti di costo, 880'000 minuti ciascuno) ha impiegato 4
+  minuti. Per le idee sulle 10 azioni serve un simulatore a più titoli (il portafoglio), non ancora scritto.
+* Le commissioni di Interactive Brokers (0,005 dollari per azione, minimo 1) sono **da verificare** sul listino ufficiale.
 
-## Cosa si può fare senza aspettare
+## Il prossimo passo
 
-* Prendere i dividendi mancanti dello SPY da una seconda fonte, scritta.
-* Verificare il salto di NVDA e il dividendo in più di QQQ su una seconda fonte.
-* Misurare lo scarto anche nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
-* **Il prossimo passo**: l'elenco storico dei titoli dell'S&P 500 (https://github.com/fja05680/sp500, raggiungibile), da cui le 10
-  più scambiate di ogni mese; i dividendi mancanti dello SPY da una seconda fonte; poi la prima prova, con le regole scritte prima nel
-  registro.
+* Il simulatore a più titoli, poi la prova 2: **l'uscita dalla «zona di rumore» dell'apertura** su SPY e QQQ (idea I2), e il **ritorno
+  dopo le forti cadute** sulle 10 azioni di allora (idea I3). Regole scritte prima, come sempre.
+* Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
+* Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
