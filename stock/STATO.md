@@ -134,8 +134,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   ma **non passa l'asticella corretta per i tentativi** (0,79 e 0,67 contro 0,95, con 27 prove nel conto): bocciata, come vuole il metodo.
   **Periodo chiuso aperto per decisione del proprietario, dopo la revisione separata (`stock/prove/REVISIONE_P015.md`): bocciata anche
   lì** (`P015_chiuso.md`): nel 2025-2026 SPY Sharpe 0,76 contro 1,04 del tenere, QQQ 1,05 contro 1,09; su QQQ perdita massima più
-  piccola (−17% contro −23%) ma guadagno più basso (+32,9% contro +45,9%). Nel 2025-2026 l'agitazione di aprile 2025 l'ha fatta uscire
-  e rientrare tardi.
+  piccola (−17% contro −23%) ma guadagno più basso (+32,9% contro +45,9%). Perché (controllato sugli ordini dello SPY): è entrata nel
+  calo di febbraio-marzo 2025 con la leva quasi al massimo (1,44 volte il conto il 18 febbraio), ha ridotto solo dopo la caduta (0,30 il
+  14 aprile) ed è tornata al 100% solo il 27 maggio, dopo il rimbalzo: il difetto previsto nel sospetto delle regole (i crolli che
+  arrivano quando la calma recente spinge a investire di più).
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
