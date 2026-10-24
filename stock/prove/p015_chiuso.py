@@ -27,7 +27,6 @@ def main():
     for s in ("SPY", "QQQ"):
         df, rett, _ = prepara_titolo(s, ULTIMO, tipo_raw="1Day_raw_chiuso", tipo_az="azioni_chiuso")
         costi = Costi(mezzo_scarto=MEZZO_SCARTO[s], slittamento=0.5 * PB, interesse_debito_annuo=0.06, **IB_FISSO)
-        pronti = [d for d in cal if d >= PRIMO]
 
         def fabbrica():
             dentro = strategia_calma(s, cal, rett)
@@ -54,7 +53,6 @@ def main():
                   f"{sum(x > 0 for x in q)} su 7 ({', '.join(f'{x:+.1%}' for x in q)}) → {'sì' if c3 else 'no'}",
                   f"{dd(gc):.1%} / {dd(bh_suo):.1%}",
                   f"**{'passa il periodo chiuso' if c1 and c2 and c3 else 'bocciata nel periodo chiuso'}**"]
-        _ = pronti
     for k, nome in enumerate(["Giorni", "Ordini eseguiti / rifiutati", "Guadagno totale senza costi / con i costi / costi doppi",
                               "Guadagno del tenere lo stesso titolo", "Sharpe del tenere lo SPY / lo stesso titolo",
                               "**1.** Sharpe annuo con i costi (deve battere tutti e due)", "**2.** Sharpe con i costi doppi (> 0)",
