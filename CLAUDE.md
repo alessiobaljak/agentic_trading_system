@@ -115,6 +115,16 @@ dashboard. Una giornata senza niente di nuovo capito va detta, non nascosta. Una
 funzione che non ha una misura del suo contributo non si può dire utile: va misurata
 o tolta.
 
+## Le azioni (dal 24 ott 2026)
+
+Il proprietario (24 ott 2026): «apri un'altra sessione che dovrai chiamare trading stock [...] una cartella dedicata alle stock che
+non si mischi con tutto quello che stiamo facendo lato crypto, solo la dashboard sarà condivisa [...] il paper lo voglio fare su un
+reale conto live demo di una piattaforma (che mi dovrai consigliare tu per il mercato svizzero)». Le azioni stanno **tutte in
+`stock/`** (leggere `stock/README.md`) e le segue la sessione **«trading stock»**. Questa sessione (le crypto) non tocca `stock/`; la
+sessione delle azioni non tocca le cartelle delle crypto. **In comune c'è solo la dashboard**: le azioni vi entrano con una scheda e
+componenti loro (`dashboard/app/components/stock/`). Le regole qui sotto valgono anche per le azioni (niente soldi veri: solo il conto
+demo; mai le credenziali del conto demo in un commit).
+
 ## Regole che non si negoziano
 
 * **`DRY_RUN` resta `true`.** Il sistema non ha mai toccato denaro vero e non deve
