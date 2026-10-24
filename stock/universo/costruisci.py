@@ -36,6 +36,15 @@ QUI = Path(__file__).resolve().parent
 RINOMINATI = {"FB": "META"}
 
 
+def cambi_di_nome() -> dict[str, str]:
+    """Tutti i cambi di simbolo trovati da `trova_cambi_di_nome` sul 2016-2024 (file `cambi_di_nome.csv`)."""
+    p = QUI / "cambi_di_nome.csv"
+    if not p.exists():
+        return dict(RINOMINATI)
+    df = pd.read_csv(p)
+    return dict(zip(df["vecchio"], df["nuovo"]))
+
+
 def carica_composizione(percorso) -> list[tuple[date, frozenset]]:
     csv.field_size_limit(10 ** 9)
     with open(percorso) as fh:
@@ -134,3 +143,24 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
+
+
+def trova_cambi_di_nome(composizione, chiusure: dict[str, pd.Series], giorni_minimi: int = 20) -> dict[str, tuple[str, date]]:
+    """I cambi di simbolo: un titolo esce dall'elenco e uno entra lo stesso giorno, e su Alpaca il nuovo ha già la storia
+    di prima con le **stesse chiusure** del vecchio (almeno `giorni_minimi` giorni in comune, differenza sotto lo 0,01%).
+    Restituisce {vecchio: (nuovo, giorno del cambio)}. `chiusure`: per simbolo, le chiusure non rettificate per giorno."""
+    out = {}
+    for (d0, m0), (d1, m1) in zip(composizione, composizione[1:]):
+        usciti, entrati = m0 - m1, m1 - m0
+        for v in sorted(usciti):
+            for n in sorted(entrati):
+                a, b = chiusure.get(v), chiusure.get(n)
+                if a is None or b is None:
+                    continue
+                comuni = a.index.intersection(b.index)
+                comuni = comuni[comuni < d1]
+                if len(comuni) < giorni_minimi:
+                    continue
+                if float((a[comuni] / b[comuni] - 1).abs().max()) < 1e-4:
+                    out[v] = (n, d1)
+    return out

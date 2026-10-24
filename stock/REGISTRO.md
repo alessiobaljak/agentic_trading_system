@@ -18,7 +18,8 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 | 8 | I titoli appena tolti dall'S&P 500, tenuti 20 sedute (`prove/P008_usciti_dall_indice.md`, scritto il 24 ott 2026 prima del calcolo) | 1 | Per evento −1,56% (t −0,8) su 109, in guadagno 35%; Sharpe con i costi −0,27; anche senza costi −13% (`prove/P008_risultati.md`) | **bocciata**: i titoli tolti continuano a scendere, il recupero del lavoro del 2004 non c'è più |
 | 9 | I giorni speciali insieme (cambio del mese + prima della banca centrale), SPY e QQQ, giudicata solo sul periodo chiuso (`prove/P009_giorni_speciali.md`, scritto il 24 ott 2026 prima del calcolo) | 3 | 2016-2024 (da leggere): Sharpe con i costi 0,70 e 0,69, investita il 26% del tempo. **Periodo chiuso**: +1,5% e +1,2% con i costi in 21 mesi, Sharpe 0,15 e 0,12 contro 1,04-1,09 del tenere; 3 trimestri su 7 in guadagno (`prove/P009_risultati.md`) | **bocciata nel periodo chiuso** |
 | 10 | La deriva dopo i bilanci: comprare dopo una reazione positiva al comunicato, le 10 di allora (`prove/P010_dopo_i_bilanci.md`, scritto il 24 ott 2026 prima del calcolo) | 1 | Per evento −0,50% rispetto allo SPY (t −0,5) su 183, meglio dello SPY nel 54%; Sharpe con i costi 0,82 contro 0,94 (tenere le 10) e 0,87 (SPY) (`prove/P010_risultati.md`) | **bocciata**: sulle grandi aziende la deriva non c'è, come diceva Martineau (2022) |
-Totale nel conto: **19** (17 prove e 2 aperture del periodo chiuso: per la prova 2 su QQQ e per la prova 9; ogni apertura conta come una prova, decisione del 24 ottobre).
+| 11 | Il rimbalzo dopo le cadute della settimana su tutte le azioni dell'S&P 500, i 20 peggiori (`prove/P011_rimbalzo_500.md`, scritto il 24 ott 2026 prima del calcolo) | 1 | (in corso) | (in corso) |
+Totale nel conto: **20** (18 prove e 2 aperture del periodo chiuso: per la prova 2 su QQQ e per la prova 9; ogni apertura conta come una prova, decisione del 24 ottobre).
 
 ## 2. Idee in coda
 

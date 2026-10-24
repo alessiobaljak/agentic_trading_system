@@ -36,3 +36,12 @@ def test_membri_al():
     comp = [(date(2020, 1, 1), frozenset({"A"})), (date(2020, 6, 1), frozenset({"B"}))]
     assert u.membri_al(comp, date(2020, 5, 31)) == {"A"}
     assert u.membri_al(comp, date(2020, 6, 1)) == {"B"}
+
+
+def test_trova_cambi_di_nome():
+    giorni = [date(2022, 6, d) for d in range(1, 25)]
+    comp = [(date(2022, 1, 1), frozenset({"FB", "X"})), (date(2022, 6, 9), frozenset({"META", "Y"}))]
+    p = pd.Series(range(100, 124), index=giorni, dtype=float)
+    chiusure = {"FB": p[p.index < date(2022, 6, 9)], "META": p, "X": p * 2, "Y": p[p.index >= date(2022, 6, 9)]}
+    # FB → META: META ha la storia di prima con le stesse chiusure; X → Y no (Y non ha storia prima)
+    assert u.trova_cambi_di_nome(comp, chiusure, giorni_minimi=5) == {"FB": ("META", date(2022, 6, 9))}
