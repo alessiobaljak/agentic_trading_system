@@ -119,3 +119,30 @@ def test_senza_chiave_non_chiama_binance(tmp_path, monkeypatch):
     d = dm.DemoG1(fb, file_stato=tmp_path / "st.json", file_g1=tmp_path / "g1.json", interruttore=acceso)
     d.tick(1_800_000_000.0)
     assert fb.get_rtdb("/demo_binance/stato")["stato"].startswith("manca la chiave")
+
+
+def test_firma_dei_tre_tipi_di_chiave(tmp_path, monkeypatch):
+    """La chiave generata dal sistema (HMAC) e quelle generate da sé (Ed25519, RSA) firmano in modo verificabile."""
+    import base64
+    import hashlib
+    import hmac
+    from urllib.parse import unquote
+
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
+
+    q = "symbol=BTCUSDT&timestamp=1"
+    assert dm.firmatore("segreto")(q) == hmac.new(b"segreto", q.encode(), hashlib.sha256).hexdigest()
+    pem = lambda k: k.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,  # noqa: E731
+                                    serialization.NoEncryption()).decode()
+    ke = ed25519.Ed25519PrivateKey.generate()
+    ke.public_key().verify(base64.b64decode(unquote(dm.firmatore(pem(ke))(q))), q.encode())
+    kr = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    kr.public_key().verify(base64.b64decode(unquote(dm.firmatore(pem(kr))(q))), q.encode(), padding.PKCS1v15(), hashes.SHA256())
+    f = tmp_path / "demo.pem"
+    f.write_text(pem(ke))
+    monkeypatch.setenv("BINANCE_DEMO_PRIVATE_KEY_PATH", str(f))
+    assert dm.segreto_dall_ambiente().startswith("-----BEGIN")
+    monkeypatch.delenv("BINANCE_DEMO_PRIVATE_KEY_PATH")
+    monkeypatch.setenv("BINANCE_DEMO_API_SECRET", pem(ke).replace("\n", "\\n"))
+    assert "\n" in dm.segreto_dall_ambiente()

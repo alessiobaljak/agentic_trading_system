@@ -8,7 +8,9 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
 * **Solo il conto demo**: tutte le richieste vanno a `demo-fapi.binance.com` (l'indirizzo dei future di prova nella documentazione
   ufficiale); `_url` rifiuta qualunque altro indirizzo, quindi questo codice non puo' mandare un ordine al conto vero nemmeno per
   errore. Le chiavi sono quelle del conto demo (`BINANCE_DEMO_API_KEY`, `BINANCE_DEMO_API_SECRET` nel `.env` della macchina),
-  diverse da quelle del conto vero; mai nel repository.
+  diverse da quelle del conto vero; mai nel repository. Vanno bene tutti e due i tipi di chiave di Binance: quella generata dal
+  sistema (il segreto, firma HMAC) e quella generata da sé (la chiave privata Ed25519 o RSA in un file PEM sulla macchina, il cui
+  percorso va in `BINANCE_DEMO_PRIVATE_KEY_PATH`; oppure il testo PEM in `BINANCE_DEMO_API_SECRET`).
 * **Cosa fa**: quando G1 prende una decisione nuova (il giorno in `data/paper_g1.json` cambia), porta le posizioni del conto demo
   ai pesi di G1 per il valore del conto: ogni variazione come ordine limite al prezzo mark, valido un'ora; dopo l'ora quello che
   resta si annulla e si fa a mercato (come la ricerca, prova 56). Leva 5 su ogni moneta (i due lati insieme fanno il 200% del
@@ -18,6 +20,7 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import hmac
 import json
@@ -26,7 +29,7 @@ import os
 import time
 from pathlib import Path
 from typing import Callable, Optional
-from urllib.parse import urlencode, urlparse
+from urllib.parse import quote, urlencode, urlparse
 
 import requests
 
@@ -100,11 +103,38 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
     return out
 
 
+def firmatore(segreto: str) -> Callable[[str], str]:
+    """La firma delle richieste secondo il tipo di chiave: il segreto della chiave generata dal sistema (HMAC SHA256, esadecimale)
+    o la chiave privata PEM della chiave generata da sé (Ed25519, o RSA con SHA256; in base64, codificata per l'indirizzo)."""
+    if "-----BEGIN" not in segreto:
+        s = segreto.encode()
+        return lambda q: hmac.new(s, q.encode(), hashlib.sha256).hexdigest()
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
+
+    k = serialization.load_pem_private_key(segreto.encode(), password=None)
+    if isinstance(k, ed25519.Ed25519PrivateKey):
+        return lambda q: quote(base64.b64encode(k.sign(q.encode())).decode(), safe="")
+    if isinstance(k, rsa.RSAPrivateKey):
+        return lambda q: quote(base64.b64encode(k.sign(q.encode(), padding.PKCS1v15(), hashes.SHA256())).decode(), safe="")
+    raise ValueError("chiave privata di tipo non previsto (servono Ed25519 o RSA)")
+
+
+def segreto_dall_ambiente() -> str:
+    """Il segreto della chiave del conto demo: il file PEM indicato in BINANCE_DEMO_PRIVATE_KEY_PATH, se c'e', altrimenti
+    BINANCE_DEMO_API_SECRET."""
+    percorso = os.environ.get("BINANCE_DEMO_PRIVATE_KEY_PATH", "")
+    if percorso and Path(percorso).exists():
+        return Path(percorso).read_text(encoding="utf-8")
+    return os.environ.get("BINANCE_DEMO_API_SECRET", "").replace("\\n", "\n")
+
+
 class ClienteDemo:
     """Le richieste al conto demo dei future (firmate con la chiave del conto demo)."""
 
     def __init__(self, chiave: str, segreto: str, http: Callable = requests.request) -> None:
-        self.chiave, self.segreto, self.http = chiave, segreto.encode(), http
+        self.chiave, self.http = chiave, http
+        self.firma = firmatore(segreto)
 
     def chiedi(self, metodo: str, percorso: str, parametri: Optional[dict] = None, firmata: bool = False):
         p = dict(parametri or {})
@@ -113,7 +143,7 @@ class ClienteDemo:
             p["recvWindow"] = 5000
         q = urlencode(p)
         if firmata:
-            q += "&signature=" + hmac.new(self.segreto, q.encode(), hashlib.sha256).hexdigest()
+            q += "&signature=" + self.firma(q)
         r = self.http(metodo, _url(percorso) + ("?" + q if q else ""), headers={"X-MBX-APIKEY": self.chiave}, timeout=15)
         if r.status_code >= 400:
             raise RuntimeError(f"{metodo} {percorso}: {r.status_code} {r.text[:200]}")
@@ -136,7 +166,7 @@ class DemoG1:
 
     def cliente(self) -> Optional[ClienteDemo]:
         if self._cliente is None:
-            k, s = os.environ.get("BINANCE_DEMO_API_KEY", ""), os.environ.get("BINANCE_DEMO_API_SECRET", "")
+            k, s = os.environ.get("BINANCE_DEMO_API_KEY", ""), segreto_dall_ambiente()
             if k and s:
                 self._cliente = ClienteDemo(k, s)
         return self._cliente
@@ -161,7 +191,11 @@ class DemoG1:
     def tick(self, now: float) -> None:
         if not self.acceso():
             return
-        c = self.cliente()
+        try:
+            c = self.cliente()
+        except Exception as exc:  # noqa: BLE001
+            self._scrivi("stato", {"stato": f"chiave del conto demo non leggibile: {type(exc).__name__}", "aggiornato": now})
+            return
         if c is None:
             self._scrivi("stato", {"stato": "manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env)", "aggiornato": now})
             return
