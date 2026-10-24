@@ -81,3 +81,6 @@ data/paper_f5.json
 data/paper_f5.tmp
 data/paper_eventi.json
 data/paper_eventi.tmp
+
+# chiavi private (conto demo di Binance): mai nel repository
+*.pem
