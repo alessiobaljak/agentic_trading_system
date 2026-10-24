@@ -137,7 +137,7 @@ G11, `programma7/REVISIONE_G11.md`): lo Sharpe corretto delle prove 57-69 non co
 corretto (`asticella.serie_programma7`): 73 gruppi, G11 0,97 → 0,948, G1 0,94 → 0,913. **Gli errori dentro E4** (23 ottobre, trovati dal revisore di G12,
 `programma7/REVISIONE_G12.md`): LIT (una moneta nuova con lo stesso nome, contata come accorciamento, +27,8%) e due operazioni
 impossibili su contratti già chiusi (RVV, HFT); corretto: **E4 59 eventi, +11,89% a evento, p 0,0067: non passa più la soglia di
-0,005**; resta nel paper come informazione. Il bot non entra più su contratti in chiusura.
+0,005**; resta nel paper come informazione. Il bot non entra più su contratti in chiusura. **Le prove 70-73 fuori dal conto** (24 ottobre): le serie di G12, G13, G14, S1 e S2 non entravano nello Sharpe corretto delle prove successive; aggiunte (`asticella.serie_programma7`), contano dalla prova 74 (le prove 72 e 73 erano comunque a 0,01).
 
 ## 2. Il paper (dal 20 ottobre 2026 per i giorni, dal 26 ottobre per le settimane)
 
