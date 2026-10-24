@@ -110,3 +110,18 @@ def test_rimbalzo_compra_i_peggiori_della_settimana_e_usa_l_elenco_del_mese_dopo
     assert sorted(primi["simbolo"]) == ["A", "B", "E"] and QUANTI == 3
     # il venerdì 7 febbraio i rendimenti di 5 sedute sono 0 per tutti: si sceglie per ordine stabile, nessun ordine dopo l'ultimo giorno
     assert r.esecuzioni["giorno"].max() == D(2020, 2, 3)
+
+
+def test_tendenza_entra_se_l_anno_e_in_guadagno_ed_esce_se_no():
+    from stock.strategie import tendenza
+    giorni = list(pd.bdate_range("2019-01-01", periods=300).date)
+    p = [100.0 + i * 0.1 for i in range(270)] + [80.0] * 30            # sale per 270 sedute, poi crolla
+    df = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                      index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+    rett = pd.Series(p, index=pd.Index(giorni))
+    r = simula_conto({"X": df}, tendenza.strategia("X", giorni, rett), Costi())
+    e = r.esecuzioni
+    # prima decisione possibile: fine del primo mese con 253 chiusure; si compra; poi, dopo il crollo, alla fine del mese si vende
+    assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[-1] < 0
+    primo = e["giorno"].iloc[0]
+    assert giorni.index(primo) >= tendenza.SEDUTE
