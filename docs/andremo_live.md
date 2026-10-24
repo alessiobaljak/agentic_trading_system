@@ -4691,3 +4691,7 @@ il 5% a operazione, non con l'1% (detto al proprietario). **Il trader 3** (solo 
 controllate sui prezzi a 1 minuto, +0,31% a operazione con t 6,8 contro +0,003% delle stesse operazioni con l'entrata a caso;
 perdite tagliate (la peggiore −1,8%). È l'unico dei tre con un vantaggio che i numeri confermano, ma non si ricava dalle candele:
 proposta al proprietario la copia simulata. Nel conto: 142 prove (19 a eventi).
+**Il proprietario, 24 ottobre pomeriggio**: «non è che sei troppo conservativo [...] io non posso fare una copia e aspettare 60
+giorni [...] usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi se funziona andiamo live».
+Registrato come piano (voce P26 del backlog): G1 sul demo e nel paper per 1-2 settimane, poi il passaggio con una cifra piccola se
+lo chiede lui esplicitamente (la regola di `DRY_RUN` resta).

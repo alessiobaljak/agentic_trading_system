@@ -152,6 +152,15 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P26. Dal paper e dal demo ai soldi veri con G1 — chiesta dal proprietario il 24 ott 2026; PIANO, decide il proprietario
+**Perché:** il proprietario (24 ott): «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi
+se funziona andiamo live»; non vuole aspettare 60 giorni di copia simulata. **Candidata:** G1 (F5 decisa ogni giorno): Sharpe 1,96
+sul passato di Binance 2021-2026, ogni anno positivo, Sharpe corretto 0,91 dopo 142 prove (soglia 0,95); sul conto demo dal 24 ott.
+**Piano:** (1) demo e paper accanto per 1-2 settimane: si confrontano esecuzione (ordini limite eseguiti, costi), rendimento e
+posizioni; (2) se combaciano, il proprietario decide il passaggio con una cifra piccola, con una richiesta esplicita (la regola di
+`DRY_RUN`); (3) il codice per il conto vero si prepara separato dal demo (chiave sua, capitale massimo scritto, interruttore suo).
+**Non si fa senza la sua richiesta esplicita.**
+
 ### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; ACCESO dal 24 ott, 09:11 UTC
 **Perché:** il proprietario (24 ott): «perché per le crypto non usiamo Binance demo per simulare i nostri ordini (un paper live)?».
 Binance Demo Trading ha i future USDⓈ-M e l'accesso da programma (`demo-fapi.binance.com`, documentazione ufficiale): gli ordini
