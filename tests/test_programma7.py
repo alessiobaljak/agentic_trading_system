@@ -293,3 +293,21 @@ def test_g18_segnale_e_uscite():
     h[5] = 100.0 * (1 + g18.PROTEZIONE) + 0.01               # prima tocca la protezione
     op = g18.operazione(o, h, l, 0, -1)
     assert op["motivo"] == "protezione" and abs(op["r_prezzo"] + g18.PROTEZIONE) < 1e-12
+
+
+def test_g19_long_dopo_il_crollo():
+    import pandas as pd
+    from research.programma7 import ventunesima as g19
+    m = np.arange(0, 3000)
+    w = pd.DataFrame({"open": 1.0, "high": 1.0, "low": 1.0, "close": 1.0, "dollari": 100.0}, index=m)
+    w.loc[1986:2000, ["open", "high", "low", "close"]] = 0.76          # −24% sul giorno prima
+    w.loc[2000, "close"] = 0.74                                          # e −2,6% nel quarto d'ora
+    w.loc[1986:2000, "dollari"] = 400.0
+    s = g19.segnali(w, np.arange(1500, 2100))
+    assert 2000 in s and min(s) >= 1986
+    w.loc[2001:, ["open", "high", "low", "close"]] = 0.75
+    w.loc[2010, "high"] = 0.75 * 1.031
+    op = g19.operazione(w, 2000, 0.001)
+    assert op["motivo"] == "obiettivo" and abs(op["r_prezzo"] - 0.03) < 1e-12
+    w.loc[2005, "low"] = 0.75 * 0.84
+    assert g19.operazione(w, 2000, 0.001)["motivo"] == "protezione"
