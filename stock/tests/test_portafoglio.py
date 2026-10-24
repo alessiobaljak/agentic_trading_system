@@ -186,3 +186,19 @@ def test_dopo_i_bilanci_compra_solo_dopo_una_reazione_migliore_dell_indice():
     e = r.esecuzioni
     assert list(e["simbolo"]) == ["A", "A"]
     assert list(e["giorno"]) == [D(2020, 1, 13), giorni[giorni.index(D(2020, 1, 13)) + 20]]
+
+
+def test_rimbalzo_sull_indice_usa_i_membri_del_giorno():
+    from datetime import date as D
+    from stock.strategie.rimbalzo import strategia_rimbalzo_indice
+    giorni = list(pd.bdate_range("2020-01-24", "2020-02-07").date)
+    cadute = {"A": -0.10, "B": -0.05, "C": 0.0, "Z": -0.50}
+    barre_, rett = {}, {}
+    for s, c in cadute.items():
+        p = [100.0] * 5 + [100.0 * (1 + c)] * 6
+        barre_[s] = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                                 index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+        rett[s] = pd.Series(p, index=pd.Index(giorni))
+    membri = lambda g: ["A", "B", "C"]          # Z non è nell'indice: non si compra anche se è caduto di più  # noqa: E731
+    r = simula_conto(barre_, strategia_rimbalzo_indice(membri, giorni, rett, quanti=2), Costi())
+    assert sorted(r.esecuzioni[r.esecuzioni.giorno == D(2020, 2, 3)]["simbolo"]) == ["A", "B"]

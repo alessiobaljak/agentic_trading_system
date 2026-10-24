@@ -73,3 +73,55 @@ def strategia_tenere_i_dieci(universo: pd.DataFrame, calendario: list[date]):
             return []
         return verso_pesi(stato, {s: 1 / len(prezzi) for s in prezzi}, prezzi, etichetta="mese")
     return decidi
+
+
+def strategia_rimbalzo_indice(membri, calendario: list[date], rettificati: dict[str, pd.Series], quanti: int = 20):
+    """Come `strategia_rimbalzo`, ma fra tutti i titoli dell'indice: `membri(giorno)` dà i simboli dell'indice quel giorno
+    (`stock/prove/P011_rimbalzo_500.md`)."""
+    dopo = giorni_dopo(calendario)
+
+    def decidi(giorno: date, storia: Storia, stato: StatoConto) -> list:
+        prossimo = dopo.get(giorno)
+        if prossimo is None or prossimo.isocalendar()[:2] == giorno.isocalendar()[:2]:
+            return []
+        rendimenti, prezzi = {}, {}
+        for s in membri(giorno):
+            r = rettificati.get(s)
+            h = storia(s)
+            if r is None or h is None or h.empty or h.index[-1] != giorno:
+                continue
+            passato = r.loc[:giorno]
+            if len(passato) < SEDUTE + 1:
+                continue
+            rendimenti[s] = passato.iloc[-1] / passato.iloc[-1 - SEDUTE] - 1
+            prezzi[s] = float(h["close"].iloc[-1])
+        if len(rendimenti) < quanti:
+            return []
+        scelti = sorted(rendimenti, key=lambda s: (rendimenti[s], s))[:quanti]
+        for s in stato.azioni:
+            if s not in prezzi:
+                h = storia(s)
+                if h is not None and not h.empty:
+                    prezzi[s] = float(h["close"].iloc[-1])
+        return verso_pesi(stato, {s: 1 / quanti for s in scelti}, prezzi, etichetta="settimana")
+    return decidi
+
+
+def strategia_tenere_l_indice(membri, calendario: list[date]):
+    """Il termine di paragone: tutti i titoli dell'indice a pesi uguali, ribilanciati il primo giorno di borsa di ogni mese."""
+    dopo = giorni_dopo(calendario)
+
+    def decidi(giorno: date, storia: Storia, stato: StatoConto) -> list:
+        prossimo = dopo.get(giorno)
+        if prossimo is None or prossimo.month == giorno.month:
+            return []
+        prezzi = {}
+        for s in set(membri(giorno)) | set(stato.azioni):
+            h = storia(s)
+            if h is not None and not h.empty and h.index[-1] == giorno:
+                prezzi[s] = float(h["close"].iloc[-1])
+        dentro = [s for s in membri(giorno) if s in prezzi]
+        if not dentro:
+            return []
+        return verso_pesi(stato, {s: 1 / len(dentro) for s in dentro}, prezzi, etichetta="mese")
+    return decidi
