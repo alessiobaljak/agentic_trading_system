@@ -132,7 +132,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   le 14 finestre con la leva hanno perso: +30,1% contro +32,7% del tenere lo SPY). **La prova 15 (più investiti quando il mercato è calmo)
   è la prima che batte il tenere sullo Sharpe** (QQQ 1,08 contro 0,99; SPY 0,95 contro 0,93; perdite massime −23/24% contro circa −33%),
   ma **non passa l'asticella corretta per i tentativi** (0,79 e 0,67 contro 0,95, con 27 prove nel conto): bocciata, come vuole il metodo.
-  Da proporre al proprietario: se aprire il periodo chiuso anche per lei (la regola dice di no).
+  **Periodo chiuso aperto per decisione del proprietario, dopo la revisione separata (`stock/prove/REVISIONE_P015.md`): bocciata anche
+  lì** (`P015_chiuso.md`): nel 2025-2026 SPY Sharpe 0,76 contro 1,04 del tenere, QQQ 1,05 contro 1,09; su QQQ perdita massima più
+  piccola (−17% contro −23%) ma guadagno più basso (+32,9% contro +45,9%). Nel 2025-2026 l'agitazione di aprile 2025 l'ha fatta uscire
+  e rientrare tardi.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
