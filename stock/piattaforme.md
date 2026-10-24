@@ -39,9 +39,10 @@ aperta: va trattata con sospetto anche lì.
 * **Il demo vale quanto il conto vero.** Stesse interfacce per il programma [3], stesse autorizzazioni e stessi abbonamenti ai dati del
   conto vero [3]: quello che si costruisce sul demo funziona poi senza cambiare niente. Su Saxo la simulazione è dichiarata «a priorità
   più bassa» per i problemi tecnici e spesso ha versioni diverse dal conto vero [7].
-* **I prezzi.** Con 15 minuti di ritardo (Saxo) si possono provare solo strategie lente (giorni o settimane). Il proprietario vuole anche
-  operare in giornata (23 ottobre): servono prezzi in tempo reale, e su Interactive Brokers il demo li prende dal conto vero se si attiva
-  la condivisione [4].
+* **I prezzi.** Con 15 minuti di ritardo (Saxo) si possono provare bene solo strategie lente (giorni o settimane): ogni strategia che
+  reagisce al prezzo entro la giornata verrebbe misurata con prezzi vecchi. Non sappiamo ancora che strategie serviranno (le richieste
+  sulle azioni sono diverse da quelle delle crypto: il proprietario, 24 ottobre), quindi conviene non chiudersi questa porta. Su
+  Interactive Brokers il demo prende i prezzi in tempo reale dal conto vero se si attiva la condivisione [4].
 * **L'universo.** Borsa svizzera e tutte le grandi borse in un posto solo [2].
 
 **I rischi della scelta:**
