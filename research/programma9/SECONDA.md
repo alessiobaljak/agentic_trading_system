@@ -15,7 +15,9 @@ fiammata di pochi minuti quello dell'ultimo regolamento può essere vecchio.
 
 ## 2. Periodo e dati
 
-* **Periodo: dal 27 giugno al 21 ottobre 2026**, mai usato dalla regola delle fiammate (le prove 75-76 si fermano al 26 giugno; i
+* **Periodo: dal 27 giugno al 30 settembre 2026** (correzione scritta alle 16:50 UTC, prima di qualunque calcolo: i file
+  mensili del funding di ottobre non sono ancora nell'archivio, e il pannello riempie ottobre con una media; senza il funding vero
+  la regola non si può applicare), mai usato dalla regola delle fiammate (le prove 75-76 si fermano al 26 giugno; i
   trade del trader n. 2 li abbiamo visti, ma non la regola su questi mesi). Universo, giorni candidati, candele a 1 minuto e segnale
   **identici alla prova 75** (`diciottesima`).
 * Il funding: quello dell'ultimo regolamento prima del segnale, dall'archivio pubblico di Binance (`fundingRate` mensile della moneta);
