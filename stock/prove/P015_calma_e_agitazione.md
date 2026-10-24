@@ -30,3 +30,16 @@ quando la volatilità recente è ancora bassa, cioè quando si è più investiti
 Passa la ricerca se sono vere **tutte**: (1) Sharpe annuo con i costi più alto del comprare e tenere lo SPY e del comprare e tenere lo
 stesso titolo, sugli stessi giorni; (2) Sharpe corretto ≥ 0,95 con tutte le serie del conto; (3) Sharpe sopra zero con i costi doppi;
 (4) almeno il 60% dei 32 trimestri in guadagno. Se passa: revisore separato, poi il periodo chiuso con l'esame della prova 2.
+
+## L'esame nel periodo chiuso (scritto il 24 ottobre 2026, dopo la bocciatura sul 2016-2024 e prima di aprirlo)
+
+**Eccezione decisa dal proprietario** (24 ottobre: «sì, prova la 15 sul periodo chiuso»): la prova 15 non ha passato la condizione 2
+(Sharpe corretto 0,67 e 0,79 contro 0,95), quindi per il metodo non andrebbe sul periodo chiuso. Ci va per decisione del proprietario,
+dopo il revisore separato. Lo si scrive qui perché resti chiaro.
+
+Periodo: dal 2 gennaio 2025 al 30 settembre 2026, stessi titoli, stesse regole, stessi costi (scarto misurato sul 2016-2024, interesse
+6%). I prezzi di novembre e dicembre 2024 servono solo per avere le 21 sedute di storia: la prima decisione è l'ultimo giorno di borsa
+della prima settimana del 2025 (fino all'esecuzione si sta in contanti; il comprare e tenere parte dal 2 gennaio). Si apre **una volta
+sola**. Per ogni titolo passa se sono vere **tutte**: (1) Sharpe annuo con i costi più alto del comprare e tenere lo SPY e del comprare e
+tenere lo stesso titolo sugli stessi giorni; (2) Sharpe con i costi doppi sopra zero; (3) almeno 4 trimestri su 7 in guadagno. Nel conto:
+**1 apertura in più** (28).

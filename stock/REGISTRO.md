@@ -23,7 +23,7 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 | 13 | Le 50 azioni dell'S&P 500 salite di più in 12 mesi (`prove/P013_momento_12_mesi.md`, scritto il 24 ott 2026 prima del calcolo) | 1 | Sharpe con i costi 0,59 contro 0,84 dello SPY e 0,73 dell'indice a pesi uguali (`prove/P013_risultati.md`) | **bocciata** |
 | 14 | Sempre investiti, con la leva (148%) nelle 24 ore prima della banca centrale, SPY e QQQ, decide il periodo chiuso (`prove/P014_leva_banca_centrale.md`, scritto il 24 ott 2026 prima del calcolo) | 3 | 2016-2024 (da leggere): Sharpe 0,89 e 0,96 contro 0,87 e 0,92. **Periodo chiuso**: +30,1% e +43,6% con i costi contro +32,7% e +45,9% del tenere; Sharpe 1,02 e 1,07 contro 1,04 e 1,09: nel 2025-2026 le 14 finestre con la leva hanno perso (`prove/P014_risultati.md`) | **bocciata nel periodo chiuso** |
 | 15 | Più investiti quando il mercato è calmo, meno quando è agitato, SPY e QQQ (`prove/P015_calma_e_agitazione.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe con i costi SPY 0,95, QQQ 1,08 contro 0,93 e 0,99 del tenere: **la prima che batte il tenere**; perdita massima −24% e −23%; costi doppi 0,85 e 1,03; trimestri 75%; ma Sharpe corretto per i tentativi 0,67 e 0,79 (soglia 0,95), t 2,8 e 3,2 (`prove/P015_risultati.md`) | **bocciata dall'asticella** (condizione 2); la più vicina finora |
-Totale nel conto: **27** (24 prove e 3 aperture del periodo chiuso: per la prova 2 su QQQ e per la prova 9; ogni apertura conta come una prova, decisione del 24 ottobre).
+Totale nel conto: **28** (24 prove e 4 aperture del periodo chiuso: per la prova 2 su QQQ e per la prova 9; ogni apertura conta come una prova, decisione del 24 ottobre).
 
 ## 2. Idee in coda
 
