@@ -206,6 +206,7 @@ def contratti_monete(info: dict) -> dict:
 class PaperF5:
     # dove scrive e da cosa si accende; G1 (sotto) cambia solo questi e il giorno della decisione
     RAMO, ETICHETTA, INTERRUTTORE_DI_SERIE, FILE_DI_SERIE = "/paper_f5", "paper_f5", INTERRUTTORE, FILE_STATO
+    MISURA_SCARTI = False          # la misura dello scarto la fa una sola istanza (G1, ogni giorno)
 
     def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Optional[Path] = None,
                  interruttore: Optional[Path] = None, pausa_s: float = 0.1) -> None:
@@ -412,7 +413,30 @@ class PaperF5:
         print(f"[{self.ETICHETTA}] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
               f"costo {costo:.2f}, equity {equity - costo:.2f}")
         self._pubblica(st, prezzi, now)
+        self.misura_scarti(getattr(self, "_ultimo_universo", []), now)
         return st
+
+    def misura_scarti(self, uni: list, now: float) -> None:
+        """Lo scarto fra il miglior prezzo di vendita e di acquisto delle monete dell'universo, in frazione del prezzo medio, per
+        fasce di volume (voce P20 del backlog: la ricerca usa uno scarto fisso dello 0,02% mai misurato). Una sola istanza lo fa."""
+        if self.fb is None or not self.MISURA_SCARTI or not uni:
+            return
+        dati = self.chiedi("/fapi/v1/ticker/bookTicker", {}) or []
+        libro = {}
+        for x in dati:
+            try:
+                b, a = float(x["bidPrice"]), float(x["askPrice"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if b > 0 and a >= b:
+                libro[x["symbol"]] = (b, a)
+        scarti = {s: (libro[s][1] - libro[s][0]) / ((libro[s][1] + libro[s][0]) / 2) for s in uni if s in libro}
+        fasce = {"1-10": uni[:10], "11-50": uni[10:50], "51-100": uni[50:100]}
+        mediane = {f: float(np.median([scarti[s] for s in ss if s in scarti])) for f, ss in fasce.items()
+                   if any(s in scarti for s in ss)}
+        data = time.strftime("%Y-%m-%d", time.gmtime(now))
+        self.fb.set_rtdb(f"/misure/scarto/{data}", {"fasce": mediane, "per_moneta": {s: round(v, 7) for s, v in scarti.items()},
+                                                   "ora": now})
 
     def pesi_del_lunedi(self, m: int, st: dict) -> tuple:
         """(pesi, lunghi, corti, numero di monete dell'universo) per il lunedi' m, con i dati di adesso; None se mancano."""
@@ -422,6 +446,7 @@ class PaperF5:
         giornaliere = {s: self._giornaliere(s) for s in contratti}
         uni = universo(giornaliere, contratti, lunedi_di(m))          # le 100 della settimana (per F5 m e' gia' il lunedi')
         uni = [s for s in uni if s not in getattr(self, "_in_chiusura", set())]
+        self._ultimo_universo = list(uni)
         funding, sigma = {}, {}
         for s in uni:
             sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
@@ -508,6 +533,7 @@ class PaperG1(PaperF5):
     RAMO, ETICHETTA = "/paper_g1", "paper_g1"
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g1.json"
+    MISURA_SCARTI = True
 
     def giorno_di_decisione(self, giorno: int) -> int:
         return giorno
@@ -536,6 +562,7 @@ class PaperG11(PaperG1):
     media dei ranghi di −funding dei 7 giorni e di −funding dell'ultimo giorno. Interruttore `ops/paper_g11_acceso`, stato in
     `data/paper_g11.json` e su RTDB in `/paper_g11`."""
     RAMO, ETICHETTA = "/paper_g11", "paper_g11"
+    MISURA_SCARTI = False
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g11_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g11.json"
 

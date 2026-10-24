@@ -183,7 +183,7 @@ quelle settimane Sharpe 1,95 invece di 1,93), ma non sono numeri veri e toccano 
 **Cosa:** riempire i giorni senza file mensile con il funding vero di `/fapi/v1/fundingRate` (lo scarico giornaliero c'è già nel
 bot) e segnare nei risultati le settimane che restano stimate. **Quando:** prima della prossima prova che usa le ultime settimane.
 
-### P20. Lo scarto delle altcoin misurato, non fissato — trovata il 23 ott 2026 (revisione di F5)
+### P20. Lo scarto delle altcoin misurato, non fissato — trovata il 23 ott 2026 (revisione di F5); MISURA ACCESA il 24 ott (G1 nel bot scrive ogni giorno lo scarto delle 100 monete in RTDB `/misure/scarto`, per fasce 1-10, 11-50, 51-100)
 **Perché:** tutte le prove usano uno scarto fisso (0,01% BTC, ETH, SOL; 0,02% le altre) mai misurato sui libri degli ordini di
 allora. Con lo 0,10% per le monete fuori dalle prime 50 F5 scende da 1,93 a 1,83; con i costi tripli a 1,60. **Cosa:** misurare
 lo scarto vero oggi (il libro degli ordini a ore del programma 5, `research/programma5/`, e `/fapi/v1/depth` dal bot) per fascia

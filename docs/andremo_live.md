@@ -4619,3 +4619,8 @@ chiusura le monete spesso salgono prima di scendere, come dopo le rimozioni a pr
 scritte nella coda con il perché). Fatto invece il resto della voce P24: F5, G1 e G11 nel bot tolgono dall'universo le monete che
 Binance chiude entro 8 giorni, così il paper non tiene una moneta fino a un prezzo che non esiste più. Test in `tests/test_paper_f5.py`.
 Riavvio fatto (ops 0651): il bot gira con le monete in chiusura tolte dall'universo di F5, G1 e G11.
+**24 ottobre, notte: le prime decisioni vere nel bot** (ops 0652). G1 alle 00:09 UTC: universo 100 monete, 20 long e 20 short,
+costo provvisorio 4 dollari (gli ordini limite si controllano dopo un'ora); G11 alle 00:13, la stessa cosa. E il primo evento del
+funding al tetto: **E4 short su IRYSUSDT** a 0,08694 contro il Bitcoin a 81.008, alle 00:13. Aggiunta anche la misura giornaliera
+dello scarto vero fra acquisto e vendita delle 100 monete (voce P20 del backlog), fatta da G1 a ogni decisione e scritta su RTDB in
+`/misure/scarto`.

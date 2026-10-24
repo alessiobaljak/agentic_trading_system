@@ -101,6 +101,10 @@ class _Finto:
                     for t in tempi if t <= self.adesso_ms]
         if percorso == "/fapi/v1/premiumIndex":
             return [{"symbol": s, "markPrice": p_} for s, p_ in self.prezzo.items()]
+        if percorso == "/fapi/v1/ticker/bookTicker":
+            # scarto dello 0,02% (le prime monete) o dello 0,1% (le altre)
+            return [{"symbol": s, "bidPrice": str(p_ * (1 - (0.0001 if int(s[1:3]) < 10 else 0.0005))),
+                     "askPrice": str(p_ * (1 + (0.0001 if int(s[1:3]) < 10 else 0.0005)))} for s, p_ in self.prezzo.items()]
         if percorso == "/fapi/v1/markPriceKlines":
             # le monete pari scendono sotto il prezzo (il limite di chi compra si esegue), le dispari restano ferme
             s = p["symbol"]
@@ -238,6 +242,9 @@ def test_g1_decide_ogni_giorno(tmp_path):
     st2 = p.carica()
     assert st2["ultimo_lunedi"] == m + 3 and st2["limite_variazioni"] == len(st["ordini"]["variazioni"])
     assert fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))["universo"] == 30
+    scarto = fb.get_rtdb("/misure/scarto/" + time.strftime("%Y-%m-%d", time.gmtime(now)))
+    assert len(scarto["per_moneta"]) == 30 and set(scarto["fasce"]) == {"1-10", "11-50"}
+    assert all(v == pytest.approx(0.0002) or v == pytest.approx(0.001) for v in scarto["per_moneta"].values())
 
 
 def test_g11_segnale_fresco_come_la_ricerca():
