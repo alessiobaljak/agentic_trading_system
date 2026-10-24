@@ -4656,3 +4656,15 @@ la copertura resta il rischio delle altcoin. Le strategie restano sui future. Ne
 M-002 non passa (p 0,11), M-003 bocciata; seconda tornata 9 e 7 trade. Paper di ricerca: A1 −0,16% in tre giorni; le settimane si
 misurano dal 26 ottobre; nessun evento N3 nel paper di ricerca; le monete entrate nell'universo sono le stesse dei giorni scorsi, tutte
 monete.
+**Il conto demo accetta anche la chiave «generata da sé»** (24 ottobre, mattina; il proprietario ha creato la chiave). Oltre al
+segreto della chiave generata dal sistema, il bot ora firma anche con una chiave privata Ed25519 o RSA in un file sulla macchina
+(`BINANCE_DEMO_PRIVATE_KEY_PATH`); una chiave illeggibile si vede nello stato in dashboard. I file `.pem` non possono più entrare
+nel repository.
+**Diciassettesima prova del programma 7, G15** (`programma7/DICIASSETTESIMA.md`, giro delle 08:17): vendere prima degli sblocchi
+dei token di squadra e investitori, con dati nuovi (i calendari pubblici di DefiLlama, 372 protocolli). Short contro il Bitcoin dal
+30° giorno prima di ogni sblocco di almeno l'1% dell'offerta fino al giorno dopo, uscita a +30%: 513 eventi su 76 monete, +1,73% a
+evento ma p 0,063, e 2026 −1,2%. Senza l'uscita di protezione −0,02%: il calo «che comincia un mese prima» (Keyrock, 90% degli
+sblocchi) sui perpetui di Binance non si vede contro il Bitcoin e dopo i costi; lo short paga anche il funding (−0,37% a evento,
+segno che molti si coprono già), e il giorno dello sblocco la moneta risale (−0,83% per lo short). Capito: una regolarità famosa e
+con le date pubbliche è già nei prezzi. Nel conto: 140 prove (17 a eventi). Correzione nel conto: le serie delle prove 70-73 non
+entravano nello Sharpe corretto delle prove dopo (`asticella.serie_programma7`); ora ci sono, anche G15.
