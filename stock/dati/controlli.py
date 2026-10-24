@@ -79,8 +79,9 @@ def controlla_minuti(df_min: pd.DataFrame, cal: pd.DataFrame, minimo_quota: floa
         if dentro < minimo_quota * attesi:
             p.append(_problema("minuti mancanti", d, f"{dentro} minuti su {attesi} nella seduta"))
     primo, ultimo = min(giorni), max(giorni)
+    visti = set(giorni)
     for d in cal.index:
-        if primo <= d <= ultimo and d not in set(giorni):
+        if primo <= d <= ultimo and d not in visti:
             p.append(_problema("buco", d, "giorno di borsa senza barre al minuto"))
     riepilogo = {"dentro": dentro_tot, "fuori": int(len(df_min) - dentro_tot), "giorni": int(giorni.nunique())}
     return p, riepilogo
@@ -110,8 +111,9 @@ def controlla_salti(df_giorno_raw: pd.DataFrame, azioni: pd.DataFrame, soglia: f
                                    f"rapporto {fraz[d]:g}: chiusure {visto:.3f} invece di circa {atteso:.3f}"))
         elif abs(salto - 1) > soglia:
             p.append(_problema("salto", d, f"apertura/chiusura di ieri = {salto:.3f} senza frazionamento"))
+    visti = set(giorni)
     for d in fraz:
-        if giorni and giorni[0] < d <= giorni[-1] and d not in set(giorni):
+        if giorni and giorni[0] < d <= giorni[-1] and d not in visti:
             p.append(_problema("frazionamento non visto", d, "il giorno di stacco non ha barra"))
     return p
 

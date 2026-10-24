@@ -165,3 +165,9 @@ def test_alpaca_fine_tirata_indietro_di_16_minuti():
     assert abs((adesso - fine) - alpaca.RITARDO_PIANO_GRATUITO).total_seconds() < 5
     passato = datetime(2016, 1, 8, tzinfo=timezone.utc)
     assert alpaca._fine_ammessa(passato) == passato
+
+
+def test_inizio_e_fine_alla_mezzanotte_di_new_york():
+    from stock.dati.scarica import _utc
+    assert _utc("2016-01-01") == datetime(2016, 1, 1, 5, tzinfo=timezone.utc)          # inverno: UTC-5
+    assert _utc("2024-06-30", fine=True) == datetime(2024, 7, 1, 4, tzinfo=timezone.utc)  # estate: UTC-4

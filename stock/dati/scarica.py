@@ -19,8 +19,10 @@ NY = "America/New_York"
 
 
 def _utc(d: str, fine: bool = False) -> datetime:
-    t = datetime.fromisoformat(d).replace(tzinfo=timezone.utc)
-    return t + timedelta(days=1) if fine else t
+    """La mezzanotte di New York del giorno `d` (del giorno dopo se `fine`), in UTC. Con la
+    mezzanotte UTC le barre al minuto prendevano le ultime ore del giorno prima a New York."""
+    t = pd.Timestamp(d, tz=NY) + (pd.Timedelta(days=1) if fine else pd.Timedelta(0))
+    return t.tz_convert("UTC").to_pydatetime()
 
 
 def scarica_titolo(simbolo: str, dal: str, al: str, minuti: bool, cartella=None) -> dict:
