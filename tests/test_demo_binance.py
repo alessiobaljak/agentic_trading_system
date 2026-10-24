@@ -182,9 +182,11 @@ def test_id_degli_ordini_e_ordini_rimasti_aperti(tmp_path):
     """Il 24 ottobre Binance ha rifiutato l'ordine di una moneta con il nome in caratteri cinesi e il ribilancio si e' fermato:
     l'identificativo ora e' sempre ammesso, un rifiuto non ferma gli altri e gli ordini rimasti aperti si annullano prima."""
     from bot.core.firebase_client import _InMemoryStore
-    assert dm.id_ordine(20750, "AUSDT") == "g1d-20750-AUSDT"
-    i = dm.id_ordine(20750, "币安人生USDT")
-    assert re.fullmatch(r"[.A-Z:/a-z0-9_-]{1,36}", i) and i != dm.id_ordine(20750, "别的USDT")
+    assert dm.id_ordine(20750, "AUSDT", 1_792_800_400) == "g1d-20750-400-AUSDT"
+    assert dm.id_ordine(20750, "AUSDT", 1) != dm.id_ordine(20750, "AUSDT", 2)          # un altro tentativo, un altro identificativo
+    i = dm.id_ordine(20750, "币安人生USDT", 99_999)
+    assert re.fullmatch(r"[.A-Z:/a-z0-9_-]{1,36}", i) and i != dm.id_ordine(20750, "别的USDT", 99_999)
+    assert len(dm.id_ordine(20750, "1000000BABYDOGEUSDT", 99_999)) <= 36
     fb = _InMemoryStore()
     finto = _Demo()
     finto.ordini[99] = {"symbol": "AUSDT", "type": "LIMIT", "quantity": "1", "orderId": 99}        # rimasto da un tentativo

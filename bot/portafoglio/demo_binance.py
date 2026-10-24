@@ -82,11 +82,13 @@ def filtri(info: dict) -> dict:
     return out
 
 
-def id_ordine(giorno: int, simbolo: str) -> str:
+def id_ordine(giorno: int, simbolo: str, tentativo: int = 0) -> str:
     """L'identificativo dell'ordine per Binance (ammessi solo ``.A-Za-z0-9:/_-``, al massimo 36): le monete con il nome in altri
-    caratteri (per esempio 币安人生USDT) prendono un'impronta del nome. Il 24 ottobre il primo ribilancio sul demo si e' fermato qui."""
+    caratteri (per esempio 币安人生USDT) prendono un'impronta del nome. Il 24 ottobre il primo ribilancio sul demo si e' fermato qui,
+    e il secondo tentativo dello stesso giorno con «ClientOrderId is duplicated»: per questo c'e' anche il tentativo (i secondi
+    dell'ora, modulo 100.000)."""
     nome = simbolo if re.fullmatch(r"[.A-Za-z0-9:/_-]+", simbolo) else "h" + hashlib.sha1(simbolo.encode()).hexdigest()[:12]
-    return f"g1d-{giorno}-{nome}"[:36]
+    return f"g1d-{giorno}-{tentativo % 100_000}-{nome}"[:36]
 
 
 def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> list:
@@ -249,7 +251,7 @@ class DemoG1:
         piazzati, rifiutati = [], []
         for s, lato, q, limite, riduce in ordini_del_giorno(pesi, posizioni, prezzi, equity, f):
             p = {"symbol": s, "side": lato, "type": "LIMIT", "timeInForce": "GTC", "quantity": testo(q), "price": testo(limite),
-                 "newClientOrderId": id_ordine(giorno, s)}
+                 "newClientOrderId": id_ordine(giorno, s, int(now))}
             if riduce:
                 p["reduceOnly"] = "true"
             try:                                       # un ordine rifiutato non ferma gli altri
