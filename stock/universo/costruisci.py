@@ -31,6 +31,9 @@ QUANTI = 10
 STESSA_AZIENDA = {"GOOG": "GOOGL", "FOX": "FOXA", "NWS": "NWSA", "DISCK": "DISCA", "DISCB": "DISCA",
                   "UA": "UAA", "BRK.A": "BRK.B", "LEN.B": "LEN", "HEI.A": "HEI"}
 QUI = Path(__file__).resolve().parent
+# cambi di nome: stesso titolo, simbolo nuovo. Nelle simulazioni si usa il simbolo nuovo, che su Alpaca ha anche la
+# storia di prima (FB e META: stesse chiusure e volumi su 1620 giorni, controllato il 24 ottobre 2026)
+RINOMINATI = {"FB": "META"}
 
 
 def carica_composizione(percorso) -> list[tuple[date, frozenset]]:

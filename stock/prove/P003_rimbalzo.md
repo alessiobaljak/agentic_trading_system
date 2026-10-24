@@ -31,6 +31,11 @@ nel 2016-2024 le grandi aziende tecnologiche sono salite molto, il che aiuta qua
 * **Titoli spariti:** un ordine per un titolo che il giorno dopo non ha la barra non si esegue e viene contato; un titolo tolto dal
   listino con azioni in mano resta valutato all'ultima chiusura (va detto nei risultati).
 
+* **Cambi di nome** *(correzione del 24 ottobre, scritta dopo il primo calcolo, `P003_risultati_con_errore_FB.md`)*: un titolo che
+  cambia simbolo resta lo stesso titolo. FB è diventato META il 9 giugno 2022: si usa META per tutto il periodo (su Alpaca le due storie
+  sono identiche fino a quel giorno). Il primo calcolo trattava FB come un titolo sparito dal listino: restava «in mano» senza poter
+  essere venduto e bloccava gli acquisti (134 ordini senza barra, 191 rifiutati). È un errore dei dati, non una scelta della regola.
+
 ## I costi
 
 * **Scarto:** per ogni titolo, metà della sua mediana misurata (`stock/dati/ESITO_CONTROLLI_UNIVERSO.md`, misura sul primo giorno di

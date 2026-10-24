@@ -98,7 +98,30 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   trimestri su 7 in guadagno, costi doppi 0,24), ma tenere QQQ fa Sharpe 1,09 e tenere lo SPY 1,04. Il periodo chiuso del metodo è
   ora consumato: non si può più usare per nessuna prova.
 
+* **Le prove 3-8** (24 ottobre, in autonomia; regole committate prima di ogni calcolo; registro in `stock/REGISTRO.md`): **tutte
+  bocciate.**
+
+  | Prova | Idea | Sharpe con i costi | Da battere |
+  |---|---|---|---|
+  | 3 | Il rimbalzo: i 3 peggiori della settimana fra le 10 di allora | 0,91 | 0,94 (tenere le 10) |
+  | 4 | Tenere solo di notte, SPY / QQQ | 0,54 / 0,60 | 0,87 / 0,92 |
+  | 5 | Seguire la tendenza a 12 mesi, SPY / QQQ | 0,70 / 0,92 | 0,85 / 0,94 |
+  | 6 | Il cambio del mese, SPY / QQQ | 0,57 / 0,54 | 0,91 / 0,96 |
+  | 7 | Le 24 ore prima della banca centrale, SPY / QQQ | 0,84 / 0,89 | 0,87 / 0,92 |
+  | 8 | I titoli appena tolti dall'S&P 500 | −0,27 | 0,87 |
+
+* **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
+  è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
+  le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
+  dell'universo (`stock/dati/ESITO_CONTROLLI_UNIVERSO.md`).
+
 ## Cosa abbiamo capito il 24 ottobre
+
+* **Sul 2016-2024 nessuna delle 8 idee batte il comprare e tenere** (13 prove nel conto, più l'apertura del periodo chiuso). Gli effetti
+  studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
+  rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
+  durissimo: tenere le 10 più scambiate a pesi uguali ha fatto Sharpe 0,94, più dello SPY (0,87).
+* **I titoli tolti dall'indice non recuperano più**: in media −1,56% nel mese dopo (il lavoro del 2004 diceva il contrario).
 
 * **Nel periodo chiuso la zona di rumore su QQQ guadagna ma non batte il tenere QQQ** (Sharpe 0,64 contro 1,09): sul 2016-2024, che gli
   autori della regola conoscevano, lo batteva (1,05 contro 0,92). È la stessa lezione delle crypto: un risultato pubblicato sul periodo
@@ -124,6 +147,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 ## Il prossimo passo
 
 * Il periodo chiuso si riusa per famiglie diverse (deciso il 24 ottobre, sopra).
-* La prova 3: il **ritorno dopo le forti cadute** sulle 10 azioni di allora (idea I3), con il simulatore a più titoli.
+* La coda delle idee (`REGISTRO.md`, sezione 2): i giorni speciali insieme (I10, nata dopo aver visto le prove 6 e 7: si può giudicare
+  solo sul periodo chiuso), la deriva dopo i bilanci (I6, servono le date dei bilanci), le varianti a costi più bassi (I8, I9).
 * Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
 * Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).

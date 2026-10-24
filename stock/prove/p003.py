@@ -18,6 +18,7 @@ from stock.simulatore.costi import Costi
 from stock.simulatore.finestre import finestre
 from stock.simulatore.portafoglio import simula_conto
 from stock.strategie.rimbalzo import strategia_rimbalzo, strategia_tenere_i_dieci
+from stock.universo.costruisci import RINOMINATI
 
 RADICE = QUI.parent
 
@@ -67,6 +68,7 @@ def rendimenti(valore: pd.Series) -> pd.Series:
 
 def main():
     universo = pd.read_csv(RADICE / "universo" / "dieci_di_allora.csv")
+    universo["simbolo"] = universo["simbolo"].replace(RINOMINATI)
     simboli = sorted(universo["simbolo"].unique())
     fino = date(2024, 12, 31)
     cal = list(alpaca.calendario("2016-01-01", "2024-12-31").index)
