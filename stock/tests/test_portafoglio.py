@@ -239,3 +239,17 @@ def test_calma_investe_di_piu_quando_il_mercato_e_calmo():
     # prima si compra con la leva massima (calma: quota tagliata a 1,5), poi con l'agitazione si vende
     assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[0] * e["prezzo"].iloc[0] > 140_000
     assert (e["quantita"] < 0).any()
+
+
+def test_ampiezza_conta_solo_i_membri_e_solo_il_passato():
+    from stock.strategie import ampiezza as amp
+    giorni = list(pd.bdate_range("2019-01-01", periods=260).date)
+    sale = pd.Series([100 + i for i in range(260)], index=pd.Index(giorni), dtype=float)
+    scende = pd.Series([400 - i for i in range(260)], index=pd.Index(giorni), dtype=float)
+    rett = {"A": sale, "B": scende, "C": sale}
+    membri = lambda g: ["A", "B"]  # noqa: E731
+    a = amp.serie_ampiezza(rett, membri, giorni)
+    assert a.index[0] == giorni[amp.SEDUTE - 1] and a.iloc[-1] == 0.5          # C non è nell'indice: non conta
+    # tagliare il futuro non cambia il passato
+    corto = amp.serie_ampiezza({k: v.iloc[:230] for k, v in rett.items()}, membri, giorni[:230])
+    assert (corto == a.loc[corto.index]).all()
