@@ -132,10 +132,10 @@ def main(argv=None):
             esiti[s]["scarto"] = misura_scarto(s, cal)
         n = sum(len(v) for v in esiti[s]["problemi"].values())
         print(f"{s}: {esiti[s]['barre_giorno']} barre al giorno, {n} problemi", flush=True)
-    testo = esito_markdown(esiti, a.dal, a.al, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"))
-    if a.esito:
-        with open(a.esito, "w") as fh:
-            fh.write(testo)
+        testo = esito_markdown(esiti, a.dal, a.al, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"))
+        if a.esito:                       # dopo ogni titolo: un errore a metà non fa perdere i titoli già fatti
+            with open(a.esito, "w") as fh:
+                fh.write(testo)
     print(testo)
 
 

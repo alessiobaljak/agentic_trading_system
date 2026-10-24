@@ -36,7 +36,7 @@ def _intestazioni() -> dict:
     return {"APCA-API-KEY-ID": chiave, "APCA-API-SECRET-KEY": segreto}
 
 
-def _get(url: str, parametri: dict, tentativi: int = 5) -> dict:
+def _get(url: str, parametri: dict, tentativi: int = 10) -> dict:
     """Una richiesta GET con i tentativi per il limite di frequenza (429) e gli errori di rete.
 
     L'errore riporta il codice e il messaggio di Alpaca, mai le intestazioni."""
@@ -54,7 +54,7 @@ def _get(url: str, parametri: dict, tentativi: int = 5) -> dict:
             return r.json()
         if r.status_code in (429, 500, 502, 503, 504) and n < tentativi - 1:
             time.sleep(attesa)
-            attesa *= 2
+            attesa = min(attesa * 2, 60.0)
             continue
         raise ErroreAlpaca(f"{r.status_code} su {url.split('?')[0]}: {r.text[:200]}")
     raise ErroreAlpaca("tentativi finiti")
