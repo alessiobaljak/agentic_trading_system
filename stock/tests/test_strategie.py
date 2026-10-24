@@ -152,6 +152,15 @@ def test_zona_di_rumore_non_usa_il_futuro_e_vuole_14_giorni():
     tutto = zr.prepara(b, cal, set())
     # i primi 14 giorni non decidono
     assert not tutto["decisione"][: 14 * 390].any() and tutto["decisione"][14 * 390:].any()
-    taglio = 17 * 390 + 200
-    parte = zr.prepara(b.iloc[:taglio], cal, set())
-    np.testing.assert_array_equal(parte["alto"][: 17 * 390], tutto["alto"][: 17 * 390])
+    # tagliando il futuro, tutti i livelli fino alla barra del taglio restano uguali (anche nel giorno tagliato)
+    for taglio in (17 * 390 + 200, 18 * 390 + 31, 19 * 390 + 360):
+        parte = zr.prepara(b.iloc[:taglio], cal, set())
+        fino = (taglio // 390) * 390 if taglio % 390 < 389 else taglio
+        for k in ("alto", "basso", "vwap"):
+            np.testing.assert_array_equal(parte[k][:fino], tutto[k][:fino])
+        np.testing.assert_array_equal(parte["decisione"][:fino], tutto["decisione"][:fino])
+        # nel giorno tagliato i valori calcolati (se ce ne sono) coincidono con quelli veri
+        oggi = slice(fino, taglio)
+        ok = ~np.isnan(parte["alto"][oggi])
+        np.testing.assert_array_equal(parte["alto"][oggi][ok], tutto["alto"][oggi][ok])
+        np.testing.assert_array_equal(parte["vwap"][oggi][ok], tutto["vwap"][oggi][ok])

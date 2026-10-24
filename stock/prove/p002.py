@@ -56,10 +56,12 @@ def main():
         sr = annuo(asticella.sharpe(gc))
         sr2 = annuo(asticella.sharpe(o["costi doppi"]["g"]))
         quota_q = sum(x > 0 for x in q) / len(q)
-        giorni_op = e[e.etichetta == "fine giornata"].shape[0]
+        giorni_op = e["t"].dt.tz_convert("America/New_York").dt.date.nunique()
+        giorni_fine = e[e.etichetta == "fine giornata"].shape[0]
         tab[s] = {
             "Giorni in cui la regola poteva operare": f"{ris[s]['giorni_validi']}",
-            "Giorni con almeno un'operazione": f"{giorni_op}",
+            "Giorni con almeno un ordine eseguito": f"{giorni_op}",
+            "Giorni con una posizione ancora aperta alla fine (chiusa a mercato)": f"{giorni_fine}",
             "Ordini eseguiti (in media per giorno operato)": f"{len(e)} ({len(e) / max(giorni_op, 1):.1f})",
             "Ordini rifiutati": f"{rc.rifiutati}",
             "Guadagno totale, senza costi": f"{o['senza costi']['r'].valore.iloc[-1] / CAPITALE - 1:+.1%}",

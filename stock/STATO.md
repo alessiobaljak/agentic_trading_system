@@ -85,8 +85,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 * **La prova 2** (`stock/prove/P002_zona_di_rumore.md`, regole committate prima; risultati in `P002_risultati.md`): uscita dalla «zona
   di rumore» dell'apertura. **SPY bocciata** (Sharpe con i costi 0,41, costi doppi sotto zero). **QQQ passa la ricerca**: Sharpe annuo con
   i costi 1,05 contro 0,92 del tenere QQQ e 0,87 del tenere lo SPY; Sharpe corretto 1,00 (soglia 0,95); costi doppi 0,48; 25 trimestri
-  su 32 in guadagno; perdita massima −9,6%; opera in circa 3 giorni su 10. **Non è ancora una strategia valida**: mancano il revisore
-  separato (in corso) e il periodo chiuso (gennaio 2025 → settembre 2026), che si apre una volta sola.
+  su 32 in guadagno; perdita massima −9,6%; opera in circa 6 giorni su 10 (1320 su 2230). **Revisione separata fatta** (`stock/prove/REVISIONE_P002.md`):
+  nessun errore bloccante; margini stretti (passa con costi fino a circa 1,2 volte quelli usati); lo scarto vero negli istanti degli ordini
+  è uguale a quello usato (0,57 contro 0,56 punti base, `P002_scarto_vero.md`). **Non è ancora una strategia valida**: manca il periodo
+  chiuso (gennaio 2025 → settembre 2026), che si apre una volta sola.
 
 ## Cosa abbiamo capito il 24 ottobre
 
@@ -110,7 +112,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Il prossimo passo
 
-* L'esito del revisore sulla prova 2; se non trova errori, il periodo chiuso per QQQ (una volta sola).
+* **Aspetta il proprietario: il sì ad aprire il periodo chiuso per la prova 2 su QQQ** (una volta sola; se lì non regge, è bocciata).
 * La prova 3: il **ritorno dopo le forti cadute** sulle 10 azioni di allora (idea I3), con il simulatore a più titoli.
 * Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
 * Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).

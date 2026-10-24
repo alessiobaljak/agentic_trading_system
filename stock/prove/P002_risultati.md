@@ -1,12 +1,13 @@
 # Prova 2 — risultati
 
-Calcolato da `python -m stock.prove.p002` il 2026-10-24 12:13 UTC con le regole di `P002_zona_di_rumore.md` (committate prima). Nel conto dell'asticella: P001_QQQ, P001_SPY, P002_QQQ, P002_SPY.
+Calcolato da `python -m stock.prove.p002` il 2026-10-24 12:28 UTC con le regole di `P002_zona_di_rumore.md` (committate prima). Nel conto dell'asticella: P001_QQQ, P001_SPY, P002_QQQ, P002_SPY.
 
 | | SPY | QQQ |
 |---|---|---|
 | Giorni in cui la regola poteva operare | 2229 | 2230 |
-| Giorni con almeno un'operazione | 661 | 681 |
-| Ordini eseguiti (in media per giorno operato) | 4075 (6.2) | 3973 (5.8) |
+| Giorni con almeno un ordine eseguito | 1347 | 1320 |
+| Giorni con una posizione ancora aperta alla fine (chiusa a mercato) | 661 | 681 |
+| Ordini eseguiti (in media per giorno operato) | 4075 (3.0) | 3973 (3.0) |
 | Ordini rifiutati | 0 | 0 |
 | Guadagno totale, senza costi | +73.4% | +201.4% |
 | Guadagno totale, con i costi | +23.9% | +102.8% |
