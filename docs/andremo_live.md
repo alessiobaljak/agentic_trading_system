@@ -4718,3 +4718,8 @@ gestisce a giudizio le operazioni andate male. Nel conto: 146 prove (20 a eventi
 long affollati (funding positivo almeno al tasso di base), giugno-settembre 2026: 409 operazioni a +0,26% contro −1,26% delle 288 con
 il funding sotto la soglia. Non sicura (p 0,31), ma il funding separa davvero le fiammate che rientrano da quelle che continuano, nel
 verso previsto dal meccanismo (gli short affollati vengono schiacciati). Nel conto: 147 prove (21 a eventi).
+**Prova 82, P9C sulla regola identica, 2023 – giugno 2026** (`programma9/TERZA.md`): con i long affollati −0,86% a operazione su
+2.389, con il funding basso −0,67% su 1.575; nel 2025 le fiammate con i long affollati vanno peggio. Il verso visto nei quattro mesi
+della prova 81 era il caso. Capito: il funding dell'ultimo regolamento non distingue le fiammate che rientrano; le fiammate delle
+monete piccole, vendute con un'uscita fissa, perdono in ogni versione provata (prove 75, 76, 81, 82). La famiglia si chiude qui.
+Nel conto: 148 prove (22 a eventi).
