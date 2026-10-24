@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 137 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 139 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -97,8 +97,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 70 | G12: E4 (il funding al tetto) con l'entrata all'ora dopo l'evento invece che all'apertura del giorno dopo, stessi eventi, 7 giorni (`programma7/QUATTORDICESIMA.md`); decide l'entrata di E4 nel bot | 1 a eventi | +13,00% a evento (p 0,0002), +1,33 punti su E4; ma (revisione indipendente, `programma7/REVISIONE_G12.md`) 1,22 punti vengono da due contratti chiusi il giorno dell'evento: sugli altri 60 eventi **+0,11 punti** (p 0,47) | no: il miglioramento non c'è; **il bot resta com'è** (cambio annullato prima del riavvio) |
 | 71 | G13: short contro il Bitcoin dei perpetui dall'annuncio di chiusura dei future fino a un'ora prima della chiusura, con l'uscita a +30% di N3 (`programma7/QUINDICESIMA.md`) | 1 a eventi | solo **7 eventi** usabili su 55 contratti (72 annunci, 32 senza sigle nel titolo; per 44 contratti le candele scaricate non mostrano la chiusura entro 21 giorni): −13,19% a evento (p 0,91), senza l'uscita +0,82%; l'uscita a +30% scatta nel 57% (`programma7/RISULTATI_QUINDICESIMA.md`) | no, ma la prova dice poco: troppo pochi eventi; servono le date di chiusura vere (testo degli annunci) |
 | 72 | G14: il premio di Coinbase sul Bitcoin (Coinbase BTC-USD contro Binance BTCUSDT, media delle 24 ore): long il Bitcoin il giorno dopo se positivo, short se negativo (`programma7/SEDICESIMA.md`); dati nuovi | 1 | 50.508 ore di Coinbase; long il 66% dei giorni, 32 cambi l'anno; il Bitcoin nei giorni long +0,120% al giorno, nei giorni short +0,027% (sale anche quelli); Sharpe 0,45 contro 0,58 del Bitcoin tenuto, discesa −46,6%, 2022 e 2025 negativi; Sharpe corretto 0,01 (`programma7/RISULTATI_SEDICESIMA.md`) | no: il premio dice un poco (i giorni «long» vanno meglio), ma non abbastanza per vendere nei giorni «short» |
+| 73 | **Programma 8, lo spot.** S1 e S2: il lato long di F5 comprato a pronti (le monete con il funding dei future più basso), a settimana e ogni giorno, solo acquisti, commissioni dello spot (`programma8/PRIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **137** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 = **139** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
