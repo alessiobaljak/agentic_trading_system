@@ -32,7 +32,9 @@ def main():
             dentro = strategia_calma(s, cal, rett)
             return lambda giorno, storia, stato: dentro(giorno, storia, stato) if giorno >= PRIMO else []
         out = {}
-        for nome, c in (("costi", costi), ("costi doppi", costi.raddoppiati()), ("senza costi", Costi())):
+        from dataclasses import replace
+        for nome, c in (("costi", costi), ("costi doppi", costi.raddoppiati()), ("senza costi", Costi()),
+                        ("interesse 8%", replace(costi, interesse_debito_annuo=0.08))):
             out[nome] = simula_conto({s: df}, fabbrica(), c, capitale=CAPITALE, leva_massima=1.5)
         g = {k: rendimenti(v.valore[(v.valore.index >= PRIMO) & (v.valore.index <= ULTIMO)]) for k, v in out.items()}
         gc = g["costi"]
@@ -52,11 +54,13 @@ def main():
                   f"{sr_spy:.2f} / {sr_suo:.2f}", f"{sr:.2f} → {'sì' if c1 else 'no'}", f"{sr2:.2f} → {'sì' if c2 else 'no'}",
                   f"{sum(x > 0 for x in q)} su 7 ({', '.join(f'{x:+.1%}' for x in q)}) → {'sì' if c3 else 'no'}",
                   f"{dd(gc):.1%} / {dd(bh_suo):.1%}",
+                  f"{annuo(asticella.sharpe(g['interesse 8%'])):.2f}",
                   f"**{'passa il periodo chiuso' if c1 and c2 and c3 else 'bocciata nel periodo chiuso'}**"]
     for k, nome in enumerate(["Giorni", "Ordini eseguiti / rifiutati", "Guadagno totale senza costi / con i costi / costi doppi",
                               "Guadagno del tenere lo stesso titolo", "Sharpe del tenere lo SPY / lo stesso titolo",
                               "**1.** Sharpe annuo con i costi (deve battere tutti e due)", "**2.** Sharpe con i costi doppi (> 0)",
-                              "**3.** Trimestri in guadagno (almeno 4 su 7)", "Perdita massima dal picco: regola / tenere", "**Esito**"]):
+                              "**3.** Trimestri in guadagno (almeno 4 su 7)", "Perdita massima dal picco: regola / tenere",
+                              "Da leggere: Sharpe con l'interesse all'8%", "**Esito**"]):
         righe.append(f"| {nome} | {tab['SPY'][k]} | {tab['QQQ'][k]} |")
     (QUI / "P015_chiuso.md").write_text("\n".join(righe) + "\n")
     print("\n".join(righe))

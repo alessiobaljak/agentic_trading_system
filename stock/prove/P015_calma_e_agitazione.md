@@ -42,4 +42,5 @@ Periodo: dal 2 gennaio 2025 al 30 settembre 2026, stessi titoli, stesse regole, 
 della prima settimana del 2025 (fino all'esecuzione si sta in contanti; il comprare e tenere parte dal 2 gennaio). Si apre **una volta
 sola**. Per ogni titolo passa se sono vere **tutte**: (1) Sharpe annuo con i costi più alto del comprare e tenere lo SPY e del comprare e
 tenere lo stesso titolo sugli stessi giorni; (2) Sharpe con i costi doppi sopra zero; (3) almeno 4 trimestri su 7 in guadagno. Nel conto:
-**1 apertura in più** (28).
+**1 apertura in più** (28). Da leggere accanto, **senza contare per l'esame** (aggiunto dopo il revisore, prima di aprire): lo stesso
+calcolo con l'interesse all'8%.
