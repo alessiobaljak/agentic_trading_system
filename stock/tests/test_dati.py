@@ -204,3 +204,8 @@ def test_scissione_valutata_come_incasso():
     assert list(v["tipo"]) == ["dividendo", "dividendo"]
     assert v["importo"].iloc[0] == pytest.approx(20.0)
     assert mancanti == ["2024-04-02 GEV"]
+
+
+def test_un_evento_per_trimestre():
+    from stock.dati.bilanci import un_evento_per_trimestre
+    assert un_evento_per_trimestre([date(2024, 1, 1), date(2024, 1, 5), date(2024, 4, 1)]) == [date(2024, 1, 1), date(2024, 4, 1)]
