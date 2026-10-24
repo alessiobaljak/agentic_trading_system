@@ -18,6 +18,8 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 * **Il periodo chiuso si riusa per idee di famiglie diverse** (24 ottobre: «sì, riusa il periodo chiuso per idee diverse»): non per
   altre regole in giornata che seguono il movimento dell'indice (la famiglia della prova 2); ogni apertura conta come una prova in più
   nel registro e nell'asticella.
+* **Universo allargato a tutte le azioni dell'S&P 500** (24 ottobre: «sì, allarga a tutte le azioni dell'S&P 500»): le prove nuove
+  usano i titoli che erano nell'indice in quel momento (circa 500, 717 in tutto dal 2016 al 2024), non più solo le 10 più scambiate.
 * **Autonomia** (24 ottobre: «procedi in autonomia su diverse idee non chiedermi il permesso ma fammi sapere quando vogliamo fare la demo
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.
