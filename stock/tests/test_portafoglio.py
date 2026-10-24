@@ -202,3 +202,23 @@ def test_rimbalzo_sull_indice_usa_i_membri_del_giorno():
     membri = lambda g: ["A", "B", "C"]          # Z non è nell'indice: non si compra anche se è caduto di più  # noqa: E731
     r = simula_conto(barre_, strategia_rimbalzo_indice(membri, giorni, rett, quanti=2), Costi())
     assert sorted(r.esecuzioni[r.esecuzioni.giorno == D(2020, 2, 3)]["simbolo"]) == ["A", "B"]
+
+
+def test_classifica_mensile_sceglie_i_meno_nervosi_e_i_piu_saliti():
+    import numpy as np
+    from stock.strategie import fattori
+    giorni = list(pd.bdate_range("2019-01-01", periods=300).date)
+    serie = {"CALMO": 100 * np.cumprod(np.full(300, 1.0005)),                      # sale piano, senza scosse
+             "NERVOSO": 100 * np.where(np.arange(300) % 2 == 0, 1.0, 1.05),        # oscilla del 5%, non sale
+             "SALE": 100 * np.cumprod(np.r_[np.full(150, 1.004), np.full(150, 0.999)])}   # sale molto, poi scende piano
+    barre_ = {s: pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                              index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+              for s, p in serie.items()}
+    rett = {s: pd.Series(p, index=pd.Index(giorni)) for s, p in serie.items()}
+    membri = lambda g: list(serie)  # noqa: E731
+    r = simula_conto(barre_, fattori.strategia_classifica(membri, giorni, rett, fattori.volatilita, quanti=1), Costi(),
+                     leva_massima=2)
+    assert set(r.esecuzioni["simbolo"]) == {"CALMO"}
+    r = simula_conto(barre_, fattori.strategia_classifica(membri, giorni, rett, fattori.momento, quanti=1, i_piu_bassi=False),
+                     Costi(), leva_massima=2)
+    assert set(r.esecuzioni["simbolo"]) == {"SALE"}
