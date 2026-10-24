@@ -1,4 +1,6 @@
 """La strategia dell'ultima mezz'ora e l'asticella, su casi costruiti a mano."""
+import math
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -101,3 +103,55 @@ def test_asticella():
     assert sorted(map(sorted, g)) == [["a", "b"], ["c"]]
     r = asticella.sharpe_corretto(buona, {"a": buona, "b": simile, "c": nulla})
     assert r["gruppi"] == 2 and r["varianza"] == pytest.approx(1 / 2000)
+
+
+def _giorni_piatti(n, prezzo=100.0):
+    giorni = pd.bdate_range("2020-01-06", periods=n)
+    parti = []
+    for d in giorni:
+        g = giornata(str(d.date()), lambda i: prezzo)
+        g["vwap"] = prezzo
+        parti.append(g)
+    return giorni, parti
+
+
+def test_zona_di_rumore_compra_sopra_il_limite_ed_esce_a_fine_giornata():
+    from stock.strategie import zona_di_rumore as zr
+    giorni, parti = _giorni_piatti(15)
+    # 14 giorni con oscillazione dell'1% fissa dopo l'apertura: σ = 1% per ogni minuto dopo il primo
+    for p in parti[:14]:
+        p.loc[p.index[1:], ["open", "high", "low", "close", "vwap"]] = 101.0
+    # oggi apre a 100 (ieri ha chiuso a 101) e sale a 103 dalle 9:45
+    oggi = parti[14]
+    oggi.loc[oggi.index[15:], ["open", "high", "low", "close", "vwap"]] = 103.0
+    b = pd.concat(parti)
+    cal = calendario([str(d.date()) for d in giorni])
+    seg = zr.prepara(b, cal, set())
+    i = np.where(seg["decisione"])[0][0]
+    # limite alto alle 10:00 = max(100, 101) × 1,01 = 102,01
+    assert seg["alto"][i] == pytest.approx(102.01)
+    assert seg["basso"][i] == pytest.approx(100 * 0.99)
+    r = simula(b, zr.strategia(seg), Costi(), capitale=10_000)
+    e = r.esecuzioni
+    assert list(e["etichetta"]) == ["decisione", "fine giornata"]
+    assert e["t"].dt.tz_convert(NY).iloc[0].strftime("%H:%M") == "10:00"
+    assert e["quantita"].iloc[0] == math.floor(0.98 * 10_000 / 103)
+
+
+def test_zona_di_rumore_non_usa_il_futuro_e_vuole_14_giorni():
+    from stock.strategie import zona_di_rumore as zr
+    rng = np.random.default_rng(2)
+    giorni = pd.bdate_range("2020-01-06", periods=20)
+    parti = []
+    for d in giorni:
+        g = giornata(str(d.date()), lambda i: 100 + rng.normal())
+        g["vwap"] = g["close"]
+        parti.append(g)
+    b = pd.concat(parti)
+    cal = calendario([str(d.date()) for d in giorni])
+    tutto = zr.prepara(b, cal, set())
+    # i primi 14 giorni non decidono
+    assert not tutto["decisione"][: 14 * 390].any() and tutto["decisione"][14 * 390:].any()
+    taglio = 17 * 390 + 200
+    parte = zr.prepara(b.iloc[:taglio], cal, set())
+    np.testing.assert_array_equal(parte["alto"][: 17 * 390], tutto["alto"][: 17 * 390])

@@ -1,6 +1,6 @@
 # Prova 1 — risultati
 
-Calcolato da `python -m stock.prove.p001` il 2026-10-24 11:34 UTC con le regole di `P001_ultima_mezzora.md` (committate prima). Periodo dal 2016-01-04 al 2024-12-31.
+Calcolato da `python -m stock.prove.p001` il 2026-10-24 12:09 UTC con le regole di `P001_ultima_mezzora.md` (committate prima). Periodo dal 2016-01-04 al 2024-12-31.
 
 **L'asticella:** comprare e tenere lo SPY (con i dividendi), Sharpe annuo **0.87** sugli stessi giorni.
 

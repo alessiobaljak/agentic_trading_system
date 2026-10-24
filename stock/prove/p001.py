@@ -41,6 +41,31 @@ def comprare_e_tenere_spy(dal: date, al: date) -> pd.Series:
     return s.pct_change().dropna()
 
 
+def salva_serie(nome: str, g: pd.Series) -> None:
+    """I rendimenti giornalieri con i costi di ogni prova: servono al conto dell'asticella delle prove dopo.
+    Sono risultati nostri, non prezzi: si committano."""
+    (QUI / "serie").mkdir(exist_ok=True)
+    g.rename("rendimento").rename_axis("giorno").to_csv(QUI / "serie" / f"{nome}.csv")
+
+
+def carica_serie() -> dict[str, pd.Series]:
+    out = {}
+    for f in sorted((QUI / "serie").glob("*.csv")):
+        x = pd.read_csv(f, index_col=0)["rendimento"]
+        x.index = pd.to_datetime(x.index).date
+        out[f.stem] = x
+    return out
+
+
+def comprare_e_tenere(simbolo: str, dal: date, al: date) -> pd.Series:
+    raw = archivio.carica(simbolo, "1Day_raw")
+    az = azioni_complete(simbolo, archivio.carica(simbolo, "azioni"))
+    rett = raw["close"] * controlli.rettifica(raw, az)
+    s = pd.Series(rett.to_numpy(), index=pd.Index(controlli.date_ny(raw.index)))
+    s = s[(s.index >= dal) & (s.index <= al)]
+    return s.pct_change().dropna()
+
+
 def annuo(sr_giorno: float) -> float:
     return sr_giorno * np.sqrt(252)
 
@@ -65,6 +90,7 @@ def main():
         risultati[s] = {"out": out, "esclusi": sorted(esclusi), "segnali": int((~np.isnan(seg["direzione"])).sum()),
                         "zero": int((seg["direzione"] == 0).sum())}
         serie[s] = out["costi"]["g"]
+        salva_serie(f"P001_{s}", out["costi"]["g"])
     g0 = min(x.index.min() for x in serie.values())
     g1 = max(x.index.max() for x in serie.values())
     bh = comprare_e_tenere_spy(g0, g1)

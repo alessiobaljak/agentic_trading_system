@@ -4,3 +4,4 @@
 *.csv.gz
 *.parquet
 !universo/dieci_di_allora.csv
+!prove/serie/*.csv
