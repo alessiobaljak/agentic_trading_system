@@ -276,3 +276,20 @@ def test_g17_conto_con_quota_piccola():
     sett, discesa, tenute = g17.conto(df, 0.01)
     assert tenute == 3 and abs(sett["netto"].sum() - 0.01 * (0.05 - 3.0 + 0.05)) < 1e-12
     assert abs(discesa - (-0.03)) < 1e-12           # dal massimo 1,0005 a 0,9705
+
+
+def test_g18_segnale_e_uscite():
+    import pandas as pd
+    from research.programma7 import ventesima as g18
+    n = 600
+    p = np.linspace(100.0, 102.0, n)                       # sale del 2% in 600 minuti: alla fine sta in cima all'intervallo
+    w = pd.DataFrame({"open": p, "high": p + 0.01, "low": p - 0.01, "close": p}, index=np.arange(n))
+    s = g18.segnali(w)
+    assert s.iloc[-1] == -1 and (s.iloc[:239] == 0).all()
+    o = np.full(100, 100.0); h = o + 0.05; l = o - 0.05
+    l[10] = 100.0 * (1 - g18.OBIETTIVO) - 0.01               # short: il minimo tocca l'obiettivo al minuto 10
+    op = g18.operazione(o, h, l, 0, -1)
+    assert op["motivo"] == "obiettivo" and op["minuti"] == 9 and abs(op["r_prezzo"] - g18.OBIETTIVO) < 1e-12
+    h[5] = 100.0 * (1 + g18.PROTEZIONE) + 0.01               # prima tocca la protezione
+    op = g18.operazione(o, h, l, 0, -1)
+    assert op["motivo"] == "protezione" and abs(op["r_prezzo"] + g18.PROTEZIONE) < 1e-12
