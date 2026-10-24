@@ -86,3 +86,27 @@ def test_verso_pesi():
     o = dict((s, x.quantita) for s, x in verso_pesi(st, {"A": 0.5, "B": 0.5}, {"A": 10, "B": 20}, quota=1.0))
     # valore 10500: A 525 azioni, B 262, C si vende
     assert o == {"A": 525, "B": 262, "C": -5}
+
+
+def test_rimbalzo_compra_i_peggiori_della_settimana_e_usa_l_elenco_del_mese_dopo():
+    from datetime import date as D
+    from stock.strategie.rimbalzo import QUANTI, strategia_rimbalzo
+    giorni = list(pd.bdate_range("2020-01-24", "2020-02-07").date)      # ven 24 gen → ven 7 feb
+    simboli = ["A", "B", "C", "D", "E"]
+    cadute = {"A": -0.10, "B": -0.05, "C": 0.0, "D": 0.05, "E": -0.20}
+    barre_ = {}
+    rett = {}
+    for s in simboli:
+        p = [100.0] * 5 + [100.0 * (1 + cadute[s])] * 6    # il ven 31 gen (sesta chiusura) cambia
+        df = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                          index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+        barre_[s] = df
+        rett[s] = pd.Series(p, index=pd.Index(giorni))
+    # elenco di gennaio senza E, di febbraio con E: la decisione del 31 gennaio esegue a febbraio → vale febbraio
+    universo = pd.DataFrame([{"mese": "2020-01", "posizione": i + 1, "simbolo": s} for i, s in enumerate("ABCD")]
+                            + [{"mese": "2020-02", "posizione": i + 1, "simbolo": s} for i, s in enumerate("ABCDE")])
+    r = simula_conto(barre_, strategia_rimbalzo(universo, giorni, rett), Costi())
+    primi = r.esecuzioni[r.esecuzioni.giorno == D(2020, 2, 3)]
+    assert sorted(primi["simbolo"]) == ["A", "B", "E"] and QUANTI == 3
+    # il venerdì 7 febbraio i rendimenti di 5 sedute sono 0 per tutti: si sceglie per ordine stabile, nessun ordine dopo l'ultimo giorno
+    assert r.esecuzioni["giorno"].max() == D(2020, 2, 3)
