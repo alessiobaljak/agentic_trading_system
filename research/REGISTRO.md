@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 147 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 148 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -106,8 +106,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 79 | **Programma 9, esplorazione larga** (31 ingredienti, ogni coppia, 2022-2023, `programma9/ESPLORAZIONE.md`) → P9A: short le monete vicino al massimo dei 30 giorni dove i conti piccoli sono più long dei grandi, 7 giorni (`programma9/PRIMA.md`) | 1 | nell'esplorazione −1,27% in 7 giorni (t −3,5); **nella conferma 2024 – giugno 2026: Sharpe −0,93, −19,2% l'anno** (2024 +8,7%, 2025 −57,9%, 2026 +2,3%), discesa −58% (`programma9/RISULTATI_PRIMA.md`) | no: non si ripete; nel 2025 le monete vicino ai massimi hanno continuato a salire |
 | 80 | P9B: long le monete che hanno perso più interesse aperto in 30 giorni quando il Bitcoin è sceso più del 6% in 30 giorni, 3 giorni (`programma9/PRIMA.md`) | 1 | nell'esplorazione +0,40% in 3 giorni (t 3,5); **nella conferma: Sharpe 0,22, +1,7% l'anno** (2025 −2,2%), 237 giorni con il mercato in calo; la leva pulita da sola −29,7% l'anno (`programma9/RISULTATI_PRIMA.md`) | no: non si ripete |
 | 81 | P9C: la regola delle fiammate (prova 75) solo quando i long sono affollati (funding dell'ultimo regolamento almeno +0,01% per 8 ore), dal 27 giugno al 30 settembre 2026 (mai usato dalla regola; ottobre senza il funding vero nell'archivio) (`programma9/SECONDA.md`) | 1 a eventi | 697 operazioni della regola delle fiammate; **con i long affollati 409, +0,26% a operazione** (p 0,31), vinte 87%, alla protezione 12,5%; **con il funding sotto la soglia 288, −1,26%** (alla protezione 16%); tutte −0,37% (`programma9/RISULTATI_SECONDA.md`) | no (non sicura), ma il verso è quello dell'ipotesi: il funding separa le fiammate che rientrano (+1,5 punti); da confermare su più anni |
+| 82 | P9C-lunga: la regola P9C identica dal 1° gennaio 2023 al 26 giugno 2026 (le fiammate delle prove 75-76, divise per funding per la prima volta) (`programma9/TERZA.md`) | 1 a eventi + 1 portafoglio | in calcolo | |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **147** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **148** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
