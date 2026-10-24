@@ -171,3 +171,24 @@ def test_inizio_e_fine_alla_mezzanotte_di_new_york():
     from stock.dati.scarica import _utc
     assert _utc("2016-01-01") == datetime(2016, 1, 1, 5, tzinfo=timezone.utc)          # inverno: UTC-5
     assert _utc("2024-06-30", fine=True) == datetime(2024, 7, 1, 4, tzinfo=timezone.utc)  # estate: UTC-4
+
+
+def test_dividendi_aggiunti_solo_dove_mancano():
+    from stock.dati.integrazioni import azioni_complete
+    a = azioni((date(2016, 6, 17), "dividendo", 1.0, 1.078))
+    c = azioni_complete("SPY", a)
+    assert date(2016, 3, 18) in set(c["data"]) and len(c) == 4
+    assert azioni_complete("QQQ", a) is a
+    # se Alpaca un giorno lo avesse, non si raddoppia
+    b = azioni((date(2016, 3, 18), "dividendo", 1.0, 1.05))
+    assert (azioni_complete("SPY", b)["data"] == date(2016, 3, 18)).sum() == 1
+
+
+def test_confronto_dividendi_riporta_gli_importi_divisi_per_i_frazionamenti():
+    from stock.dati.integrazioni import confronta_dividendi
+    # AAPL: 0,82 nell'agosto 2020 prima del 4 per 1 del 31 agosto; Yahoo scrive 0,205
+    nostri = azioni((date(2020, 8, 7), "dividendo", 1.0, 0.82), (date(2020, 11, 6), "dividendo", 1.0, 0.205),
+                    (date(2021, 2, 5), "dividendo", 1.0, 0.205))
+    altri = {date(2020, 8, 7): 0.205, date(2020, 11, 6): 0.205, date(2021, 5, 7): 0.22}
+    d = confronta_dividendi(nostri, altri, {date(2020, 8, 31): 4.0})
+    assert [(str(x["data"]), x["tipo"]) for x in d] == [("2021-02-05", "manca a loro"), ("2021-05-07", "manca a noi")]
