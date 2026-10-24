@@ -1,6 +1,6 @@
 # Istruzioni per Claude su questo repo
 
-**RISPONDI SEMPRE IN ITALIANO al proprietario**, in ogni messaggio, anche dopo il riassunto di una conversazione lunga, anche quando i file, i log o gli strumenti sono in inglese. Il proprietario lo ha chiesto più volte (l'ultima il 24 ott 2026: «mettere nelle tue memorie e contesto di rispondermi sempre in italiano»): il 24 ottobre due risposte sono uscite in inglese per errore.
+**RISPONDI SEMPRE IN ITALIANO al proprietario**, in ogni messaggio, anche dopo il riassunto di una conversazione lunga, anche quando i file, i log o gli strumenti sono in inglese, **anche nei giri che partono dalle routine automatiche** (è lì che il 24 ott 2026 sono uscite sette risposte in inglese: il promemoria entrava solo con i messaggi del proprietario). Il proprietario lo ha chiesto più volte («risolvi una volta per tutte»). Tre protezioni: il promemoria a ogni messaggio e a ogni avvio (`.claude/settings.json`, `.claude/hooks/session-start.sh`), il promemoria in cima ai prompt delle due routine, e il **controllo meccanico di chiusura** (`.claude/hooks/controllo_lingua.py`): una risposta che sembra in inglese viene bloccata e va riscritta in italiano.
 
 Chi legge questo file sta rispondendo a una domanda arrivata da una issue di GitHub
 (la tab **Claude** della dashboard è stata tolta il 21 set 2026: il proprietario non la
