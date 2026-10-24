@@ -265,3 +265,14 @@ def test_g16_segnale_e_uscite():
     assert op["motivo"] == "protezione" and abs(op["r_prezzo"] - (-(1.3 * 1.01 - 1))) < 1e-12
     # senza protezione: arriva all'obiettivo
     assert g16.operazione(w, 2000, 0.001, protezione=False)["motivo"] == "obiettivo"
+
+
+def test_g17_conto_con_quota_piccola():
+    import pandas as pd
+    from research.programma7 import diciannovesima as g17
+    g = g17.DA + 10
+    df = pd.DataFrame({"entrata_min": [g * 1440, g * 1440 + 10, (g + 1) * 1440], "uscita_min": [g * 1440 + 5, g * 1440 + 20, (g + 1) * 1440 + 5],
+                       "r": [0.05, -3.0, 0.05]})
+    sett, discesa, tenute = g17.conto(df, 0.01)
+    assert tenute == 3 and abs(sett["netto"].sum() - 0.01 * (0.05 - 3.0 + 0.05)) < 1e-12
+    assert abs(discesa - (-0.03)) < 1e-12           # dal massimo 1,0005 a 0,9705
