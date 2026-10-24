@@ -7,8 +7,9 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 
 | # | Idea (file delle regole) | Prove | Risultato | Esito |
 |---|---|---|---|---|
+| 1 | L'ultima mezz'ora segue il resto della giornata, SPY e QQQ (`prove/P001_ultima_mezzora.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | (in corso) | (in corso) |
 
-Totale nel conto: **0**.
+Totale nel conto: **2**.
 
 ## 2. Idee in coda
 
