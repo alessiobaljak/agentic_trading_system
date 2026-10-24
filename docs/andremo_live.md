@@ -4700,3 +4700,12 @@ una salita, comprare in basso, obiettivo +0,3%, protezione −1,8%) con le cande
 zero prima dei costi e −0,09% dopo, ogni anno; anche nel periodo del trader −0,087%. Capito: con un obiettivo piccolo e una protezione
 larga si vince spesso per costruzione (una passeggiata a caso vince l'86% delle volte); il +0,31% del trader viene da qualcosa che le
 candele non mostrano (livelli, libro degli ordini, notizie). Nel conto: 143 prove.
+**Programma 9, esplorazione larga** (24 ottobre, richiesta del proprietario: «leggere informazioni diverse e metterle insieme»;
+`research/programma9/`). Una tabella moneta-giorno con 31 ingredienti (funding, interesse aperto, conti grandi e piccoli, acquisti a
+mercato, rendimenti, età, volume a pronti, contesto del mercato) dal 2022; esplorate tutte le coppie sul 2022-2023 (10.125 caselle),
+scelte le due con un meccanismo e confermate sul 2024 – giugno 2026 senza averle guardate prima. **P9A** (short vicino ai massimi
+quando i conti piccoli sono più long dei grandi): −1,27% in 7 giorni nell'esplorazione, nella conferma −19,2% l'anno. **P9B** (long
+le monete che hanno già perso la leva quando il mercato scende): +0,40% in 3 giorni nell'esplorazione, nella conferma +1,7% l'anno.
+Capito: con 10.000 caselle, i t intorno a 4-5 escono anche per caso, e le combinazioni del 2022-2023 non valgono nel 2024-2026 (nel
+2025 i massimi hanno continuato a salire). Il metodo con i due periodi separati ha fatto il suo lavoro: le ha fermate prima del
+paper. Nel conto: 146 prove.
