@@ -240,3 +240,28 @@ def test_g15_eventi_e_operazione():
     r = g15.operazione(pan, 0, 1, 10, 41)
     assert r["fermata"] and r["giorni"] == 10
     assert abs(r["r"] - (-(1.3 * 1.01 - 1) - g15.vu.COSTO_MONETA - g15.vu.COSTO_BTC)) < 1e-12
+
+
+def test_g16_segnale_e_uscite():
+    import pandas as pd
+    from research.programma7 import diciottesima as g16
+    m = np.arange(0, 3000)
+    w = pd.DataFrame({"open": 1.0, "high": 1.0, "low": 1.0, "close": 1.0, "dollari": 100.0}, index=m)
+    # dal minuto 2000: +60% sul giorno prima, +5% nell'ultimo quarto d'ora, volume 10 volte
+    w.loc[1986:2000, ["open", "high", "low", "close"]] = 1.55
+    w.loc[2000, "close"] = 1.63
+    w.loc[1986:2000, "dollari"] = 1000.0
+    s = g16.segnali(w, np.arange(1500, 2100))
+    assert 2000 in s and min(s) >= 1986 and max(s) <= 2000      # solo dentro la fiammata
+    # obiettivo: dal minuto 2010 il minimo scende del 5% sotto l'entrata (apertura del 2001)
+    w.loc[2001:, ["open", "high", "low", "close"]] = 1.60
+    w.loc[2010, "low"] = 1.60 * 0.95
+    op = g16.operazione(w, 2000, 0.001)
+    assert op["motivo"] == "obiettivo" and op["minuti"] == 9 and abs(op["r_prezzo"] - 0.05) < 1e-12
+    assert abs(op["costi"] - (0.001 + g16.MAKER)) < 1e-12
+    # protezione prima dell'obiettivo
+    w.loc[2005, "high"] = 1.60 * 1.31
+    op = g16.operazione(w, 2000, 0.001)
+    assert op["motivo"] == "protezione" and abs(op["r_prezzo"] - (-(1.3 * 1.01 - 1))) < 1e-12
+    # senza protezione: arriva all'obiettivo
+    assert g16.operazione(w, 2000, 0.001, protezione=False)["motivo"] == "obiettivo"
