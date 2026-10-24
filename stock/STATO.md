@@ -117,6 +117,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   1,04-1,09 del tenere (`stock/prove/P009_risultati.md`). La deriva dopo i bilanci sulle 10 di allora: −0,50% a evento rispetto allo SPY,
   Sharpe 0,82 contro 0,94 (`P010_risultati.md`). Le date dei bilanci vengono dalla SEC (`stock/dati/bilanci.py`): si usa solo la data del
   deposito, perché l'ora del modulo può arrivare ore dopo il comunicato.
+* **Le prove 11-13 su tutte le azioni dell'S&P 500** (24 ottobre, dopo il sì del proprietario ad allargare): **bocciate.** Il rimbalzo
+  della settimana (i 20 peggiori) fa Sharpe 0,51 con i costi e 0,80 anche senza costi, contro 0,91 dello SPY; le 50 meno nervose 0,64 e
+  le 50 salite di più in un anno 0,59, contro 0,84 dello SPY e 0,73 dell'indice a pesi uguali. Strumenti nuovi: 18 cambi di simbolo
+  trovati in automatico (`stock/universo/cambi_di_nome.csv`), azioni societarie dei 717 titoli. Restano piccoli difetti noti dei dati
+  (fusioni con un simbolo nuovo e una storia diversa, per esempio Discovery → Warner Bros. Discovery: il titolo resta valutato all'ultima
+  chiusura) che non cambiano gli esiti, bocciati con margini larghi.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
@@ -124,7 +130,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa abbiamo capito il 24 ottobre
 
-* **Sul 2016-2024 nessuna delle 10 idee batte il comprare e tenere** (19 nel conto, comprese 2 aperture del periodo chiuso). Gli effetti
+* **Sul 2016-2024 nessuna delle 13 idee batte il comprare e tenere** (22 nel conto, comprese 2 aperture del periodo chiuso), né sulle 10 più grandi né su tutto l'S&P 500. Gli effetti
   studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
   rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
   durissimo: tenere le 10 più scambiate a pesi uguali ha fatto Sharpe 0,94, più dello SPY (0,87).
