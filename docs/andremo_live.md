@@ -4714,3 +4714,7 @@ paper. Nel conto: 146 prove.
 +0,76% ma con perdite fino a −95%; nel periodo del trader −0,70%. Capito: nei due versi (fiammate e crolli) il trader sceglie bene
 il minuto, ma un'uscita fissa piccola non basta a pagare le volte in cui il movimento continua; il suo guadagno dipende da come
 gestisce a giudizio le operazioni andate male. Nel conto: 146 prove (20 a eventi).
+**Prova 81, P9C** (`programma9/SECONDA.md`, la prima combinazione «ragionata» del programma 9): la regola delle fiammate solo con i
+long affollati (funding positivo almeno al tasso di base), giugno-settembre 2026: 409 operazioni a +0,26% contro −1,26% delle 288 con
+il funding sotto la soglia. Non sicura (p 0,31), ma il funding separa davvero le fiammate che rientrano da quelle che continuano, nel
+verso previsto dal meccanismo (gli short affollati vengono schiacciati). Nel conto: 147 prove (21 a eventi).
