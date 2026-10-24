@@ -5,7 +5,7 @@ il controllo che il prezzo d'entrata e quello d'uscita stiano nelle candele di q
 dell'entrata (5, 15, 60 minuti), il volume rispetto al giorno prima, l'eta' del contratto, la durata e il rendimento sul prezzo.
 Descrittivo: non e' una prova e non entra nel conto.
 
-Uso: python3 -m research.trader_copiati.analisi_trader2 <cartella con i csv delle trascrizioni>
+Uso: python3 -m research.trader_copiati.analisi_trader2 <cartella con i csv delle trascrizioni> [nome del csv d'uscita]
 """
 from __future__ import annotations
 
@@ -105,7 +105,7 @@ def analizza(r: dict) -> dict:
     return out
 
 
-def esegui(cartella: str) -> pd.DataFrame:
+def esegui(cartella: str, nome: str = "trader2_posizioni.csv") -> pd.DataFrame:
     righe = []
     for f in sorted(Path(cartella).glob("*.csv")):
         righe += list(csv.DictReader(open(f, encoding="utf-8")))
@@ -118,10 +118,10 @@ def esegui(cartella: str) -> pd.DataFrame:
             chiavi.add(k)
             uniche.append(r)
     out = pd.DataFrame([analizza(r) for r in uniche])
-    out.to_csv(QUI / "trader2_posizioni.csv", index=False)
+    out.to_csv(QUI / nome, index=False)
     return out
 
 
 if __name__ == "__main__":
-    d = esegui(sys.argv[1])
+    d = esegui(sys.argv[1], *sys.argv[2:3])
     print(json.dumps({"posizioni": len(d), "controllo": d["controllo"].value_counts().to_dict()}, ensure_ascii=False))
