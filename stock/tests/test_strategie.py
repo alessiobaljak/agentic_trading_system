@@ -164,3 +164,21 @@ def test_zona_di_rumore_non_usa_il_futuro_e_vuole_14_giorni():
         ok = ~np.isnan(parte["alto"][oggi])
         np.testing.assert_array_equal(parte["alto"][oggi][ok], tutto["alto"][oggi][ok])
         np.testing.assert_array_equal(parte["vwap"][oggi][ok], tutto["vwap"][oggi][ok])
+
+
+def test_notte_compra_alla_sera_vende_alla_mattina_e_incassa_il_dividendo():
+    from stock.strategie import notte
+    g1 = giornata("2020-01-02", lambda i: 100.0 if i < 389 else 101.0)     # ultima barra (15:59) apre a 101
+    g2 = giornata("2020-01-03", lambda i: 103.0)                             # mattina dopo: 103
+    b = pd.concat([g1, g2])
+    cal = calendario(["2020-01-02", "2020-01-03"])
+    az = pd.DataFrame([{"data": pd.Timestamp("2020-01-03").date(), "tipo": "dividendo", "rapporto": 1.0, "importo": 0.5}])
+    b = notte.con_dividendi(b, az)
+    assert b["dividendo"].sum() == 0.5 and b["dividendo"].iloc[390] == 0.5
+    r = simula(b, notte.strategia(notte.prepara(b, cal, set())), Costi(), capitale=10_000)
+    e = r.esecuzioni
+    assert list(e["etichetta"]) == ["sera", "mattina", "sera"]   # la seconda sera ricompra
+    assert e["t"].dt.tz_convert(NY).iloc[0].strftime("%H:%M") == "15:59" and e["prezzo"].iloc[0] == 101
+    assert e["t"].dt.tz_convert(NY).iloc[1].strftime("%Y-%m-%d %H:%M") == "2020-01-03 09:30"
+    q = math.floor(0.98 * 10_000 / 100)
+    assert r.valore.iloc[-1] == pytest.approx(10_000 + q * (103 - 101) + q * 0.5)
