@@ -9,6 +9,10 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
+# promemoria della lingua (24 ott 2026, richiesta del proprietario): finisce nel contesto a ogni avvio e ripresa
+# (in cima: con set -e un errore dopo non lo deve far saltare)
+echo "[session-start] PROMEMORIA DEL PROPRIETARIO: rispondi SEMPRE e SOLO in italiano, in ogni messaggio, anche dopo un riassunto o una ripresa."
+
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 cd "$PROJECT_DIR"
 
@@ -80,5 +84,3 @@ echo 'export PYTHONPATH="."' >> "${CLAUDE_ENV_FILE:-/dev/null}"
 # policy dell'ambiente: assicurarsi che consenta HTTPS verso questi domini.
 echo "[session-start] Completato."
 
-# promemoria della lingua (24 ott 2026, richiesta del proprietario): finisce nel contesto a ogni avvio e ripresa
-echo "[session-start] PROMEMORIA DEL PROPRIETARIO: rispondi SEMPRE e SOLO in italiano, in ogni messaggio, anche dopo un riassunto o una ripresa."
