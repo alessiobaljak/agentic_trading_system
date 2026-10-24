@@ -8,7 +8,7 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 | # | Idea (file delle regole) | Prove | Risultato | Esito |
 |---|---|---|---|---|
 | 1 | L'ultima mezz'ora segue il resto della giornata, SPY e QQQ (`prove/P001_ultima_mezzora.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe annuo con i costi SPY −0,60, QQQ −0,30 (comprare e tenere lo SPY 0,87); senza costi 0,31 e 0,67; trimestri in guadagno 28% e 38% (`prove/P001_risultati.md`) | **bocciata** su tutti e due |
-| 2 | Uscita dalla «zona di rumore» dell'apertura, SPY e QQQ (`prove/P002_zona_di_rumore.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | (in corso) | (in corso) |
+| 2 | Uscita dalla «zona di rumore» dell'apertura, SPY e QQQ (`prove/P002_zona_di_rumore.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe annuo con i costi SPY 0,41, QQQ 1,05 (tenere SPY 0,87, tenere QQQ 0,92); Sharpe corretto 0,77 e 1,00; costi doppi −0,19 e 0,48; trimestri in guadagno 53% e 78% (`prove/P002_risultati.md`) | SPY **bocciata**; QQQ **passa la ricerca** → revisore separato |
 
 Totale nel conto: **4**.
 
