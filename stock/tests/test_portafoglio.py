@@ -164,3 +164,25 @@ def test_raggruppamento_paga_la_frazione_in_contanti():
     r = simula_conto({"A": a}, al_giorno({0: [("A", Ordine(908, "mercato"))], 2: [("A", Ordine(-181, "mercato"))]}), Costi())
     assert list(r.esecuzioni["quantita"]) == [908, -181]
     assert r.valore.iloc[-1] == pytest.approx(100_000)
+
+
+def test_dopo_i_bilanci_compra_solo_dopo_una_reazione_migliore_dell_indice():
+    from datetime import date as D
+    from stock.strategie import dopo_bilanci as db
+    giorni = list(pd.bdate_range("2020-01-02", periods=40).date)
+    # comunicato il 9 gennaio: prima = 8, dopo = 10; decisione il 10, ingresso il 13
+    pA = [100.0] * 6 + [110.0] * 34          # A sale del 10% il 10 gennaio (indice +0)
+    pB = [100.0] * 6 + [99.0] * 34           # B scende
+    idx = pd.Series([100.0] * 40, index=pd.Index(giorni))
+    barre_ = {s: pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                              index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+              for s, p in (("A", pA), ("B", pB))}
+    rett = {s: pd.Series(p, index=pd.Index(giorni)) for s, p in (("A", pA), ("B", pB))}
+    universo = pd.DataFrame([{"mese": "2020-01", "posizione": 1, "simbolo": "A"}, {"mese": "2020-01", "posizione": 2, "simbolo": "B"},
+                             {"mese": "2020-02", "posizione": 1, "simbolo": "A"}, {"mese": "2020-02", "posizione": 2, "simbolo": "B"}])
+    com = {"A": [D(2020, 1, 9)], "B": [D(2020, 1, 9)]}
+    assert D(2020, 1, 10) in db.piano(com, giorni)
+    r = simula_conto(barre_, db.strategia(com, universo, giorni, rett, idx), Costi())
+    e = r.esecuzioni
+    assert list(e["simbolo"]) == ["A", "A"]
+    assert list(e["giorno"]) == [D(2020, 1, 13), giorni[giorni.index(D(2020, 1, 13)) + 20]]
