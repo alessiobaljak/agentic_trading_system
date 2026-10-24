@@ -1,0 +1,5 @@
+# i prezzi scaricati non entrano mai nel repository (licenza dei dati di borsa, repository pubblico):
+# stanno in ~/stock_dati o in STOCK_DATI_DIR. Questa riga è una seconda difesa.
+*.csv
+*.csv.gz
+*.parquet

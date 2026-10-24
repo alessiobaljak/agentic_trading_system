@@ -43,6 +43,15 @@ bocciate) in `REGISTRO.md` (`LEZIONI_DALLE_CRYPTO.md`, punto 2).
   repository vanno solo il programma che li scarica, i controlli e i risultati.
 * Le chiavi le legge solo una sessione aperta **dopo** che sono state messe nell'ambiente: il 24 ottobre questa sessione (aperta prima)
   non le vedeva, e Alpaca rispondeva 401.
+* **Verificato il 24 ottobre (sessione nuova, con le chiavi):** Alpaca risponde 200 per le barre al giorno e al minuto dal 2016, le
+  quotazioni, i frazionamenti e i dividendi, il calendario della borsa. Gli ultimi 15 minuti non si possono chiedere (risposta 403
+  «subscription does not permit querying recent SIP data»): il programma tira indietro la fine di 16 minuti.
+* **I dividendi di Alpaca non sono completi.** Sullo SPY, fra il 2016 e il 2024, l'elenco dei dividendi ne ha 33 su 36: mancano lo
+  stacco del 18 marzo 2016, del 15 giugno 2018 e del 20 dicembre 2024; i primi due mancano anche nei prezzi rettificati di Alpaca
+  (`stock/dati/ESITO_CONTROLLI.md`). Vuol dire che il comprare e tenere lo SPY, cioè l'asticella, con i dati di Alpaca rende un po'
+  meno del vero (fra lo 0,3 e lo 0,6% per ogni dividendo mancante: è la misura dei 34 trovati nei prezzi rettificati): un'asticella più bassa del giusto. Prima di qualsiasi confronto con
+  l'indice i dividendi mancanti vanno presi da una seconda fonte (per lo SPY, lo storico delle distribuzioni pubblicato
+  dall'emittente) e scritti a mano, con la fonte.
 
 ## 4. I periodi **(proposta)**
 
