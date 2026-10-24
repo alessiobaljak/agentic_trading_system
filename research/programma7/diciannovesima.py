@@ -94,7 +94,12 @@ def esegui(log=print) -> dict:
     ps = te.pannello_settimane(pan, log=lambda x: None, indicatori_si=False)
     btc = pd.Series(ps["R"][:, ps["simboli"].index("BTCUSDT")], index=ps["lunedi"])
     inizio = int(sett.index.min())
-    p = te.esame(sett, btc, inizio=inizio, anni_pieni=(2023, 2024))
+    pubblicazione = sc.PUBBLICAZIONE           # il tratto «dopo l'aprile 2025» dell'esame qui non c'e': solo descrittivo
+    sc.PUBBLICAZIONE = sc.giorno(2024, 7, 1)
+    try:
+        p = te.esame(sett, btc, inizio=inizio, anni_pieni=(2023, 2024))
+    finally:
+        sc.PUBBLICAZIONE = pubblicazione
     rivisto = ast.corretto_rivisto({**ast.serie_nuove(), "76 G17": sett["netto"]}, {"76 G17": p["intero"]})
     rr = rivisto["candidate"]["76 G17"]
     p["sharpe_corretto"], p["t"], p["gruppi"] = rr["corretto_con_aggiunta"], rr["t"], rivisto["gruppi"]

@@ -53,3 +53,11 @@ che abbiamo visto): 3.494 operazioni su 405 monete.
   ma il guadagno di ogni volta (+5%) è più piccolo del rischio che la fiammata continui.
 * Quindi il suo +37.782 in un anno è vero ma è il premio di un'assicurazione venduta: guadagna poco quasi sempre e prima o poi
   arriva la moneta che sale di 10 volte. Con 20.000 dollari di margine, una sola di quelle azzera il conto.
+
+## La versione senza protezione con posizioni piccole (prova 76, `research/programma7/RISULTATI_DICIANNOVESIMA.md`)
+
+Correzione di quanto scritto sopra: la frase «una settimana perde il 154% del conto» vale con il 5% del conto a operazione; con
+l'1% la stessa regola senza protezione, nel gennaio 2025 – giugno 2026, arriva a 1,57 volte il conto con la discesa peggiore del 34%
+(conto descrittivo). Per questo l'abbiamo provata sul serio, con regole scritte prima, sul 2023-2024 (anni mai usati): **393
+operazioni, +0,30% a operazione (p 0,36), 2024 negativo, il conto con l'1% a operazione +1% in due anni.** Il vantaggio del
+2025-2026 non si ripete: era di quel periodo, con molte più fiammate. Non va nel paper.

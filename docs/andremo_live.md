@@ -4684,3 +4684,10 @@ lui): +1,65% e 97% vinte, ma tre operazioni a −1.511%, −972% e −628%, e un
 conto. Entrare a caso negli stessi giorni fa −9,43%: il momento lui lo sa scegliere. Capito: le classifiche dei trader da copiare
 premiano chi vende un'assicurazione (vince quasi sempre, poi salta); la quota di vinte e la discesa massima del profilo non lo
 mostrano. Nel conto: 141 prove (18 a eventi).
+**Prova 76, G17** (`programma7/DICIANNOVESIMA.md`): la regola del trader 2 senza protezione e con l'1% del conto a operazione, sul
+2023-2024 (anni mai usati per l'idea). 393 operazioni, +0,30% a operazione (p 0,36), 2024 negativo, il conto +1% in due anni. Il
++1,65% del 2025-2026 era di quel periodo. Mi ero anche sbagliato a dire che la regola senza protezione «azzera il conto»: vale con
+il 5% a operazione, non con l'1% (detto al proprietario). **Il trader 3** (solo Bitcoin, `trader_copiati/trader_3.md`): 118 posizioni
+controllate sui prezzi a 1 minuto, +0,31% a operazione con t 6,8 contro +0,003% delle stesse operazioni con l'entrata a caso;
+perdite tagliate (la peggiore −1,8%). È l'unico dei tre con un vantaggio che i numeri confermano, ma non si ricava dalle candele:
+proposta al proprietario la copia simulata. Nel conto: 142 prove (19 a eventi).
