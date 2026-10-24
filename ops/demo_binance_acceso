@@ -1,0 +1,5 @@
+G1 con ordini veri sul conto demo di Binance (bot/portafoglio/demo_binance.py; docs/backlog.md P25), su richiesta del
+proprietario del 24 ottobre 2026 («perché per le crypto non usiamo Binance demo per simulare i nostri ordini?»).
+Parla solo con demo-fapi.binance.com (soldi finti). Lavora solo se nel .env della macchina ci sono BINANCE_DEMO_API_KEY e
+BINANCE_DEMO_API_SECRET (le chiavi del conto demo, create dal proprietario; mai nel repository).
+Per spegnerlo: cancellare questo file e riavviare il bot (ops: riavvia-bot).

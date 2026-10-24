@@ -152,6 +152,18 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; CODICE PRONTO, aspetta la chiave
+**Perché:** il proprietario (24 ott): «perché per le crypto non usiamo Binance demo per simulare i nostri ordini (un paper live)?».
+Binance Demo Trading ha i future USDⓈ-M e l'accesso da programma (`demo-fapi.binance.com`, documentazione ufficiale): gli ordini
+veri mostrano quello che il nostro paper solo ipotizza (esecuzione degli ordini limite, dimensioni minime, rifiuti, saldo e funding
+calcolati da Binance). Binance avverte che prezzi del libro ed esecuzione possono differire dal mercato vero. **Cosa:**
+`bot/portafoglio/demo_binance.py` (`DemoG1`): a ogni decisione di G1 porta il conto demo ai pesi di G1 con ordini limite al mark
+validi un'ora, poi a mercato; leva 5; ogni ora il conto su RTDB `/demo_binance`; in dashboard accanto al paper. Parla solo con
+l'indirizzo demo (`_url` rifiuta gli altri). **Manca:** la chiave del conto demo (il proprietario la crea in Binance Demo Trading,
+API Management, solo trading dei future, niente prelievi, e la mette nel `.env` della macchina come `BINANCE_DEMO_API_KEY` e
+`BINANCE_DEMO_API_SECRET`), poi un riavvio del bot. **Metro:** G1 sul demo contro G1 nel paper, settimana per settimana; la quota
+di ordini limite eseguiti sul demo contro quella del paper (40 su 40 il 24 ottobre).
+
 ### P24. Niente entrate del paper su contratti in chiusura — trovata e FATTA il 23 ott 2026 (revisione di G12)
 **Perché:** due eventi di E4 erano su contratti che Binance ha tolto dal listino il giorno stesso (`research/programma7/
 REVISIONE_G12.md`): un paper che ci entra conta guadagni o perdite impossibili. **Cosa:** `f5.in_chiusura` (la data di consegna

@@ -20,6 +20,10 @@ type StatoEventi = {
   stato?: string; equity?: number; capitale?: number; rendimento?: number; aperte_n3?: number; aperte_e4?: number;
   chiuse?: number; rendimento_medio?: number | null; e4_in_attesa?: number; aggiornato?: number;
 };
+type StatoDemo = {
+  stato?: string; equity?: number; capitale_iniziale?: number; rendimento?: number; long?: number; short?: number;
+  limite_eseguiti?: number; limite_totali?: number; ordini_in_attesa?: number; aggiornato?: number;
+};
 type Aperta = { tipo?: string; simbolo?: string; entrata?: number; rendimento_ora?: number; uscita_giorno?: string };
 type Chiusa = { tipo?: string; simbolo?: string; uscita?: number; rendimento?: number; motivo?: string };
 
@@ -101,6 +105,28 @@ function Portafoglio({ ramo, titolo, inizio }: { ramo: string; titolo: string; i
   );
 }
 
+function ContoDemo() {
+  const [d, setD] = useState<StatoDemo | null>(null);
+  useEffect(() => onValue(ref(getRtdb(), 'demo_binance/stato'), (s) => setD(s.val())), []);
+  return (
+    <>
+      <div className="sotto-titolo">G1 con ordini veri sul conto demo di Binance (soldi finti)</div>
+      {!d ? (
+        <p className="muted" style={{ margin: '2px 0 8px', fontSize: 12.5 }}>Spento o non ancora partito.</p>
+      ) : (
+        <p style={{ margin: '2px 0 8px', fontSize: 12.5 }}>
+          <b>{d.stato}</b> (aggiornato {quando(d.aggiornato)})
+          {d.equity != null && (
+            <> · valore <b>${d.equity.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b> ({pct(d.rendimento)}) ·{' '}
+              {d.long} long, {d.short} short · ordini limite eseguiti {d.limite_eseguiti ?? 0} su {d.limite_totali ?? 0}
+              {(d.ordini_in_attesa ?? 0) > 0 ? ` · ${d.ordini_in_attesa} in attesa` : ''}</>
+          )}
+        </p>
+      )}
+    </>
+  );
+}
+
 export default function PaperBot() {
   const [ev, setEv] = useState<StatoEventi | null>(null);
   const [aperte, setAperte] = useState<Record<string, Aperta> | null>(null);
@@ -134,6 +160,9 @@ export default function PaperBot() {
       <div style={{ marginTop: 10 }} />
       <Portafoglio ramo="paper_g11" titolo="Come G1 con il funding dell'ultimo giorno accanto (G11, a confronto con G1)"
         inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
+
+      <div style={{ marginTop: 10 }} />
+      <ContoDemo />
 
       <div className="sotto-titolo" style={{ marginTop: 10 }}>Monete appena quotate e funding al tetto</div>
       {!ev ? (

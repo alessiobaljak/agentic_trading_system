@@ -4640,3 +4640,9 @@ decisione delle 00:05; **gli ordini limite: 40 eseguiti su 40** per tutte e due 
 long (la concentrazione nota, voce P19). G1 e G11 tengono monete in parte diverse: G11 ha TRX al 38% e il Bitcoin short al 16%.
 Nota: il vecchio sistema ha aperto un'operazione il 21 ottobre (SYRUP long, `Ultima decisione` dello stato): è ancora acceso, si
 ferma solo con il pulsante STOP della dashboard.
+**G1 sul conto demo di Binance, codice pronto** (24 ottobre; il proprietario: «perché per le crypto non usiamo Binance demo per
+simulare i nostri ordini?»). Avevo risposto di no guardando solo la documentazione del mercato a pronti: sbagliato, Binance Demo
+Trading ha anche i future e l'accesso da programma (`demo-fapi.binance.com`). Pronto `bot/portafoglio/demo_binance.py`: a ogni
+decisione di G1 ordini veri sul conto demo (limite al mark per un'ora, poi a mercato), il conto letto ogni ora, in dashboard
+accanto al paper (voce P25). Il codice parla solo con l'indirizzo demo e lavora solo con la chiave del conto demo nel `.env` della
+macchina, che deve creare il proprietario. Test in `tests/test_demo_binance.py`.
