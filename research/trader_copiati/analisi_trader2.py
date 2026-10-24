@@ -43,14 +43,20 @@ def minuti(simbolo: str, giorno: str) -> pd.DataFrame:
     f = DATI / simbolo / f"{giorno}.csv.gz"
     if f.exists():
         return pd.read_csv(f, index_col=0)
-    for k in range(3):
-        r = requests.get(URL.format(s=simbolo, d=giorno), timeout=30)
+    r = None
+    for k in range(5):                    # la connessione all'archivio a volte cade (24 ottobre): si riprova
+        try:
+            r = requests.get(URL.format(s=simbolo, d=giorno), timeout=30)
+        except requests.RequestException:
+            r = None
+            time.sleep(2 ** k)
+            continue
         if r.status_code == 404:
             return pd.DataFrame()
         if r.ok:
             break
         time.sleep(2 ** k)
-    else:
+    if r is None or not r.ok:
         return pd.DataFrame()
     z = zipfile.ZipFile(io.BytesIO(r.content))
     righe = list(csv.reader(io.TextIOWrapper(z.open(z.namelist()[0]))))
