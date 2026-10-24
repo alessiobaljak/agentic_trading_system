@@ -80,7 +80,19 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   segue la giornata, SPY e QQQ, 2016-2024. **Bocciata su tutti e due.** Sharpe annuo con i costi −0,60 (SPY) e −0,30 (QQQ), contro 0,87
   del comprare e tenere lo SPY; trimestri in guadagno 28% e 38%.
 
+* **Il simulatore a più titoli** (`stock/simulatore/portafoglio.py`): un solo conto con più azioni, barre al giorno; vendite prima
+  degli acquisti, ordini per titoli senza barra non eseguiti e contati, titoli spariti dal listino segnalati; 6 test in più.
+* **La prova 2** (`stock/prove/P002_zona_di_rumore.md`, regole committate prima; risultati in `P002_risultati.md`): uscita dalla «zona
+  di rumore» dell'apertura. **SPY bocciata** (Sharpe con i costi 0,41, costi doppi sotto zero). **QQQ passa la ricerca**: Sharpe annuo con
+  i costi 1,05 contro 0,92 del tenere QQQ e 0,87 del tenere lo SPY; Sharpe corretto 1,00 (soglia 0,95); costi doppi 0,48; 25 trimestri
+  su 32 in guadagno; perdita massima −9,6%; opera in circa 3 giorni su 10. **Non è ancora una strategia valida**: mancano il revisore
+  separato (in corso) e il periodo chiuso (gennaio 2025 → settembre 2026), che si apre una volta sola.
+
 ## Cosa abbiamo capito il 24 ottobre
+
+* **Su QQQ la regola della zona di rumore regge dopo i costi, sullo SPY no.** Prima dei costi lo Sharpe è 1,62 su QQQ e 1,01 sullo SPY:
+  il movimento di QQQ in giornata è più ampio, mentre il costo di un'operazione è quasi lo stesso. Sospetto da tenere: QQQ, nel
+  2016-2024, è stato un periodo eccezionale per i titoli tecnologici (anche se la regola compra e vende allo scoperto in giornata).
 
 * **L'effetto dell'ultima mezz'ora c'è, ma è più piccolo dei costi.** Senza costi la prova guadagna (Sharpe annuo 0,31 sullo SPY, 0,67
   su QQQ): circa 0,5 punti base al giorno sullo SPY (12,4% in 2259 giorni). Ogni giornata costa circa 1,7 punti base fra commissioni
@@ -93,12 +105,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 * **I prezzi del periodo chiuso** (dal 2025) non sono stati scaricati: nessuno li ha visti.
 * Il simulatore gira su un titolo alla volta: la prova 1 (2 titoli × 3 varianti di costo, 880'000 minuti ciascuno) ha impiegato 4
-  minuti. Per le idee sulle 10 azioni serve un simulatore a più titoli (il portafoglio), non ancora scritto.
+  minuti. Il simulatore a più titoli adesso c'è.
 * Le commissioni di Interactive Brokers (0,005 dollari per azione, minimo 1) sono **da verificare** sul listino ufficiale.
 
 ## Il prossimo passo
 
-* Il simulatore a più titoli, poi la prova 2: **l'uscita dalla «zona di rumore» dell'apertura** su SPY e QQQ (idea I2), e il **ritorno
-  dopo le forti cadute** sulle 10 azioni di allora (idea I3). Regole scritte prima, come sempre.
+* L'esito del revisore sulla prova 2; se non trova errori, il periodo chiuso per QQQ (una volta sola).
+* La prova 3: il **ritorno dopo le forti cadute** sulle 10 azioni di allora (idea I3), con il simulatore a più titoli.
 * Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
 * Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
