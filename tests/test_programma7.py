@@ -181,7 +181,7 @@ def test_le_prove_del_programma7_entrano_nel_conto():
     from research.programma6 import asticella as ast
     s = ast.serie_nuove()
     for n in ("57 G1", "58 G2", "59 G4", "60 G3", "61 F5T", "61 G1T", "62 G5", "63 G6", "63 G1+G6", "64 G7", "65 G8", "66 MAX",
-              "67 G9", "68 G10", "69 G11"):
+              "67 G9", "68 G10", "69 G11", "70 G12", "71 G13", "72 G14", "73 S1", "73 S2"):
         assert n in s and len(s[n]) > 50, n
 
 
@@ -219,3 +219,24 @@ def test_g14_segnale_e_conto():
     d = g14.conto(np.array([1.0, 1.0, -1.0]), np.array([0.01, -0.02, 0.03]), np.array([0.0001, 0.0001, 0.0001]))
     assert list(d["giro"]) == [1.0, 0.0, 2.0]
     assert abs(d["netto"].iloc[2] - (-0.03 - 2 * g14.COSTO + 0.0001)) < 1e-12
+
+
+def test_g15_eventi_e_operazione():
+    from research.programma7 import diciassettesima as g15
+    x = {"circolante": [[99, 1000.0], [100, 1000.0], [130, 1100.0]],
+         "gradini": [[100, "insiders", 30.0, "Team"], [100, "privateSale", 20.0, "Investors"], [100, "airdrop", 500.0, "Airdrop"],
+                     [131, "insiders", 5.0, "Team"], [140, "insiders", 50.0, "Team"]]}
+    ev = g15.eventi_del_protocollo(x)
+    assert ev[0] == {"giorno": 100, "dimensione": 0.05, "categorie": "insiders+privateSale"}   # l'airdrop non conta
+    assert len(ev) == 2 and abs(ev[1]["dimensione"] - 5 / 1100) < 1e-12                       # il 140 non ha l'offerta del giorno prima
+    assert g15.prefisso("1000PEPEUSDT", "PEPE") == 1e3 and g15.prefisso("ARBUSDT", "ARB") == 1.0
+    T, S = 60, 2
+    pan = {k: np.full((T, S), 100.0) for k in ("open", "high", "close")}
+    pan["funding"] = np.zeros((T, S))
+    pan["open"][41, 0] = 90.0                                                                 # la moneta scende del 10%
+    r = g15.operazione(pan, 0, 1, 10, 41)
+    assert abs(r["r"] - (0.10 - g15.vu.COSTO_MONETA - g15.vu.COSTO_BTC)) < 1e-12 and not r["fermata"] and r["giorni"] == 31
+    pan["high"][20, 0] = 131.0                                                                # tocca +30% il giorno 20
+    r = g15.operazione(pan, 0, 1, 10, 41)
+    assert r["fermata"] and r["giorni"] == 10
+    assert abs(r["r"] - (-(1.3 * 1.01 - 1) - g15.vu.COSTO_MONETA - g15.vu.COSTO_BTC)) < 1e-12

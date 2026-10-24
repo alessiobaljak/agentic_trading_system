@@ -218,7 +218,9 @@ def serie_programma7() -> dict:
                  ("60 G3", "risultati_quarta/settimane_G3.csv.gz"), ("61 F5T", "risultati_quinta/settimane_F5T.csv.gz"),
                  ("61 G1T", "risultati_quinta/settimane_G1T.csv.gz"), ("63 G6", "risultati_settima/settimane_G6.csv.gz"),
                  ("63 G1+G6", "risultati_settima/settimane_G1_G6.csv.gz"), ("66 MAX", "risultati_decima/settimane_MAX.csv.gz"),
-                 ("67 G9", "risultati_undicesima/settimane_G9.csv.gz"), ("69 G11", "risultati_tredicesima/settimane_G11.csv.gz")):
+                 ("67 G9", "risultati_undicesima/settimane_G9.csv.gz"), ("69 G11", "risultati_tredicesima/settimane_G11.csv.gz"),
+                 ("72 G14", "risultati_sedicesima/settimane_G14.csv.gz"), ("73 S1", "../programma8/risultati_prima/settimane_S1.csv.gz"),
+                 ("73 S2", "../programma8/risultati_prima/settimane_S2.csv.gz")):
         if (p7 / f).exists():
             out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
     for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
@@ -230,6 +232,18 @@ def serie_programma7() -> dict:
         ora = giorno * 24 + (d[ora_col].to_numpy() if ora_col else 0)
         ev = pd.DataFrame({"simbolo": d["simbolo"] if "simbolo" in d else d["contratto"], "ora": ora,
                            "uscita_h": ora + np.round(d["giorni"].to_numpy() * 24).astype(int), "r": d["r"]})
+        out[n] = qu.portafoglio(ev)["netto"]
+    # 24 ottobre: G12 (7 giorni dall'ora dopo l'evento), G13 (le ore fino alla chiusura) e G15 (gli sblocchi) mancavano
+    for n, f in (("70 G12", "risultati_quattordicesima/eventi_G12.csv"), ("71 G13", "risultati_quindicesima/eventi_G13.csv"),
+                 ("74 G15", "risultati_diciassettesima/eventi_G15.csv")):
+        if not (p7 / f).exists():
+            continue
+        d = pd.read_csv(p7 / f)
+        ora = d["data"].map(lambda x: sc.giorno(*map(int, x.split("-")))).to_numpy() * 24
+        if "ora_evento" in d:
+            ora = ora + d["ora_evento"].to_numpy() + 1
+        durata = 7 * 24 if n == "70 G12" else (d["ore"].to_numpy() if "ore" in d else np.round(d["giorni"].to_numpy() * 24).astype(int))
+        ev = pd.DataFrame({"simbolo": d["simbolo"], "ora": ora, "uscita_h": ora + durata, "r": d["r7" if n == "70 G12" else "r"]})
         out[n] = qu.portafoglio(ev)["netto"]
     f = p7 / "risultati_dodicesima" / "operazioni_G10.csv"
     if f.exists():
