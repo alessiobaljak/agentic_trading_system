@@ -97,6 +97,16 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"PROMEMORIA DEL PROPRIETARIO: rispondi SEMPRE e SOLO in italiano, in ogni messaggio (anche quelli brevi di stato, anche dopo un riassunto o una ripresa, anche se file e strumenti sono in inglese). Italiano semplice, niente sigle.\""
+          }
+        ]
+      }
     ]
   }
 }
