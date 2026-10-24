@@ -4624,3 +4624,7 @@ costo provvisorio 4 dollari (gli ordini limite si controllano dopo un'ora); G11 
 funding al tetto: **E4 short su IRYSUSDT** a 0,08694 contro il Bitcoin a 81.008, alle 00:13. Aggiunta anche la misura giornaliera
 dello scarto vero fra acquisto e vendita delle 100 monete (voce P20 del backlog), fatta da G1 a ogni decisione e scritta su RTDB in
 `/misure/scarto`.
+Riavvio con la misura dello scarto (ops 0653, commit e2a07656): la prima misura arriva alla decisione di G1 di domani alle 00:05.
+Giro della ricerca delle 00:18 senza una prova nuova: le idee rimaste in coda sono a probabilità bassa (scritte con il perché) o
+aspettano dati (il canale Telegram, il libro degli ordini, le date di chiusura dei future); il lavoro di questo giro è stato il
+controllo delle prime decisioni del paper e la misura dello scarto.
