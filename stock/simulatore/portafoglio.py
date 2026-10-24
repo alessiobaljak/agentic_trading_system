@@ -95,6 +95,7 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
     barre_ny = {s: df.set_axis(pd.Index(giorni_per[s])) for s, df in barre.items()}
     storia = Storia(barre_ny, tutti)
     c_di = (lambda s: costi[s]) if isinstance(costi, dict) else (lambda s: costi)
+    tasso_debito = max(c.interesse_debito_annuo for c in costi.values()) if isinstance(costi, dict) else costi.interesse_debito_annuo
 
     stato = StatoConto(contanti=float(capitale))
     in_attesa: list[tuple[str, Ordine]] = []
@@ -177,9 +178,11 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
             tot_scarto += scarto
             esecuzioni.append({"giorno": d, "simbolo": s, "quantita": q, "prezzo": prezzo, "tipo": o.tipo,
                                "commissione": comm, "scarto": scarto, "etichetta": o.etichetta})
-        # 3. valore alla chiusura
+        # 3. valore alla chiusura, e l'interesse sui contanti presi a prestito (leva) per la notte
         for s, i in oggi.items():
             stato.ultimo_prezzo[s] = col[s]["close"][i]
+        if stato.contanti < 0 and tasso_debito:
+            stato.contanti -= -stato.contanti * tasso_debito / 252
         valori[k] = stato.valore()
         # 4. decisione per il giorno dopo
         storia.i = k

@@ -222,3 +222,20 @@ def test_classifica_mensile_sceglie_i_meno_nervosi_e_i_piu_saliti():
     r = simula_conto(barre_, fattori.strategia_classifica(membri, giorni, rett, fattori.momento, quanti=1, i_piu_bassi=False),
                      Costi(), leva_massima=2)
     assert set(r.esecuzioni["simbolo"]) == {"SALE"}
+
+
+def test_calma_investe_di_piu_quando_il_mercato_e_calmo():
+    import numpy as np
+    from stock.strategie import tendenza
+    giorni = list(pd.bdate_range("2019-01-01", periods=120).date)
+    # 60 sedute calme (0,5% al giorno di oscillazione), poi 60 agitate (4%)
+    r = np.r_[np.where(np.arange(60) % 2 == 0, 0.005, -0.005), np.where(np.arange(60) % 2 == 0, 0.04, -0.04)]
+    p = 100 * np.cumprod(1 + r)
+    df = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                      index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+    rett = pd.Series(p, index=pd.Index(giorni))
+    res = simula_conto({"X": df}, tendenza.strategia_calma("X", giorni, rett), Costi(interesse_debito_annuo=0.06), leva_massima=1.5)
+    e = res.esecuzioni
+    # prima si compra con la leva massima (calma: quota tagliata a 1,5), poi con l'agitazione si vende
+    assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[0] * e["prezzo"].iloc[0] > 140_000
+    assert (e["quantita"] < 0).any()

@@ -128,3 +128,26 @@ def strategia_dentro(seg: dict, quota: float = 0.98):
             return [Ordine(-stato.azioni, "mercato", etichetta="fuori")]
         return []
     return decidi
+
+
+def strategia_leva_finestre(seg: dict, base: float = 0.98, alta: float = 1.48, inizio: int = 0):
+    """Sempre investiti al `base` del conto; nelle finestre (`compra` → `vendi`) al livello `alta` (prova 14)."""
+    import math
+
+    from stock.simulatore.motore import Ordine
+    compra, vendi = seg["compra"], seg["vendi"]
+
+    def decidi(storia, stato) -> list:
+        i = len(storia) - 1
+        if i < inizio:
+            return []
+        c = float(storia["close"].iat[-1])
+        if compra[i]:
+            voluto = math.floor(alta * stato.valore(c) / c)
+        elif vendi[i] or stato.azioni == 0:
+            voluto = math.floor(base * stato.valore(c) / c)
+        else:
+            return []
+        d = voluto - stato.azioni
+        return [Ordine(d, "mercato", etichetta="leva" if compra[i] else "base")] if d else []
+    return decidi

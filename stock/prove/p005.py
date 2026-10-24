@@ -22,7 +22,7 @@ def main():
            lambda rett, esecuzioni: rett.index[tendenza.SEDUTE])
 
 
-def esegui(numero: str, regole: str, fabbrica, primo_giorno):
+def esegui(numero: str, regole: str, fabbrica, primo_giorno, leva_massima: float = 1.0, interesse: float = 0.0):
     """Una prova sull'indice con il simulatore a più titoli. `fabbrica(simbolo, calendario, rettificata)` dà la
     strategia; `primo_giorno(rettificata, esecuzioni)` il giorno da cui parte la serie."""
     cal = list(alpaca.calendario("2016-01-01", "2024-12-31").index)
@@ -30,18 +30,18 @@ def esegui(numero: str, regole: str, fabbrica, primo_giorno):
     ris = {}
     for s in ("SPY", "QQQ"):
         df, rett, _ = prepara_titolo(s, date(2024, 12, 31))
-        costi = Costi(mezzo_scarto=MEZZO_SCARTO[s], slittamento=0.5 * PB, **IB_FISSO)
+        costi = Costi(mezzo_scarto=MEZZO_SCARTO[s], slittamento=0.5 * PB, interesse_debito_annuo=interesse, **IB_FISSO)
         out = {}
         for nome, c in (("costi", costi), ("costi doppi", costi.raddoppiati()), ("senza costi", Costi())):
-            out[nome] = simula_conto({s: df}, fabbrica(s, cal, rett), c, capitale=CAPITALE)
+            out[nome] = simula_conto({s: df}, fabbrica(s, cal, rett), c, capitale=CAPITALE, leva_massima=leva_massima)
             print(s, nome, f"{out[nome].valore.iloc[-1]:.0f}", flush=True)
         primo = primo_giorno(rett, out["costi"].esecuzioni)
         g = {k: rendimenti(v.valore[v.valore.index >= primo]) for k, v in out.items()}
-        salva_serie(f"P00{numero}_{s}", g["costi"])
+        salva_serie(f"P{int(numero):03d}_{s}", g["costi"])
         ris[s] = (out, g)
     tutte = carica_serie()
     righe = [f"# Prova {numero} — risultati", "",
-             f"Calcolato da `python -m stock.prove.p00{numero}` il {datetime.now(UTC):%Y-%m-%d %H:%M} UTC con le regole di "
+             f"Calcolato da `python -m stock.prove.p{int(numero):03d}` il {datetime.now(UTC):%Y-%m-%d %H:%M} UTC con le regole di "
              f"`{regole}` (committate prima). Nel conto dell'asticella: " + ", ".join(sorted(tutte)) + ".", "",
              "| | SPY | QQQ |", "|---|---|---|"]
     tab = {}
@@ -75,7 +75,7 @@ def esegui(numero: str, regole: str, fabbrica, primo_giorno):
         tab[s]["**Esito**"] = "**passa la ricerca**" if passa else "**bocciata**"
     for k in tab["SPY"]:
         righe.append(f"| {k} | {tab['SPY'][k]} | {tab['QQQ'][k]} |")
-    (QUI / f"P00{numero}_risultati.md").write_text("\n".join(righe) + "\n")
+    (QUI / f"P{int(numero):03d}_risultati.md").write_text("\n".join(righe) + "\n")
     print("\n".join(righe))
 
 
