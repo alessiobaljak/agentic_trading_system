@@ -20,6 +20,11 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
   nel registro e nell'asticella.
 * **Universo allargato a tutte le azioni dell'S&P 500** (24 ottobre: «sì, allarga a tutte le azioni dell'S&P 500»): le prove nuove
   usano i titoli che erano nell'indice in quel momento (circa 500, 717 in tutto dal 2016 al 2024), non più solo le 10 più scambiate.
+* **Ricerca più ampia, anche sulle 10 grandi** (24 ottobre: «ti consiglio di ampliare notevolmente la ricerca ma soprattutto di non
+  seguire le regole standard su internet [...] è la tua capacità di leggere informazioni diverse e metterle insieme [...] non è che se le
+  10 più scambiate sono fallite che non riprovi più strategie su queste»): idee proprie e combinazioni di informazioni diverse, su tutti
+  gli universi (10 grandi compresi), sempre con regole scritte prima e il conto delle prove. Provare la leva nei giorni prima della banca
+  centrale, senza chiedere.
 * **Autonomia** (24 ottobre: «procedi in autonomia su diverse idee non chiedermi il permesso ma fammi sapere quando vogliamo fare la demo
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.

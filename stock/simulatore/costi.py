@@ -21,6 +21,8 @@ class Costi:
     slittamento: float = 0.0
     # interesse annuo sul valore delle posizioni allo scoperto (prestito dei titoli)
     prestito_annuo: float = 0.0
+    # interesse annuo sui contanti presi a prestito dal broker (conto con leva: contanti sotto zero)
+    interesse_debito_annuo: float = 0.0
 
     def commissione(self, azioni: float, prezzo: float) -> float:
         azioni = abs(azioni)
@@ -39,4 +41,5 @@ class Costi:
                        percentuale=2 * self.percentuale,
                        massima_percentuale=None if self.massima_percentuale is None else 2 * self.massima_percentuale,
                        mezzo_scarto=2 * self.mezzo_scarto, slittamento=2 * self.slittamento,
-                       prestito_annuo=2 * self.prestito_annuo)
+                       prestito_annuo=2 * self.prestito_annuo,
+                       interesse_debito_annuo=2 * self.interesse_debito_annuo)

@@ -217,3 +217,10 @@ def test_finestre_che_avanzano_e_periodo_chiuso():
         finestre(date(2016, 1, 1), date(2025, 1, 2), chiuso_dal=date(2025, 1, 1))
     with pytest.raises(PeriodoChiuso):
         controlla_periodo(date(2025, 6, 1), date(2025, 1, 1))
+
+
+def test_interesse_sui_contanti_presi_a_prestito():
+    b = barre([(100, 100, 100, 100)] * 3)
+    # 1500 azioni a 100 con 100'000: 50'000 a prestito; 0,0252 l'anno / 252 = 0,0001 a notte = 5 dollari
+    r = simula(b, una_volta({0: [Ordine(1500, "mercato")]}), Costi(interesse_debito_annuo=0.0252), leva_massima=1.6)
+    assert r.prestito == pytest.approx(5.0 + 5.0005)   # notti dopo le barre 1 e 2 (la seconda anche sull interesse della prima)

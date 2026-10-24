@@ -176,6 +176,11 @@ def simula(barre: pd.DataFrame, strategia: Strategia, costi: Costi, capitale: fl
             p = -stato.azioni * chiu * costi.prestito_annuo / 252
             stato.contanti -= p
             tot_prestito += p
+        # e l'interesse sui contanti presi a prestito (leva), per ogni notte
+        if stato.contanti < 0 and ultima_del_giorno[i] and costi.interesse_debito_annuo:
+            p = -stato.contanti * costi.interesse_debito_annuo / 252
+            stato.contanti -= p
+            tot_prestito += p
         valori[i] = stato.valore(chiu)
         # 4. la strategia decide alla chiusura, per la barra dopo
         decisi = strategia(barre.iloc[: i + 1], Stato(stato.contanti, stato.azioni)) or []
