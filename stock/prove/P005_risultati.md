@@ -1,6 +1,6 @@
 # Prova 5 — risultati
 
-Calcolato da `python -m stock.prove.p005` il 2026-10-24 13:24 UTC con le regole di `P005_tendenza.md` (committate prima). Nel conto dell'asticella: P001_QQQ, P001_SPY, P002_QQQ, P002_QQQ_chiuso, P002_SPY, P004_QQQ, P004_SPY, P005_QQQ, P005_SPY.
+Calcolato da `python -m stock.prove.p005` il 2026-10-24 13:25 UTC con le regole di `P005_tendenza.md` (committate prima). Nel conto dell'asticella: P001_QQQ, P001_SPY, P002_QQQ, P002_QQQ_chiuso, P002_SPY, P004_QQQ, P004_SPY, P005_QQQ, P005_SPY.
 
 | | SPY | QQQ |
 |---|---|---|

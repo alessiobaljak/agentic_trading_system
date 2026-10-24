@@ -125,3 +125,18 @@ def test_tendenza_entra_se_l_anno_e_in_guadagno_ed_esce_se_no():
     assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[-1] < 0
     primo = e["giorno"].iloc[0]
     assert giorni.index(primo) >= tendenza.SEDUTE
+
+
+def test_cambio_del_mese_entra_al_penultimo_ed_esce_al_quarto():
+    from datetime import date as D
+    from stock.strategie.calendario import posizione_nel_mese, strategia_cambio_del_mese
+    giorni = list(pd.bdate_range("2020-01-02", "2020-02-14").date)
+    assert posizione_nel_mese(giorni)[D(2020, 1, 31)] == (22, 22)
+    p = [100.0] * len(giorni)
+    df = pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                      index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+    r = simula_conto({"X": df}, strategia_cambio_del_mese("X", giorni), Costi())
+    e = r.esecuzioni
+    # gennaio 2020 (giorni feriali): penultimo 30 gennaio; febbraio: quarto giorno 6 febbraio
+    assert list(e["giorno"])[:2] == [D(2020, 1, 30), D(2020, 2, 6)]   # (il calendario tagliato al 14 febbraio fa poi un altro giro)
+    assert e["quantita"].iloc[0] > 0 and e["quantita"].iloc[1] < 0
