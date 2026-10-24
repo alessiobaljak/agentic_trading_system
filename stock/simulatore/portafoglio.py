@@ -114,12 +114,29 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
                 tot_div += q * div[i]
             fr = col[s]["frazionamento"]
             if fr is not None and not np.isnan(fr[i]) and fr[i] not in (0.0, 1.0):
-                if q:
-                    stato.azioni[s] = q * fr[i]
                 if s in stato.ultimo_prezzo:
                     stato.ultimo_prezzo[s] /= fr[i]
-                in_attesa = [(x, Ordine(o.quantita * fr[i], o.tipo, None if o.prezzo is None else o.prezzo / fr[i],
-                                        o.solo_riduce, o.etichetta)) if x == s else (x, o) for x, o in in_attesa]
+                if q:
+                    nuove = q * fr[i]
+                    if not frazionarie:
+                        # la frazione di azione si paga in contanti all'ultimo prezzo (come fa il broker)
+                        intere = float(np.trunc(round(nuove, 9)))
+                        stato.contanti += (nuove - intere) * stato.ultimo_prezzo.get(s, 0.0)
+                        nuove = intere
+                    stato.azioni[s] = nuove
+                    if nuove == 0:
+                        del stato.azioni[s]
+                arrotonda = (lambda x: float(np.trunc(round(x, 9)))) if not frazionarie else (lambda x: x)
+                nuovi = []
+                for x, o in in_attesa:
+                    if x != s:
+                        nuovi.append((x, o))
+                        continue
+                    qq = arrotonda(o.quantita * fr[i])
+                    if qq:
+                        nuovi.append((x, Ordine(qq, o.tipo, None if o.prezzo is None else o.prezzo / fr[i], o.solo_riduce,
+                                                o.etichetta)))
+                in_attesa = nuovi
         # 2. ordini: stop, vendite, acquisti, limiti
         ordine_tipo = {"stop": 0, "mercato": 1, "limite": 3}
         ordinati = sorted(in_attesa, key=lambda so: ordine_tipo[so[1].tipo] + (0 if so[1].quantita < 0 or so[1].tipo != "mercato" else 1))

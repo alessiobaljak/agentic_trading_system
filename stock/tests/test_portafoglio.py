@@ -156,3 +156,11 @@ def test_usciti_dall_indice_compra_il_giorno_dell_uscita_e_vende_dopo_20_sedute(
     e = r.esecuzioni
     assert list(e["giorno"]) == [D(2020, 1, 6), giorni[giorni.index(D(2020, 1, 6)) + 20]]
     assert e["quantita"].iloc[0] == 100      # il 10% di 100'000 a 100 dollari
+
+
+def test_raggruppamento_paga_la_frazione_in_contanti():
+    # 1 nuova ogni 5 (rapporto 0,2): 908 azioni diventano 181,6 → 181 azioni e 0,6 pagata in contanti
+    a = barre([(10, 10, 10, 10), (10, 10, 10, 10), (50, 50, 50, 50), (50, 50, 50, 50)], G, frazionamento=[1, 1, 0.2, 1])
+    r = simula_conto({"A": a}, al_giorno({0: [("A", Ordine(908, "mercato"))], 2: [("A", Ordine(-181, "mercato"))]}), Costi())
+    assert list(r.esecuzioni["quantita"]) == [908, -181]
+    assert r.valore.iloc[-1] == pytest.approx(100_000)

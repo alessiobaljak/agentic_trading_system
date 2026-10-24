@@ -139,6 +139,11 @@ def simula(barre: pd.DataFrame, strategia: Strategia, costi: Costi, capitale: fl
             tot_div += incasso
         if fr_[i] != 1.0:
             stato.azioni *= fr_[i]
+            if not frazionarie and stato.azioni != int(stato.azioni):
+                # la frazione di azione si paga in contanti all'apertura (come fa il broker)
+                intere = float(np.trunc(round(stato.azioni, 9)))
+                stato.contanti += (stato.azioni - intere) * ap
+                stato.azioni = intere
             in_attesa = [Ordine(o.quantita * fr_[i], o.tipo, None if o.prezzo is None else o.prezzo / fr_[i],
                                 o.solo_riduce, o.etichetta) for o in in_attesa]
         # 2. ordini decisi alla chiusura della barra prima: stop, poi a mercato, poi limiti
