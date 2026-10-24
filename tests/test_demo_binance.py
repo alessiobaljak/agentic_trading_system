@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from urllib.parse import parse_qs, urlparse
 
 import pytest
@@ -44,7 +45,16 @@ class _Demo:
             return _Risposta({"dualSidePosition": False} if metodo == "GET" else {"code": 200})
         if u.path == "/fapi/v1/leverage":
             return _Risposta({"leverage": int(q["leverage"])})
+        if u.path == "/fapi/v1/openOrders":
+            return _Risposta([{"symbol": o["symbol"]} for o in self.ordini.values() if not o.get("chiuso") and o["type"] == "LIMIT"])
+        if u.path == "/fapi/v1/allOpenOrders":
+            for o in self.ordini.values():
+                if o["symbol"] == q["symbol"]:
+                    o["chiuso"] = True
+            return _Risposta({"code": 200})
         if u.path == "/fapi/v1/order" and metodo == "POST":
+            if not re.fullmatch(r"[.A-Z:/a-z0-9_-]{1,36}", q.get("newClientOrderId", "x")):
+                return _Risposta({"code": -1100, "msg": "Illegal characters found in parameter 'newclientorderid'"}, 400)
             i = len(self.ordini) + 1
             self.ordini[i] = dict(q, orderId=i)
             return _Risposta({"orderId": i})
@@ -166,3 +176,25 @@ def test_sezione_del_conto_demo_nello_stato():
                                         "/demo_binance/errore": {"testo": "GET x: 401", "ora": 1.7e9}}))
     testo = "\n".join(righe)
     assert "acceso" in testo and "$5,010.00" in testo and "eseguiti a limite 38" in testo and "401" in testo
+
+
+def test_id_degli_ordini_e_ordini_rimasti_aperti(tmp_path):
+    """Il 24 ottobre Binance ha rifiutato l'ordine di una moneta con il nome in caratteri cinesi e il ribilancio si e' fermato:
+    l'identificativo ora e' sempre ammesso, un rifiuto non ferma gli altri e gli ordini rimasti aperti si annullano prima."""
+    from bot.core.firebase_client import _InMemoryStore
+    assert dm.id_ordine(20750, "AUSDT") == "g1d-20750-AUSDT"
+    i = dm.id_ordine(20750, "币安人生USDT")
+    assert re.fullmatch(r"[.A-Z:/a-z0-9_-]{1,36}", i) and i != dm.id_ordine(20750, "别的USDT")
+    fb = _InMemoryStore()
+    finto = _Demo()
+    finto.ordini[99] = {"symbol": "AUSDT", "type": "LIMIT", "quantity": "1", "orderId": 99}        # rimasto da un tentativo
+    acceso = tmp_path / "acceso"
+    acceso.write_text("si")
+    g1 = tmp_path / "g1.json"
+    g1.write_text(json.dumps({"ultimo_lunedi": 20750, "pesi": {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d = dm.DemoG1(fb, cliente=dm.ClienteDemo("chiave", "segreto", http=finto), file_stato=tmp_path / "st.json", file_g1=g1,
+                  interruttore=acceso)
+    d.tick(20750 * 86400.0 + 400)
+    assert finto.ordini[99].get("chiuso") and len(d.carica()["ordini"]["lista"]) == 2
+    rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24") or fb.get_rtdb("/demo_binance/ribilanciamenti")
+    assert "AUSDT" in str(rib)

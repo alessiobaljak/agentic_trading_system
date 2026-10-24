@@ -26,6 +26,7 @@ import hmac
 import json
 import math
 import os
+import re
 import time
 from pathlib import Path
 from typing import Callable, Optional
@@ -79,6 +80,13 @@ def filtri(info: dict) -> dict:
         except (KeyError, TypeError, ValueError):
             continue
     return out
+
+
+def id_ordine(giorno: int, simbolo: str) -> str:
+    """L'identificativo dell'ordine per Binance (ammessi solo ``.A-Za-z0-9:/_-``, al massimo 36): le monete con il nome in altri
+    caratteri (per esempio 币安人生USDT) prendono un'impronta del nome. Il 24 ottobre il primo ribilancio sul demo si e' fermato qui."""
+    nome = simbolo if re.fullmatch(r"[.A-Za-z0-9:/_-]+", simbolo) else "h" + hashlib.sha1(simbolo.encode()).hexdigest()[:12]
+    return f"g1d-{giorno}-{nome}"[:36]
 
 
 def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> list:
@@ -230,26 +238,34 @@ class DemoG1:
             if c.chiedi("GET", "/fapi/v1/positionSide/dual", firmata=True).get("dualSidePosition"):
                 c.chiedi("POST", "/fapi/v1/positionSide/dual", {"dualSidePosition": "false"}, firmata=True)
             st["modo_controllato"] = True
+        # gli ordini rimasti aperti (un tentativo interrotto) si annullano prima di contare le posizioni: senza, si raddoppiano
+        aperti = sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []})
+        for s in aperti:
+            c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
         equity, _, posizioni = self._conto(c)
         st.setdefault("capitale_iniziale", equity)
         mancano = sorted(s for s in pesi if s not in f)
         leve = set(st.get("leve") or [])
-        piazzati = []
+        piazzati, rifiutati = [], []
         for s, lato, q, limite, riduce in ordini_del_giorno(pesi, posizioni, prezzi, equity, f):
-            if s not in leve:
-                c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": LEVA}, firmata=True)
-                leve.add(s)
             p = {"symbol": s, "side": lato, "type": "LIMIT", "timeInForce": "GTC", "quantity": testo(q), "price": testo(limite),
-                 "newClientOrderId": f"g1d-{giorno}-{s}"[:36]}
+                 "newClientOrderId": id_ordine(giorno, s)}
             if riduce:
                 p["reduceOnly"] = "true"
-            r = c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
+            try:                                       # un ordine rifiutato non ferma gli altri
+                if s not in leve:
+                    c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": LEVA}, firmata=True)
+                    leve.add(s)
+                r = c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
+            except RuntimeError as exc:
+                rifiutati.append({"simbolo": s, "errore": str(exc)[:200]})
+                continue
             piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId")})
         st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati}})
         data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
         self._scrivi(f"ribilanciamenti/{data}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
-                                                 "piazzati": now})
-        print(f"[demo_binance] decisione G1 del {data}: {len(piazzati)} ordini limite sul conto demo")
+                                                 "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now})
+        print(f"[demo_binance] decisione G1 del {data}: {len(piazzati)} ordini limite sul conto demo, {len(rifiutati)} rifiutati")
         return st
 
     def chiudi_ordini(self, c: ClienteDemo, st: dict, now: float) -> dict:

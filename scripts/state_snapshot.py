@@ -595,9 +595,12 @@ def sezione_demo_binance(fb) -> list:
     """Le righe di G1 sul conto demo di Binance (RTDB /demo_binance): stato, equity, ordini limite, ultimo errore."""
     titolo = "## G1 sul conto demo di Binance (ordini veri, soldi finti)"
     st = fb.get_rtdb("/demo_binance/stato") or {}
-    if not isinstance(st, dict) or not st:
+    err = fb.get_rtdb("/demo_binance/errore") or {}
+    st = st if isinstance(st, dict) else {}
+    err = err if isinstance(err, dict) else {}
+    if not st and not err:
         return [titolo, "- spento o mai partito (manca `ops/demo_binance_acceso`, o il bot non è stato riavviato)", ""]
-    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    righe = [titolo, f"- stato: **{st.get('stato', 'nessuna valutazione del conto ancora')}** ({_ts(st.get('aggiornato'))})"]
     if st.get("equity") is not None:
         righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
                      f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short · "
@@ -611,9 +614,10 @@ def sezione_demo_binance(fb) -> list:
         righe.append(f"- ultima decisione {g}: {x.get('ordini', 0)} ordini"
                      + (f", eseguiti a limite {lim.get('eseguiti_a_limite', 0)}, a mercato {lim.get('a_mercato', 0)}" if lim else "")
                      + (f"; monete che sul demo non ci sono: {', '.join(x['monete_mancanti_sul_demo'])}"
-                        if x.get("monete_mancanti_sul_demo") else ""))
-    err = fb.get_rtdb("/demo_binance/errore") or {}
-    if isinstance(err, dict) and err:
+                        if x.get("monete_mancanti_sul_demo") else "")
+                     + (f"; rifiutati {len(x['rifiutati'])}: " + "; ".join(f"{r.get('simbolo')} {str(r.get('errore'))[:80]}"
+                                                                         for r in x["rifiutati"][:3]) if x.get("rifiutati") else ""))
+    if err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
     return righe + [""]
 
