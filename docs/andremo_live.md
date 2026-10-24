@@ -4723,3 +4723,8 @@ verso previsto dal meccanismo (gli short affollati vengono schiacciati). Nel con
 della prova 81 era il caso. Capito: il funding dell'ultimo regolamento non distingue le fiammate che rientrano; le fiammate delle
 monete piccole, vendute con un'uscita fissa, perdono in ogni versione provata (prove 75, 76, 81, 82). La famiglia si chiude qui.
 Nel conto: 148 prove (22 a eventi).
+**Prova 83, P9D** (`programma9/QUARTA.md`, giro delle 20:17): le 613 vendite delle monete nuove al 7° giorno divise per funding.
+Con i long affollati +4,68% a operazione (461), con il funding basso +3,50% (150): differenza non sicura (p 0,35). Il funding della
+moneta nuova al 7° giorno è quasi sempre al tasso di base: non separa. La regola delle monete nuove resta com'è. Capito, insieme alle
+prove 81-82: il funding dell'ultimo regolamento non dice quali movimenti continuano; il funding conta come media su più giorni fra le
+monete (F5, G1), non come filtro di un evento. Nel conto: 149 prove (23 a eventi).
