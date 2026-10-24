@@ -15,6 +15,12 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 * **Sì alle proposte di `METODO.md`** (24 ottobre): nelle prove sul passato le 10 azioni più scambiate *di allora* più SPY e QQQ;
   l'indice come asticella; il periodo chiuso da gennaio 2025 a settembre 2026; le condizioni per il demo e per i soldi veri.
 * **Piattaforma del demo: Interactive Brokers** (24 ottobre).
+* **Il periodo chiuso si riusa per idee di famiglie diverse** (24 ottobre: «sì, riusa il periodo chiuso per idee diverse»): non per
+  altre regole in giornata che seguono il movimento dell'indice (la famiglia della prova 2); ogni apertura conta come una prova in più
+  nel registro e nell'asticella.
+* **Autonomia** (24 ottobre: «procedi in autonomia su diverse idee non chiedermi il permesso ma fammi sapere quando vogliamo fare la demo
+  su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
+  per il demo.
 
 ## Cosa aspetta il proprietario
 
@@ -117,9 +123,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Il prossimo passo
 
-* **Da decidere con il proprietario: il periodo chiuso è consumato.** Il metodo ne prevede uno solo (gennaio 2025 → settembre 2026).
-  Le prossime prove non hanno più un periodo mai visto per la conferma finale: serve una regola nuova (per esempio i dati che arrivano
-  da ottobre 2026 in poi, oppure il demo come conferma), da scrivere prima della prossima prova che passa la ricerca.
+* Il periodo chiuso si riusa per famiglie diverse (deciso il 24 ottobre, sopra).
 * La prova 3: il **ritorno dopo le forti cadute** sulle 10 azioni di allora (idea I3), con il simulatore a più titoli.
 * Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
 * Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).

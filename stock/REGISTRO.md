@@ -10,7 +10,7 @@ il file delle regole) e il risultato dopo; il conto delle prove serve all'astice
 | 1 | L'ultima mezz'ora segue il resto della giornata, SPY e QQQ (`prove/P001_ultima_mezzora.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe annuo con i costi SPY −0,60, QQQ −0,30 (comprare e tenere lo SPY 0,87); senza costi 0,31 e 0,67; trimestri in guadagno 28% e 38% (`prove/P001_risultati.md`) | **bocciata** su tutti e due |
 | 2 | Uscita dalla «zona di rumore» dell'apertura, SPY e QQQ (`prove/P002_zona_di_rumore.md`, scritto il 24 ott 2026 prima del calcolo) | 2 | Sharpe annuo con i costi SPY 0,41, QQQ 1,05 (tenere SPY 0,87, tenere QQQ 0,92); Sharpe corretto 0,77 e 1,00; costi doppi −0,19 e 0,48; trimestri in guadagno 53% e 78% (`prove/P002_risultati.md`) | SPY **bocciata**; QQQ passa la ricerca e la revisione (`prove/REVISIONE_P002.md`), poi **bocciata nel periodo chiuso** (2025-01-02 → 2026-09-30: Sharpe con i costi 0,64 contro 1,09 del tenere QQQ e 1,04 del tenere lo SPY; +10,1% con i costi; 6 trimestri su 7 in guadagno; `prove/P002_chiuso.md`) |
 
-Totale nel conto: **4**.
+Totale nel conto: **5** (le 4 prove più l'apertura del periodo chiuso per la prova 2 su QQQ, che conta come una prova: decisione del 24 ottobre).
 
 ## 2. Idee in coda
 
