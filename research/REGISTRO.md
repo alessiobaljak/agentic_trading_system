@@ -236,6 +236,14 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    degli annunci di chiusura dei future, da scaricare come in `programma6/annunci.py`). Le regole d'uscita vanno scritte prima.
 36. **G13 con i dati completi**: le date di chiusura dal testo degli annunci (non dalle candele) e anche gli annunci «Multiple»; con
    7 eventi la prova 71 non dice niente. Probabilità bassa (nei 7, senza uscita +0,8%, con l'uscita le salite a +30% sono il 57%).
+37. **I trader da copiare di Binance** (il proprietario, 24 ottobre: «600k in 30 giorni con ROI del 62%, 500k con ROI del 172%»):
+   aspetta i dati dal proprietario (lo storico delle posizioni di 2-3 trader, le statistiche a 90-180 giorni, le posizioni aperte).
+   Piano: ricostruire le operazioni sui prezzi veri, confrontarle con entrate a caso sulle stesse monete e negli stessi giorni,
+   cercare cosa si ripete alle entrate con regole scritte prima, e seguirli 30-60 giorni in avanti senza soldi. Riserve scritte
+   prima: i primi in classifica fra migliaia sono in parte fortuna; il ROI dipende dalla leva; le posizioni chiuse non mostrano le
+   perdite tenute aperte.
+38. **Idee per lo spot che non hanno bisogno di vendere** (lezione del programma 8: senza copertura resta il rischio delle altcoin):
+   da scrivere con un perché prima di provarle; per ora nessuna con buona probabilità.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
    appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
