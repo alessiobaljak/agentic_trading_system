@@ -159,6 +159,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   non basta a compensare. Togliere il livello o allargare l'orario non cambia niente: la testa e spalle dopo l'apertura, così scritta,
   non porta informazione. Che dopo l'apertura il prezzo cambi spesso direzione (prova 17) non vuol dire che il punto del cambio si veda
   in tempo.
+* **La prova 23** (le regole in giornata rifatte sulle 10 azioni di allora, richiesta del proprietario): **bocciate tutte e cinque.**
+  Le regole che seguono il movimento hanno un vantaggio **prima dei costi** anche sulle azioni (zona di rumore Sharpe 1,31, prima candela
+  0,95-0,96, più del tenere le 10 a 0,94), soprattutto sui titoli più nervosi (AMD, TSLA, NVDA); ma operano ogni giorno su 10 titoli
+  (circa 40'000 ordini in 9 anni) e i costi, anche con lo scarto di metà giornata che è più stretto di quello vero dell'apertura, le
+  portano sotto zero. Stima (non calcolata): anche dimezzando i costi lo Sharpe resterebbe sotto quello del tenere. L'inversione perde
+  anche senza costi, come sugli indici. Da qui: il vantaggio in giornata esiste ma è più piccolo di quanto costa prenderlo.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
