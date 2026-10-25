@@ -4765,3 +4765,8 @@ contro −7,9%, ma 3 punti l'anno in meno; corretto 0,83 (è F5 al 93%). Il cont
 quando si parla di soldi veri. Nel conto: 153 prove.
 **Riavvio del bot delle 04:32 UTC** (ops 0667-0668): ripartito senza errori; da qui il paper di G1 scrive il funding medio
 dell'universo a ogni decisione.
+**Prova 87, PC** (`programma7/VENTICINQUESIMA.md`, 05:23 UTC): il premio di Coinbase fra le monete, con dati nuovi (131 monete di
+Coinbase, candele orarie dal 2023, scaricate dopo le regole). Sharpe 0,19, 2024 −58%; il verso opposto fa peggio (−0,50), quindi
+un filo d'informazione nel verso previsto, ma la dispersione del premio fra le monete è solo lo 0,15% e viene arbitraggiata: non
+paga i costi. Capito: la domanda americana a pronti, moneta per moneta, non anticipa i rendimenti della settimana dopo. Nel conto:
+154 prove.
