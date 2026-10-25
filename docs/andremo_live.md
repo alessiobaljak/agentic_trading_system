@@ -4921,4 +4921,7 @@ dopo il primo giorno di scambi su Coinbase, uscita a +30% o dopo 7 giorni. 91 ev
 nelle due metà e senza le 5 migliori, e +5,2 punti sopra le stesse monete in giorni qualunque (p 0,004). Passa l'esame scritto ma non la
 soglia di tutte le 31 prove a eventi, e il 2026 è negativo (11 eventi). Capito: la quotazione su Coinbase si vende sulla notizia, come la
 quotazione su Binance (prova 32): stessa famiglia, «chi compra la novità paga troppo», vista da un'altra borsa. Va al revisore separato.
+**Prova 106, conferma su OKX** (12:52 UTC, fuori dal conto): la regola della 105 sulle quotazioni a pronti di OKX (tolte 43 «quotazioni»
+tecniche del 29 gennaio 2021): 48 eventi, +0,84% a operazione, p 0,38. La conferma non riesce. Capito: l'effetto, se c'è, è di Coinbase
+(il pubblico al dettaglio americano che arriva con l'app), non di ogni borsa grande; per la prova 105 resta da sentire il revisore.
 
