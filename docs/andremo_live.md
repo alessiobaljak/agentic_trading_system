@@ -4748,3 +4748,7 @@ Sharpe corretto 0,35, t 2,94. Capito: decidere ogni giorno un modello che cambia
 previsione; il vantaggio del modello è quello settimanale (M7), e quando va in paper, se mai, ci va settimanale. Nel conto: 150
 prove. In coda tre voci nuove (46-48: lo short del salto di funding, il premio di Coinbase fra monete, il passo pratico per
 misurare in avanti l'esposizione secondo il funding medio).
+**Prova 85, G21** (`programma7/VENTITREESIMA.md`, giro delle 04:17): l'inversione fra le monete 101-200 con meno giro (solo il 10%
+per lato, tre fette da tre giorni). Il giro scende da 17,5 a 6,5 volte a settimana e le spese da 61% a 24%, ma il lordo cade da
++29% a +11% l'anno: netto −17,9%, 2025 −126%. Capito: l'inversione delle monete poco liquide si consuma nel primo giorno e non è
+più forte negli estremi; non c'è un modo di pagarla meno senza perderla. La famiglia (prove 67 e 85) si chiude. Nel conto: 151.
