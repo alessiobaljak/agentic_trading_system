@@ -276,3 +276,41 @@ def test_prima_candela_con_limite_non_rientra_dopo_lo_stop():
     seg = pc.prepara(b, cal, set(), 5)
     r = simula(b, pc.strategia_limite(seg), Costi(), capitale=10_000)
     assert list(r.esecuzioni["etichetta"]) == ["ingresso", "stop"]
+
+
+def _inversione_giorno():
+    """Sale fino a 101 (minuto 9), scende con S1 a 100,4 (25), massimo più basso 100,6 (28), testa 100,0 (35), rottura sopra
+    100,6 (40), spalla destra 100,3 (45), poi risale."""
+    punti = [(0, 100.5), (9, 101.0), (25, 100.4), (28, 100.6), (35, 100.0), (40, 100.7), (45, 100.3), (60, 100.9), (120, 100.8)]
+    xs, ys = zip(*punti)
+    p = np.interp(np.arange(121), xs, ys)
+    o = np.r_[p[0], p[:-1]]
+    return o, np.maximum(o, p), np.minimum(o, p), p.copy(), np.arange(121)
+
+
+def test_inversione_trova_la_testa_e_spalle_sul_livello():
+    from stock.strategie import inversione as inv
+    o, h, l, c, k = _inversione_giorno()
+    i, s2, obiettivo = inv.cerca(o, h, l, c, k, [(99.98, 100.05)], inv.PRINCIPALE)
+    assert i == 47 and s2 == pytest.approx(100.3) and obiettivo == pytest.approx(101.0)
+    assert inv.cerca(o, h, l, c, k, [(98.0, 98.05)], inv.PRINCIPALE) is None        # nessuna zona vicina
+    assert inv.cerca(o, h, l, c, k, [], inv.SENZA_ZONE)[0] == 47
+
+
+def test_inversione_non_guarda_il_futuro_e_vende_allo_specchio():
+    from stock.strategie import inversione as inv
+    o, h, l, c, k = _inversione_giorno()
+    corto = [x[:48] for x in (o, h, l, c, k)]
+    assert inv.cerca(*corto, [(99.98, 100.05)], inv.PRINCIPALE)[0] == 47
+    assert inv.cerca(*[x[:47] for x in (o, h, l, c, k)], [(99.98, 100.05)], inv.PRINCIPALE) is None
+    # il giorno allo specchio (200 - prezzo) è una vendita: prepara la cerca cambiando segno ai prezzi e alle zone dei massimi
+    om, hm, lm, cm = 200 - o, 200 - l, 200 - h, 200 - c
+    i, s2, ob = inv.cerca(-om, -lm, -hm, -cm, k, inv.zone(-np.array([99.5, 99.5, 99.95, 99.5, 99.5, 99.5, 99.5, 100.02, 99.5, 99.5])),
+                          inv.PRINCIPALE)
+    assert i == 47 and -s2 == pytest.approx(99.7) and -ob == pytest.approx(99.0)
+
+
+def test_inversione_testa_fuori_orario_non_vale():
+    from stock.strategie import inversione as inv
+    o, h, l, c, k = _inversione_giorno()
+    assert inv.cerca(o, h, l, c, k + 10, [(99.98, 100.05)], inv.PRINCIPALE) is None       # testa alle 10:15
