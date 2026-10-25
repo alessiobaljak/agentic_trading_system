@@ -1,46 +1,46 @@
 # Stato sistema (snapshot)
-_Generato: 2026-10-25 11:29 UTC_
+_Generato: 2026-10-25 16:19 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$817.25**
-- ultimo heartbeat: 2026-10-25 11:29 UTC
+- ultimo heartbeat: 2026-10-25 16:19 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
-- stato: **in attesa del primo cambio** (2026-10-25 11:29 UTC)
+- stato: **in attesa del primo cambio** (2026-10-25 16:19 UTC)
 - prova a secco (2026-10-25 08:29 UTC, pesi del 2026-10-19): universo 100, 20 long, 20 short; pesi maggiori CRVUSDT -6.3%, ETHFIUSDT -6.2%, LITUSDT -6.0%, MORPHOUSDT -7.9%, POLUSDT +6.3%, TRXUSDT +38.1%, WLFIUSDT -14.2%, XMRUSDT -11.7%, ZECUSDT -5.8%, ZENUSDT -6.6%
 
 ## Paper G1 (F5 decisa ogni giorno, eseguito dal bot)
-- stato: **acceso** (2026-10-25 11:06 UTC)
+- stato: **acceso** (2026-10-25 16:08 UTC)
 - prova a secco (2026-10-23 20:32 UTC, pesi del 2026-10-23): universo 100, 20 long, 20 short; pesi maggiori 1000BONKUSDT +8.6%, ACEUSDT +7.3%, ALGOUSDT +7.5%, ASTERUSDT -11.2%, ATOMUSDT +7.4%, PENGUUSDT -6.6%, POLUSDT +9.6%, STXUSDT +6.4%, WLFIUSDT -10.5%, XMRUSDT -11.2%
-- equity: **$9,828.15** su $10,000 (-1.72%) · costi $6.44 · funding pagato $-7.63
+- equity: **$9,757.19** su $10,000 (-2.43%) · costi $6.44 · funding pagato $-9.63
 - posizioni: 22 long, 23 short · ultimo ribilancio 2026-10-25
 - ordini limite: 85 eseguiti su 85 · tutto a mercato sarebbe costato $22.40 · in attesa del controllo dell'ora: 0
 - pesi maggiori: TRXUSDT +36.9%, BTCUSDT -15.1%, WLFIUSDT -9.4%, ASTERUSDT -8.8%, XMRUSDT -7.8%, POLUSDT +6.8%, ZENUSDT -5.2%, ALGOUSDT +5.0%, LABUSDT -4.9%, PENGUUSDT -4.8%
 
 ## Paper G11 (G1 con il funding fresco, a confronto con G1)
-- stato: **acceso** (2026-10-25 11:13 UTC)
+- stato: **acceso** (2026-10-25 16:14 UTC)
 - prova a secco (2026-10-23 20:36 UTC, pesi del 2026-10-23): universo 100, 20 long, 20 short; pesi maggiori ACEUSDT +7.4%, ADAUSDT +9.6%, ASTERUSDT -11.3%, ATOMUSDT +7.4%, AVAXUSDT +8.8%, PENGUUSDT -6.6%, POLUSDT +9.7%, WLFIUSDT -10.5%, XMRUSDT -11.3%, ZENUSDT -6.2%
-- equity: **$9,957.77** su $10,000 (-0.42%) · costi $5.63 · funding pagato $-7.94
+- equity: **$9,930.52** su $10,000 (-0.69%) · costi $5.63 · funding pagato $-9.85
 - posizioni: 24 long, 25 short · ultimo ribilancio 2026-10-25
 - ordini limite: 92 eseguiti su 92 · tutto a mercato sarebbe costato $19.51 · in attesa del controllo dell'ora: 0
 - pesi maggiori: TRXUSDT +31.4%, BTCUSDT -12.5%, WLFIUSDT -7.7%, ASTERUSDT -7.3%, ETCUSDT -7.0%, 1000SHIBUSDT -6.8%, XMRUSDT -6.4%, HYPEUSDT -6.0%, XLMUSDT +5.9%, POLUSDT +5.8%
 
 ## Paper G1N (G1 neutra al mercato, la versione proposta per i soldi veri)
-- stato: **in attesa del primo cambio** (2026-10-25 11:29 UTC)
+- stato: **in attesa del primo cambio** (2026-10-25 16:19 UTC)
 - prova a secco (2026-10-25 08:33 UTC, pesi del 2026-10-25): universo 100, 20 long, 20 short; pesi maggiori ALGOUSDT +6.1%, ASTERUSDT -8.9%, ATOMUSDT +5.7%, BTCUSDT -15.2%, LABUSDT -4.9%, POLUSDT +8.3%, TRXUSDT +45.0%, WLFIUSDT -9.4%, XMRUSDT -7.8%, ZENUSDT -5.2%
 
 ## Paper N3 ed E4 (eventi, eseguito dal bot)
-- stato: **acceso** (2026-10-25 11:26 UTC)
-- equity: **$10,288.71** su $10,000 (+2.89%) · aperte N3 0, E4 1 · chiuse 0 · E4 in attesa 0
-- aperte: E4 IRYSUSDT +57.7% (fino al 2026-10-31)
+- stato: **acceso** (2026-10-25 15:27 UTC)
+- equity: **$10,279.08** su $10,000 (+2.79%) · aperte N3 0, E4 1 · chiuse 0 · E4 in attesa 0
+- aperte: E4 IRYSUSDT +55.8% (fino al 2026-10-31)
 
 ## G1 sul conto demo di Binance (ordini veri, soldi finti)
-- stato: **acceso** (2026-10-25 11:20 UTC)
-- equity: **$4,939.21** su $4,992.87 (-1.07%) · posizioni 22 long, 22 short · ordini limite eseguiti 48 su 48 · in attesa 0
+- stato: **acceso** (2026-10-25 15:21 UTC)
+- equity: **$4,911.46** su $4,992.87 (-1.63%) · posizioni 22 long, 22 short · ordini limite eseguiti 48 su 48 · in attesa 0
 - ultima decisione 2026-10-25: 44 ordini, eseguiti a limite 44, a mercato 0; rifiutati 1: 龙虾USDT POST /fapi/v1/order: 400 {"code":-1121,"msg":"Invalid symbol."}
 - ultimo errore (2026-10-24 09:02 UTC): `POST /fapi/v1/order: 400 {"code":-4116,"msg":"ClientOrderId is duplicated."}`
 
@@ -325,13 +325,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 3 | 0.2% |
-| consistency | 17 | 1.3% |
 | holdout | 1 | 0.1% |
 | total_return | 1207 | 91.4% |
-| recovery | 64 | 4.8% |
-| trades | 6 | 0.5% |
 | regime | 22 | 1.7% |
+| trades | 6 | 0.5% |
+| recovery | 64 | 4.8% |
+| consistency | 17 | 1.3% |
+| pf_ex_top | 3 | 0.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -339,19 +339,19 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 242 | 0.7% |
 | consistency | 589 | 1.7% |
-| total_return | 26463 | 78.0% |
 | holdout | 153 | 0.5% |
-| recovery | 2737 | 8.1% |
-| trades | 936 | 2.8% |
 | regime | 2815 | 8.3% |
+| trades | 936 | 2.8% |
+| recovery | 2737 | 8.1% |
+| total_return | 26463 | 78.0% |
+| pf_ex_top | 242 | 0.7% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-10-25 11:00 UTC · coppie validate: **278** · GATE 1 pronto: True
+- ultimo giro: 2026-10-25 16:02 UTC · coppie validate: **278** · GATE 1 pronto: True
 - tasso di passaggio misurato: **0.320%**
 
 **Parametri modificati rispetto ai default:**
@@ -398,45 +398,45 @@ _Nessuna coppia ha passato in questo run._
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 665 trade · PF vissuto 0.774 vs 2.02 atteso · mfe mediana 0.76R
+- **globale**: drift · 653 trade · PF vissuto 0.761 vs 2.02 atteso · mfe mediana 0.76R
 
-- **freno globale attivo**: size x0.5 e leva x0.71 (radice) su OGNI trade finche' il PF a 30 giorni resta sotto 0.6 x atteso (motivo: PF 0.77 vs 2.02 atteso · mfe mediana 0.76R < primo TP 1.50R)
+- **freno globale attivo**: size x0.5 e leva x0.71 (radice) su OGNI trade finche' il PF a 30 giorni resta sotto 0.6 x atteso (motivo: PF 0.76 vs 2.02 atteso · mfe mediana 0.76R < primo TP 1.50R)
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
-| SYRUPUSDT|gen_4c6df481 | drift | 11 | 1.044 / 1.544 | mfe mediana 0.81R < primo TP 2.00R |
 | TAUSDT|gen_01fbe76f | drift | 11 | 0.436 / 1.711 | PF 0.44 vs 1.71 atteso · mfe mediana 0.80R < primo TP 1.50R |
+| SYRUPUSDT|gen_4c6df481 | drift | 11 | 1.044 / 1.544 | mfe mediana 0.81R < primo TP 2.00R |
 | PTBUSDT|gen_684d7623 | drift | 11 | 0.987 / 1.871 | PF 0.99 vs 1.87 atteso · mfe mediana 0.53R < primo TP 1.00R |
-| MYXUSDT|gen_8931b93c | drift | 9 | 0.26 / 1.583 | PF 0.26 vs 1.58 atteso · mfe mediana 0.24R < primo TP 1.50R |
 | USELESSUSDT|gen_e09c5203 | drift | 9 | 0.628 / 1.636 | PF 0.63 vs 1.64 atteso · mfe mediana 0.48R < primo TP 2.00R |
+| MYXUSDT|gen_8931b93c | drift | 9 | 0.26 / 1.583 | PF 0.26 vs 1.58 atteso · mfe mediana 0.24R < primo TP 1.50R |
 | TRUMPUSDT|gen_d16d1d02 | drift | 8 | 1.003 / 1.591 | mfe mediana 1.08R < primo TP 2.00R |
 | STXUSDT|gen_0aa0d29c | watch | 7 | 0.566 / 1.663 | PF 0.57 vs 1.66 atteso · mfe mediana 0.51R < primo TP 1.00R |
 | QUSDT|gen_5905e08d | watch | 7 | 0.628 / 1.856 | PF 0.63 vs 1.86 atteso · mfe mediana 0.80R < primo TP 1.50R |
+| BANKUSDT|gen_7100bb59 | watch | 6 | 0.475 / 1.938 | PF 0.47 vs 1.94 atteso · mfe mediana 0.45R < primo TP 0.75R |
+| SYRUPUSDT|gen_f3b97917 | watch | 6 | 0.998 / 2.064 | PF 1.00 vs 2.06 atteso · mfe mediana 1.06R < primo TP 2.00R |
 | HEMIUSDT|gen_acea368d | watch | 6 | 1.303 / 1.784 | mfe mediana 0.95R < primo TP 1.50R |
 | GPSUSDT|gen_871647b8 | watch | 6 | 0.564 / 1.555 | PF 0.56 vs 1.55 atteso · mfe mediana 1.20R < primo TP 2.00R |
-| SYRUPUSDT|gen_f3b97917 | watch | 6 | 0.998 / 2.064 | PF 1.00 vs 2.06 atteso · mfe mediana 1.06R < primo TP 2.00R |
-| BANKUSDT|gen_7100bb59 | watch | 6 | 0.475 / 1.938 | PF 0.47 vs 1.94 atteso · mfe mediana 0.45R < primo TP 0.75R |
 | FORMUSDT|gen_c647ead7 | watch | 5 | 0.536 / 2.214 | PF 0.54 vs 2.21 atteso · mfe mediana 0.51R < primo TP 0.75R |
-| PNUTUSDT|gen_4810faab | watch | 5 | 2.677 / 2.591 | mfe mediana 1.13R < primo TP 2.00R |
 | XPINUSDT|gen_f311acf9 | watch | 5 | 0.029 / 3.282 | PF 0.03 vs 3.28 atteso · mfe mediana 0.40R < primo TP 1.00R |
+| PNUTUSDT|gen_4810faab | watch | 5 | 2.677 / 2.591 | mfe mediana 1.13R < primo TP 2.00R |
+| GALAUSDT|gen_b9aa9989 | watch | 4 | 0.347 / 1.922 | PF 0.35 vs 1.92 atteso · mfe mediana 0.55R < primo TP 1.00R |
+| HEMIUSDT|gen_c1f71d65 | watch | 4 | 2.146 / 1.54 | mfe mediana 0.94R < primo TP 1.50R |
+| HUMAUSDT|gen_da39a23a | watch | 4 | 1.618 / 2.258 | mfe mediana 0.70R < primo TP 1.00R |
 | HOMEUSDT|gen_467d9ee2 | watch | 4 | 0.206 / 1.617 | PF 0.21 vs 1.62 atteso · mfe mediana 0.58R < primo TP 1.00R |
-| AVAAIUSDT|gen_e50a9211 | watch | 4 | 0.345 / 1.525 | PF 0.35 vs 1.52 atteso |
-| MUBARAKUSDT|gen_49c2f657 | watch | 4 | 0.762 / 1.721 | PF 0.76 vs 1.72 atteso · mfe mediana 0.85R < primo TP 1.50R |
-| BMTUSDT|gen_be64073c | watch | 4 | 0.142 / 2.843 | PF 0.14 vs 2.84 atteso · mfe mediana 0.51R < primo TP 1.50R |
-| DEXEUSDT|gen_3d4be8c7 | watch | 4 | 1.299 / 1.545 | mfe mediana 0.89R < primo TP 1.50R |
+| HYPEUSDT|gen_f19b67e8 | watch | 4 | 0.237 / 1.624 | PF 0.24 vs 1.62 atteso · mfe mediana 0.51R < primo TP 1.00R |
 
 - serie di perdite (freno SPENTO dal 24 set, solo misura): **gen_fa304106** (6 perdite di fila), **gen_bb762669** (4 perdite di fila), **gen_f311acf9** (4 perdite di fila)
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **costante** · 665 trade · correlazione None · influenza applicata **x1.0**
-- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (665 trade, confidenza 60-60)
+- verdetto: **costante** · 653 trade · correlazione None · influenza applicata **x1.0**
+- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (653 trade, confidenza 60-60)
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 221 | 58% | -0.06% |
-| 60.0–60.0 | 221 | 52% | -0.49% |
-| 60.0–60.0 | 223 | 61% | -0.05% |
+| 60.0–60.0 | 217 | 58% | -0.09% |
+| 60.0–60.0 | 217 | 52% | -0.47% |
+| 60.0–60.0 | 219 | 60% | -0.10% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
