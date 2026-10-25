@@ -4770,3 +4770,7 @@ Coinbase, candele orarie dal 2023, scaricate dopo le regole). Sharpe 0,19, 2024 
 un filo d'informazione nel verso previsto, ma la dispersione del premio fra le monete è solo lo 0,15% e viene arbitraggiata: non
 paga i costi. Capito: la domanda americana a pronti, moneta per moneta, non anticipa i rendimenti della settimana dopo. Nel conto:
 154 prove.
+**Prova 88, G1N** (`programma7/VENTISEIESIMA.md`, 06:19 UTC): G1 neutra al mercato. Sharpe 1,91 contro 1,96 di G1, ma discesa
+massima −23,1% contro −28,8%, le 15 settimane peggiori −5,5% contro −6,0%, per 3 punti l'anno in meno; il controllo 120/80 fa
+peggio (2022 −13,7%). Lo stesso risultato di F5N: la neutralità al beta è una protezione che costa poco. Capito: per i soldi veri
+(backlog P26) la versione neutra di G1 è quella da mettere sul tavolo, perché taglia la discesa massima di 6 punti. Nel conto: 156.
