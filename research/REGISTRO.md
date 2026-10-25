@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 149 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 150 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -108,8 +108,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 81 | P9C: la regola delle fiammate (prova 75) solo quando i long sono affollati (funding dell'ultimo regolamento almeno +0,01% per 8 ore), dal 27 giugno al 30 settembre 2026 (mai usato dalla regola; ottobre senza il funding vero nell'archivio) (`programma9/SECONDA.md`) | 1 a eventi | 697 operazioni della regola delle fiammate; **con i long affollati 409, +0,26% a operazione** (p 0,31), vinte 87%, alla protezione 12,5%; **con il funding sotto la soglia 288, −1,26%** (alla protezione 16%); tutte −0,37% (`programma9/RISULTATI_SECONDA.md`) | no (non sicura), ma il verso è quello dell'ipotesi: il funding separa le fiammate che rientrano (+1,5 punti); da confermare su più anni |
 | 82 | P9C-lunga: la regola P9C identica dal 1° gennaio 2023 al 26 giugno 2026 (le fiammate delle prove 75-76, divise per funding per la prima volta) (`programma9/TERZA.md`) | 1 a eventi + 1 portafoglio | 3.964 operazioni; **con i long affollati 2.389: −0,86% a operazione** (p 1,00), con il funding basso 1.575: −0,67%; per anno (affollati / basso) 2023 +0,69% / −0,49%, 2024 +0,13% / −0,98%, **2025 −1,36% / −0,46%**, 2026 −0,39% / −0,92%; portafoglio Sharpe −1,31 (`programma9/RISULTATI_TERZA.md`) | no: il funding non separa le fiammate che rientrano; il +0,26% dei mesi della prova 81 era il caso |
 | 83 | P9D: le 613 operazioni della regola delle monete nuove al 7° giorno (prova 32) solo con il funding dell'ultimo regolamento almeno +0,01% per 8 ore (`programma9/QUARTA.md`) | 1 a eventi | funding mediano all'entrata +0,01% (il tasso di base); **con i long affollati 461: +4,68% a operazione** (p 0,005), con il funding sotto la soglia 150: +3,50%; differenza +1,19 punti, p 0,35; 2026 −0,09% e −1,12% (`programma9/RISULTATI_QUARTA.md`) | no: il filtro non migliora la regola delle monete nuove (che resta com'è nel paper) |
+| 84 | G20: il modello ad alberi deciso ogni giorno (M3) con cinque semi e gli ordini limite sulle variazioni, banda 20/40, dal 2022 (`programma7/VENTIDUESIMA.md`); idea 33 | 1 | in calcolo | |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **149** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **150** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -241,7 +242,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    (quanto dura l'inversione) e conta nel conto; probabilità bassa, perché le spese erano il doppio del lordo.
 32. ~~**F5 con il funding fresco**~~ → prova 69 (G11).: il segnale dei 7 giorni più quello dell'ultimo giorno (il revisore ha trovato che l'ultimo
    regolamento porta circa 0,2 di Sharpe), deciso ogni giorno come G1. Variante di G1: probabilità media, nel conto.
-33. **Il modello M7 deciso ogni giorno con gli ordini limite** (M3, la prova 16, era bocciata per le spese a mercato del 23,8%
+33. ~~**Il modello M7 deciso ogni giorno con gli ordini limite**~~ → prova 84 (G20). (M3, la prova 16, era bocciata per le spese a mercato del 23,8%
    l'anno; con gli ordini limite e la banda di G1 le spese scendono). Calcolo lungo (cinque semi ogni 4 settimane).
 35. ~~**Vendere i perpetui annunciati in chiusura**~~ → prova 71 (G13). (la revisione di G12: due monete tolte dal listino crollano nelle ultime ore prima
    della chiusura): short dall'annuncio di chiusura dei future fino a prima della chiusura, con tutti gli annunci (servono le date
