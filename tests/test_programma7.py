@@ -311,3 +311,17 @@ def test_g19_long_dopo_il_crollo():
     assert op["motivo"] == "obiettivo" and abs(op["r_prezzo"] - 0.03) < 1e-12
     w.loc[2005, "low"] = 0.75 * 0.84
     assert g19.operazione(w, 2000, 0.001)["motivo"] == "protezione"
+
+
+def test_g20_pesi_spostati_al_giorno_dopo(monkeypatch):
+    from research.programma7 import ventiduesima as g20
+    T, S = 5, 3
+    pan = {"close": np.ones((T, S)), "open": np.ones((T, S))}
+    pan["open"][3, 2] = np.nan                                   # manca la candela del giorno 3 sulla terza moneta
+    colonne = np.array([0, 2])
+    Wc = np.zeros((T, 2))
+    Wc[2] = [0.5, -0.5]                                           # la decisione del giorno 2
+    monkeypatch.setattr(g20.m3, "pesi_isteresi", lambda P, U, s: Wc)
+    Wop = g20.pesi_operativi(None, None, None, pan, colonne)
+    assert Wop.shape == (T, S) and not Wop[0].any() and not Wop[2].any()
+    assert Wop[3, 0] == 0.5 and Wop[3, 1] == 0.0 and Wop[3, 2] == 0.0   # vale per il giorno 3; la moneta senza candela è fuori
