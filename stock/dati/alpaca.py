@@ -178,3 +178,21 @@ def calendario(inizio, fine) -> pd.DataFrame:
     df["apertura"] = pd.to_datetime(df["date"] + " " + df["open"]).dt.tz_localize(NY)
     df["chiusura"] = pd.to_datetime(df["date"] + " " + df["close"]).dt.tz_localize(NY)
     return df.set_index("data")[["apertura", "chiusura"]]
+
+
+def barre_di_piu(simboli: list[str], timeframe: str, inizio: datetime, fine: datetime, rettifica: str = "raw",
+                 feed: str = "sip") -> dict[str, pd.DataFrame]:
+    """Come `barre`, per più titoli in una sola richiesta (Alpaca le accetta separate da virgole)."""
+    fine = _fine_ammessa(fine)
+    parametri = {"symbols": ",".join(simboli), "timeframe": timeframe, "start": _iso(inizio), "end": _iso(fine),
+                 "adjustment": rettifica, "feed": feed, "limit": 10000, "sort": "asc"}
+    righe: dict[str, list] = {s: [] for s in simboli}
+    while True:
+        j = _get(f"{DATI_URL}/v2/stocks/bars", parametri)
+        for s, b in (j.get("bars") or {}).items():
+            righe.setdefault(s, []).extend(b)
+        token = j.get("next_page_token")
+        if not token:
+            break
+        parametri["page_token"] = token
+    return {s: barre_da_righe(r) for s, r in righe.items()}
