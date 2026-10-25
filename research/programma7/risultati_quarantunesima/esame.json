@@ -1,0 +1,82 @@
+{
+ "eventi_letti": 1284,
+ "ammessi": 894,
+ "tagli": {
+  "boot": {
+   "media": 0.011570467266452437,
+   "basso": -0.014843245369876471,
+   "alto": 0.03234820815735298,
+   "p": 0.16748325167483252,
+   "eventi": 200,
+   "annunci": 61
+  },
+  "prima_meta": 0.01664858982819424,
+  "seconda_meta": 0.006492344704710635,
+  "senza_5_migliori": 0.003780034315738972,
+  "vinti": 0.64,
+  "mediana": 0.03118324696445396,
+  "per_anno": {
+   "2023": {
+    "eventi": 4,
+    "media": 0.11379112568063009
+   },
+   "2024": {
+    "eventi": 23,
+    "media": 0.016507517178073118
+   },
+   "2025": {
+    "eventi": 118,
+    "media": 0.027959935816524
+   },
+   "2026": {
+    "eventi": 55,
+    "media": -0.033091206743228116
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.1675)"
+ },
+ "aumenti": {
+  "boot": {
+   "media": 0.0074863901123747014,
+   "basso": -0.019174730383800777,
+   "alto": 0.034954853581639765,
+   "p": 0.2933706629337066,
+   "eventi": 180,
+   "annunci": 50
+  },
+  "prima_meta": -0.016206954555442115,
+  "seconda_meta": 0.031179734780191523,
+  "senza_5_migliori": 0.0010097243293248884,
+  "vinti": 0.5722222222222222,
+  "mediana": 0.020042056729810187,
+  "per_anno": {
+   "2023": {
+    "eventi": 27,
+    "media": -0.050532270918554105
+   },
+   "2024": {
+    "eventi": 135,
+    "media": 0.011502436443210043
+   },
+   "2025": {
+    "eventi": 17,
+    "media": 0.06791264599641753
+   },
+   "2026": {
+    "eventi": 1,
+    "media": 0.004577633255952937
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.2934)"
+ },
+ "soglia_tutte": 0.0003448275862068966,
+ "rapporto_medio_taglio": 0.4977676365301365,
+ "tagli_con_posizioni_esistenti": {
+  "n": 132,
+  "media": 0.0003432285390284937,
+  "altri_media": 0.033364518913804805
+ },
+ "senza_candele": 5,
+ "impronta_eventi": "da44c76eb67f7f573c704bbd26e74482f8e6373ac813c9c3117e6f84a0f10670",
+ "esito": "media non sopra zero con p ≤ 0,01 (p 0.1675)"
+}

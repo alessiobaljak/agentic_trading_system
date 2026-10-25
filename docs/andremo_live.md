@@ -4904,4 +4904,9 @@ seguita nell'ultima ora del giorno. Al lordo +0,067% a operazione su 29.343 (pos
 arriva), al netto −0,069%. No. Capito: la prevedibilità in giornata esiste ed è misurabile, ma vale metà dei costi di un giro, e dal 2025
 è sparita anche al lordo (il mercato l'ha imparata). È la stessa lezione dei costi delle prove a 1 giorno: nel trading in giornata il
 vantaggio deve essere grande, perché ogni giorno si paga un giro intero. Nel conto: 172.
+**Prova 103, i tagli della leva annunciati da Binance** (`programma7/QUARANTUNESIMA.md`, 08:46 UTC): 217 annunci letti tabella per tabella,
+206 tagli e 180 aumenti; short la moneta contro il Bitcoin dall'ora dopo l'annuncio a 72 ore dopo il cambio. Tagli +1,16% a operazione
+(p 0,17), aumenti +0,75% con la stessa operazione. No. Capito: il taglio della leva non costringe a vendere abbastanza da muovere il
+prezzo; i tagli che toccano le posizioni già aperte (quelli che dovrebbero forzare di più) fanno +0,03%. La differenza fra tagli e aumenti
+è piccola: resta la debolezza delle monete piccole contro il Bitcoin del 2024-2025, che G1 e F5 raccolgono già. Nel conto: 173 (29 a eventi).
 
