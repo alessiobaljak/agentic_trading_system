@@ -245,3 +245,20 @@ def test_prima_candela_compra_se_sale_ed_esce_allo_stop_o_alla_chiusura():
     assert ore[0] == "09:35" and ore[1] == "15:59"
     # lo stop del giorno 2 è il minimo della candela (100): apertura delle 9:35 già sotto (98): si paga 98
     assert e["prezzo"].iloc[3] == pytest.approx(98.0)
+
+
+def test_prima_candela_con_limite_entra_solo_se_il_prezzo_torna_oltre_il_limite():
+    from stock.strategie import prima_candela as pc
+    cal = calendario(["2020-01-02", "2020-01-03"])
+    # giorno 1: candela 100 → 100,8 (minimo 100); poi scende a 100,5 (passa sotto il limite 100,8): eseguito a 100,8
+    b1 = giornata("2020-01-02", lambda i: 100 + 0.2 * i if i < 5 else 102.0)
+    b1.iloc[7, b1.columns.get_loc("low")] = 100.5                    # solo il minimo della barra delle 9:37 scende
+    # giorno 2: candela 100 → 100,8; poi solo sopra: il limite non si esegue
+    b2 = giornata("2020-01-03", lambda i: 100 + 0.2 * i if i < 5 else 102.0)
+    b = pd.concat([b1, b2])
+    seg = pc.prepara(b, cal, set(), 5)
+    r = simula(b, pc.strategia_limite(seg), Costi(mezzo_scarto=0.001), capitale=10_000)
+    e = r.esecuzioni
+    assert list(e["etichetta"]) == ["ingresso", "chiusura"]
+    assert e["prezzo"].iloc[0] == pytest.approx(100.8)              # niente scarto sull'ingresso a limite
+    assert e["t"].dt.tz_convert(NY).iloc[0].strftime("%H:%M") == "09:37"

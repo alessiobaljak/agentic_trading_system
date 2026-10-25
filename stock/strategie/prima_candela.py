@@ -84,3 +84,43 @@ def strategia(seg: dict, multiplo: float | None = 10.0):
             return livelli(segno, liv_stop, rif, abs(stato.azioni))
         return []
     return decidi
+
+
+def strategia_limite(seg: dict, multiplo: float | None = 10.0, validita: int = 15):
+    """Come `strategia`, ma l'ingresso è un ordine limite al prezzo di chiusura della candela, valido `validita` barre
+    (`stock/prove/P021_notizie_ordini_limite.md`)."""
+    direzione, stop, giorno_di, uscita = seg["direzione"], seg["stop"], seg["giorno"], seg["uscita"]
+    attesa = {}                                   # giorno -> (segno, stop, limite, quantità, ultima barra valida)
+
+    def livelli(segno, liv_stop, riferimento, q):
+        ordini = [Ordine(-segno * q, "stop", liv_stop, solo_riduce=True, etichetta="stop", dopo_ingresso=True)]
+        if multiplo is not None:
+            r = abs(riferimento - liv_stop)
+            obiettivo = riferimento + segno * multiplo * r
+            if r > 0 and obiettivo > 0:
+                ordini.append(Ordine(-segno * q, "limite", obiettivo, solo_riduce=True, etichetta="obiettivo",
+                                     dopo_ingresso=True))
+        return ordini
+
+    def decidi(storia: pd.DataFrame, stato: Stato) -> list:
+        i = len(storia) - 1
+        g = giorno_di[i]
+        if uscita[i]:
+            attesa.pop(g, None)
+            return [Ordine(-stato.azioni, "mercato", etichetta="chiusura")] if stato.azioni else []
+        if direzione[i] != 0 and stato.azioni == 0:
+            c = float(storia["close"].iat[-1])
+            q = math.floor(QUOTA * stato.valore(c) / c)
+            if q <= 0:
+                return []
+            attesa[g] = (direzione[i], stop[i], c, q, i + validita)
+        if g not in attesa:
+            return []
+        segno, liv_stop, limite, q, fino = attesa[g]
+        if stato.azioni:
+            return livelli(segno, liv_stop, limite, abs(stato.azioni))
+        if i < fino:
+            # l'ordine limite d'ingresso vale per la barra dopo; stop e obiettivo partono insieme se si esegue
+            return [Ordine(segno * q, "limite", limite, etichetta="ingresso", dopo_ingresso=False)] + livelli(segno, liv_stop, limite, q)
+        return []
+    return decidi
