@@ -270,3 +270,21 @@ def test_dirigenti_entra_il_giorno_dopo_il_deposito_e_rispetta_i_posti():
     assert list(e["giorno"]) == [D(2020, 1, 7), D(2020, 1, 7)]
     assert list(e["simbolo"]) == ["A", "B"]          # prima il valore più alto
     assert e["quantita"].iloc[0] == 50
+
+
+def test_contro_i_dirigenti_tiene_lo_spy_e_vende_allo_scoperto():
+    from datetime import date as D
+    from stock.strategie import dirigenti
+    giorni = list(pd.bdate_range("2020-01-02", periods=40).date)
+    p_spy = [100.0] * 40
+    p_a = [100.0] * 5 + [90.0] * 35            # A scende dopo il deposito
+    barre_ = {s: pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                              index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+              for s, p in (("SPY", p_spy), ("A", p_a))}
+    ev = [(D(2020, 1, 3), "A", 500_000.0)]
+    r = simula_conto(barre_, dirigenti.strategia_contro(ev, giorni), {"SPY": Costi(), "A": Costi(prestito_annuo=0.0252)},
+                     leva_massima=2)
+    e = r.esecuzioni
+    assert list(e["etichetta"]) == ["base", "scoperto", "ricopertura"]
+    # scoperto di 50 azioni a 100 il 6 gennaio, ricoperte a 90: +500, meno il prestito (50 × 100 o 90 × 0,0001 a notte)
+    assert 100_000 + 450 < r.valore.iloc[-1] < 100_000 + 500

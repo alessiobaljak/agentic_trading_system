@@ -183,6 +183,12 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
             stato.ultimo_prezzo[s] = col[s]["close"][i]
         if stato.contanti < 0 and tasso_debito:
             stato.contanti -= -stato.contanti * tasso_debito / 252
+        # il prestito dei titoli venduti allo scoperto, per ogni notte
+        for s_, q_ in stato.azioni.items():
+            if q_ < 0:
+                tasso = c_di(s_).prestito_annuo
+                if tasso:
+                    stato.contanti -= -q_ * stato.ultimo_prezzo.get(s_, 0.0) * tasso / 252
         valori[k] = stato.valore()
         # 4. decisione per il giorno dopo
         storia.i = k
