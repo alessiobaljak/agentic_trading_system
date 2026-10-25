@@ -377,3 +377,15 @@ def test_pc_multiplo_e_segnale_settimanale():
     assert abs(S[0, 0] - 0.01) < 1e-12 and abs(S[1, 0] + 0.02) < 1e-12 and np.isnan(S[:, 1]).all()
     poche = pd.Series(0.03, index=ore[-50:])                        # meno di 100 ore: niente segnale
     assert np.isnan(pc.segnale_settimanale({"AUSDT": poche}, ["AUSDT"], lunedi)[1, 0])
+
+
+def test_f5c_carry_atteso_e_fattore():
+    from research.programma7 import ventisettesima as f5c
+    W = np.array([[0.5, 0.5, -0.5, -0.5]])
+    f7 = np.array([[-0.001, -0.001, 0.003, 0.005]])                # il lato long paga poco (negativo: incassa), lo short incassa
+    c = f5c.carry_atteso(W, f7)
+    assert abs(c[0] - (0.5 * 0.003 + 0.5 * 0.005 - (0.5 * -0.001 + 0.5 * -0.001))) < 1e-12
+    carry = np.array([1.0] * 10 + [2.0, 0.5, 0.1, 5.0])
+    f = f5c.fattore(carry, finestra=26, minimo=8)
+    assert (f[:8] == 1).all()                                       # prima di 8 settimane il fattore vale 1
+    assert f[10] == 1.5 and f[11] == 0.5 and f[12] == 0.5 and f[13] == 1.5   # 2×, 0,5×, 0,1× (pavimento), 5× (tetto)
