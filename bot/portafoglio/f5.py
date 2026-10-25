@@ -408,7 +408,8 @@ class PaperF5:
             self.fb.set_rtdb(f"{self.RAMO}/ribilanciamenti/{data}", {
                 "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
                 "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
-                "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now})
+                "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now,
+                "funding_medio_7": getattr(self, "_funding_medio_7", None)})
             self.fb.set_rtdb(f"{self.RAMO}/posizioni", {s: round(w, 6) for s, w in pesi.items()})
         print(f"[{self.ETICHETTA}] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
               f"costo {costo:.2f}, equity {equity - costo:.2f}")
@@ -453,6 +454,11 @@ class PaperF5:
             sigma[s] = sg
             funding[s] = self._funding_giorni(s, (m - 8) * GIORNO_MS) if np.isfinite(sg) else None
         segnale = self.segnali(funding, m)
+        # il funding medio dell'universo dei 7 giorni (idea 45 del registro, 25 ott 2026): si registra ogni giorno per misurare in
+        # avanti, a tavolino, l'esposizione secondo il funding medio (sotto -11% l'anno F5 faceva +0,25% a settimana sul passato)
+        medi = [funding_7(f, m) for f in funding.values() if f is not None]
+        medi = [x for x in medi if np.isfinite(x)]
+        self._funding_medio_7 = float(np.mean(medi)) if medi else None
         # il regolamento delle 00:00 del lunedi' fa parte del segnale e ne porta circa 0,2 di Sharpe (revisione del 23
         # ottobre, CONTROLLO_PARITA.md): se manca per piu' del 10% delle monete, Binance non l'ha ancora pubblicato e si
         # riprova dopo 30 minuti invece di decidere con un segnale monco
@@ -479,7 +485,8 @@ class PaperF5:
         ordine = sorted(pesi.items(), key=lambda kv: -abs(kv[1]))
         self.fb.set_rtdb(f"{self.RAMO}/prova", {
             "lunedi": time.strftime("%Y-%m-%d", time.gmtime(m * 86400)), "universo": n, "long": len(lunghi),
-            "short": len(corti), "pesi_maggiori": {s: round(w, 4) for s, w in ordine[:10]}, "eseguita": now})
+            "short": len(corti), "pesi_maggiori": {s: round(w, 4) for s, w in ordine[:10]}, "eseguita": now,
+            "funding_medio_7": getattr(self, "_funding_medio_7", None)})
         print(f"[{self.ETICHETTA}] prova a secco: universo {n}, long {len(lunghi)}, short {len(corti)}")
 
     def _funding_regolati(self, st: dict, prezzi: dict) -> None:

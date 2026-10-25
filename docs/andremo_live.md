@@ -4752,3 +4752,8 @@ misurare in avanti l'esposizione secondo il funding medio).
 per lato, tre fette da tre giorni). Il giro scende da 17,5 a 6,5 volte a settimana e le spese da 61% a 24%, ma il lordo cade da
 +29% a +11% l'anno: netto −17,9%, 2025 −126%. Capito: l'inversione delle monete poco liquide si consuma nel primo giorno e non è
 più forte negli estremi; non c'è un modo di pagarla meno senza perderla. La famiglia (prove 67 e 85) si chiude. Nel conto: 151.
+**Il conto demo dopo la seconda notte** (ops 0666, 04:23 UTC): i 44 ordini limite della decisione delle 00:05 eseguiti **tutti a
+limite** (48 su 48 da ieri), 22 long e 22 short, 4.918,94 USDT (−1,48% dalle 11:11 del 24); il paper di G1 −2,24% dalle 00:05
+del 24. Sono partiti in momenti diversi: il confronto vero comincia dalle settimane piene. **Passo pratico 48 fatto**: il paper di G1
+scrive ogni giorno il funding medio dell'universo (`funding_medio_7`), così l'idea 45 (esposizione secondo il funding medio) si
+misurerà in avanti a tavolino; riavvio del bot in coda.

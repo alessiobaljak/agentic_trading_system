@@ -242,6 +242,9 @@ def test_g1_decide_ogni_giorno(tmp_path):
     st2 = p.carica()
     assert st2["ultimo_lunedi"] == m + 3 and st2["limite_variazioni"] == len(st["ordini"]["variazioni"])
     assert fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))["universo"] == 30
+    rib = fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))
+    assert rib["funding_medio_7"] is not None and abs(rib["funding_medio_7"]) < 0.1      # il funding medio dell'universo (idea 45)
+    assert fb.get_rtdb("/paper_g1/prova")["funding_medio_7"] is not None
     scarto = fb.get_rtdb("/misure/scarto/" + time.strftime("%Y-%m-%d", time.gmtime(now)))
     assert len(scarto["per_moneta"]) == 30 and set(scarto["fasce"]) == {"1-10", "11-50"}
     assert all(v == pytest.approx(0.0002) or v == pytest.approx(0.001) for v in scarto["per_moneta"].values())
