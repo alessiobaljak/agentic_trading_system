@@ -4792,3 +4792,12 @@ perpetuo di Binance o mai su Gate.io) e «già scoperte» (su Gate da almeno 30 
 scoperte +7,64%: il contrario dell'ipotesi, differenza non sicura (p 0,76). Capito: la discesa dal 7° giorno non dipende dalla
 novità «altrove»; e dal 2025 la regola delle monete nuove rende meno (2026 negativo in tutti i gruppi: da tenere d'occhio nel
 paper). Nel conto: 159 prove (24 a eventi).
+
+**Bilancio delle 159 prove (25 ottobre, 06:40 UTC), per non girare a vuoto.** Regge una sola famiglia: *chi paga la leva perde*:
+il funding fra monete (F5 a settimana, G1 ogni giorno: Sharpe 1,87-1,96, ogni anno positivo), le monete nuove vendute dal 7° giorno
+(+4,3% a operazione, ma dal 2025 meno), il funding al tetto (E4, non più sotto la soglia). Tutto il resto non regge: gli indicatori
+da soli a ogni orizzonte (prove 1, 2, 34-39, 46, 54, 77), il momento e la dimensione fra monete (49, 66), le combinazioni
+esplorate sul 2022-2023 (79-80), i filtri sugli eventi con il funding (81-83, 90), lo scalping sulle fiammate e sui crolli (75-78),
+il carry atteso (89), i mercati di Coinbase e Upbit (41, 72, 87), le opzioni e le stablecoin (44, 47). Le varianti di F5/G1 che
+aggiungono qualcosa non sono rendimento ma **protezione**: la neutralità al beta (86, 88) taglia la discesa massima di 4-6 punti.
+Da qui le prove nuove devono avere un perché che non sia già fra questi, oppure dati che nessuna prova ha toccato.
