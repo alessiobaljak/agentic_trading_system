@@ -253,3 +253,20 @@ def test_ampiezza_conta_solo_i_membri_e_solo_il_passato():
     # tagliare il futuro non cambia il passato
     corto = amp.serie_ampiezza({k: v.iloc[:230] for k, v in rett.items()}, membri, giorni[:230])
     assert (corto == a.loc[corto.index]).all()
+
+
+def test_dirigenti_entra_il_giorno_dopo_il_deposito_e_rispetta_i_posti():
+    from datetime import date as D
+    from stock.strategie import dirigenti
+    giorni = list(pd.bdate_range("2020-01-02", periods=40).date)
+    p = [100.0] * 40
+    barre_ = {s: pd.DataFrame({"open": p, "high": p, "low": p, "close": p},
+                              index=pd.DatetimeIndex([str(g) for g in giorni], tz="America/New_York").tz_convert("UTC"))
+              for s in ("A", "B")}
+    # deposito di sabato 4 gennaio: decisione lunedì 6, ingresso martedì 7
+    ev = [(D(2020, 1, 4), "A", 500_000.0), (D(2020, 1, 6), "B", 200_000.0)]
+    r = simula_conto(barre_, dirigenti.strategia(ev, giorni), Costi())
+    e = r.esecuzioni[r.esecuzioni.etichetta == "ingresso"]
+    assert list(e["giorno"]) == [D(2020, 1, 7), D(2020, 1, 7)]
+    assert list(e["simbolo"]) == ["A", "B"]          # prima il valore più alto
+    assert e["quantita"].iloc[0] == 50
