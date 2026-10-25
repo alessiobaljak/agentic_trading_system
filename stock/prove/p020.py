@@ -42,41 +42,50 @@ def chiusure_e_frazionamenti(s):
 
 
 def operazioni(cal, membri):
-    """Per ogni evento in gioco: (giorno, simbolo, salto). Il salto si vede alla prima barra delle 9:30."""
+    """Per ogni evento in gioco: (giorno, simbolo, salto). Il salto si vede alla prima barra delle 9:30. Si legge ogni giorno una
+    volta: per ogni evento si guarda prima il giorno del deposito (o il primo di borsa dopo), poi, se lì non salta, il giorno dopo."""
     ev = pd.read_csv(cartella_dati() / "eventi" / "comunicati.csv", parse_dates=["deposito"])
-    cache_min: dict[date, pd.DataFrame] = {}
-    cache_ch: dict[str, tuple] = {}
-    out = []
-    for s, d in zip(ev["simbolo"], ev["deposito"].dt.date):
+    candidati: dict[date, list[tuple[int, str]]] = {}
+    for n, (s, d) in enumerate(zip(ev["simbolo"], ev["deposito"].dt.date)):
         k = bisect.bisect_left(cal, d)
-        for j in (k, k + 1):
-            if j >= len(cal) or j == 0:
+        if 0 < k < len(cal):
+            candidati.setdefault(cal[k], []).append((n, s))
+    cache_ch: dict[str, tuple] = {}
+    fatti: set[int] = set()
+    out = []
+    secondo: dict[date, list[tuple[int, str]]] = {}
+    for g in cal:
+        lista = candidati.get(g, []) + secondo.pop(g, [])
+        if not lista:
+            continue
+        f = cartella_dati() / "eventi" / "minuti" / f"{g}.csv.gz"
+        m = pd.read_csv(f, index_col="t", parse_dates=["t"]) if f.exists() else pd.DataFrame()
+        prime = m.groupby("simbolo").head(1) if not m.empty else m
+        prime = prime[[t.tz_convert(NY).strftime("%H:%M") == "09:30" for t in prime.index]] if not prime.empty else prime
+        aperture = dict(zip(prime["simbolo"], prime["open"])) if not prime.empty else {}
+        dentro = set(membri(g))
+        j = cal.index(g)
+        for n, s in lista:
+            if n in fatti:
                 continue
-            g = cal[j]
-            if s not in set(membri(g)):
-                break
-            if g not in cache_min:
-                f = cartella_dati() / "eventi" / "minuti" / f"{g}.csv.gz"
-                cache_min[g] = pd.read_csv(f, index_col="t", parse_dates=["t"]) if f.exists() else pd.DataFrame()
-            m = cache_min[g]
-            if m.empty or s not in set(m["simbolo"]):
-                break
+            primo_giorno = candidati.get(g) is not None and (n, s) in candidati[g]
+            if s not in dentro or s not in aperture:
+                fatti.add(n)
+                continue
             if s not in cache_ch:
                 cache_ch[s] = chiusure_e_frazionamenti(s)
             ch, fr = cache_ch[s]
             if ch is None or cal[j - 1] not in ch.index:
-                break
-            b = m[m["simbolo"] == s]
-            prima = b.iloc[0]
-            if prima.name.tz_convert(NY).strftime("%H:%M") != "09:30":
-                break
-            ieri = ch[cal[j - 1]] / fr.get(g, 1.0)
-            salto = prima["open"] / ieri - 1
+                fatti.add(n)
+                continue
+            salto = aperture[s] / (ch[cal[j - 1]] / fr.get(g, 1.0)) - 1
             if abs(salto) >= SALTO:
                 out.append((g, s, float(salto)))
-                break
-        if len(cache_min) > 40:
-            cache_min.clear()
+                fatti.add(n)
+            elif primo_giorno and j + 1 < len(cal):
+                secondo.setdefault(cal[j + 1], []).append((n, s))
+            else:
+                fatti.add(n)
     return out
 
 
