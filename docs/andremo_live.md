@@ -4869,4 +4869,10 @@ vendita coperta del funding): ora scarico i prezzi a pronti di 373 monete (07:58
 pubblicazioni del BLS dal 2021. −0,35% a operazione, vinte 40%, il 78% dei gruppi di giorni a caso fa meglio. No. Capito: il Bitcoin
 reagisce al dato nella mezz'ora del dato e poi non va da nessuna parte; la deriva della prova 96 era della Fed (e si è spenta): gli eventi
 macro a calendario escono dalla coda, con due prove sole spese. Nel conto: 168 (27 a eventi).
+**Prova 99, i flussi dell'ETF** (`programma7/TRENTASETTESIMA.md`, 08:03 UTC): le quote in circolazione di IBIT (file pubblico di iShares,
+non ridistribuito) × NAV, dal gennaio 2024; long il Bitcoin per 24 ore dopo un flusso forte in entrata, short dopo un'uscita forte. −0,32% a
+operazione su 445 (p 0,999), entrambi i lati negativi, ogni anno. No, e il contrario di quanto scritto. Capito: i flussi degli ETF
+arrivano **dopo** il prezzo (chi compra l'ETF compra dopo il rialzo) e il giorno dopo il Bitcoin fa −0,23% dopo le entrate forti e +0,16%
+dopo le uscite forti: un ritorno piccolo, che non paga i costi di un giro; la versione contraria non si prova (sarebbe scelta sul dato). I
+flussi degli ETF escono dalla coda. Nel conto: 169 (28 a eventi).
 

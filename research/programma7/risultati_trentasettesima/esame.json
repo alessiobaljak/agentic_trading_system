@@ -1,0 +1,37 @@
+{
+ "operazioni": {
+  "eventi": 445,
+  "media": -0.003248467784993971,
+  "basso": -0.005421770326779961,
+  "alto": -0.0011451549512724538,
+  "p": 0.9987
+ },
+ "long": {
+  "n": 293,
+  "media": -0.0034607562269714427
+ },
+ "short": {
+  "n": 152,
+  "media": -0.002839253880392659
+ },
+ "vinte": 0.4,
+ "prima_meta": -0.004664391559296237,
+ "seconda_meta": -0.002789135370116152,
+ "per_anno": {
+  "2024": -0.004664391559296237,
+  "2025": -0.0038659985115010015,
+  "2026": -0.0016462070053334587
+ },
+ "giorni_con_segnale": 445,
+ "giorni_di_borsa_valutati": 688,
+ "controllo_mescolato": {
+  "permutazioni": 2000,
+  "quota_almeno_come_veri": 0.978,
+  "media": -0.0010760984756864689
+ },
+ "bitcoin_tenuto_stessi_giorni": -0.0009286179431077494,
+ "sharpe_giornaliero": -2.6796642452538872,
+ "costo_per_lato": 0.0006000000000000001,
+ "soglia_tutte": 0.00035714285714285714,
+ "esito": "non passa"
+}
