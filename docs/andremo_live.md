@@ -4741,3 +4741,10 @@ il meccanismo, ma visto su tutti gli anni usati, quindi in coda (idea 45) e da p
 alle 00:23 UTC: il modello ad alberi deciso ogni giorno con cinque semi e gli ordini limite (idea 33); calcolo di ore.
 **Il conto demo alle 00:17 UTC** (ops 0664): seconda decisione fatta, 44 ordini limite in attesa del controllo dell'ora, 22 long e
 22 short, 4.930 USDT (−1,26%); il paper di G1 −2,07%.
+**Prova 84, G20, finita alle 00:33 UTC** (`programma7/VENTIDUESIMA.md`): il modello ad alberi deciso ogni giorno, con cinque
+semi e gli ordini limite, fa Sharpe 1,35 (+42,1% l'anno) contro 0,95 di M3 a mercato con un seme: i due cambiamenti valgono
++0,4 di Sharpe. Ma: spese 16,5% l'anno (M7 settimanale, stesso vantaggio con correlazione 0,70, ne spende un terzo), 2026 −10,4%,
+Sharpe corretto 0,35, t 2,94. Capito: decidere ogni giorno un modello che cambia idea spesso costa il doppio e non aggiunge
+previsione; il vantaggio del modello è quello settimanale (M7), e quando va in paper, se mai, ci va settimanale. Nel conto: 150
+prove. In coda tre voci nuove (46-48: lo short del salto di funding, il premio di Coinbase fra monete, il passo pratico per
+misurare in avanti l'esposizione secondo il funding medio).
