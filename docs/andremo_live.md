@@ -4844,3 +4844,12 @@ ho tenuto quelle del Mac. Regola pratica da oggi: `git fetch` e il registro **pr
 **Lo Sharpe corretto di G1 con il mazzo completo** è 0,86 (era 0,913 con il mazzo incompleto), G11 0,91: ogni variante di G1 che proviamo
 (88, 92, 93) abbassa il numero di G1, perché la correzione conta le prove. Lo scrivo com'è; la decisione del proprietario del 24 ottobre
 resta e a giudicare G1 sono il demo e il paper.
+**Prova 94, le due protezioni insieme** (`programma7/TRENTADUESIMA.md`, 07:37 UTC, calcolo alle 07:38): G1 neutra al mercato con
+l'interruttore sulle perdite. La discesa scende ancora (−21,3% contro −23,1% della neutralità e −26,2% dell'interruttore da solo), ma lo
+Sharpe scende (1,89 contro 1,91), la prima pausa salta un recupero del +6,6% e una estrazione a caso su venti fa la stessa discesa. No.
+Capito: la neutralità taglia già le settimane peggiori, quindi l'interruttore scatta in giorni diversi e meno utili; sommare due protezioni
+non raddoppia la protezione. Per i soldi veri la proposta resta **G1N** (una protezione sola, misurata due volte). Nel conto: 164.
+**La coda si è svuotata di nuovo** (07:44 UTC): dopo 94 prove del programma 6-7 le varianti di F5/G1 sono esaurite. Ho messo in coda quattro
+idee con dati che nessuna prova ha toccato (63 flussi degli ETF, 64 uso vero delle catene da DefiLlama, 65 vendita coperta del funding con
+lo spot, 66 eventi macro a ore): le prossime prove partono da lì, nell'ordine in cui lo scarico è più leggero.
+
