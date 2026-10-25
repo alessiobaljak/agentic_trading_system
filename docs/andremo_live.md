@@ -4859,4 +4859,10 @@ maggio 2022. Sharpe 0,60, +14,9% l'anno, +0,29% a settimana ma con p 0,075: non 
 di una catena dice qualcosa sul suo gettone; ma è poco, e c'è solo dal 2024 (2023 −1,4%). Il lato venduto (le catene che si svuotano)
 rende il doppio del lato comprato: coerente con tutto il resto, chi lascia una catena la lascia davvero. Nel conto: 165.
 **Prova 96 preparata** (07:52 UTC): le riunioni della Fed (46 comunicati dal 2021, date dal sito della Fed) sul Bitcoin a ore.
+**Prova 96, la deriva dopo la Fed** (`programma7/TRENTAQUATTRESIMA.md`, 07:52 UTC): il segno dell'ora del comunicato seguito per 6 ore,
+46 riunioni. +0,61% a operazione, vinte 65%, nessuno dei 2.000 gruppi di giorni a caso fa altrettanto; ma p 0,021 (serve 0,01), e nel
+2025-2026 la deriva è negativa. No. Capito: il Bitcoin reagisce alla Fed come le azioni (la prima ora continua: +0,41% nell'ora dopo il
+comunicato, poi quasi nulla), ma è un evento otto volte l'anno e il vantaggio si è spento negli ultimi due anni; i dati dell'inflazione
+(12 l'anno) restano in coda perché servono le date ufficiali. Nel conto: 166 (26 a eventi). Scritte alle 07:55 le regole della prova 97 (la
+vendita coperta del funding): ora scarico i prezzi a pronti di 373 monete (07:58 UTC).
 
