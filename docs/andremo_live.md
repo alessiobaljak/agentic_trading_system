@@ -4940,4 +4940,10 @@ l'errore andava contro le strategie: le spese vere sono un po' più basse di que
 variazioni in più eseguite a limite; G1N uguale (1,91, discesa −23,1%). L'errore di lettura andava contro le strategie, ora i numeri sono
 esatti. Gli Sharpe corretti con tutte le prove nel conto restano 0,86 (G1), 0,91 (G11), 0,83 (G1N). L'idea 77 (l'attenzione su
 Wikipedia) non si fa per ora: solo 40 monete abbinate a una pagina sicura, 11-29 per settimana nell'universo.
+**Prova 107, i perpetui annunciati in chiusura con le date vere** (`programma7/QUARANTACINQUESIMA.md`, 20:22 UTC): il testo dei 72 annunci
+dà 82 contratti con l'ora della chiusura (la prova 71 ne aveva 7). Short contro il Bitcoin dall'ora dopo l'annuncio a un'ora prima della
+chiusura, con l'uscita a +30%: **+7,89% a evento su 77, p 0,028** (serve 0,01): no per la regola scritta. Ma è positiva nel 2024, nel 2025 e
+nel 2026, batte le stesse monete prima dell'annuncio di 8 punti, e senza l'uscita (solo riportata) farebbe +12,35% con p 0,003. Capito:
+quando Binance chiude un perpetuo, chi è dentro deve uscire e il prezzo scende fino alla chiusura; l'uscita a +30% taglia più guadagni
+(le salite brevi prima del crollo) che perdite. Non si cambia la regola dopo averla vista: si chiede al revisore se misurarla in avanti.
 
