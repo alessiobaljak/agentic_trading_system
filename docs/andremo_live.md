@@ -4825,3 +4825,22 @@ rendimento.
 **Dimenticanza corretta nell'asticella**: le serie delle prove a portafoglio 84, 86, 88 e 89 non erano nel mazzo della correzione
 (`asticella.serie_programma7`), quindi lo Sharpe corretto delle prove 89-91 era un po' meno severo del dovuto; aggiunte, con la 92.
 Capito oggi: il mazzo della correzione va aggiornato nella stessa riga in cui si registra una prova, non dopo.
+
+### 25 ottobre 2026, dal cloud (07:35 UTC)
+
+**Prova 92, il clima del mercato** (`programma7/TRENTESIMA.md`, regole del Mac alle 07:18 UTC, calcolo nel cloud): il punteggio 0-100
+della skill ricostruito dal pannello; sotto 40 (28% dei giorni) i pesi di G1 e F5 dimezzati. G1 clima Sharpe 1,95 contro 1,96 e F5 clima
+1,93 contro 1,87, con la discesa identica (−28,8% e −26,9%); G1 perde 5 punti l'anno. Capito: nel clima «difensivo» G1 e F5
+guadagnano meno (+0,08% al giorno contro +0,17%; F5 +0,3% a settimana contro +1,1%) ma restano positivi, quindi togliere esposizione lì
+toglie rendimento e non protezione; le perdite vere stanno altrove (i rally delle monete piccole, `programma6/PERDITE_F5.md`). No.
+**Prova 93, l'interruttore sulle perdite** (`programma7/TRENTUNESIMA.md`, 07:26 UTC): dopo −15% dal massimo G1 si ferma 7 giorni e il
+massimo si azzera. Sei pause in cinque anni e mezzo; G1-S Sharpe 1,98 contro 1,96, stesso rendimento, discesa −26,2% contro −28,8%, le
+15 settimane peggiori un po' meno gravi, e nessuna delle 20 estrazioni con le pause messe a caso arriva a quella discesa. Per il criterio
+scritto prima aggiunge protezione, ma è un effetto piccolo su sei eventi: non rendimento. Capito: dopo le discese grosse G1 non recupera
+subito (nei giorni fermi avrebbe fatto −0,8% in tutto), quindi la pausa non costa; sommata alla neutralità (prova 88) potrebbe dare la
+discesa che serve ai soldi veri: idea 62 (G1N-S) in coda, la prossima. Nel conto: 163 prove.
+**Due processi, una sessione.** Alle 07:18 il Mac ha scritto le regole della prova 92 e alle 07:26 il cloud ne ha scritte di quasi uguali:
+ho tenuto quelle del Mac. Regola pratica da oggi: `git fetch` e il registro **prima** di scrivere le regole di un'idea, non dopo.
+**Lo Sharpe corretto di G1 con il mazzo completo** è 0,86 (era 0,913 con il mazzo incompleto), G11 0,91: ogni variante di G1 che proviamo
+(88, 92, 93) abbassa il numero di G1, perché la correzione conta le prove. Lo scrivo com'è; la decisione del proprietario del 24 ottobre
+resta e a giudicare G1 sono il demo e il paper.
