@@ -4946,4 +4946,10 @@ chiusura, con l'uscita a +30%: **+7,89% a evento su 77, p 0,028** (serve 0,01): 
 nel 2026, batte le stesse monete prima dell'annuncio di 8 punti, e senza l'uscita (solo riportata) farebbe +12,35% con p 0,003. Capito:
 quando Binance chiude un perpetuo, chi è dentro deve uscire e il prezzo scende fino alla chiusura; l'uscita a +30% taglia più guadagni
 (le salite brevi prima del crollo) che perdite. Non si cambia la regola dopo averla vista: si chiede al revisore se misurarla in avanti.
+**Il revisore separato sulla prova 107** (20:42 UTC, `programma7/REVISIONE_107.md`): l'effetto della chiusura è vero (contro le altre
+monete negli stessi giorni +6-7 punti), ma la prova lo gonfiava: in 18 eventi su 77 la data di chiusura era sbagliata, OMG aveva la
+chiusura rinviata, e mancavano 10 contratti del 2022 scritti in altro modo; con tutto corretto +4,85% a evento, p 0,116. E soprattutto: dal
+21 ottobre 2026 Binance blocca i nuovi ordini dal minuto in cui pubblica l'annuncio. **Non va nel paper**; si segue a ogni nuovo annuncio
+se si possono ancora aprire posizioni. Capito: un effetto vero può non essere una strategia, se la borsa toglie la porta d'ingresso.
+Script e tabelle dei due revisori di oggi salvati in `programma7/revisione_105/` e `revisione_107/`.
 
