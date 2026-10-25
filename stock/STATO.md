@@ -154,6 +154,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 * **La prova 21** (le stesse azioni con notizie, entrando con un ordine limite): **bocciata.** L'ordine limite risparmia lo scarto
   all'ingresso, ma l'uscita (allo stop o alla chiusura) lo paga comunque, e i pochi casi in cui il limite non si esegue sono i migliori
   (+1,71% a operazione contro +0,10%). Con i costi veri: −0,088% a operazione, Sharpe −0,89.
+* **La prova 22** (l'inversione dopo l'apertura a 5 passi di Riley Coleman, scritta a regole fisse su SPY e QQQ): **bocciata.**
+  Perde **anche senza costi** (−4,6% e −2,6% in nove anni); solo il 31-34% delle operazioni guadagna e l'obiettivo più largo dello stop
+  non basta a compensare. Togliere il livello o allargare l'orario non cambia niente: la testa e spalle dopo l'apertura, così scritta,
+  non porta informazione. Che dopo l'apertura il prezzo cambi spesso direzione (prova 17) non vuol dire che il punto del cambio si veda
+  in tempo.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
