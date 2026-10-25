@@ -253,7 +253,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 30. ~~**Dopo una salita enorme, il long**~~ → prova 64 (G7, su Gate.io). (ipotesi nata guardando G5, prova 62: metà delle monete salite del 30% in un giorno sale di
    un altro 30%; senza uscita lo short perde il 6,6% a evento). È un'idea vista sui dati, quindi si prova **solo su dati non usati**
    (le monete di Gate.io che non sono su Binance, o il 2020), con le regole scritte prima.
-31. **G9 — l'inversione di un giorno fra le monete 101-200 con gli ordini limite** (in giornata, ogni giorno): chi fornisce
+31. ~~**G9 — l'inversione di un giorno fra le monete 101-200 con gli ordini limite**~~ (in giornata, ogni giorno): chi fornisce
    liquidità guadagna comprando chi è sceso e vendendo chi è salito (Nagel 2012); fra le cripto l'effetto c'è proprio nelle monete
    meno liquide (Zaremba e altri 2021; Bianchi, Babiak e Dickerson 2022). L'idea 24 era stata scartata per i costi a mercato: con gli
    ordini limite (prova 51: 95% eseguiti fra le 101-150) i costi scendono a un terzo. → prova 67 (no: lordo +29%, spese 61%).
