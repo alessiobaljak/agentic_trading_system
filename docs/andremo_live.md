@@ -4875,4 +4875,9 @@ operazione su 445 (p 0,999), entrambi i lati negativi, ogni anno. No, e il contr
 arrivano **dopo** il prezzo (chi compra l'ETF compra dopo il rialzo) e il giorno dopo il Bitcoin fa −0,23% dopo le entrate forti e +0,16%
 dopo le uscite forti: un ritorno piccolo, che non paga i costi di un giro; la versione contraria non si prova (sarebbe scelta sul dato). I
 flussi degli ETF escono dalla coda. Nel conto: 169 (28 a eventi).
+**Prova 100, le stablecoin nelle catene** (`programma7/TRENTOTTESIMA.md`, 08:07 UTC): la crescita a 30 giorni delle stablecoin su ogni
+catena come segnale fra i gettoni delle catene. Sharpe 0,21, perdente nel 2023 e nel 2024, 103 settimane su 249 ferme per pochi
+ammessi. No. Capito: il denaro parcheggiato su una catena non anticipa il suo gettone (si muove per gli incentivi, non per comprare); fra
+le misure di fondamentali provate oggi solo le commissioni (prova 95) portano un segnale vero, e piccolo. Nel conto: 170. In coda: il conto
+della famiglia unica (idea 68, serve ai soldi veri), il rapporto fra volume del perpetuo e a pronti (69), le scadenze delle opzioni (70).
 
