@@ -1,19 +1,19 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-22.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-23.zip",
  "procedure": {
   "N-001": {
-   "trade": 9,
+   "trade": 11,
    "netto": {
-    "n": 9,
-    "giorni": 3,
-    "media": 0.005259426894471739,
-    "basso": -0.11329880388756029,
-    "alto": 0.38873489350587626,
-    "p": 0.41405859414058593
+    "n": 11,
+    "giorni": 4,
+    "media": -0.011722835857067675,
+    "basso": -0.10959546963747707,
+    "alto": 0.26951541556965847,
+    "p": 0.6180381961803819
    },
-   "netto_doppio": 0.0034594268944717396,
-   "caso_netto": -0.007906031585848865,
-   "senza_migliore": -0.10430499213735814,
+   "netto_doppio": -0.013522835857067676,
+   "caso_netto": -0.010934286981004905,
+   "senza_migliore": -0.10071344238216634,
    "per_moneta": {
     "AVAUSDT": {
      "trade": 2,
@@ -24,8 +24,8 @@
      "netto": -0.06388588957055205
     },
     "IOSTUSDT": {
-     "trade": 2,
-     "netto": 0.21702571856578728
+     "trade": 3,
+     "netto": 0.1072237694046791
     },
     "LITUSDT": {
      "trade": 1,
@@ -42,27 +42,39 @@
     "VTHOUSDT": {
      "trade": 1,
      "netto": -0.10694052715887578
+    },
+    "XMRUSDT": {
+     "trade": 1,
+     "netto": -0.06390590756045286
     }
    },
-   "esito": "in corso (9 trade chiusi su 400)"
+   "esito": "in corso (11 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 7,
+   "trade": 10,
    "netto": {
-    "n": 7,
-    "giorni": 2,
-    "media": 0.00609584290136046,
-    "basso": 0.002886480892084755,
+    "n": 10,
+    "giorni": 3,
+    "media": 0.0023768346140864587,
+    "basso": -0.00630085138955288,
     "alto": 0.008502864408317237,
-    "p": 9.999000099990002e-05
+    "p": 0.3728627137286271
    },
-   "netto_doppio": 0.004295842901360454,
-   "caso_netto": -0.0013999631587293655,
-   "senza_migliore": 0.002886480892084755,
+   "netto_doppio": 0.0005768346140864564,
+   "caso_netto": -0.0021104813991345557,
+   "senza_migliore": -0.0017071852487340628,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
      "netto": -0.004693975269665838
+    },
+    "CRVUSDT": {
+     "trade": 1,
+     "netto": -0.0071850296176628504
+    },
+    "INJUSDT": {
+     "trade": 1,
+     "netto": 0.010678590653290933
     },
     "IOSTUSDT": {
      "trade": 3,
@@ -76,16 +88,36 @@
      "trade": 1,
      "netto": -0.007326027166118274
     },
+    "PHAUSDT": {
+     "trade": 1,
+     "netto": -0.022396115204286724
+    },
     "STXUSDT": {
      "trade": 1,
      "netto": 0.015867844522968324
     }
    },
-   "esito": "in corso (7 trade chiusi su 400)"
+   "esito": "in corso (10 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 0,
-   "esito": "nessun trade chiuso"
+   "trade": 1,
+   "netto": {
+    "n": 1,
+    "media": NaN,
+    "basso": NaN,
+    "alto": NaN,
+    "p": NaN
+   },
+   "netto_doppio": -0.052679807729674163,
+   "caso_netto": -0.010959615662198744,
+   "senza_migliore": NaN,
+   "per_moneta": {
+    "IOSTUSDT": {
+     "trade": 1,
+     "netto": -0.049102277743905576
+    }
+   },
+   "esito": "in corso (1 trade chiusi su 400)"
   }
  }
 }
