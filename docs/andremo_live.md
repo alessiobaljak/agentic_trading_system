@@ -4738,6 +4738,6 @@ schiacciamento degli short delle prove 21, 62, 75-76; (2) negli estremi F5 guada
 nei rally, +0,3% nelle settimane in mezzo): non è una strategia da mercato calmo; (3) con il funding medio dell'universo molto
 negativo prima della settimana (gli short affollati ovunque) F5 fa +0,25% a settimana, contro +2,10% quando è alto: coerente con
 il meccanismo, ma visto su tutti gli anni usati, quindi in coda (idea 45) e da provare solo in avanti. **Prova 84 (G20)** lanciata
-alle 00:50 UTC: il modello ad alberi deciso ogni giorno con cinque semi e gli ordini limite (idea 33); calcolo di ore.
+alle 00:23 UTC: il modello ad alberi deciso ogni giorno con cinque semi e gli ordini limite (idea 33); calcolo di ore.
 **Il conto demo alle 00:17 UTC** (ops 0664): seconda decisione fatta, 44 ordini limite in attesa del controllo dell'ora, 22 long e
 22 short, 4.930 USDT (−1,26%); il paper di G1 −2,07%.
