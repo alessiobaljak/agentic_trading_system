@@ -222,3 +222,26 @@ def test_giorni_speciali_unione_delle_due_finestre():
     # nei primi giorni di gennaio (k ≤ 3) si è dentro dall'inizio: si compra alla seconda barra
     assert ore[:3] == ["01-02 09:31", "01-07 09:30", "01-28 14:00"]
     assert ore[3:6] == ["01-29 13:59", "01-30 09:30", "02-06 09:30"]
+
+
+def test_prima_candela_compra_se_sale_ed_esce_allo_stop_o_alla_chiusura():
+    from stock.strategie import prima_candela as pc
+    cal = calendario(["2020-01-02", "2020-01-03"])
+    # giorno 1: candela 9:30-9:34 da 100 a 101 (minimo 99,5), poi sale: si esce alla chiusura
+    def g1(i):
+        return 100 + 0.2 * i if i < 5 else 101 + 0.001 * i
+    b1 = giornata("2020-01-02", g1)
+    b1.iloc[2, b1.columns.get_loc("low")] = 99.5
+    # giorno 2: candela in salita, poi cade sotto il minimo della candela: si esce allo stop
+    def g2(i):
+        return 100 + 0.2 * i if i < 5 else 98.0
+    b2 = giornata("2020-01-03", g2)
+    b = pd.concat([b1, b2])
+    seg = pc.prepara(b, cal, set(), 5)
+    r = simula(b, pc.strategia(seg), Costi(), capitale=10_000)
+    e = r.esecuzioni
+    assert list(e["etichetta"]) == ["ingresso", "chiusura", "ingresso", "stop"]
+    ore = list(e["t"].dt.tz_convert(NY).dt.strftime("%H:%M"))
+    assert ore[0] == "09:35" and ore[1] == "15:59"
+    # lo stop del giorno 2 è il minimo della candela (100): apertura delle 9:35 già sotto (98): si paga 98
+    assert e["prezzo"].iloc[3] == pytest.approx(98.0)
