@@ -4892,4 +4892,9 @@ soldi veri (prova 88: stessa resa di G1, discesa da −28,8% a −23,1%) gira da
 `PaperG1N`): ogni giorno i due lati di G1 scalati perché la somma dei beta dei 90 giorni sia zero, entro 0,5-1,5; il beta e la
 scalatura sono confrontati con quelli della ricerca nei test. Il bot va riavviato dal canale ops. Serve a P26: quando il proprietario
 chiederà i soldi veri, G1N avrà settimane di paper alle spalle sugli stessi giorni di G1.
+**Prova 101, il volume del perpetuo su quello a pronti** (`programma7/TRENTANOVESIMA.md`, 08:17 UTC; scarico dei volumi a pronti di 449
+monete): short le più speculative, long le meno. Sharpe 0,68 ma +115% nel 2021 e quattro anni su cinque negativi, discesa −45%. No.
+Capito: la quota di volume che passa dai perpetui non dice dove va il prezzo; il lato comprato (le monete grandi, con molto pronti) ha
+guadagnato solo nei rialzi del 2021 e del 2024. Nel conto: 171. La fonte per gli annunci di Upbit (idea 71) è chiusa agli strumenti
+automatici: resta in coda con la nota.
 
