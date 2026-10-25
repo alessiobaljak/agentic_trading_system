@@ -428,3 +428,27 @@ def test_clima_punteggio_regolatore_e_nessuno_sguardo_al_futuro():
     assert abs(p3[0] - atteso) < 1e-9
     # con troppo poco (solo Bitcoin e slancio: 35 di peso) il punteggio manca
     assert np.isnan(cl.punteggio({"bitcoin": 90.0, "slancio": 90.0, "ampiezza": np.nan, "funding": np.nan, "discesa": np.nan}))
+
+
+def test_interruttore_sulle_perdite_pausa_e_massimo_che_si_azzera():
+    from research.programma7 import trentunesima as tu
+    T, S = 40, 2
+    W = np.tile(np.array([0.5, -0.5]), (T, 1))
+    R = np.zeros((T, S))
+    R[3] = [-0.10, 0.10]          # il giorno 3 il conto perde circa il 10%
+    R[5] = [-0.08, 0.08]          # il giorno 5 un altro 8%: alla fine del 5 e' sotto -15% dal massimo
+    R[20] = [0.30, -0.30]         # dopo la pausa un guadagno, poi
+    R[25] = [-0.20, 0.20]         # una discesa del 20%: scatta di nuovo, dal massimo nuovo
+    F = np.zeros((T, S))
+    costo = np.zeros(S)
+    Wn, netti, inizi = tu.con_interruttore(W, R, F, costo, soglia=0.15, pausa=7)
+    assert inizi == [6, 26]                                   # la pausa parte il giorno dopo la soglia superata
+    assert (Wn[6:13] == 0).all() and (Wn[13] != 0).all()      # 7 giorni fermi, poi si riparte
+    assert (Wn[26:33] == 0).all() and (Wn[33] != 0).all()
+    assert (netti[6:13] == 0).all()
+    # senza l'azzeramento del massimo il conto fermo sotto -15% non sarebbe mai ripartito: qui riparte al giorno 13
+    assert (Wn[:6] == W[:6]).all()
+    # le pause a caso: stesso numero di pause, 7 giorni ciascuna, senza sovrapposizioni
+    Wc = tu.pause_a_caso(W, 2, np.random.default_rng(1), pausa=7)
+    fermi = (Wc == 0).all(axis=1)
+    assert fermi.sum() == 14

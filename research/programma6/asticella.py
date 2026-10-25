@@ -226,7 +226,8 @@ def serie_programma7() -> dict:
                  ("86 F5 120/80", "risultati_ventiquattresima/settimane_F5_120-80.csv.gz"),
                  ("88 G1N", "risultati_ventiseiesima/settimane_G1N.csv.gz"), ("88 G1 120/80", "risultati_ventiseiesima/settimane_G1_120-80.csv.gz"),
                  ("89 F5C", "risultati_ventisettesima/settimane_F5C.csv.gz"),
-                 ("92 G1 clima", "risultati_trentesima/settimane_G1_clima.csv.gz"), ("92 F5 clima", "risultati_trentesima/settimane_F5_clima.csv.gz")):
+                 ("92 G1 clima", "risultati_trentesima/settimane_G1_clima.csv.gz"), ("92 F5 clima", "risultati_trentesima/settimane_F5_clima.csv.gz"),
+                 ("93 G1-S", "risultati_trentunesima/settimane_G1-S.csv.gz")):
         if (p7 / f).exists():
             out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
     for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
