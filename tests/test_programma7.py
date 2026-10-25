@@ -364,3 +364,16 @@ def test_f5n_beta_e_scalatura():
     assert abs(np.abs(WN[0]).sum() - 2.0) < 1e-12                       # esposizione lorda al 200%
     WN2, a2, b2, _, _ = f5n.scala_neutra(W, np.array([[0.1, 0.1, 2.0, 2.0]]))
     assert a2[0] == 1.5 and b2[0] == 0.5                                   # i limiti
+
+
+def test_pc_multiplo_e_segnale_settimanale():
+    import pandas as pd
+    from research.programma7 import venticinquesima as pc
+    assert pc.multiplo("1000PEPEUSDT", "PEPE") == 1e3 and pc.multiplo("SOLUSDT", "SOL") == 1.0 and pc.multiplo("1MBABYDOGEUSDT", "BABYDOGE") == 1e6
+    lunedi = np.array([20000, 20007])
+    ore = np.arange((20000 - 7) * 24, 20007 * 24)                 # due settimane piene di ore
+    p = pd.Series(np.where(ore < 20000 * 24, 0.01, -0.02), index=ore)
+    S = pc.segnale_settimanale({"AUSDT": p, "BUSDT": pd.Series(dtype=float)}, ["AUSDT", "BUSDT"], lunedi)
+    assert abs(S[0, 0] - 0.01) < 1e-12 and abs(S[1, 0] + 0.02) < 1e-12 and np.isnan(S[:, 1]).all()
+    poche = pd.Series(0.03, index=ore[-50:])                        # meno di 100 ore: niente segnale
+    assert np.isnan(pc.segnale_settimanale({"AUSDT": poche}, ["AUSDT"], lunedi)[1, 0])
