@@ -142,7 +142,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   8 anni non passa l'asticella. La prima candela dopo l'apertura (17, idea del proprietario, 5 e 15 minuti su SPY e QQQ): Sharpe con i
   costi da −0,48 a 0,38; il caso migliore (QQQ, 5 minuti) fa +106% senza costi e +33% con i costi; l'80% dei giorni esce allo stop. Gli
   acquisti dei dirigenti (18, dati della SEC sbloccati con l'indirizzo del proprietario): nelle aziende dell'S&P 500 il titolo, nel mese
-  dopo, fa **peggio** dello SPY (−0,59% a evento, t −3,0 su 1457).
+  dopo, **non fa meglio** dello SPY. *Correzione del 25 ottobre:* il «−0,59% a evento, t −3,0» scritto prima era sbagliato (prezzi
+  senza dividendi e con i costi); corretto è −0,24% (t −1,2). Il mercato reagisce già nella notte dopo il deposito (+0,42%, t 15,7); da
+  lì in poi non resta niente (−0,04%). La prova 19 (vendere allo scoperto quei titoli, idea nata dal numero sbagliato) è bocciata nel
+  periodo chiuso (+19,0% contro +32,7% del tenere lo SPY).
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli

@@ -17,3 +17,11 @@ Calcolato da `python -m stock.prove.p018` il 2026-10-25 08:24 UTC con le regole 
 | Anni in guadagno (da leggere) | 7 su 9 | — | — |
 | Perdita massima dal picco con i costi | -42.1% | — | — |
 | **Esito** | **bocciata** | | |
+
+**Correzione del 25 ottobre 2026 (dopo la prova 19).** La riga «guadagno medio per evento» qui sopra è **sbagliata per difetto**: usa i
+prezzi di esecuzione non rettificati (senza i dividendi) contro lo SPY rettificato, e comprende i costi. Ricalcolata sugli stessi 1458
+ingressi con i prezzi rettificati e senza costi: **−0,24% (t −1,2)**, cioè nessun effetto distinguibile dal caso. Su tutti i 2656
+acquisti nell'S&P 500: nella notte dopo il deposito il titolo sale dello 0,42% più dello SPY (t 15,7: il mercato reagisce subito); da
+quell'apertura in poi, per 20 sedute, −0,04% (t −0,25). L'esito della prova (bocciata) non cambia: l'esame usa il valore del conto, che i
+dividendi li conta. Lo stesso modo di calcolare la riga per evento c'è nelle prove 8 e 10: anche lì quella riga è più bassa del vero di
+circa il rendimento dei dividendi del periodo più i costi, e anche lì gli esiti non cambiano.
