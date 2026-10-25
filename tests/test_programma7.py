@@ -325,3 +325,21 @@ def test_g20_pesi_spostati_al_giorno_dopo(monkeypatch):
     Wop = g20.pesi_operativi(None, None, None, pan, colonne)
     assert Wop.shape == (T, S) and not Wop[0].any() and not Wop[2].any()
     assert Wop[3, 0] == 0.5 and Wop[3, 1] == 0.0 and Wop[3, 2] == 0.0   # vale per il giorno 3; la moneta senza candela è fuori
+
+
+def test_g21_estremi_e_fette():
+    from research.programma6 import terza as te
+    from research.programma7 import ventitreesima as g21
+    S = max(20, te.MIN_MONETE)
+    ieri = np.arange(S, dtype=float)[None, :] / S                 # la moneta 0 è scesa di più, l'ultima è salita di più
+    U, sig = np.ones((1, S), bool), np.ones((1, S))
+    W = g21.pesi_estremi(ieri, U, sig, quota=0.10)
+    n = int(round(0.10 * S))
+    assert (W[0, :n] > 0).all() and (W[0, -n:] < 0).all() and not W[0, n:-n].any()
+    assert abs(W[0].clip(min=0).sum() - 1) < 1e-12 and abs(W[0].clip(max=0).sum() + 1) < 1e-12
+    Wf = np.zeros((6, 2))
+    Wf[1] = [1.0, 0.0]                                            # una fetta aperta il giorno 1 sulla prima moneta
+    Wf[3] = [0.0, -1.0]                                           # e una il giorno 3 sulla seconda
+    Wo = g21.pesi_a_fette(Wf, 3)
+    assert np.allclose(Wo[:, 0], [0, 1 / 3, 1 / 3, 1 / 3, 0, 0])   # resta tre giorni: 1, 2, 3
+    assert np.allclose(Wo[:, 1], [0, 0, 0, -1 / 3, -1 / 3, -1 / 3])
