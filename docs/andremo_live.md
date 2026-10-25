@@ -4763,3 +4763,5 @@ contro −7,9%, ma 3 punti l'anno in meno; corretto 0,83 (è F5 al 93%). Il cont
 −20%): il merito è della neutralità, non del pesare di più il lato long. Capito: il lato venduto di F5 ha davvero il beta più alto
 (0,98 contro 0,90) e neutralizzarlo taglia le code; non basta per una strategia nuova, ma è la versione difensiva da avere pronta
 quando si parla di soldi veri. Nel conto: 153 prove.
+**Riavvio del bot delle 04:32 UTC** (ops 0667-0668): ripartito senza errori; da qui il paper di G1 scrive il funding medio
+dell'universo a ogni decisione.
