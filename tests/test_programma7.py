@@ -343,3 +343,24 @@ def test_g21_estremi_e_fette():
     Wo = g21.pesi_a_fette(Wf, 3)
     assert np.allclose(Wo[:, 0], [0, 1 / 3, 1 / 3, 1 / 3, 0, 0])   # resta tre giorni: 1, 2, 3
     assert np.allclose(Wo[:, 1], [0, 0, 0, -1 / 3, -1 / 3, -1 / 3])
+
+
+def test_f5n_beta_e_scalatura():
+    from research.programma7 import ventiquattresima as f5n
+    # il beta: una moneta che fa il doppio del mercato, una che fa la metà, su 120 giorni; universo di 3 monete
+    rng = np.random.default_rng(0)
+    m = rng.normal(0, 0.02, 121)
+    C = np.ones((121, 3))
+    C[1:, 0] = np.cumprod(1 + 2 * m[1:]); C[1:, 1] = np.cumprod(1 + 0.5 * m[1:]); C[1:, 2] = np.cumprod(1 + m[1:])
+    pan = {"close": C}
+    U = np.ones((1, 3), bool)
+    beta = f5n.beta_delle_monete(pan, U, np.array([120]))
+    assert beta[0, 0] > beta[0, 2] > beta[0, 1] and abs(beta[0, 2] - 1) < 0.2
+    # la scalatura: lato long con beta 0,8, lato short con beta 1,2 → long × 1,2, short × 0,8, somma dei beta pesati zero
+    W = np.array([[0.5, 0.5, -0.5, -0.5]])
+    b = np.array([[0.8, 0.8, 1.2, 1.2]])
+    WN, a, bb, bl, bs = f5n.scala_neutra(W, b)
+    assert abs(a[0] - 1.2) < 1e-12 and abs(bb[0] - 0.8) < 1e-12 and abs((WN[0] * b[0]).sum()) < 1e-12
+    assert abs(np.abs(WN[0]).sum() - 2.0) < 1e-12                       # esposizione lorda al 200%
+    WN2, a2, b2, _, _ = f5n.scala_neutra(W, np.array([[0.1, 0.1, 2.0, 2.0]]))
+    assert a2[0] == 1.5 and b2[0] == 0.5                                   # i limiti
