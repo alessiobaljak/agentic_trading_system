@@ -91,6 +91,7 @@ def strategia_limite(seg: dict, multiplo: float | None = 10.0, validita: int = 1
     (`stock/prove/P021_notizie_ordini_limite.md`)."""
     direzione, stop, giorno_di, uscita = seg["direzione"], seg["stop"], seg["giorno"], seg["uscita"]
     attesa = {}                                   # giorno -> (segno, stop, limite, quantità, ultima barra valida)
+    entrati: set = set()
 
     def livelli(segno, liv_stop, riferimento, q):
         ordini = [Ordine(-segno * q, "stop", liv_stop, solo_riduce=True, etichetta="stop", dopo_ingresso=True)]
@@ -118,7 +119,10 @@ def strategia_limite(seg: dict, multiplo: float | None = 10.0, validita: int = 1
             return []
         segno, liv_stop, limite, q, fino = attesa[g]
         if stato.azioni:
+            entrati.add(g)
             return livelli(segno, liv_stop, limite, abs(stato.azioni))
+        if g in entrati:                          # un solo ingresso al giorno: dopo l'uscita non si rientra
+            return []
         if i < fino:
             # l'ordine limite d'ingresso vale per la barra dopo; stop e obiettivo partono insieme se si esegue
             return [Ordine(segno * q, "limite", limite, etichetta="ingresso", dopo_ingresso=False)] + livelli(segno, liv_stop, limite, q)

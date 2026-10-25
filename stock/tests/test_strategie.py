@@ -262,3 +262,17 @@ def test_prima_candela_con_limite_entra_solo_se_il_prezzo_torna_oltre_il_limite(
     assert list(e["etichetta"]) == ["ingresso", "chiusura"]
     assert e["prezzo"].iloc[0] == pytest.approx(100.8)              # niente scarto sull'ingresso a limite
     assert e["t"].dt.tz_convert(NY).iloc[0].strftime("%H:%M") == "09:37"
+
+
+def test_prima_candela_con_limite_non_rientra_dopo_lo_stop():
+    from stock.strategie import prima_candela as pc
+    cal = calendario(["2020-01-02"])
+    # candela 100 → 100,8 (minimo 100); 9:36 scende a 100,5 (eseguito), 9:37 tocca 99 (stop), poi torna sotto il limite più volte
+    b = giornata("2020-01-02", lambda i: 100 + 0.2 * i if i < 5 else 102.0)
+    b.iloc[6, b.columns.get_loc("low")] = 100.5
+    b.iloc[7, b.columns.get_loc("low")] = 99.0
+    for k in (8, 9, 10):
+        b.iloc[k, b.columns.get_loc("low")] = 100.5
+    seg = pc.prepara(b, cal, set(), 5)
+    r = simula(b, pc.strategia_limite(seg), Costi(), capitale=10_000)
+    assert list(r.esecuzioni["etichetta"]) == ["ingresso", "stop"]
