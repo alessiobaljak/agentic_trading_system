@@ -1,0 +1,61 @@
+{
+ "eventi": 91,
+ "esame": {
+  "boot": {
+   "media": 0.051182702287585397,
+   "basso": 0.012079155485176952,
+   "alto": 0.09013732726978851,
+   "p": 0.0057994200579942,
+   "eventi": 91,
+   "annunci": 67
+  },
+  "prima_meta": 0.06175295624053255,
+  "seconda_meta": 0.04084223646405014,
+  "senza_5_migliori": 0.03091118282468587,
+  "vinti": 0.6813186813186813,
+  "mediana": 0.07860066657603017,
+  "per_anno": {
+   "2021": {
+    "eventi": 19,
+    "media": 0.007280071324781495
+   },
+   "2022": {
+    "eventi": 13,
+    "media": 0.04886593062950419
+   },
+   "2023": {
+    "eventi": 3,
+    "media": 0.046446076445962485
+   },
+   "2024": {
+    "eventi": 9,
+    "media": 0.15233993963093434
+   },
+   "2025": {
+    "eventi": 36,
+    "media": 0.07659101431966081
+   },
+   "2026": {
+    "eventi": 11,
+    "media": -0.034875158791656126
+   }
+  },
+  "esito": "VALIDA"
+ },
+ "controllo": {
+  "operazioni": 1804,
+  "media": -0.0011913055470533364
+ },
+ "differenza_con_controllo": {
+  "media": 0.051682361607428735,
+  "basso": 0.014960200082060202,
+  "alto": 0.08766482031975921,
+  "p": 0.0038
+ },
+ "tre_giorni": 0.017566756097624765,
+ "quattordici_giorni": 0.07675449097818962,
+ "salita_14_prima_mediana": 0.06044749385654913,
+ "fermate": 0.10989010989010989,
+ "soglia_tutte": 0.0003225806451612903,
+ "esito": "passa l'esame scritto ma non la soglia di tutte le prove a eventi"
+}

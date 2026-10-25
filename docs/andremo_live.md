@@ -4916,4 +4916,9 @@ salita del 50% e accelera, la corsa è quasi finita (il massimo dopo l'entrata i
 la salita: vende ogni ondata (rientra più in alto nel 96% dei casi), e anche quello, come regola, non rende. **Errore trovato**: il
 controllo «a caso» delle prove 75 e 104 è falsato (i giorni sono scelti con il massimo del giorno, noto solo a sera), quindi la frase
 «lui sa scegliere il minuto» in `trader_copiati/trader_2.md` non era dimostrata: corretta. Nel conto: 174 (30 a eventi).
+**Prova 105, l'effetto Coinbase** (`programma7/QUARANTATREESIMA.md`, 12:45 UTC): short il perpetuo di Binance contro il Bitcoin dal giorno
+dopo il primo giorno di scambi su Coinbase, uscita a +30% o dopo 7 giorni. 91 eventi dal 2021: **+5,12% a operazione, p 0,006**, positiva
+nelle due metà e senza le 5 migliori, e +5,2 punti sopra le stesse monete in giorni qualunque (p 0,004). Passa l'esame scritto ma non la
+soglia di tutte le 31 prove a eventi, e il 2026 è negativo (11 eventi). Capito: la quotazione su Coinbase si vende sulla notizia, come la
+quotazione su Binance (prova 32): stessa famiglia, «chi compra la novità paga troppo», vista da un'altra borsa. Va al revisore separato.
 
