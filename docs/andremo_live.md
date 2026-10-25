@@ -4805,3 +4805,23 @@ Da qui le prove nuove devono avere un perché che non sia già fra questi, oppur
 +1,59% a operazione (p 0,12) contro +4,34% della prima tranche sulle stesse monete, e dal 2025 zero. Capito: la discesa della
 novità si consuma nel primo mese; la regola delle monete nuove resta com'è, e va seguita nel paper perché dal 2025 rende meno
 anche nella prima tranche. Nel conto: 160 prove (25 a eventi).
+
+### 25 ottobre 2026, dal Mac del proprietario (07:40 UTC)
+
+**La sessione è ripresa sul Mac**, senza i dati di mercato: il proprietario ha deciso «lascia i calcoli al cloud». Il Mac coordina
+(regole, coda, diario, commit), il cloud calcola. Recuperata dalla trascrizione la prova 91 (regole e codice), rimasta nel cloud senza
+push; la sessione nel cloud è poi tornata e ha spinto da sola il risultato (+1,59% a operazione, p 0,12, no) e la prova in avanti del programma 5.
+
+**Skill nuove per il revisore separato** (`.claude/skills/LEGGIMI.md`): il proprietario ha aggiunto nove skill di tradermonty; io ne ho
+scelte e lette sei (backtest-expert con il suo punteggio su cinque dimensioni, residual-edge-analyzer per separare beta e residuo, e
+quattro liste di controllo), solo libreria standard, 114 test passati. Dalle skill del proprietario sono nate le idee 60 (clima del
+mercato) e 61 (interruttore sulle perdite).
+
+**Prova 92 preparata** (`programma7/TRENTESIMA.md`, 07:18 UTC): il clima del mercato come regolatore di G1 e F5, con le soglie copiate
+dal metodo della skill e una sola soglia di decisione (40). Test sintetico passato (salita → oltre 80, discesa → sotto 40, nessuno
+sguardo al futuro). Nel conto: 162 prove. La riserva scritta prima: G1 e F5 sono quasi neutre, è probabile che il regolatore tolga solo
+rendimento.
+
+**Dimenticanza corretta nell'asticella**: le serie delle prove a portafoglio 84, 86, 88 e 89 non erano nel mazzo della correzione
+(`asticella.serie_programma7`), quindi lo Sharpe corretto delle prove 89-91 era un po' meno severo del dovuto; aggiunte, con la 92.
+Capito oggi: il mazzo della correzione va aggiornato nella stessa riga in cui si registra una prova, non dopo.

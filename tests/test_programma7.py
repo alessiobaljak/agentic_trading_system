@@ -389,3 +389,42 @@ def test_f5c_carry_atteso_e_fattore():
     f = f5c.fattore(carry, finestra=26, minimo=8)
     assert (f[:8] == 1).all()                                       # prima di 8 settimane il fattore vale 1
     assert f[10] == 1.5 and f[11] == 0.5 and f[12] == 0.5 and f[13] == 1.5   # 2×, 0,5×, 0,1× (pavimento), 5× (tetto)
+
+
+def test_clima_punteggio_regolatore_e_nessuno_sguardo_al_futuro():
+    from research.programma7 import trentesima as cl
+    rng = np.random.default_rng(3)
+    T, S = 800, 8
+    simboli = ["BTCUSDT"] + [f"A{j}USDT" for j in range(1, S)]
+    # mercato in salita: Bitcoin e le monete salgono ogni giorno con poco rumore, funding neutro
+    su = np.cumprod(1 + 0.004 + rng.normal(0, 0.003, (T, S)), axis=0)
+    pan_su = {"close": su, "open": su, "funding": np.full((T, S), 0.0001), "simboli": simboli, "t0": 0}
+    U = np.ones((1, S), bool)
+    idx = np.array([T - 1])
+    p_su, tab_su = cl.clima(pan_su, idx, U)
+    assert tab_su.loc[0, "bitcoin"] == 100 and tab_su.loc[0, "ampiezza"] == 95 and tab_su.loc[0, "slancio"] == 90
+    assert tab_su.loc[0, "funding"] == 75                       # 0,0001/3 al giorno → +0,0033% a 8 ore: neutro
+    assert p_su[0] > 80
+    # mercato in discesa: tutto scende, funding affollato dai long (0,15% al giorno → 0,05% a 8 ore)
+    giu = np.cumprod(1 - 0.004 + rng.normal(0, 0.003, (T, S)), axis=0)
+    pan_giu = {"close": giu, "open": giu, "funding": np.full((T, S), 0.0015), "simboli": simboli, "t0": 0}
+    p_giu, tab_giu = cl.clima(pan_giu, idx, U)
+    assert tab_giu.loc[0, "bitcoin"] == 5 and tab_giu.loc[0, "ampiezza"] == 10 and tab_giu.loc[0, "funding"] == 30
+    assert tab_giu.loc[0, "slancio"] == 35                      # sotto il 10%: la resa vale 35, non 20
+    assert p_giu[0] < 40
+    # il regolatore: meta' sotto 40, pieno sopra e dove il punteggio manca
+    assert list(cl.regolatore(np.array([39.9, 40.0, 85.0, np.nan]))) == [0.5, 1.0, 1.0, 1.0]
+    # nessuno sguardo al futuro: cambiare il giorno della decisione e quelli dopo non cambia il punteggio
+    altro = pan_su["close"].copy()
+    altro[T - 1:] *= 0.5
+    pan_altro = {**pan_su, "close": altro, "open": altro}
+    p2, _ = cl.clima(pan_altro, idx, U)
+    assert p2[0] == p_su[0]
+    # i pesi ridistribuiti: senza funding (tutto NaN) il punteggio e' la media degli altri quattro sui loro pesi
+    pan_nf = {**pan_su, "funding": np.full((T, S), np.nan)}
+    p3, tab3 = cl.clima(pan_nf, idx, U)
+    assert np.isnan(tab3.loc[0, "funding"])
+    atteso = (25 * 100 + 20 * 95 + 15 * tab3.loc[0, "discesa"] + 10 * 90) / 70
+    assert abs(p3[0] - atteso) < 1e-9
+    # con troppo poco (solo Bitcoin e slancio: 35 di peso) il punteggio manca
+    assert np.isnan(cl.punteggio({"bitcoin": 90.0, "slancio": 90.0, "ampiezza": np.nan, "funding": np.nan, "discesa": np.nan}))

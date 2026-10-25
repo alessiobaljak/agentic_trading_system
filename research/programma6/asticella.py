@@ -220,7 +220,13 @@ def serie_programma7() -> dict:
                  ("63 G1+G6", "risultati_settima/settimane_G1_G6.csv.gz"), ("66 MAX", "risultati_decima/settimane_MAX.csv.gz"),
                  ("67 G9", "risultati_undicesima/settimane_G9.csv.gz"), ("69 G11", "risultati_tredicesima/settimane_G11.csv.gz"),
                  ("72 G14", "risultati_sedicesima/settimane_G14.csv.gz"), ("73 S1", "../programma8/risultati_prima/settimane_S1.csv.gz"),
-                 ("73 S2", "../programma8/risultati_prima/settimane_S2.csv.gz")):
+                 ("73 S2", "../programma8/risultati_prima/settimane_S2.csv.gz"),
+                 # 25 ottobre: le prove a portafoglio dalla 84 in poi mancavano dal mazzo della correzione
+                 ("84 G20", "risultati_ventiduesima/settimane_G20.csv.gz"), ("86 F5N", "risultati_ventiquattresima/settimane_F5N.csv.gz"),
+                 ("86 F5 120/80", "risultati_ventiquattresima/settimane_F5_120-80.csv.gz"),
+                 ("88 G1N", "risultati_ventiseiesima/settimane_G1N.csv.gz"), ("88 G1 120/80", "risultati_ventiseiesima/settimane_G1_120-80.csv.gz"),
+                 ("89 F5C", "risultati_ventisettesima/settimane_F5C.csv.gz"),
+                 ("92 G1 clima", "risultati_trentesima/settimane_G1_clima.csv.gz"), ("92 F5 clima", "risultati_trentesima/settimane_F5_clima.csv.gz")):
         if (p7 / f).exists():
             out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
     for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
