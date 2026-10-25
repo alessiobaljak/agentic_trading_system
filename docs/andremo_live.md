@@ -4801,3 +4801,7 @@ esplorate sul 2022-2023 (79-80), i filtri sugli eventi con il funding (81-83, 90
 il carry atteso (89), i mercati di Coinbase e Upbit (41, 72, 87), le opzioni e le stablecoin (44, 47). Le varianti di F5/G1 che
 aggiungono qualcosa non sono rendimento ma **protezione**: la neutralità al beta (86, 88) taglia la discesa massima di 4-6 punti.
 Da qui le prove nuove devono avere un perché che non sia già fra questi, oppure dati che nessuna prova ha toccato.
+**Prova 91, N3B2** (`programma7/VENTINOVESIMA.md`, 06:39 UTC): la seconda tranche delle monete nuove, short dal 37° al 67° giorno.
++1,59% a operazione (p 0,12) contro +4,34% della prima tranche sulle stesse monete, e dal 2025 zero. Capito: la discesa della
+novità si consuma nel primo mese; la regola delle monete nuove resta com'è, e va seguita nel paper perché dal 2025 rende meno
+anche nella prima tranche. Nel conto: 160 prove (25 a eventi).
