@@ -151,6 +151,9 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   c'è ed è il più forte trovato finora (Sharpe 1,29, +0,128% a operazione su 6562), ma in quei momenti lo scarto vero è di 23 punti base
   (mediana, misurata alle 9:35 su 379 casi): ogni operazione costa più di quanto rende. Chi descrive queste regole come profittevoli
   probabilmente non conta lo scarto dell'apertura.
+* **La prova 21** (le stesse azioni con notizie, entrando con un ordine limite): **bocciata.** L'ordine limite risparmia lo scarto
+  all'ingresso, ma l'uscita (allo stop o alla chiusura) lo paga comunque, e i pochi casi in cui il limite non si esegue sono i migliori
+  (+1,71% a operazione contro +0,10%). Con i costi veri: −0,088% a operazione, Sharpe −0,89.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
