@@ -163,6 +163,9 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
   leva, 105-106 quotazioni): gli eventi di quelle monete prima di settembre 2023 sparivano senza dirlo. La 105 e la 106 sono rifatte.
 * **Perché non subito**: per (1) la correzione può solo migliorare un poco le spese; per (2) le prove 74, 91 e 103 sono bocciate con
   margine (p 0,12-0,29) e gli eventi toccati sono pochi. Da rifare quando si rimette mano a quelle famiglie, o prima di portarne una nel paper.
+* **Fatto il 25 ottobre, 16:50 UTC**: le prove 74, 91 e 103 rifatte con la lettura corretta danno **gli stessi numeri** (la 74 non usa le
+  candele orarie; nella 91 e nella 103 gli eventi delle 14 monete cadevano dopo settembre 2023). Resta (1): i conti a ordine limite di G1,
+  G11, G1N e varianti, dove l'errore andava contro le strategie.
 
 ### P26. Dal paper e dal demo ai soldi veri con G1 — chiesta dal proprietario il 24 ott 2026; PIANO, decide il proprietario
 **Perché:** il proprietario (24 ott): «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi

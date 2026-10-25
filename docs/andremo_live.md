@@ -4933,4 +4933,7 @@ Coinbase c'era nel passato (contro le stesse monete +4,4 punti, contro le altre 
 e si è spento dall'ottobre 2025; (b) **il revisore separato serve**: senza di lui avrei scritto «passa l'esame» su un risultato gonfiato
 da un errore di lettura. Le prove già fatte toccate dallo stesso errore sono nel backlog (P27): nei conti a ordine limite di G1 e varianti
 l'errore andava contro le strategie (spese un po' più alte del vero), nelle prove a eventi 74, 91 e 103 toccava pochi eventi.
+**Le prove toccate dall'errore di lettura, rifatte** (16:50 UTC): la 74, la 91 e la 103 con la lettura corretta delle candele orarie danno
+gli stessi numeri; l'errore aveva colpito davvero solo la 105 e la 106. Resta da rifare il conto a ordine limite di G1 e varianti (dove
+l'errore andava contro le strategie: le spese vere sono un po' più basse di quelle scritte).
 
