@@ -46,3 +46,11 @@ long +8,7%, short +2,1%, universo +5,1%.
 
 Non si cambia F5 su questi numeri: sono stati visti su tutti gli anni usati. Il punto 4 va in coda (idea 45) e si può provare solo
 in avanti (nel paper) o su dati non usati.
+
+## Aggiunta del 25 ottobre: da dove viene il beta più alto del lato venduto (idea 51, descrittivo)
+
+Sulle 302 settimane: beta medio 0,97 del lato long e 1,03 dello short. Fra le monete dell'universo, il beta non segue il momento
+(correlazione di rango con il rendimento dei 7 giorni prima −0,04) né il volume (−0,10): segue la **volatilità** (0,52). Le monete
+vendute sono le più agitate (volatilità dei 30 giorni 0,060 contro 0,057 del lato long, pur con i pesi 1/volatilità dentro ogni
+lato) e per questo salgono di più nei rally. Quindi la neutralità al beta (prove 86 e 88) è in buona parte una neutralità alla
+volatilità fra i due lati: è una protezione strutturale, non una scommessa sul momento.

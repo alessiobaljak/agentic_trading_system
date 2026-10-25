@@ -4774,3 +4774,6 @@ paga i costi. Capito: la domanda americana a pronti, moneta per moneta, non anti
 massima −23,1% contro −28,8%, le 15 settimane peggiori −5,5% contro −6,0%, per 3 punti l'anno in meno; il controllo 120/80 fa
 peggio (2022 −13,7%). Lo stesso risultato di F5N: la neutralità al beta è una protezione che costa poco. Capito: per i soldi veri
 (backlog P26) la versione neutra di G1 è quella da mettere sul tavolo, perché taglia la discesa massima di 6 punti. Nel conto: 156.
+**Controllo 51** (descrittivo, `programma6/PERDITE_F5.md`): il beta più alto del lato venduto di F5 viene dalla volatilità delle
+monete (correlazione 0,52), non dal momento né dal volume. Capito: la neutralità al beta delle prove 86 e 88 è una neutralità alla
+volatilità fra i lati, cioè una protezione strutturale.
