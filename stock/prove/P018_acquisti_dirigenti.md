@@ -19,6 +19,11 @@ opzioni), codice **P** (acquisto sul mercato) e «acquisito». Chi compra deve e
 solo un socio con più del 10%). Il simbolo è quello scritto nel modulo, con i cambi di simbolo del 2016-2024. Vale la **data di deposito**
 alla SEC (il giorno in cui l'acquisto diventa pubblico), non quella dell'acquisto.
 
+**Pulizia dei dati** *(aggiunta il 25 ottobre, prima del calcolo della strategia, dopo aver visto che nei moduli ci sono errori di
+compilazione: acquisti singoli fino a 1,6 × 10^14 dollari in aziende piccolissime)*: si scarta ogni operazione il cui prezzo per azione
+dista più del 50% dalla chiusura non rettificata del titolo nel giorno dell'operazione (o, se quel giorno non c'è la barra, nel giorno di
+borsa precedente). Le operazioni senza prezzo si scartano.
+
 ## La regola
 
 * **Evento:** per ogni azienda dell'S&P 500 del giorno di deposito (composizione storica) e per ogni giorno di deposito, la somma degli
