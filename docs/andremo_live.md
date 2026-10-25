@@ -4852,4 +4852,11 @@ non raddoppia la protezione. Per i soldi veri la proposta resta **G1N** (una pro
 **La coda si è svuotata di nuovo** (07:44 UTC): dopo 94 prove del programma 6-7 le varianti di F5/G1 sono esaurite. Ho messo in coda quattro
 idee con dati che nessuna prova ha toccato (63 flussi degli ETF, 64 uso vero delle catene da DefiLlama, 65 vendita coperta del funding con
 lo spot, 66 eventi macro a ore): le prossime prove partono da lì, nell'ordine in cui lo scarico è più leggero.
+**Prova 95, l'uso vero delle catene** (`programma7/TRENTATREESIMA.md`, 07:49 UTC): le commissioni pagate dagli utenti su ogni catena
+(DefiLlama, 108 gettoni con il perpetuo) dei 7 giorni rispetto ai 90 prima, long il 20% più alto e short il più basso, a settimana dal
+maggio 2022. Sharpe 0,60, +14,9% l'anno, +0,29% a settimana ma con p 0,075: non regge. Capito: il segnale non è momento travestito
+(correlazione 0,09 con il rendimento dei 7 giorni prima) e batte il caso (il controllo mescolato perde il 13,8% l'anno), quindi l'uso reale
+di una catena dice qualcosa sul suo gettone; ma è poco, e c'è solo dal 2024 (2023 −1,4%). Il lato venduto (le catene che si svuotano)
+rende il doppio del lato comprato: coerente con tutto il resto, chi lascia una catena la lascia davvero. Nel conto: 165.
+**Prova 96 preparata** (07:52 UTC): le riunioni della Fed (46 comunicati dal 2021, date dal sito della Fed) sul Bitcoin a ore.
 
