@@ -152,6 +152,18 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P27. Rifare le prove toccate dall'errore nella lettura delle candele orarie — trovata il 25 ott 2026 (revisione della prova 105); LETTURA CORRETTA lo stesso giorno, prove da rifare
+
+* **Cosa**: `research/programma6/esecuzione.ore_di` leggeva solo le barre del programma 6 quando esistevano, e per 14 monete (CRV, SUSHI,
+  COTI, SHIB, ZEN, CVC, GALA, SAND, CELR, INJ, HBAR, LDO, LIT, EGLD) le barre cominciano il 1° settembre 2023: le ore prima mancavano
+  anche se i file mensili erano scaricati. Corretta il 25 ottobre (le barre completate con i file mensili, `tests/test_ore_di.py`).
+* **Chi ne è toccato**: (1) i conti a ordine limite di G1, G11, G1N e varianti (prove 56-57, 69, 84, 86-88, 92-94): per quelle monete prima
+  di settembre 2023 la variazione si contava a mercato («senza candele»), quindi l'errore andava **contro** le strategie e i loro numeri
+  sono un po' prudenti; (2) le prove a eventi con le candele orarie (74 sblocchi, 91 seconda tranche delle monete nuove, 103 tagli della
+  leva, 105-106 quotazioni): gli eventi di quelle monete prima di settembre 2023 sparivano senza dirlo. La 105 e la 106 sono rifatte.
+* **Perché non subito**: per (1) la correzione può solo migliorare un poco le spese; per (2) le prove 74, 91 e 103 sono bocciate con
+  margine (p 0,12-0,29) e gli eventi toccati sono pochi. Da rifare quando si rimette mano a quelle famiglie, o prima di portarne una nel paper.
+
 ### P26. Dal paper e dal demo ai soldi veri con G1 — chiesta dal proprietario il 24 ott 2026; PIANO, decide il proprietario
 **Perché:** il proprietario (24 ott): «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi
 se funziona andiamo live»; non vuole aspettare 60 giorni di copia simulata. **Candidata:** G1 (F5 decisa ogni giorno): Sharpe 1,96

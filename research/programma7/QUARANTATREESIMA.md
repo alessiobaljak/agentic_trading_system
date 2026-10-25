@@ -32,3 +32,20 @@ generale nel 2024-2025 (prova 103: anche gli eventi di controllo rendevano), qui
 
 Come la regola delle monete nuove (`trentesima.esame`, bootstrap per settimana): media sopra zero con **p ≤ 0,01**, positiva nelle due
 metà e senza le 5 migliori, **e sopra il controllo** sulle stesse monete; contando le 31 prove a eventi la soglia è 0,00032.
+
+## Correzioni dopo la revisione separata (25 ottobre 2026, 13:30 UTC)
+
+Le regole qui sopra restano quelle. Il revisore separato della prova 105 ha trovato due errori di dati, corretti prima di rifare il
+calcolo (i numeri di prima restano nel registro accanto a quelli nuovi):
+
+1. **La lettura delle candele orarie** (`programma6/esecuzione.ore_di`) ignorava i file mensili scaricati quando esistevano le barre del
+   programma 6, che per 14 monete cominciano il 1° settembre 2023: gli eventi di quelle monete prima di quella data sparivano senza dirlo
+   (91 operazioni invece di 105). Corretta nel codice comune, con i test (`tests/test_ore_di.py`).
+2. **I simboli riusati**: la regola «perpetuo nato almeno 30 giorni prima» va letta sul contratto vero. Se prima del giorno della
+   quotazione il volume del perpetuo resta a zero per almeno 7 giorni di fila, il simbolo è stato riusato o il contratto è ripartito, e la
+   nascita è il primo giorno con volume dopo la pausa (`quarantatreesima.nascita_vera`). Toglie PUMP, RAY e HNT da Coinbase; AI, LIT, LUNA
+   e PUMP da OKX.
+
+Le altre osservazioni del revisore (prodotti già quotati in USDC prima del dollaro, il nuovo nome di un token, i giorni di nascita dei
+token con un perpetuo di pre-mercato) non violano le regole scritte e restano dentro; il loro peso si riporta a parte.
+

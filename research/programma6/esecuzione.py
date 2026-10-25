@@ -32,12 +32,21 @@ DELTE = (0.0, 0.0005, 0.001, 0.002)
 
 
 def ore_di(s: str) -> pd.DataFrame:
+    """Le candele da 1 ora di una moneta (indice = ora dall'epoca): le barre del programma 6 (dai minuti verificati del programma 5)
+    dove ci sono, completate con i file mensili da 1 ora dell'archivio di Binance (`quarta.ore`) per le ore che le barre non coprono.
+
+    Correzione del 25 ottobre 2026 (revisione della prova 105): prima, se le barre esistevano, i file mensili non si leggevano mai, e
+    per 14 monete le cui barre cominciano il 1° settembre 2023 (CRV, SUSHI, COTI, SHIB, ZEN, CVC, GALA, SAND, CELR, INJ, HBAR, LDO,
+    LIT, EGLD) le ore prima di quella data mancavano anche quando i file erano stati scaricati."""
     b = d6.barre(s, "1h")
-    if not b.empty:
-        out = b[["open", "high", "low", "close"]].astype(float).copy()
-        out.index = (b["minuto"].to_numpy() // 60).astype(np.int64)
+    z = qa.ore(s)
+    if b.empty:
+        return z
+    out = b[["open", "high", "low", "close"]].astype(float).copy()
+    out.index = (b["minuto"].to_numpy() // 60).astype(np.int64)
+    if z.empty:
         return out
-    return qa.ore(s)
+    return out.combine_first(z[["open", "high", "low", "close"]]).sort_index()
 
 
 def esegui() -> dict:

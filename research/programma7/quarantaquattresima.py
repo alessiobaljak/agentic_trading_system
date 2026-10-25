@@ -38,9 +38,11 @@ def esegui(log=print) -> dict:
     eventi = []
     for b, v in sorted(primi.items()):
         L, s = v["primo_giorno_okx"], v["perpetuo"]
-        if L in tecnici or not (cbm.DA <= L <= cbm.A) or s == "BTCUSDT" or v["primo_giorno_perpetuo"] > L - cbm.STORIA_MIN:
+        if L in tecnici or not (cbm.DA <= L <= cbm.A) or s == "BTCUSDT":
             continue
         j = pan["simboli"].index(s)
+        if cbm.nascita_vera(np.nan_to_num(V[:, j]), t0, v["primo_giorno_perpetuo"], L) > L - cbm.STORIA_MIN:
+            continue
         k = L - t0
         if 0 <= k < V.shape[0] and np.nan_to_num(V[k, j]) > 0:
             eventi.append((s, L))

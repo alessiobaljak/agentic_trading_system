@@ -27,6 +27,30 @@ CONTROLLI, SEME = 20, 2026
 PROVE_A_EVENTI = 31
 
 
+PAUSA_RIUSO = 7
+
+
+def nascita_vera(v: np.ndarray, t0: int, nascita: int, L: int, pausa: int = PAUSA_RIUSO) -> int:
+    """Il giorno di nascita del perpetuo per la regola dei 30 giorni (correzione dei dati del 25 ottobre, revisione della prova 105):
+    se prima di L il volume resta a zero per almeno ``pausa`` giorni di fila, il simbolo e' stato riusato o il contratto e' ripartito
+    (PUMP, RAY, HNT, LUNA...), e la nascita vera e' il primo giorno con volume dopo l'ultima pausa. ``v`` = volume giornaliero."""
+    k = L - t0
+    corsa, fine = 0, None
+    for kk in range(max(0, nascita - t0), min(k, len(v))):
+        if not v[kk] > 0:
+            corsa += 1
+            if corsa >= pausa:
+                fine = kk
+        else:
+            corsa = 0
+    if fine is None:
+        return nascita
+    n = fine + 1
+    while n < min(k, len(v)) and not v[n] > 0:
+        n += 1
+    return max(nascita, n + t0)
+
+
 def operazione(c: pd.DataFrame, cb: pd.DataFrame, f: pd.Series, fb: pd.Series, g0: int, giorni: int = GIORNI) -> dict:
     """Short la moneta e long il Bitcoin dall'apertura del giorno g0; uscita a +30% (massimo orario) o dopo ``giorni``."""
     h0, h1 = g0 * 24, (g0 + giorni) * 24
@@ -64,9 +88,9 @@ def esegui(log=print) -> dict:
         L, s = v["primo_giorno_coinbase"], v["perpetuo"]
         if not isinstance(L, int) or L <= 0 or not (DA <= L <= A) or s == "BTCUSDT":
             continue
-        if v["primo_giorno_perpetuo"] > L - STORIA_MIN:
-            continue
         j = pan["simboli"].index(s)
+        if nascita_vera(np.nan_to_num(V[:, j]), t0, v["primo_giorno_perpetuo"], L) > L - STORIA_MIN:
+            continue
         k = L - t0
         if not (0 <= k < V.shape[0]) or not np.nan_to_num(V[k, j]) > 0:
             continue

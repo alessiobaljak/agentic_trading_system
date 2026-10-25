@@ -4924,4 +4924,13 @@ quotazione su Binance (prova 32): stessa famiglia, «chi compra la novità paga 
 **Prova 106, conferma su OKX** (12:52 UTC, fuori dal conto): la regola della 105 sulle quotazioni a pronti di OKX (tolte 43 «quotazioni»
 tecniche del 29 gennaio 2021): 48 eventi, +0,84% a operazione, p 0,38. La conferma non riesce. Capito: l'effetto, se c'è, è di Coinbase
 (il pubblico al dettaglio americano che arriva con l'app), non di ogni borsa grande; per la prova 105 resta da sentire il revisore.
+**Il revisore separato sulla prova 105** (13:05 UTC): «non regge». Ha trovato due errori di dati veri: (1) la lettura delle candele
+orarie del codice comune (`programma6/esecuzione.ore_di`) ignorava i file mensili quando c'erano le barre del programma 6, che per 14
+monete cominciano a settembre 2023, e 14 eventi sparivano senza dirlo; (2) i simboli riusati (PUMP era un altro token fino al 9 luglio
+2025: il suo perpetuo vero aveva 5 giorni, non 30). Corretti tutti e due con i test (2.472 passati), le prove 105 e 106 rifatte con le
+stesse regole: **105 → +4,03% a operazione su 104, p 0,016: non passa più l'esame scritto**; 106 → −0,15% su 49. Capito: (a) l'effetto
+Coinbase c'era nel passato (contro le stesse monete +4,4 punti, contro le altre dello stesso giorno +5,4), ma non abbastanza da dirlo vero
+e si è spento dall'ottobre 2025; (b) **il revisore separato serve**: senza di lui avrei scritto «passa l'esame» su un risultato gonfiato
+da un errore di lettura. Le prove già fatte toccate dallo stesso errore sono nel backlog (P27): nei conti a ordine limite di G1 e varianti
+l'errore andava contro le strategie (spese un po' più alte del vero), nelle prove a eventi 74, 91 e 103 toccava pochi eventi.
 
