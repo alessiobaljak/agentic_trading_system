@@ -4899,4 +4899,9 @@ guadagnato solo nei rialzi del 2021 e del 2024. Nel conto: 171. La fonte per gli
 automatici: resta in coda con la nota.
 **Paper G1N partito** (08:37 UTC): dopo il riavvio delle 08:27 (richiesta 0670) la prova a secco è passata: universo 100, 20 lunghe e
 20 corte, nessun errore (log 0673). La prima decisione vera è alle 00:05 UTC del 26 ottobre, insieme a quella di G1 e G11.
+**Prova 102, il momento in giornata** (`programma7/QUARANTESIMA.md`, 08:41 UTC): su 14 monete grandi, la direzione delle prime 23 ore
+seguita nell'ultima ora del giorno. Al lordo +0,067% a operazione su 29.343 (positivo su tutte le monete, nessuna estrazione a caso ci
+arriva), al netto −0,069%. No. Capito: la prevedibilità in giornata esiste ed è misurabile, ma vale metà dei costi di un giro, e dal 2025
+è sparita anche al lordo (il mercato l'ha imparata). È la stessa lezione dei costi delle prove a 1 giorno: nel trading in giornata il
+vantaggio deve essere grande, perché ogni giorno si paga un giro intero. Nel conto: 172.
 

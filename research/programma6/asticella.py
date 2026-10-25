@@ -231,7 +231,8 @@ def serie_programma7() -> dict:
                  ("94 G1N-S", "risultati_trentaduesima/settimane_G1N-S.csv.gz"),
                  ("95 CF", "risultati_trentatreesima/settimane_CF.csv.gz"), ("97 CC", "risultati_trentacinquesima/settimane_CC.csv.gz"),
                  ("100 SC", "risultati_trentottesima/settimane_SC.csv.gz"),
-                 ("101 VS", "risultati_trentanovesima/settimane_VS.csv.gz")):
+                 ("101 VS", "risultati_trentanovesima/settimane_VS.csv.gz"),
+                 ("102 G25", "risultati_quarantesima/settimane_G25.csv.gz")):
         if (p7 / f).exists():
             out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
     for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
