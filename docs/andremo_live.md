@@ -4787,3 +4787,8 @@ lati incassano e pagano, noto prima). Sharpe 1,66 contro 1,87 di F5, e il contro
 uguale (1,63): il carry atteso non porta informazione. Capito: il funding vale il 45% del netto di F5, ma settimana per settimana il
 rendimento lo decide il prezzo (correlazione del carry atteso con il netto 0,00, con il funding incassato 0,59). Variare l'esposizione
 aggiunge solo volatilità: F5 resta a esposizione fissa. Nel conto: 158.
+**Prova 90, N3V** (`programma7/VENTOTTESIMA.md`, 06:45 UTC): le monete nuove di Binance divise fra «davvero nuove» (nate con il
+perpetuo di Binance o mai su Gate.io) e «già scoperte» (su Gate da almeno 30 giorni). Le davvero nuove +5,09% a operazione, le già
+scoperte +7,64%: il contrario dell'ipotesi, differenza non sicura (p 0,76). Capito: la discesa dal 7° giorno non dipende dalla
+novità «altrove»; e dal 2025 la regola delle monete nuove rende meno (2026 negativo in tutti i gruppi: da tenere d'occhio nel
+paper). Nel conto: 159 prove (24 a eventi).
