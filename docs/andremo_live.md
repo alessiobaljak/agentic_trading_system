@@ -4777,3 +4777,8 @@ peggio (2022 −13,7%). Lo stesso risultato di F5N: la neutralità al beta è un
 **Controllo 51** (descrittivo, `programma6/PERDITE_F5.md`): il beta più alto del lato venduto di F5 viene dalla volatilità delle
 monete (correlazione 0,52), non dal momento né dal volume. Capito: la neutralità al beta delle prove 86 e 88 è una neutralità alla
 volatilità fra i lati, cioè una protezione strutturale.
+**Idea 56, chiusa senza prova** (25 ottobre): nel controllo di fattibilità dei dati (gli annunci a pronti di Binance abbinati alle
+613 monete nuove) ho stampato anche le medie per gruppo prima di scrivere le regole: un errore di metodo, scritto nel registro.
+Il risultato resta descrittivo (le monete già a pronti da prima rendono di più in N3, +8,4% contro +3,3%, non quelle quotate insieme
+come avevo ipotizzato) e una regola, se mai, si prova solo in avanti. Lezione: i controlli di fattibilità devono contare gli
+abbinamenti, non mostrare i rendimenti.
