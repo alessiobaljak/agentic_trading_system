@@ -4757,3 +4757,9 @@ limite** (48 su 48 da ieri), 22 long e 22 short, 4.918,94 USDT (−1,48% dalle 1
 del 24. Sono partiti in momenti diversi: il confronto vero comincia dalle settimane piene. **Passo pratico 48 fatto**: il paper di G1
 scrive ogni giorno il funding medio dell'universo (`funding_medio_7`), così l'idea 45 (esposizione secondo il funding medio) si
 misurerà in avanti a tavolino; riavvio del bot in coda.
+**Prova 86, F5N** (`programma7/VENTIQUATTRESIMA.md`, 04:35 UTC): F5 con i due lati scalati perché la somma dei beta (90 giorni prima,
+verso la media dell'universo) sia zero. Sharpe 1,90 contro 1,87 di F5, discesa −23% contro −27%, nelle 15 settimane peggiori −5,9%
+contro −7,9%, ma 3 punti l'anno in meno; corretto 0,83 (è F5 al 93%). Il controllo con il peso fisso 120/80 fa peggio (1,51, 2022
+−20%): il merito è della neutralità, non del pesare di più il lato long. Capito: il lato venduto di F5 ha davvero il beta più alto
+(0,98 contro 0,90) e neutralizzarlo taglia le code; non basta per una strategia nuova, ma è la versione difensiva da avere pronta
+quando si parla di soldi veri. Nel conto: 153 prove.
