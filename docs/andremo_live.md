@@ -4909,4 +4909,11 @@ vantaggio deve essere grande, perché ogni giorno si paga un giro intero. Nel co
 (p 0,17), aumenti +0,75% con la stessa operazione. No. Capito: il taglio della leva non costringe a vendere abbastanza da muovere il
 prezzo; i tagli che toccano le posizioni già aperte (quelli che dovrebbero forzare di più) fanno +0,03%. La differenza fra tagli e aumenti
 è piccola: resta la debolezza delle monete piccole contro il Bitcoin del 2024-2025, che G1 e F5 raccolgono già. Nel conto: 173 (29 a eventi).
+**Prova 104, cavalcare la fiammata** (`programma7/QUARANTADUESIMA.md`, 09:04 UTC, domanda del proprietario sulle posizioni ripetute del
+trader n. 2): comprare allo stesso segnale delle fiammate, stop che segue il prezzo al 10%, rientri a ogni slancio. 2021-2022 (mai
+usato): −1,74% a operazione su 523; anche il 2023-2024 (−1,00%) e il 2025-2026 (−0,63%) negativi. No. Capito: quando una moneta è già
+salita del 50% e accelera, la corsa è quasi finita (il massimo dopo l'entrata in mediana +6,6%); i rientri peggiorano. Il trader non segue
+la salita: vende ogni ondata (rientra più in alto nel 96% dei casi), e anche quello, come regola, non rende. **Errore trovato**: il
+controllo «a caso» delle prove 75 e 104 è falsato (i giorni sono scelti con il massimo del giorno, noto solo a sera), quindi la frase
+«lui sa scegliere il minuto» in `trader_copiati/trader_2.md` non era dimostrata: corretta. Nel conto: 174 (30 a eventi).
 

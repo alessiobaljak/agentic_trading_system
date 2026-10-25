@@ -51,6 +51,9 @@ che abbiamo visto): 3.494 operazioni su 405 monete.
   conto a operazione, **una sola settimana perde il 154% del conto**.
 * **Il momento conta**: entrare a caso negli stessi giorni sulle stesse monete fa −9,43% a operazione. Lui sa scegliere il minuto;
   ma il guadagno di ogni volta (+5%) è più piccolo del rischio che la fiammata continui.
+  **Correzione del 25 ottobre**: quel controllo è falsato. I giorni candidati sono scelti con il massimo del giorno (noto solo a
+  sera), quindi le entrate a caso cadono anche prima della fiammata, dove vendere perde per costruzione; lo specchio (comprare a caso
+  negli stessi giorni, prova 104) fa +10-12% per lo stesso motivo. Il −9,43% non dice che lui sa scegliere il minuto.
 * Quindi il suo +37.782 in un anno è vero ma è il premio di un'assicurazione venduta: guadagna poco quasi sempre e prima o poi
   arriva la moneta che sale di 10 volte. Con 20.000 dollari di margine, una sola di quelle azzera il conto.
 
@@ -61,3 +64,15 @@ l'1% la stessa regola senza protezione, nel gennaio 2025 – giugno 2026, arriva
 (conto descrittivo). Per questo l'abbiamo provata sul serio, con regole scritte prima, sul 2023-2024 (anni mai usati): **393
 operazioni, +0,30% a operazione (p 0,36), 2024 negativo, il conto con l'1% a operazione +1% in due anni.** Il vantaggio del
 2025-2026 non si ripete: era di quel periodo, con molte più fiammate. Non va nel paper.
+
+## Le posizioni ripetute sulla stessa moneta nello stesso giorno (25 ottobre, domanda del proprietario)
+
+* Metà delle 178 posizioni (89) sono ripetute: 36 coppie moneta-giorno con 2 o più posizioni, 32 sempre dallo stesso lato; fanno 9.089
+  dei 12.818 dollari. Ma **vendono ogni ondata, non seguono la salita**: nel 96% dei casi la posizione successiva entra più in alto della
+  prima (mediana +16,6% contro di lui). IRYS il 23 ottobre: sei vendite a 0,041, 0,056, 0,081, 0,114, 0,154 e 0,198 mentre la moneta va
+  fino a 0,50; sull'ultima il prezzo gli va contro del 154% prima di tornare.
+* Vendere ogni ondata, con i rientri, è la prova 75 (−0,88% a operazione con la protezione); nella regola i rientri vanno un po' meglio
+  della prima vendita (−0,25% la quarta e oltre contro −1,25% la prima) ma restano negativi.
+* **La lettura opposta, comprare la salita e cavalcarla** con uno stop che segue il prezzo (prova 104, decisa sul 2021-2022): −1,74% a
+  operazione, e i rientri peggiorano. Quando il segnale scatta la corsa è quasi finita (il massimo dopo l'entrata in mediana +6,6%).
+
