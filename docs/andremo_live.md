@@ -4865,4 +4865,8 @@ rende il doppio del lato comprato: coerente con tutto il resto, chi lascia una c
 comunicato, poi quasi nulla), ma è un evento otto volte l'anno e il vantaggio si è spento negli ultimi due anni; i dati dell'inflazione
 (12 l'anno) restano in coda perché servono le date ufficiali. Nel conto: 166 (26 a eventi). Scritte alle 07:55 le regole della prova 97 (la
 vendita coperta del funding): ora scarico i prezzi a pronti di 373 monete (07:58 UTC).
+**Prova 98, la deriva dopo il dato dell'inflazione** (`programma7/TRENTASEIESIMA.md`, 08:01 UTC): la stessa regola della 96 sulle 67
+pubblicazioni del BLS dal 2021. −0,35% a operazione, vinte 40%, il 78% dei gruppi di giorni a caso fa meglio. No. Capito: il Bitcoin
+reagisce al dato nella mezz'ora del dato e poi non va da nessuna parte; la deriva della prova 96 era della Fed (e si è spenta): gli eventi
+macro a calendario escono dalla coda, con due prove sole spese. Nel conto: 168 (27 a eventi).
 
