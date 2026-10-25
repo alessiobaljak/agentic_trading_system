@@ -138,6 +138,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   calo di febbraio-marzo 2025 con la leva quasi al massimo (1,44 volte il conto il 18 febbraio), ha ridotto solo dopo la caduta (0,30 il
   14 aprile) ed è tornata al 100% solo il 27 maggio, dopo il rimbalzo: il difetto previsto nel sospetto delle regole (i crolli che
   arrivano quando la calma recente spinge a investire di più).
+* **Le prove 16-18** (24-25 ottobre): **bocciate.** L'ampiezza del mercato (16) batte di poco il tenere sullo Sharpe ma con 7 uscite in
+  8 anni non passa l'asticella. La prima candela dopo l'apertura (17, idea del proprietario, 5 e 15 minuti su SPY e QQQ): Sharpe con i
+  costi da −0,48 a 0,38; il caso migliore (QQQ, 5 minuti) fa +106% senza costi e +33% con i costi; l'80% dei giorni esce allo stop. Gli
+  acquisti dei dirigenti (18, dati della SEC sbloccati con l'indirizzo del proprietario): nelle aziende dell'S&P 500 il titolo, nel mese
+  dopo, fa **peggio** dello SPY (−0,59% a evento, t −3,0 su 1457).
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
