@@ -4880,4 +4880,11 @@ catena come segnale fra i gettoni delle catene. Sharpe 0,21, perdente nel 2023 e
 ammessi. No. Capito: il denaro parcheggiato su una catena non anticipa il suo gettone (si muove per gli incentivi, non per comprare); fra
 le misure di fondamentali provate oggi solo le commissioni (prova 95) portano un segnale vero, e piccolo. Nel conto: 170. In coda: il conto
 della famiglia unica (idea 68, serve ai soldi veri), il rapporto fra volume del perpetuo e a pronti (69), le scadenze delle opzioni (70).
+**Prova 97, la vendita coperta del funding** (`programma7/TRENTACINQUESIMA.md`, 07:55 UTC; scarico dei prezzi a pronti di 373 monete,
+calcolo finito alle 08:20): il lato venduto di F5 coperto comprando a pronti. Sharpe 1,66 ma +4,7% l'anno per capitale, discesa −3,6%;
+positivo davvero solo nel 2021 (+26,9%), poi fra −2% e +4%. No. Capito, e conta: **il funding da solo non paga il giro**. Dal 2022 il
+lato venduto incassa 4-16% l'anno di funding e spende 8-9% in commissioni settimanali; il guadagno di F5 e G1 viene dal prezzo (le monete
+con i long affollati scendono e le altre salgono), e la copertura a pronti lo toglie insieme al rischio. Un lettore attento noti anche: la
+spesa a pronti pesa il doppio di quella del perpetuo. Nel conto: 170 prove. Lo scarico dei prezzi a pronti resta in casa
+(`research/data/spot_1d`, fuori da git) per le idee future (69).
 

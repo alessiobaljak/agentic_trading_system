@@ -143,7 +143,8 @@ def esegui(log=print) -> dict:
     log(f"[trentacinquesima] coppie con il pronti: {n_ok} su {len(coppie)}")
     n_giorni = pan["close"].shape[0]
     Op = tabella_pronti(coppie, pan["t0"], n_giorni)
-    jp = {s: coppie.index(pronti(s)) for s in simboli}
+    posizione = {c: k for k, c in enumerate(coppie)}
+    jp = {s: posizione.get(pronti(s)) for s in simboli}             # None per i perpetui che non sono nel lato venduto
     O_perp = pan["open"]
     costo = sc.costi_moneta(simboli)
     F = ps["F"]                                   # funding della settimana di tenuta (somma), settimane × monete
@@ -158,7 +159,8 @@ def esegui(log=print) -> dict:
             continue
         with np.errstate(all="ignore"):
             rp = O_perp[m2] / O_perp[m] - 1
-            rs = np.array([Op[m2, jp[s]] / Op[m, jp[s]] - 1 if np.isfinite(Op[m, jp[s]]) and np.isfinite(Op[m2, jp[s]]) else np.nan for s in simboli])
+            rs = np.array([Op[m2, jp[s]] / Op[m, jp[s]] - 1 if jp[s] is not None and np.isfinite(Op[m, jp[s]]) and np.isfinite(Op[m2, jp[s]])
+                           else np.nan for s in simboli])
         disp = np.isfinite(rs) & np.isfinite(rp) & (x > 0)
         senza = float(x[(x > 0) & ~disp].sum())
         x = np.where(disp, x, 0.0)
