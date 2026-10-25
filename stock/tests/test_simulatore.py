@@ -224,3 +224,12 @@ def test_interesse_sui_contanti_presi_a_prestito():
     # 1500 azioni a 100 con 100'000: 50'000 a prestito; 0,0252 l'anno / 252 = 0,0001 a notte = 5 dollari
     r = simula(b, una_volta({0: [Ordine(1500, "mercato")]}), Costi(interesse_debito_annuo=0.0252), leva_massima=1.6)
     assert r.prestito == pytest.approx(5.0 + 5.0005)   # notti dopo le barre 1 e 2 (la seconda anche sull interesse della prima)
+
+
+def test_stop_mandato_con_l_ingresso_vale_gia_nella_barra_dell_ingresso():
+    b = barre([(100, 100, 100, 100), (100, 101, 97, 98), (98, 98, 98, 98)])
+    piano = {0: [Ordine(10, "mercato"), Ordine(-10, "stop", 98.5, solo_riduce=True, dopo_ingresso=True)]}
+    r = simula(b, una_volta(piano), ZERO)
+    # entrata a 100 all'apertura della barra 1, stop toccato nella stessa barra: uscita a 98,5
+    assert list(r.esecuzioni["prezzo"]) == [100, 98.5]
+    assert list(r.esecuzioni["t"]) == [b.index[1], b.index[1]]

@@ -41,6 +41,8 @@ class Ordine:
     prezzo: float | None = None   # livello per limite e stop
     solo_riduce: bool = False     # non apre né gira la posizione: si taglia a quella che c'è
     etichetta: str = ""
+    # uno stop (o un limite) mandato insieme all'ingresso: vale già nella barra dell'ingresso, dopo l'ordine a mercato
+    dopo_ingresso: bool = False
 
     def __post_init__(self):
         if self.tipo not in TIPI:
@@ -145,9 +147,9 @@ def simula(barre: pd.DataFrame, strategia: Strategia, costi: Costi, capitale: fl
                 stato.contanti += (stato.azioni - intere) * ap
                 stato.azioni = intere
             in_attesa = [Ordine(o.quantita * fr_[i], o.tipo, None if o.prezzo is None else o.prezzo / fr_[i],
-                                o.solo_riduce, o.etichetta) for o in in_attesa]
+                                o.solo_riduce, o.etichetta, o.dopo_ingresso) for o in in_attesa]
         # 2. ordini decisi alla chiusura della barra prima: stop, poi a mercato, poi limiti
-        ordinati = sorted(in_attesa, key=lambda o: {"stop": 0, "mercato": 1, "limite": 2}[o.tipo])
+        ordinati = sorted(in_attesa, key=lambda o: 1.5 if o.dopo_ingresso else {"stop": 0, "mercato": 1, "limite": 2}[o.tipo])
         for o in ordinati:
             q = o.quantita
             if o.solo_riduce:
