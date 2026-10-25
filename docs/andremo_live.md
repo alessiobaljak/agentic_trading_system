@@ -4897,4 +4897,6 @@ monete): short le più speculative, long le meno. Sharpe 0,68 ma +115% nel 2021 
 Capito: la quota di volume che passa dai perpetui non dice dove va il prezzo; il lato comprato (le monete grandi, con molto pronti) ha
 guadagnato solo nei rialzi del 2021 e del 2024. Nel conto: 171. La fonte per gli annunci di Upbit (idea 71) è chiusa agli strumenti
 automatici: resta in coda con la nota.
+**Paper G1N partito** (08:37 UTC): dopo il riavvio delle 08:27 (richiesta 0670) la prova a secco è passata: universo 100, 20 lunghe e
+20 corte, nessun errore (log 0673). La prima decisione vera è alle 00:05 UTC del 26 ottobre, insieme a quella di G1 e G11.
 
