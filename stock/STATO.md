@@ -146,6 +146,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   senza dividendi e con i costi); corretto è −0,24% (t −1,2). Il mercato reagisce già nella notte dopo il deposito (+0,42%, t 15,7); da
   lì in poi non resta niente (−0,04%). La prova 19 (vendere allo scoperto quei titoli, idea nata dal numero sbagliato) è bocciata nel
   periodo chiuso (+19,0% contro +32,7% del tenere lo SPY).
+* **La prova 20, le azioni con una notizia** (25 ottobre, idea del proprietario: la prima candela da 5 minuti nel giorno del bilancio,
+  quando all'apertura il titolo salta di almeno il 2%): **bocciata**, ma con la lezione più chiara di tutte. Il vantaggio prima dei costi
+  c'è ed è il più forte trovato finora (Sharpe 1,29, +0,128% a operazione su 6562), ma in quei momenti lo scarto vero è di 23 punti base
+  (mediana, misurata alle 9:35 su 379 casi): ogni operazione costa più di quanto rende. Chi descrive queste regole come profittevoli
+  probabilmente non conta lo scarto dell'apertura.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
@@ -153,6 +158,8 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa abbiamo capito il 24 ottobre
 
+* **La regola dei costi:** nei momenti in cui c'è movimento (l'apertura, le notizie) lo scarto è largo; il vantaggio di quei momenti
+  si paga tutto in scarto (prova 20: 23 punti base alle 9:35 nei giorni con notizie).
 * **Sul 2016-2024 solo un'idea su 15 batte il comprare e tenere sullo Sharpe** (la prova 15, più investiti quando il mercato è calmo), e non abbastanza per l'asticella (27 nel conto, comprese 3 aperture del periodo chiuso). La direzione del mercato non si indovina; la sua agitazione sì. Gli effetti
   studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
   rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
