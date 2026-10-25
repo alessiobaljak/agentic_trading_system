@@ -4936,4 +4936,8 @@ l'errore andava contro le strategie (spese un po' più alte del vero), nelle pro
 **Le prove toccate dall'errore di lettura, rifatte** (16:50 UTC): la 74, la 91 e la 103 con la lettura corretta delle candele orarie danno
 gli stessi numeri; l'errore aveva colpito davvero solo la 105 e la 106. Resta da rifare il conto a ordine limite di G1 e varianti (dove
 l'errore andava contro le strategie: le spese vere sono un po' più basse di quelle scritte).
+**G1, G11 e G1N rifatti con la lettura corretta** (17:50 UTC): G1 Sharpe 1,97 (era 1,96), spese 6,5% l'anno (erano 6,7%), 3.800
+variazioni in più eseguite a limite; G1N uguale (1,91, discesa −23,1%). L'errore di lettura andava contro le strategie, ora i numeri sono
+esatti. Gli Sharpe corretti con tutte le prove nel conto restano 0,86 (G1), 0,91 (G11), 0,83 (G1N). L'idea 77 (l'attenzione su
+Wikipedia) non si fa per ora: solo 40 monete abbinate a una pagina sicura, 11-29 per settimana nell'universo.
 

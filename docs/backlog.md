@@ -152,7 +152,7 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
-### P27. Rifare le prove toccate dall'errore nella lettura delle candele orarie — trovata il 25 ott 2026 (revisione della prova 105); LETTURA CORRETTA lo stesso giorno, prove da rifare
+### P27. Rifare le prove toccate dall'errore nella lettura delle candele orarie — trovata il 25 ott 2026 (revisione della prova 105); FATTA lo stesso giorno
 
 * **Cosa**: `research/programma6/esecuzione.ore_di` leggeva solo le barre del programma 6 quando esistevano, e per 14 monete (CRV, SUSHI,
   COTI, SHIB, ZEN, CVC, GALA, SAND, CELR, INJ, HBAR, LDO, LIT, EGLD) le barre cominciano il 1° settembre 2023: le ore prima mancavano
@@ -166,6 +166,9 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 * **Fatto il 25 ottobre, 16:50 UTC**: le prove 74, 91 e 103 rifatte con la lettura corretta danno **gli stessi numeri** (la 74 non usa le
   candele orarie; nella 91 e nella 103 gli eventi delle 14 monete cadevano dopo settembre 2023). Resta (1): i conti a ordine limite di G1,
   G11, G1N e varianti, dove l'errore andava contro le strategie.
+* **Fatto anche (1), il 25 ottobre alle 17:50 UTC**: G1, G11 e G1N rifatti con la lettura corretta. G1: Sharpe 1,97 (era 1,96), spese 6,5%
+  l'anno (erano 6,7%), 108.663 variazioni a limite (erano 104.870); G11 2,05, spese 10,2%; G1N 1,91, discesa −23,1% come prima. Gli Sharpe
+  corretti con il mazzo completo restano 0,86 (G1), 0,91 (G11), 0,83 (G1N). Voce chiusa.
 
 ### P26. Dal paper e dal demo ai soldi veri con G1 — chiesta dal proprietario il 24 ott 2026; PIANO, decide il proprietario
 **Perché:** il proprietario (24 ott): «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi
