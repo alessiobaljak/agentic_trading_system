@@ -4887,4 +4887,9 @@ lato venduto incassa 4-16% l'anno di funding e spende 8-9% in commissioni settim
 con i long affollati scendono e le altre salgono), e la copertura a pronti lo toglie insieme al rischio. Un lettore attento noti anche: la
 spesa a pronti pesa il doppio di quella del perpetuo. Nel conto: 170 prove. Lo scarico dei prezzi a pronti resta in casa
 (`research/data/spot_1d`, fuori da git) per le idee future (69).
+**G1 neutra al mercato nel paper del bot** (08:30 UTC, decisione del coordinamento su delega del 22 ottobre): la versione proposta per i
+soldi veri (prova 88: stessa resa di G1, discesa da −28,8% a −23,1%) gira da oggi accanto a G1 e G11 (`bot/portafoglio/f5.py`,
+`PaperG1N`): ogni giorno i due lati di G1 scalati perché la somma dei beta dei 90 giorni sia zero, entro 0,5-1,5; il beta e la
+scalatura sono confrontati con quelli della ricerca nei test. Il bot va riavviato dal canale ops. Serve a P26: quando il proprietario
+chiederà i soldi veri, G1N avrà settimane di paper alle spalle sugli stessi giorni di G1.
 

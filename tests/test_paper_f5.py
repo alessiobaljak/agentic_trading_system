@@ -280,3 +280,68 @@ def test_monete_in_chiusura_fuori_dall_universo(tmp_path, monkeypatch):
     p = f5.PaperF5(None, chiedi=chiedi, file_stato=tmp_path / "s.json", interruttore=tmp_path / "x", pausa_s=0.0)
     pesi, lunghi, corti, n = p.pesi_del_lunedi(m, {})
     assert n == 29 and "C29USDT" not in pesi
+
+
+def test_g1n_beta_e_scalatura_come_la_ricerca():
+    """`beta_delle_monete` e `scala_neutra` del bot danno gli stessi numeri di `programma7.ventiquattresima` su un pannello sintetico."""
+    from research.programma7 import ventiquattresima as f5n
+    rng = np.random.default_rng(7)
+    T, S = 130, 12
+    simboli = [f"M{j}USDT" for j in range(S)]
+    mercato = rng.normal(0, 0.03, T)
+    beta_vero = rng.uniform(0.3, 1.8, S)
+    r = mercato[:, None] * beta_vero[None, :] + rng.normal(0, 0.02, (T, S))
+    close = 100 * np.cumprod(1 + r, axis=0)
+    close[:T - 30, 3] = np.nan                                   # una moneta con 29 rendimenti nei 90 giorni: beta 1 nella ricerca e nel bot
+    pan = {"close": close, "simboli": simboli, "t0": 20000}
+    m = 20000 + T - 1                                            # il giorno di decisione: i rendimenti fino a m-1
+    U = np.ones((1, S), bool)
+    U[0, 5] = False                                              # una moneta fuori dall'universo
+    attesi = f5n.beta_delle_monete(pan, U, np.array([m - pan["t0"]]))[0]
+    uni = [s for j, s in enumerate(simboli) if U[0, j]]
+    chiusure = {s: {pan["t0"] + i: float(close[i, j]) for i in range(T) if np.isfinite(close[i, j])} for j, s in enumerate(simboli)}
+    beta = f5.beta_delle_monete(chiusure, uni, m)
+    for j, s in enumerate(simboli):
+        if U[0, j]:
+            assert beta[s] == pytest.approx(attesi[j], abs=1e-9), s
+    assert beta[simboli[3]] == 1.0                               # meno di 45 giorni: 1
+    # la scalatura: stessi a, b della ricerca
+    W = np.zeros((1, S))
+    W[0, [0, 1, 2]] = [0.5, 0.3, 0.2]
+    W[0, [6, 7, 8, 9]] = [-0.4, -0.3, -0.2, -0.1]
+    WN, a, b, bl, bs = f5n.scala_neutra(W, np.array([[attesi[j] for j in range(S)]]))
+    pesi = {s: float(W[0, j]) for j, s in enumerate(simboli) if W[0, j] != 0}
+    pesi_n, a2, b2, bl2, bs2 = f5.scala_neutra(pesi, beta)
+    assert (a2, b2, bl2, bs2) == pytest.approx((a[0], b[0], bl[0], bs[0]), abs=1e-9)
+    for j, s in enumerate(simboli):
+        assert pesi_n.get(s, 0.0) == pytest.approx(WN[0, j], abs=1e-9)
+    # un lato solo: niente scalatura
+    assert f5.scala_neutra({"A": 0.5, "B": 0.5}, {"A": 1.2, "B": 0.8})[1:3] == (1.0, 1.0)
+
+
+def test_g1n_scala_i_pesi_di_g1(tmp_path, monkeypatch):
+    """PaperG1N prende i pesi di G1 e li scala con il beta; la neutralita' finisce nel record del ribilancio."""
+    m = 20800
+    simboli = ["AUSDT", "BUSDT", "CUSDT", "DUSDT"]
+    rng = np.random.default_rng(1)
+    mercato = rng.normal(0, 0.03, 100)
+    betas = {"AUSDT": 1.6, "BUSDT": 1.4, "CUSDT": 0.6, "DUSDT": 0.4}
+    giornaliere = {}
+    for s in simboli:
+        c = 100 * np.cumprod(1 + betas[s] * mercato + rng.normal(0, 0.001, 100))
+        giornaliere[s] = {m - 100 + i: (float(c[i]), float(c[i]), 1e7) for i in range(100)}
+    p = f5.PaperG1N(None, chiedi=lambda *a: None, file_stato=tmp_path / "g1n.json", interruttore=tmp_path / "no", pausa_s=0.0)
+    pesi_g1 = {"AUSDT": 0.5, "BUSDT": 0.5, "CUSDT": -0.5, "DUSDT": -0.5}
+
+    def finto(self, m_, st):
+        self._ultimo_universo = list(simboli)
+        self._ultime_giornaliere = giornaliere
+        return dict(pesi_g1), {"AUSDT", "BUSDT"}, {"CUSDT", "DUSDT"}, 4
+    monkeypatch.setattr(f5.PaperG1, "pesi_del_lunedi", finto)
+    pesi, lunghi, corti, n = p.pesi_del_lunedi(m, {})
+    # il lato long ha beta alto (1,5) e lo short basso (0,5): il long si riduce (a = 2·0,5/2 = 0,5), lo short cresce (b = 1,5)
+    assert p._neutralita["a"] == pytest.approx(0.5, abs=0.05) and p._neutralita["b"] == pytest.approx(1.5, abs=0.05)
+    assert pesi["AUSDT"] == pytest.approx(0.5 * p._neutralita["a"], abs=1e-4)      # a e b nel record sono arrotondati a 4 decimali
+    assert pesi["CUSDT"] == pytest.approx(-0.5 * p._neutralita["b"], abs=1e-4)
+    assert sum(w * betas[s] for s, w in pesi.items()) == pytest.approx(0.0, abs=0.1)
+    assert p.RAMO == "/paper_g1n" and p.giorno_di_decisione(m) == m

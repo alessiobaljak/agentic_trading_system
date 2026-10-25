@@ -160,6 +160,7 @@ sul passato di Binance 2021-2026, ogni anno positivo, Sharpe corretto 0,91 dopo 
 posizioni; (2) se combaciano, il proprietario decide il passaggio con una cifra piccola, con una richiesta esplicita (la regola di
 `DRY_RUN`); (3) il codice per il conto vero si prepara separato dal demo (chiave sua, capitale massimo scritto, interruttore suo).
 **Non si fa senza la sua richiesta esplicita.** **Aggiunta del 25 ott:** la versione neutra al mercato di G1 (prova 88, `research/programma7/RISULTATI_VENTISEIESIMA.md`) ha la stessa resa (Sharpe 1,91 contro 1,96) con la discesa massima da −28,8% a −23,1%: per i soldi veri è la variante da proporre; richiede nel bot il beta giornaliero delle monete (90 giorni) e la scalatura dei lati.
+  **25 ottobre, sera della mattina (08:30 UTC)**: G1N (la neutralità al beta, prova 88) gira nel paper del bot accanto a G1 e G11 (`bot/portafoglio/f5.py`, classe `PaperG1N`, interruttore `ops/paper_g1n_acceso`, ramo `/paper_g1n`, nel grafico della dashboard), così quando il proprietario chiederà i soldi veri la versione proposta avrà settimane di paper alle spalle; le prove 93-94 (l'interruttore sulle perdite) non hanno aggiunto niente sopra la neutralità.
 
 ### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; ACCESO dal 24 ott, 09:11 UTC
 **Perché:** il proprietario (24 ott): «perché per le crypto non usiamo Binance demo per simulare i nostri ordini (un paper live)?».

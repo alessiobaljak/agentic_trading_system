@@ -40,7 +40,7 @@ from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
 from bot.portafoglio.eventi import PaperEventi
 from bot.portafoglio.demo_binance import DemoG1
-from bot.portafoglio.f5 import PaperF5, PaperG1, PaperG11
+from bot.portafoglio.f5 import PaperF5, PaperG1, PaperG11, PaperG1N
 from bot.risk.circuit_breakers import CircuitBreakers
 from bot.risk import kill_switch
 from bot.risk.kill_switch import BotState
@@ -494,6 +494,8 @@ class TradingBot:
         self.paper_g1 = PaperG1(self.fb)
         # G11, G1 con il funding fresco, accanto a G1 per il confronto (richiesta del proprietario del 23 ottobre)
         self.paper_g11 = PaperG11(self.fb)
+        # G1N, G1 neutra al mercato (prova 88): la versione proposta per i soldi veri, nel paper dal 25 ottobre (P26)
+        self.paper_g1n = PaperG1N(self.fb)
         # G1 con ordini veri sul conto demo di Binance (Binance Demo Trading): interruttore ops/demo_binance_acceso, chiavi del
         # conto demo nel .env; parla solo con demo-fapi.binance.com
         self.demo_g1 = DemoG1(self.fb)
@@ -2633,6 +2635,10 @@ class TradingBot:
                 self.paper_g11.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_g11] errore: {exc}")
+            try:
+                self.paper_g1n.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[paper_g1n] errore: {exc}")
             try:
                 self.demo_g1.tick(time.time())
             except Exception as exc:  # noqa: BLE001

@@ -110,6 +110,8 @@ def build() -> str:
                               interruttore="ops/paper_g1_acceso")
     lines += sezione_paper_f5(fb, ramo="/paper_g11", titolo="## Paper G11 (G1 con il funding fresco, a confronto con G1)",
                               interruttore="ops/paper_g11_acceso")
+    lines += sezione_paper_f5(fb, ramo="/paper_g1n", titolo="## Paper G1N (G1 neutra al mercato, la versione proposta per i soldi veri)",
+                              interruttore="ops/paper_g1n_acceso")
     lines += sezione_paper_eventi(fb)
     lines += sezione_demo_binance(fb)
 

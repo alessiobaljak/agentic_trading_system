@@ -203,6 +203,55 @@ def contratti_monete(info: dict) -> dict:
     return out
 
 
+GIORNI_BETA, MIN_BETA = 90, 45
+LIMITI_NEUTRA = (0.5, 1.5)
+
+
+def beta_delle_monete(chiusure: dict, universo: list, m: int, giorni: int = GIORNI_BETA, minimo: int = MIN_BETA) -> dict:
+    """Come `programma7.ventiquattresima.beta_delle_monete` per un giorno di decisione m: la pendenza dei rendimenti giornalieri
+    della moneta sulla media giornaliera dell'universo, sui ``giorni`` prima di m (rendimenti dei giorni m-giorni .. m-1), almeno
+    ``minimo`` giorni con tutti e due i dati; 1 dove manca. ``chiusure[s]`` = {giorno: chiusura}."""
+    giorni_r = list(range(m - giorni, m))
+    rend = {}
+    for s in universo:
+        c = chiusure.get(s) or {}
+        rend[s] = np.array([(c[d] / c[d - 1] - 1) if (d in c and (d - 1) in c and c[d - 1] > 0 and np.isfinite(c[d]) and np.isfinite(c[d - 1]))
+                            else np.nan for d in giorni_r])
+    if not rend:
+        return {}
+    M = np.vstack([rend[s] for s in universo])
+    with np.errstate(all="ignore"):
+        mercato = np.nanmean(M, axis=0) if len(universo) else np.full(len(giorni_r), np.nan)
+    ok_m = np.isfinite(mercato)
+    out = {}
+    for s in universo:
+        ok = ok_m & np.isfinite(rend[s])
+        if ok.sum() < minimo:
+            out[s] = 1.0
+            continue
+        x, y = mercato[ok], rend[s][ok]
+        vx = x.var()
+        out[s] = float(np.cov(x, y, ddof=0)[0, 1] / vx) if vx > 0 else 1.0
+    return out
+
+
+def scala_neutra(pesi: dict, beta: dict) -> tuple:
+    """Come `programma7.ventiquattresima.scala_neutra` per un giorno: i due lati scalati (long × a, short × b) perche' la somma dei
+    beta pesati sia zero con l'esposizione lorda al 200%; a e b entro LIMITI_NEUTRA. Ritorna (pesi, a, b, beta del lato long,
+    beta del lato short); se manca un lato o bl + bs <= 0 i pesi restano com'erano (a = b = 1)."""
+    lunghi = {s: w for s, w in pesi.items() if w > 0}
+    corti = {s: -w for s, w in pesi.items() if w < 0}
+    if not lunghi or not corti:
+        return dict(pesi), 1.0, 1.0, float("nan"), float("nan")
+    bl = sum(w * beta.get(s, 1.0) for s, w in lunghi.items()) / sum(lunghi.values())
+    bs = sum(w * beta.get(s, 1.0) for s, w in corti.items()) / sum(corti.values())
+    if bl + bs <= 0:
+        return dict(pesi), 1.0, 1.0, bl, bs
+    a = float(np.clip(2 * bs / (bl + bs), *LIMITI_NEUTRA))
+    b = float(np.clip(2 * bl / (bl + bs), *LIMITI_NEUTRA))
+    return {s: (w * a if w > 0 else w * b) for s, w in pesi.items()}, a, b, bl, bs
+
+
 class PaperF5:
     # dove scrive e da cosa si accende; G1 (sotto) cambia solo questi e il giorno della decisione
     RAMO, ETICHETTA, INTERRUTTORE_DI_SERIE, FILE_DI_SERIE = "/paper_f5", "paper_f5", INTERRUTTORE, FILE_STATO
@@ -409,7 +458,8 @@ class PaperF5:
                 "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
                 "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now,
-                "funding_medio_7": getattr(self, "_funding_medio_7", None)})
+                "funding_medio_7": getattr(self, "_funding_medio_7", None),
+                "neutralita": getattr(self, "_neutralita", None)})
             self.fb.set_rtdb(f"{self.RAMO}/posizioni", {s: round(w, 6) for s, w in pesi.items()})
         print(f"[{self.ETICHETTA}] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
               f"costo {costo:.2f}, equity {equity - costo:.2f}")
@@ -445,6 +495,7 @@ class PaperF5:
         if not contratti:
             return None
         giornaliere = {s: self._giornaliere(s) for s in contratti}
+        self._ultime_giornaliere = giornaliere
         uni = universo(giornaliere, contratti, lunedi_di(m))          # le 100 della settimana (per F5 m e' gia' il lunedi')
         uni = [s for s in uni if s not in getattr(self, "_in_chiusura", set())]
         self._ultimo_universo = list(uni)
@@ -551,6 +602,37 @@ class PaperG1(PaperF5):
 
     def banda_di_partenza(self, m: int) -> dict:
         return {}
+
+
+class PaperG1N(PaperG1):
+    """G1N, G1 neutra al mercato (research/programma7/VENTISEIESIMA.md, prova 88: discesa massima da −28,8% a −23,1% con lo stesso
+    rendimento; nel paper per decisione del coordinamento del 25 ottobre 2026, voce P26 del backlog: e' la versione proposta per i
+    soldi veri). Stesse regole di G1, poi i due lati scalati ogni giorno perche' la somma dei beta (90 giorni prima, verso la media
+    dell'universo del giorno) sia zero, entro 0,5-1,5. Interruttore `ops/paper_g1n_acceso`, stato in `data/paper_g1n.json` e su RTDB
+    in `/paper_g1n`."""
+    RAMO, ETICHETTA = "/paper_g1n", "paper_g1n"
+    MISURA_SCARTI = False
+    INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1n_acceso"
+    FILE_DI_SERIE = RADICE / "data" / "paper_g1n.json"
+
+    def _giornaliere(self, simbolo: str) -> dict:
+        # servono 91 chiusure per i 90 rendimenti del beta (G1 ne chiede 40)
+        k = self.chiedi("/fapi/v1/klines", {"symbol": simbolo, "interval": "1d", "limit": 100}) or []
+        time.sleep(self.pausa_s)
+        return {int(r[0]) // GIORNO_MS: (float(r[1]), float(r[4]), float(r[7])) for r in k}
+
+    def pesi_del_lunedi(self, m: int, st: dict) -> tuple:
+        r = super().pesi_del_lunedi(m, st)
+        if r is None:
+            return None
+        pesi, lunghi, corti, n_uni = r
+        uni = list(getattr(self, "_ultimo_universo", []))
+        chiusure = {s: {d: v[1] for d, v in g.items()} for s, g in (getattr(self, "_ultime_giornaliere", {}) or {}).items() if s in uni}
+        beta = beta_delle_monete(chiusure, uni, m)
+        pesi_n, a, b, bl, bs = scala_neutra(pesi, beta)
+        self._neutralita = {"a": round(a, 4), "b": round(b, 4), "beta_long": None if bl != bl else round(bl, 4),
+                            "beta_short": None if bs != bs else round(bs, 4)}
+        return pesi_n, lunghi, corti, n_uni
 
 
 def rango_centrato(valori: dict) -> dict:

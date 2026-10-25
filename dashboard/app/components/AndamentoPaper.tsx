@@ -18,6 +18,7 @@ const SERIE: { ramo: string; nome: string; colore: string; base: 'capitale' | 'c
   { ramo: 'paper_g1', nome: 'G1 nel paper', colore: '#2a78d6', base: 'capitale' },
   { ramo: 'demo_binance', nome: 'G1 sul conto demo di Binance', colore: '#eb6834', base: 'capitale_iniziale' },
   { ramo: 'paper_g11', nome: 'G11 nel paper', colore: '#1baf7a', base: 'capitale' },
+  { ramo: 'paper_g1n', nome: 'G1 neutra al mercato nel paper (dal 25 ottobre)', colore: '#8e5bd6', base: 'capitale' },
   { ramo: 'paper_f5', nome: 'F5 nel paper (dal 26 ottobre)', colore: '#eda100', base: 'capitale' },
 ];
 
