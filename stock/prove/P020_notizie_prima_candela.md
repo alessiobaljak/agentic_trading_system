@@ -27,6 +27,9 @@ quelli misurati nei giorni normali.
   è la somma dei loro risultati per il loro peso.
 * **Periodo:** 2016-2024. Barre al minuto di Alpaca, solo i giorni degli eventi.
 
+*Aggiunta del 25 ottobre, durante il primo calcolo (che si è fermato per questo errore, senza risultati): nelle vendite allo scoperto
+con una candela molto ampia l'obiettivo a 10 volte il rischio può finire sotto zero dollari; in quel caso l'obiettivo non si mette.*
+
 ## Costi ed esame
 
 Costi come la prova 11 (scarto misurato per i 34 titoli, metà scarto 5 punti base e 2 di slittamento per gli altri; Interactive

@@ -56,8 +56,9 @@ def strategia(seg: dict, multiplo: float | None = 10.0):
         ordini = [Ordine(-segno * q, "stop", liv_stop, solo_riduce=True, etichetta="stop", dopo_ingresso=True)]
         if multiplo is not None:
             r = abs(riferimento - liv_stop)
-            if r > 0:
-                ordini.append(Ordine(-segno * q, "limite", riferimento + segno * multiplo * r, solo_riduce=True,
+            obiettivo = riferimento + segno * multiplo * r
+            if r > 0 and obiettivo > 0:            # un obiettivo sotto zero dollari non si mette (resta lo stop e la chiusura)
+                ordini.append(Ordine(-segno * q, "limite", obiettivo, solo_riduce=True,
                                      etichetta="obiettivo", dopo_ingresso=True))
         return ordini
 
