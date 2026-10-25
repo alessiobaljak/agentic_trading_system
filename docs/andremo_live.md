@@ -4782,3 +4782,8 @@ volatilità fra i lati, cioè una protezione strutturale.
 Il risultato resta descrittivo (le monete già a pronti da prima rendono di più in N3, +8,4% contro +3,3%, non quelle quotate insieme
 come avevo ipotizzato) e una regola, se mai, si prova solo in avanti. Lezione: i controlli di fattibilità devono contare gli
 abbinamenti, non mostrare i rendimenti.
+**Prova 89, F5C** (`programma7/VENTISETTESIMA.md`, 06:32 UTC): F5 con l'esposizione scalata dal carry atteso (il funding che i due
+lati incassano e pagano, noto prima). Sharpe 1,66 contro 1,87 di F5, e il controllo con lo stesso fattore mescolato a caso fa
+uguale (1,63): il carry atteso non porta informazione. Capito: il funding vale il 45% del netto di F5, ma settimana per settimana il
+rendimento lo decide il prezzo (correlazione del carry atteso con il netto 0,00, con il funding incassato 0,59). Variare l'esposizione
+aggiunge solo volatilità: F5 resta a esposizione fissa. Nel conto: 158.
