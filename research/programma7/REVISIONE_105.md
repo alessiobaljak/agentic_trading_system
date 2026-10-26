@@ -14,3 +14,12 @@ Revisore separato (un agente indipendente, senza le conclusioni del coordinament
 * **Il controllo è giusto**; contro le altre monete dello stesso giorno, quelle di età simile o con la salita più simile, l'eccesso è
   +5,4-6,0 punti con p < 0,001: nel passato l'effetto c'era.
 * **Giudizio: non regge** come strategia validata (corretti i dati: p 0,010 con tutti gli eventi, 0,016 togliendo PUMP); da tenere in coda.
+
+## Misura in avanti a tavolino (idea 75): le quotazioni nuove su Coinbase dopo il 25 ottobre 2026
+
+La stessa regola della prova 105, senza cambiarla, sui soli eventi nuovi (monete con il perpetuo di Binance da almeno 30 giorni che
+cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando gli eventi nuovi sono almeno 30.
+
+| Controllo (UTC) | Monete nuove su Coinbase con il perpetuo di Binance |
+|---|---|
+| 2026-10-26 16:23 | nessuna (rispetto all'elenco del 25 ottobre) |
