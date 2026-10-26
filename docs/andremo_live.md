@@ -4953,3 +4953,13 @@ chiusura rinviata, e mancavano 10 contratti del 2022 scritti in altro modo; con 
 se si possono ancora aprire posizioni. Capito: un effetto vero può non essere una strategia, se la borsa toglie la porta d'ingresso.
 Script e tabelle dei due revisori di oggi salvati in `programma7/revisione_105/` e `revisione_107/`.
 
+### 26 ottobre 2026 (00:30 UTC)
+
+**I ribilanci della notte, tutti puliti** (log 0674): F5 ha fatto il primo cambio della settimana alle 00:08 UTC (universo 100, 26 long
+e 27 short, costo 4,00 dollari, conto 9.996,00); G1 alle 00:13 (22 e 24, conto 9.814,27); G11 alle 00:17 (26 e 24, conto 9.975,32); **G1N
+la prima decisione vera alle 00:21** (20 e 20, costo 4,00, conto 9.996,00). Da oggi le quattro strategie del funding fra monete girano nel
+paper sugli stessi giorni, e il confronto fra G1 e la versione neutra proposta per i soldi veri comincia a contare.
+**La ricerca, a che punto**: con le idee 70 e 77 chiuse la coda non ha più idee con un perché sui dati gratuiti che abbiamo; per cercare
+ancora servono dati nuovi (backlog P28: liquidazioni e funding di tutte le borse, lo storico al secondo del libro e delle opzioni, i dati
+delle catene), che sono a pagamento e li decide il proprietario. Intanto si misura in avanti quello che regge.
+
