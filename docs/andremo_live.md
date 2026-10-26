@@ -4981,4 +4981,10 @@ scritto, non l'asticella (Sharpe corretto 0,22 con 198 prove nel conto). Lo spec
 assicurarsi (la volatilità implicita è in media il 20% sopra quella che si vede), ed è la stessa famiglia di «chi paga la leva o la novità
 perde»: chi compra protezione la paga troppo. Ma è vendita di assicurazione (la settimana peggiore −25,7%), e i prezzi sono stimati: va
 verificata sui prezzi veri delle opzioni prima di qualunque passo. Al revisore separato. Nel conto: 198.
+**Il revisore separato sulla prova 110** (06:57 UTC, `programma7/REVISIONE_110.md`): **non regge**. Con i prezzi veri delle opzioni
+settimanali di Deribit (archivio pubblico, tutti i 580 venerdì) il premio vero è il 12,7% più basso di quello stimato con la volatilità
+implicita a 30 giorni, e la vendita della volatilità fa +0,009% a settimana: zero, e in perdita dal 2023. Capito: il premio della volatilità
+nel Bitcoin c'è (il mercato paga in media lo 0,25% del prezzo a settimana più di quello che poi si muove), ma è piccolo e i costi lo mangiano;
+e un'approssimazione «ragionevole» può creare da sola un risultato: d'ora in poi le prove sulle opzioni usano i prezzi veri. Il documento
+del proprietario è chiuso: lo scalping con gli indicatori, la griglia e la vendita di opzioni, le tre parti mai provate, non reggono.
 
