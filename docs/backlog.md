@@ -152,6 +152,23 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P28. Dati nuovi per continuare a cercare — trovata il 26 ott 2026; DECIDE IL PROPRIETARIO (sono a pagamento)
+
+* **Perché**: dopo 107 prove dei programmi 6-7 (176 nel conto) le idee con un perché sui dati che abbiamo sono finite. Regge una sola
+  famiglia, «chi paga la leva o la novità perde» (G1/F5, N3, E4), già nel paper; il resto, provato con i dati gratuiti (prezzi, volumi,
+  funding, posizioni aperte, libro degli ordini a ore, annunci di Binance, Coinbase, OKX, DefiLlama, ETF, Wikipedia), non regge. Le idee
+  che restano aperte hanno bisogno di dati che non abbiamo.
+* **Cosa servirebbe, dal più utile**:
+  1. **Liquidazioni, funding e posizioni aperte di tutte le borse** (un servizio di dati come Coinglass): l'archivio di Binance non ha più le
+     liquidazioni; con il funding e le posizioni di Bybit, OKX e delle altre si misura l'affollamento vero di una moneta, non solo quello di
+     Binance (il cuore di G1).
+  2. **Lo storico del libro degli ordini e delle opzioni al secondo** (un servizio come Tardis): lo scalping e le scadenze delle opzioni
+     (idee 29 e 70) senza questi dati non si possono provare.
+  3. **I dati delle catene** (flussi verso le borse, grandi portafogli; servizi come Glassnode o CryptoQuant): l'unico dato di fondamentali
+     che ha mostrato qualcosa (le commissioni delle catene, prova 95) era gratuito e povero.
+* **Senza dati nuovi**: si continua a misurare in avanti (paper, conto demo) le strategie che reggono, si riprovano le idee scritte «da
+  riguardare» quando avranno più eventi (Coinbase, chiusure dei future), e si cerca dove il perché è nuovo anche con i dati gratuiti.
+
 ### P27. Rifare le prove toccate dall'errore nella lettura delle candele orarie — trovata il 25 ott 2026 (revisione della prova 105); FATTA lo stesso giorno
 
 * **Cosa**: `research/programma6/esecuzione.ore_di` leggeva solo le barre del programma 6 quando esistevano, e per 14 monete (CRV, SUSHI,
