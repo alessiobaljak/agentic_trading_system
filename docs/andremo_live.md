@@ -4973,4 +4973,12 @@ giorno. Chi guadagna con lo scalping lo fa con altro (velocità, libro degli ord
 monete dal 2024. La griglia lunga fa −14,8% l'anno (tenere le stesse monete +41%), la neutra dei future −66%. No. Capito: una griglia
 guadagna un gradino a ogni oscillazione ma perde il 5% a ogni uscita dall'intervallo, e le monete escono da un ±10% decine di volte l'anno;
 il rendimento promesso dai siti viene da monete scelte dopo, quando si sa che sono rimaste ferme. Nel conto: 196.
+**Prova 110, vendere le opzioni** (`programma7/QUARANTOTTESIMA.md`, 06:34 UTC; strategie 27-28 del documento del proprietario): con i prezzi
+delle opzioni stimati dalla volatilità implicita di Deribit (approssimazione). **Vendere ogni settimana un'opzione di acquisto e una di
+vendita al prezzo di oggi su BTC ed ETH: +0,92% a settimana su 290, p 0,003, ogni anno positivo, Sharpe 1,19, discesa −36%.** Passa l'esame
+scritto, non l'asticella (Sharpe corretto 0,22 con 198 prove nel conto). Lo specchio, comprare la volatilità (il gamma scalping), perde
+−1,51% a settimana; la chiamata coperta al +10% toglie rendimento (−0,63% al mese nelle opzioni, −36% nel 2024). Capito: il mercato paga per
+assicurarsi (la volatilità implicita è in media il 20% sopra quella che si vede), ed è la stessa famiglia di «chi paga la leva o la novità
+perde»: chi compra protezione la paga troppo. Ma è vendita di assicurazione (la settimana peggiore −25,7%), e i prezzi sono stimati: va
+verificata sui prezzi veri delle opzioni prima di qualunque passo. Al revisore separato. Nel conto: 198.
 
