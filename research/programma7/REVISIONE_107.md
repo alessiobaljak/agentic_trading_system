@@ -25,3 +25,10 @@ da `/tmp/revisore107/`: i percorsi vanno adattati). Rifatta la prova: stessi 77 
 21 ottobre Binance blocca i nuovi ordini dal momento dell'annuncio. Resta una **osservazione da seguire**: a ogni nuovo annuncio di
 chiusura si guarda se gli utenti possono ancora aprire posizioni; se per tre annunci di fila sì, si scrive una prova nuova con i dati
 corretti e i costi veri, da misurare in avanti.
+
+## Osservazione in avanti: Binance lascia ancora aprire posizioni dopo l'annuncio?
+
+| Controllo (UTC) | Annunci di chiusura nuovi | Nuove posizioni vietate da | Conta per «tre di fila» |
+|---|---|---|---|
+| 2026-10-21 09:30 (PTB, MITO) | 1 | dal minuto della pubblicazione (gli utenti normali); i market maker da 30 minuti prima | no |
+| 2026-10-26 04:20 | nessuno dopo il 21 ottobre | — | — |
