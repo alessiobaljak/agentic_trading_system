@@ -4962,4 +4962,11 @@ paper sugli stessi giorni, e il confronto fra G1 e la versione neutra proposta p
 **La ricerca, a che punto**: con le idee 70 e 77 chiuse la coda non ha più idee con un perché sui dati gratuiti che abbiamo; per cercare
 ancora servono dati nuovi (backlog P28: liquidazioni e funding di tutte le borse, lo storico al secondo del libro e delle opzioni, i dati
 delle catene), che sono a pagamento e li decide il proprietario. Intanto si misura in avanti quello che regge.
+**Prova 108, lo scalping del documento del proprietario** (`programma7/QUARANTASEIESIMA.md`, 06:20 UTC): nove regole con gli indicatori
+classici (EMA 9/21 con RSI, la regola della EMA 5, RSI 7 80/20, Bollinger, MACD, stocastico 5-3-3, VWAP, ritracciamento, rottura con il
+volume) a 1 e 5 minuti, su BTC, ETH, SOL, XRP, DOGE e BNB dal 2024, stop 1 ATR e obiettivo 2 ATR. **Nessuna delle 18 regge**: prima dei
+costi fanno tutte zero (fra −0,010% e +0,004% a operazione su centinaia di migliaia di operazioni), dopo i costi tutte −0,11/−0,13%, in ogni
+anno e su ogni moneta. Capito, ed è la cosa più chiara di tutta la ricerca sullo scalping: a 1-5 minuti gli indicatori classici non
+prevedono niente; chi li usa paga un giro di costi a ogni operazione, e con 50 operazioni al giorno perde circa il 5% della posizione al
+giorno. Chi guadagna con lo scalping lo fa con altro (velocità, libro degli ordini, informazione), non con questi indicatori. Nel conto: 194.
 
