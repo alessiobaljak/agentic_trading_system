@@ -1,20 +1,24 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-23.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-24.zip",
  "procedure": {
   "N-001": {
-   "trade": 11,
+   "trade": 16,
    "netto": {
-    "n": 11,
-    "giorni": 4,
-    "media": -0.011722835857067675,
-    "basso": -0.10959546963747707,
-    "alto": 0.26951541556965847,
-    "p": 0.6180381961803819
+    "n": 16,
+    "giorni": 5,
+    "media": -0.021919360486167133,
+    "basso": -0.10062056569352074,
+    "alto": 0.13382750263064744,
+    "p": 0.6644335566443356
    },
-   "netto_doppio": -0.013522835857067676,
-   "caso_netto": -0.010934286981004905,
-   "senza_migliore": -0.10071344238216634,
+   "netto_doppio": -0.02371936048616713,
+   "caso_netto": -0.015741014688535313,
+   "senza_migliore": -0.08563166647578539,
    "per_moneta": {
+    "ARKUSDT": {
+     "trade": 1,
+     "netto": -0.16046483767718342
+    },
     "AVAUSDT": {
      "trade": 2,
      "netto": -0.0589136315462718
@@ -24,20 +28,24 @@
      "netto": -0.06388588957055205
     },
     "IOSTUSDT": {
-     "trade": 3,
-     "netto": 0.1072237694046791
+     "trade": 4,
+     "netto": 0.06974294541226786
     },
     "LITUSDT": {
      "trade": 1,
      "netto": -0.056705537459283396
     },
     "PHAUSDT": {
-     "trade": 1,
-     "netto": 0.0007969529085874133
+     "trade": 2,
+     "netto": -0.03659836874013042
     },
     "REZUSDT": {
+     "trade": 2,
+     "netto": 0.01410652058831149
+    },
+    "SPXUSDT": {
      "trade": 1,
-     "netto": -0.04215433070866146
+     "netto": -0.014967890605216503
     },
     "VTHOUSDT": {
      "trade": 1,
@@ -48,29 +56,45 @@
      "netto": -0.06390590756045286
     }
    },
-   "esito": "in corso (11 trade chiusi su 400)"
+   "esito": "in corso (16 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 10,
+   "trade": 16,
    "netto": {
-    "n": 10,
-    "giorni": 3,
-    "media": 0.0023768346140864587,
-    "basso": -0.00630085138955288,
-    "alto": 0.008502864408317237,
-    "p": 0.3728627137286271
+    "n": 16,
+    "giorni": 5,
+    "media": -0.00283989333195025,
+    "basso": -0.01763594675907153,
+    "alto": 0.009832053513168675,
+    "p": 0.6092390760923908
    },
-   "netto_doppio": 0.0005768346140864564,
-   "caso_netto": -0.0021104813991345557,
-   "senza_migliore": -0.0017071852487340628,
+   "netto_doppio": -0.004639893331950251,
+   "caso_netto": -0.0016893288133486228,
+   "senza_migliore": -0.006169244715368882,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
      "netto": -0.004693975269665838
     },
+    "ARKUSDT": {
+     "trade": 1,
+     "netto": -0.04991174340403524
+    },
+    "AVAUSDT": {
+     "trade": 1,
+     "netto": -0.056414834247555536
+    },
     "CRVUSDT": {
      "trade": 1,
      "netto": -0.0071850296176628504
+    },
+    "ETHFIUSDT": {
+     "trade": 1,
+     "netto": 0.02201330369899981
+    },
+    "FARTCOINUSDT": {
+     "trade": 1,
+     "netto": 0.009472141706924144
     },
     "INJUSDT": {
      "trade": 1,
@@ -85,8 +109,8 @@
      "netto": 0.030163615546084734
     },
     "MORPHOUSDT": {
-     "trade": 1,
-     "netto": -0.007326027166118274
+     "trade": 2,
+     "netto": -0.0103046816887403
     },
     "PHAUSDT": {
      "trade": 1,
@@ -95,29 +119,37 @@
     "STXUSDT": {
      "trade": 1,
      "netto": 0.015867844522968324
+    },
+    "UNIUSDT": {
+     "trade": 1,
+     "netto": 0.018917829004960553
     }
    },
-   "esito": "in corso (10 trade chiusi su 400)"
+   "esito": "in corso (16 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 1,
+   "trade": 2,
    "netto": {
-    "n": 1,
+    "n": 2,
     "media": NaN,
     "basso": NaN,
     "alto": NaN,
     "p": NaN
    },
-   "netto_doppio": -0.052679807729674163,
-   "caso_netto": -0.010959615662198744,
+   "netto_doppio": 0.014098331289583398,
+   "caso_netto": -0.0323650319948489,
    "senza_migliore": NaN,
    "per_moneta": {
     "IOSTUSDT": {
      "trade": 1,
      "netto": -0.049102277743905576
+    },
+    "REZUSDT": {
+     "trade": 1,
+     "netto": 0.08522013925299626
     }
    },
-   "esito": "in corso (1 trade chiusi su 400)"
+   "esito": "in corso (2 trade chiusi su 400)"
   }
  }
 }

@@ -1,10 +1,10 @@
 {
  "quotazioni": {
-  "annunci": 2286,
-  "totale_dichiarato": 2286,
-  "sha256": "ec20834c4d096175c72e9c353da7fb4da06afea180f2cb5f3442872849ccf4ab",
+  "annunci": 2289,
+  "totale_dichiarato": 2289,
+  "sha256": "f415ac86427d9a96ea97d1a869e6b5a6c74c4c3990dcf62fc23c2d94d6db3ab5",
   "primo": 1500595579000,
-  "ultimo": 1792553471286
+  "ultimo": 1792999800000
  },
  "notizie": {
   "annunci": 4464,
