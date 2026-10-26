@@ -4987,4 +4987,9 @@ implicita a 30 giorni, e la vendita della volatilità fa +0,009% a settimana: ze
 nel Bitcoin c'è (il mercato paga in media lo 0,25% del prezzo a settimana più di quello che poi si muove), ma è piccolo e i costi lo mangiano;
 e un'approssimazione «ragionevole» può creare da sola un risultato: d'ora in poi le prove sulle opzioni usano i prezzi veri. Il documento
 del proprietario è chiuso: lo scalping con gli indicatori, la griglia e la vendita di opzioni, le tre parti mai provate, non reggono.
+**Prova 111, il resto dello scalping del documento** (`programma7/QUARANTANOVESIMA.md`, 08:24 UTC): divergenze dell'RSI, engulfing, pin bar
+e trading nell'intervallo, a 1 e 5 minuti sulle 6 monete. Nessuna delle 8 regge: prima dei costi fanno zero (fra −0,001% e +0,005%), dopo
+i costi −0,11/−0,12% a operazione, in ogni anno e su ogni moneta. **Il documento del proprietario è chiuso**: delle 37 strategie, quelle
+provabili sono state provate tutte (26 nuove prove oggi più quelle delle settimane scorse), nessuna regge; le altre non si possono fare con
+il solo Binance o non sono strategie con un vantaggio (la leva, la media degli acquisti). Nel conto: 206.
 
