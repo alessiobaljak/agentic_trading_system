@@ -23,3 +23,4 @@ cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando 
 | Controllo (UTC) | Monete nuove su Coinbase con il perpetuo di Binance |
 |---|---|
 | 2026-10-26 16:23 | nessuna (rispetto all'elenco del 25 ottobre) |
+| 2026-10-26 20:20 | nessuna |
