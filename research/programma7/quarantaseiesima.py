@@ -230,7 +230,9 @@ def esegui(log=print) -> dict:
                 tutte.append(op)
             log(f"[quarantaseiesima] {s} a {tf} minuti: fatto")
     tutte = pd.concat(tutte, ignore_index=True)
-    tutte.to_csv(RIS / "operazioni_SK.csv.gz", index=False)
+    DATI_OP = QUI.parent / "data" / "p7_scalping"          # 76 MB: fuori da git
+    DATI_OP.mkdir(parents=True, exist_ok=True)
+    tutte.to_csv(DATI_OP / "operazioni_SK.csv.gz", index=False)
     soglia = 0.01 / VARIANTI
     tab, out = [], {}
     giorni_tot = (A_MIN - DA_MIN) / 1440
