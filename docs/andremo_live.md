@@ -4969,4 +4969,8 @@ costi fanno tutte zero (fra −0,010% e +0,004% a operazione su centinaia di mig
 anno e su ogni moneta. Capito, ed è la cosa più chiara di tutta la ricerca sullo scalping: a 1-5 minuti gli indicatori classici non
 prevedono niente; chi li usa paga un giro di costi a ogni operazione, e con 50 operazioni al giorno perde circa il 5% della posizione al
 giorno. Chi guadagna con lo scalping lo fa con altro (velocità, libro degli ordini, informazione), non con questi indicatori. Nel conto: 194.
+**Prova 109, il trading a griglia** (`programma7/QUARANTASETTESIMA.md`, 06:29 UTC): 21 livelli dal −10% al +10%, ordini limite, sulle 6
+monete dal 2024. La griglia lunga fa −14,8% l'anno (tenere le stesse monete +41%), la neutra dei future −66%. No. Capito: una griglia
+guadagna un gradino a ogni oscillazione ma perde il 5% a ogni uscita dall'intervallo, e le monete escono da un ±10% decine di volte l'anno;
+il rendimento promesso dai siti viene da monete scelte dopo, quando si sa che sono rimaste ferme. Nel conto: 196.
 
