@@ -4993,3 +4993,11 @@ i costi −0,11/−0,12% a operazione, in ogni anno e su ogni moneta. **Il docum
 provabili sono state provate tutte (26 nuove prove oggi più quelle delle settimane scorse), nessuna regge; le altre non si possono fare con
 il solo Binance o non sono strategie con un vantaggio (la leva, la media degli acquisti). Nel conto: 206.
 
+### 27 ottobre 2026 (00:25 UTC)
+
+**I ribilanci della notte, puliti** (log 0675): G1 alle 00:09 (23 long e 23 short, costo 0,37 dollari, conto 10.078,39: +0,78%
+dall'inizio, ieri pomeriggio −1,44%); G11 alle 00:13 (conto 10.180,73, +1,81%); G1N alle 00:17 (21 e 20, conto 10.356,89: +3,6% nel
+primo giorno intero); il conto demo alle 00:17 (29 ordini limite, 1 rifiutato: la moneta con il nome in caratteri cinesi). Giorni così
+grandi (G1 +2,7% in un giorno) stanno dentro le oscillazioni normali; il confronto G1/G1N conterà a settimane piene sugli stessi giorni.
+Misure in avanti a tavolino: nessun annuncio di chiusura dei future dopo il 21 ottobre, nessuna quotazione nuova su Coinbase.
+
