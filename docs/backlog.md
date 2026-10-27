@@ -606,6 +606,23 @@ veri. Lo diranno le letture.
 
 ## 5. Solo se serve
 
+### P29. Spostare la macchina da Hetzner ad AWS — domanda del proprietario del 27 ott 2026; VALUTATA, NON ORA
+* **Esito**: per le strategie di oggi non serve. G1 e F5 ribilanciano una volta al giorno o alla settimana con ordini limite che restano
+  aperti un'ora, quindi qualche decimo di secondo di ritardo verso Binance non cambia niente. La velocità conterebbe solo per lo scalping,
+  che nelle prove 108 e 111 non ha retto (`research/REGISTRO.md`). La macchina usa quasi niente: 0 GB di memoria occupata su 15 (ops 0199).
+* **Costo (stime, da verificare sui listini)**: Hetzner da 16 GB costa 12-16 € al mese (listino CX43 prima e dopo l'aumento di giugno 2026,
+  fonte Northflank). AWS Lightsail da 4 GB, che basterebbero, costa 24 $ al mese (pagina ufficiale AWS). Una macchina AWS da 16 GB con disco,
+  indirizzo pubblico (0,005 $ l'ora, AWS) e traffico costa circa 90-150 $ al mese senza impegno. Attenzione: chi cancella un server Hetzner
+  perde il prezzo vecchio, perché gli aumenti del 2026 valgono per gli ordini nuovi e i piani CX sono spesso non ordinabili.
+* **Regione**: mai negli Stati Uniti, perché Binance risponde «posizione non consentita» (errore 451). Si sceglie Zurigo o Francoforte, oppure
+  Tokyo se un giorno servisse la velocità.
+* **Si rifà se**: (a) si passa ai soldi veri e conta l'affidabilità, ma prima basta accendere i backup di Hetzner; (b) una strategia
+  provata ha bisogno di millisecondi; (c) la macchina Hetzner dà problemi (oggi il battito di `ops/heartbeat.md` è regolare).
+* **Come si fa**: macchina Ubuntu 24.04, poi `scripts/setup_vps.sh`. A mano vanno copiati `.env`, `ops/allowlist`, `data/paper_*.json` e
+  l'accesso a GitHub, mai nel repo. Va aggiornata la lista degli indirizzi delle chiavi del demo, se c'è. Prima si spegne il vecchio, poi si
+  accende il nuovo, perché due bot accesi insieme scriverebbero sullo stesso Firebase, sullo stesso repo e sullo stesso demo. Il passaggio non
+  si fa fra le 00:00 e le 01:30 UTC e non il lunedì. Dopo si controllano il battito, il log e il primo ribilancio.
+
 ### D1. Il registro su più documenti
 L'unico rimedio che scala, ma tocca bot, learning, quattro script e la dashboard: farlo di fretta
 rischia di perdere settimane di conferme. Oggi c'è spazio per circa 17-18 giorni (stima del 1 ott,
