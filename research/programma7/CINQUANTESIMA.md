@@ -26,6 +26,31 @@ in 4 ore.
   * Le cascate di tutto il mercato sono pochi giorni indipendenti: in un giorno come il 10 ottobre 2025 scattano decine di monete
     insieme. Per questo l'esame tiene insieme gli eventi della stessa settimana.
 
+## 1bis. Nota aggiunta alle 08:45 UTC, con il calcolo in corso e prima di qualunque risultato: la parentela con I-001 del programma 5
+
+Ho scritto questa prova senza leggere la sezione 3 del registro, ed è un **errore di metodo**: avevo guardato solo la sezione 1 e la
+coda. Il programma 5, il 18 ottobre, aveva già provato la stessa idea, **I-001** (`programma5/idee/I-001/scheda.md` e `C.md`): il
+rimbalzo dopo i crolli fatti di liquidazioni, con l'interesse aperto in calo.
+
+**Com'era fatta I-001**: un crollo in 5 minuti misurato rispetto alle 24 ore prima, l'interesse aperto nel 5% più negativo dei 30
+giorni prima, uscita dopo 60 minuti, sulle 12 monete grandi del programma 5, nel 2020-2022.
+
+**Com'era andata**:
+* con la condizione sulle posizioni, I-001a ha fatto +0,11% a operazione su 567 (p 0,30) e I-001b −0,10% su 2.887;
+* il crollo da solo, I-001c, ha fatto −0,02%;
+* le tre varianti sono state bocciate.
+
+**Cosa cambia in questa prova**:
+* la scala: il crollo e il calo delle posizioni si misurano su un'ora intera, non su 5 minuti, e si tiene 4 ore, non 60 minuti;
+* l'universo: le 100 monete più scambiate di ogni settimana, comprese quelle tolte dopo dal listino, invece di 12 grandi;
+* il periodo: fino all'ottobre 2026, con i quasi quattro anni dal 2023 che I-001 non aveva.
+
+Il dicembre 2021 e il 2022 erano già nel periodo di I-001, per le 11 monete grandi diverse dal Bitcoin.
+
+**La regola non cambia.** Nel giudizio si terrà conto anche delle 3 varianti di I-001: la soglia di tutte le prove a eventi resta
+p ≤ 0,0003. Si guarda anche se la prova regge **dal 2023** in poi, cioè fuori dal periodo già usato da I-001, e la prova a quel
+punto va detta per quello che è: una seconda prova della stessa idea, non un'idea nuova.
+
 ## 2. Dati e periodo (fissati qui)
 
 * **Periodo**: dal 1° dicembre 2021 al 24 ottobre 2026. Il 1° dicembre 2021 è l'inizio dei dati a 5 minuti sulle posizioni per la
