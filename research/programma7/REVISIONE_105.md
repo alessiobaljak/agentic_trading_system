@@ -28,3 +28,4 @@ cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando 
 | 2026-10-27 04:20 | nessuna |
 | 2026-10-27 08:26 | nessuna |
 | 2026-10-27 12:36 | nessuna |
+| 2026-10-27 16:21 | **STABLE** (STABLE-USD) aggiunta, ma ancora in sola cancellazione: gli scambi non sono cominciati, nessuna candela. Perpetuo STABLEUSDT su Binance dal 2025-11-06 (più di 30 giorni): sarà il primo evento nuovo il giorno in cui cominciano gli scambi |
