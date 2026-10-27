@@ -1,6 +1,6 @@
 # Programma 7 — cinquantesima prova: comprare dopo le cascate di vendite forzate, in giornata (LQ)
 
-Scritto il 27 ottobre 2026, alle 08:55 UTC. Le regole sono fissate **prima di scaricare i dati sulle posizioni a 5 minuti dei giorni
+Scritto il 27 ottobre 2026, alle 08:35 UTC (commit `c291fc1e` delle 08:36; la prima versione diceva per errore 08:55). Le regole sono fissate **prima di scaricare i dati sulle posizioni a 5 minuti dei giorni
 candidati e prima di qualunque calcolo di rendimento**. Fino a qui si è guardata solo la copertura delle candele orarie: il 5,2% delle
 ore mancava, su 142 monete, e i mesi mancanti si stanno scaricando. È l'idea 78 della coda di `research/REGISTRO.md`, scritta il 27
 ottobre perché la coda era vuota con i dati gratuiti. Fa parte del trading di ogni giorno: si entra e si esce nella stessa giornata,
