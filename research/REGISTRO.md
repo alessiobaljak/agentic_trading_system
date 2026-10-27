@@ -7,7 +7,9 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 **Le regole del registro**
 
 1. **Prima di ogni idea nuova** si guarda qui: se c'è già (anche con un altro nome), non si rifà; se si rifà diversa, si
-   scrive che cosa cambia e perché.
+   scrive che cosa cambia e perché. Si leggono **tutte** le sezioni, anche la 3 e la 4 (i programmi 5 e precedenti, con le
+   schede in `programma5/idee/`): il 27 ottobre la prova 112 è stata scritta senza vedere che I-001 del programma 5 era la
+   stessa idea (cercare anche le parole chiave nelle schede, per esempio con `grep -ril`).
 2. **Ogni prova nuova** ha la sua riga **prima** del calcolo (con il file delle regole) e il risultato **dopo**, con i
    numeri e il file da cui vengono. Anche le prove che vanno male: sono quelle che evitano di ripetere.
 3. Il **conto delle prove** del programma 6 (quante varianti si sono provate sugli stessi anni) serve allo Sharpe corretto:
