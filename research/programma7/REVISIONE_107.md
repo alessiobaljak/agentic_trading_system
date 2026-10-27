@@ -38,3 +38,4 @@ corretti e i costi veri, da misurare in avanti.
 | 2026-10-27 00:21 | nessuno dopo il 21 ottobre | — | — |
 | 2026-10-27 04:20 | nessuno dopo il 21 ottobre | — | — |
 | 2026-10-27 08:26 | nessuno dopo il 21 ottobre | — | — |
+| 2026-10-27 12:36 | nessuno dopo il 21 ottobre | — | — |
