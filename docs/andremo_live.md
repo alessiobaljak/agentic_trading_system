@@ -5001,3 +5001,22 @@ primo giorno intero); il conto demo alle 00:17 (29 ordini limite, 1 rifiutato: l
 grandi (G1 +2,7% in un giorno) stanno dentro le oscillazioni normali; il confronto G1/G1N conterà a settimane piene sugli stessi giorni.
 Misure in avanti a tavolino: nessun annuncio di chiusura dei future dopo il 21 ottobre, nessuna quotazione nuova su Coinbase.
 
+
+### 27 ottobre 2026 (10:00 UTC)
+
+**Paper e demo stamattina** (stato delle 07:52): G1 +0,71% dall'inizio, G11 +1,62%, G1N +3,20%, F5 +1,31% dopo il primo cambio, eventi
++3,16% (IRYS +63,1%, chiude il 31); il demo +1,32%, 118 ordini limite eseguiti su 121. Da ieri pomeriggio G1 nel paper e G1 sul demo
+sono saliti quasi uguale (+2,15 e +2,05 punti). TRX pesa il 39% in G1 e quasi il 50% in G1N: è la concentrazione nota (voce P19, il tetto
+peggiorava i conti), da tenere d'occhio. Prova in avanti del programma 5 (dati al 25 ottobre) e conto a tavolino del programma 6 aggiornati;
+le 8 monete entrate nell'universo sono tutte monete. Misure in avanti: nessuna chiusura dei future nuova, nessuna quotazione nuova su
+Coinbase. Valutato il passaggio della macchina da Hetzner ad AWS: oggi non serve (backlog P29).
+**Prova 112, comprare dopo le cascate di vendite forzate** (`programma7/CINQUANTESIMA.md`): la moneta perde il 5% in un'ora e nella stessa
+ora l'interesse aperto scende del 5%; long 5 minuti dopo, 4 ore, sulle 100 monete di ogni settimana dal dicembre 2021. **No**: 2.279
+operazioni, +0,15% a operazione (p 0,33); dal 2023 +0,77% (p 0,008, sotto la soglia di una prova sola ma non di tutte), il 2026 negativo,
+e i 5 giorni migliori fanno il 304% della somma. Capito: **l'interesse aperto distingue davvero chi vende per forza da chi vende per
+scelta** (il prezzo nelle 4 ore dopo: +0,27% dopo le cascate, −0,28% dopo i crolli con le posizioni in salita), ma il rimbalzo è piccolo,
+viene dai crolli di tutto il mercato e sparisce coperto con il Bitcoin. **Errore di metodo**: ho scritto la prova senza leggere la
+sezione 3 del registro, dove c'era già I-001 del programma 5, la stessa idea a 5 minuti, bocciata. L'ho trovato con il calcolo in corso,
+prima dei risultati, e l'ho scritto nelle regole (sezione 1bis); d'ora in poi, prima di un'idea nuova, si leggono tutte le sezioni del
+registro, anche quelle dei programmi 5 e precedenti. Così è caduta subito anche un'altra idea che stavo per scrivere: il prezzo intorno al
+regolamento del funding, che è I-006 (idea 80, tolta). In coda una sola nuova: N3 per le monete distribuite gratis (idea 79). Nel conto: 207.
