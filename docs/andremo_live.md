@@ -5035,3 +5035,12 @@ come G1, short le monete che i coreani pagano di più rispetto a Binance, long q
 previsto batte il contrario, come la prova 41), e il premio coreano è un'informazione diversa dal funding (correlazione con G1 −0,21), ma
 da solo è troppo debole e agitato. Errore ripetuto oggi: due volte ho scritto nelle regole un'ora futura (08:55 e 16:40) invece di
 quella vera; corrette con il commit, e d'ora in poi l'ora si prende dall'orologio prima di scriverla. Nel conto: 209.
+**Misure in avanti delle 20:21**: **STABLE ha cominciato gli scambi su Coinbase alle 18:00 UTC**: primo evento nuovo della misura in avanti
+dell'effetto Coinbase (entrata a tavolino domani alle 00:00 UTC, uscita al più tardi il 4 novembre; `programma7/REVISIONE_105.md`).
+Nessuna chiusura dei future nuova.
+**Idea 82, l'offerta delle monete che cresce**: non si fa, i dati gratuiti contano solo le monete create dalla rete, non gli sblocchi.
+**Prova 115, il BNB dopo gli annunci di Launchpool e Megadrop** (`programma7/CINQUANTATREESIMA.md`, 20:24 UTC): per avere le monete
+regalate bisogna bloccare BNB. **No**: dal 5° minuto dopo l'annuncio, per 24 ore, +0,60% a evento (p 0,19), mediana zero. Capito: **la
+domanda di BNB c'è ma si prezza nel primo minuto** (+0,92% sul Bitcoin): l'informazione degli annunci di Binance va a chi la legge in
+pochi secondi. È l'unico caso trovato finora in cui la velocità e una macchina vicina a Binance conterebbero; prima di pensarci si misura
+in quanti secondi si muove il prezzo (idea 84). Nel conto: 210.
