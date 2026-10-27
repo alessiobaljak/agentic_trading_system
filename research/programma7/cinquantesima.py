@@ -237,6 +237,12 @@ def esegui(log=print, solo_conta: bool = False) -> dict:
             v = pan["funding"][g - t0, j] if 0 <= g - t0 < pan["funding"].shape[0] else np.nan
             fund[(s, g)] = float(np.nan_to_num(v))
     cache: dict = {}
+    # le candele a 1 minuto di tutti i giorni che servono (C2 contiene LQ e C1; il caso usa i giorni di LQ), scaricate in parallelo
+    file = sorted({(s, g) for s, t in d.loc[d["C2"], ["simbolo", "ora"]].itertuples(index=False)
+                   for g in range((60 * (t + 1) + RITARDO) // 1440, (60 * (t + 1) + RITARDO + max(ORIZZONTI)) // 1440 + 1)})
+    log(f"[cinquantesima] {len(file)} giorni-moneta di candele a 1 minuto")
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        list(ex.map(lambda x: minuti(x[0], sc.data(x[1])), file))
     log("[cinquantesima] operazioni LQ")
     lq = gruppo(d, "LQ", costo, fund, btc, cache)
     RIS.mkdir(exist_ok=True)
