@@ -1,6 +1,6 @@
 # Programma 7 — cinquantaduesima prova: il premio coreano fra le monete, deciso ogni giorno (KP)
 
-Scritto il 27 ottobre 2026 alle 16:40 UTC, **prima di scaricare i prezzi di Upbit e prima di qualunque calcolo**. Fino a qui si è
+Scritto il 27 ottobre 2026 alle 16:25 UTC (commit `46c129ae` delle 16:26; la prima versione diceva per errore 16:40), **prima di scaricare i prezzi di Upbit e prima di qualunque calcolo**. Fino a qui si è
 guardato solo quante monete dell'universo hanno un mercato in won su Upbit: fra 21 e 67 a settimana, 55 di mediana. È un'idea nuova,
 che entra nella coda come 81. È trading di ogni giorno: la decisione si prende ogni giorno come G1, con gli ordini limite.
 
