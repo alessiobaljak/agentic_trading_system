@@ -5020,3 +5020,9 @@ sezione 3 del registro, dove c'era già I-001 del programma 5, la stessa idea a 
 prima dei risultati, e l'ho scritto nelle regole (sezione 1bis); d'ora in poi, prima di un'idea nuova, si leggono tutte le sezioni del
 registro, anche quelle dei programmi 5 e precedenti. Così è caduta subito anche un'altra idea che stavo per scrivere: il prezzo intorno al
 regolamento del funding, che è I-006 (idea 80, tolta). In coda una sola nuova: N3 per le monete distribuite gratis (idea 79). Nel conto: 207.
+**Prova 113, le monete nuove regalate da Binance** (`programma7/CINQUANTUNESIMA.md`, 12:50 UTC; idea 79): le 613 vendite della regola
+delle monete nuove divise fra quelle distribuite gratis (HODLer Airdrops, Launchpool, Megadrop: 87) e le altre. **Le gratis +12,1% a
+evento, le altre +3,0%; nello stesso trimestre +7,9 punti, p 0,027**: la direzione è quella prevista, chi ha avuto la moneta senza pagarla
+la vende, ma con 87 eventi (75 nel 2024-2025) non basta per le regole (0,01, e 0,0003 contando tutte le prove a eventi). La regola N3 del
+bot non cambia; parte una misura in avanti a tavolino sulle monete nuove dal 22 ottobre, da rifare con 30 eventi gratis nuovi. Capito: fra
+le monete nuove, quella che pesa di più non è come vengono quotate (l'idea 56) ma **se qualcuno le ha avute gratis**. Nel conto: 208.

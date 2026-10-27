@@ -1,0 +1,112 @@
+{
+ "eventi": 613,
+ "gratis": 87,
+ "altre": 526,
+ "trimestri_con_tutti_e_due": 15,
+ "gratis_in_trimestri_confrontabili": 87,
+ "differenza": 0.0786830815194959,
+ "p_differenza": 0.027197280271972803,
+ "differenza_senza_uscita": 0.13647147252695366,
+ "media_gratis": 0.12108794075285478,
+ "media_altre": 0.029920529039723094,
+ "esame_gratis": {
+  "boot": {
+   "media": 0.12108794075285476,
+   "basso": 0.05097811285413606,
+   "alto": 0.18945028637684255,
+   "p": 0.0005999400059994001,
+   "eventi": 87,
+   "annunci": 67
+  },
+  "prima_meta": 0.10066302848142754,
+  "seconda_meta": 0.1410486504726587,
+  "senza_5_migliori": 0.08900855385753496,
+  "vinti": 0.6551724137931034,
+  "mediana": 0.2287508021323726,
+  "per_anno": {
+   "2021": {
+    "eventi": 2,
+    "media": 0.005222792232571105
+   },
+   "2022": {
+    "eventi": 2,
+    "media": -0.04186507452311064
+   },
+   "2023": {
+    "eventi": 7,
+    "media": -0.03415352037038062
+   },
+   "2024": {
+    "eventi": 26,
+    "media": 0.13955146401649132
+   },
+   "2025": {
+    "eventi": 49,
+    "media": 0.14474213014020956
+   },
+   "2026": {
+    "eventi": 1,
+    "media": 0.1263076113730638
+   }
+  },
+  "esito": "VALIDA"
+ },
+ "per_tipo": {
+  "hodler airdrops": {
+   "eventi": 43,
+   "media": 0.1346086234395893
+  },
+  "launchpool": {
+   "eventi": 41,
+   "media": 0.08444958633423245
+  },
+  "megadrop": {
+   "eventi": 3,
+   "media": 0.4280156659641652
+  }
+ },
+ "per_anno": {
+  "2021": {
+   "gratis": 2,
+   "media_gratis": 0.005222792232571105,
+   "altre": 45,
+   "media_altre": -0.0153444621213695
+  },
+  "2022": {
+   "gratis": 2,
+   "media_gratis": -0.04186507452311064,
+   "altre": 20,
+   "media_altre": 0.02966465850613228
+  },
+  "2023": {
+   "gratis": 7,
+   "media_gratis": -0.03415352037038061,
+   "altre": 82,
+   "media_altre": 0.07577281453106353
+  },
+  "2024": {
+   "gratis": 26,
+   "media_gratis": 0.13955146401649132,
+   "altre": 105,
+   "media_altre": 0.06090436995908854
+  },
+  "2025": {
+   "gratis": 49,
+   "media_gratis": 0.1447421301402096,
+   "altre": 188,
+   "media_altre": 0.020818765021418148
+  },
+  "2026": {
+   "gratis": 1,
+   "media_gratis": 0.1263076113730638,
+   "altre": 86,
+   "media_altre": -0.007986646058660318
+  }
+ },
+ "uscite_a_30_gratis": 0.3563218390804598,
+ "uscite_a_30_altre": 0.43155893536121676,
+ "senza_uscita_gratis": 0.15043075767286193,
+ "senza_uscita_altre": 0.026819991829339116,
+ "soglia_tutte": 0.00029411764705882356,
+ "esito": "la differenza non è sopra zero con p ≤ 0,01 (p 0.0272)"
+}
