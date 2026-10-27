@@ -5026,3 +5026,12 @@ evento, le altre +3,0%; nello stesso trimestre +7,9 punti, p 0,027**: la direzio
 la vende, ma con 87 eventi (75 nel 2024-2025) non basta per le regole (0,01, e 0,0003 contando tutte le prove a eventi). La regola N3 del
 bot non cambia; parte una misura in avanti a tavolino sulle monete nuove dal 22 ottobre, da rifare con 30 eventi gratis nuovi. Capito: fra
 le monete nuove, quella che pesa di più non è come vengono quotate (l'idea 56) ma **se qualcuno le ha avute gratis**. Nel conto: 208.
+**Misure in avanti delle 16:21**: nessuna chiusura dei future nuova; **STABLE è stata aggiunta su Coinbase**, ma è ancora in sola
+cancellazione (gli scambi non sono cominciati); il perpetuo su Binance c'è dal 6 novembre 2025, quindi sarà il primo evento nuovo della
+misura in avanti dell'effetto Coinbase. Nessuna moneta nuova dei perpetui dal 22 ottobre nel pannello (dati al 25).
+**Prova 114, il premio coreano fra le monete** (`programma7/CINQUANTADUESIMA.md`, 16:25 UTC; idea 81, dati nuovi da Upbit): ogni giorno
+come G1, short le monete che i coreani pagano di più rispetto a Binance, long quelle che pagano di meno. **No**: Sharpe 0,31, discesa
+−61,6%, tre anni negativi su sei; il verso opposto −0,80. Capito: la domanda dei piccoli investitori coreani si paga cara (il verso
+previsto batte il contrario, come la prova 41), e il premio coreano è un'informazione diversa dal funding (correlazione con G1 −0,21), ma
+da solo è troppo debole e agitato. Errore ripetuto oggi: due volte ho scritto nelle regole un'ora futura (08:55 e 16:40) invece di
+quella vera; corrette con il commit, e d'ora in poi l'ora si prende dall'orologio prima di scriverla. Nel conto: 209.
