@@ -187,6 +187,11 @@ impossibili su contratti già chiusi (RVV, HFT); corretto: **E4 59 eventi, +11,8
 `programma6/paper/REGOLE.md`, aggiornato ogni mattina, in dashboard nella scheda Controllo. Candidate: **F3, K1, M1, F3 +
 M1**, più F2, C1, A1. Verdetto a 52 settimane (25 ottobre 2027) e a 104, mai prima. Risultati in `programma6/paper/PAPER.md`.
 
+**Le misure in avanti a tavolino** (si guardano a ogni giro della ricerca; nessuna cambia il bot finché non si rifà il conto):
+* le chiusure dei future: a ogni annuncio nuovo, Binance lascia ancora aprire posizioni? (`programma7/REVISIONE_107.md`; tre di fila sì → prova nuova);
+* le quotazioni nuove su Coinbase delle monete con il perpetuo di Binance (`programma7/REVISIONE_105.md`; si rifà il conto con 30 eventi nuovi);
+* le monete nuove distribuite gratis da Binance, dal 22 ottobre 2026 (`programma7/RISULTATI_CINQUANTUNESIMA.md`; si rifà il conto con 30 eventi gratis nuovi).
+
 ## 3. Programma 5 (18-19 ottobre 2026): circa 60 idee, nessuna valida
 
 Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarle:
