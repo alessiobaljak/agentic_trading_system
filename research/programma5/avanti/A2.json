@@ -1,27 +1,27 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-24.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-25.zip",
  "procedure": {
   "N-001": {
-   "trade": 16,
+   "trade": 17,
    "netto": {
-    "n": 16,
-    "giorni": 5,
-    "media": -0.021919360486167133,
-    "basso": -0.10062056569352074,
-    "alto": 0.13382750263064744,
-    "p": 0.6644335566443356
+    "n": 17,
+    "giorni": 6,
+    "media": -0.027698949856277997,
+    "basso": -0.10363119051131867,
+    "alto": 0.10931004582248074,
+    "p": 0.708929107089291
    },
-   "netto_doppio": -0.02371936048616713,
-   "caso_netto": -0.015741014688535313,
-   "senza_migliore": -0.08563166647578539,
+   "netto_doppio": -0.029498949856277996,
+   "caso_netto": -0.007824747552779244,
+   "senza_migliore": -0.08809886028309014,
    "per_moneta": {
     "ARKUSDT": {
      "trade": 1,
      "netto": -0.16046483767718342
     },
     "AVAUSDT": {
-     "trade": 2,
-     "netto": -0.0589136315462718
+     "trade": 3,
+     "netto": -0.07933321429019848
     },
     "GUSDT": {
      "trade": 1,
@@ -56,7 +56,7 @@
      "netto": -0.06390590756045286
     }
    },
-   "esito": "in corso (16 trade chiusi su 400)"
+   "esito": "in corso (17 trade chiusi su 400)"
   },
   "N-002": {
    "trade": 16,
@@ -69,7 +69,7 @@
     "p": 0.6092390760923908
    },
    "netto_doppio": -0.004639893331950251,
-   "caso_netto": -0.0016893288133486228,
+   "caso_netto": -0.0001350371567890788,
    "senza_migliore": -0.006169244715368882,
    "per_moneta": {
     "AAVEUSDT": {
@@ -128,17 +128,17 @@
    "esito": "in corso (16 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 2,
+   "trade": 3,
    "netto": {
-    "n": 2,
+    "n": 3,
     "media": NaN,
     "basso": NaN,
     "alto": NaN,
     "p": NaN
    },
-   "netto_doppio": 0.014098331289583398,
-   "caso_netto": -0.0323650319948489,
-   "senza_migliore": NaN,
+   "netto_doppio": -0.0073093449915676055,
+   "caso_netto": -0.04034841871413178,
+   "senza_migliore": -0.047321316751317725,
    "per_moneta": {
     "IOSTUSDT": {
      "trade": 1,
@@ -147,9 +147,13 @@
     "REZUSDT": {
      "trade": 1,
      "netto": 0.08522013925299626
+    },
+    "XMRUSDT": {
+     "trade": 1,
+     "netto": -0.047321316751317725
     }
    },
-   "esito": "in corso (2 trade chiusi su 400)"
+   "esito": "in corso (3 trade chiusi su 400)"
   }
  }
 }
