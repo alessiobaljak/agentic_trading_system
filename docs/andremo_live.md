@@ -5059,3 +5059,9 @@ perché scritto (dati a pagamento, dati ricalcolati dopo i fatti, troppo pochi e
 long le monete con più indirizzi attivi per dollaro di valore, short quelle con meno, a settimana come F5. **No**: Sharpe 0,33, ma 2021
 +90%, 2022 +32%, poi 2023 −29% e 2024 −21%. Capito: è un effetto vero negli anni in cui è stato studiato e **consumato dopo la
 pubblicazione**, come dice la stessa letteratura per molte famiglie; il verso previsto resta migliore del contrario (−0,57). Nel conto: 211.
+**Prova 117, le monete «inelastiche»** (`programma7/CINQUANTACINQUESIMA.md`, 04:21 UTC; idea 86, Li, Liao, Yang e Zhang, bozza del
+2026): le monete con una grande salita e un grande crollo nelle 12 settimane prima dovrebbero rendere male dopo. **No**: EMI Sharpe
+−0,15; EWIL (con il momento delle 2 settimane) −0,20, con −92% nel 2021 e −85% nel 2023 e poi +79% nel 2025. Capito: sulle 100 monete
+più scambiate dei perpetui il risultato dell'articolo (4.284 monete, anche piccolissime) non si ripete, e la versione con il momento
+segue la sorte del momento. È la terza prova dalla letteratura di oggi che non regge sui perpetui: quello che i ricercatori trovano
+fra migliaia di monete, prima del 2022, raramente sopravvive fra le 100 grandi dopo. Nel conto: 213.
