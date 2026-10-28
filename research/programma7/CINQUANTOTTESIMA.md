@@ -44,3 +44,21 @@ ottobre. È una prova a eventi sul Bitcoin, con entrata e uscita in un giorno.
 * **Se regge**, passa da un revisore separato.
 * **Per capire, senza decidere niente**: il Bitcoin dalle 24 ore prima fino all'annuncio, per vedere se il calo viene prima; le
   tenute di 1 e 4 ore; per anno.
+
+## 5. Sospesa il 28 ottobre alle 14:35 UTC, prima di qualunque risultato
+
+* **I testi delle comunicazioni non si possono scaricare.** L'archivio dei documenti della SEC (`www.sec.gov/Archives`) risponde 403 a
+  tutte le richieste di questa macchina. La SEC chiede un indirizzo email di contatto nelle richieste automatiche, e qui non se ne usa
+  nessuno senza il permesso del proprietario. L'elenco dei moduli (`data.sec.gov`) invece risponde.
+* Il calcolo partito alle 12:27 ha salvato solo file vuoti, quindi non ha riconosciuto nessun evento e non ha calcolato nessun
+  rendimento. È stato fermato.
+* **La frase della regola era troppo stretta.** Lo dice la ricerca nel testo della SEC (`efts.sec.gov`, che risponde), contando solo i
+  moduli trovati, senza prezzi:
+  * «acquired approximately» trova 32 moduli;
+  * «bitcoins for approximately» ne trova 38;
+  * gli annunci settimanali di Strategy dal novembre 2024 usano «acquired [numero] bitcoins for approximately».
+
+  La regola, quando ripartirà, dovrà riconoscere anche questa forma: «acquired» seguito, entro poche parole, da un numero e da
+  «bitcoin».
+* **Non conta nel conto delle prove**, perché non è stata calcolata. Riparte con un indirizzo di contatto per la SEC, se il
+  proprietario lo vuole, oppure con un'altra fonte pubblica delle date degli acquisti.

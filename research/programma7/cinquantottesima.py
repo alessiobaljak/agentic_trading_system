@@ -59,7 +59,7 @@ def moduli() -> list:
 
 def testo(numero: str, documento: str) -> str:
     f = DATI / f"{numero}.txt"
-    if f.exists():
+    if f.exists() and f.stat().st_size > 200:        # i file quasi vuoti sono rifiuti della SEC (28 ottobre): si riscaricano
         return f.read_text(encoding="utf-8")
     html = _get(f"https://www.sec.gov/Archives/edgar/data/{int(CIK)}/{numero.replace('-', '')}/{documento}", testo=True) or ""
     t = re.sub(r"<[^>]+>", " ", html)

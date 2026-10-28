@@ -5082,3 +5082,8 @@ dopo 7 giorni; le monete entrate sono tutte monete). Test del repo: 2.476 passat
 con saldo crescono di più nella settimana. **No**: Sharpe −0,21, il verso opposto 0,03, anni a strappi (2021 −60%, 2025 +43%). Capito:
 sulle monete grandi il prezzo prende subito la crescita degli utenti; delle idee della letteratura di oggi ne restano nella coda tre
 deboli (l'inclinazione delle opzioni sul Bitcoin, gli acquisti di Strategy, l'attenzione su Google). Nel conto: 215.
+**Prova 120, il Bitcoin dopo gli acquisti di Strategy** (`programma7/CINQUANTOTTESIMA.md`, regole delle 12:25): **sospesa prima di
+qualunque risultato**. La SEC rifiuta lo scarico dei testi delle comunicazioni senza un indirizzo email di contatto, quindi il calcolo
+ha salvato solo file vuoti ed è stato fermato; non conta nel conto (resta 215). Due errori miei: la frase della regola era troppo
+stretta (Strategy scrive «acquired 10,107 bitcoins for approximately»), e il comando per fermare il calcolo cercava il processo per nome
+e ha interrotto anche se stesso, come avverte la routine del mattino (si ferma sempre con il numero del processo).
