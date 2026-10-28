@@ -5087,3 +5087,7 @@ qualunque risultato**. La SEC rifiuta lo scarico dei testi delle comunicazioni s
 ha salvato solo file vuoti ed è stato fermato; non conta nel conto (resta 215). Due errori miei: la frase della regola era troppo
 stretta (Strategy scrive «acquired 10,107 bitcoins for approximately»), e il comando per fermare il calcolo cercava il processo per nome
 e ha interrotto anche se stesso, come avverte la routine del mattino (si ferma sempre con il numero del processo).
+**La misura dei secondi dopo gli annunci di Launchpool** (`programma7/SECONDI_BNB.md`, idea 84, descrittiva): il BNB fa il 3% del
+movimento in 1 secondo, il 66% in 5, tutto in 30, e niente prima della pubblicazione. Capito: l'informazione degli annunci di Binance va
+a chi la legge entro 1-2 secondi; è una gara di velocità, l'unico posto dove una macchina a Tokyo conterebbe (backlog P29), ma per i
+soli Launchpool vale poco (11 l'anno). Misure in avanti delle 16:23: niente di nuovo.

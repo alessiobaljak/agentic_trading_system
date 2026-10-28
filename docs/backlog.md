@@ -616,6 +616,8 @@ veri. Lo diranno le letture.
   perde il prezzo vecchio, perché gli aumenti del 2026 valgono per gli ordini nuovi e i piani CX sono spesso non ordinabili.
 * **Regione**: mai negli Stati Uniti, perché Binance risponde «posizione non consentita» (errore 451). Si sceglie Zurigo o Francoforte, oppure
   Tokyo se un giorno servisse la velocità.
+* **28 ottobre, la misura dei secondi** (`research/programma7/SECONDI_BNB.md`): dopo gli annunci di Launchpool il BNB fa due terzi del
+  movimento in 5 secondi. È l'unico caso trovato in cui la vicinanza a Binance conterebbe, ma vale poco da solo (11 eventi l'anno).
 * **Si rifà se**: (a) si passa ai soldi veri e conta l'affidabilità, ma prima basta accendere i backup di Hetzner; (b) una strategia
   provata ha bisogno di millisecondi; (c) la macchina Hetzner dà problemi (oggi il battito di `ops/heartbeat.md` è regolare).
 * **Come si fa**: macchina Ubuntu 24.04, poi `scripts/setup_vps.sh`. A mano vanno copiati `.env`, `ops/allowlist`, `data/paper_*.json` e
