@@ -5052,3 +5052,10 @@ in quanti secondi si muove il prezzo (idea 84). Nel conto: 210.
 demo alle 00:18 (40 ordini limite, 1 rifiutato: sempre la moneta con il nome in caratteri cinesi). Misure in avanti delle 00:21: niente
 di nuovo oltre a STABLE (entrata a tavolino stanotte alle 00:00). Coda delle idee con i dati gratuiti vuota: parte una ricerca nella
 letteratura pubblicata (un aiutante separato) dei segnali sulle crypto non ancora provati, con la fonte e i dati che servono.
+**Ricerca nella letteratura** (`research/letture/letteratura_28ott2026.md`, un aiutante separato): 11 segnali pubblicati che non avevamo
+provato, con le fonti, i dati che servono e una stima delle probabilità. In coda come idee 85-93; quattro si scartano subito, con il
+perché scritto (dati a pagamento, dati ricalcolati dopo i fatti, troppo pochi eventi).
+**Prova 116, il valore misurato con gli utenti** (`programma7/CINQUANTAQUATTRESIMA.md`, 00:43 UTC; idea 85, dati gratis di CoinMetrics):
+long le monete con più indirizzi attivi per dollaro di valore, short quelle con meno, a settimana come F5. **No**: Sharpe 0,33, ma 2021
++90%, 2022 +32%, poi 2023 −29% e 2024 −21%. Capito: è un effetto vero negli anni in cui è stato studiato e **consumato dopo la
+pubblicazione**, come dice la stessa letteratura per molte famiglie; il verso previsto resta migliore del contrario (−0,57). Nel conto: 211.
