@@ -5078,3 +5078,7 @@ va bene solo dal giugno 2024 (Sharpe 1,19), ma quel periodo l'abbiamo già visto
 settimane del 2 novembre, come sola informazione (`programma6/paper/REGOLE.md`, sezione 6); niente bot prima del verdetto a 52
 settimane. Aggiornamento del mattino: prova in avanti del programma 5 (dati al 26 ottobre, nessun verdetto) e conto a tavolino (A1 −0,40%
 dopo 7 giorni; le monete entrate sono tutte monete). Test del repo: 2.476 passati.
+**Prova 119, la crescita degli utenti** (`programma7/CINQUANTASETTESIMA.md`, 08:20 UTC; idea 87): long le monete in cui gli indirizzi
+con saldo crescono di più nella settimana. **No**: Sharpe −0,21, il verso opposto 0,03, anni a strappi (2021 −60%, 2025 +43%). Capito:
+sulle monete grandi il prezzo prende subito la crescita degli utenti; delle idee della letteratura di oggi ne restano nella coda tre
+deboli (l'inclinazione delle opzioni sul Bitcoin, gli acquisti di Strategy, l'attenzione su Google). Nel conto: 215.
