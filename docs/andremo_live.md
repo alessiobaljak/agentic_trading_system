@@ -5072,3 +5072,9 @@ più correlati sono saliti ieri, short quelle i cui vicini sono scesi. **No**: S
 cambia ogni giorno (17 entrate al giorno) e le spese arrivano al 43-82% l'anno. Capito, e vale per tutto il trading di ogni giorno: un
 vantaggio che dura un giorno deve essere enorme per pagare un giro ogni giorno; G1 regge perché il suo segnale cambia lentamente (una
 posizione dura 17 giorni). Nel conto: 214.
+**EWIL nel conto a tavolino** (08:00 UTC): il proprietario ha chiesto se la strategia dell'articolo della prova 117, uscito nel 2026, non sia
+fatta per il mercato di oggi. I dati dell'articolo finiscono a maggio 2024, quindi non è costruita sul 2025-2026; sulle nostre monete
+va bene solo dal giugno 2024 (Sharpe 1,19), ma quel periodo l'abbiamo già visto. Si misura quindi in avanti, a costo zero, dalle
+settimane del 2 novembre, come sola informazione (`programma6/paper/REGOLE.md`, sezione 6); niente bot prima del verdetto a 52
+settimane. Aggiornamento del mattino: prova in avanti del programma 5 (dati al 26 ottobre, nessun verdetto) e conto a tavolino (A1 −0,40%
+dopo 7 giorni; le monete entrate sono tutte monete). Test del repo: 2.476 passati.

@@ -23,6 +23,7 @@ QUI = Path(__file__).parent
 INIZIO_GIORNI = sc.giorno(2026, 10, 20)
 INIZIO_SETTIMANE = sc.giorno(2026, 10, 26)
 INIZIO_E4_MS = sc.giorno(2026, 10, 21) * 86_400_000
+INIZIO_EWIL = sc.giorno(2026, 11, 2)                # REGOLE.md, sezione 6: solo informazione
 INTERESSE, TETTO = 0.0001, 0.0005
 
 
@@ -282,6 +283,16 @@ def esegui(log=print) -> dict:
     f572 = f572[f572.index >= INIZIO_SETTIMANE]
     res["candidate"]["F5 + M7 + K2 a rischio uguale (informazione)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f572.items()}, **_riassunto(f572, 52)}
+    # EWIL (prova 117, REGOLE.md sezione 6, solo informazione): la regola cosi' com'e', dalle settimane del 2 novembre 2026
+    from research.programma6 import ottava as ot
+    from research.programma7 import cinquantacinquesima as ew
+    psw = te.pannello_settimane(pan, log=lambda x: None, indicatori_si=False)
+    Wew, _ = ew.pesi(pan, psw, ot.sigma_30(pan, psw["lunedi"] - pan["t0"]), "EWIL")
+    dew = te.conto(Wew, psw["R"], psw["F"], sc.costi_moneta(psw["simboli"]))
+    dew.index = psw["lunedi"]
+    dew = dew[dew.index >= INIZIO_EWIL]
+    res["candidate"]["EWIL (informazione, dal 2 novembre)"] = {
+        "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in dew["netto"].items()}, **_riassunto(dew["netto"], 52)}
     # N3 (TRENTESIMA.md, REGOLE.md sezione 11): gli eventi del periodo P su Binance e su Gate.io
     from research.programma6 import scarico_annunci, tipi_gate
     from research.programma6.paper import n3

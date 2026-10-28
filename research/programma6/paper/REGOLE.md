@@ -171,3 +171,19 @@ vecchio paper; lo stato in `docs/state.md` («Paper N3 ed E4») e su RTDB in `/p
 vera e a vedere subito gli eventi (E4 qui si vede in giornata, nel calcolo solo quando esce il file del mese); **non cambia i
 verdetti di N3 ed E4**, che restano sul calcolo di questo paper a 52 e 104 settimane.
 
+
+## 6. Aggiunta del 28 ottobre 2026: EWIL, solo informazione
+
+Il proprietario (28 ottobre), dopo la prova 117: «se è un articolo creato nel 2026 forse [...] è una strategia trovata per il mercato
+attuale 2025 e 2026?». La prova 117 (`research/programma7/RISULTATI_CINQUANTACINQUESIMA.md`) dice che EWIL (le vincenti elastiche
+contro le perdenti inelastiche, Li, Liao, Yang e Zhang) sulle 100 monete più scambiate perde molto nel 2021-2023 e va bene dopo i dati
+dell'articolo: dal giugno 2024 Sharpe 1,19.
+
+Quel periodo l'abbiamo già visto, quindi non conta come prova. Si misura in avanti, **senza cambiare niente della regola della prova
+117**:
+* **le settimane dal lunedì 2 novembre 2026**;
+* **una prima occhiata a 26 settimane** (il 3 maggio 2027);
+* **il verdetto a 52 settimane**, con le regole della sezione 3. Il confronto «Sharpe del periodo P non sotto la metà di quello sul
+  passato» usa lo Sharpe del 2021-2026, −0,20.
+
+Fino ad allora è solo informazione: non entra nel bot.

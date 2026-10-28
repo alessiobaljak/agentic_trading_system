@@ -192,6 +192,8 @@ impossibili su contratti già chiusi (RVV, HFT); corretto: **E4 59 eventi, +11,8
 `programma6/paper/REGOLE.md`, aggiornato ogni mattina, in dashboard nella scheda Controllo. Candidate: **F3, K1, M1, F3 +
 M1**, più F2, C1, A1. Verdetto a 52 settimane (25 ottobre 2027) e a 104, mai prima. Risultati in `programma6/paper/PAPER.md`.
 
+**28 ottobre**: aggiunta **EWIL** (prova 117) come sola informazione, dalle settimane del 2 novembre 2026, con la prima occhiata a 26 settimane e il verdetto a 52 (`programma6/paper/REGOLE.md`, sezione 6), dopo la domanda del proprietario sul mercato di oggi.
+
 **Le misure in avanti a tavolino** (si guardano a ogni giro della ricerca; nessuna cambia il bot finché non si rifà il conto):
 * le chiusure dei future: a ogni annuncio nuovo, Binance lascia ancora aprire posizioni? (`programma7/REVISIONE_107.md`; tre di fila sì → prova nuova);
 * le quotazioni nuove su Coinbase delle monete con il perpetuo di Binance (`programma7/REVISIONE_105.md`; si rifà il conto con 30 eventi nuovi);
