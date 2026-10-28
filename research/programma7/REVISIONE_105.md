@@ -31,6 +31,7 @@ cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando 
 | 2026-10-27 16:21 | **STABLE** (STABLE-USD) aggiunta, ma ancora in sola cancellazione: gli scambi non sono cominciati, nessuna candela. Perpetuo STABLEUSDT su Binance dal 2025-11-06 (più di 30 giorni): sarà il primo evento nuovo il giorno in cui cominciano gli scambi |
 | 2026-10-27 20:21 | **STABLE: gli scambi sono cominciati** (prima candela oraria di Coinbase alle 18:00 UTC del 27 ottobre): evento nuovo n. 1 |
 | 2026-10-28 00:21 | nessuna oltre STABLE |
+| 2026-10-28 04:20 | nessuna oltre STABLE |
 
 **Gli eventi nuovi** (la regola della prova 105 così com'è: short il perpetuo di Binance e long il Bitcoin all'apertura del giorno dopo
 il primo giorno di scambi su Coinbase, uscita a +30% o dopo 7 giorni; il conto si fa quando sono almeno 30, con la regola dei simboli
