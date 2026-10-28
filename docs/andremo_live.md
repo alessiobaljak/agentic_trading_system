@@ -5065,3 +5065,10 @@ pubblicazione**, come dice la stessa letteratura per molte famiglie; il verso pr
 più scambiate dei perpetui il risultato dell'articolo (4.284 monete, anche piccolissime) non si ripete, e la versione con il momento
 segue la sorte del momento. È la terza prova dalla letteratura di oggi che non regge sui perpetui: quello che i ricercatori trovano
 fra migliaia di monete, prima del 2022, raramente sopravvive fra le 100 grandi dopo. Nel conto: 213.
+**Prova 116 e 117 della notte**: vedi sopra (il valore misurato con gli utenti, consumato dopo il 2022; le monete inelastiche, che sulle
+100 grandi non si ripetono).
+**Prova 118, il momento dei vicini, ogni giorno** (`programma7/CINQUANTASEIESIMA.md`, 06:17 UTC; idea 91): long le monete i cui 10 vicini
+più correlati sono saliti ieri, short quelle i cui vicini sono scesi. **No**: Sharpe −0,93. Prima dei costi +14,5% l'anno, ma il segnale
+cambia ogni giorno (17 entrate al giorno) e le spese arrivano al 43-82% l'anno. Capito, e vale per tutto il trading di ogni giorno: un
+vantaggio che dura un giorno deve essere enorme per pagare un giro ogni giorno; G1 regge perché il suo segnale cambia lentamente (una
+posizione dura 17 giorni). Nel conto: 214.
