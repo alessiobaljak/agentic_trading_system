@@ -5044,3 +5044,11 @@ regalate bisogna bloccare BNB. **No**: dal 5° minuto dopo l'annuncio, per 24 or
 domanda di BNB c'è ma si prezza nel primo minuto** (+0,92% sul Bitcoin): l'informazione degli annunci di Binance va a chi la legge in
 pochi secondi. È l'unico caso trovato finora in cui la velocità e una macchina vicina a Binance conterebbero; prima di pensarci si misura
 in quanti secondi si muove il prezzo (idea 84). Nel conto: 210.
+
+### 28 ottobre 2026 (00:25 UTC)
+
+**I ribilanci della notte, puliti** (log 0676, nessun errore): G1 alle 00:09 (25 long e 20 short, costo 0,88 dollari, conto 9.906,10:
+−0,94% dall'inizio); G11 alle 00:13 (26 e 28, conto 10.076,75: +0,77%); G1N alle 00:17 (24 e 20, conto 10.216,88: +2,17%); il conto
+demo alle 00:18 (40 ordini limite, 1 rifiutato: sempre la moneta con il nome in caratteri cinesi). Misure in avanti delle 00:21: niente
+di nuovo oltre a STABLE (entrata a tavolino stanotte alle 00:00). Coda delle idee con i dati gratuiti vuota: parte una ricerca nella
+letteratura pubblicata (un aiutante separato) dei segnali sulle crypto non ancora provati, con la fonte e i dati che servono.
