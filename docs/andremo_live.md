@@ -5091,3 +5091,8 @@ e ha interrotto anche se stesso, come avverte la routine del mattino (si ferma s
 movimento in 1 secondo, il 66% in 5, tutto in 30, e niente prima della pubblicazione. Capito: l'informazione degli annunci di Binance va
 a chi la legge entro 1-2 secondi; è una gara di velocità, l'unico posto dove una macchina a Tokyo conterebbe (backlog P29), ma per i
 soli Launchpool vale poco (11 l'anno). Misure in avanti delle 16:23: niente di nuovo.
+**Prova 121, l'inclinazione delle opzioni sul Bitcoin** (`programma7/CINQUANTANOVESIMA.md`, 20:22 UTC; idea 88, dati di Deribit): long il
+Bitcoin quando le opzioni da salita sono più care del solito, short quando lo sono meno. **No**: Sharpe −0,34; e la misura, stretta,
+c'è solo in 773 giorni su 2.034. Capito: il segnale va **al contrario** del previsto (correlazione con il giorno dopo −0,12): le opzioni
+da salita care sono l'entusiasmo che paga troppo, come il funding alto. Non si sceglie adesso il verso opposto; diventa l'idea 94, da
+provare sull'Ether con una misura più larga. Nel conto: 216.
