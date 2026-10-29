@@ -5127,3 +5127,8 @@ la protezione resta cominciare con poco capitale. Nel conto: 219.
 paura estrema (PA) e venderlo nell'avidità estrema (AV). **No**: PA Sharpe 0,11 (2022 −68%), AV −0,45 (2020 −69%); tenere il Bitcoin
 sempre fa 0,76. Capito: l'avidità estrema è forza che continua (Bitcoin +23% nei 30 giorni dopo), e la paura estrema può durare mesi
 mentre il prezzo scende; l'indice racconta il mercato, non lo anticipa. Nel conto: 221.
+**I messaggi di Musk e le crypto** (`programma7/MINUTI_MUSK.md`, idea 98, descrittiva, domanda del proprietario): dalla raccolta pubblica
+dei suoi messaggi (78.616 dal 2013 al maggio 2025, Hugging Face), i 33 messaggi originali su Dogecoin dal 2020 facevano +2,9% nel primo
+minuto e +5,2% in 5 minuti; ma per anno l'effetto c'è nel 2020-2022 e sparisce nel 2024-2025 (nove messaggi del 2025: zero). Sul
+Bitcoin quasi niente. Capito: anche questo segnale famoso è finito quando tutti lo conoscevano; e quando c'era, andava a chi leggeva X
+nel primo minuto.
