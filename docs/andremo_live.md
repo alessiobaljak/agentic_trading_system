@@ -5139,3 +5139,11 @@ alla fine non c'è niente da sgonfiare; il volume fatto per il premio è comprar
 all'inizio della gara tocca l'uscita a +30% una volta su cinque. **L'idea 99 (le notizie della SEC) non si fa come prova**: il verso si
 sa solo quando la notizia esce, la prima reazione va a chi è più veloce e una lista fatta oggi a mano sarebbe scelta con il senno di poi.
 Nel conto: 222.
+**Giro delle 16:33.** Controlli in avanti delle 16:44: niente di nuovo (su Coinbase solo STABLE, nessuna chiusura dei future). Con la
+coda quasi vuota ho scritto cinque idee nuove (101-105: la rotazione fra altcoin e Bitcoin, il buco fra perpetuo e pronti nei crolli,
+il valore con le commissioni, le emissioni di Tether, l'inizio del mese). **Prova 127, la rotazione fra le altcoin e il Bitcoin**
+(`programma7/SESSANTACINQUESIMA.md`, 16:41 UTC; decisa ogni giorno): long l'indice delle altcoin e short il Bitcoin quando le altcoin
+vanno meglio da 20, 60 e 120 giorni, il contrario quando vanno peggio. **No**: Sharpe −0,09. Capito: le ondate esistono (nel 2021
+l'indice delle altcoin fa +288% sul Bitcoin, poi perde quattro anni di fila, −67% nel 2025), ma la tendenza cambia verso più di una
+volta a settimana e la regola paga ogni svolta; anche «sempre venduta sulle altcoin», che guadagna dal 2022, non regge perché il 2021 la
+distrugge. Nel conto: 223.
