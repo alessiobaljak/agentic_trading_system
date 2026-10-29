@@ -194,7 +194,28 @@ sul passato di Binance 2021-2026, ogni anno positivo, Sharpe corretto 0,91 dopo 
 **Piano:** (1) demo e paper accanto per 1-2 settimane: si confrontano esecuzione (ordini limite eseguiti, costi), rendimento e
 posizioni; (2) se combaciano, il proprietario decide il passaggio con una cifra piccola, con una richiesta esplicita (la regola di
 `DRY_RUN`); (3) il codice per il conto vero si prepara separato dal demo (chiave sua, capitale massimo scritto, interruttore suo).
-**Non si fa senza la sua richiesta esplicita.** **Aggiunta del 25 ott:** la versione neutra al mercato di G1 (prova 88, `research/programma7/RISULTATI_VENTISEIESIMA.md`) ha la stessa resa (Sharpe 1,91 contro 1,96) con la discesa massima da −28,8% a −23,1%: per i soldi veri è la variante da proporre; richiede nel bot il beta giornaliero delle monete (90 giorni) e la scalatura dei lati.
+**Non si fa senza la sua richiesta esplicita.** **Aggiunta del 25 ott:** la versione neutra al mercato di G1 (prova 88, `research/programma7/RISULTATI_VENTISEIESIMA.md`) ha quasi la stessa resa (Sharpe 1,91 contro 1,96; 2,8 punti l'anno in meno, corretto il 29 ottobre) con la discesa massima da −28,8% a −23,1%: per i soldi veri era la variante da proporre (non più dal 29 ottobre, vedi sotto); richiede nel bot il beta giornaliero delle monete (90 giorni) e la scalatura dei lati.
+  **29 ottobre, la revisione separata di G1N** (`research/programma7/REVISIONE_G1N.md`): **G1N non è da preferire a G1 per i soldi
+  veri.**
+  * **I conti sono giusti**: nessun dato futuro, e il bot calcola le stesse cose della ricerca.
+  * **Ma la discesa più bassa non è un vantaggio dimostrato**:
+    * viene da un solo episodio (novembre 2023 – marzo 2024) e nel ricampionamento c'è solo nel 62% dei casi;
+    * dal 2025 G1N fa peggio di G1 (Sharpe 1,94 contro 2,42, discesa −20,6% contro −17,9%);
+    * un lato long più pesante del 4% circa, quasi fisso, fa meglio (2,01) senza stimare nessun beta.
+  * **La frase «stessa resa» era inesatta**: G1N rende 2,8 punti l'anno in meno. È corretta qui sopra solo con questa nota, e nel codice
+    del bot.
+  * **Lo Sharpe corretto di oggi**: G1N 0,835 e G1 0,860, sotto lo 0,90 della regola del proprietario.
+  * **I rischi per i soldi veri che il paper non vede** (la candidata per i soldi veri torna G1, con questi rischi davanti):
+    * il lato venduto è di monete piccole (la metà fra la 51ª e la 100ª);
+    * nei giorni di funding uguale per molte monete lo short scende a 5 monete, e una può pesare quasi metà del capitale (BLZ al 47,8% il
+      5 febbraio 2024);
+    * rialzi improvvisi del lato venduto (nel caso peggiore −11,1% del conto in un giorno);
+    * il funding è metà del guadagno (+27% l'anno su 51,5%);
+    * con meno di circa 10.000 USDT molti ordini sono sotto il minimo di Binance (con 1.000 USDT il 76%);
+    * gli ordini limite sono l'ipotesi più fragile (se il prezzo deve passare il livello dello 0,10%, G1N scende da 1,92 a 1,53);
+    * il demo segue G1, non G1N.
+
+  Il limite al numero minimo di monete per lato (contro la moneta sola al 47,8%) è l'idea 97 della coda.
   **25 ottobre, sera della mattina (08:30 UTC)**: G1N (la neutralità al beta, prova 88) gira nel paper del bot accanto a G1 e G11 (`bot/portafoglio/f5.py`, classe `PaperG1N`, interruttore `ops/paper_g1n_acceso`, ramo `/paper_g1n`, nel grafico della dashboard), così quando il proprietario chiederà i soldi veri la versione proposta avrà settimane di paper alle spalle; le prove 93-94 (l'interruttore sulle perdite) non hanno aggiunto niente sopra la neutralità.
 
 ### P25. G1 con ordini veri sul conto demo di Binance — chiesta dal proprietario il 24 ott 2026; ACCESO dal 24 ott, 09:11 UTC

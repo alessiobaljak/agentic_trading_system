@@ -605,9 +605,10 @@ class PaperG1(PaperF5):
 
 
 class PaperG1N(PaperG1):
-    """G1N, G1 neutra al mercato (research/programma7/VENTISEIESIMA.md, prova 88: discesa massima da −28,8% a −23,1% con lo stesso
-    rendimento; nel paper per decisione del coordinamento del 25 ottobre 2026, voce P26 del backlog: e' la versione proposta per i
-    soldi veri). Stesse regole di G1, poi i due lati scalati ogni giorno perche' la somma dei beta (90 giorni prima, verso la media
+    """G1N, G1 neutra al mercato (research/programma7/VENTISEIESIMA.md, prova 88: discesa massima da −28,8% a −23,1%, con 2,8 punti
+    l'anno di rendimento in meno di G1; nel paper per decisione del coordinamento del 25 ottobre 2026. La revisione separata del 29
+    ottobre (research/programma7/REVISIONE_G1N.md) dice che non e' da preferire a G1 per i soldi veri: resta nel paper come confronto).
+    Stesse regole di G1, poi i due lati scalati ogni giorno perche' la somma dei beta (90 giorni prima, verso la media
     dell'universo del giorno) sia zero, entro 0,5-1,5. Interruttore `ops/paper_g1n_acceso`, stato in `data/paper_g1n.json` e su RTDB
     in `/paper_g1n`."""
     RAMO, ETICHETTA = "/paper_g1n", "paper_g1n"

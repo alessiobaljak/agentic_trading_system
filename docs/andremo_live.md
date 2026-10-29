@@ -5109,3 +5109,12 @@ Bitcoin con la stessa misura larga, il verso della letteratura fa 0,37, con tre 
 l'inclinazione delle opzioni cambia segno secondo la moneta e la misura, quindi il segnale non c'è, o non paga un giro al giorno; con il
 premio della volatilità (prove 47, 110) la famiglia delle opzioni si chiude. Errore di metodo evitato: dopo la 122 non ho girato il verso
 sull'Ether, ho provato l'ipotesi sul Bitcoin, dove la misura larga non era mai stata calcolata. Nel conto: 218.
+**La revisione separata di G1N** (`research/programma7/REVISIONE_G1N.md`, un aiutante che non l'aveva scritta né costruita):
+**G1N non è da preferire a G1 per i soldi veri.** I conti sono giusti (nessun dato futuro; il bot calcola le stesse cose della ricerca,
+verificato su 60 giorni veri), ma la discesa più bassa viene da un solo episodio (novembre 2023 – marzo 2024, 62% nel ricampionamento),
+dal 2025 G1N fa peggio di G1 (1,94 contro 2,42) e un lato long più pesante del 4% quasi fisso fa meglio senza stimare nessun beta. Il
+«stessa resa» che avevo scritto era inesatto (2,8 punti l'anno in meno): corretto nel backlog e nel codice del bot. La candidata per i
+soldi veri torna G1, con una lista di rischi che il paper non vede (backlog P26): il lato venduto su monete piccole, giorni con 5 sole
+monete short e una al 47,8% del capitale, rialzi improvvisi (−11,1% nel giorno peggiore), metà del guadagno dal funding, ordini sotto il
+minimo con poco capitale, ordini limite fragili. Capito: un vantaggio sulla discesa massima va provato con il ricampionamento, non con
+un solo numero; e il controllo (il 120/80) deve somigliare alla cosa che si controlla. Idea 97 in coda: un minimo di monete per lato.
