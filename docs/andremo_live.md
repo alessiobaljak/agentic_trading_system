@@ -5163,3 +5163,11 @@ peggio delle ore normali. Capito: le emissioni di Tether non spingono più il Bi
 messaggi di Musk. Nel conto: 226. **La coda delle idee pronte è vuota**: le altre aspettano dati che non abbiamo (Upbit, Wikipedia, la
 SEC, il valore di mercato storico) o il proprietario (l'esportazione del canale Telegram, lo storico del libro degli ordini), o si
 guardano solo in avanti. Prossimo passo: una nuova ricerca di idee nelle pubblicazioni del 2025-2026.
+**Ricerca nelle pubblicazioni del 29 ottobre sera** (un aiutante separato, che ha letto tutto il registro): poche idee davvero nuove;
+otto in coda (106-113), con le fonti e una probabilità onesta; quasi tutto il resto della letteratura 2024-2026 sui perpetui è già nel
+registro. La scoperta utile: il file dei calendari degli sblocchi della prova 74 contiene l'offerta in circolazione giorno per giorno,
+quindi l'idea 82 (scartata il 27 ottobre per mancanza di dati) si può fare. **Prova 131, la diluizione** (`programma7/SESSANTANOVESIMA.md`,
+21:00 UTC; 137 monete): **no**. DA (l'offerta cresciuta in 12 settimane) Sharpe 0,13; DB (l'offerta che resta da sbloccare) Sharpe
+0,49, meglio del caso e forte dal 2024 (+36%, +56%, +52% l'anno), ma −64% nel 2021 e −22% nel 2023. Capito: le monete con tanta
+offerta ancora bloccata fanno peggio da quando il problema è diventato famoso (2024); prima, nella mania del 2021, salivano di più.
+DB si guarda solo in avanti. Nel conto: 228.
