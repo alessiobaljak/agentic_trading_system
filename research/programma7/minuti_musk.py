@@ -24,8 +24,11 @@ PAROLE = {"DOGEUSDT": r"\bdoge\b|dogecoin", "BTCUSDT": r"bitcoin|\bbtc\b"}
 
 def percorso(simbolo: str, m: int) -> dict | None:
     giorni = range(m // 1440, (m + max(DOPO)) // 1440 + 1)
-    w = pd.concat([x for x in (minuti(simbolo, sc.data(g)) for g in giorni) if not x.empty]) if giorni else pd.DataFrame()
-    if w.empty or m not in w.index:
+    parti = [x for x in (minuti(simbolo, sc.data(g)) for g in giorni) if not x.empty]
+    if not parti:                       # nessuna candela (per esempio prima che il perpetuo esistesse)
+        return None
+    w = pd.concat(parti)
+    if m not in w.index:
         return None
     p0 = float(w.loc[m, "open"])
     out = {}
