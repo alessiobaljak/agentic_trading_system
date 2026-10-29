@@ -1,5 +1,5 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-26.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-27.zip",
  "procedure": {
   "N-001": {
    "trade": 23,
@@ -81,7 +81,7 @@
     "p": 0.8176182381761824
    },
    "netto_doppio": -0.008557344777561137,
-   "caso_netto": -0.0019961845479607443,
+   "caso_netto": -0.0017453578176822788,
    "senza_migliore": -0.010160208668753801,
    "per_moneta": {
     "AAVEUSDT": {
