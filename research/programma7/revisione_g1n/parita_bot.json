@@ -1,0 +1,590 @@
+{
+ "pannello_tagliato": [
+  {
+   "giorno": "2022-01-13",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 59
+  },
+  {
+   "giorno": "2022-01-23",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 58
+  },
+  {
+   "giorno": "2024-01-16",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 38
+  },
+  {
+   "giorno": "2024-07-14",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 56
+  },
+  {
+   "giorno": "2025-08-26",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 56
+  },
+  {
+   "giorno": "2026-10-04",
+   "diff_max_G1N": 0.0,
+   "diff_max_G1": 0.0,
+   "monete": 51
+  }
+ ],
+ "bot_contro_ricerca": [
+  {
+   "giorno": "2021-02-04",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-05-28",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-06-28",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-09-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-10-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-10-12",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-10-16",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-10-31",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-11-02",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-03-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 4.163336342344337e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-05-10",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-05-30",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-07-25",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-08-08",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-10-03",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-10-06",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-12-22",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-01-09",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-02-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-04-04",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-07-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-08-10",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-09-09",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.0408340855860843e-17,
+   "diff_max_G1N": 6.938893903907228e-18,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-10-06",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-11-21",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-11-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-01-19",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 4.163336342344337e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-01-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-02-15",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-02-28",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-05-20",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-05-23",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-07-02",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-09-28",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-10-19",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-12-10",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-02-14",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 5.551115123125783e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-03-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-06-17",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-06-21",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-08-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-08-21",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-09-12",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 4.163336342344337e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-10-07",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-11-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-11-20",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "diff_max_G1N": 4.163336342344337e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-12-20",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-01-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 4.440892098500626e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-02-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-03-15",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 2.0816681711721685e-17,
+   "diff_max_beta": 1.5543122344752192e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-04-20",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-05-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 1.3877787807814457e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-05-04",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 8.881784197001252e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-07-04",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 4.163336342344337e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 1.3322676295501878e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-07-18",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 1.7763568394002505e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-07-30",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 1.3322676295501878e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-08-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 1.3322676295501878e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-08-06",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 5.551115123125783e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 6.661338147750939e-16,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-08-12",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 5.551115123125783e-17,
+   "diff_max_G1N": 5.551115123125783e-17,
+   "diff_max_beta": 1.7763568394002505e-15,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-09-14",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "diff_max_G1N": 2.7755575615628914e-17,
+   "diff_max_beta": 1.3322676295501878e-15,
+   "lati_cambiati": 0
+  }
+ ],
+ "bot_contro_ricerca_sintesi": {
+  "giorni": 60,
+  "universo_uguale": 60,
+  "diff_max_G1": 5.551115123125783e-17,
+  "diff_max_G1N": 5.551115123125783e-17,
+  "diff_max_beta": 1.7763568394002505e-15,
+  "giorni_con_lati_cambiati": 0
+ }
+}

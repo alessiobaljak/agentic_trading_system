@@ -1,0 +1,48 @@
+{
+ "ordini": {
+  "variazioni_totali": 117045,
+  "al_giorno": 55.73571428571429,
+  "mediana_in_frazione_del_capitale": 0.0021734308036538558,
+  "quantile_25": 0.0009323437639815208,
+  "capitale_1000": {
+   "quota_ordini_sotto_5_usdt": 0.7583408090905207,
+   "quota_del_giro_sotto_5_usdt": 0.20097418236102957
+  },
+  "capitale_5000": {
+   "quota_ordini_sotto_5_usdt": 0.2660942372591738,
+   "quota_del_giro_sotto_5_usdt": 0.01919963116084359
+  },
+  "capitale_10000": {
+   "quota_ordini_sotto_5_usdt": 0.14074074074074075,
+   "quota_del_giro_sotto_5_usdt": 0.005209081200202759
+  },
+  "capitale_100000": {
+   "quota_ordini_sotto_5_usdt": 0.013917723952326029,
+   "quota_del_giro_sotto_5_usdt": 5.248906520040603e-05
+  }
+ },
+ "giro_annuo": {
+  "G1": 137.212657804096,
+  "G1N": 135.9814105140145
+ },
+ "short_rialzo_nel_giorno": {
+  "posizioni_giorno": 56535,
+  "sopra_20pc": 1298,
+  "sopra_30pc": 493,
+  "sopra_50pc": 138,
+  "massimo": 4.130260750228729
+ },
+ "perdita_peggiore_possibile_nel_giorno": {
+  "valore": -0.6328894712273746,
+  "giorno": "2025-10-10",
+  "quantile_1pc": -0.2596211978203028
+ },
+ "mercato_intero_al_minimo_o_al_massimo": {
+  "peggiore": -0.11068078903535694,
+  "giorno": "2021-01-30",
+  "quantile_1pc": -0.042373635706582854,
+  "peggiore_crollo": -0.031808716645864245,
+  "peggiore_rialzo": -0.11068078903535694
+ },
+ "short_peso_massimo": 0.4783176454671501
+}
