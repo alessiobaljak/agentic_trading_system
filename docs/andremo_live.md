@@ -5157,3 +5157,9 @@ protocolli) **non si fa per ora**: lo storico gratuito del valore di mercato cop
 **Prova 129, l'inizio del mese sul Bitcoin** (`programma7/SESSANTASETTESIMA.md`, 20:23 UTC): long dall'ultimo giorno del mese al terzo
 del mese dopo. **No**: +0,03% a operazione su 80 mesi (p 0,48), peggio di un giorno qualunque (+0,30%), e negativa dal 2024. Capito: i
 flussi degli stipendi e dei piani d'acquisto mensili, se ci sono, non si vedono nel prezzo del Bitcoin. Nel conto: 225.
+**Prova 130, le emissioni nuove di Tether** (`programma7/SESSANTOTTESIMA.md`, 20:27 UTC; idea 104): 116 emissioni da almeno 500 milioni
+su Tron dal 2021 (lo storico di Ethereum non si legge gratis), long il Bitcoin per 24 ore. **No**: −0,46% a operazione (p 0,92), un po'
+peggio delle ore normali. Capito: le emissioni di Tether non spingono più il Bitcoin; l'effetto del 2017-2018 è finito, come quello dei
+messaggi di Musk. Nel conto: 226. **La coda delle idee pronte è vuota**: le altre aspettano dati che non abbiamo (Upbit, Wikipedia, la
+SEC, il valore di mercato storico) o il proprietario (l'esportazione del canale Telegram, lo storico del libro degli ordini), o si
+guardano solo in avanti. Prossimo passo: una nuova ricerca di idee nelle pubblicazioni del 2025-2026.
