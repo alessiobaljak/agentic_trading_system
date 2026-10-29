@@ -5123,3 +5123,7 @@ quando un lato ha meno di 10 monete, tutta l'esposizione scende in proporzione. 
 −8,5%), ma la discesa massima peggiora un poco (−30,4% contro −28,8%), perché nei giorni ridotti si perdono anche i guadagni. Capito: il
 rischio della moneta sola molto pesante non si toglie gratis, né con il tetto (prova 61) né con il minimo di monete; per i soldi veri
 la protezione resta cominciare con poco capitale. Nel conto: 219.
+**Prova 125, l'indice di paura e avidità** (`programma7/SESSANTATREESIMA.md`, 06:48 UTC; idea del proprietario): comprare il Bitcoin nella
+paura estrema (PA) e venderlo nell'avidità estrema (AV). **No**: PA Sharpe 0,11 (2022 −68%), AV −0,45 (2020 −69%); tenere il Bitcoin
+sempre fa 0,76. Capito: l'avidità estrema è forza che continua (Bitcoin +23% nei 30 giorni dopo), e la paura estrema può durare mesi
+mentre il prezzo scende; l'indice racconta il mercato, non lo anticipa. Nel conto: 221.
