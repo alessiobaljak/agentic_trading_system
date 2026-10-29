@@ -5152,3 +5152,8 @@ distrugge. Nel conto: 223.
 in un'ora ma resta per ore, quindi non è una gara di secondi. La prova (long il perpetuo e short il Bitcoin per 4 ore, 818 eventi dal
 2021): **no**, +0,73% a operazione ma con p 0,30 e la mediana a −0,47%. Capito: il perpetuo torna davvero verso il pronti (+1,2 punti
 in 4 ore), ma intanto il pronti continua a scendere, e la media viene quasi tutta dal 2021; nel 2026 −1,47%. Nel conto: 224.
+**Giro delle 20:19.** Controlli in avanti delle 20:22: niente di nuovo. **L'idea 103** (il valore misurato con le commissioni dei
+protocolli) **non si fa per ora**: lo storico gratuito del valore di mercato copre solo 17 gettoni di protocollo, troppo pochi.
+**Prova 129, l'inizio del mese sul Bitcoin** (`programma7/SESSANTASETTESIMA.md`, 20:23 UTC): long dall'ultimo giorno del mese al terzo
+del mese dopo. **No**: +0,03% a operazione su 80 mesi (p 0,48), peggio di un giorno qualunque (+0,30%), e negativa dal 2024. Capito: i
+flussi degli stipendi e dei piani d'acquisto mensili, se ci sono, non si vedono nel prezzo del Bitcoin. Nel conto: 225.
