@@ -5103,3 +5103,9 @@ provare sull'Ether con una misura più larga. Nel conto: 216.
 −1,93% dall'inizio); G11 alle 00:13 (29 e 27, conto 10.006,89: +0,07%); G1N alle 00:17 (24 e 22, conto 10.119,20: +1,19%); il conto
 demo alle 00:17 (30 ordini limite, 1 rifiutato: la moneta con il nome in caratteri cinesi). In calcolo la prova 122 (l'inclinazione
 delle opzioni al contrario, sull'Ether). Misure in avanti delle 00:22: niente di nuovo.
+**Prove 122 e 123, l'inclinazione delle opzioni sull'Ether e sul Bitcoin** (`programma7/SESSANTESIMA.md`, `SESSANTUNESIMA.md`): sull'Ether il
+verso al contrario (preso dal Bitcoin della prova 121) perde molto, Sharpe −1,37: lì vale il verso della letteratura. Rifatto sul
+Bitcoin con la stessa misura larga, il verso della letteratura fa 0,37, con tre anni negativi su sei. **No** per tutte e due. Capito:
+l'inclinazione delle opzioni cambia segno secondo la moneta e la misura, quindi il segnale non c'è, o non paga un giro al giorno; con il
+premio della volatilità (prove 47, 110) la famiglia delle opzioni si chiude. Errore di metodo evitato: dopo la 122 non ho girato il verso
+sull'Ether, ho provato l'ipotesi sul Bitcoin, dove la misura larga non era mai stata calcolata. Nel conto: 218.
