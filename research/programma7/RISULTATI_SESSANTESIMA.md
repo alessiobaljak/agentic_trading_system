@@ -11,7 +11,7 @@ Regole in `SESSANTESIMA.md` (scritte prima). Operazioni di Deribit sulle opzioni
 
 **Esito: netto con l'intervallo non sopra zero**
 
-## Cosa abbiamo capito (controllo delle 00:58 UTC, prima di registrare)
+## Cosa abbiamo capito (controllo delle 00:55 UTC, prima di registrare)
 
 * **Il conto è giusto.**
   * Le posizioni sono metà short e metà long (49,6% short) e il segnale c'è in 1.959 giorni su 2.034.
