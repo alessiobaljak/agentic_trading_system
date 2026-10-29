@@ -5096,3 +5096,10 @@ Bitcoin quando le opzioni da salita sono più care del solito, short quando lo s
 c'è solo in 773 giorni su 2.034. Capito: il segnale va **al contrario** del previsto (correlazione con il giorno dopo −0,12): le opzioni
 da salita care sono l'entusiasmo che paga troppo, come il funding alto. Non si sceglie adesso il verso opposto; diventa l'idea 94, da
 provare sull'Ether con una misura più larga. Nel conto: 216.
+
+### 29 ottobre 2026 (00:30 UTC)
+
+**I ribilanci della notte, puliti** (log 0677, nessun errore): G1 alle 00:09 (24 long e 22 short, costo 0,63 dollari, conto 9.807,40:
+−1,93% dall'inizio); G11 alle 00:13 (29 e 27, conto 10.006,89: +0,07%); G1N alle 00:17 (24 e 22, conto 10.119,20: +1,19%); il conto
+demo alle 00:17 (30 ordini limite, 1 rifiutato: la moneta con il nome in caratteri cinesi). In calcolo la prova 122 (l'inclinazione
+delle opzioni al contrario, sull'Ether). Misure in avanti delle 00:22: niente di nuovo.
