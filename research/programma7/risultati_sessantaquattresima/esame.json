@@ -1,0 +1,94 @@
+{
+ "conto": {
+  "gare con periodo e moneta": 306,
+  "senza perpetuo": 88,
+  "perpetuo dopo la fine": 48,
+  "senza scambi il giorno dopo o senza 8 giorni di dati": 2,
+  "doppione entro 14 giorni": 1,
+  "eventi": 167
+ },
+ "senza_candele_orarie": 0,
+ "eventi": 167,
+ "esame": {
+  "boot": {
+   "media": -4.411670526154467e-05,
+   "basso": -0.026825538196969742,
+   "alto": 0.027168531447389947,
+   "p": 0.49865013498650135,
+   "eventi": 167,
+   "annunci": 77
+  },
+  "prima_meta": -0.022837751210280515,
+  "seconda_meta": 0.022478165008031008,
+  "senza_5_migliori": -0.011889186375427688,
+  "vinti": 0.5808383233532934,
+  "mediana": 0.022782116527587923,
+  "per_anno": {
+   "2020": {
+    "eventi": 6,
+    "media": -0.0070575975029995575
+   },
+   "2021": {
+    "eventi": 14,
+    "media": 0.013250083185029807
+   },
+   "2022": {
+    "eventi": 3,
+    "media": -0.14544924909997434
+   },
+   "2023": {
+    "eventi": 2,
+    "media": -0.11154948537003967
+   },
+   "2024": {
+    "eventi": 3,
+    "media": 2.2606991779796266e-05
+   },
+   "2025": {
+    "eventi": 16,
+    "media": -0.014295915886310434
+   },
+   "2026": {
+    "eventi": 123,
+    "media": 0.005996670584508389
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.4987)"
+ },
+ "controllo": {
+  "operazioni": 3287,
+  "media": -0.013950616550391752
+ },
+ "differenza_con_controllo": {
+  "media": 0.01734403661169783,
+  "eventi": 167,
+  "basso": -0.009640231621391325,
+  "alto": 0.04400374190387638,
+  "p": 0.1053
+ },
+ "tre_giorni": 0.011182579267822582,
+ "quattordici_giorni": 0.00937787117386194,
+ "dall_inizio": -0.03205910714024896,
+ "durante_mediana": -0.01688770741314327,
+ "durante_media": -0.03167738858839828,
+ "fermate": 0.17365269461077845,
+ "giovani": {
+  "eventi": 51,
+  "media": -0.012492678479945271
+ },
+ "altre": {
+  "eventi": 116,
+  "media": 0.005428957868090781
+ },
+ "alpha": {
+  "eventi": 33,
+  "media": 0.008327687702152772
+ },
+ "non_alpha": {
+  "eventi": 134,
+  "media": -0.0021058297309680587
+ },
+ "simboli_riusati": 2,
+ "soglia_tutte": 0.0002777777777777778,
+ "esito": "media non sopra zero con p ≤ 0,01 (p 0.4987)"
+}

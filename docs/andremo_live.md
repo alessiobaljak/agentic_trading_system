@@ -5132,3 +5132,10 @@ dei suoi messaggi (78.616 dal 2013 al maggio 2025, Hugging Face), i 33 messaggi 
 minuto e +5,2% in 5 minuti; ma per anno l'effetto c'è nel 2020-2022 e sparisce nel 2024-2025 (nove messaggi del 2025: zero). Sul
 Bitcoin quasi niente. Capito: anche questo segnale famoso è finito quando tutti lo conoscevano; e quando c'era, andava a chi leggeva X
 nel primo minuto.
+**Prova 126, vendere alla fine delle gare di trading di Binance** (`programma7/SESSANTAQUATTRESIMA.md`, 12:47 UTC; idea 96): dalla
+sezione delle attività di Binance (3.215 annunci, 463 gare), 167 gare con la data di fine, la moneta e il perpetuo. **No**: 0,00% a
+operazione (p 0,50). Capito: la gara non gonfia il prezzo (durante la gara la moneta fa −1,69% contro il Bitcoin in mediana), quindi
+alla fine non c'è niente da sgonfiare; il volume fatto per il premio è comprare e vendere insieme. Dà solo picchi improvvisi: chi vende
+all'inizio della gara tocca l'uscita a +30% una volta su cinque. **L'idea 99 (le notizie della SEC) non si fa come prova**: il verso si
+sa solo quando la notizia esce, la prima reazione va a chi è più veloce e una lista fatta oggi a mano sarebbe scelta con il senno di poi.
+Nel conto: 222.
