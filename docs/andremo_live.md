@@ -5118,3 +5118,8 @@ soldi veri torna G1, con una lista di rischi che il paper non vede (backlog P26)
 monete short e una al 47,8% del capitale, rialzi improvvisi (−11,1% nel giorno peggiore), metà del guadagno dal funding, ordini sotto il
 minimo con poco capitale, ordini limite fragili. Capito: un vantaggio sulla discesa massima va provato con il ricampionamento, non con
 un solo numero; e il controllo (il 120/80) deve somigliare alla cosa che si controlla. Idea 97 in coda: un minimo di monete per lato.
+**Prova 124, G1 con un minimo di monete per lato** (`programma7/SESSANTADUESIMA.md`, 06:19 UTC; idea 97, dalla revisione di G1N):
+quando un lato ha meno di 10 monete, tutta l'esposizione scende in proporzione. **No**: il giorno peggiore migliora (−6,8% contro
+−8,5%), ma la discesa massima peggiora un poco (−30,4% contro −28,8%), perché nei giorni ridotti si perdono anche i guadagni. Capito: il
+rischio della moneta sola molto pesante non si toglie gratis, né con il tetto (prova 61) né con il minimo di monete; per i soldi veri
+la protezione resta cominciare con poco capitale. Nel conto: 219.
