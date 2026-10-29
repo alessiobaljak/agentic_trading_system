@@ -1,6 +1,6 @@
 # Programma 7 — sessantunesima prova: l'inclinazione delle opzioni sul Bitcoin, verso della letteratura, misura larga (RRB)
 
-Scritto il 29 ottobre 2026 alle 00:56 UTC (ora dell'orologio), **prima di calcolare l'inclinazione larga sul Bitcoin**. È trading di ogni
+Scritto il 29 ottobre 2026 alle 00:55 UTC (commit `0cfd8dbc`), **prima di calcolare l'inclinazione larga sul Bitcoin**. È trading di ogni
 giorno, sul solo Bitcoin.
 
 ## 1. Da dove viene (da dichiarare)
