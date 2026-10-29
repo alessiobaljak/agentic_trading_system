@@ -5147,3 +5147,8 @@ vanno meglio da 20, 60 e 120 giorni, il contrario quando vanno peggio. **No**: S
 l'indice delle altcoin fa +288% sul Bitcoin, poi perde quattro anni di fila, −67% nel 2025), ma la tendenza cambia verso più di una
 volta a settimana e la regola paga ogni svolta; anche «sempre venduta sulle altcoin», che guadagna dal 2022, non regge perché il 2021 la
 distrugge. Nel conto: 223.
+**Idea 102, il buco fra il perpetuo e il pronti** (`programma7/BUCO_PERPETUO.md`, descrittiva, poi prova 128,
+`programma7/SESSANTASEIESIMA.md`, 17:06 UTC): quando il perpetuo chiude un'ora almeno l'1% sotto il prezzo a pronti, il buco si dimezza
+in un'ora ma resta per ore, quindi non è una gara di secondi. La prova (long il perpetuo e short il Bitcoin per 4 ore, 818 eventi dal
+2021): **no**, +0,73% a operazione ma con p 0,30 e la mediana a −0,47%. Capito: il perpetuo torna davvero verso il pronti (+1,2 punti
+in 4 ore), ma intanto il pronti continua a scendere, e la media viene quasi tutta dal 2021; nel 2026 −1,47%. Nel conto: 224.
