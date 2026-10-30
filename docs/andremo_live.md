@@ -5171,3 +5171,11 @@ quindi l'idea 82 (scartata il 27 ottobre per mancanza di dati) si può fare. **P
 0,49, meglio del caso e forte dal 2024 (+36%, +56%, +52% l'anno), ma −64% nel 2021 e −22% nel 2023. Capito: le monete con tanta
 offerta ancora bloccata fanno peggio da quando il problema è diventato famoso (2024); prima, nella mania del 2021, salivano di più.
 DB si guarda solo in avanti. Nel conto: 228.
+
+### 30 ottobre 2026 (00:30 UTC)
+
+**I ribilanci della notte, puliti** (log 0678, nessun errore): G1 alle 00:09 (22 long e 25 short, costo 1,26 dollari, conto 10.237,30:
++2,37% dall'inizio); G11 alle 00:13 (29 e 26, conto 10.211,53: +2,12%); G1N alle 00:17 (22 e 25, conto 10.378,68: +3,79%); il conto
+demo alle 00:18 (44 ordini limite, 1 rifiutato, come sempre la moneta con il nome in caratteri cinesi). Rispetto alle 13:01 di ieri
+(G1 −1,42%) un giorno buono: +3,8 punti in undici ore, che in pochi giorni non vuol dire niente. Misure in avanti delle 00:22: niente di
+nuovo.
