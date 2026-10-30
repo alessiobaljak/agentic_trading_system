@@ -81,12 +81,27 @@ def esegui(log=print) -> dict:
     pan = sc.pannello()
     ev = picchi(pan)
     log(f"[settantaduesima] {len(ev)} giorni di picco")
-    serve_ore = sorted({(s, g) for s, g in ev})
+    # ogni file una volta sola (due picchi della stessa moneta nello stesso mese non devono scaricare lo stesso file insieme)
+    mesi_ore = sorted({(s, m) for s, g in ev for m in bp.mesi(g - 1, g + 5)})
+    giorni_m = sorted({(s, x) for s, g in ev for x in (g - 1, g)})
+
+    def premio(x):
+        try:
+            sg._scarica(f"data/futures/um/monthly/premiumIndexKlines/{x[0]}/1h/{x[0]}-1h-{x[1]}.zip", bp.DATI / x[0])
+        except Exception:  # noqa: BLE001
+            pass
+
+    def ore_mese(x):
+        s, m = x
+        g0 = sc.giorno(int(m[:4]), int(m[5:7]), 1)
+        gt.scarica(s, g0 * 24, (g0 + 27) * 24)
     with ThreadPoolExecutor(max_workers=8) as ex:
-        list(ex.map(lambda x: gt.scarica(x[0], (x[1] - 1) * 24, (x[1] + 5) * 24), serve_ore))
-        list(ex.map(lambda x: [sg._scarica(f"data/futures/um/monthly/premiumIndexKlines/{x[0]}/1h/{x[0]}-1h-{m}.zip", bp.DATI / x[0])
-                               for m in bp.mesi(x[1] - 1, x[1] + 1)], serve_ore))
-        list(ex.map(lambda x: (metriche(x[0], x[1]), metriche(x[0], x[1] - 1)), serve_ore))
+        list(ex.map(ore_mese, mesi_ore))
+        list(ex.map(premio, mesi_ore))
+        list(ex.map(lambda x: metriche(*x), giorni_m))
+    for s, g in ev:                       # i giorni di ottobre 2026, fuori dai file mensili
+        if sc.data(g + 1) >= "2026-10-01":
+            gt.scarica(s, (g + 1) * 24, (g + 5) * 24)
     gt.scarica("BTCUSDT", DAL * 24, (AL + 5) * 24)
     cb = es.ore_di("BTCUSDT")
     S = list(pan["simboli"])
