@@ -5201,3 +5201,10 @@ seguire il primo passaggio delle 24 ore di un multiplo di 1.000 dollari (Bitcoin
 operazione su 3.483 passaggi, e già prima dei costi −0,06%; i numeri tondi fanno peggio dei livelli spostati a metà. Capito: dopo un
 numero tondo il prezzo non scappa via con gli stop, torna un po' indietro; ma il ritorno è troppo piccolo anche per l'operazione al
 contrario. Nel conto: 233.
+**Prova 135, il funding di Hyperliquid contro quello di Binance** (`programma7/SETTANTATREESIMA.md`, 06:18 UTC; idea 110): vendere le
+monete dove Hyperliquid paga più di Binance. **No, ma al contrario in modo netto**: Sharpe −2,38, negativa in tutti e quattro gli anni
+(dal giugno 2023), con il lato venduto che perde il 39% l'anno. Le monete dove su Hyperliquid i long pagano di più poi salgono anche su
+Binance: chi fa leva su Hyperliquid (grandi portafogli sulla catena) sembra sapere qualcosa. Non è G1 travestito (correlazione −0,06).
+Il verso al contrario è nato da questi dati, quindi non vale finché non regge su dati che non ha visto: prima le monete dalla 101ª alla
+200ª (stessi anni, monete diverse), poi in avanti. Due intoppi miei: il primo calcolo è stato fermato dal tempo massimo (83 minuti)
+durante lo scarico da Hyperliquid, che è lento; rilanciato, ha ripreso da dove era arrivato. Nel conto: 232.
