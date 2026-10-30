@@ -4,6 +4,6 @@ Calcolo di `avanti.py` (REGOLE.md, sezione 9) con i dati fino a `BTCUSDT-1m-2026
 
 | Procedura | Trade chiusi | Netto a trade | Intervallo al 95% | p | A costi doppi | Caso | Esito |
 |---|---|---|---|---|---|---|---|
-| M-001c | 177 | -0.752% | -1.915; -0.101 | 0.9896 | -0.927% | -0.389% | in corso (177 trade chiusi su 400) |
-| M-002 | 1380 | +0.723% | -0.819; +2.463 | 0.2410 | +0.533% | -1.190% | non passa: p 0.2410 oltre 0.0167 o netto non positivo |
-| M-003 | 513 | -2.090% | -4.362; +0.150 | 0.9659 | -2.332% | -0.566% | non passa: p 0.9659 oltre 0.0167 o netto non positivo |
+| M-001c | 178 | -0.756% | -1.911; -0.105 | 0.9901 | -0.931% | -0.367% | in corso (178 trade chiusi su 400) |
+| M-002 | 1439 | +0.691% | -0.783; +2.378 | 0.2414 | +0.502% | -1.174% | non passa: p 0.2414 oltre 0.0167 o netto non positivo |
+| M-003 | 526 | -2.146% | -4.398; +0.066 | 0.9717 | -2.389% | -0.450% | non passa: p 0.9717 oltre 0.0167 o netto non positivo |
