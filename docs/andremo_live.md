@@ -5208,3 +5208,8 @@ Binance: chi fa leva su Hyperliquid (grandi portafogli sulla catena) sembra sape
 Il verso al contrario è nato da questi dati, quindi non vale finché non regge su dati che non ha visto: prima le monete dalla 101ª alla
 200ª (stessi anni, monete diverse), poi in avanti. Due intoppi miei: il primo calcolo è stato fermato dal tempo massimo (83 minuti)
 durante lo scarico da Hyperliquid, che è lento; rilanciato, ha ripreso da dove era arrivato. Nel conto: 232.
+**Prova 137, il funding di Hyperliquid al contrario, sulle monete che non ha visto** (`programma7/SETTANTACINQUESIMA.md`, 09:58 UTC; idea
+114): sulle monete dalla 101ª alla 200ª, comprare dove Hyperliquid paga più di Binance. **Non confermata**: Sharpe 0,72, ma il solo
+funding di Binance (G1) sulle stesse monete fa 0,75, e il 2026 è negativo. Sulle prime 100, già viste, la stessa regola fa 1,90 con i
+costi. Capito: il segnale di Hyperliquid è forte proprio sulle monete dove è nato e non si trasferisce oltre il funding di Binance; resta
+da guardare solo in avanti (backlog P30). Nel conto: 234.
