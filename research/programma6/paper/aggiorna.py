@@ -24,6 +24,8 @@ INIZIO_GIORNI = sc.giorno(2026, 10, 20)
 INIZIO_SETTIMANE = sc.giorno(2026, 10, 26)
 INIZIO_E4_MS = sc.giorno(2026, 10, 21) * 86_400_000
 INIZIO_EWIL = sc.giorno(2026, 11, 2)                # REGOLE.md, sezione 6: solo informazione
+INIZIO_HLI = sc.giorno(2026, 11, 2)                 # REGOLE.md, sezione 15: solo informazione
+HL_DAL_MS = sc.giorno(2026, 10, 20) * 86_400_000     # il funding di Hyperliquid si scarica solo da qui
 INTERESSE, TETTO = 0.0001, 0.0005
 
 
@@ -240,6 +242,47 @@ def a1(pan: dict) -> tuple:
     return df, {"giorno": sc.data(t + pan["t0"]), "pesi": dict(sorted(adesso.items(), key=lambda x: -x[1]))}
 
 
+def funding_hyperliquid(pan: dict, log=print) -> np.ndarray:
+    """Il funding di Hyperliquid per giorno di tenuta (REGOLE.md, sezione 15), dal 20 ottobre 2026: si scarica solo la parte nuova di ogni
+    moneta (`research/data/hyperliquid_recente/`), e si abbina ai perpetui come nella prova 135."""
+    from research.programma7 import settantatreesima as hl
+    dati = QUI.parents[1] / "data" / "hyperliquid_recente"
+    dati.mkdir(parents=True, exist_ok=True)
+    simboli, t0 = pan["simboli"], pan["t0"]
+    T = pan["close"].shape[0]
+    Fh = np.full((T, len(simboli)), np.nan)
+    meta = hl._post({"type": "meta"}) or {"universe": []}
+    usati = set()
+    for n in [x["name"] for x in meta["universe"]]:
+        corta = n.startswith("k") and n[1:].isupper()
+        cand = (f"1000{n[1:]}USDT",) if corta else (f"{n}USDT", f"1000{n}USDT")
+        s = next((x for x in cand if x in simboli), None)
+        if not s or s in usati:
+            continue
+        usati.add(s)
+        f = dati / f"{n}.json"
+        righe = json.loads(f.read_text()) if f.exists() else []
+        inizio = (righe[-1][0] + 1) if righe else HL_DAL_MS
+        while True:
+            d = hl._post({"type": "fundingHistory", "coin": n, "startTime": inizio})
+            if not d:
+                break
+            righe += [(int(x["time"]), float(x["fundingRate"])) for x in d]
+            if len(d) < 500:
+                break
+            inizio = int(d[-1]["time"]) + 1
+        f.write_text(json.dumps(righe))
+        if not righe:
+            continue
+        df = pd.DataFrame(righe, columns=["ts", "tasso"]).drop_duplicates("ts")
+        tenuta = (df["ts"].to_numpy() // 60_000 - 1) // 1440
+        g = pd.Series(df["tasso"].to_numpy(float), index=tenuta).groupby(level=0).sum()
+        g = g[(g.index >= t0) & (g.index < t0 + T)]
+        Fh[g.index.to_numpy() - t0, simboli.index(s)] = g.to_numpy()
+    log(f"[paper] Hyperliquid: {len(usati)} monete abbinate")
+    return Fh
+
+
 def esegui(log=print) -> dict:
     pan = sc.costruisci_pannello(log=lambda x: None)
     # i dati sulle posizioni dei giorni nuovi (per K1), con la tabella appena ricostruita
@@ -293,6 +336,32 @@ def esegui(log=print) -> dict:
     dew = dew[dew.index >= INIZIO_EWIL]
     res["candidate"]["EWIL (informazione, dal 2 novembre)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in dew["netto"].items()}, **_riassunto(dew["netto"], 52)}
+    # HLI (prova 137, REGOLE.md sezione 15, solo informazione): il funding di Hyperliquid al contrario sulle prime 100, ogni giorno, dal
+    # 2 novembre 2026, accanto a G1 sulle stesse monete; un errore qui non ferma il paper
+    try:
+        from research.programma6 import ventiquattresima as vq
+        from research.programma7 import cinquantaduesima as kp
+        from research.programma7 import prima as g1
+        from research.programma7 import settantesima as fm
+        Fh = funding_hyperliquid(pan, log)
+        ultimo_lunedi = int(psw["lunedi"][-1])
+        giorni = np.arange(INIZIO_HLI, min(pan["t0"] + pan["close"].shape[0] - 1, ultimo_lunedi + 7), dtype=np.int64)
+        if len(giorni):
+            idx = giorni - pan["t0"]
+            Ud = g1.universo_del_giorno(giorni, psw["lunedi"], psw["U"])
+            fb = se.funding_7(pan, idx)
+            scarto = np.round(fm.somma_7(Fh, idx) - fb, 12)
+            Ur = Ud & np.isfinite(scarto)
+            sig = ot.sigma_30(pan, idx)
+            R, F = sc.rendimenti(pan)[idx], np.nan_to_num(pan["funding"][idx])
+            for nome, ct in (("HLI", scarto), ("G1 sulle stesse monete di HLI", -fb)):
+                W = vq.pesi_banda(np.where(np.isfinite(sig) & Ur, ct, np.nan), Ur, sig)
+                lim, _ = kp.conto(W, R, F, sc.costi_moneta(pan["simboli"]), giorni, pan["simboli"])
+                netto = pd.Series(lim["netto"].to_numpy(), index=giorni)
+                res["candidate"][f"{nome} (informazione, dal 2 novembre)"] = {
+                    "giorni": {sc.data(int(k)): round(float(v), 6) for k, v in netto.items()}, **_riassunto(netto, 365)}
+    except Exception as ex:                           # noqa: BLE001
+        log(f"[paper] HLI non calcolata ({ex})")
     # N3 (TRENTESIMA.md, REGOLE.md sezione 11): gli eventi del periodo P su Binance e su Gate.io
     from research.programma6 import scarico_annunci, tipi_gate
     from research.programma6.paper import n3

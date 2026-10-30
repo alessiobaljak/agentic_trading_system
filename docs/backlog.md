@@ -679,6 +679,8 @@ Non è «una riga di codice»: dettaglio nell'archivio.
 
 ### P30 — Misura in avanti di HLI (il funding di Hyperliquid al contrario) sulle prime 100 (30 ottobre 2026)
 
+**Fatto il 30 ottobre sera**: aggiunta al conto a tavolino come informazione dal 2 novembre 2026, con le regole scritte prima (`research/programma6/paper/REGOLE.md`, sezione 15; codice in `research/programma6/paper/aggiorna.py`, `funding_hyperliquid` e il blocco HLI). Il funding di Hyperliquid si scarica solo dal 20 ottobre in avanti, quindi la routine del mattino resta veloce.
+
 **Cosa**: aggiungere al conto a tavolino del programma 6 (`research/programma6/paper/aggiorna.py`) la regola HLI sulle prime 100 (long il quinto dove Hyperliquid paga più di Binance nei 7 giorni prima, short il più basso, decisa ogni giorno come G1), come **sola informazione**, con il funding di Hyperliquid letto ogni giorno dall'API pubblica (`research/programma7/settantatreesima.py`).
 **Perché**: nella prova 135 vendere dove Hyperliquid paga di più faceva Sharpe −2,38 in ogni anno; il verso al contrario sulle prime 100 fa 1,90 con i costi (prova 137, `research/programma7/RISULTATI_SETTANTACINQUESIMA.md`), ma è nato su quei dati, e sulle monete 101-200 non ha battuto G1 (0,72 contro 0,75). Solo i dati nuovi possono dire se è vero.
 **Perché non subito**: serve lo scarico giornaliero da Hyperliquid nel conto a tavolino (lento: circa 60 richieste per moneta la prima volta, poi una al giorno), e il verdetto non arriverebbe prima di molti mesi.

@@ -5232,3 +5232,8 @@ pubblicazioni): long o short il Bitcoin per la settimana secondo come cambia la 
 **No**: Sharpe −0,27, mentre tenere il Bitcoin sempre fa 0,71. Capito: anche i grandi gestori sul CME seguono il mercato, non lo
 anticipano (come i flussi dei fondi quotati, prova 99). Nel conto: 237. Con questa, le idee della ricerca nelle pubblicazioni del 29
 ottobre sono tutte provate o scritte con il perché; in coda restano solo idee bloccate dai dati o da guardare in avanti.
+**Giro delle 20:18.** Notizie: 77 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 20:21: niente di nuovo. Con la coda
+delle idee vuota, il passo utile è stato mettere in misura sui dati nuovi il segnale più forte visto finora: **HLI** (il funding di
+Hyperliquid al contrario, Sharpe 1,90 sul passato delle prime 100 ma nato da quei dati) entra nel conto a tavolino come informazione dal
+2 novembre, accanto a G1 sulle stesse monete, con le regole scritte prima (`programma6/paper/REGOLE.md`, sezione 15). Verdetto a 52
+settimane. Il percorso del calcolo è stato provato su due settimane già viste (solo per controllare che giri, non come risultato).
