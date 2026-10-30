@@ -5219,3 +5219,10 @@ su cui l'attenzione sale) Sharpe −0,07; GA2 (vendere quelle con tanti articoli
 quello che dice lo studio sulle azioni: nelle crypto le monete con tanto volume e nessuna notizia sono quelle che poi scendono (il verso
 opposto di GA2 fa 0,93). È nato guardando questi dati, quindi va confermato sugli articoli dal 2025 a oggi, che CoinDesk dà solo con una
 chiave gratuita: decide il proprietario (idea 116). Nel conto: 236.
+**La raccolta delle notizie crypto parte oggi** (il proprietario: «ok parti con la raccolta gratuita da oggi»; `research/notizie/REGOLE.md`,
+12:39 UTC). Il servizio gratuito di CoinDesk non esiste più dal 21 maggio 2026, quindi si raccolgono da qui in avanti gli articoli
+pubblici di 21 siti a ogni giro (ogni 4 ore e la mattina), con le regole scritte prima: come si riconosce una moneta in un articolo e la
+prova in avanti della regola nata dalla prova 138 (dal 30 novembre 2026, verdetto a 52 settimane). Primo giro alle 12:40: 662 articoli
+da tutte e 21 le fonti. **Fra le notizie raccolte**: il 29 ottobre sera Binance ha subito un furto di circa 6,3 miliardi di dollari (77
+titoli, per esempio Cointelegraph e CoinDesk); Binance dice di aver messo da parte 6,34 miliardi per coprire le perdite. Il bot e il
+conto demo non usano soldi veri; per i soldi veri il rischio della borsa va nel backlog (P26).
