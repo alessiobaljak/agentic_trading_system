@@ -5184,3 +5184,8 @@ pubblicazioni): sulle 49 monete che su Binance hanno anche il perpetuo con il ma
 più sopra quello in moneta. **No**: Sharpe −0,37, mentre G1 sulle stesse monete fa 0,85. Capito: su Binance il funding in moneta è in
 media anche più alto di quello in USDT (−2,7% l'anno lo scarto), il contrario di quello che BitMEX trova sul suo Bitcoin; lo scarto non
 separa chi paga la leva, il livello del funding sì. Nel conto: 229.
+**Prova 133, il primo flusso di ogni quarto d'ora** (`programma7/SETTANTUNESIMA.md`, 00:32 UTC; idea 108, da uno studio di luglio 2026
+su 6 perpetui di Binance): seguire il verso degli acquisti aggressivi del primo minuto di ogni quarto d'ora, decidendo ogni 4 ore, sul
+periodo che lo studio non ha visto (dal novembre 2024). **No**: −0,035% a operazione su 23.969 operazioni, e prima dei costi +0,004%,
+cioè niente. Capito: anche un effetto pubblicato quest'anno, misurato sui dati di Binance, non si vede nei mesi dopo lo studio con le
+candele a 1 minuto; i segnali di microstruttura vivono nei secondi, dove non arriviamo. Nel conto: 230.
