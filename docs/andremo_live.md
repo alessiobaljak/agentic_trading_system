@@ -5189,3 +5189,10 @@ su 6 perpetui di Binance): seguire il verso degli acquisti aggressivi del primo 
 periodo che lo studio non ha visto (dal novembre 2024). **No**: −0,035% a operazione su 23.969 operazioni, e prima dei costi +0,004%,
 cioè niente. Capito: anche un effetto pubblicato quest'anno, misurato sui dati di Binance, non si vede nei mesi dopo lo studio con le
 candele a 1 minuto; i segnali di microstruttura vivono nei secondi, dove non arriviamo. Nel conto: 230.
+**Prova 134, la pompa del pronti con i long intrappolati** (`programma7/SETTANTADUESIMA.md`, 04:23 UTC; idea 109): vendere il giorno dopo
+un picco (il massimo del giorno almeno il 20% sopra apertura e chiusura) quando nelle 6 ore prima ci sono le tracce della manipolazione
+descritte da Wang e Zhang. **No**: −0,71% a operazione su 668 picchi con la bandiera, uguale ai picchi senza (−0,70%). Capito: la
+bandiera non separa niente; e vendere dopo un picco perde in media anche se la mediana è positiva (+1,35%), perché i pochi picchi che
+continuano costano più di tutti gli altri. È la stessa lezione delle fiammate (prove 62, 75, 76). Un errore mio, corretto prima dei
+risultati: due picchi della stessa moneta nello stesso mese facevano scaricare lo stesso file insieme e il primo calcolo si fermava;
+ora ogni file si scarica una volta sola. Nel conto: 231.

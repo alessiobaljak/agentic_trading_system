@@ -1,0 +1,72 @@
+{
+ "conti": {
+  "picchi": 2321,
+  "senza_ore": 1,
+  "senza_premio": 17,
+  "senza_posizioni": 91,
+  "senza_operazione": 0
+ },
+ "picchi_con_i_dati": 2212,
+ "con_bandiera": 668,
+ "esame": {
+  "boot": {
+   "media": -0.007117834671030953,
+   "basso": -0.01855939912061441,
+   "alto": 0.004617336256606531,
+   "p": 0.8891110888911109,
+   "eventi": 668,
+   "annunci": 137
+  },
+  "prima_meta": -0.0033220844894770014,
+  "seconda_meta": -0.010913584852584904,
+  "senza_5_migliori": -0.012572322853858394,
+  "vinti": 0.5583832335329342,
+  "mediana": 0.013468348312261754,
+  "per_anno": {
+   "2021": {
+    "eventi": 1,
+    "media": -0.044384884622694874
+   },
+   "2022": {
+    "eventi": 3,
+    "media": -0.05476436516045274
+   },
+   "2023": {
+    "eventi": 33,
+    "media": -0.00219918230522262
+   },
+   "2024": {
+    "eventi": 59,
+    "media": -0.018719536713692475
+   },
+   "2025": {
+    "eventi": 266,
+    "media": -0.0010521893076061552
+   },
+   "2026": {
+    "eventi": 306,
+    "media": -0.010095188046213023
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.8891)"
+ },
+ "controllo": {
+  "picchi": 1544,
+  "media": -0.006988199633231668
+ },
+ "differenza": {
+  "media": -0.00012963503779928488,
+  "basso": -0.012905039308969166,
+  "alto": 0.012117636010500732,
+  "p": 0.5041
+ },
+ "condizioni_sole": {
+  "premio_scende": 0.0024872362783483464,
+  "posizioni_salgono": 0.02333384100730365,
+  "grandi_riducono": -0.008282738762524116
+ },
+ "tutti_i_picchi": -0.007027348008118614,
+ "tre_giorni_bandiera": -0.006088791743231461,
+ "fermate_bandiera": 0.11826347305389222,
+ "esito": "media non sopra zero con p ≤ 0,01 (p 0.8891)"
+}
