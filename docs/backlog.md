@@ -684,3 +684,13 @@ Non è «una riga di codice»: dettaglio nell'archivio.
 **Perché non subito**: serve lo scarico giornaliero da Hyperliquid nel conto a tavolino (lento: circa 60 richieste per moneta la prima volta, poi una al giorno), e il verdetto non arriverebbe prima di molti mesi.
 **Cosa ci si aspetta**: se l'effetto è vero, la regola sulle prime 100 resta sopra G1 sulle stesse settimane; se era un caso, torna vicino a zero.
 
+### P31 — Il calcolo settimanale della prova in avanti delle notizie (30 ottobre 2026)
+
+**Cosa**: dal 30 novembre 2026, ogni lunedì, il conto a tavolino della regola «GA2 al contrario» (comprare le monete con tanti articoli per dollaro scambiato, vendere quelle molto scambiate senza notizie) sugli articoli raccolti da `research/notizie/raccolta.py`, come scritto in `research/notizie/REGOLE.md` (sezione 3), accanto a G1 sulle stesse settimane.
+**Perché non subito**: servono 28 giorni di articoli prima del primo lunedì.
+**Cosa ci si aspetta**: occhiata a 26 settimane (giugno 2027), verdetto a 52 (novembre 2027).
+
+### P26, aggiunta del 30 ottobre 2026 — il rischio della borsa
+
+Il 29 ottobre 2026 sera Binance ha subito un furto di circa 6,3 miliardi di dollari («il più grande della storia delle crypto»), secondo i titoli raccolti il 30 ottobre da Cointelegraph, CoinDesk e Decrypt (`research/notizie/archivio/2026-10-30.jsonl.gz`); Binance dice di aver messo da parte 6,34 miliardi per coprire le perdite. Per i soldi veri vale il rischio di tenere tutto il capitale su una sola borsa: da valutare con il proprietario prima di partire (quanto lasciare sul conto, prelievi regolari).
+
