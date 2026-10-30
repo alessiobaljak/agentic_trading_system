@@ -2,18 +2,18 @@
  "dati_fino_a": "BTCUSDT-1m-2026-10-27.zip",
  "procedure": {
   "N-001": {
-   "trade": 23,
+   "trade": 25,
    "netto": {
-    "n": 23,
-    "giorni": 7,
-    "media": -0.04662375440429533,
-    "basso": -0.10313985232947709,
-    "alto": 0.06440036941780813,
-    "p": 0.8426157384261573
+    "n": 25,
+    "giorni": 8,
+    "media": -0.040726549173610335,
+    "basso": -0.09725563074914972,
+    "alto": 0.06400192979290863,
+    "p": 0.8202179782021798
    },
-   "netto_doppio": -0.04842375440429533,
-   "caso_netto": -0.004179051995249923,
-   "senza_migliore": -0.09174241238526644,
+   "netto_doppio": -0.04252654917361034,
+   "caso_netto": -0.005569575372671576,
+   "senza_migliore": -0.08093934662485429,
    "per_moneta": {
     "ARKUSDT": {
      "trade": 2,
@@ -32,8 +32,8 @@
      "netto": -0.06388588957055205
     },
     "IOSTUSDT": {
-     "trade": 5,
-     "netto": 0.052978124294277326
+     "trade": 6,
+     "netto": 0.055188275614388514
     },
     "LITUSDT": {
      "trade": 1,
@@ -56,8 +56,8 @@
      "netto": -0.014967890605216503
     },
     "STEEMUSDT": {
-     "trade": 1,
-     "netto": -0.24843326025681176
+     "trade": 2,
+     "netto": -0.13024483525661099
     },
     "VTHOUSDT": {
      "trade": 1,
@@ -68,21 +68,21 @@
      "netto": -0.06390590756045286
     }
    },
-   "esito": "in corso (23 trade chiusi su 400)"
+   "esito": "in corso (25 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 18,
+   "trade": 20,
    "netto": {
-    "n": 18,
-    "giorni": 7,
-    "media": -0.0067573447775611355,
-    "basso": -0.025662147086186613,
-    "alto": 0.006623760634332344,
-    "p": 0.8176182381761824
+    "n": 20,
+    "giorni": 8,
+    "media": -0.005047041175997758,
+    "basso": -0.02125859594647791,
+    "alto": 0.007199835913524833,
+    "p": 0.7604239576042395
    },
-   "netto_doppio": -0.008557344777561137,
-   "caso_netto": -0.0017453578176822788,
-   "senza_migliore": -0.010160208668753801,
+   "netto_doppio": -0.006847041175997761,
+   "caso_netto": -0.0007503667147886032,
+   "senza_migliore": -0.007881775345773086,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
@@ -129,8 +129,8 @@
      "netto": -0.022396115204286724
     },
     "REZUSDT": {
-     "trade": 1,
-     "netto": 0.006093005919754615
+     "trade": 2,
+     "netto": 0.00927358587495455
     },
     "STEEMUSDT": {
      "trade": 1,
@@ -140,25 +140,30 @@
      "trade": 1,
      "netto": 0.015867844522968324
     },
+    "SYNUSDT": {
+     "trade": 1,
+     "netto": 0.008237216645990777
+    },
     "UNIUSDT": {
      "trade": 1,
      "netto": 0.018917829004960553
     }
    },
-   "esito": "in corso (18 trade chiusi su 400)"
+   "esito": "in corso (20 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 4,
+   "trade": 5,
    "netto": {
-    "n": 4,
-    "media": NaN,
-    "basso": NaN,
-    "alto": NaN,
-    "p": NaN
+    "n": 5,
+    "giorni": 4,
+    "media": 0.016654131884653943,
+    "basso": -0.0555703762533787,
+    "alto": 0.1027653038768424,
+    "p": 0.39406059394060594
    },
-   "netto_doppio": -0.02262430010789973,
-   "caso_netto": -0.04444038568418641,
-   "senza_migliore": -0.0555703762533787,
+   "netto_doppio": 0.01265801976627266,
+   "caso_netto": -0.03850478410581387,
+   "senza_migliore": -0.018755722749416677,
    "per_moneta": {
     "1000PEPEUSDT": {
      "trade": 1,
@@ -169,15 +174,15 @@
      "netto": -0.049102277743905576
     },
     "REZUSDT": {
-     "trade": 1,
-     "netto": 0.08522013925299626
+     "trade": 2,
+     "netto": 0.12175684483696635
     },
     "XMRUSDT": {
      "trade": 1,
      "netto": -0.047321316751317725
     }
    },
-   "esito": "in corso (4 trade chiusi su 400)"
+   "esito": "in corso (5 trade chiusi su 400)"
   }
  }
 }
