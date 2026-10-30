@@ -5196,3 +5196,8 @@ bandiera non separa niente; e vendere dopo un picco perde in media anche se la m
 continuano costano più di tutti gli altri. È la stessa lezione delle fiammate (prove 62, 75, 76). Un errore mio, corretto prima dei
 risultati: due picchi della stessa moneta nello stesso mese facevano scaricare lo stesso file insieme e il primo calcolo si fermava;
 ora ogni file si scarica una volta sola. Nel conto: 231.
+**Prova 136, il Bitcoin e l'Ether che passano un numero tondo** (`programma7/SETTANTAQUATTRESIMA.md`, 08:18 UTC; idea 112, in giornata):
+seguire il primo passaggio delle 24 ore di un multiplo di 1.000 dollari (Bitcoin) o di 100 (Ether) per un'ora. **No**: −0,18% a
+operazione su 3.483 passaggi, e già prima dei costi −0,06%; i numeri tondi fanno peggio dei livelli spostati a metà. Capito: dopo un
+numero tondo il prezzo non scappa via con gli stop, torna un po' indietro; ma il ritorno è troppo piccolo anche per l'operazione al
+contrario. Nel conto: 233.
