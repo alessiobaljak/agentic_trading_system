@@ -5213,3 +5213,9 @@ durante lo scarico da Hyperliquid, che è lento; rilanciato, ha ripreso da dove 
 funding di Binance (G1) sulle stesse monete fa 0,75, e il 2026 è negativo. Sulle prime 100, già viste, la stessa regola fa 1,90 con i
 costi. Capito: il segnale di Hyperliquid è forte proprio sulle monete dove è nato e non si trasferisce oltre il funding di Binance; resta
 da guardare solo in avanti (backlog P30). Nel conto: 234.
+**Prova 138, quanto i giornali crypto parlano di una moneta** (`programma7/SETTANTASEIESIMA.md`, 12:24 UTC; idea del proprietario):
+229.172 articoli raccolti da CoinDesk Data (2019 – febbraio 2025), a settimana come F5. **No per tutte e due**: GA1 (vendere le monete
+su cui l'attenzione sale) Sharpe −0,07; GA2 (vendere quelle con tanti articoli per dollaro scambiato) −1,22. Capito, e al contrario di
+quello che dice lo studio sulle azioni: nelle crypto le monete con tanto volume e nessuna notizia sono quelle che poi scendono (il verso
+opposto di GA2 fa 0,93). È nato guardando questi dati, quindi va confermato sugli articoli dal 2025 a oggi, che CoinDesk dà solo con una
+chiave gratuita: decide il proprietario (idea 116). Nel conto: 236.
