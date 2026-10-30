@@ -187,3 +187,19 @@ Quel periodo l'abbiamo già visto, quindi non conta come prova. Si misura in ava
   passato» usa lo Sharpe del 2021-2026, −0,20.
 
 Fino ad allora è solo informazione: non entra nel bot.
+
+## 15. Aggiunta del 30 ottobre 2026: HLI, solo informazione
+
+Scritta il 30 ottobre 2026 alle 20:22 UTC, prima di ogni giorno misurato. La prova 135 (`research/programma7/RISULTATI_SETTANTATREESIMA.md`)
+ha trovato che vendere le monete dove su Hyperliquid i long pagano più che su Binance faceva Sharpe −2,38, in ogni anno dal giugno 2023;
+il verso al contrario (HLI) sulle prime 100 fa 1,90 con i costi, ma è nato da quei dati, e sulle monete 101-200 non ha battuto G1 (prova
+137). Quel periodo l'abbiamo già visto: si misura in avanti, **senza cambiare niente della regola della prova 137 sulle prime 100**:
+* **la regola**: ogni giorno alle 00:00, fra le monete dell'universo di G1 con il funding di Hyperliquid in tutti e 7 i giorni prima, long il
+  quinto con lo scarto (funding di Hyperliquid meno funding di Binance dei 7 giorni) più alto, short il più basso, banda 20/40, pesi secondo
+  l'inverso della volatilità, almeno 20 monete, ordini limite come G1 (`cinquantaduesima.conto`); accanto, **G1 sulle stesse monete**;
+* **il funding di Hyperliquid** dall'API pubblica, solo dal 20 ottobre 2026 in avanti (`aggiorna.funding_hyperliquid`), salvato in
+  `research/data/hyperliquid_recente/` fuori da git;
+* **i giorni dal 2 novembre 2026**; un'occhiata a 26 settimane (maggio 2027) e il **verdetto a 52 settimane** (novembre 2027): regge se lo
+  Sharpe dell'anno è sopra quello di G1 sulle stesse monete negli stessi giorni.
+
+Fino ad allora è solo informazione: non entra nel bot.
