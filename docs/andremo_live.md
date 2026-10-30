@@ -5226,3 +5226,9 @@ prova in avanti della regola nata dalla prova 138 (dal 30 novembre 2026, verdett
 da tutte e 21 le fonti. **Fra le notizie raccolte**: il 29 ottobre sera Binance ha subito un furto di circa 6,3 miliardi di dollari (77
 titoli, per esempio Cointelegraph e CoinDesk); Binance dice di aver messo da parte 6,34 miliardi per coprire le perdite. Il bot e il
 conto demo non usano soldi veri; per i soldi veri il rischio della borsa va nel backlog (P26).
+**Giro delle 16:18.** Notizie: 114 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 16:22: niente di nuovo. **Prova 139, i
+gestori di patrimoni sul Bitcoin del CME** (`programma7/SETTANTASETTESIMA.md`, 16:23 UTC; idea 113, l'ultima della ricerca nelle
+pubblicazioni): long o short il Bitcoin per la settimana secondo come cambia la posizione dei grandi gestori nel rapporto della CFTC.
+**No**: Sharpe −0,27, mentre tenere il Bitcoin sempre fa 0,71. Capito: anche i grandi gestori sul CME seguono il mercato, non lo
+anticipano (come i flussi dei fondi quotati, prova 99). Nel conto: 237. Con questa, le idee della ricerca nelle pubblicazioni del 29
+ottobre sono tutte provate o scritte con il perché; in coda restano solo idee bloccate dai dati o da guardare in avanti.
