@@ -5179,3 +5179,8 @@ DB si guarda solo in avanti. Nel conto: 228.
 demo alle 00:18 (44 ordini limite, 1 rifiutato, come sempre la moneta con il nome in caratteri cinesi). Rispetto alle 13:01 di ieri
 (G1 −1,42%) un giorno buono: +3,8 punti in undici ore, che in pochi giorni non vuol dire niente. Misure in avanti delle 00:22: niente di
 nuovo.
+**Prova 132, il funding in USDT contro quello in moneta** (`programma7/SETTANTESIMA.md`, 00:23 UTC; idea 107, dalla ricerca nelle
+pubblicazioni): sulle 49 monete che su Binance hanno anche il perpetuo con il margine in moneta, vendere quelle dove il funding in USDT è
+più sopra quello in moneta. **No**: Sharpe −0,37, mentre G1 sulle stesse monete fa 0,85. Capito: su Binance il funding in moneta è in
+media anche più alto di quello in USDT (−2,7% l'anno lo scarto), il contrario di quello che BitMEX trova sul suo Bitcoin; lo scarto non
+separa chi paga la leva, il livello del funding sì. Nel conto: 229.
