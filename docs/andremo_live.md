@@ -5256,3 +5256,8 @@ dopo una settimana positiva** (`programma7/SETTANTANOVESIMA.md`, 04:22 UTC; idea
 il giorno in cui arrivano in fretta tanti short. **No, e al contrario**: −0,98% a operazione su 3.896 eventi, peggio dei giorni in cui il
 funding era già negativo (+0,05%). Capito: gli short che arrivano in fretta su una moneta tranquilla di solito hanno ragione; quelli che
 perdono, nella regola di G1, sono le folle affollate da tempo, non chi arriva per primo. Nel conto: 239.
+**Gli eventi sul conto demo accanto a G1** (il proprietario, 31 ottobre: «ok aggiungi gli eventi sul demo accanto a G1»): le operazioni
+aperte del paper degli eventi si sommano ai pesi di G1 sullo stesso conto demo, il 5% del conto ciascuna; quando il paper ne apre o
+chiude una, il demo tocca solo quella moneta e il Bitcoin (`bot/portafoglio/demo_binance.py`, interruttore
+`ops/demo_binance_eventi_acceso`, 4 test nuovi; tutti i 2.480 test passano). È la prova generale del conto unico per i soldi veri.
+Chiesto il riavvio del bot alla VPS (0680).

@@ -1,0 +1,4 @@
+Gli eventi (N3 ed E4 del paper degli eventi) sul conto demo di Binance accanto a G1 (bot/portafoglio/demo_binance.py;
+docs/backlog.md P25), su richiesta del proprietario del 31 ottobre 2026 («ok aggiungi gli eventi sul demo accanto a G1»).
+Ogni operazione aperta del paper degli eventi si somma ai pesi di G1 con il 5% del conto (short la moneta, long il Bitcoin).
+Per spegnere solo gli eventi sul demo: cancellare questo file (il bot lo rilegge a ogni giro, non serve riavviarlo).

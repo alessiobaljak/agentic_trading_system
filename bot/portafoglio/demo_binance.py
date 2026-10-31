@@ -17,6 +17,12 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
   capitale). Ogni ora legge il conto e scrive su RTDB in `/demo_binance`.
 * Acceso solo dal file `ops/demo_binance_acceso` e solo se le chiavi ci sono; `DRY_RUN` del bot non c'entra (il conto vero non si
   tocca mai).
+* **Gli eventi accanto a G1** (il proprietario, 31 ottobre 2026: «ok aggiungi gli eventi sul demo accanto a G1»; interruttore suo,
+  `ops/demo_binance_eventi_acceso`): le operazioni aperte del paper degli eventi (`data/paper_eventi.json`, N3 ed E4) si sommano ai
+  pesi di G1, ognuna con il 5% del conto come nel paper (short la moneta, long il Bitcoin per lo stesso valore). Quando il paper apre
+  o chiude un'operazione, il demo porta ai pesi nuovi **solo** quella moneta e il Bitcoin, con gli stessi ordini limite per un'ora e
+  poi a mercato; lo fa dopo il ribilancio di G1 del giorno (o dalle 02:00 UTC, se G1 non ha deciso), cosi' i due non si accavallano.
+  Il conto demo e' uno solo: il rendimento si confronta con la somma dei due paper.
 """
 from __future__ import annotations
 
@@ -40,6 +46,10 @@ HOST_DEMO = "demo-fapi.binance.com"
 INTERRUTTORE = RADICE / "ops" / "demo_binance_acceso"
 FILE_STATO = RADICE / "data" / "demo_binance.json"
 FILE_G1 = RADICE / "data" / "paper_g1.json"
+INTERRUTTORE_EVENTI = RADICE / "ops" / "demo_binance_eventi_acceso"
+FILE_EVENTI = RADICE / "data" / "paper_eventi.json"
+QUOTA_EVENTI = 0.05                    # come il paper degli eventi: il 5% del capitale per operazione
+ATTESA_G1_S = 2 * 3600                 # gli eventi del giorno aspettano il ribilancio di G1 fino alle 02:00 UTC
 LEVA = 5
 VALIDITA_LIMITE_S = 3600
 OGNI_VALUTAZIONE_S = 3600
@@ -113,6 +123,26 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
     return out
 
 
+def pesi_eventi(aperte: dict) -> dict:
+    """I pesi delle operazioni aperte del paper degli eventi: ognuna short la moneta e long il Bitcoin per il 5% del conto."""
+    w: dict = {}
+    for p in (aperte or {}).values():
+        s = p.get("simbolo")
+        if not s or s == "BTCUSDT":
+            continue
+        w[s] = w.get(s, 0.0) - QUOTA_EVENTI
+        w["BTCUSDT"] = w.get("BTCUSDT", 0.0) + QUOTA_EVENTI
+    return w
+
+
+def somma_pesi(*pesi: dict) -> dict:
+    out: dict = {}
+    for w in pesi:
+        for s, v in (w or {}).items():
+            out[s] = out.get(s, 0.0) + float(v)
+    return {s: v for s, v in out.items() if abs(v) > 1e-12}
+
+
 def firmatore(segreto: str) -> Callable[[str], str]:
     """La firma delle richieste secondo il tipo di chiave: il segreto della chiave generata dal sistema (HMAC SHA256, esadecimale)
     o la chiave privata PEM della chiave generata da sé (Ed25519, o RSA con SHA256; in base64, codificata per l'indirizzo)."""
@@ -162,10 +192,12 @@ class ClienteDemo:
 
 class DemoG1:
     def __init__(self, fb, cliente: Optional[ClienteDemo] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_G1,
-                 interruttore: Path = INTERRUTTORE) -> None:
+                 interruttore: Path = INTERRUTTORE, file_eventi: Path = FILE_EVENTI,
+                 interruttore_eventi: Path = INTERRUTTORE_EVENTI) -> None:
         self.fb = fb
         self._cliente = cliente
         self.file_stato, self.file_g1, self.interruttore = Path(file_stato), Path(file_g1), Path(interruttore)
+        self.file_eventi, self.interruttore_eventi = Path(file_eventi), Path(interruttore_eventi)
         self._ultimo_tentativo = 0.0
 
     # ---- stato ----
@@ -173,6 +205,19 @@ class DemoG1:
         if self.interruttore == INTERRUTTORE and os.environ.get("PYTEST_CURRENT_TEST"):
             return False
         return self.interruttore.exists()
+
+    def eventi_accesi(self) -> bool:
+        if self.interruttore_eventi == INTERRUTTORE_EVENTI and os.environ.get("PYTEST_CURRENT_TEST"):
+            return False
+        return self.interruttore_eventi.exists()
+
+    def eventi_aperti(self) -> dict:
+        if not self.eventi_accesi():
+            return {}
+        try:
+            return dict(json.loads(self.file_eventi.read_text(encoding="utf-8")).get("aperte") or {})
+        except Exception:  # noqa: BLE001
+            return {}
 
     def cliente(self) -> Optional[ClienteDemo]:
         if self._cliente is None:
@@ -217,8 +262,17 @@ class DemoG1:
                 st = self.chiudi_ordini(c, st, now)
             g1 = json.loads(self.file_g1.read_text(encoding="utf-8")) if self.file_g1.exists() else {}
             giorno = int(g1.get("ultimo_lunedi", 0))
+            aperte = self.eventi_aperti()
+            firma, monete_eventi = sorted(aperte), sorted({p.get("simbolo") for p in aperte.values() if p.get("simbolo")})
+            pesi = somma_pesi(g1.get("pesi") or {}, pesi_eventi(aperte))
             if giorno and giorno > int(st.get("ultimo_giorno", 0)) and not st.get("ordini"):
-                st = self.ribilancia(c, st, g1.get("pesi") or {}, giorno, now)
+                st = self.ribilancia(c, st, pesi, giorno, now)
+                st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
+            elif (firma != list(st.get("eventi_firma") or []) and not st.get("ordini") and int(st.get("ultimo_giorno", 0))
+                  and (int(st["ultimo_giorno"]) >= int(now // 86400) or now >= int(now // 86400) * 86400 + ATTESA_G1_S)):
+                toccate = set(monete_eventi) | set(st.get("eventi_monete") or []) | {"BTCUSDT"}
+                st = self.ribilancia(c, st, pesi, int(st["ultimo_giorno"]), now, solo=toccate)
+                st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
             if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
                 st = self.valuta(c, st, now)
             self.salva(st)
@@ -232,7 +286,8 @@ class DemoG1:
         posizioni = {x["symbol"]: float(x["positionAmt"]) for x in conto.get("positions", []) if float(x.get("positionAmt") or 0)}
         return float(conto["totalMarginBalance"]), float(conto["totalWalletBalance"]), posizioni
 
-    def ribilancia(self, c: ClienteDemo, st: dict, pesi: dict, giorno: int, now: float) -> dict:
+    def ribilancia(self, c: ClienteDemo, st: dict, pesi: dict, giorno: int, now: float, solo: Optional[set] = None) -> dict:
+        """Porta il conto ai pesi; con ``solo`` (un'operazione a eventi aperta o chiusa) tocca solo quelle monete."""
         f = filtri(c.chiedi("GET", "/fapi/v1/exchangeInfo"))
         prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
         if not st.get("modo_controllato"):
@@ -242,6 +297,8 @@ class DemoG1:
             st["modo_controllato"] = True
         # gli ordini rimasti aperti (un tentativo interrotto) si annullano prima di contare le posizioni: senza, si raddoppiano
         aperti = sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []})
+        if solo is not None:
+            aperti = [s for s in aperti if s in solo]
         for s in aperti:
             c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
         equity, _, posizioni = self._conto(c)
@@ -249,7 +306,10 @@ class DemoG1:
         mancano = sorted(s for s in pesi if s not in f)
         leve = set(st.get("leve") or [])
         piazzati, rifiutati = [], []
-        for s, lato, q, limite, riduce in ordini_del_giorno(pesi, posizioni, prezzi, equity, f):
+        da_fare = ordini_del_giorno(pesi, posizioni, prezzi, equity, f)
+        if solo is not None:
+            da_fare = [o for o in da_fare if o[0] in solo]
+        for s, lato, q, limite, riduce in da_fare:
             p = {"symbol": s, "side": lato, "type": "LIMIT", "timeInForce": "GTC", "quantity": testo(q), "price": testo(limite),
                  "newClientOrderId": id_ordine(giorno, s, int(now))}
             if riduce:
@@ -263,11 +323,14 @@ class DemoG1:
                 rifiutati.append({"simbolo": s, "errore": str(exc)[:200]})
                 continue
             piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId")})
-        st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati}})
         data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
-        self._scrivi(f"ribilanciamenti/{data}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
-                                                 "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now})
-        print(f"[demo_binance] decisione G1 del {data}: {len(piazzati)} ordini limite sul conto demo, {len(rifiutati)} rifiutati")
+        chiave = data if solo is None else f"{time.strftime('%Y-%m-%d', time.gmtime(now))}-eventi-{time.strftime('%H%M', time.gmtime(now))}"
+        st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati, "chiave": chiave}})
+        self._scrivi(f"ribilanciamenti/{chiave}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
+                                                   "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now,
+                                                   "solo_eventi": solo is not None})
+        cosa = f"decisione G1 del {data}" if solo is None else "operazioni a eventi cambiate"
+        print(f"[demo_binance] {cosa}: {len(piazzati)} ordini limite sul conto demo, {len(rifiutati)} rifiutati")
         return st
 
     def chiudi_ordini(self, c: ClienteDemo, st: dict, now: float) -> dict:
@@ -295,9 +358,9 @@ class DemoG1:
         st["limite_eseguiti"] = int(st.get("limite_eseguiti", 0)) + eseguiti_limite
         st["limite_totali"] = int(st.get("limite_totali", 0)) + n
         st["a_mercato"] = int(st.get("a_mercato", 0)) + a_mercato
-        data = time.strftime("%Y-%m-%d", time.gmtime(int(st["ultimo_giorno"]) * 86400))
-        self._scrivi(f"ribilanciamenti/{data}/limite", {"ordini": n, "eseguiti_a_limite": eseguiti_limite, "a_mercato": a_mercato,
-                                                        "controllato": now})
+        chiave = st["ordini"].get("chiave") or time.strftime("%Y-%m-%d", time.gmtime(int(st["ultimo_giorno"]) * 86400))
+        self._scrivi(f"ribilanciamenti/{chiave}/limite", {"ordini": n, "eseguiti_a_limite": eseguiti_limite, "a_mercato": a_mercato,
+                                                          "controllato": now})
         st.pop("ordini")
         return st
 

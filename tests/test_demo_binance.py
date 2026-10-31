@@ -21,9 +21,12 @@ class _Risposta:
 class _Demo:
     """Il conto demo finto: 10.000 USDT, due monete, gli ordini limite si eseguono solo su AUSDT."""
 
-    def __init__(self):
+    PREZZI = {"AUSDT": "100.003", "BUSDT": "50.007", "CUSDT": "2.0", "BTCUSDT": "100000.0"}
+
+    def __init__(self, simboli=("AUSDT", "BUSDT")):
         self.chiamate = []
-        self.posizioni = {"AUSDT": 0.0, "BUSDT": 0.0}
+        self.simboli = tuple(simboli)
+        self.posizioni = {s: 0.0 for s in self.simboli}
         self.ordini = {}
 
     def __call__(self, metodo, url, headers=None, timeout=None):
@@ -35,9 +38,9 @@ class _Demo:
             return _Risposta({"symbols": [{"symbol": s, "filters": [
                 {"filterType": "PRICE_FILTER", "tickSize": "0.01"},
                 {"filterType": "LOT_SIZE", "stepSize": "0.001", "minQty": "0.001"},
-                {"filterType": "MIN_NOTIONAL", "notional": "5"}]} for s in ("AUSDT", "BUSDT")]})
+                {"filterType": "MIN_NOTIONAL", "notional": "5"}]} for s in self.simboli]})
         if u.path == "/fapi/v1/premiumIndex":
-            return _Risposta([{"symbol": "AUSDT", "markPrice": "100.003"}, {"symbol": "BUSDT", "markPrice": "50.007"}])
+            return _Risposta([{"symbol": s, "markPrice": self.PREZZI[s]} for s in self.simboli])
         if u.path == "/fapi/v2/account":
             return _Risposta({"totalMarginBalance": "10000", "totalWalletBalance": "10000",
                               "positions": [{"symbol": s, "positionAmt": str(v)} for s, v in self.posizioni.items()]})
@@ -200,3 +203,61 @@ def test_id_degli_ordini_e_ordini_rimasti_aperti(tmp_path):
     assert finto.ordini[99].get("chiuso") and len(d.carica()["ordini"]["lista"]) == 2
     rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24") or fb.get_rtdb("/demo_binance/ribilanciamenti")
     assert "AUSDT" in str(rib)
+
+
+def test_pesi_degli_eventi():
+    aperte = {"E4-CUSDT-20261031": {"tipo": "E4", "simbolo": "CUSDT"}, "N3-AUSDT-20261031": {"tipo": "N3", "simbolo": "AUSDT"}}
+    w = dm.pesi_eventi(aperte)
+    assert w == {"CUSDT": -0.05, "AUSDT": -0.05, "BTCUSDT": 0.10}
+    assert dm.somma_pesi({"AUSDT": 0.5, "BUSDT": -0.5}, w) == {"AUSDT": 0.45, "BUSDT": -0.5, "CUSDT": -0.05, "BTCUSDT": 0.10}
+    assert dm.somma_pesi({"AUSDT": 0.05}, {"AUSDT": -0.05}) == {}
+
+
+def _demo_con_eventi(tmp_path, finto, aperte, eventi_accesi=True):
+    from bot.core.firebase_client import _InMemoryStore
+    fb = _InMemoryStore()
+    (tmp_path / "acceso").write_text("si")
+    if eventi_accesi:
+        (tmp_path / "eventi_acceso").write_text("si")
+    (tmp_path / "eventi.json").write_text(json.dumps({"aperte": aperte}))
+    g1 = tmp_path / "g1.json"
+    g1.write_text(json.dumps({"ultimo_lunedi": 20750, "pesi": {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d = dm.DemoG1(fb, cliente=dm.ClienteDemo("chiave", "segreto", http=finto), file_stato=tmp_path / "st.json", file_g1=g1,
+                  interruttore=tmp_path / "acceso", file_eventi=tmp_path / "eventi.json",
+                  interruttore_eventi=tmp_path / "eventi_acceso")
+    return d, fb
+
+
+def test_eventi_accanto_a_g1_nel_ribilancio_del_giorno(tmp_path):
+    """Il proprietario, 31 ottobre: «ok aggiungi gli eventi sul demo accanto a G1». Un'operazione a eventi aperta si somma ai pesi
+    di G1: short la moneta e long il Bitcoin per il 5% del conto."""
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT", "BTCUSDT"))
+    d, _ = _demo_con_eventi(tmp_path, finto, {"E4-CUSDT-20261031": {"tipo": "E4", "simbolo": "CUSDT"}})
+    d.tick(20750 * 86400.0 + 400)
+    post = {q["symbol"]: (q["side"], q["quantity"]) for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order"}
+    assert post["CUSDT"] == ("SELL", "250") and post["BTCUSDT"] == ("BUY", "0.005") and set(post) == {"AUSDT", "BUSDT", "CUSDT", "BTCUSDT"}
+    assert d.carica()["eventi_firma"] == ["E4-CUSDT-20261031"]
+
+
+def test_eventi_che_cambiano_dopo_g1_toccano_solo_le_loro_monete(tmp_path):
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT", "BTCUSDT"))
+    d, fb = _demo_con_eventi(tmp_path, finto, {})
+    d.tick(20750 * 86400.0 + 400)                     # G1 del giorno, nessun evento
+    d.tick(20750 * 86400.0 + 400 + 3601)              # dopo l'ora: gli ordini di G1 chiusi
+    prima = len(finto.chiamate)
+    (tmp_path / "eventi.json").write_text(json.dumps({"aperte": {"N3-CUSDT-20261031": {"tipo": "N3", "simbolo": "CUSDT"}}}))
+    d.tick(20750 * 86400.0 + 400 + 7300)              # il paper apre un evento: solo CUSDT e il Bitcoin
+    nuovi = [q["symbol"] for m, p, q in finto.chiamate[prima:] if m == "POST" and p == "/fapi/v1/order"]
+    assert sorted(nuovi) == ["BTCUSDT", "CUSDT"]
+    st = d.carica()
+    assert st["ultimo_giorno"] == 20750 and st["eventi_firma"] == ["N3-CUSDT-20261031"] and "-eventi-" in st["ordini"]["chiave"]
+    assert fb.get_rtdb(f"/demo_binance/ribilanciamenti/{st['ordini']['chiave']}")["solo_eventi"] is True
+
+
+def test_eventi_spenti_non_cambiano_niente(tmp_path):
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT", "BTCUSDT"))
+    d, _ = _demo_con_eventi(tmp_path, finto, {"E4-CUSDT-20261031": {"tipo": "E4", "simbolo": "CUSDT"}}, eventi_accesi=False)
+    d.tick(20750 * 86400.0 + 400)
+    post = {q["symbol"] for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order"}
+    assert post == {"AUSDT", "BUSDT"} and d.carica()["eventi_firma"] == []
+
