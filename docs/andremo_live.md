@@ -5237,3 +5237,11 @@ delle idee vuota, il passo utile è stato mettere in misura sui dati nuovi il se
 Hyperliquid al contrario, Sharpe 1,90 sul passato delle prime 100 ma nato da quei dati) entra nel conto a tavolino come informazione dal
 2 novembre, accanto a G1 sulle stesse monete, con le regole scritte prima (`programma6/paper/REGOLE.md`, sezione 15). Verdetto a 52
 settimane. Il percorso del calcolo è stato provato su due settimane già viste (solo per controllare che giri, non come risultato).
+
+### 31 ottobre 2026 (00:30 UTC)
+
+**Giro delle 00:17.** Notizie: 46 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 00:21: niente di nuovo. Chiesto il log
+dei ribilanci della notte (0679). **Prova 140, vendere quando una moneta arriva su Hyperliquid** (`programma7/SETTANTOTTESIMA.md`, 00:21
+UTC; idea nuova 117): 63 monete già su Binance quotate poi su Hyperliquid, short contro il Bitcoin per 7 giorni. **No**: −0,88% a
+operazione (p 0,63). Capito: Hyperliquid quota le monete che stanno già correndo (+27% sul Bitcoin nella settimana prima); dopo, di
+solito scendono un po', ma una volta su cinque continuano a salire e l'uscita a +30% si mangia tutto. Nel conto: 238.
