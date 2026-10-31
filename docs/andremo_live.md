@@ -5245,3 +5245,8 @@ dei ribilanci della notte (0679). **Prova 140, vendere quando una moneta arriva 
 UTC; idea nuova 117): 63 monete già su Binance quotate poi su Hyperliquid, short contro il Bitcoin per 7 giorni. **No**: −0,88% a
 operazione (p 0,63). Capito: Hyperliquid quota le monete che stanno già correndo (+27% sul Bitcoin nella settimana prima); dopo, di
 solito scendono un po', ma una volta su cinque continuano a salire e l'uscita a +30% si mangia tutto. Nel conto: 238.
+**I ribilanci della notte, puliti** (log 0679, nessun errore): G1 alle 00:09 (24 long e 25 short, conto 10.399,79: +4,00% dall'inizio);
+G11 alle 00:13 (27 e 23, conto 10.463,71: +4,64%); G1N alle 00:17 (24 e 25, conto 10.632,08: +6,32%); il conto demo alle 00:17 (32 ordini
+limite, 1 rifiutato, la solita moneta con il nome in caratteri cinesi). **Chiusa la prima operazione a eventi del bot**: la vendita su
+IRYS (E4, aperta il 24 ottobre), uscita a tempo dopo 7 giorni con **+62,74% (+313,71 dollari)**. È un evento solo: E4 sul passato faceva
++11,7% a evento (prova 26), quindi questo è molto sopra la media e non dice niente da solo.
