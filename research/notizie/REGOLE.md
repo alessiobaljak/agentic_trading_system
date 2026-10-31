@@ -46,3 +46,12 @@ pubbliche degli ultimi articoli dei siti.
 * **Il verdetto**, come il conto a tavolino del programma 6: un'occhiata a 26 settimane (giugno 2027) e il **verdetto a 52 settimane**
   (novembre 2027): la regola regge se lo Sharpe delle 52 settimane è sopra 0,5 e sopra quello di G1 sulle stesse settimane. Prima i numeri
   sono informazione. Il calcolo settimanale si aggiunge al conto a tavolino quando ci sono i primi 28 giorni (voce P31 del backlog).
+
+## Aggiunta del 31 ottobre 2026 (16:23 UTC): le monete di tendenza di CoinGecko
+
+* **Cosa**: a ogni giro della raccolta si legge anche la lista pubblica delle monete più cercate su CoinGecko (`search/trending`, 15
+  monete) e la si salva in `archivio/tendenze.csv` (ora, posizione, id, sigla, nome, posizione per capitalizzazione). È l'idea 126 del
+  registro: la famiglia dell'attenzione, chi compra quello che tutti guardano paga troppo.
+* **Perché da oggi**: lo storico gratuito di questa lista non esiste; l'unico modo di averlo è raccoglierlo.
+* **Quando si prova**: in avanti, quando ci sono almeno 6 mesi di dati (non prima del 30 aprile 2027), con regole scritte prima di
+  guardare i dati raccolti. Fino ad allora la lista non si usa per nessuna decisione.

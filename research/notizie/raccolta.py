@@ -1,6 +1,7 @@
 """La raccolta delle notizie crypto (REGOLE.md): a ogni giro legge le pagine pubbliche degli ultimi articoli di 21 siti, salva gli articoli
 nuovi in `archivio/AAAA-MM-GG.jsonl.gz` e scrive il giro in `archivio/giri.csv`. Il primo giorno di ogni mese rifa' l'elenco dei nomi
-delle monete (`nomi_AAAA-MM.json`) dalle prime 1.000 di CoinGecko.
+delle monete (`nomi_AAAA-MM.json`) dalle prime 1.000 di CoinGecko. Dal 31 ottobre 2026 salva anche le monete di tendenza di
+CoinGecko in `archivio/tendenze.csv` (idea 126 del registro).
 
 Uso: python3 -m research.notizie.raccolta
 """
@@ -165,6 +166,33 @@ def citate(testo: str, elenco: dict) -> list:
     return out
 
 
+TENDENZE = "https://api.coingecko.com/api/v3/search/trending"
+
+
+def tendenze(ora: datetime) -> int:
+    """Idea 126 del registro: la lista delle monete di tendenza di CoinGecko (le più cercate), salvata a ogni giro in
+    `archivio/tendenze.csv` (ora, posizione, id, sigla, nome, posizione per capitalizzazione). Restituisce le righe scritte."""
+    b = _get(TENDENZE)
+    if not b:
+        return 0
+    try:
+        voci = json.loads(b).get("coins") or []
+    except Exception:  # noqa: BLE001
+        return 0
+    f = ARCHIVIO / "tendenze.csv"
+    if not f.exists():
+        f.write_text("ora,posizione,id,sigla,nome,rango_capitalizzazione\n")
+    righe = []
+    for k, v in enumerate(voci, 1):
+        x = v.get("item") or {}
+        nome = str(x.get("name") or "").replace(",", " ").replace("\n", " ")
+        righe.append(f"{ora.strftime('%Y-%m-%d %H:%M')},{k},{x.get('id') or ''},{str(x.get('symbol') or '').upper()},{nome},"
+                     f"{x.get('market_cap_rank') if x.get('market_cap_rank') is not None else ''}\n")
+    with f.open("a") as g:
+        g.writelines(righe)
+    return len(righe)
+
+
 def esegui(log=print) -> dict:
     ora = datetime.now(timezone.utc)
     ARCHIVIO.mkdir(parents=True, exist_ok=True)
@@ -195,9 +223,13 @@ def esegui(log=print) -> dict:
         for fonte, n, k, nota in giro:
             g.write(f"{ora.strftime('%Y-%m-%d %H:%M')},{fonte},{n},{k},{nota}\n")
     risposte = sum(1 for _, n, _, _ in giro if n)
+    try:
+        n_tendenze = tendenze(ora)
+    except Exception:  # noqa: BLE001
+        n_tendenze = 0
     log(f"[notizie] {ora.strftime('%Y-%m-%d %H:%M')} UTC: {len(nuovi)} articoli nuovi da {risposte} fonti su {len(FONTI)}; "
-        f"piene: {', '.join(x[0] for x in giro if x[3]) or 'nessuna'}")
-    return {"nuovi": len(nuovi), "fonti_che_rispondono": risposte}
+        f"piene: {', '.join(x[0] for x in giro if x[3]) or 'nessuna'}; monete di tendenza su CoinGecko: {n_tendenze}")
+    return {"nuovi": len(nuovi), "fonti_che_rispondono": risposte, "tendenze": n_tendenze}
 
 
 if __name__ == "__main__":
