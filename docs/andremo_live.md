@@ -5269,3 +5269,12 @@ monete (HLI parte dal 2 novembre). **Prova 142, G1 dentro ogni settore** (`progr
 confrontato solo fra monete dello stesso settore (CoinGecko). **No**: Sharpe 1,49 contro 1,98 di G1, con la stessa discesa. Capito: G1
 resta in media comprata sulle reti principali e venduta su meme e finanza decentralizzata, e quel confronto fra settori è una parte del
 guadagno, non solo un rischio; scritto nel backlog fra i rischi di G1 per i soldi veri (P26). Nel conto: 240.
+**Giro delle 08:18.** Notizie: 18 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 08:20: niente di nuovo. **Il conto
+unico sul passato** (`programma7/conto_unico.py`, `CONTO_UNICO.md`; una misura per capire, non una prova, non entra nel conto): G1 con
+tutto il capitale più gli eventi delle prove 32 (monete appena quotate) e 26 (funding al tetto) al 5% ciascuno, al massimo 20 aperti,
+come fa ora il demo. Dal 2021 al 4 ottobre 2026: **G1 da sola +65,7% l'anno, Sharpe 1,98, discesa −30,1%; G1 più gli eventi +115,5%,
+Sharpe 2,82, discesa −22,3%**; gli eventi da soli +30,2%, Sharpe 3,41, discesa −25,2%; correlazione fra i due 0,03 (664 eventi usati, 11
+saltati perché ce n'erano già 20 aperti). Il 2021 è l'unico anno in cui gli eventi tolgono (da +177,6% a +166,5%). Capito: le due
+famiglie guadagnano in giorni diversi, quindi insieme la discesa scende invece di salire; è il motivo del conto unico. Le riserve: il
+rendimento di ogni evento è spalmato sui suoi giorni (la discesa vera è più grande), e gli eventi su Binance non sono dimostrati come
+G1 (la prova 32 è valida sui dati di Gate.io e passa con riserva su Binance; la 26 è promettente, non dimostrata).
