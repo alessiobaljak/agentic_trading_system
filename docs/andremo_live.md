@@ -5261,3 +5261,5 @@ aperte del paper degli eventi si sommano ai pesi di G1 sullo stesso conto demo, 
 chiude una, il demo tocca solo quella moneta e il Bitcoin (`bot/portafoglio/demo_binance.py`, interruttore
 `ops/demo_binance_eventi_acceso`, 4 test nuovi; tutti i 2.480 test passano). È la prova generale del conto unico per i soldi veri.
 Chiesto il riavvio del bot alla VPS (0680).
+Il bot è ripartito alle 07:26 UTC (log 0681) con `DRY_RUN=True` e il codice degli eventi sul demo (commit f6ce9a66), senza errori del
+paper o del demo; restano solo due avvisi vecchi del sistema fermo (le posizioni aperte di MITOUSDT e PTBUSDT non lette da Binance).
