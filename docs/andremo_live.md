@@ -5294,3 +5294,10 @@ continue** («la rana nella pentola», `programma7/OTTANTADUESIMA.md`, 16:21 UTC
 salite a piccoli passi nei 14 giorni, vendere quelle scese a piccoli passi. **No**: Sharpe −0,20, discesa −89%, sotto il momento
 semplice (0,15). Capito: nei perpetui il momento non regge in nessuna forma, e il filtro della continuità lo peggiora (lati più piccoli
 e il doppio delle spese). Nel conto: 242.
+**Giro delle 20:18.** Notizie: 42 articoli nuovi da 20 fonti su 21 (ZyCrypto non ha risposto); 15 monete di tendenza salvate.
+Controlli in avanti delle 20:20: niente di nuovo. **Prova 145, le notizie nuove contro quelle ripetute** (`programma7/OTTANTATREESIMA.md`,
+20:22 UTC; idea 127, da Tetlock 2011 e Chu e Tsiakas 2026): per ogni articolo su una moneta, quanto è diverso dai 20 articoli precedenti
+sulla stessa moneta; comprare le monete con le notizie più nuove, vendere quelle con le notizie più ripetute. **No**: Sharpe −0,36,
+discesa −80%, e il segnale mescolato a caso fa quasi lo stesso (13 volte su 20 almeno quanto quello vero). Capito: con i titoli e i
+riassunti dei giornali crypto, né quanto si parla di una moneta (prova 138) né quanto è nuovo quello che se ne dice muovono il prezzo
+della settimana dopo. Nel conto: 243.
