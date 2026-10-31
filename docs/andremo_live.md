@@ -5285,3 +5285,12 @@ idea non ha retto su Coinbase, OKX e Hyperliquid. **Prova 143, il momento dei se
 saliti di meno. **No**: Sharpe 0,40, discesa −55%, il 2024 a −45%; i settori finti fatti a caso fanno in media −0,11, quindi un po' di
 segnale c'è, ma con sei settori ogni lato è una scommessa su uno o due racconti interi, troppo agitata. Capito: nei perpetui il
 momento dei settori non regge dopo i costi; non è legato a G1 (correlazione 0,00), ma da solo non vale. Nel conto: 241.
+**Giro delle 16:18.** Notizie: 63 articoli nuovi, tutte e 21 le fonti; da oggi la raccolta salva anche le 15 monete di tendenza di
+CoinGecko a ogni giro (idea 126: la famiglia dell'attenzione; lo storico gratuito non esiste, si prova in avanti fra 6 mesi). Controlli
+in avanti delle 16:19: niente di nuovo. Ricerca nelle pubblicazioni del 2026 con la coda vuota: tre idee nuove. Due non si fanno: le
+monete poco agitate (è quasi la scommessa contro il beta, già bocciata) e il momento dell'apertura di Wall Street sul Bitcoin (i controlli
+delle prove sulla Fed e sull'inflazione l'hanno già misurato: −0,15% e −0,11% a operazione). **Prova 144, il momento delle salite
+continue** («la rana nella pentola», `programma7/OTTANTADUESIMA.md`, 16:21 UTC; idea 123; trading di ogni giorno): comprare le monete
+salite a piccoli passi nei 14 giorni, vendere quelle scese a piccoli passi. **No**: Sharpe −0,20, discesa −89%, sotto il momento
+semplice (0,15). Capito: nei perpetui il momento non regge in nessuna forma, e il filtro della continuità lo peggiora (lati più piccoli
+e il doppio delle spese). Nel conto: 242.
