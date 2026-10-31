@@ -5278,3 +5278,10 @@ saltati perché ce n'erano già 20 aperti). Il 2021 è l'unico anno in cui gli e
 famiglie guadagnano in giorni diversi, quindi insieme la discesa scende invece di salire; è il motivo del conto unico. Le riserve: il
 rendimento di ogni evento è spalmato sui suoi giorni (la discesa vera è più grande), e gli eventi su Binance non sono dimostrati come
 G1 (la prova 32 è valida sui dati di Gate.io e passa con riserva su Binance; la 26 è promettente, non dimostrata).
+**Giro delle 12:18.** Notizie: 43 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 12:22: niente di nuovo (su Coinbase
+sempre solo STABLE, nessuna chiusura nuova di Binance). L'idea 122 (vendere quando una moneta arriva su Kraken) non si fa: la stessa
+idea non ha retto su Coinbase, OKX e Hyperliquid. **Prova 143, il momento dei settori** (`programma7/OTTANTUNESIMA.md`, 12:27 UTC; idea
+121, dalla tesi di Luo del 2025): ogni lunedì long le monete dei settori saliti di più nelle 4 settimane prima, short quelle dei settori
+saliti di meno. **No**: Sharpe 0,40, discesa −55%, il 2024 a −45%; i settori finti fatti a caso fanno in media −0,11, quindi un po' di
+segnale c'è, ma con sei settori ogni lato è una scommessa su uno o due racconti interi, troppo agitata. Capito: nei perpetui il
+momento dei settori non regge dopo i costi; non è legato a G1 (correlazione 0,00), ma da solo non vale. Nel conto: 241.
