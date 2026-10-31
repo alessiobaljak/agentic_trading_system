@@ -5250,3 +5250,9 @@ G11 alle 00:13 (27 e 23, conto 10.463,71: +4,64%); G1N alle 00:17 (24 e 25, cont
 limite, 1 rifiutato, la solita moneta con il nome in caratteri cinesi). **Chiusa la prima operazione a eventi del bot**: la vendita su
 IRYS (E4, aperta il 24 ottobre), uscita a tempo dopo 7 giorni con **+62,74% (+313,71 dollari)**. È un evento solo: E4 sul passato faceva
 +11,7% a evento (prova 26), quindi questo è molto sopra la media e non dice niente da solo.
+**Giro delle 04:18.** Notizie: 25 articoli nuovi da 20 fonti su 21 (CoinJournal non ha risposto). Controlli in avanti delle 04:21:
+niente di nuovo. L'idea 119 (i furti alle borse come evento) non si fa: dal 2020 sono 4. **Prova 141, il funding che diventa negativo
+dopo una settimana positiva** (`programma7/SETTANTANOVESIMA.md`, 04:22 UTC; idea nuova 118, trading di ogni giorno): comprare la moneta
+il giorno in cui arrivano in fretta tanti short. **No, e al contrario**: −0,98% a operazione su 3.896 eventi, peggio dei giorni in cui il
+funding era già negativo (+0,05%). Capito: gli short che arrivano in fretta su una moneta tranquilla di solito hanno ragione; quelli che
+perdono, nella regola di G1, sono le folle affollate da tempo, non chi arriva per primo. Nel conto: 239.
