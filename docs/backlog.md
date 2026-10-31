@@ -693,6 +693,10 @@ Non è «una riga di codice»: dettaglio nell'archivio.
 **Perché non subito**: servono 28 giorni di articoli prima del primo lunedì.
 **Cosa ci si aspetta**: occhiata a 26 settimane (giugno 2027), verdetto a 52 (novembre 2027).
 
+### P26, aggiunta del 31 ottobre 2026 — il rischio dei settori
+
+G1 resta in media comprata sulle reti principali (+11,5% del capitale netto) e venduta su meme, finanza decentralizzata e «altro» (prova 142, `research/programma7/RISULTATI_OTTANTESIMA.md`); il settore più comprato pesa in media il 20%. Toglierlo (G1 dentro ogni settore) costa mezzo punto di Sharpe (1,49 contro 1,98) senza abbassare la discesa: il rischio è anche una parte del guadagno. Con i soldi veri vuol dire che un rialzo forte delle meme o della finanza decentralizzata contro le reti principali pesa su G1 tutto insieme.
+
 ### P26, aggiunta del 30 ottobre 2026 — il rischio della borsa
 
 Il 29 ottobre 2026 sera Binance ha subito un furto di circa 6,3 miliardi di dollari («il più grande della storia delle crypto»), secondo i titoli raccolti il 30 ottobre da Cointelegraph, CoinDesk e Decrypt (`research/notizie/archivio/2026-10-30.jsonl.gz`); Binance dice di aver messo da parte 6,34 miliardi per coprire le perdite. Per i soldi veri vale il rischio di tenere tutto il capitale su una sola borsa: da valutare con il proprietario prima di partire (quanto lasciare sul conto, prelievi regolari).

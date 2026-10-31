@@ -5263,3 +5263,9 @@ chiude una, il demo tocca solo quella moneta e il Bitcoin (`bot/portafoglio/demo
 Chiesto il riavvio del bot alla VPS (0680).
 Il bot è ripartito alle 07:26 UTC (log 0681) con `DRY_RUN=True` e il codice degli eventi sul demo (commit f6ce9a66), senza errori del
 paper o del demo; restano solo due avvisi vecchi del sistema fermo (le posizioni aperte di MITOUSDT e PTBUSDT non lette da Binance).
+**Mattino del 31 ottobre.** Prova in avanti del programma 5: M-001c 181 su 400, M-002 e M-003 non passano, la seconda tornata ferma.
+Conto a tavolino: dati fino al 29 ottobre, le 22 monete nuove dell'universo sono tutte monete; il funding di Hyperliquid letto per 213
+monete (HLI parte dal 2 novembre). **Prova 142, G1 dentro ogni settore** (`programma7/OTTANTESIMA.md`, 08:01 UTC; idea 120): il funding
+confrontato solo fra monete dello stesso settore (CoinGecko). **No**: Sharpe 1,49 contro 1,98 di G1, con la stessa discesa. Capito: G1
+resta in media comprata sulle reti principali e venduta su meme e finanza decentralizzata, e quel confronto fra settori è una parte del
+guadagno, non solo un rischio; scritto nel backlog fra i rischi di G1 per i soldi veri (P26). Nel conto: 240.
