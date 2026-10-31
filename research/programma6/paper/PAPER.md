@@ -1,6 +1,6 @@
 # Programma 6 — il paper delle candidate
 
-Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-10-27**; funding stimato dall'indice del premio dal 2026-09-01 (si ricalcola quando l'archivio pubblica il file del mese).
+Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-10-29**; funding stimato dall'indice del premio dal 2026-09-01 (si ricalcola quando l'archivio pubblica il file del mese).
 Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C1). Verdetto a 52 e 104 settimane, mai prima.
 
 | Candidata | Periodi nel periodo P | Rendimento totale | Sharpe da quando è partita |
@@ -20,7 +20,7 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 | M7 + M8 a rischio uguale (informazione) | 0 | +0.00% | — |
 | F5 + M7 + K2 a rischio uguale (informazione) | 0 | +0.00% | — |
 | EWIL (informazione, dal 2 novembre) | 0 | +0.00% | — |
-| A1 | 8 | -0.25% | -2.01 |
+| A1 | 10 | -0.25% | -1.86 |
 
 ## Le posizioni di adesso
 
@@ -30,7 +30,7 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 * **M1**, ultima settimana calcolata (dal 2026-10-19; quella in corso si calcola a settimana chiusa): long 1000SHIBUSDT 4.0%, ADAUSDT 3.4%, ALGOUSDT 2.8%, ATOMUSDT 2.8%, BCHUSDT 2.1%, BNBUSDT 8.0%, BTCUSDT 7.8%, CAKEUSDT 3.9%, DOGEUSDT 3.5%, DOTUSDT 2.9%, ETCUSDT 3.9%, ETHUSDT 7.0%, FILUSDT 2.3%, LINKUSDT 3.5%, LTCUSDT 3.4%, MORPHOUSDT 3.5%, SOLUSDT 5.4%, TRXUSDT 21.5%, XLMUSDT 3.4%, XRPUSDT 5.0%; short BOMEUSDT -8.3%, BRUSDT -4.5%, COTIUSDT -10.6%, GRASSUSDT -5.5%, GTCUSDT -2.9%, INJUSDT -9.3%, LSKUSDT -7.7%, METUSDT -6.1%, MUBARAKUSDT -3.0%, NILUSDT -3.9%, ONEUSDT -2.8%, PHAUSDT -3.5%, QNTUSDT -2.7%, QUSDT -2.3%, SAGAUSDT -3.1%, SANDUSDT -4.9%, STRKUSDT -3.9%, TIAUSDT -6.7%, USUSDT -1.9%, WUSDT -6.5%.
 * **F2**, settimana dal 2026-10-26: long 1000BONKUSDT, ALGOUSDT, ATOMUSDT, BRUSDT, GALAUSDT, GTCUSDT, LSKUSDT, METUSDT, MINAUSDT, MONUSDT, MOVRUSDT, OPUSDT, PHAUSDT, POLUSDT, QUSDT, RAYSOLUSDT, RLCUSDT, SANDUSDT, SUSDT, WUSDT; short 1000PEPEUSDT, AKEUSDT, APRUSDT, ASTERUSDT, BNBUSDT, BTCUSDT, ENAUSDT, ETHUSDT, FARTCOINUSDT, GRASSUSDT, LDOUSDT, MUBARAKUSDT, PROMUSDT, USELESSUSDT, USUSDT, VVVUSDT, WLFIUSDT, XMRUSDT, XPLUSDT, XRPUSDT.
 * **C1**, ultima settimana calcolata (dal 2026-10-19): long 1000PEPEUSDT, AKEUSDT, APTUSDT, ARBUSDT, ASTERUSDT, BCHUSDT, BTCUSDT, CRVUSDT, ETHFIUSDT, FILUSDT, GTCUSDT, INJUSDT, NEARUSDT, QUSDT, SUSDT, TAOUSDT, TIAUSDT, TRXUSDT, WLFIUSDT, XMRUSDT; short 1000BONKUSDT, ACEUSDT, BOMEUSDT, COTIUSDT, ENAUSDT, FARTCOINUSDT, FETUSDT, GALAUSDT, JTOUSDT, LSKUSDT, MINAUSDT, MONUSDT, ONEUSDT, PROMUSDT, PUMPUSDT, SAGAUSDT, USELESSUSDT, USUSDT, WUSDT, XPLUSDT.
-* **A1**, pesi decisi alla chiusura del 2026-10-27 (frazione del capitale): HYPEUSDT 1.2%, BNBUSDT 1.1%, 1000PEPEUSDT 0.8%, BTCUSDT 0.7%, XRPUSDT 0.6%, NEARUSDT 0.6%, ZECUSDT 0.5%, ETHUSDT 0.5%, UNIUSDT 0.5%, SOLUSDT 0.5%, ENAUSDT 0.4%, LINKUSDT 0.4%, PUMPUSDT 0.4%, ARBUSDT 0.4%, DOGEUSDT 0.2%.
+* **A1**, pesi decisi alla chiusura del 2026-10-29 (frazione del capitale): HYPEUSDT 1.3%, 1000PEPEUSDT 0.8%, BNBUSDT 0.7%, BTCUSDT 0.7%, NEARUSDT 0.6%, ZECUSDT 0.4%, UNIUSDT 0.4%, ARBUSDT 0.3%, PUMPUSDT 0.3%, ETHUSDT 0.3%, SOLUSDT 0.2%, ENAUSDT 0.2%.
 
 **E4** (a eventi, dal 21 ottobre; si vedono quando esce il file mensile del funding): nessun evento ancora.
 

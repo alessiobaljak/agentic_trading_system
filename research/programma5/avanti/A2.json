@@ -1,5 +1,5 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-27.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-29.zip",
  "procedure": {
   "N-001": {
    "trade": 25,
@@ -12,7 +12,7 @@
     "p": 0.8202179782021798
    },
    "netto_doppio": -0.04252654917361034,
-   "caso_netto": -0.005569575372671576,
+   "caso_netto": -0.007040164930104739,
    "senza_migliore": -0.08093934662485429,
    "per_moneta": {
     "ARKUSDT": {
@@ -81,7 +81,7 @@
     "p": 0.7604239576042395
    },
    "netto_doppio": -0.006847041175997761,
-   "caso_netto": -0.0007503667147886032,
+   "caso_netto": -0.003922168814967889,
    "senza_migliore": -0.007881775345773086,
    "per_moneta": {
     "AAVEUSDT": {
@@ -162,7 +162,7 @@
     "p": 0.39406059394060594
    },
    "netto_doppio": 0.01265801976627266,
-   "caso_netto": -0.03850478410581387,
+   "caso_netto": -0.021068394006722526,
    "senza_migliore": -0.018755722749416677,
    "per_moneta": {
     "1000PEPEUSDT": {
