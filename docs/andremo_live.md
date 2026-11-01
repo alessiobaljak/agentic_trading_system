@@ -5372,3 +5372,9 @@ sul conto: a −35% dal massimo il demo chiude tutto da solo e si ferma finché 
 quantità vere e quelle volute all'ultimo ribilancio, con le monete oltre il 2% del conto su RTDB e nello stato della macchina. Il
 pulsante della dashboard ha bisogno delle regole del database aggiornate (`firebase/database.rules.json`, da pubblicare con `firebase
 deploy`); fino ad allora vale il comando come file. Gli eventi restano solo sul demo, con i soldi finti (conferma del proprietario).
+**Giro delle 20:17.** Notizie: 36 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 20:20: niente di nuovo. **Il primo
+controllo delle protezioni del demo** (stato 0688, 20:07 UTC): il conto demo usava già il margine unico su tutte le monete (niente da
+sistemare); lo stop sul conto è attivo, con il massimo contato dalla ripartenza (5.159,32 dollari, si chiude tutto sotto 3.353,55); il
+confronto fra posizioni vere e volute parte dopo il ribilancio di stanotte. Conto demo +3,33% dall'inizio. Nessuna prova nuova: la coda
+delle idee con dati gratuiti e un perché forte è vuota; le misure in avanti nuove (HLI, DXI, la copia dei trader di Hyperliquid)
+partono domani.

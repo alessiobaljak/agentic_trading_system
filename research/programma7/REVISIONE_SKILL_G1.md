@@ -106,3 +106,5 @@ ottobre 2026:
 * Le due cose provate sul passato contro la concentrazione **peggiorano la discesa**: il tetto del 10% per moneta (prova 61, −32,6% contro
   −28,8%) e il minimo di 10 monete per lato (prova 124, −30,4%). Il rischio di una moneta sola si governa con poco capitale e con lo stop
   sul conto, non con il tetto.
+
+**Verificato il 1° novembre alle 20:07 UTC** (stato 0688, primo controllo del bot con le protezioni): il conto demo usa già il margine unico su tutte le monete; stop sul conto attivo (massimo 5.159,32 dollari, si chiude tutto sotto 3.353,55).
