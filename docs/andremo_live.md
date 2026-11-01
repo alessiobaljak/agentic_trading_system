@@ -5358,3 +5358,8 @@ miei messaggi: errore mio, detto al proprietario); **N3 dal 1° luglio 2025 fa �
 eventi non è la proposta per i soldi veri; il demo imposta la leva 5 ma non il tipo di margine. Le condizioni sono nel backlog (P26).
 Capito oggi: G1 ha un vantaggio vero sul passato che non viene dal mercato, ma è sotto la soglia del proprietario contando tutte le
 prove, dipende da pochi periodi e dal funding estremo, e gli eventi nell'ultimo anno tolgono invece di aggiungere.
+**Giro delle 16:18.** Notizie: 49 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 16:21: niente di nuovo. Una misura per il
+piano dei soldi veri (`programma7/REVISIONE_SKILL_G1.md`, sezione 6): con il margine separato per ogni moneta a leva 5 almeno una
+posizione di G1 sarebbe stata chiusa a forza in 313 giorni su 2.100 dal lato comprato e in 843 dal lato venduto; con il margine unico per
+tutto il conto mai. Quindi il margine unico va impostato e controllato dal codice prima dei soldi veri (oggi non è controllato). Capito
+oggi: il tipo di margine non è un dettaglio, decide se il backtest vale o no.

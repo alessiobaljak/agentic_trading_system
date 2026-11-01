@@ -87,3 +87,22 @@ controllato, esposizione non oltre il 200%; un tetto per moneta e almeno 10 mone
 tutto, uno stop automatico sulla perdita del conto (per esempio −20%) e il confronto ogni giorno fra posizioni e pesi; almeno 10.000
 USDT ma non più di quanto si può perdere, con prelievi regolari; gli eventi solo sul demo finché N3 non torna positivo sugli eventi nuovi.
 
+
+## 6. Aggiunta: i movimenti dentro la giornata e il tipo di margine (misura descrittiva, 1° novembre, 16:25 UTC)
+
+Sui pesi di G1 ricalcolati come `prima.py` e le candele giornaliere (minimo e massimo rispetto all'apertura), dal 4 gennaio 2021 al 4
+ottobre 2026:
+* **Il lato comprato nel giorno peggiore** (19 maggio 2021) è arrivato a −57,6% del suo valore al minimo della giornata; il lato
+  venduto nel giorno peggiore (24 maggio 2021) a −29,4%. La somma dei due peggiori, come limite superiore (non succedono per forza
+  insieme), −59,9%; nell'1% dei giorni peggiori −25,6%.
+* **Con il margine separato per ogni moneta a leva 5** una posizione si chiude a forza a circa −18%/−20% contro: è successo ad almeno
+  una moneta comprata in **313 giorni su 2.100** (in media il 10,5% del lato) e ad almeno una moneta venduta in **843 giorni** (il 6%
+  del lato). Con quel margine il backtest non varrebbe niente: si perderebbero posizioni quasi un giorno su due.
+* **Con il margine unico per tutto il conto** i due lati si compensano e la chiusura forzata arriva solo se tutto il conto scende sotto il
+  margine minimo (pochi punti percentuali del capitale con esposizione 2): sul passato non sarebbe mai successo, perché la discesa massima
+  a fine giornata è −30,1%.
+* **Cosa serve**: il margine unico impostato dal codice e controllato a ogni avvio (oggi il demo imposta solo la leva 5, il tipo di margine
+  è quello di partenza del conto, che su Binance di solito è unico, ma non è controllato).
+* Le due cose provate sul passato contro la concentrazione **peggiorano la discesa**: il tetto del 10% per moneta (prova 61, −32,6% contro
+  −28,8%) e il minimo di 10 monete per lato (prova 124, −30,4%). Il rischio di una moneta sola si governa con poco capitale e con lo stop
+  sul conto, non con il tetto.
