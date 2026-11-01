@@ -1,0 +1,64 @@
+{
+ "schema_version": "1.0",
+ "date_column": "date",
+ "return_unit": "decimal",
+ "frequency": "daily",
+ "annualization_factor": 365,
+ "primary_model": {
+  "name": "mercato_e_altcoin",
+  "baseline_columns": [
+   "mercato",
+   "pesi_uguali"
+  ]
+ },
+ "sensitivity_models": [
+  {
+   "name": "mercato",
+   "baseline_columns": [
+    "mercato"
+   ]
+  },
+  {
+   "name": "piu_momento",
+   "baseline_columns": [
+    "mercato",
+    "pesi_uguali",
+    "momento"
+   ]
+  },
+  {
+   "name": "piu_settori",
+   "baseline_columns": [
+    "mercato",
+    "pesi_uguali",
+    "settori"
+   ]
+  },
+  {
+   "name": "tutti",
+   "baseline_columns": [
+    "mercato",
+    "pesi_uguali",
+    "momento",
+    "settori"
+   ]
+  }
+ ],
+ "regime_columns": [
+  "bitcoin_30_giorni"
+ ],
+ "rolling_window": 182,
+ "minimum_observations": 60,
+ "minimum_regime_observations": 20,
+ "minimum_rolling_windows": 12,
+ "hac_lags": "auto",
+ "include_series": false,
+ "strategy_column": "g1_netto",
+ "data_declarations": {
+  "baseline_selection": "predeclared",
+  "strategy_return_basis": "net",
+  "baseline_return_basis": "gross",
+  "analysis_scope": "in_sample",
+  "universe_data": "point_in_time"
+ }
+}

@@ -1,0 +1,516 @@
+{
+  "analysis_type": "returns_based_residual_edge",
+  "data": {
+    "annualization_factor": 365,
+    "baseline_columns": [
+      "mercato",
+      "momento",
+      "pesi_uguali",
+      "settori"
+    ],
+    "configured_minimum_observations": 60,
+    "declarations": {
+      "analysis_scope": "in_sample",
+      "baseline_return_basis": "gross",
+      "baseline_selection": "predeclared",
+      "strategy_return_basis": "gross",
+      "universe_data": "point_in_time"
+    },
+    "effective_minimum_observations": 60,
+    "end_date": "2026-10-04",
+    "frequency": "daily",
+    "observation_count": 2100,
+    "regime_columns": [
+      "bitcoin_30_giorni"
+    ],
+    "return_unit_normalized": "decimal",
+    "start_date": "2021-01-04",
+    "strategy_column": "g1_lordo"
+  },
+  "method_notes": [
+    "OLS includes an intercept.",
+    "Residual edge ratio is annualized alpha divided by annualized residual volatility.",
+    "HAC standard errors address heteroskedasticity and serial correlation asymptotically.",
+    "Results describe declared return-series exposure, not holdings-based Brinson attribution."
+  ],
+  "models": [
+    {
+      "adjusted_r_squared": 0.034653262,
+      "alpha": {
+        "annualized_arithmetic": 0.6240949612,
+        "hac_standard_error_periodic": 0.0003326521,
+        "periodic": 0.0017098492,
+        "t_stat": 5.1400517027
+      },
+      "baseline_columns": [
+        "mercato",
+        "pesi_uguali"
+      ],
+      "coefficients": [
+        {
+          "estimate": 0.0017098492,
+          "hac_standard_error": 0.0003326521,
+          "name": "intercept",
+          "t_stat": 5.1400517027
+        },
+        {
+          "estimate": 0.0068973403,
+          "hac_standard_error": 0.032637137,
+          "name": "mercato",
+          "t_stat": 0.21133411
+        },
+        {
+          "estimate": -0.063799744,
+          "hac_standard_error": 0.0268551835,
+          "name": "pesi_uguali",
+          "t_stat": -2.3756957045
+        }
+      ],
+      "diagnostic_status": "RESIDUAL_EDGE",
+      "hac_lags": 7,
+      "name": "mercato_e_altcoin",
+      "observation_count": 2100,
+      "r_squared": 0.0355730778,
+      "residual": {
+        "active_return_max_drawdown": -0.2394793616,
+        "annualized_volatility": 0.269409144,
+        "durbin_watson": 1.9567970043,
+        "lag_one_autocorrelation": 0.0215931645,
+        "periodic_volatility": 0.0141015191,
+        "residual_edge_ratio": 2.3165322152
+      },
+      "role": "primary",
+      "rolling": {
+        "enabled": true,
+        "failed_window_count": 0,
+        "latest": {
+          "annualized_alpha": 0.3376580787,
+          "end_index": 2099,
+          "r_squared": 0.010591779,
+          "residual_edge_ratio": 1.1950992432
+        },
+        "positive_alpha_fraction": 0.8931735279,
+        "r_squared": {
+          "max": 0.4872471688,
+          "median": 0.0877836725,
+          "min": 4.82976e-05
+        },
+        "residual_edge_ratio": {
+          "max": 6.7434166852,
+          "median": 1.7114234552,
+          "min": -1.3289785379
+        },
+        "window": 182,
+        "window_count": 1919
+      },
+      "status_reasons": [
+        "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+      ],
+      "vif": {
+        "mercato": 2.742856336,
+        "pesi_uguali": 2.742856336
+      }
+    },
+    {
+      "adjusted_r_squared": 0.0205465427,
+      "alpha": {
+        "annualized_arithmetic": 0.6309167451,
+        "hac_standard_error_periodic": 0.0003296055,
+        "periodic": 0.001728539,
+        "t_stat": 5.2442658427
+      },
+      "baseline_columns": [
+        "mercato"
+      ],
+      "coefficients": [
+        {
+          "estimate": 0.001728539,
+          "hac_standard_error": 0.0003296055,
+          "name": "intercept",
+          "t_stat": 5.2442658427
+        },
+        {
+          "estimate": -0.0697296433,
+          "hac_standard_error": 0.0167754162,
+          "name": "mercato",
+          "t_stat": -4.1566565422
+        }
+      ],
+      "diagnostic_status": "RESIDUAL_EDGE",
+      "hac_lags": 7,
+      "name": "mercato",
+      "observation_count": 2100,
+      "r_squared": 0.0210131713,
+      "residual": {
+        "active_return_max_drawdown": -0.2439309631,
+        "annualized_volatility": 0.2714351544,
+        "durbin_watson": 1.9591555765,
+        "lag_one_autocorrelation": 0.0204188853,
+        "periodic_volatility": 0.0142075653,
+        "residual_edge_ratio": 2.3243737403
+      },
+      "role": "sensitivity",
+      "rolling": {
+        "enabled": true,
+        "failed_window_count": 0,
+        "latest": {
+          "annualized_alpha": 0.3253851534,
+          "end_index": 2099,
+          "r_squared": 0.000684431,
+          "residual_edge_ratio": 1.145937654
+        },
+        "positive_alpha_fraction": 0.8931735279,
+        "r_squared": {
+          "max": 0.1950744154,
+          "median": 0.0392779529,
+          "min": 1.148e-07
+        },
+        "residual_edge_ratio": {
+          "max": 6.7978998407,
+          "median": 1.86917118,
+          "min": -1.1656967331
+        },
+        "window": 182,
+        "window_count": 1919
+      },
+      "status_reasons": [
+        "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+      ],
+      "vif": {
+        "mercato": 1.0
+      }
+    },
+    {
+      "adjusted_r_squared": 0.0342309235,
+      "alpha": {
+        "annualized_arithmetic": 0.6248155626,
+        "hac_standard_error_periodic": 0.0003313338,
+        "periodic": 0.0017118235,
+        "t_stat": 5.16646116
+      },
+      "baseline_columns": [
+        "mercato",
+        "pesi_uguali",
+        "momento"
+      ],
+      "coefficients": [
+        {
+          "estimate": 0.0017118235,
+          "hac_standard_error": 0.0003313338,
+          "name": "intercept",
+          "t_stat": 5.16646116
+        },
+        {
+          "estimate": 0.0069906984,
+          "hac_standard_error": 0.0324948326,
+          "name": "mercato",
+          "t_stat": 0.2151326185
+        },
+        {
+          "estimate": -0.0642457984,
+          "hac_standard_error": 0.026573203,
+          "name": "pesi_uguali",
+          "t_stat": -2.4176911766
+        },
+        {
+          "estimate": -0.0030591613,
+          "hac_standard_error": 0.0312217861,
+          "name": "momento",
+          "t_stat": -0.0979816247
+        }
+      ],
+      "diagnostic_status": "RESIDUAL_EDGE",
+      "hac_lags": 7,
+      "name": "piu_momento",
+      "observation_count": 2100,
+      "r_squared": 0.0356112509,
+      "residual": {
+        "active_return_max_drawdown": -0.2377576586,
+        "annualized_volatility": 0.2694038122,
+        "durbin_watson": 1.957039531,
+        "lag_one_autocorrelation": 0.021473214,
+        "periodic_volatility": 0.01410124,
+        "residual_edge_ratio": 2.3192528624
+      },
+      "role": "sensitivity",
+      "rolling": {
+        "enabled": true,
+        "failed_window_count": 0,
+        "latest": {
+          "annualized_alpha": 0.3268048892,
+          "end_index": 2099,
+          "r_squared": 0.0144309726,
+          "residual_edge_ratio": 1.1589364055
+        },
+        "positive_alpha_fraction": 0.8895257947,
+        "r_squared": {
+          "max": 0.4882075143,
+          "median": 0.1133114356,
+          "min": 0.0011791752
+        },
+        "residual_edge_ratio": {
+          "max": 6.8134603067,
+          "median": 1.7936226682,
+          "min": -1.0038195252
+        },
+        "window": 182,
+        "window_count": 1919
+      },
+      "status_reasons": [
+        "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+      ],
+      "vif": {
+        "mercato": 2.7438430785,
+        "momento": 1.0407997346,
+        "pesi_uguali": 2.7939941754
+      }
+    },
+    {
+      "adjusted_r_squared": 0.0353250956,
+      "alpha": {
+        "annualized_arithmetic": 0.6225287228,
+        "hac_standard_error_periodic": 0.0003314413,
+        "periodic": 0.0017055581,
+        "t_stat": 5.1458832551
+      },
+      "baseline_columns": [
+        "mercato",
+        "pesi_uguali",
+        "settori"
+      ],
+      "coefficients": [
+        {
+          "estimate": 0.0017055581,
+          "hac_standard_error": 0.0003314413,
+          "name": "intercept",
+          "t_stat": 5.1458832551
+        },
+        {
+          "estimate": 0.0040868366,
+          "hac_standard_error": 0.0338371028,
+          "name": "mercato",
+          "t_stat": 0.1207797436
+        },
+        {
+          "estimate": -0.0585953774,
+          "hac_standard_error": 0.0300591608,
+          "name": "pesi_uguali",
+          "t_stat": -1.9493351087
+        },
+        {
+          "estimate": 0.0299835663,
+          "hac_standard_error": 0.0567968205,
+          "name": "settori",
+          "t_stat": 0.5279092386
+        }
+      ],
+      "diagnostic_status": "RESIDUAL_EDGE",
+      "hac_lags": 7,
+      "name": "piu_settori",
+      "observation_count": 2100,
+      "r_squared": 0.0367038592,
+      "residual": {
+        "active_return_max_drawdown": -0.2420919751,
+        "annualized_volatility": 0.2692511579,
+        "durbin_watson": 1.9589617328,
+        "lag_one_autocorrelation": 0.0205125703,
+        "periodic_volatility": 0.0140932497,
+        "residual_edge_ratio": 2.3120744504
+      },
+      "role": "sensitivity",
+      "rolling": {
+        "enabled": true,
+        "failed_window_count": 0,
+        "latest": {
+          "annualized_alpha": 0.3395589917,
+          "end_index": 2099,
+          "r_squared": 0.0249971094,
+          "residual_edge_ratio": 1.2106730288
+        },
+        "positive_alpha_fraction": 0.9046378322,
+        "r_squared": {
+          "max": 0.4875794417,
+          "median": 0.1664161726,
+          "min": 0.0007224247
+        },
+        "residual_edge_ratio": {
+          "max": 6.4783252521,
+          "median": 1.7440723186,
+          "min": -1.3147640643
+        },
+        "window": 182,
+        "window_count": 1919
+      },
+      "status_reasons": [
+        "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+      ],
+      "vif": {
+        "mercato": 2.7730451735,
+        "pesi_uguali": 2.9778633828,
+        "settori": 1.1309123085
+      }
+    },
+    {
+      "adjusted_r_squared": 0.0348682855,
+      "alpha": {
+        "annualized_arithmetic": 0.6227647502,
+        "hac_standard_error_periodic": 0.000329306,
+        "periodic": 0.0017062048,
+        "t_stat": 5.181213324
+      },
+      "baseline_columns": [
+        "mercato",
+        "pesi_uguali",
+        "momento",
+        "settori"
+      ],
+      "coefficients": [
+        {
+          "estimate": 0.0017062048,
+          "hac_standard_error": 0.000329306,
+          "name": "intercept",
+          "t_stat": 5.181213324
+        },
+        {
+          "estimate": 0.0041364393,
+          "hac_standard_error": 0.0335395889,
+          "name": "mercato",
+          "t_stat": 0.1233300529
+        },
+        {
+          "estimate": -0.058772375,
+          "hac_standard_error": 0.0289214279,
+          "name": "pesi_uguali",
+          "t_stat": -2.0321394622
+        },
+        {
+          "estimate": -0.0009534949,
+          "hac_standard_error": 0.0298240614,
+          "name": "momento",
+          "t_stat": -0.0319706588
+        },
+        {
+          "estimate": 0.0297648178,
+          "hac_standard_error": 0.0533730893,
+          "name": "settori",
+          "t_stat": 0.5576746299
+        }
+      ],
+      "diagnostic_status": "RESIDUAL_EDGE",
+      "hac_lags": 7,
+      "name": "tutti",
+      "observation_count": 2100,
+      "r_squared": 0.0367075074,
+      "residual": {
+        "active_return_max_drawdown": -0.2415385385,
+        "annualized_volatility": 0.269250648,
+        "durbin_watson": 1.9590199151,
+        "lag_one_autocorrelation": 0.0204838403,
+        "periodic_volatility": 0.014093223,
+        "residual_edge_ratio": 2.3129554369
+      },
+      "role": "sensitivity",
+      "rolling": {
+        "enabled": true,
+        "failed_window_count": 0,
+        "latest": {
+          "annualized_alpha": 0.328721582,
+          "end_index": 2099,
+          "r_squared": 0.0288245998,
+          "residual_edge_ratio": 1.1743403013
+        },
+        "positive_alpha_fraction": 0.9067222512,
+        "r_squared": {
+          "max": 0.4884748223,
+          "median": 0.1803951063,
+          "min": 0.0013686168
+        },
+        "residual_edge_ratio": {
+          "max": 6.5061462529,
+          "median": 1.7584312483,
+          "min": -0.9684408417
+        },
+        "window": 182,
+        "window_count": 1919
+      },
+      "status_reasons": [
+        "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+      ],
+      "vif": {
+        "mercato": 2.7759598083,
+        "momento": 1.0579703717,
+        "pesi_uguali": 3.0621144601,
+        "settori": 1.1495695815
+      }
+    }
+  ],
+  "primary_model": "mercato_e_altcoin",
+  "regime_analysis": {
+    "bitcoin_30_giorni": [
+      {
+        "active_return_metrics": {
+          "annualized_arithmetic_return": 0.5640210407,
+          "annualized_volatility": 0.2829373431,
+          "max_drawdown": -0.3622642713,
+          "periodic_mean": 0.0015452631,
+          "periodic_volatility": 0.0148096174,
+          "sharpe_zero_rate": 1.9934485656
+        },
+        "evidence_status": "ADEQUATE",
+        "label": "sopra",
+        "observation_count": 1130,
+        "positive_fraction": 0.5327433628
+      },
+      {
+        "active_return_metrics": {
+          "annualized_arithmetic_return": 0.694077982,
+          "annualized_volatility": 0.2528342664,
+          "max_drawdown": -0.1442738642,
+          "periodic_mean": 0.0019015835,
+          "periodic_volatility": 0.0132339503,
+          "sharpe_zero_rate": 2.7451895342
+        },
+        "evidence_status": "ADEQUATE",
+        "label": "sotto",
+        "observation_count": 970,
+        "positive_fraction": 0.5577319588
+      }
+    ]
+  },
+  "schema_version": "1.0",
+  "source": {
+    "config_name": "config_lordo.json",
+    "csv_name": "serie.csv"
+  },
+  "strategy_metrics": {
+    "annualized_arithmetic_return": 0.6079342489,
+    "annualized_volatility": 0.2743327578,
+    "max_drawdown": -0.2805637278,
+    "periodic_mean": 0.0016655733,
+    "periodic_volatility": 0.0143592328,
+    "sharpe_zero_rate": 2.2160468684
+  },
+  "verdict": {
+    "decision_eligibility": "REVIEW_REQUIRED",
+    "decision_grade": false,
+    "reasons": [
+      "Alpha, residual edge ratio, and rolling stability clear the configured thresholds."
+    ],
+    "status": "RESIDUAL_EDGE",
+    "thresholds": {
+      "alpha_t_stat_min": 2.0,
+      "baseline_explained_r2_min": 0.75,
+      "residual_edge_ratio_min": 0.75,
+      "rolling_positive_fraction_min": 0.6,
+      "weak_edge_ratio_max": 0.5
+    },
+    "trade_authorization": "NOT_AUTHORIZED"
+  },
+  "warnings": [
+    {
+      "id": "NOT_OUT_OF_SAMPLE",
+      "message": "Treat in-sample residual edge as exploratory until confirmed out of sample.",
+      "severity": "high"
+    }
+  ]
+}
