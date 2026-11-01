@@ -5331,3 +5331,11 @@ nuova: la ricerca nelle pubblicazioni del 2025-2026 sugli eventi ha portato solo
 131), che non si fa perché i nostri 513 sblocchi dicono già il contrario per il giorno dello sblocco (la moneta risale contro il
 Bitcoin). Capito oggi: niente di nuovo sui prezzi; le idee con dati gratuiti e un perché forte che non abbiamo ancora provato sono
 quasi finite, e le prossime verranno soprattutto dalle misure in avanti (notizie, monete di tendenza, HLI e DXI dal 2 novembre).
+**Giro delle 12:18.** Notizie: 52 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 12:19: niente di nuovo. **Una misura in
+avanti nuova: copiare i trader migliori di Hyperliquid** (idea 132, `trader_copiati/HYPERLIQUID.md`, regola scritta alle 12:20 UTC
+prima di raccogliere qualunque posizione): la versione automatica dell'idea del proprietario dei trader da copiare. Su Hyperliquid la
+classifica (48.270 conti) e le posizioni di ognuno sono pubbliche; dal 2 novembre, ogni lunedì i 20 conti con il rendimento del mese più
+alto (almeno 1 milione nel conto), le loro posizioni lette a ogni giro della raccolta e copiate sui perpetui di Binance; verdetto a 52
+settimane. Sul passato non si può: la classifica di oggi tiene solo i sopravvissuti. Lettura provata in una cartella di prova: 20 conti
+su 20 (`trader_copiati/hyperliquid.py`, chiamata dalla raccolta delle notizie). Idea 133 ferma: le liquidazioni vere per moneta
+(Coinalyze) servono una chiave che può creare solo il proprietario.

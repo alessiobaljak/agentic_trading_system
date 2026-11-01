@@ -1,7 +1,8 @@
 """La raccolta delle notizie crypto (REGOLE.md): a ogni giro legge le pagine pubbliche degli ultimi articoli di 21 siti, salva gli articoli
 nuovi in `archivio/AAAA-MM-GG.jsonl.gz` e scrive il giro in `archivio/giri.csv`. Il primo giorno di ogni mese rifa' l'elenco dei nomi
 delle monete (`nomi_AAAA-MM.json`) dalle prime 1.000 di CoinGecko. Dal 31 ottobre 2026 salva anche le monete di tendenza di
-CoinGecko in `archivio/tendenze.csv` (idea 126 del registro).
+CoinGecko in `archivio/tendenze.csv` (idea 126 del registro); dal 2 novembre legge anche le posizioni dei trader migliori di
+Hyperliquid (`research/trader_copiati/hyperliquid.py`, idea 132).
 
 Uso: python3 -m research.notizie.raccolta
 """
@@ -227,6 +228,11 @@ def esegui(log=print) -> dict:
         n_tendenze = tendenze(ora)
     except Exception:  # noqa: BLE001
         n_tendenze = 0
+    try:                                          # idea 132: i trader migliori di Hyperliquid (trader_copiati/HYPERLIQUID.md)
+        from research.trader_copiati import hyperliquid as th
+        th.esegui(ora, log)
+    except Exception as ex:  # noqa: BLE001
+        log(f"[trader] Hyperliquid non letto ({ex})")
     log(f"[notizie] {ora.strftime('%Y-%m-%d %H:%M')} UTC: {len(nuovi)} articoli nuovi da {risposte} fonti su {len(FONTI)}; "
         f"piene: {', '.join(x[0] for x in giro if x[3]) or 'nessuna'}; monete di tendenza su CoinGecko: {n_tendenze}")
     return {"nuovi": len(nuovi), "fonti_che_rispondono": risposte, "tendenze": n_tendenze}
