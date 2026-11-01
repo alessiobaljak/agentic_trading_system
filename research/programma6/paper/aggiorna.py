@@ -283,6 +283,68 @@ def funding_hyperliquid(pan: dict, log=print) -> np.ndarray:
     return Fh
 
 
+DYDX = "https://indexer.dydx.trade/v4"
+
+
+def _dydx(percorso: str):
+    import time
+    import urllib.request
+    for k in range(4):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(f"{DYDX}/{percorso}", headers={"User-Agent": "ricerca/1.0"}), timeout=30) as r:
+                return json.load(r)
+        except Exception:                             # noqa: BLE001
+            time.sleep(2 * (k + 1))
+    return None
+
+
+def funding_dydx(pan: dict, log=print) -> np.ndarray:
+    """Il funding di dYdX per giorno di tenuta (REGOLE.md, sezione 16), dal 20 ottobre 2026: un tasso ogni ora, si scarica solo la parte
+    nuova di ogni moneta, all'indietro a pagine di 100 (`research/data/dydx_recente/`); `XYZ-USD` si abbina a `XYZUSDT` o `1000XYZUSDT`."""
+    from datetime import datetime, timedelta, timezone
+    dati = QUI.parents[1] / "data" / "dydx_recente"
+    dati.mkdir(parents=True, exist_ok=True)
+    simboli, t0 = pan["simboli"], pan["t0"]
+    T = pan["close"].shape[0]
+    Fd = np.full((T, len(simboli)), np.nan)
+    mercati = (_dydx("perpetualMarkets") or {}).get("markets") or {}
+    usati = set()
+    for tk in sorted(mercati):
+        if not tk.endswith("-USD"):
+            continue
+        n = tk[:-4]
+        s = next((x for x in (f"{n}USDT", f"1000{n}USDT") if x in simboli), None)
+        if not s or s in usati:
+            continue
+        usati.add(s)
+        f = dati / f"{n}.json"
+        righe = json.loads(f.read_text()) if f.exists() else []
+        limite = (righe[-1][0] if righe else HL_DAL_MS - 1)
+        nuove, prima = [], None
+        while True:
+            q = f"historicalFunding/{tk}?limit=100" + (f"&effectiveBeforeOrAt={prima}" if prima else "")
+            d = ((_dydx(q) or {}).get("historicalFunding")) or []
+            if not d:
+                break
+            pagina = [(int(datetime.fromisoformat(x["effectiveAt"].replace("Z", "+00:00")).timestamp() * 1000), float(x["rate"])) for x in d]
+            nuove += [r for r in pagina if r[0] > limite]
+            piu_vecchia = min(r[0] for r in pagina)
+            if piu_vecchia <= limite or len(d) < 100:
+                break
+            prima = (datetime.fromtimestamp(piu_vecchia / 1000, tz=timezone.utc) - timedelta(milliseconds=1)).isoformat().replace("+00:00", "Z")
+        righe = sorted(set(map(tuple, righe)) | set(nuove))
+        f.write_text(json.dumps(righe))
+        if not righe:
+            continue
+        df = pd.DataFrame(righe, columns=["ts", "tasso"]).drop_duplicates("ts")
+        tenuta = (df["ts"].to_numpy() // 60_000 - 1) // 1440
+        g = pd.Series(df["tasso"].to_numpy(float), index=tenuta).groupby(level=0).sum()
+        g = g[(g.index >= t0) & (g.index < t0 + T)]
+        Fd[g.index.to_numpy() - t0, simboli.index(s)] = g.to_numpy()
+    log(f"[paper] dYdX: {len(usati)} monete abbinate")
+    return Fd
+
+
 def esegui(log=print) -> dict:
     pan = sc.costruisci_pannello(log=lambda x: None)
     # i dati sulle posizioni dei giorni nuovi (per K1), con la tabella appena ricostruita
@@ -362,6 +424,31 @@ def esegui(log=print) -> dict:
                     "giorni": {sc.data(int(k)): round(float(v), 6) for k, v in netto.items()}, **_riassunto(netto, 365)}
     except Exception as ex:                           # noqa: BLE001
         log(f"[paper] HLI non calcolata ({ex})")
+    # DXI (REGOLE.md sezione 16, solo informazione): la stessa regola di HLI con il funding di dYdX, dal 2 novembre 2026
+    try:
+        from research.programma6 import ventiquattresima as vq
+        from research.programma7 import cinquantaduesima as kp
+        from research.programma7 import prima as g1
+        from research.programma7 import settantesima as fm
+        Fd = funding_dydx(pan, log)
+        ultimo_lunedi = int(psw["lunedi"][-1])
+        giorni = np.arange(INIZIO_HLI, min(pan["t0"] + pan["close"].shape[0] - 1, ultimo_lunedi + 7), dtype=np.int64)
+        if len(giorni):
+            idx = giorni - pan["t0"]
+            Ud = g1.universo_del_giorno(giorni, psw["lunedi"], psw["U"])
+            fb = se.funding_7(pan, idx)
+            scarto = np.round(fm.somma_7(Fd, idx) - fb, 12)
+            Ur = Ud & np.isfinite(scarto)
+            sig = ot.sigma_30(pan, idx)
+            R, F = sc.rendimenti(pan)[idx], np.nan_to_num(pan["funding"][idx])
+            for nome, ct in (("DXI", scarto), ("G1 sulle stesse monete di DXI", -fb)):
+                W = vq.pesi_banda(np.where(np.isfinite(sig) & Ur, ct, np.nan), Ur, sig)
+                lim, _ = kp.conto(W, R, F, sc.costi_moneta(pan["simboli"]), giorni, pan["simboli"])
+                netto = pd.Series(lim["netto"].to_numpy(), index=giorni)
+                res["candidate"][f"{nome} (informazione, dal 2 novembre)"] = {
+                    "giorni": {sc.data(int(k)): round(float(v), 6) for k, v in netto.items()}, **_riassunto(netto, 365)}
+    except Exception as ex:                           # noqa: BLE001
+        log(f"[paper] DXI non calcolata ({ex})")
     # N3 (TRENTESIMA.md, REGOLE.md sezione 11): gli eventi del periodo P su Binance e su Gate.io
     from research.programma6 import scarico_annunci, tipi_gate
     from research.programma6.paper import n3

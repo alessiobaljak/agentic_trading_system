@@ -5314,3 +5314,11 @@ la 93 con l'elenco pubblico di DefiLlama). **No**: dei 1.333 attacchi restano 28
 operazione ma p 0,071, e senza le 5 migliori è negativo. Capito: dopo un attacco il gettone in media scende ancora un po' contro il
 Bitcoin (i 3 attacchi sopra i 10 milioni fanno +26,8% sul nostro short), ma quasi tutti gli attacchi colpiscono protocolli senza gettone
 o senza perpetuo, e 28 eventi in sei anni non bastano. Nel conto: 244 (45 a eventi).
+**Giro delle 04:18.** Notizie: 14 articoli nuovi da 20 fonti su 21 (CoinJournal non ha risposto). Controlli in avanti delle 04:21:
+niente di nuovo. Nessuna prova nuova sul passato: due idee scritte e non provate, con il perché nel registro (129, la regola di HLI con
+il funding di dYdX: sul passato non sarebbe indipendente; 130, il Bitcoin tenuto solo fuori dagli orari di Wall Street: i costi di ogni
+giorno la mangiano). **Una misura in avanti in più, DXI** (`programma6/paper/REGOLE.md`, sezione 16, scritta alle 04:23 UTC prima di
+leggere i dati): la stessa regola di HLI con il funding di dYdX, dal 2 novembre accanto a HLI, verdetto a 52 settimane; se il meccanismo
+di HLI è vero deve vedersi anche lì. Scarico provato: 226 monete di dYdX abbinate ai perpetui di Binance, funding ogni ora dal 20
+ottobre (`aggiorna.funding_dydx`); tutti i 2.480 test passano. Capito oggi: niente di nuovo sui prezzi; una correzione mia, detta al
+proprietario: il tetto del 10% per moneta **non** c'è nella versione per i soldi veri (la prova 61 l'ha bocciato: alzava la discesa).
