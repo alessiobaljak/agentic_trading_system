@@ -203,3 +203,20 @@ il verso al contrario (HLI) sulle prime 100 fa 1,90 con i costi, ma è nato da q
   Sharpe dell'anno è sopra quello di G1 sulle stesse monete negli stessi giorni.
 
 Fino ad allora è solo informazione: non entra nel bot.
+
+## 16. Aggiunta del 1° novembre 2026: DXI, la stessa regola di HLI con il funding di dYdX, solo informazione
+
+Scritta il 1° novembre 2026 alle 04:23 UTC, prima di ogni giorno misurato e prima di aver letto il funding di dYdX (si è solo provato che
+il servizio pubblico risponde). HLI (sezione 15) è nata dai dati di Hyperliquid della prova 135: se il meccanismo è vero (dove i trader
+sulla catena pagano più che su Binance, la moneta poi sale), deve vedersi anche su un'altra borsa sulla catena. Sul passato non si
+prova: i prezzi di Binance del 2023-2026 sono gli stessi su cui HLI è nata, quindi una prova sul passato non sarebbe indipendente (idea
+129 del registro). Si misura solo in avanti:
+* **la regola**: identica a HLI (sezione 15), con il funding di **dYdX** (servizio pubblico `indexer.dydx.trade/v4/historicalFunding`, un
+  tasso ogni ora, sommato per giorno di tenuta) al posto di quello di Hyperliquid; le monete di dYdX (`XYZ-USD`) si abbinano ai perpetui di
+  Binance `XYZUSDT` o `1000XYZUSDT`; accanto, **G1 sulle stesse monete**;
+* **il funding di dYdX** solo dal 20 ottobre 2026 in avanti (`aggiorna.funding_dydx`), salvato in `research/data/dydx_recente/` fuori da
+  git;
+* **i giorni dal 2 novembre 2026**, verdetto a 52 settimane (novembre 2027), come HLI: regge se lo Sharpe dell'anno è sopra quello di G1
+  sulle stesse monete negli stessi giorni. Conta come conferma di HLI, non come prova nuova nel conto.
+
+Fino ad allora è solo informazione: non entra nel bot.

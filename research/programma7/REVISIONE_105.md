@@ -55,6 +55,7 @@ cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando 
 | 2026-10-31 16:19 | nessuna oltre STABLE |
 | 2026-10-31 20:20 | nessuna oltre STABLE |
 | 2026-11-01 00:20 | nessuna oltre STABLE |
+| 2026-11-01 04:21 | nessuna oltre STABLE |
 
 **Gli eventi nuovi** (la regola della prova 105 così com'è: short il perpetuo di Binance e long il Bitcoin all'apertura del giorno dopo
 il primo giorno di scambi su Coinbase, uscita a +30% o dopo 7 giorni; il conto si fa quando sono almeno 30, con la regola dei simboli
