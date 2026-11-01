@@ -5301,3 +5301,16 @@ sulla stessa moneta; comprare le monete con le notizie più nuove, vendere quell
 discesa −80%, e il segnale mescolato a caso fa quasi lo stesso (13 volte su 20 almeno quanto quello vero). Capito: con i titoli e i
 riassunti dei giornali crypto, né quanto si parla di una moneta (prova 138) né quanto è nuovo quello che se ne dice muovono il prezzo
 della settimana dopo. Nel conto: 243.
+
+### 1° novembre 2026 (00:50 UTC)
+
+**Giro delle 00:18.** Notizie: 24 articoli nuovi, tutte e 21 le fonti; rifatto l'elenco dei nomi delle monete per novembre. Controlli
+in avanti delle 00:20: niente di nuovo. **I ribilanci della notte, puliti** (log 0684): G1 alle 00:09 (25 long e 26 short, conto
+10.320,45: +3,20% dall'inizio), G11 alle 00:13 (30 e 23, 10.457,50: +4,58%), G1N alle 00:17 (25 e 26, 10.538,03: +5,38%), il conto demo
+alle 00:18 (34 ordini limite, 1 rifiutato, la solita moneta con il nome in caratteri cinesi). La sera del 31 tutti avevano perso circa un
+punto e mezzo per la discesa di Tron (−7,8% in 24 ore su CoinGecko), la moneta più comprata (12-13% in G1, 31% in F5).
+**Prova 146, vendere dopo un attacco informatico al protocollo** (`programma7/OTTANTAQUATTRESIMA.md`, 00:22 UTC; idea 128, che riapre
+la 93 con l'elenco pubblico di DefiLlama). **No**: dei 1.333 attacchi restano 28 eventi con il gettone sul perpetuo di Binance, +3,94% a
+operazione ma p 0,071, e senza le 5 migliori è negativo. Capito: dopo un attacco il gettone in media scende ancora un po' contro il
+Bitcoin (i 3 attacchi sopra i 10 milioni fanno +26,8% sul nostro short), ma quasi tutti gli attacchi colpiscono protocolli senza gettone
+o senza perpetuo, e 28 eventi in sei anni non bastano. Nel conto: 244 (45 a eventi).

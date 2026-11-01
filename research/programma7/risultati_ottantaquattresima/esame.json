@@ -1,0 +1,76 @@
+{
+ "conti": {
+  "attacchi": 1333,
+  "fuori_periodo": 181,
+  "senza_moneta": 768,
+  "senza_perpetuo": 282,
+  "perpetuo_giovane": 27,
+  "senza_coingecko": 39,
+  "prezzo_diverso": 7,
+  "ripetuti": 1,
+  "eventi": 28
+ },
+ "eventi": 28,
+ "esame": {
+  "boot": {
+   "media": 0.03944208793840638,
+   "basso": -0.012359502570635278,
+   "alto": 0.09430831512150654,
+   "p": 0.070992900709929,
+   "eventi": 28,
+   "annunci": 26
+  },
+  "prima_meta": 0.0018241502682466734,
+  "seconda_meta": 0.07706002560856609,
+  "senza_5_migliori": -0.00975866267134151,
+  "vinti": 0.5714285714285714,
+  "mediana": 0.011544337304227761,
+  "per_anno": {
+   "2021": {
+    "eventi": 3,
+    "media": 0.0006183892057651796
+   },
+   "2022": {
+    "eventi": 1,
+    "media": 0.04645776473258294
+   },
+   "2023": {
+    "eventi": 1,
+    "media": 0.08633729189718127
+   },
+   "2024": {
+    "eventi": 5,
+    "media": -0.011394186923043162
+   },
+   "2025": {
+    "eventi": 6,
+    "media": 0.08376259012168362
+   },
+   "2026": {
+    "eventi": 12,
+    "media": 0.04367696932611944
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.0710)"
+ },
+ "controllo": {
+  "operazioni": 505,
+  "media": -0.002051922917235262
+ },
+ "differenza": {
+  "media": 0.03957188845262646,
+  "basso": -0.013539717462669222,
+  "alto": 0.09619217164956491,
+  "p": 0.074,
+  "eventi": 27
+ },
+ "tre_giorni": 0.05253592107734374,
+ "quattordici_giorni": -0.0012108268971403502,
+ "gia_fatto_mediana": -0.02307241844668817,
+ "fermate": 0.03571428571428571,
+ "grandi": {
+  "eventi": 3,
+  "media": 0.26824914445079945
+ },
+ "esito": "media non sopra zero con p ≤ 0,01 (p 0.0710)"
+}
