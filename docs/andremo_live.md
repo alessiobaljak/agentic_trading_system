@@ -5326,3 +5326,8 @@ proprietario: il tetto del 10% per moneta **non** c'è nella versione per i sold
 M-003 non passano, la seconda tornata N-001 34, N-002 21, N-003 6. Conto a tavolino: dati fino al 30 ottobre, le 22 monete entrate
 nell'universo sono le stesse di ieri (tutte monete); il funding letto per 213 monete di Hyperliquid e 226 di dYdX (HLI e DXI partono
 dal 2 novembre). Fra le vendite a tavolino sulle monete nuove di Gate.io, PREDICT chiusa a −31,7% (uscita a +30% contro).
+**Giro delle 08:17.** Notizie: 16 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 08:18: niente di nuovo. Nessuna prova
+nuova: la ricerca nelle pubblicazioni del 2025-2026 sugli eventi ha portato solo un'idea, vendere nelle 72 ore dopo uno sblocco (idea
+131), che non si fa perché i nostri 513 sblocchi dicono già il contrario per il giorno dello sblocco (la moneta risale contro il
+Bitcoin). Capito oggi: niente di nuovo sui prezzi; le idee con dati gratuiti e un perché forte che non abbiamo ancora provato sono
+quasi finite, e le prossime verranno soprattutto dalle misure in avanti (notizie, monete di tendenza, HLI e DXI dal 2 novembre).
