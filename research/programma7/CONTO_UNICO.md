@@ -13,3 +13,5 @@ Script `conto_unico.py`. G1 con tutto il capitale (i giorni della prova 57, dal 
 Per anno (G1 da sola → G1 più gli eventi): 2021 +177.6% → +166.5%, 2022 +32.4% → +36.4%, 2023 +5.9% → +41.0%, 2024 +93.1% → +228.8%, 2025 +92.2% → +279.6%, 2026 +26.4% → +29.7%.
 
 Correlazione fra G1 e gli eventi, giorno per giorno: 0.03.
+
+**Correzione del 1° novembre 2026** (revisione con le skill, `REVISIONE_SKILL_G1.md` punto 6): gli eventi peggiorano il conto nell'ultimo anno. N3 dal 1° luglio 2025 fa −2,30% a evento su 213 (ricontrollato); lo Sharpe 3,41 degli eventi qui sopra viene dal rendimento spalmato sui giorni, e contato al giorno di uscita il revisore trova 1,39; E4 non ha un'uscita di protezione (GAS −133% nel 2023). Il conto unico G1 più eventi **non** è oggi la proposta per i soldi veri: gli eventi restano sul demo come misura.

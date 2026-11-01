@@ -5347,3 +5347,14 @@ li chiede. **E invece di aspettare il 30 novembre, la regola delle notizie si è
 pubblico katelabs, 25.407 titoli di febbraio-aprile 2026, mai usati): **+0,14% a settimana dopo i costi, contro −0,48% di G1 nelle stesse
 8 settimane**, 4 settimane positive su 8. Conferma il verso, ma debole e su poche settimane. Il primo calcolo con la nostra raccolta resta
 il 30 novembre solo perché la regola conta gli articoli dei 28 giorni prima. Nel conto: 245.
+**La revisione di G1 con le skill** (richiesta del proprietario: «lanciale subito»; `programma7/REVISIONE_SKILL_G1.md`). Revisione del
+backtest: nessun errore nel codice (niente dati dal futuro, monete tolte dal listino dentro, costi e funding veri, entrata all'apertura
+dopo), ma tre limiti: nessun periodo davvero nuovo, sulle monete 101-200 Sharpe 0,75, una moneta sola può pesare troppo. Il guadagno
+separato dal mercato: il mercato spiega il 3,6%, resta +62% l'anno prima delle spese (t 5,1), i settori non lo spiegano; negli ultimi 6
+mesi circa la metà. Il rischio: discesa −30,1%, la più lunga 354 giorni, code grasse (curtosi 8,7). I dati: pochi problemi (0,1%). La
+critica avversaria di un revisore separato: **oggi no ai soldi veri, sì con condizioni e solo G1**. Ricontrollato da me: **lo Sharpe
+corretto di G1 oggi è 0,86, non 0,94** (rifatto il 25 ottobre con più prove nel conto; il valore vecchio era rimasto nel registro e nei
+miei messaggi: errore mio, detto al proprietario); **N3 dal 1° luglio 2025 fa −2,30% a evento su 213**, quindi il conto unico G1 più
+eventi non è la proposta per i soldi veri; il demo imposta la leva 5 ma non il tipo di margine. Le condizioni sono nel backlog (P26).
+Capito oggi: G1 ha un vantaggio vero sul passato che non viene dal mercato, ma è sotto la soglia del proprietario contando tutte le
+prove, dipende da pochi periodi e dal funding estremo, e gli eventi nell'ultimo anno tolgono invece di aggiungere.

@@ -701,3 +701,7 @@ G1 resta in media comprata sulle reti principali (+11,5% del capitale netto) e v
 
 Il 29 ottobre 2026 sera Binance ha subito un furto di circa 6,3 miliardi di dollari («il più grande della storia delle crypto»), secondo i titoli raccolti il 30 ottobre da Cointelegraph, CoinDesk e Decrypt (`research/notizie/archivio/2026-10-30.jsonl.gz`); Binance dice di aver messo da parte 6,34 miliardi per coprire le perdite. Per i soldi veri vale il rischio di tenere tutto il capitale su una sola borsa: da valutare con il proprietario prima di partire (quanto lasciare sul conto, prelievi regolari).
 
+
+### P26, aggiunta del 1° novembre 2026 — la revisione con le skill (`research/programma7/REVISIONE_SKILL_G1.md`)
+
+Prima dei soldi veri, se il proprietario li chiede: (1) lo Sharpe corretto di G1 oggi è **0,86** (non 0,94: valore vecchio), lo deve accettare lui; (2) il margine incrociato impostato e controllato dal codice (oggi il demo imposta solo la leva 5), esposizione non oltre il 200%; (3) un interruttore che **chiude** tutte le posizioni, uno stop sulla perdita del conto (per esempio −20% o −30%), il confronto ogni giorno fra le posizioni vere e i pesi; (4) almeno 10 monete per lato e un tetto per moneta, da rimisurare sul passato (la prova 61 col solo tetto del 10% alzava la discesa); (5) gli eventi solo sul demo finché N3 non torna positivo sugli eventi nuovi (dal 1° luglio 2025 −2,30% a evento su 213); (6) poco capitale all'inizio, prelievi regolari (rischio della borsa).
