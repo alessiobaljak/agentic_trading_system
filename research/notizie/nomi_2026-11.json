@@ -1,0 +1,1710 @@
+{
+"fatto": "2026-11-01 00:20",
+"monete": 1000,
+"elenco": {
+"BTCUSDT": {
+"sigla": "BTC",
+"nome": "Bitcoin"
+},
+"ETHUSDT": {
+"sigla": "ETH",
+"nome": "Ethereum"
+},
+"BNBUSDT": {
+"sigla": "BNB",
+"nome": "BNB"
+},
+"XRPUSDT": {
+"sigla": "XRP",
+"nome": "XRP"
+},
+"SOLUSDT": {
+"sigla": "SOL",
+"nome": "Solana"
+},
+"TRXUSDT": {
+"sigla": "TRX",
+"nome": "TRON"
+},
+"ZECUSDT": {
+"sigla": "ZEC",
+"nome": "Zcash"
+},
+"HYPEUSDT": {
+"sigla": "HYPE",
+"nome": "Hyperliquid"
+},
+"DOGEUSDT": {
+"sigla": "DOGE",
+"nome": "Dogecoin"
+},
+"XMRUSDT": {
+"sigla": "XMR",
+"nome": "Monero"
+},
+"LINKUSDT": {
+"sigla": "LINK",
+"nome": "Chainlink"
+},
+"ADAUSDT": {
+"sigla": "ADA",
+"nome": "Cardano"
+},
+"XLMUSDT": {
+"sigla": "XLM",
+"nome": "Stellar"
+},
+"NEARUSDT": {
+"sigla": "NEAR",
+"nome": "NEAR Protocol"
+},
+"BCHUSDT": {
+"sigla": "BCH",
+"nome": "Bitcoin Cash"
+},
+"UNIUSDT": {
+"sigla": "UNI",
+"nome": "Uniswap"
+},
+"LTCUSDT": {
+"sigla": "LTC",
+"nome": "Litecoin"
+},
+"CCUSDT": {
+"sigla": "CC",
+"nome": "Canton"
+},
+"AVAXUSDT": {
+"sigla": "AVAX",
+"nome": "Avalanche"
+},
+"SUIUSDT": {
+"sigla": "SUI",
+"nome": "Sui"
+},
+"GRAMUSDT": {
+"sigla": "GRAM",
+"nome": "Gram (prev. Toncoin)"
+},
+"HBARUSDT": {
+"sigla": "HBAR",
+"nome": "Hedera"
+},
+"QNTUSDT": {
+"sigla": "QNT",
+"nome": "Quant"
+},
+"TAOUSDT": {
+"sigla": "TAO",
+"nome": "Bittensor"
+},
+"1000SHIBUSDT": {
+"sigla": "SHIB",
+"nome": "Shiba Inu"
+},
+"ENAUSDT": {
+"sigla": "ENA",
+"nome": "Ethena"
+},
+"1000PEPEUSDT": {
+"sigla": "PEPE",
+"nome": "Pepe"
+},
+"AAVEUSDT": {
+"sigla": "AAVE",
+"nome": "Aave"
+},
+"MUSDT": {
+"sigla": "M",
+"nome": "MemeCore"
+},
+"ONDOUSDT": {
+"sigla": "ONDO",
+"nome": "Ondo"
+},
+"PUMPUSDT": {
+"sigla": "PUMP",
+"nome": "Pump.fun"
+},
+"ASTERUSDT": {
+"sigla": "ASTER",
+"nome": "Aster"
+},
+"MORPHOUSDT": {
+"sigla": "MORPHO",
+"nome": "Morpho"
+},
+"BTWUSDT": {
+"sigla": "BTW",
+"nome": "Bitway"
+},
+"DOTUSDT": {
+"sigla": "DOT",
+"nome": "Polkadot"
+},
+"SKYUSDT": {
+"sigla": "SKY",
+"nome": "Sky"
+},
+"WLFIUSDT": {
+"sigla": "WLFI",
+"nome": "World Liberty Financial"
+},
+"WLDUSDT": {
+"sigla": "WLD",
+"nome": "Worldcoin"
+},
+"ICPUSDT": {
+"sigla": "ICP",
+"nome": "Internet Computer"
+},
+"VVVUSDT": {
+"sigla": "VVV",
+"nome": "Venice Token"
+},
+"ETCUSDT": {
+"sigla": "ETC",
+"nome": "Ethereum Classic"
+},
+"ARBUSDT": {
+"sigla": "ARB",
+"nome": "Arbitrum"
+},
+"JSTUSDT": {
+"sigla": "JST",
+"nome": "JUST"
+},
+"POLUSDT": {
+"sigla": "POL",
+"nome": "POL (ex-MATIC)"
+},
+"KASUSDT": {
+"sigla": "KAS",
+"nome": "Kaspa"
+},
+"ALGOUSDT": {
+"sigla": "ALGO",
+"nome": "Algorand"
+},
+"JUPUSDT": {
+"sigla": "JUP",
+"nome": "Jupiter"
+},
+"RENDERUSDT": {
+"sigla": "RENDER",
+"nome": "Render"
+},
+"ATOMUSDT": {
+"sigla": "ATOM",
+"nome": "Cosmos Hub"
+},
+"LITUSDT": {
+"sigla": "LIT",
+"nome": "Lighter"
+},
+"ZROUSDT": {
+"sigla": "ZRO",
+"nome": "LayerZero"
+},
+"FILUSDT": {
+"sigla": "FIL",
+"nome": "Filecoin"
+},
+"INJUSDT": {
+"sigla": "INJ",
+"nome": "Injective"
+},
+"NIGHTUSDT": {
+"sigla": "NIGHT",
+"nome": "Midnight"
+},
+"CAKEUSDT": {
+"sigla": "CAKE",
+"nome": "PancakeSwap"
+},
+"ETHFIUSDT": {
+"sigla": "ETHFI",
+"nome": "Ether.fi"
+},
+"DASHUSDT": {
+"sigla": "DASH",
+"nome": "Dash"
+},
+"STXUSDT": {
+"sigla": "STX",
+"nome": "Stacks"
+},
+"APTUSDT": {
+"sigla": "APT",
+"nome": "Aptos"
+},
+"AEROUSDT": {
+"sigla": "AERO",
+"nome": "Aerodrome Finance"
+},
+"PYTHUSDT": {
+"sigla": "PYTH",
+"nome": "Pyth Network"
+},
+"VETUSDT": {
+"sigla": "VET",
+"nome": "VeChain"
+},
+"STABLEUSDT": {
+"sigla": "STABLE",
+"nome": "​​Stable"
+},
+"TIAUSDT": {
+"sigla": "TIA",
+"nome": "Celestia"
+},
+"PENGUUSDT": {
+"sigla": "PENGU",
+"nome": "Pudgy Penguins"
+},
+"CRVUSDT": {
+"sigla": "CRV",
+"nome": "Curve DAO"
+},
+"RAYUSDT": {
+"sigla": "RAY",
+"nome": "Raydium"
+},
+"TRUMPUSDT": {
+"sigla": "TRUMP",
+"nome": "Official Trump"
+},
+"GRASSUSDT": {
+"sigla": "GRASS",
+"nome": "Grass"
+},
+"VIRTUALUSDT": {
+"sigla": "VIRTUAL",
+"nome": "Virtuals Protocol"
+},
+"XPLUSDT": {
+"sigla": "XPL",
+"nome": "Plasma"
+},
+"FETUSDT": {
+"sigla": "FET",
+"nome": "Artificial Superintelligence Alliance"
+},
+"BTTUSDT": {
+"sigla": "BTT",
+"nome": "BitTorrent"
+},
+"BSVUSDT": {
+"sigla": "BSV",
+"nome": "Bitcoin SV"
+},
+"STRKUSDT": {
+"sigla": "STRK",
+"nome": "Starknet"
+},
+"SPXUSDT": {
+"sigla": "SPX",
+"nome": "SPX6900"
+},
+"PENDLEUSDT": {
+"sigla": "PENDLE",
+"nome": "Pendle"
+},
+"SEIUSDT": {
+"sigla": "SEI",
+"nome": "Sei"
+},
+"FFUSDT": {
+"sigla": "FF",
+"nome": "Falcon Finance"
+},
+"UBUSDT": {
+"sigla": "UB",
+"nome": "Unibase"
+},
+"SUNUSDT": {
+"sigla": "SUN",
+"nome": "Sun Token"
+},
+"PIEVERSEUSDT": {
+"sigla": "PIEVERSE",
+"nome": "Pieverse"
+},
+"XTZUSDT": {
+"sigla": "XTZ",
+"nome": "Tezos"
+},
+"LDOUSDT": {
+"sigla": "LDO",
+"nome": "Lido DAO"
+},
+"KITEUSDT": {
+"sigla": "KITE",
+"nome": "Kite"
+},
+"OPUSDT": {
+"sigla": "OP",
+"nome": "Optimism"
+},
+"1000BONKUSDT": {
+"sigla": "BONK",
+"nome": "Bonk"
+},
+"AKEUSDT": {
+"sigla": "AKE",
+"nome": "Akedo"
+},
+"CFXUSDT": {
+"sigla": "CFX",
+"nome": "Conflux"
+},
+"1000LUNCUSDT": {
+"sigla": "LUNC",
+"nome": "Terra Luna Classic"
+},
+"MONUSDT": {
+"sigla": "MON",
+"nome": "Monad"
+},
+"GRTUSDT": {
+"sigla": "GRT",
+"nome": "The Graph"
+},
+"1000FLOKIUSDT": {
+"sigla": "FLOKI",
+"nome": "FLOKI"
+},
+"KAIAUSDT": {
+"sigla": "KAIA",
+"nome": "Kaia"
+},
+"FRAXUSDT": {
+"sigla": "FRAX",
+"nome": "Legacy Frax Dollar"
+},
+"BATUSDT": {
+"sigla": "BAT",
+"nome": "Basic Attention"
+},
+"ARUSDT": {
+"sigla": "AR",
+"nome": "Arweave"
+},
+"ENSUSDT": {
+"sigla": "ENS",
+"nome": "Ethereum Name Service"
+},
+"COMPUSDT": {
+"sigla": "COMP",
+"nome": "Compound"
+},
+"RUNEUSDT": {
+"sigla": "RUNE",
+"nome": "THORChain"
+},
+"JTOUSDT": {
+"sigla": "JTO",
+"nome": "Jito"
+},
+"EIGENUSDT": {
+"sigla": "EIGEN",
+"nome": "EigenCloud (prev. EigenLayer)"
+},
+"KMNOUSDT": {
+"sigla": "KMNO",
+"nome": "Kamino"
+},
+"CVXUSDT": {
+"sigla": "CVX",
+"nome": "Convex Finance"
+},
+"IOTAUSDT": {
+"sigla": "IOTA",
+"nome": "IOTA"
+},
+"SYRUPUSDT": {
+"sigla": "SYRUP",
+"nome": "Maple Finance"
+},
+"AKTUSDT": {
+"sigla": "AKT",
+"nome": "Akash Network"
+},
+"JASMYUSDT": {
+"sigla": "JASMY",
+"nome": "JasmyCoin"
+},
+"ZAMAUSDT": {
+"sigla": "ZAMA",
+"nome": "Zama"
+},
+"WIFUSDT": {
+"sigla": "WIF",
+"nome": "dogwifhat"
+},
+"TWTUSDT": {
+"sigla": "TWT",
+"nome": "Trust Wallet"
+},
+"METUSDT": {
+"sigla": "MET",
+"nome": "Meteora"
+},
+"THETAUSDT": {
+"sigla": "THETA",
+"nome": "Theta Network"
+},
+"PONSUSDT": {
+"sigla": "PONS",
+"nome": "Pons"
+},
+"SUSDT": {
+"sigla": "S",
+"nome": "Sonic"
+},
+"AXSUSDT": {
+"sigla": "AXS",
+"nome": "Axie Infinity"
+},
+"XCNUSDT": {
+"sigla": "XCN",
+"nome": "Onyxcoin"
+},
+"FLUIDUSDT": {
+"sigla": "FLUID",
+"nome": "Fluid"
+},
+"QUSDT": {
+"sigla": "Q",
+"nome": "Quack AI"
+},
+"MANAUSDT": {
+"sigla": "MANA",
+"nome": "Decentraland"
+},
+"BRUSDT": {
+"sigla": "BR",
+"nome": "Bedrock"
+},
+"AWEUSDT": {
+"sigla": "AWE",
+"nome": "AWE Network"
+},
+"SENTUSDT": {
+"sigla": "SENT",
+"nome": "Sentient"
+},
+"NEOUSDT": {
+"sigla": "NEO",
+"nome": "NEO"
+},
+"AUSDT": {
+"sigla": "A",
+"nome": "Vaulta"
+},
+"SANDUSDT": {
+"sigla": "SAND",
+"nome": "The Sandbox"
+},
+"2ZUSDT": {
+"sigla": "2Z",
+"nome": "DoubleZero"
+},
+"1000XECUSDT": {
+"sigla": "XEC",
+"nome": "eCash"
+},
+"CHZUSDT": {
+"sigla": "CHZ",
+"nome": "Chiliz"
+},
+"USELESSUSDT": {
+"sigla": "USELESS",
+"nome": "Useless Coin"
+},
+"EDGEUSDT": {
+"sigla": "EDGE",
+"nome": "edgeX"
+},
+"FARTCOINUSDT": {
+"sigla": "FARTCOIN",
+"nome": "Fartcoin"
+},
+"HUSDT": {
+"sigla": "H",
+"nome": "Humanity"
+},
+"ZKUSDT": {
+"sigla": "ZK",
+"nome": "ZKsync"
+},
+"CAPUSDT": {
+"sigla": "CAP",
+"nome": "Cap"
+},
+"GLMUSDT": {
+"sigla": "GLM",
+"nome": "Golem"
+},
+"1INCHUSDT": {
+"sigla": "1INCH",
+"nome": "1INCH"
+},
+"APEUSDT": {
+"sigla": "APE",
+"nome": "ApeCoin"
+},
+"IMXUSDT": {
+"sigla": "IMX",
+"nome": "Immutable"
+},
+"SUPERUSDT": {
+"sigla": "SUPER",
+"nome": "SuperVerse"
+},
+"SFPUSDT": {
+"sigla": "SFP",
+"nome": "SafePal"
+},
+"SNXUSDT": {
+"sigla": "SNX",
+"nome": "Synthetix"
+},
+"EGLDUSDT": {
+"sigla": "EGLD",
+"nome": "MultiversX"
+},
+"PLUMEUSDT": {
+"sigla": "PLUME",
+"nome": "Plume"
+},
+"0GUSDT": {
+"sigla": "0G",
+"nome": "0G"
+},
+"PROMUSDT": {
+"sigla": "PROM",
+"nome": "Prom"
+},
+"ATHUSDT": {
+"sigla": "ATH",
+"nome": "Aethir"
+},
+"GENIUSUSDT": {
+"sigla": "GENIUS",
+"nome": "Genius"
+},
+"ZENUSDT": {
+"sigla": "ZEN",
+"nome": "Horizen"
+},
+"SOONUSDT": {
+"sigla": "SOON",
+"nome": "SOON"
+},
+"RSRUSDT": {
+"sigla": "RSR",
+"nome": "Reserve Rights"
+},
+"SKRUSDT": {
+"sigla": "SKR",
+"nome": "Seeker"
+},
+"ORCAUSDT": {
+"sigla": "ORCA",
+"nome": "Orca"
+},
+"DYDXUSDT": {
+"sigla": "DYDX",
+"nome": "dYdX"
+},
+"GMXUSDT": {
+"sigla": "GMX",
+"nome": "GMX"
+},
+"GALAUSDT": {
+"sigla": "GALA",
+"nome": "GALA"
+},
+"MAGMAUSDT": {
+"sigla": "MAGMA",
+"nome": "Magma Finance"
+},
+"CHIPUSDT": {
+"sigla": "CHIP",
+"nome": "USD.AI"
+},
+"1000CHEEMSUSDT": {
+"sigla": "CHEEMS",
+"nome": "Cheems Token"
+},
+"ZRXUSDT": {
+"sigla": "ZRX",
+"nome": "0x Protocol"
+},
+"TAGUSDT": {
+"sigla": "TAG",
+"nome": "TAGGER"
+},
+"QTUMUSDT": {
+"sigla": "QTUM",
+"nome": "Qtum"
+},
+"ARKMUSDT": {
+"sigla": "ARKM",
+"nome": "Arkham"
+},
+"GASUSDT": {
+"sigla": "GAS",
+"nome": "Gas"
+},
+"WALUSDT": {
+"sigla": "WAL",
+"nome": "Walrus"
+},
+"WUSDT": {
+"sigla": "W",
+"nome": "Wormhole"
+},
+"REDUSDT": {
+"sigla": "RED",
+"nome": "RedStone"
+},
+"FORMUSDT": {
+"sigla": "FORM",
+"nome": "Four"
+},
+"MINAUSDT": {
+"sigla": "MINA",
+"nome": "Mina Protocol"
+},
+"KAVAUSDT": {
+"sigla": "KAVA",
+"nome": "Kava"
+},
+"MELANIAUSDT": {
+"sigla": "MELANIA",
+"nome": "Melania Meme"
+},
+"UAIUSDT": {
+"sigla": "UAI",
+"nome": "UnifAI Network"
+},
+"ORDIUSDT": {
+"sigla": "ORDI",
+"nome": "ORDI"
+},
+"HNTUSDT": {
+"sigla": "HNT",
+"nome": "Helium"
+},
+"NMRUSDT": {
+"sigla": "NMR",
+"nome": "Numeraire"
+},
+"COWUSDT": {
+"sigla": "COW",
+"nome": "CoW Protocol"
+},
+"LPTUSDT": {
+"sigla": "LPT",
+"nome": "Livepeer"
+},
+"YFIUSDT": {
+"sigla": "YFI",
+"nome": "yearn.finance"
+},
+"SAFEUSDT": {
+"sigla": "SAFE",
+"nome": "Safe"
+},
+"KSMUSDT": {
+"sigla": "KSM",
+"nome": "Kusama"
+},
+"RIFUSDT": {
+"sigla": "RIF",
+"nome": "Rootstock Infrastructure Framework"
+},
+"OUSDT": {
+"sigla": "O",
+"nome": "o1.exchange"
+},
+"ZETAUSDT": {
+"sigla": "ZETA",
+"nome": "ZetaChain"
+},
+"HOTUSDT": {
+"sigla": "HOT",
+"nome": "Holo"
+},
+"AIUSDT": {
+"sigla": "AI",
+"nome": "Artificial Inu"
+},
+"CKBUSDT": {
+"sigla": "CKB",
+"nome": "Nervos Network"
+},
+"GALUSDT": {
+"sigla": "GAL",
+"nome": "GAL (migrated to Gravity - G)"
+},
+"BABYUSDT": {
+"sigla": "BABY",
+"nome": "Babylon"
+},
+"DGBUSDT": {
+"sigla": "DGB",
+"nome": "DigiByte"
+},
+"SPKUSDT": {
+"sigla": "SPK",
+"nome": "Spark"
+},
+"VTHOUSDT": {
+"sigla": "VTHO",
+"nome": "VeThor"
+},
+"1MBABYDOGEUSDT": {
+"sigla": "BABYDOGE",
+"nome": "Baby Doge Coin"
+},
+"BANANAS31USDT": {
+"sigla": "BANANAS31",
+"nome": "Banana For Scale"
+},
+"ONEUSDT": {
+"sigla": "ONE",
+"nome": "ONEchain"
+},
+"REUSDT": {
+"sigla": "RE",
+"nome": "RE"
+},
+"LINEAUSDT": {
+"sigla": "LINEA",
+"nome": "Linea"
+},
+"KAITOUSDT": {
+"sigla": "KAITO",
+"nome": "KAITO"
+},
+"ESPUSDT": {
+"sigla": "ESP",
+"nome": "Espresso"
+},
+"AXLUSDT": {
+"sigla": "AXL",
+"nome": "Axelar"
+},
+"JCTUSDT": {
+"sigla": "JCT",
+"nome": "Janction"
+},
+"LSKUSDT": {
+"sigla": "LSK",
+"nome": "Lisk"
+},
+"SUSHIUSDT": {
+"sigla": "SUSHI",
+"nome": "Sushi"
+},
+"IOUSDT": {
+"sigla": "IO",
+"nome": "io.net"
+},
+"NXPCUSDT": {
+"sigla": "NXPC",
+"nome": "Nexpace"
+},
+"DUSKUSDT": {
+"sigla": "DUSK",
+"nome": "DUSK"
+},
+"TURBOUSDT": {
+"sigla": "TURBO",
+"nome": "Turbo"
+},
+"ACUUSDT": {
+"sigla": "ACU",
+"nome": "Acurast"
+},
+"BANUSDT": {
+"sigla": "BAN",
+"nome": "Comedian"
+},
+"DEXEUSDT": {
+"sigla": "DEXE",
+"nome": "DeXe"
+},
+"MARSCOINUSDT": {
+"sigla": "MARSCOIN",
+"nome": "MarsCoin"
+},
+"ASTRUSDT": {
+"sigla": "ASTR",
+"nome": "Astar"
+},
+"MEMEUSDT": {
+"sigla": "MEME",
+"nome": "MEMETOON"
+},
+"MEGAUSDT": {
+"sigla": "MEGA",
+"nome": "MegaETH"
+},
+"ROSEUSDT": {
+"sigla": "ROSE",
+"nome": "Oasis"
+},
+"HUMAUSDT": {
+"sigla": "HUMA",
+"nome": "Huma Finance"
+},
+"BERAUSDT": {
+"sigla": "BERA",
+"nome": "Berachain"
+},
+"ENJUSDT": {
+"sigla": "ENJ",
+"nome": "Enjin Coin"
+},
+"XVSUSDT": {
+"sigla": "XVS",
+"nome": "Venus"
+},
+"HOLOUSDT": {
+"sigla": "HOLO",
+"nome": "Holoworld"
+},
+"EDUUSDT": {
+"sigla": "EDU",
+"nome": "Open Campus"
+},
+"ONTUSDT": {
+"sigla": "ONT",
+"nome": "Ontology"
+},
+"ICNTUSDT": {
+"sigla": "ICNT",
+"nome": "Impossible Cloud Network Token"
+},
+"GPSUSDT": {
+"sigla": "GPS",
+"nome": "GoPlus Security"
+},
+"COAIUSDT": {
+"sigla": "COAI",
+"nome": "ChainOpera AI"
+},
+"TRBUSDT": {
+"sigla": "TRB",
+"nome": "Tellor Tributes"
+},
+"BIOUSDT": {
+"sigla": "BIO",
+"nome": "Bio Protocol"
+},
+"IDUSDT": {
+"sigla": "ID",
+"nome": "SPACE ID"
+},
+"CELOUSDT": {
+"sigla": "CELO",
+"nome": "Celo"
+},
+"ALTUSDT": {
+"sigla": "ALT",
+"nome": "AltLayer"
+},
+"AIOTUSDT": {
+"sigla": "AIOT",
+"nome": "OKZOO"
+},
+"ARXUSDT": {
+"sigla": "ARX",
+"nome": "Arcium"
+},
+"IRYSUSDT": {
+"sigla": "IRYS",
+"nome": "Irys"
+},
+"BARDUSDT": {
+"sigla": "BARD",
+"nome": "Lombard"
+},
+"POLYXUSDT": {
+"sigla": "POLYX",
+"nome": "Polymesh"
+},
+"MUBARAKUSDT": {
+"sigla": "MUBARAK",
+"nome": "Mubarak"
+},
+"TOSHIUSDT": {
+"sigla": "TOSHI",
+"nome": "Toshi"
+},
+"AZTECUSDT": {
+"sigla": "AZTEC",
+"nome": "Aztec"
+},
+"AINUSDT": {
+"sigla": "AIN",
+"nome": "Infinity Ground"
+},
+"MERLUSDT": {
+"sigla": "MERL",
+"nome": "Merlin Chain"
+},
+"JELLYJELLYUSDT": {
+"sigla": "JELLYJELLY",
+"nome": "Jelly-My-Jelly"
+},
+"BRETTUSDT": {
+"sigla": "BRETT",
+"nome": "Brett"
+},
+"ALLOUSDT": {
+"sigla": "ALLO",
+"nome": "Allora"
+},
+"BOMEUSDT": {
+"sigla": "BOME",
+"nome": "BOOK OF MEME"
+},
+"TRUTHUSDT": {
+"sigla": "TRUTH",
+"nome": "Swarm Network"
+},
+"RLCUSDT": {
+"sigla": "RLC",
+"nome": "iExec RLC"
+},
+"GWEIUSDT": {
+"sigla": "GWEI",
+"nome": "ETHGas"
+},
+"ARCUSDT": {
+"sigla": "ARC",
+"nome": "AI Rig Complex"
+},
+"DOSUSDT": {
+"sigla": "DOS",
+"nome": "DAPPOS"
+},
+"PROVEUSDT": {
+"sigla": "PROVE",
+"nome": "Succinct"
+},
+"IDOLUSDT": {
+"sigla": "IDOL",
+"nome": "MEET48"
+},
+"PNUTUSDT": {
+"sigla": "PNUT",
+"nome": "Peanut the Squirrel"
+},
+"POPCATUSDT": {
+"sigla": "POPCAT",
+"nome": "Popcat"
+},
+"FOLKSUSDT": {
+"sigla": "FOLKS",
+"nome": "FOLKS"
+},
+"FLOWUSDT": {
+"sigla": "FLOW",
+"nome": "Flow"
+},
+"DEEPUSDT": {
+"sigla": "DEEP",
+"nome": "DeepBook"
+},
+"ANKRUSDT": {
+"sigla": "ANKR",
+"nome": "Ankr Network"
+},
+"NILUSDT": {
+"sigla": "NIL",
+"nome": "Nillion"
+},
+"INITUSDT": {
+"sigla": "INIT",
+"nome": "Initia"
+},
+"MASKUSDT": {
+"sigla": "MASK",
+"nome": "Mask Network"
+},
+"REZUSDT": {
+"sigla": "REZ",
+"nome": "Renzo"
+},
+"SXTUSDT": {
+"sigla": "SXT",
+"nome": "Space and Time"
+},
+"BASUSDT": {
+"sigla": "BAS",
+"nome": "BNB Attestation Service"
+},
+"SCUSDT": {
+"sigla": "SC",
+"nome": "Siacoin"
+},
+"1000000MOGUSDT": {
+"sigla": "MOG",
+"nome": "Mog Coin"
+},
+"ZILUSDT": {
+"sigla": "ZIL",
+"nome": "Zilliqa"
+},
+"XVGUSDT": {
+"sigla": "XVG",
+"nome": "Verge"
+},
+"MEWUSDT": {
+"sigla": "MEW",
+"nome": "cat in a dogs world"
+},
+"ALCHUSDT": {
+"sigla": "ALCH",
+"nome": "Alchemist AI"
+},
+"SECZUSDT": {
+"sigla": "SECZ",
+"nome": "Securitize"
+},
+"RAVEUSDT": {
+"sigla": "RAVE",
+"nome": "RaveDAO"
+},
+"POWRUSDT": {
+"sigla": "POWR",
+"nome": "Powerledger"
+},
+"BANDUSDT": {
+"sigla": "BAND",
+"nome": "Band"
+},
+"AVNTUSDT": {
+"sigla": "AVNT",
+"nome": "Veranta"
+},
+"MEUSDT": {
+"sigla": "ME",
+"nome": "Magic Eden"
+},
+"BEATUSDT": {
+"sigla": "BEAT",
+"nome": "Audiera"
+},
+"NOTUSDT": {
+"sigla": "NOT",
+"nome": "Notcoin"
+},
+"CFGUSDT": {
+"sigla": "CFG",
+"nome": "Centrifuge"
+},
+"XPINUSDT": {
+"sigla": "XPIN",
+"nome": "XPIN Network"
+},
+"PHAUSDT": {
+"sigla": "PHA",
+"nome": "PHALA"
+},
+"MOODENGUSDT": {
+"sigla": "MOODENG",
+"nome": "Moo Deng"
+},
+"API3USDT": {
+"sigla": "API3",
+"nome": "Api3"
+},
+"MOCAUSDT": {
+"sigla": "MOCA",
+"nome": "Moca Network"
+},
+"LABUSDT": {
+"sigla": "LAB",
+"nome": "LAB"
+},
+"PEOPLEUSDT": {
+"sigla": "PEOPLE",
+"nome": "ConstitutionDAO"
+},
+"ARKUSDT": {
+"sigla": "ARK",
+"nome": "ARK"
+},
+"ONGUSDT": {
+"sigla": "ONG",
+"nome": "Ontology Gas"
+},
+"SYNUSDT": {
+"sigla": "SYN",
+"nome": "Synapse"
+},
+"LISTAUSDT": {
+"sigla": "LISTA",
+"nome": "Lista DAO"
+},
+"RPLUSDT": {
+"sigla": "RPL",
+"nome": "Rocket Pool"
+},
+"IOTXUSDT": {
+"sigla": "IOTX",
+"nome": "IoTeX"
+},
+"SSVUSDT": {
+"sigla": "SSV",
+"nome": "SSV Network"
+},
+"SNTUSDT": {
+"sigla": "SNT",
+"nome": "Status"
+},
+"SAHARAUSDT": {
+"sigla": "SAHARA",
+"nome": "Sahara AI"
+},
+"ORBSUSDT": {
+"sigla": "ORBS",
+"nome": "Orbs"
+},
+"UMAUSDT": {
+"sigla": "UMA",
+"nome": "UMA"
+},
+"DEGENUSDT": {
+"sigla": "DEGEN",
+"nome": "Degen"
+},
+"SKYAIUSDT": {
+"sigla": "SKYAI",
+"nome": "SkyAI"
+},
+"ACXUSDT": {
+"sigla": "ACX",
+"nome": "Across Protocol"
+},
+"SOMIUSDT": {
+"sigla": "SOMI",
+"nome": "Somnia"
+},
+"OPGUSDT": {
+"sigla": "OPG",
+"nome": "OpenGradient"
+},
+"B3USDT": {
+"sigla": "B3",
+"nome": "B3 (Base)"
+},
+"SIGNUSDT": {
+"sigla": "SIGN",
+"nome": "Sign"
+},
+"MOVEUSDT": {
+"sigla": "MOVE",
+"nome": "Movement"
+},
+"OCEANUSDT": {
+"sigla": "OCEAN",
+"nome": "Ocean Protocol"
+},
+"SOLVUSDT": {
+"sigla": "SOLV",
+"nome": "Solv Protocol"
+},
+"COTIUSDT": {
+"sigla": "COTI",
+"nome": "COTI"
+},
+"GIGGLEUSDT": {
+"sigla": "GIGGLE",
+"nome": "Giggle Fund"
+},
+"MANTAUSDT": {
+"sigla": "MANTA",
+"nome": "Manta Network"
+},
+"BULLAUSDT": {
+"sigla": "BULLA",
+"nome": "BULLA"
+},
+"XAIUSDT": {
+"sigla": "XAI",
+"nome": "SideShift"
+},
+"ONUSDT": {
+"sigla": "ON",
+"nome": "Orochi Network"
+},
+"STEEMUSDT": {
+"sigla": "STEEM",
+"nome": "Steem"
+},
+"BNTUSDT": {
+"sigla": "BNT",
+"nome": "Bancor Network"
+},
+"OPENUSDT": {
+"sigla": "OPEN",
+"nome": "OpenLedger"
+},
+"ATUSDT": {
+"sigla": "AT",
+"nome": "Apro"
+},
+"LUNAUSDT": {
+"sigla": "LUNA",
+"nome": "Terra"
+},
+"CATIUSDT": {
+"sigla": "CATI",
+"nome": "Catizen"
+},
+"MAGICUSDT": {
+"sigla": "MAGIC",
+"nome": "Treasure"
+},
+"PUNDIXUSDT": {
+"sigla": "PUNDIX",
+"nome": "Pundi X"
+},
+"EULUSDT": {
+"sigla": "EUL",
+"nome": "Euler"
+},
+"ZORAUSDT": {
+"sigla": "ZORA",
+"nome": "Zora"
+},
+"NEIROUSDT": {
+"sigla": "NEIRO",
+"nome": "Neiro"
+},
+"MTLUSDT": {
+"sigla": "MTL",
+"nome": "Metal DAO"
+},
+"IOSTUSDT": {
+"sigla": "IOST",
+"nome": "IOST"
+},
+"ZESTUSDT": {
+"sigla": "ZEST",
+"nome": "Zest Protocol"
+},
+"HIVEUSDT": {
+"sigla": "HIVE",
+"nome": "Hive"
+},
+"TAKEUSDT": {
+"sigla": "TAKE",
+"nome": "OVERTAKE"
+},
+"CTSIUSDT": {
+"sigla": "CTSI",
+"nome": "Cartesi"
+},
+"VANAUSDT": {
+"sigla": "VANA",
+"nome": "Vana"
+},
+"MMTUSDT": {
+"sigla": "MMT",
+"nome": "Momentum"
+},
+"XANUSDT": {
+"sigla": "XAN",
+"nome": "Anoma"
+},
+"KNCUSDT": {
+"sigla": "KNC",
+"nome": "Kyber Network Crystal"
+},
+"USTCUSDT": {
+"sigla": "USTC",
+"nome": "TerraClassicUSD"
+},
+"ILVUSDT": {
+"sigla": "ILV",
+"nome": "Illuvium"
+},
+"SQDUSDT": {
+"sigla": "SQD",
+"nome": "SQD"
+},
+"FLUXUSDT": {
+"sigla": "FLUX",
+"nome": "Flux"
+},
+"GRVTUSDT": {
+"sigla": "GRVT",
+"nome": "GRVT Token"
+},
+"ZEREBROUSDT": {
+"sigla": "ZEREBRO",
+"nome": "Zerebro"
+},
+"SKLUSDT": {
+"sigla": "SKL",
+"nome": "SKALE"
+},
+"AUCTIONUSDT": {
+"sigla": "AUCTION",
+"nome": "Bounce"
+},
+"GUSDT": {
+"sigla": "G",
+"nome": "Gravity (by Galxe)"
+},
+"BSBUSDT": {
+"sigla": "BSB",
+"nome": "Block Street"
+},
+"ETHWUSDT": {
+"sigla": "ETHW",
+"nome": "EthereumPoW"
+},
+"CVCUSDT": {
+"sigla": "CVC",
+"nome": "Civic"
+},
+"VELVETUSDT": {
+"sigla": "VELVET",
+"nome": "Velvet"
+},
+"MANTRAUSDT": {
+"sigla": "MANTRA",
+"nome": "MANTRA"
+},
+"ZBTUSDT": {
+"sigla": "ZBT",
+"nome": "ZEROBASE"
+},
+"DODOUSDT": {
+"sigla": "DODO",
+"nome": "DODO"
+},
+"BLURUSDT": {
+"sigla": "BLUR",
+"nome": "Blur"
+},
+"SPACEUSDT": {
+"sigla": "SPACE",
+"nome": "Spacecoin"
+},
+"STRAXUSDT": {
+"sigla": "STRAX",
+"nome": "Xertra"
+},
+"BIRBUSDT": {
+"sigla": "BIRB",
+"nome": "Moonbirds"
+},
+"METISUSDT": {
+"sigla": "METIS",
+"nome": "Metis"
+},
+"CARVUSDT": {
+"sigla": "CARV",
+"nome": "CARV"
+},
+"FUNUSDT": {
+"sigla": "FUN",
+"nome": "FUNToken"
+},
+"HOMEUSDT": {
+"sigla": "HOME",
+"nome": "HOME"
+},
+"RVNUSDT": {
+"sigla": "RVN",
+"nome": "Ravencoin"
+},
+"WAVESUSDT": {
+"sigla": "WAVES",
+"nome": "Waves"
+},
+"APRUSDT": {
+"sigla": "APR",
+"nome": "Capricorn"
+},
+"EWTUSDT": {
+"sigla": "EWT",
+"nome": "Energy Web Token"
+},
+"AVAUSDT": {
+"sigla": "AVA",
+"nome": "AVA (Travala)"
+},
+"EDENUSDT": {
+"sigla": "EDEN",
+"nome": "OpenEden"
+},
+"KGENUSDT": {
+"sigla": "KGEN",
+"nome": "KGeN"
+},
+"XNYUSDT": {
+"sigla": "XNY",
+"nome": "Codatta"
+},
+"WOOUSDT": {
+"sigla": "WOO",
+"nome": "WOO"
+},
+"BREVUSDT": {
+"sigla": "BREV",
+"nome": "Brevis"
+},
+"TNSRUSDT": {
+"sigla": "TNSR",
+"nome": "Tensor"
+},
+"YGGUSDT": {
+"sigla": "YGG",
+"nome": "Yield Guild Games"
+},
+"LAUSDT": {
+"sigla": "LA",
+"nome": "Lagrange"
+},
+"HYPERUSDT": {
+"sigla": "HYPER",
+"nome": "Hyperlane"
+},
+"USUALUSDT": {
+"sigla": "USUAL",
+"nome": "Usual"
+},
+"GMTUSDT": {
+"sigla": "GMT",
+"nome": "GMT"
+},
+"KEEPUSDT": {
+"sigla": "KEEP",
+"nome": "Keep Network"
+},
+"CTRUSDT": {
+"sigla": "CTR",
+"nome": "Citrea"
+},
+"WAXPUSDT": {
+"sigla": "WAXP",
+"nome": "WAX"
+},
+"BANKUSDT": {
+"sigla": "BANK",
+"nome": "Lorenzo Protocol"
+},
+"CELRUSDT": {
+"sigla": "CELR",
+"nome": "Celer Network"
+},
+"SIRENUSDT": {
+"sigla": "SIREN",
+"nome": "Siren"
+},
+"CETUSUSDT": {
+"sigla": "CETUS",
+"nome": "Cetus Protocol"
+},
+"1000SATSUSDT": {
+"sigla": "SATS",
+"nome": "SATS (Ordinals)"
+},
+"TONUSDT": {
+"sigla": "TON",
+"nome": "Tokamak Network"
+},
+"HEMIUSDT": {
+"sigla": "HEMI",
+"nome": "Hemi"
+},
+"GTCUSDT": {
+"sigla": "GTC",
+"nome": "Gitcoin"
+},
+"NAORISUSDT": {
+"sigla": "NAORIS",
+"nome": "NaoX Protocol"
+},
+"CLOUSDT": {
+"sigla": "CLO",
+"nome": "Yei Finance"
+},
+"AUDIOUSDT": {
+"sigla": "AUDIO",
+"nome": "Audius"
+},
+"BIGTIMEUSDT": {
+"sigla": "BIGTIME",
+"nome": "Big Time"
+},
+"LQTYUSDT": {
+"sigla": "LQTY",
+"nome": "Liquity"
+},
+"AEVOUSDT": {
+"sigla": "AEVO",
+"nome": "Aevo"
+},
+"LUMIAUSDT": {
+"sigla": "LUMIA",
+"nome": "Lumia"
+},
+"SLPUSDT": {
+"sigla": "SLP",
+"nome": "Smooth Love Potion"
+},
+"YBUSDT": {
+"sigla": "YB",
+"nome": "Yield Basis"
+},
+"FLOCKUSDT": {
+"sigla": "FLOCK",
+"nome": "FLOCK"
+},
+"OGNUSDT": {
+"sigla": "OGN",
+"nome": "Origin Token"
+},
+"RIVERUSDT": {
+"sigla": "RIVER",
+"nome": "River"
+},
+"TAIKOUSDT": {
+"sigla": "TAIKO",
+"nome": "Taiko"
+},
+"AGLDUSDT": {
+"sigla": "AGLD",
+"nome": "Adventure Gold"
+},
+"CYSUSDT": {
+"sigla": "CYS",
+"nome": "Cysic"
+},
+"BLESSUSDT": {
+"sigla": "BLESS",
+"nome": "Bless"
+},
+"DIAUSDT": {
+"sigla": "DIA",
+"nome": "DIA"
+},
+"ARPAUSDT": {
+"sigla": "ARPA",
+"nome": "ARPA"
+},
+"CGPTUSDT": {
+"sigla": "CGPT",
+"nome": "ChainGPT"
+},
+"BMTUSDT": {
+"sigla": "BMT",
+"nome": "Bubblemaps"
+},
+"WCTUSDT": {
+"sigla": "WCT",
+"nome": "WalletConnect Token"
+},
+"DOGSUSDT": {
+"sigla": "DOGS",
+"nome": "Dogs"
+},
+"B2USDT": {
+"sigla": "B2",
+"nome": "BSquared Network"
+},
+"CYBERUSDT": {
+"sigla": "CYBER",
+"nome": "CYBER"
+},
+"AIXBTUSDT": {
+"sigla": "AIXBT",
+"nome": "aixbt"
+},
+"FIDAUSDT": {
+"sigla": "FIDA",
+"nome": "Bonfida"
+},
+"CHRUSDT": {
+"sigla": "CHR",
+"nome": "Chromia"
+},
+"BNXUSDT": {
+"sigla": "BNX",
+"nome": "BinaryX [OLD]"
+},
+"EPICUSDT": {
+"sigla": "EPIC",
+"nome": "Epic Private Internet Cash"
+},
+"PUFFERUSDT": {
+"sigla": "PUFFER",
+"nome": "Puffer"
+},
+"BICOUSDT": {
+"sigla": "BICO",
+"nome": "Biconomy"
+},
+"ELSAUSDT": {
+"sigla": "ELSA",
+"nome": "Elsa"
+},
+"CTKUSDT": {
+"sigla": "CTK",
+"nome": "Shentu"
+},
+"POWERUSDT": {
+"sigla": "POWER",
+"nome": "Power Protocol"
+},
+"ANIMEUSDT": {
+"sigla": "ANIME",
+"nome": "Animecoin"
+},
+"PRLUSDT": {
+"sigla": "PRL",
+"nome": "Perle"
+},
+"ACEUSDT": {
+"sigla": "ACE",
+"nome": "Fusionist"
+},
+"MIRAUSDT": {
+"sigla": "MIRA",
+"nome": "Mira"
+},
+"ARIAUSDT": {
+"sigla": "ARIA",
+"nome": "Aria.AI"
+},
+"ORDERUSDT": {
+"sigla": "ORDER",
+"nome": "Orderly"
+},
+"TREEUSDT": {
+"sigla": "TREE",
+"nome": "Tree"
+},
+"DOODUSDT": {
+"sigla": "DOOD",
+"nome": "Doodles"
+},
+"ANTUSDT": {
+"sigla": "ANT",
+"nome": "Autonomi"
+}
+}
+}
