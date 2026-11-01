@@ -1,6 +1,6 @@
 # Programma 7 — ottantacinquesima prova: le notizie, conferma sul 2026 (GA2 al contrario sull'archivio katelabs)
 
-Scritto il 1° novembre 2026 alle 12:35 UTC (ora dell'orologio), **prima di qualunque calcolo**: dell'archivio si sono letti solo la scheda
+Scritto il 1° novembre 2026 alle 12:34 UTC (ora dell'orologio), **prima di qualunque calcolo**: dell'archivio si sono letti solo la scheda
 e la dimensione del file. Nasce dalla domanda del proprietario del 1° novembre («perché il 30 novembre? devo per forza aspettare un
 mese?»): invece di aspettare i 28 giorni della nostra raccolta, la regola si prova subito su notizie del 2026 che nessuna prova ha mai
 usato.

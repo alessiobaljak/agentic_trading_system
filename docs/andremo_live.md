@@ -5339,3 +5339,11 @@ alto (almeno 1 milione nel conto), le loro posizioni lette a ogni giro della rac
 settimane. Sul passato non si può: la classifica di oggi tiene solo i sopravvissuti. Lettura provata in una cartella di prova: 20 conti
 su 20 (`trader_copiati/hyperliquid.py`, chiamata dalla raccolta delle notizie). Idea 133 ferma: le liquidazioni vere per moneta
 (Coinalyze) servono una chiave che può creare solo il proprietario.
+**Il proprietario, 1° novembre: «perché il 30 novembre? [...] verdetto dopo 52 settimane? questo è inaccettabile».** Ha ragione: le
+attese di 52 settimane andavano contro quello che aveva detto il 21 e il 24 ottobre (si giudica sul passato, il demo è una conferma di
+qualche giorno o settimana, poi decide lui). Corretto in tutte le regole delle misure in avanti (`programma6/paper/REGOLE.md` sezione 17,
+`notizie/REGOLE.md`, `trader_copiati/HYPERLIQUID.md`): niente attese fisse, i numeri al proprietario ogni settimana, i soldi veri quando
+li chiede. **E invece di aspettare il 30 novembre, la regola delle notizie si è provata subito sui titoli del 2026** (prova 147, archivio
+pubblico katelabs, 25.407 titoli di febbraio-aprile 2026, mai usati): **+0,14% a settimana dopo i costi, contro −0,48% di G1 nelle stesse
+8 settimane**, 4 settimane positive su 8. Conferma il verso, ma debole e su poche settimane. Il primo calcolo con la nostra raccolta resta
+il 30 novembre solo perché la regola conta gli articoli dei 28 giorni prima. Nel conto: 245.

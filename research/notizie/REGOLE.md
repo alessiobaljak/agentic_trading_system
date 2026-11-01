@@ -55,3 +55,22 @@ pubbliche degli ultimi articoli dei siti.
 * **Perché da oggi**: lo storico gratuito di questa lista non esiste; l'unico modo di averlo è raccoglierlo.
 * **Quando si prova**: in avanti, quando ci sono almeno 6 mesi di dati (non prima del 30 aprile 2027), con regole scritte prima di
   guardare i dati raccolti. Fino ad allora la lista non si usa per nessuna decisione.
+
+## Aggiunta del 1° novembre 2026: niente attese fisse
+
+Il proprietario, 1° novembre 2026: «perché il 30 novembre? devo per forza aspettare un mese? [...] verdetto dopo 52 settimane? questo
+è inaccettabile, cosa usiamo a fare il backtesting e demo se devo aspettare 52 settimane». Ha ragione: lo aveva già detto il 21 ottobre
+(«si giudica sul passato di Binance, il paper è una conferma, non una condizione») e il 24 ottobre («usiamo i dati passati e simuliamo con
+paper / live demo per qualche giorno, settimana, ma poi se funziona andiamo live»). Quindi, **da oggi e per tutte le misure in avanti di
+questo file** (comprese quelle scritte prima con le 52 e le 104 settimane):
+* **niente attese fisse**: le 26, 52 e 104 settimane non sono più condizioni; restano solo come date in cui si rifà il conto per informazione;
+* **i numeri vanno al proprietario ogni settimana**, con il confronto con il passato e con G1 negli stessi giorni, detti chiari anche
+  quando sono pochi («4 settimane non bastano a dire che funziona» si scrive, ma non blocca niente);
+* **cosa decide**: quello che passa la regola del proprietario sul passato (sezione 1 del registro: Sharpe corretto da 0,90 in su, ogni
+  anno positivo, t sopra 3) va subito in paper e sul demo; dopo qualche giorno o settimana di demo che esegue come il paper, **i soldi
+  veri li decide il proprietario quando li chiede in modo esplicito** (regola di `CLAUDE.md`: `DRY_RUN` resta vero fino ad allora);
+* le idee nate dai dati, che sul passato non si possono giudicare in modo pulito, vanno in paper (soldi finti) appena si può, e il
+  proprietario decide quando ha visto abbastanza.
+
+Per le notizie: la regola si è già provata sui titoli del 2026 (prova 147, `programma7/RISULTATI_OTTANTACINQUESIMA.md`); il primo calcolo
+con la nostra raccolta resta il 30 novembre solo perché la regola conta gli articoli dei 28 giorni prima.

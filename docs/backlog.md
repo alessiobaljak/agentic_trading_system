@@ -319,7 +319,7 @@ quindi li vede fino a un mese dopo: per misurarla bene non serve altro, per **us
 di Binance (`/fapi/v1/fundingInfo`, che dice quali monete hanno l'intervallo accorciato) dalla macchina della ricerca non è
 raggiungibile (risposta «restricted location», 20 ott); dalla VPS sì.
 **Cosa:** un comando in lista bianca sulla VPS che legge `fundingInfo` una volta l'ora e scrive i cambi in `ops/results/`.
-**Quando:** solo se E4 regge nel paper (verdetto a 52 settimane) e il proprietario vuole usarla; prima non serve.
+**Quando:** solo se E4 regge nel paper e il proprietario vuole usarla; prima non serve (dal 1° novembre 2026 niente attese fisse: `research/programma6/paper/REGOLE.md`, sezione 17).
 
 
 ### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. Il 12 ott il PASSO 7 è fatto: zero strategie trovate (630 varianti, 0 passate nel vault contro 0,02 attese per caso), branch uniti nel principale, lezioni in `research/lezioni/metodo.md` e `research/confronto/`. La ricerca 4.5 è chiusa; cosa fare dopo è la voce P6
