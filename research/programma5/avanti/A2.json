@@ -1,20 +1,24 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-29.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-30.zip",
  "procedure": {
   "N-001": {
-   "trade": 25,
+   "trade": 34,
    "netto": {
-    "n": 25,
-    "giorni": 8,
-    "media": -0.040726549173610335,
-    "basso": -0.09725563074914972,
-    "alto": 0.06400192979290863,
-    "p": 0.8202179782021798
+    "n": 34,
+    "giorni": 9,
+    "media": -0.04449350968230413,
+    "basso": -0.09078644772922027,
+    "alto": 0.036647793127328535,
+    "p": 0.893010698930107
    },
-   "netto_doppio": -0.04252654917361034,
-   "caso_netto": -0.007040164930104739,
-   "senza_migliore": -0.08093934662485429,
+   "netto_doppio": -0.04629350968230413,
+   "caso_netto": -0.009291230365335941,
+   "senza_migliore": -0.07339616856789924,
    "per_moneta": {
+    "1000PEPEUSDT": {
+     "trade": 1,
+     "netto": -0.08039467912931206
+    },
     "ARKUSDT": {
      "trade": 2,
      "netto": -0.13540789246890403
@@ -22,6 +26,10 @@
     "AVAUSDT": {
      "trade": 3,
      "netto": -0.07933321429019848
+    },
+    "BNBUSDT": {
+     "trade": 1,
+     "netto": -0.018664715346185388
     },
     "CVCUSDT": {
      "trade": 1,
@@ -36,16 +44,20 @@
      "netto": 0.055188275614388514
     },
     "LITUSDT": {
-     "trade": 1,
-     "netto": -0.056705537459283396
+     "trade": 2,
+     "netto": -0.09502166262353559
     },
     "LSKUSDT": {
-     "trade": 1,
-     "netto": -0.13496240248758926
+     "trade": 2,
+     "netto": -0.03225598096806123
     },
     "PHAUSDT": {
      "trade": 2,
      "netto": -0.03659836874013042
+    },
+    "PYTHUSDT": {
+     "trade": 1,
+     "netto": -0.16229723756906086
     },
     "REZUSDT": {
      "trade": 3,
@@ -59,30 +71,42 @@
      "trade": 2,
      "netto": -0.13024483525661099
     },
+    "TRXUSDT": {
+     "trade": 1,
+     "netto": -0.0857597259590048
+    },
+    "UNIUSDT": {
+     "trade": 1,
+     "netto": 0.08471003578652561
+    },
     "VTHOUSDT": {
      "trade": 1,
      "netto": -0.10694052715887578
     },
     "XMRUSDT": {
+     "trade": 2,
+     "netto": -0.05425267165660505
+    },
+    "ZENUSDT": {
      "trade": 1,
-     "netto": -0.06390590756045286
+     "netto": -0.12472249465196636
     }
    },
-   "esito": "in corso (25 trade chiusi su 400)"
+   "esito": "in corso (34 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 20,
+   "trade": 21,
    "netto": {
-    "n": 20,
-    "giorni": 8,
-    "media": -0.005047041175997758,
-    "basso": -0.02125859594647791,
-    "alto": 0.007199835913524833,
-    "p": 0.7604239576042395
+    "n": 21,
+    "giorni": 9,
+    "media": -0.0006574856230133592,
+    "basso": -0.017237844107754346,
+    "alto": 0.016152463607835458,
+    "p": 0.5269473052694731
    },
-   "netto_doppio": -0.006847041175997761,
-   "caso_netto": -0.003922168814967889,
-   "senza_migliore": -0.007881775345773086,
+   "netto_doppio": -0.0024574856230133633,
+   "caso_netto": -0.002164001937622405,
+   "senza_migliore": -0.005047041175997758,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
@@ -120,6 +144,10 @@
      "trade": 1,
      "netto": 0.030163615546084734
     },
+    "LSKUSDT": {
+     "trade": 1,
+     "netto": 0.0871336254366746
+    },
     "MORPHOUSDT": {
      "trade": 2,
      "netto": -0.0103046816887403
@@ -149,21 +177,21 @@
      "netto": 0.018917829004960553
     }
    },
-   "esito": "in corso (20 trade chiusi su 400)"
+   "esito": "in corso (21 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 5,
+   "trade": 6,
    "netto": {
-    "n": 5,
-    "giorni": 4,
-    "media": 0.016654131884653943,
-    "basso": -0.0555703762533787,
-    "alto": 0.1027653038768424,
-    "p": 0.39406059394060594
+    "n": 6,
+    "giorni": 5,
+    "media": -0.01733449733717826,
+    "basso": -0.10990309503097513,
+    "alto": 0.07274797975121039,
+    "p": 0.648035196480352
    },
-   "netto_doppio": 0.01265801976627266,
-   "caso_netto": -0.021068394006722526,
-   "senza_migliore": -0.018755722749416677,
+   "netto_doppio": -0.02129518194790521,
+   "caso_netto": -0.02035910638678774,
+   "senza_migliore": -0.05246010688880119,
    "per_moneta": {
     "1000PEPEUSDT": {
      "trade": 1,
@@ -177,12 +205,16 @@
      "trade": 2,
      "netto": 0.12175684483696635
     },
+    "SYNUSDT": {
+     "trade": 1,
+     "netto": -0.18727764344633924
+    },
     "XMRUSDT": {
      "trade": 1,
      "netto": -0.047321316751317725
     }
    },
-   "esito": "in corso (5 trade chiusi su 400)"
+   "esito": "in corso (6 trade chiusi su 400)"
   }
  }
 }

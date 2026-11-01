@@ -1,5 +1,5 @@
 {
- "dati_fino_al": "2026-10-29",
+ "dati_fino_al": "2026-10-30",
  "funding_stimato_dal": "2026-09-01",
  "candidate": {
   "F3": {
@@ -88,15 +88,37 @@
     "2026-10-26": 0.00045,
     "2026-10-27": 0.001494,
     "2026-10-28": -5.1e-05,
-    "2026-10-29": 0.0
+    "2026-10-29": 0.0,
+    "2026-10-30": 0.002159
    },
-   "periodi": 10,
-   "totale": -0.0025386937077693794,
-   "media": -0.0002511660135404657,
-   "sharpe": -1.8626895770596363
+   "periodi": 11,
+   "totale": -0.0003853329439499342,
+   "media": -3.2074430409526784e-05,
+   "sharpe": -0.2403379804212627
   }
  },
- "eventi_N3": [],
+ "eventi_N3": [
+  {
+   "mercato": "Gate.io",
+   "simbolo": "AXIS_USDT",
+   "ingresso": "2026-10-28",
+   "stato": "in corso"
+  },
+  {
+   "mercato": "Gate.io",
+   "simbolo": "PREDICT_USDT",
+   "ingresso": "2026-10-28",
+   "stato": "chiuso",
+   "r": -0.31742863837880236,
+   "fermata": true
+  },
+  {
+   "mercato": "Gate.io",
+   "simbolo": "KIMCHI_USDT",
+   "ingresso": "2026-10-29",
+   "stato": "in corso"
+  }
+ ],
  "eventi_E4": [],
  "adesso": {
   "F3": {
@@ -397,17 +419,17 @@
    ]
   },
   "A1": {
-   "giorno": "2026-10-29",
+   "giorno": "2026-10-30",
    "pesi": {
-    "HYPEUSDT": 0.0132,
-    "1000PEPEUSDT": 0.0079,
+    "HYPEUSDT": 0.0134,
+    "1000PEPEUSDT": 0.0092,
     "BNBUSDT": 0.0073,
-    "BTCUSDT": 0.0071,
+    "BTCUSDT": 0.0072,
     "NEARUSDT": 0.0056,
     "ZECUSDT": 0.0043,
-    "UNIUSDT": 0.0039,
-    "ARBUSDT": 0.0029,
+    "UNIUSDT": 0.0038,
     "PUMPUSDT": 0.0029,
+    "ARBUSDT": 0.0028,
     "ETHUSDT": 0.0026,
     "SOLUSDT": 0.0024,
     "ENAUSDT": 0.002
@@ -441,8 +463,8 @@
  "settimana_in_corso": {
   "F5": {
    "lunedi": "2026-10-26",
-   "fino_al": "2026-10-29",
-   "netto_senza_costi": 0.004882861175504638
+   "fino_al": "2026-10-30",
+   "netto_senza_costi": 0.0076085368301948755
   }
  },
  "passato": {
