@@ -23,6 +23,18 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
   o chiude un'operazione, il demo porta ai pesi nuovi **solo** quella moneta e il Bitcoin, con gli stessi ordini limite per un'ora e
   poi a mercato; lo fa dopo il ribilancio di G1 del giorno (o dalle 02:00 UTC, se G1 non ha deciso), cosi' i due non si accavallano.
   Il conto demo e' uno solo: il rendimento si confronta con la somma dei due paper.
+* **Le protezioni** (il proprietario, 1° novembre 2026: «sì prepara e soglia −35%»; prima dei soldi veri, revisione con le skill,
+  `research/programma7/REVISIONE_SKILL_G1.md`):
+  * **il margine unico**: a ogni moneta nuova si chiede a Binance il margine unico per tutto il conto (`CROSSED`); ogni ora si
+    controlla, e una moneta con il margine separato si chiude, si passa al margine unico e si riapre al ribilancio dopo;
+  * **il pulsante che chiude tutto** (dashboard, `/commands/demo_binance_chiudi_tutto`; oppure un testo nuovo nel file
+    `ops/demo_binance_chiudi_tutto`): annulla gli ordini e chiude tutte le posizioni a mercato; poi il demo resta fermo finché non
+    arriva «riparti» (`/commands/demo_binance_riparti`, o un testo nuovo in `ops/demo_binance_riparti`);
+  * **lo stop sul conto**: se il valore del conto scende del 35% dal suo massimo, il demo chiude tutto da solo e si ferma allo stesso
+    modo (controllo a ogni valutazione, ogni ora);
+  * **il confronto fra le posizioni vere e quelle volute**: ogni ora, senza ordini in corso, le quantità che Binance dice che teniamo
+    contro quelle decise all'ultimo ribilancio; ogni moneta con uno scarto oltre il 2% del conto va su RTDB in
+    `/demo_binance/confronto` (si sistema da sola al ribilancio dopo).
 """
 from __future__ import annotations
 
@@ -54,6 +66,14 @@ LEVA = 5
 VALIDITA_LIMITE_S = 3600
 OGNI_VALUTAZIONE_S = 3600
 ATTESA_DOPO_ERRORE_S = 1800
+STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chiude tutto a −35% dal massimo del conto
+SOGLIA_CONFRONTO = 0.02                # uno scarto oltre il 2% del conto su una moneta si segnala
+COMANDO_CHIUDI = "/commands/demo_binance_chiudi_tutto"
+COMANDO_RIPARTI = "/commands/demo_binance_riparti"
+# gli stessi due comandi come file nel repository (funzionano anche senza la dashboard: li scrive la sessione su richiesta del
+# proprietario, la macchina li riceve con il git pull di ogni minuto); si eseguono una volta per ogni testo nuovo del file
+FILE_CHIUDI = RADICE / "ops" / "demo_binance_chiudi_tutto"
+FILE_RIPARTI = RADICE / "ops" / "demo_binance_riparti"
 
 
 def _url(percorso: str) -> str:
@@ -193,8 +213,10 @@ class ClienteDemo:
 class DemoG1:
     def __init__(self, fb, cliente: Optional[ClienteDemo] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_G1,
                  interruttore: Path = INTERRUTTORE, file_eventi: Path = FILE_EVENTI,
-                 interruttore_eventi: Path = INTERRUTTORE_EVENTI) -> None:
+                 interruttore_eventi: Path = INTERRUTTORE_EVENTI, file_chiudi: Path = FILE_CHIUDI,
+                 file_riparti: Path = FILE_RIPARTI) -> None:
         self.fb = fb
+        self.file_chiudi, self.file_riparti = Path(file_chiudi), Path(file_riparti)
         self._cliente = cliente
         self.file_stato, self.file_g1, self.interruttore = Path(file_stato), Path(file_g1), Path(interruttore)
         self.file_eventi, self.interruttore_eventi = Path(file_eventi), Path(interruttore_eventi)
@@ -242,6 +264,48 @@ class DemoG1:
         if self.fb is not None:
             self.fb.set_rtdb(f"/demo_binance/{ramo}", valore)
 
+    def _comando(self, percorso: str) -> bool:
+        if self.fb is None:
+            return False
+        try:
+            return bool(self.fb.get_rtdb(percorso))
+        except Exception:  # noqa: BLE001
+            return False
+
+    def _comando_file(self, f: Path, st: dict, chiave: str) -> bool:
+        """Il comando come file: vale una volta per ogni testo nuovo (il file resta nel repository)."""
+        if os.environ.get("PYTEST_CURRENT_TEST") and f in (FILE_CHIUDI, FILE_RIPARTI):
+            return False
+        try:
+            testo_file = f.read_text(encoding="utf-8").strip() if f.exists() else ""
+        except Exception:  # noqa: BLE001
+            return False
+        if testo_file and testo_file != st.get(chiave):
+            st[chiave] = testo_file
+            return True
+        return False
+
+    def chiudi_tutto(self, c: ClienteDemo, st: dict, now: float, motivo: str) -> dict:
+        """Annulla tutti gli ordini aperti e chiude tutte le posizioni a mercato; poi il demo resta fermo (``st['fermo']``)."""
+        for s in sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []}):
+            c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
+        equity, _, posizioni = self._conto(c)
+        chiuse, errori = [], []
+        for s, q in sorted(posizioni.items()):
+            p = {"symbol": s, "side": "SELL" if q > 0 else "BUY", "type": "MARKET", "quantity": testo(abs(q)), "reduceOnly": "true"}
+            try:
+                c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
+                chiuse.append(s)
+            except RuntimeError as exc:
+                errori.append({"simbolo": s, "errore": str(exc)[:200]})
+        st.pop("ordini", None)
+        st["fermo"] = {"motivo": motivo, "ora": now, "equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori}
+        self._scrivi("fermo", st["fermo"])
+        self._scrivi("stato", {"stato": f"fermo: {motivo}", "equity": round(equity, 2), "aggiornato": now,
+                               "capitale_iniziale": float(st.get("capitale_iniziale", equity))})
+        print(f"[demo_binance] CHIUSO TUTTO ({motivo}): {len(chiuse)} posizioni chiuse, {len(errori)} errori")
+        return st
+
     # ---- il giro ----
     def tick(self, now: float) -> None:
         if not self.acceso():
@@ -258,6 +322,30 @@ class DemoG1:
             return
         try:
             st = self.carica()
+            da_dashboard = self._comando(COMANDO_CHIUDI)
+            da_file = self._comando_file(self.file_chiudi, st, "eseguito_chiudi")
+            if da_dashboard or da_file:
+                if not st.get("fermo"):
+                    st = self.chiudi_tutto(c, st, now, "pulsante della dashboard" if da_dashboard else "comando chiudi tutto")
+                if da_dashboard:
+                    self.fb.set_rtdb(COMANDO_CHIUDI, False)
+            if st.get("fermo"):
+                da_dashboard = self._comando(COMANDO_RIPARTI)
+                if da_dashboard or self._comando_file(self.file_riparti, st, "eseguito_riparti"):
+                    st.pop("fermo")
+                    st["ultimo_giorno"] = 0                     # al giro dopo si torna ai pesi di oggi
+                    st["massimo"] = self._conto(c)[0]           # lo stop si misura dalla ripartenza
+                    if da_dashboard:
+                        self.fb.set_rtdb(COMANDO_RIPARTI, False)
+                    self._scrivi("fermo", None)
+                    print("[demo_binance] ripartito")
+                else:
+                    if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
+                        equity = self._conto(c)[0]
+                        st["ultima_valutazione"] = now
+                        self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
+                    self.salva(st)
+                    return
             if st.get("ordini") and now >= float(st["ordini"]["piazzati"]) + VALIDITA_LIMITE_S:
                 st = self.chiudi_ordini(c, st, now)
             g1 = json.loads(self.file_g1.read_text(encoding="utf-8")) if self.file_g1.exists() else {}
@@ -275,6 +363,9 @@ class DemoG1:
                 st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
             if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
                 st = self.valuta(c, st, now)
+                if not st.get("fermo"):
+                    st = self.controlla_margine(c, st, now)
+                    st = self.confronta(c, st, now)
             self.salva(st)
         except Exception as exc:  # noqa: BLE001
             self._ultimo_tentativo = now
@@ -283,8 +374,65 @@ class DemoG1:
 
     def _conto(self, c: ClienteDemo) -> tuple:
         conto = c.chiedi("GET", "/fapi/v2/account", firmata=True)
+        self._separati = sorted(x["symbol"] for x in conto.get("positions", []) if x.get("isolated") in (True, "true"))
         posizioni = {x["symbol"]: float(x["positionAmt"]) for x in conto.get("positions", []) if float(x.get("positionAmt") or 0)}
         return float(conto["totalMarginBalance"]), float(conto["totalWalletBalance"]), posizioni
+
+    def _margine_unico(self, c: ClienteDemo, s: str) -> str:
+        """Chiede a Binance il margine unico per la moneta; «già unico» (-4046) va bene. Restituisce '' o l'errore."""
+        try:
+            c.chiedi("POST", "/fapi/v1/marginType", {"symbol": s, "marginType": "CROSSED"}, firmata=True)
+        except RuntimeError as exc:
+            if "-4046" not in str(exc):
+                return str(exc)[:200]
+        return ""
+
+    def controlla_margine(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Ogni ora: le monete con il margine separato si chiudono (se hanno una posizione), passano al margine unico e si riaprono al
+        ribilancio dopo."""
+        _, _, posizioni = self._conto(c)
+        separati = list(getattr(self, "_separati", []))
+        sistemate, errori = [], []
+        for s in separati:
+            q = posizioni.get(s, 0.0)
+            if q:
+                try:
+                    c.chiedi("POST", "/fapi/v1/order", {"symbol": s, "side": "SELL" if q > 0 else "BUY", "type": "MARKET",
+                                                        "quantity": testo(abs(q)), "reduceOnly": "true"}, firmata=True)
+                except RuntimeError as exc:
+                    errori.append({"simbolo": s, "errore": str(exc)[:200]})
+                    continue
+            e = self._margine_unico(c, s)
+            (errori.append({"simbolo": s, "errore": e}) if e else sistemate.append(s))
+        if sistemate and any(posizioni.get(s) for s in sistemate):
+            st["ultimo_giorno"] = 0                             # si riaprono subito ai pesi di oggi
+        self._scrivi("margine", {"controllato": now, "separati_trovati": separati, "sistemate": sistemate, "errori": errori})
+        if separati:
+            print(f"[demo_binance] margine separato su {separati}: sistemate {sistemate}, errori {len(errori)}")
+        return st
+
+    def confronta(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Ogni ora, senza ordini in corso: le quantità vere contro quelle volute all'ultimo ribilancio (``st['obiettivi']``)."""
+        if st.get("ordini") or not st.get("obiettivi"):
+            return st
+        equity, _, posizioni = self._conto(c)
+        prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
+        obiettivi = st["obiettivi"]
+        differenze, totale = [], 0.0
+        for s in sorted(set(obiettivi) | set(posizioni)):
+            if s not in prezzi or equity <= 0:
+                continue
+            voluto, vero = float(obiettivi.get(s, 0.0)), float(posizioni.get(s, 0.0))
+            scarto = (vero - voluto) * prezzi[s] / equity
+            totale += abs(scarto)
+            if abs(scarto) > SOGLIA_CONFRONTO:
+                differenze.append({"simbolo": s, "voluto": round(voluto * prezzi[s] / equity, 4), "vero": round(vero * prezzi[s] / equity, 4),
+                                   "scarto": round(scarto, 4)})
+        self._scrivi("confronto", {"ora": now, "differenze": differenze, "scarto_totale": round(totale, 4),
+                                   "monete": len(set(obiettivi) | set(posizioni))})
+        if differenze:
+            print(f"[demo_binance] posizioni diverse da quelle volute: {[d['simbolo'] for d in differenze]}")
+        return st
 
     def ribilancia(self, c: ClienteDemo, st: dict, pesi: dict, giorno: int, now: float, solo: Optional[set] = None) -> dict:
         """Porta il conto ai pesi; con ``solo`` (un'operazione a eventi aperta o chiusa) tocca solo quelle monete."""
@@ -316,6 +464,9 @@ class DemoG1:
                 p["reduceOnly"] = "true"
             try:                                       # un ordine rifiutato non ferma gli altri
                 if s not in leve:
+                    e = self._margine_unico(c, s)
+                    if e:
+                        raise RuntimeError(f"margine unico non impostato: {e}")
                     c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": LEVA}, firmata=True)
                     leve.add(s)
                 r = c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
@@ -323,6 +474,11 @@ class DemoG1:
                 rifiutati.append({"simbolo": s, "errore": str(exc)[:200]})
                 continue
             piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId")})
+        obiettivi = {} if solo is None else {k: v for k, v in (st.get("obiettivi") or {}).items() if k not in solo}
+        for s, w in pesi.items():
+            if s in prezzi and (solo is None or s in solo) and w:
+                obiettivi[s] = float(w) * equity / prezzi[s]
+        st["obiettivi"] = obiettivi
         data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
         chiave = data if solo is None else f"{time.strftime('%Y-%m-%d', time.gmtime(now))}-eventi-{time.strftime('%H%M', time.gmtime(now))}"
         st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati, "chiave": chiave}})
@@ -369,10 +525,15 @@ class DemoG1:
         st.setdefault("capitale_iniziale", equity)
         st["ultima_valutazione"] = now
         iniziale = float(st["capitale_iniziale"])
+        st["massimo"] = max(float(st.get("massimo", iniziale)), equity)
+        if equity <= (1 - STOP_CONTO) * st["massimo"]:
+            return self.chiudi_tutto(c, st, now, f"stop sul conto: {100 * (equity / st['massimo'] - 1):.1f}% dal massimo")
         self._scrivi("stato", {"stato": "acceso", "equity": round(equity, 2), "saldo": round(wallet, 2), "capitale_iniziale": iniziale,
                                "rendimento": equity / iniziale - 1 if iniziale else 0.0,
                                "long": sum(1 for v in posizioni.values() if v > 0), "short": sum(1 for v in posizioni.values() if v < 0),
                                "limite_eseguiti": int(st.get("limite_eseguiti", 0)), "limite_totali": int(st.get("limite_totali", 0)),
-                               "ordini_in_attesa": len((st.get("ordini") or {}).get("lista") or []), "aggiornato": now})
+                               "ordini_in_attesa": len((st.get("ordini") or {}).get("lista") or []), "aggiornato": now,
+                               "massimo": round(st["massimo"], 2), "dal_massimo": equity / st["massimo"] - 1,
+                               "stop_a": round((1 - STOP_CONTO) * st["massimo"], 2)})
         self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
         return st

@@ -5363,3 +5363,12 @@ piano dei soldi veri (`programma7/REVISIONE_SKILL_G1.md`, sezione 6): con il mar
 posizione di G1 sarebbe stata chiusa a forza in 313 giorni su 2.100 dal lato comprato e in 843 dal lato venduto; con il margine unico per
 tutto il conto mai. Quindi il margine unico va impostato e controllato dal codice prima dei soldi veri (oggi non è controllato). Capito
 oggi: il tipo di margine non è un dettaglio, decide se il backtest vale o no.
+**Le protezioni del conto demo** (il proprietario, 1° novembre: «sì prepara e soglia −35%»; `bot/portafoglio/demo_binance.py`, 6 test
+nuovi, tutti i 2.486 test passano): (1) il margine unico per tutto il conto chiesto a Binance per ogni moneta prima della leva, e
+controllato ogni ora: una moneta con il margine separato si chiude, passa al margine unico e si riapre subito ai pesi di oggi; (2) il
+pulsante «Chiudi tutto sul demo» nella dashboard, con la conferma, e «Riparti»; lo stesso comando anche come file
+(`ops/demo_binance_chiudi_tutto`, `ops/demo_binance_riparti`), che la sessione può scrivere su richiesta del proprietario; (3) lo stop
+sul conto: a −35% dal massimo il demo chiude tutto da solo e si ferma finché non si preme «Riparti»; (4) ogni ora il confronto fra le
+quantità vere e quelle volute all'ultimo ribilancio, con le monete oltre il 2% del conto su RTDB e nello stato della macchina. Il
+pulsante della dashboard ha bisogno delle regole del database aggiornate (`firebase/database.rules.json`, da pubblicare con `firebase
+deploy`); fino ad allora vale il comando come file. Gli eventi restano solo sul demo, con i soldi finti (conferma del proprietario).

@@ -15,6 +15,14 @@
           ".validate": "newData.isBoolean() || !newData.exists()"
         }
       },
+      "demo_binance_chiudi_tutto": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
+      },
+      "demo_binance_riparti": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
+      },
       "close_position_meta": {
         ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
         ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'"

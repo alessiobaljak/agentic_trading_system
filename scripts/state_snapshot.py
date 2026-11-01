@@ -619,6 +619,24 @@ def sezione_demo_binance(fb) -> list:
                         if x.get("monete_mancanti_sul_demo") else "")
                      + (f"; rifiutati {len(x['rifiutati'])}: " + "; ".join(f"{r.get('simbolo')} {str(r.get('errore'))[:80]}"
                                                                          for r in x["rifiutati"][:3]) if x.get("rifiutati") else ""))
+    if st.get("stop_a") is not None:
+        righe.append(f"- stop sul conto (−35% dal massimo): massimo ${float(st.get('massimo') or 0):,.2f}, si chiude tutto sotto "
+                     f"${float(st['stop_a']):,.2f}; ora {100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
+    fermo = fb.get_rtdb("/demo_binance/fermo")
+    if isinstance(fermo, dict) and fermo:
+        righe.append(f"- **FERMO** dal {_ts(fermo.get('ora'))}: {fermo.get('motivo')} · posizioni chiuse {fermo.get('chiuse', 0)}, "
+                     f"errori {len(fermo.get('errori') or [])} (riparte solo con il pulsante «riparti» della dashboard)")
+    mg = fb.get_rtdb("/demo_binance/margine")
+    if isinstance(mg, dict) and mg:
+        sep = mg.get("separati_trovati") or []
+        righe.append(f"- margine ({_ts(mg.get('controllato'))}): " + ("unico su tutte le monete" if not sep else
+                     f"separato su {', '.join(sep)}; sistemate {', '.join(mg.get('sistemate') or []) or 'nessuna'}"))
+    cf = fb.get_rtdb("/demo_binance/confronto")
+    if isinstance(cf, dict) and cf:
+        dif = cf.get("differenze") or []
+        righe.append(f"- posizioni vere contro volute ({_ts(cf.get('ora'))}): {cf.get('monete', 0)} monete, scarto totale "
+                     f"{100 * float(cf.get('scarto_totale') or 0):.1f}% del conto; " + ("nessuna moneta oltre il 2%" if not dif else
+                     "oltre il 2%: " + ", ".join(f"{x.get('simbolo')} {100 * float(x.get('scarto') or 0):+.1f}%" for x in dif[:6])))
     if err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
     return righe + [""]

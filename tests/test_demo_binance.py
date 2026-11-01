@@ -28,6 +28,9 @@ class _Demo:
         self.simboli = tuple(simboli)
         self.posizioni = {s: 0.0 for s in self.simboli}
         self.ordini = {}
+        self.equity = "10000"
+        self.separati = set()
+        self.margine = {}
 
     def __call__(self, metodo, url, headers=None, timeout=None):
         u = urlparse(url)
@@ -42,8 +45,15 @@ class _Demo:
         if u.path == "/fapi/v1/premiumIndex":
             return _Risposta([{"symbol": s, "markPrice": self.PREZZI[s]} for s in self.simboli])
         if u.path == "/fapi/v2/account":
-            return _Risposta({"totalMarginBalance": "10000", "totalWalletBalance": "10000",
-                              "positions": [{"symbol": s, "positionAmt": str(v)} for s, v in self.posizioni.items()]})
+            return _Risposta({"totalMarginBalance": self.equity, "totalWalletBalance": self.equity,
+                              "positions": [{"symbol": s, "positionAmt": str(v), "isolated": s in self.separati}
+                                            for s, v in self.posizioni.items()]})
+        if u.path == "/fapi/v1/marginType":
+            if q["symbol"] not in self.separati and q["symbol"] in self.margine:
+                return _Risposta({"code": -4046, "msg": "No need to change margin type."}, 400)
+            self.margine[q["symbol"]] = q["marginType"]
+            self.separati.discard(q["symbol"])
+            return _Risposta({"code": 200, "msg": "success"})
         if u.path == "/fapi/v1/positionSide/dual":
             return _Risposta({"dualSidePosition": False} if metodo == "GET" else {"code": 200})
         if u.path == "/fapi/v1/leverage":
@@ -260,4 +270,120 @@ def test_eventi_spenti_non_cambiano_niente(tmp_path):
     d.tick(20750 * 86400.0 + 400)
     post = {q["symbol"] for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order"}
     assert post == {"AUSDT", "BUSDT"} and d.carica()["eventi_firma"] == []
+
+
+def _demo_semplice(tmp_path, finto, pesi=None, giorno=20750):
+    from bot.core.firebase_client import _InMemoryStore
+    fb = _InMemoryStore()
+    (tmp_path / "acceso").write_text("si")
+    g1 = tmp_path / "g1.json"
+    g1.write_text(json.dumps({"ultimo_lunedi": giorno, "pesi": pesi or {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d = dm.DemoG1(fb, cliente=dm.ClienteDemo("chiave", "segreto", http=finto), file_stato=tmp_path / "st.json", file_g1=g1,
+                  interruttore=tmp_path / "acceso")
+    return d, fb
+
+
+def _post(finto, percorso="/fapi/v1/order"):
+    return [q for m, p, q in finto.chiamate if m == "POST" and p == percorso]
+
+
+def test_margine_unico_chiesto_prima_della_leva(tmp_path):
+    """Il proprietario, 1° novembre: il margine unico per tutto il conto, impostato dal codice (con la leva 5 e il margine separato
+    una posizione si chiuderebbe a forza a −18%/−20%)."""
+    finto = _Demo()
+    d, _ = _demo_semplice(tmp_path, finto)
+    d.tick(20750 * 86400.0 + 400)
+    passi = [(p, q.get("symbol")) for m, p, q in finto.chiamate if m == "POST" and p in ("/fapi/v1/marginType", "/fapi/v1/leverage")]
+    assert passi == [("/fapi/v1/marginType", "AUSDT"), ("/fapi/v1/leverage", "AUSDT"),
+                     ("/fapi/v1/marginType", "BUSDT"), ("/fapi/v1/leverage", "BUSDT")]
+    assert all(q["marginType"] == "CROSSED" for q in _post(finto, "/fapi/v1/marginType"))
+
+
+def test_pulsante_chiude_tutto_poi_fermo_finche_non_riparte(tmp_path):
+    finto = _Demo()
+    finto.posizioni = {"AUSDT": 10.0, "BUSDT": -20.0}
+    d, fb = _demo_semplice(tmp_path, finto)
+    fb.set_rtdb(dm.COMANDO_CHIUDI, True)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    st = d.carica()
+    assert st["fermo"]["motivo"] == "pulsante della dashboard" and fb.get_rtdb(dm.COMANDO_CHIUDI) is False
+    chiusure = {q["symbol"]: (q["side"], q["type"], q["quantity"], q.get("reduceOnly")) for q in _post(finto)}
+    assert chiusure == {"AUSDT": ("SELL", "MARKET", "10", "true"), "BUSDT": ("BUY", "MARKET", "20", "true")}
+    assert fb.get_rtdb("/demo_binance/stato")["stato"].startswith("fermo")
+    # fermo: la decisione nuova di G1 non manda ordini
+    finto.posizioni = {"AUSDT": 0.0, "BUSDT": 0.0}
+    n = len(_post(finto))
+    d.tick(t0 + 4000)
+    assert len(_post(finto)) == n and d.carica().get("fermo")
+    # il pulsante «riparti»: al giro dopo si torna ai pesi di G1
+    fb.set_rtdb(dm.COMANDO_RIPARTI, True)
+    d.tick(t0 + 8000)
+    assert "fermo" not in d.carica() and fb.get_rtdb(dm.COMANDO_RIPARTI) is False
+    d.tick(t0 + 8100)
+    assert {q["symbol"] for q in _post(finto)[n:] if q["type"] == "LIMIT"} == {"AUSDT", "BUSDT"}
+
+
+def test_stop_sul_conto_a_meno_35_per_cento(tmp_path):
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)                                         # ribilancio e prima valutazione: massimo 10.000
+    assert d.carica()["massimo"] == 10000.0
+    finto.posizioni = {"AUSDT": 50.0, "BUSDT": -100.0}
+    finto.equity = "6600"                              # −34%: niente
+    d.tick(t0 + 3700)
+    assert "fermo" not in d.carica()
+    finto.equity = "6400"                              # −36%: chiude tutto
+    d.tick(t0 + 7400)
+    st = d.carica()
+    assert st["fermo"]["motivo"].startswith("stop sul conto: -36.0%")
+    assert {q["symbol"] for q in _post(finto) if q["type"] == "MARKET" and q.get("reduceOnly") == "true"} >= {"AUSDT", "BUSDT"}
+
+
+def test_margine_separato_si_chiude_e_passa_al_margine_unico(tmp_path):
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    d.tick(t0 + 3601)                                  # ordini chiusi (eseguiti a limite o a mercato)
+    finto.posizioni = {"AUSDT": 50.0, "BUSDT": -100.0}
+    finto.separati = {"AUSDT"}
+    d.tick(t0 + 7300)
+    m = fb.get_rtdb("/demo_binance/margine")
+    assert m["separati_trovati"] == ["AUSDT"] and m["sistemate"] == ["AUSDT"]
+    assert any(q["symbol"] == "AUSDT" and q["type"] == "MARKET" and q.get("reduceOnly") == "true" for q in _post(finto))
+    assert d.carica()["ultimo_giorno"] == 0             # si riapre subito ai pesi di oggi
+
+
+def test_confronto_fra_posizioni_vere_e_volute(tmp_path):
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    ob = d.carica()["obiettivi"]
+    assert ob["AUSDT"] == pytest.approx(5000 / 100.003) and ob["BUSDT"] == pytest.approx(-5000 / 50.007)
+    d.tick(t0 + 3601)                                  # ordini chiusi
+    finto.posizioni = {"AUSDT": 30.0, "BUSDT": -99.986}
+    d.tick(t0 + 7300)
+    c = fb.get_rtdb("/demo_binance/confronto")
+    assert [x["simbolo"] for x in c["differenze"]] == ["AUSDT"] and c["differenze"][0]["scarto"] == -0.2
+
+
+def test_chiudi_tutto_e_riparti_con_il_file(tmp_path):
+    """Lo stesso comando come file nel repository: una volta per ogni testo nuovo."""
+    finto = _Demo()
+    finto.posizioni = {"AUSDT": 10.0}
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.file_chiudi, d.file_riparti = tmp_path / "chiudi", tmp_path / "riparti"
+    d.file_chiudi.write_text("1 nov 2026 18:00")
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    assert d.carica()["fermo"]["motivo"] == "comando chiudi tutto"
+    n = len(_post(finto))
+    d.tick(t0 + 4000)                                  # lo stesso testo non si ripete
+    assert len(_post(finto)) == n and d.carica().get("fermo")
+    d.file_riparti.write_text("1 nov 2026 19:00")
+    d.tick(t0 + 8000)
+    assert "fermo" not in d.carica()
 

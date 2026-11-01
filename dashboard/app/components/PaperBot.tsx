@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onValue, ref } from 'firebase/database';
+import { onValue, ref, serverTimestamp, set } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 import AndamentoPaper from './AndamentoPaper';
 
@@ -24,7 +24,10 @@ type StatoEventi = {
 type StatoDemo = {
   stato?: string; equity?: number; capitale_iniziale?: number; rendimento?: number; long?: number; short?: number;
   limite_eseguiti?: number; limite_totali?: number; ordini_in_attesa?: number; aggiornato?: number;
+  massimo?: number; dal_massimo?: number; stop_a?: number;
 };
+type Fermo = { motivo?: string; ora?: number; chiuse?: number };
+type Confronto = { ora?: number; differenze?: { simbolo: string; scarto: number }[]; scarto_totale?: number; monete?: number };
 type Aperta = { tipo?: string; simbolo?: string; entrata?: number; rendimento_ora?: number; uscita_giorno?: string };
 type Chiusa = { tipo?: string; simbolo?: string; uscita?: number; rendimento?: number; motivo?: string };
 
@@ -106,6 +109,76 @@ function Portafoglio({ ramo, titolo, inizio }: { ramo: string; titolo: string; i
   );
 }
 
+/**
+ * Le protezioni del conto demo (il proprietario, 1° novembre 2026): il pulsante che chiude tutte le posizioni (con la conferma: un
+ * click per sbaglio non deve chiudere tutto) e quello che fa ripartire il demo dopo uno stop. Scrivono in /commands; il bot li legge
+ * a ogni giro e li rimette a false (bot/portafoglio/demo_binance.py).
+ */
+function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
+  const [fermo, setFermo] = useState<Fermo | null>(null);
+  const [cf, setCf] = useState<Confronto | null>(null);
+  const [conferma, setConferma] = useState(false);
+  const [invio, setInvio] = useState<string | null>(null);
+  const [errore, setErrore] = useState<string | null>(null);
+  useEffect(() => {
+    const db = getRtdb();
+    const a = onValue(ref(db, 'demo_binance/fermo'), (s) => setFermo(s.val()));
+    const b = onValue(ref(db, 'demo_binance/confronto'), (s) => setCf(s.val()));
+    return () => { a(); b(); };
+  }, []);
+  const manda = async (percorso: string, nomeComando: string) => {
+    setErrore(null);
+    try {
+      await set(ref(getRtdb(), percorso), true);
+      await set(ref(getRtdb(), `${percorso}_meta`), { da: 'dashboard', ora: serverTimestamp() }).catch(() => undefined);
+      setInvio(`${nomeComando}: inviato, il bot lo esegue entro un minuto`);
+      setConferma(false);
+    } catch (e) {
+      setErrore(e instanceof Error ? e.message : 'Invio non riuscito.');
+    }
+  };
+  const dif = cf?.differenze ?? [];
+  return (
+    <div style={{ margin: '0 0 10px', fontSize: 12.5 }}>
+      {d?.stop_a != null && (
+        <p style={{ margin: '2px 0' }}>
+          Stop sul conto a −35% dal massimo: si chiude tutto sotto <b>${d.stop_a.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b>
+          {' '}(ora {pct(d.dal_massimo)} dal massimo).
+        </p>
+      )}
+      {cf && (
+        <p style={{ margin: '2px 0' }}>
+          Posizioni vere contro volute ({quando(cf.ora)}):{' '}
+          {dif.length === 0 ? 'nessuna moneta con uno scarto oltre il 2% del conto'
+            : <b>{dif.map((x) => `${nome(x.simbolo)} ${pct(x.scarto, 1)}`).join(', ')}</b>}.
+        </p>
+      )}
+      {fermo ? (
+        <p style={{ margin: '4px 0' }}>
+          <b>Demo fermo</b> dal {quando(fermo.ora)}: {fermo.motivo} ({fermo.chiuse ?? 0} posizioni chiuse).{' '}
+          <button className="btn" onClick={() => manda('commands/demo_binance_riparti', 'Riparti')}>Riparti</button>
+        </p>
+      ) : (
+        <p style={{ margin: '4px 0' }}>
+          {!conferma ? (
+            <button className="btn btn-danger" onClick={() => setConferma(true)}>Chiudi tutto sul demo</button>
+          ) : (
+            <>
+              Confermi? Chiude <b>tutte le posizioni</b> del conto demo a mercato e lo ferma finché non premi «Riparti».{' '}
+              <button className="btn" onClick={() => setConferma(false)}>Annulla</button>{' '}
+              <button className="btn btn-danger" onClick={() => manda('commands/demo_binance_chiudi_tutto', 'Chiudi tutto')}>
+                Sì, chiudi tutto
+              </button>
+            </>
+          )}
+        </p>
+      )}
+      {invio && <p className="muted" style={{ margin: '2px 0' }}>{invio}</p>}
+      {errore && <div className="warn">{errore}</div>}
+    </div>
+  );
+}
+
 function ContoDemo() {
   const [d, setD] = useState<StatoDemo | null>(null);
   useEffect(() => onValue(ref(getRtdb(), 'demo_binance/stato'), (s) => setD(s.val())), []);
@@ -124,6 +197,7 @@ function ContoDemo() {
           )}
         </p>
       )}
+      <ProtezioniDemo d={d} />
     </>
   );
 }
