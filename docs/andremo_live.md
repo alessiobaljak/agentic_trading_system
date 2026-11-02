@@ -5387,3 +5387,8 @@ del mese fra +93% e +409%: usano molta leva), lette le posizioni di tutti e 20 (
 (log 0689): F5 alle 00:09, il ribilancio del lunedì (26 long e 25 short, conto 9.852,92: −1,47% dall'inizio); G1 alle 00:13 (27 e 25,
 10.274,39: +2,74%); G11 alle 00:17 (30 e 22, 10.404,61: +4,05%); G1N e il demo dopo le 00:20, nel prossimo stato. Da oggi contano i
 giorni di HLI e DXI.
+**Giro delle 04:17.** Notizie: 27 articoli nuovi da 20 fonti su 21; posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti
+delle 04:21: niente di nuovo. **Il primo confronto del demo fra le posizioni vere e quelle volute** (stato 0690, 03:22 UTC): 52 monete,
+scarto totale 2,5% del conto, nessuna moneta oltre il 2% (dentro c'è la moneta con il nome in caratteri cinesi che Binance rifiuta);
+margine unico su tutte le monete; ribilancio del demo del 2 novembre: 46 ordini, 45 eseguiti a limite e 1 a mercato. Conto demo +2,92%
+dall'inizio, G1N nel paper +4,33%.
