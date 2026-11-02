@@ -5407,3 +5407,6 @@ Hyperliquid lette. Controlli in avanti delle 12:39: niente di nuovo. Nessuna pro
 **Giro delle 16:53.** Notizie: 138 articoli nuovi da 20 fonti su 21; la pagina di Crypto Briefing era tutta nuova (qualche articolo
 fra un giro e l'altro può essere sfuggito: il giro è partito con mezz'ora di ritardo). Posizioni dei 20 trader di Hyperliquid lette.
 Controlli in avanti delle 16:56: niente di nuovo. Nessuna prova nuova.
+**Giro delle 20:18.** Notizie: 90 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette. Controlli in
+avanti delle 20:19: niente di nuovo. Stato delle 20:03 (0692): conto demo +2,20%, G1 +1,75%, G1N +4,44%, F5 −2,20% dall'inizio; nel
+demo nessuna moneta oltre il 2% di scarto, margine unico. Nessuna prova nuova.
