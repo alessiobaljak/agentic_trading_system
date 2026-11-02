@@ -5392,3 +5392,8 @@ delle 04:21: niente di nuovo. **Il primo confronto del demo fra le posizioni ver
 scarto totale 2,5% del conto, nessuna moneta oltre il 2% (dentro c'è la moneta con il nome in caratteri cinesi che Binance rifiuta);
 margine unico su tutte le monete; ribilancio del demo del 2 novembre: 46 ordini, 45 eseguiti a limite e 1 a mercato. Conto demo +2,92%
 dall'inizio, G1N nel paper +4,33%.
+**Mattino del 2 novembre.** Prova in avanti del programma 5: M-001c 224 su 400, M-002 e M-003 non passano, la seconda tornata N-001 35,
+N-002 23, N-003 6. Conto a tavolino: dati fino al 31 ottobre, le 22 monete entrate nell'universo sono le stesse (tutte monete);
+funding letto per 213 monete di Hyperliquid e 226 di dYdX. Stato del mattino (0691): conto demo +2,23%, G1 +1,60%, G1N +4,01%, F5 −2,30%
+dall'inizio; nelle 24 ore sono scese alcune monete piccole comprate (POL −3,4%, ALGO −2,6% su CoinGecko) mentre il Bitcoin venduto è salito
+un poco (+0,2%).

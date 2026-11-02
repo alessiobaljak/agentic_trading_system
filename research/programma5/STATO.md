@@ -116,6 +116,7 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento del 30 ottobre (dati fino al 28 ottobre): M-001c 178 su 400 (−0,76%, in corso); M-002 1.439 (+0,69%, non passa, p 0,24); M-003 526 (−2,15%, non passa, p 0,97); seconda tornata: N-001 25 trade chiusi (−4,07%), N-002 20 (−0,51%), N-003 5 (+1,67%).
   Aggiornamento del 31 ottobre (dati fino al 29 ottobre): M-001c 181 su 400 (in corso); M-002 1.463 (non passa, p 0,25); M-003 543 (non passa, p 0,98); seconda tornata: N-001 25 trade chiusi, N-002 20, N-003 5 (invariati).
   Aggiornamento del 1° novembre (dati fino al 30 ottobre): M-001c 215 su 400 (in corso); M-002 1.513 (non passa, p 0,25); M-003 570 (non passa, p 0,98); seconda tornata: N-001 34 trade chiusi, N-002 21, N-003 6.
+  Aggiornamento del 2 novembre (dati fino al 31 ottobre): M-001c 224 su 400 (in corso); M-002 1.539 (non passa, p 0,23); M-003 583 (non passa, p 0,97); seconda tornata: N-001 35 trade chiusi, N-002 23, N-003 6.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
