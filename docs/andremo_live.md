@@ -5404,3 +5404,6 @@ portafoglio copiato si scala a 2 come G1; 94 monete in tutto. Il primo conto si 
 candele di oggi.
 **Giro delle 12:36.** Notizie: 116 articoli nuovi, tutte e 21 le fonti (il lunedì i giornali scrivono di più); posizioni dei 20 trader di
 Hyperliquid lette. Controlli in avanti delle 12:39: niente di nuovo. Nessuna prova nuova.
+**Giro delle 16:53.** Notizie: 138 articoli nuovi da 20 fonti su 21; la pagina di Crypto Briefing era tutta nuova (qualche articolo
+fra un giro e l'altro può essere sfuggito: il giro è partito con mezz'ora di ritardo). Posizioni dei 20 trader di Hyperliquid lette.
+Controlli in avanti delle 16:56: niente di nuovo. Nessuna prova nuova.
