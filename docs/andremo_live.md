@@ -5378,3 +5378,12 @@ sistemare); lo stop sul conto è attivo, con il massimo contato dalla ripartenza
 confronto fra posizioni vere e volute parte dopo il ribilancio di stanotte. Conto demo +3,33% dall'inizio. Nessuna prova nuova: la coda
 delle idee con dati gratuiti e un perché forte è vuota; le misure in avanti nuove (HLI, DXI, la copia dei trader di Hyperliquid)
 partono domani.
+
+### 2 novembre 2026 (00:25 UTC)
+
+**Giro delle 00:18.** Notizie: 31 articoli nuovi, tutte e 21 le fonti. Controlli in avanti delle 00:21: niente di nuovo. **Partita la
+copia dei trader di Hyperliquid**: scelti i 20 conti della settimana fra 48.241 in classifica (conto da almeno 1,06 milioni, rendimento
+del mese fra +93% e +409%: usano molta leva), lette le posizioni di tutti e 20 (`trader_copiati/hyperliquid/`). Ribilanci della notte
+(log 0689): F5 alle 00:09, il ribilancio del lunedì (26 long e 25 short, conto 9.852,92: −1,47% dall'inizio); G1 alle 00:13 (27 e 25,
+10.274,39: +2,74%); G11 alle 00:17 (30 e 22, 10.404,61: +4,05%); G1N e il demo dopo le 00:20, nel prossimo stato. Da oggi contano i
+giorni di HLI e DXI.
