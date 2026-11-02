@@ -5402,3 +5402,5 @@ Controlli in avanti delle 08:30: niente di nuovo. Scritto il conto della copia d
 20 conti scelti, 14 hanno posizioni sui perpetui (gli altri 6 hanno i soldi altrove); la loro leva media è circa 7,5 volte il conto, il
 portafoglio copiato si scala a 2 come G1; 94 monete in tutto. Il primo conto si fa domani, quando l'archivio di Binance pubblica le
 candele di oggi.
+**Giro delle 12:36.** Notizie: 116 articoli nuovi, tutte e 21 le fonti (il lunedì i giornali scrivono di più); posizioni dei 20 trader di
+Hyperliquid lette. Controlli in avanti delle 12:39: niente di nuovo. Nessuna prova nuova.
