@@ -5397,3 +5397,8 @@ N-002 23, N-003 6. Conto a tavolino: dati fino al 31 ottobre, le 22 monete entra
 funding letto per 213 monete di Hyperliquid e 226 di dYdX. Stato del mattino (0691): conto demo +2,23%, G1 +1,60%, G1N +4,01%, F5 −2,30%
 dall'inizio; nelle 24 ore sono scese alcune monete piccole comprate (POL −3,4%, ALGO −2,6% su CoinGecko) mentre il Bitcoin venduto è salito
 un poco (+0,2%).
+**Giro delle 08:28.** Notizie: 25 articoli nuovi, tutte e 21 le fonti; posizioni dei trader di Hyperliquid lette (4 giri da stanotte).
+Controlli in avanti delle 08:30: niente di nuovo. Scritto il conto della copia dei trader (`trader_copiati/conto_hyperliquid.py`): dei
+20 conti scelti, 14 hanno posizioni sui perpetui (gli altri 6 hanno i soldi altrove); la loro leva media è circa 7,5 volte il conto, il
+portafoglio copiato si scala a 2 come G1; 94 monete in tutto. Il primo conto si fa domani, quando l'archivio di Binance pubblica le
+candele di oggi.
