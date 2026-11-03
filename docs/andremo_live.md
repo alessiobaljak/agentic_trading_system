@@ -5418,3 +5418,6 @@ in avanti delle 00:22: niente di nuovo. Ribilanci della notte (log 0693), puliti
 +1,60%), G11 alle 00:13 (30 e 23, 10.308,05: +3,08%), G1N alle 00:17 (27 e 25, 10.432,74: +4,33%), il demo alle 00:18 (33 ordini limite, 1
 rifiutato, la solita moneta). Il conto della copia dei trader non ha ancora i prezzi: l'archivio di Binance non ha pubblicato le candele
 del 2 novembre; si rifà nel prossimo giro.
+**Giro delle 04:17.** Notizie: 37 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (9 giri). Controlli in
+avanti delle 04:23: niente di nuovo. Il conto della copia dei trader aspetta ancora le candele del 2 novembre: l'archivio pubblico di
+Binance alle 04:22 non le aveva (risposta 404); di solito escono con un giorno e mezzo di ritardo.
