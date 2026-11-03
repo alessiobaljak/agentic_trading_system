@@ -5435,3 +5435,7 @@ fisse, il lunedì il riepilogo settimanale al proprietario (la regola del 1° no
 **Giro delle 08:17.** Notizie: 28 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (11 giri); il conto
 della copia aspetta ancora le candele del 2 novembre. Controlli in avanti delle 08:20: CT compare fra le monete su Coinbase, ma scambia lì
 dal 19 ottobre e il perpetuo di Binance ha solo un mese: non è un evento nuovo per la misura dell'effetto Coinbase. Nessuna prova nuova.
+**Giro delle 12:19.** Notizie: 98 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (12 giri).
+Controlli in avanti delle 12:23: niente di nuovo. **Il primo conto della copia dei trader di Hyperliquid** (le candele del 2 novembre sono
+uscite; `trader_copiati/HYPERLIQUID_CONTO.md`): dal 2 novembre all'01:00 UTC, 20 ore, **+3,22%** (prezzo +3,38%, spese −0,16%; il funding
+del 2 novembre non è ancora nel pannello), esposizione 2, la leva dei 20 conti prima di scalare 7,5 volte. Un giorno solo: non dice niente.
