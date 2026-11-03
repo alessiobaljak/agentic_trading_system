@@ -71,6 +71,7 @@ cominciano a scambiare contro il dollaro su Coinbase). Si rifà il conto quando 
 | 2026-11-03 08:20 | **CT** compare nell'elenco perché il perpetuo CTUSDT è entrato nel pannello: su Coinbase scambia dal 19 ottobre (prima del 25) e il perpetuo c'è solo dal 1° ottobre (meno di 30 giorni prima): **non è un evento nuovo**; nient'altro oltre STABLE |
 | 2026-11-03 12:23 | nessuna oltre STABLE (e CT, già vista) |
 | 2026-11-03 16:22 | nessuna oltre STABLE (e CT, già vista) |
+| 2026-11-03 20:22 | nessuna oltre STABLE (e CT, già vista) |
 
 **Gli eventi nuovi** (la regola della prova 105 così com'è: short il perpetuo di Binance e long il Bitcoin all'apertura del giorno dopo
 il primo giorno di scambi su Coinbase, uscita a +30% o dopo 7 giorni; il conto si fa quando sono almeno 30, con la regola dei simboli
