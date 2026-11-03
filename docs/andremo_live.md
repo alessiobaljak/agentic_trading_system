@@ -5439,3 +5439,5 @@ dal 19 ottobre e il perpetuo di Binance ha solo un mese: non è un evento nuovo 
 Controlli in avanti delle 12:23: niente di nuovo. **Il primo conto della copia dei trader di Hyperliquid** (le candele del 2 novembre sono
 uscite; `trader_copiati/HYPERLIQUID_CONTO.md`): dal 2 novembre all'01:00 UTC, 20 ore, **+3,22%** (prezzo +3,38%, spese −0,16%; il funding
 del 2 novembre non è ancora nel pannello), esposizione 2, la leva dei 20 conti prima di scalare 7,5 volte. Un giorno solo: non dice niente.
+**Giro delle 16:18.** Notizie: 127 articoli nuovi da 19 fonti su 21 (la pagina di Crypto Briefing era tutta nuova); posizioni dei 20
+trader di Hyperliquid lette. Controlli in avanti delle 16:22: niente di nuovo. Nessuna prova nuova.
