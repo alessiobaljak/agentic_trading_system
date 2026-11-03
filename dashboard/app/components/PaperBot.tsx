@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { onValue, ref, serverTimestamp, set } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 import AndamentoPaper from './AndamentoPaper';
+import DiarioPaper from './DiarioPaper';
 
 /**
  * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5, G1 e G11 (bot/portafoglio/f5.py) e le monete
@@ -228,6 +229,8 @@ export default function PaperBot() {
       </p>
 
       <AndamentoPaper />
+      <div style={{ marginTop: 10 }} />
+      <DiarioPaper />
       <div style={{ marginTop: 10 }} />
 
       <Portafoglio ramo="paper_f5" titolo="Funding con la banda, cambio ogni lunedì (F5)"

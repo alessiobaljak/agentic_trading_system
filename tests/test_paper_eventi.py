@@ -154,6 +154,10 @@ def test_al_massimo_20_aperte(tmp_path):
     _tick(p, b, D * 86400.0 + 400)
     assert len(p.carica()["aperte"]) == ev.MAX_APERTE
     assert fb.get_rtdb("/paper_eventi/stato")["aperte_n3"] == ev.MAX_APERTE
+    import time
+    g = time.strftime("%Y-%m-%d", time.gmtime(D * 86400))
+    oggi = fb.get_rtdb("/paper_eventi/diario/" + g)
+    assert oggi["aperte"] == ev.MAX_APERTE and oggi["equity"] > 0 and fb.get_rtdb("/paper_eventi/giorni/" + g) == oggi["equity"]
 
 
 def test_primo_passo_corto():

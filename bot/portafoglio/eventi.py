@@ -297,6 +297,9 @@ class PaperEventi:
             "aperte_e4": sum(1 for p in aperte.values() if p["tipo"] == "E4"),
             "chiuse": n, "rendimento_medio": (float(st.get("chiuse_somma_r", 0.0)) / n) if n else None,
             "e4_in_attesa": len(st.get("e4_attese") or []) + len(st.get("e4_eventi") or []), "aggiornato": now})
+        oggi = time.strftime("%Y-%m-%d", time.gmtime(now))
+        self.fb.set_rtdb(f"/paper_eventi/giorni/{oggi}", round(e, 2))
+        self.fb.set_rtdb(f"/paper_eventi/diario/{oggi}", {"equity": round(e, 2), "aperte": len(aperte)})
         self.fb.set_rtdb("/paper_eventi/aperte", {
             i: {"tipo": p["tipo"], "simbolo": p["simbolo"], "entrata": p["entrata_ms"], "p0": p["p0"],
                 "rendimento_ora": round(rendimento(float(p["p0"]), mark.get(p["simbolo"], float(p["p0"])), float(p["b0"]),

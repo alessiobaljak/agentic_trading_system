@@ -454,8 +454,11 @@ class PaperF5:
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(m * 86400))
         if self.fb is not None:
+            prima = {s for s, q in vecchie.items() if q}
+            dopo = {s for s, q in nuove.items() if q}
             self.fb.set_rtdb(f"{self.RAMO}/ribilanciamenti/{data}", {
                 "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
+                "entrate": len(dopo - prima), "uscite": len(prima - dopo),
                 "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now,
                 "funding_medio_7": getattr(self, "_funding_medio_7", None),
@@ -580,7 +583,12 @@ class PaperF5:
             "limite_variazioni": int(st.get("limite_variazioni", 0)), "limite_eseguite": int(st.get("limite_eseguite", 0)),
             "ordini_in_attesa": len((st.get("ordini") or {}).get("variazioni") or {}),
             "funding_totale": round(float(st.get("funding_totale", 0.0)), 2), "aggiornato": now})
-        self.fb.set_rtdb(f"{self.RAMO}/giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(e, 2))
+        oggi = time.strftime('%Y-%m-%d', time.gmtime(now))
+        self.fb.set_rtdb(f"{self.RAMO}/giorni/{oggi}", round(e, 2))
+        # il diario del giorno per la dashboard (il proprietario, 3 nov 2026: «un grafico [...] giornalmente, sia profitto che win rate
+        # che percentuali, posizioni aperte e chiuse»): l'ultimo valore del giorno e le posizioni aperte
+        self.fb.set_rtdb(f"{self.RAMO}/diario/{oggi}", {"equity": round(e, 2), "long": sum(1 for w in pesi.values() if w > 0),
+                                                        "short": sum(1 for w in pesi.values() if w < 0)})
 
 
 class PaperG1(PaperF5):

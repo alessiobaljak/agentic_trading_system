@@ -482,7 +482,10 @@ class DemoG1:
         data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
         chiave = data if solo is None else f"{time.strftime('%Y-%m-%d', time.gmtime(now))}-eventi-{time.strftime('%H%M', time.gmtime(now))}"
         st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati, "chiave": chiave}})
+        voluti = {s for s, w in pesi.items() if w and (solo is None or s in solo)}
+        tenuti = {s for s, q in posizioni.items() if q and (solo is None or s in solo)}
         self._scrivi(f"ribilanciamenti/{chiave}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
+                                                   "entrate": len(voluti - tenuti), "uscite": len(tenuti - voluti),
                                                    "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now,
                                                    "solo_eventi": solo is not None})
         cosa = f"decisione G1 del {data}" if solo is None else "operazioni a eventi cambiate"
@@ -535,5 +538,8 @@ class DemoG1:
                                "ordini_in_attesa": len((st.get("ordini") or {}).get("lista") or []), "aggiornato": now,
                                "massimo": round(st["massimo"], 2), "dal_massimo": equity / st["massimo"] - 1,
                                "stop_a": round((1 - STOP_CONTO) * st["massimo"], 2)})
-        self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
+        oggi = time.strftime('%Y-%m-%d', time.gmtime(now))
+        self._scrivi(f"giorni/{oggi}", round(equity, 2))
+        self._scrivi(f"diario/{oggi}", {"equity": round(equity, 2), "long": sum(1 for v in posizioni.values() if v > 0),
+                                        "short": sum(1 for v in posizioni.values() if v < 0)})
         return st

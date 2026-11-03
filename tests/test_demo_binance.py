@@ -131,6 +131,9 @@ def test_decisione_di_g1_sul_demo(tmp_path):
     mercato = [q for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order" and q["type"] == "MARKET"]
     assert mercato == [{"symbol": "BUSDT", "side": "SELL", "type": "MARKET", "quantity": "99.986", **{k: mercato[0][k] for k in ("timestamp", "recvWindow", "signature")}}]
     assert fb.get_rtdb("/demo_binance/stato")["equity"] == 10000.0
+    rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24")
+    assert rib["entrate"] == 2 and rib["uscite"] == 0
+    assert fb.get_rtdb("/demo_binance/diario/2026-10-24") == {"equity": 10000.0, "long": 0, "short": 0}
 
 
 def test_senza_chiave_non_chiama_binance(tmp_path, monkeypatch):

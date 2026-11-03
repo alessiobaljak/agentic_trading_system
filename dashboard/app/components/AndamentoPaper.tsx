@@ -20,6 +20,7 @@ const SERIE: { ramo: string; nome: string; colore: string; base: 'capitale' | 'c
   { ramo: 'paper_g11', nome: 'G11 nel paper', colore: '#1baf7a', base: 'capitale' },
   { ramo: 'paper_g1n', nome: 'G1 neutra al mercato nel paper (dal 25 ottobre)', colore: '#8e5bd6', base: 'capitale' },
   { ramo: 'paper_f5', nome: 'F5 nel paper (dal 26 ottobre)', colore: '#eda100', base: 'capitale' },
+  { ramo: 'paper_eventi', nome: 'Eventi nel paper (giorni dal 3 novembre)', colore: '#5c6b7a', base: 'capitale' },
 ];
 
 type Stato = { equity?: number; capitale?: number; capitale_iniziale?: number; aggiornato?: number };

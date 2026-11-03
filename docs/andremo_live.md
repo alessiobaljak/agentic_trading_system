@@ -5421,3 +5421,10 @@ del 2 novembre; si rifà nel prossimo giro.
 **Giro delle 04:17.** Notizie: 37 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (9 giri). Controlli in
 avanti delle 04:23: niente di nuovo. Il conto della copia dei trader aspetta ancora le candele del 2 novembre: l'archivio pubblico di
 Binance alle 04:22 non le aveva (risposta 404); di solito escono con un giorno e mezzo di ritardo.
+**La scheda «Giorno per giorno» della dashboard** (il proprietario, 3 novembre: «un grafico che ti fa vedere paper e demo come stanno
+andando giornalmente, sia profitto che win rate che percentuali, posizioni aperte e chiuse»): `dashboard/app/components/DiarioPaper.tsx`,
+nella scheda del paper sotto il grafico dell'andamento. Una tabella con tutte le strategie (valore, dall'inizio, profitto, giorni in
+guadagno sul totale, giorno migliore e peggiore, posizioni aperte, entrate e uscite; per gli eventi le operazioni chiuse e quante in
+guadagno); toccando una riga, le barre del profitto di ogni giorno e la tabella dei giorni. Nel bot (`f5.py`, `eventi.py`,
+`demo_binance.py`): le entrate e le uscite di ogni ribilancio, il diario del giorno, e il valore di ogni giorno anche per gli eventi. Il
+grafico dell'andamento ha anche gli eventi. Tutti i 2.486 test passano, la dashboard si costruisce; chiesto il riavvio del bot.

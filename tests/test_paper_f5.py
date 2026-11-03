@@ -244,6 +244,10 @@ def test_g1_decide_ogni_giorno(tmp_path):
     assert fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))["universo"] == 30
     rib = fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))
     assert rib["funding_medio_7"] is not None and abs(rib["funding_medio_7"]) < 0.1      # il funding medio dell'universo (idea 45)
+    # il diario per la dashboard (3 nov 2026): le entrate e le uscite del ribilancio, e il valore e le posizioni del giorno
+    assert rib["entrate"] == rib["long"] + rib["short"] and rib["uscite"] == 0          # il primo ribilancio parte da zero
+    oggi = fb.get_rtdb("/paper_g1/diario/" + time.strftime("%Y-%m-%d", time.gmtime(now)))
+    assert oggi["equity"] > 0 and oggi["long"] + oggi["short"] > 0
     assert fb.get_rtdb("/paper_g1/prova")["funding_medio_7"] is not None
     scarto = fb.get_rtdb("/misure/scarto/" + time.strftime("%Y-%m-%d", time.gmtime(now)))
     assert len(scarto["per_moneta"]) == 30 and set(scarto["fasce"]) == {"1-10", "11-50"}
