@@ -5432,3 +5432,6 @@ grafico dell'andamento ha anche gli eventi. Tutti i 2.486 test passano, la dashb
 N-002 30, N-003 6. Conto a tavolino: dati fino al 1° novembre; entrate nell'universo nuove (AGT, AVA, CHIP, ERA, JCT, MAGMA, OGN): tutte
 monete (CHIP è il gettone di USD.AI su CoinGecko), niente da togliere. Corrette le istruzioni della routine del mattino: niente attese
 fisse, il lunedì il riepilogo settimanale al proprietario (la regola del 1° novembre).
+**Giro delle 08:17.** Notizie: 28 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (11 giri); il conto
+della copia aspetta ancora le candele del 2 novembre. Controlli in avanti delle 08:20: CT compare fra le monete su Coinbase, ma scambia lì
+dal 19 ottobre e il perpetuo di Binance ha solo un mese: non è un evento nuovo per la misura dell'effetto Coinbase. Nessuna prova nuova.
