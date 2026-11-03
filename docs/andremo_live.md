@@ -5428,3 +5428,7 @@ guadagno sul totale, giorno migliore e peggiore, posizioni aperte, entrate e usc
 guadagno); toccando una riga, le barre del profitto di ogni giorno e la tabella dei giorni. Nel bot (`f5.py`, `eventi.py`,
 `demo_binance.py`): le entrate e le uscite di ogni ribilancio, il diario del giorno, e il valore di ogni giorno anche per gli eventi. Il
 grafico dell'andamento ha anche gli eventi. Tutti i 2.486 test passano, la dashboard si costruisce; chiesto il riavvio del bot.
+**Mattino del 3 novembre.** Prova in avanti del programma 5: M-001c 228 su 400, M-002 e M-003 non passano, la seconda tornata N-001 43,
+N-002 30, N-003 6. Conto a tavolino: dati fino al 1° novembre; entrate nell'universo nuove (AGT, AVA, CHIP, ERA, JCT, MAGMA, OGN): tutte
+monete (CHIP è il gettone di USD.AI su CoinGecko), niente da togliere. Corrette le istruzioni della routine del mattino: niente attese
+fisse, il lunedì il riepilogo settimanale al proprietario (la regola del 1° novembre).
