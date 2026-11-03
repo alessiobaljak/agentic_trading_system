@@ -5410,3 +5410,11 @@ Controlli in avanti delle 16:56: niente di nuovo. Nessuna prova nuova.
 **Giro delle 20:18.** Notizie: 90 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette. Controlli in
 avanti delle 20:19: niente di nuovo. Stato delle 20:03 (0692): conto demo +2,20%, G1 +1,75%, G1N +4,44%, F5 −2,20% dall'inizio; nel
 demo nessuna moneta oltre il 2% di scarto, margine unico. Nessuna prova nuova.
+
+### 3 novembre 2026 (00:30 UTC)
+
+**Giro delle 00:18.** Notizie: 94 articoli nuovi, tutte e 21 le fonti; posizioni dei 20 trader di Hyperliquid lette (8 giri). Controlli
+in avanti delle 00:22: niente di nuovo. Ribilanci della notte (log 0693), puliti: G1 alle 00:09 (27 long e 25 short, conto 10.160,09:
++1,60%), G11 alle 00:13 (30 e 23, 10.308,05: +3,08%), G1N alle 00:17 (27 e 25, 10.432,74: +4,33%), il demo alle 00:18 (33 ordini limite, 1
+rifiutato, la solita moneta). Il conto della copia dei trader non ha ancora i prezzi: l'archivio di Binance non ha pubblicato le candele
+del 2 novembre; si rifà nel prossimo giro.
