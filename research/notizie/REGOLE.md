@@ -74,3 +74,10 @@ questo file** (comprese quelle scritte prima con le 52 e le 104 settimane):
 
 Per le notizie: la regola si è già provata sui titoli del 2026 (prova 147, `programma7/RISULTATI_OTTANTACINQUESIMA.md`); il primo calcolo
 con la nostra raccolta resta il 30 novembre solo perché la regola conta gli articoli dei 28 giorni prima.
+
+## Aggiunta del 4 novembre 2026: la seconda pagina di Crypto Briefing
+
+Il 2 e il 3 novembre la pagina di Crypto Briefing (30 articoli) è stata tre volte tutta nuova fra un giro e l'altro: qualche articolo
+sfuggiva. Da oggi si legge anche la seconda pagina (`cryptobriefing2` in `raccolta.py`); gli articoli già visti si riconoscono dal link,
+quindi non si contano due volte. Le fonti lette diventano 22 (la stessa testata con due pagine). La regola della prova in avanti non
+cambia: conta gli articoli, non le fonti.
