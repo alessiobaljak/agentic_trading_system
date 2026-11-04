@@ -5461,3 +5461,6 @@ delle 08:19: niente di nuovo. Nessuna prova nuova.
 **Giro delle 12:20.** Notizie: 100 articoli nuovi da 22 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Copia dei trader:
 dopo 44 ore **−0,18%** (prezzo +0,09%, spese −0,20%, funding +0,02%): il +3% del primo giorno è tornato indietro il secondo. Controlli
 in avanti delle 12:27: niente di nuovo. Nessuna prova nuova.
+**Giro delle 16:18.** Notizie: 141 articoli nuovi da 22 fonti su 22 (la prima pagina di Crypto Briefing era tutta nuova, la seconda
+ha coperto il resto); posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti delle 16:23: niente di nuovo. Nessuna prova
+nuova.
