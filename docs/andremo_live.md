@@ -5458,3 +5458,6 @@ DXI compaiono da domani (serve l'apertura del giorno dopo per il primo giorno). 
 (le candele del 3 novembre non sono ancora uscite).
 **Giro delle 08:18.** Notizie: 40 articoli nuovi da 22 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti
 delle 08:19: niente di nuovo. Nessuna prova nuova.
+**Giro delle 12:20.** Notizie: 100 articoli nuovi da 22 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Copia dei trader:
+dopo 44 ore **−0,18%** (prezzo +0,09%, spese −0,20%, funding +0,02%): il +3% del primo giorno è tornato indietro il secondo. Controlli
+in avanti delle 12:27: niente di nuovo. Nessuna prova nuova.
