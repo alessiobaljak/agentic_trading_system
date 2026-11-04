@@ -5452,3 +5452,7 @@ prima era tutta nuova tre volte: qualche articolo sfuggiva). Controlli in avanti
 (27 e 26, 10.382,33: +3,82%), il demo alle 00:18 (32 ordini limite, 1 rifiutato, la solita moneta).
 **Giro delle 04:18.** Notizie: 31 articoli nuovi da 22 fonti su 22 (nessuna pagina piena); posizioni dei 20 trader di Hyperliquid lette
 (16 giri); il conto della copia aspetta le candele del 3 novembre. Controlli in avanti delle 04:23: niente di nuovo. Nessuna prova nuova.
+**Mattino del 4 novembre.** Prova in avanti del programma 5: M-001c 230 su 400, M-002 e M-003 non passano, la seconda tornata N-001 48,
+N-002 31, N-003 23. Conto a tavolino: dati fino al 2 novembre, le monete entrate nell'universo sono le stesse di ieri (tutte monete); HLI e
+DXI compaiono da domani (serve l'apertura del giorno dopo per il primo giorno). Copia dei trader di Hyperliquid: +3,24% nelle prime 20 ore
+(le candele del 3 novembre non sono ancora uscite).
