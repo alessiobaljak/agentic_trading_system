@@ -5456,3 +5456,5 @@ prima era tutta nuova tre volte: qualche articolo sfuggiva). Controlli in avanti
 N-002 31, N-003 23. Conto a tavolino: dati fino al 2 novembre, le monete entrate nell'universo sono le stesse di ieri (tutte monete); HLI e
 DXI compaiono da domani (serve l'apertura del giorno dopo per il primo giorno). Copia dei trader di Hyperliquid: +3,24% nelle prime 20 ore
 (le candele del 3 novembre non sono ancora uscite).
+**Giro delle 08:18.** Notizie: 40 articoli nuovi da 22 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti
+delle 08:19: niente di nuovo. Nessuna prova nuova.
