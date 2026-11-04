@@ -5450,3 +5450,5 @@ trader di Hyperliquid lette. Controlli in avanti delle 16:22: niente di nuovo. N
 prima era tutta nuova tre volte: qualche articolo sfuggiva). Controlli in avanti delle 00:23: niente di nuovo. Ribilanci della notte (log
 0696), puliti: G1 alle 00:09 (27 long e 26 short, conto 10.100,02: +1,00%), G11 alle 00:13 (27 e 22, 10.280,00: +2,80%), G1N alle 00:17
 (27 e 26, 10.382,33: +3,82%), il demo alle 00:18 (32 ordini limite, 1 rifiutato, la solita moneta).
+**Giro delle 04:18.** Notizie: 31 articoli nuovi da 22 fonti su 22 (nessuna pagina piena); posizioni dei 20 trader di Hyperliquid lette
+(16 giri); il conto della copia aspetta le candele del 3 novembre. Controlli in avanti delle 04:23: niente di nuovo. Nessuna prova nuova.
