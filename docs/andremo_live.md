@@ -5443,3 +5443,10 @@ del 2 novembre non è ancora nel pannello), esposizione 2, la leva dei 20 conti 
 trader di Hyperliquid lette. Controlli in avanti delle 16:22: niente di nuovo. Nessuna prova nuova.
 **Giro delle 20:18.** Notizie: 102 articoli nuovi, tutte e 21 le fonti (la pagina di Crypto Briefing di nuovo tutta nuova); posizioni dei
 20 trader di Hyperliquid lette. Controlli in avanti delle 20:22: niente di nuovo. Nessuna prova nuova.
+
+### 4 novembre 2026 (00:30 UTC)
+
+**Giro delle 00:18.** Notizie: 95 articoli nuovi da 22 fonti su 22; da oggi si legge anche la seconda pagina di Crypto Briefing (la
+prima era tutta nuova tre volte: qualche articolo sfuggiva). Controlli in avanti delle 00:23: niente di nuovo. Ribilanci della notte (log
+0696), puliti: G1 alle 00:09 (27 long e 26 short, conto 10.100,02: +1,00%), G11 alle 00:13 (27 e 22, 10.280,00: +2,80%), G1N alle 00:17
+(27 e 26, 10.382,33: +3,82%), il demo alle 00:18 (32 ordini limite, 1 rifiutato, la solita moneta).
