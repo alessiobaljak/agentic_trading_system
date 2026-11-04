@@ -5464,3 +5464,5 @@ in avanti delle 12:27: niente di nuovo. Nessuna prova nuova.
 **Giro delle 16:18.** Notizie: 141 articoli nuovi da 22 fonti su 22 (la prima pagina di Crypto Briefing era tutta nuova, la seconda
 ha coperto il resto); posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti delle 16:23: niente di nuovo. Nessuna prova
 nuova.
+**Giro delle 20:18.** Notizie: 111 articoli nuovi da 21 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti
+delle 20:21: niente di nuovo. Nessuna prova nuova.
