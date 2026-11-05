@@ -5535,3 +5535,9 @@ ha motivo per ora. Prossimo passo: scomporre il guadagno del demo in prezzo, spe
 legge dal conto il funding incassato e le commissioni pagate davvero, giorno per giorno dal 24 ottobre, e il paper scrive i suoi totali
 di spese e funding nel diario del giorno; il rapporto di stato li mette a confronto. Solo letture, gli ordini non cambiano. Quattro test
 nuovi, 2.496 test passano. Riavvio del bot chiesto alla macchina (ops 0699), poi il log e lo stato per controllare.
+**Migliorare G1, voci 2-3, prima lettura (22:56)**: dal 24 ottobre al 5 novembre il demo ha incassato **72,54 USDT di funding** e pagato
+**8,42 USDT di commissioni**, su un guadagno di 239,92 USDT: funding +1,45% del capitale, commissioni −0,17%, prezzo circa +3,5%
+(`ops/results/0703-6nov-stato-entrate-dal-24-ottobre.md`). Il funding del giorno è salito da 0,02-0,07% a fine ottobre a 0,16-0,23% dal
+30 ottobre. Corretto il rapporto (i giorni prima del diario prendono l'equity dai valori del giorno; totali in USDT; un test). **Capito
+oggi**: sul conto vero G1 esegue come il paper (12 giorni, differenza −0,02% al giorno, dentro il rumore), il funding c'è davvero (un
+terzo del guadagno) e le commissioni sono piccole (circa un trentesimo del funding negli ultimi giorni).

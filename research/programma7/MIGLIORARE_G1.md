@@ -60,3 +60,10 @@ separato prima del paper).
   tocca gli ordini); il paper scrive nel diario del giorno i totali di spese e funding (`bot/portafoglio/f5.py`); il rapporto di stato
   ha una seconda tabella, funding e spese del demo contro il paper in % dell'equity (`scripts/state_snapshot.py`). Quattro test
   nuovi, 2.496 test passano. Riavvio del bot chiesto alla macchina (ops 0699).
+* **5 novembre 2026, 22:56 UTC, voci 2-3, prima lettura** (`ops/results/0703-6nov-stato-entrate-dal-24-ottobre.md`): dal 24 ottobre al
+  5 novembre (13 giorni) il demo ha **incassato 72,54 USDT di funding** e **pagato 8,42 USDT di commissioni**, su un guadagno totale di
+  239,92 USDT (equity 5.232,79 da 4.992,87). Quindi, sul capitale iniziale: funding +1,45%, commissioni −0,17%, prezzo circa +3,5%
+  (il resto, per differenza). In proporzione all'anno (13 giorni sono pochi): funding circa +41%, commissioni circa −4,7%. Il funding
+  del giorno è salito da 0,02-0,07% a fine ottobre a 0,16-0,23% dal 30 ottobre. Le commissioni pesano più nei giorni dei ribilanci
+  grandi (0,043% il 24 ottobre, il primo giorno). **Capito**: la parte del funding di G1 sul conto vero c'è (circa un terzo del guadagno
+  di questi giorni), e le commissioni sono piccole. Il confronto con il funding atteso dal paper parte dal 6 novembre.
