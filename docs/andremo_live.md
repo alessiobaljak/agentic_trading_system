@@ -5495,3 +5495,11 @@ spostata in una funzione: universi e pesi identici a prima su tutte le settimane
 passano). Primi due giorni (2-3 novembre): **HLI −1,75%** contro G1 sulle stesse monete −0,22%; **DXI −0,79%** contro −0,37%. Due
 giorni non dicono niente. Il proprietario ha chiesto se si possono copiare le balene sulla blockchain: risposto (la copia di Hyperliquid
 lo fa già; sulle altre catene lo storico gratuito non è pulito) e proposto un secondo gruppo di Hyperliquid con i 20 conti più grandi.
+**Copia dei trader di Hyperliquid, con i prezzi del 4 novembre: −7,90% dopo 68 ore** (prezzo −7,55%, spese −0,32%, funding +0,06%;
+`trader_copiati/HYPERLIQUID_CONTO.md`). Quasi tutto in un tratto: dalle 13:00 alle 17:00 UTC del 4 novembre −7,37%, quando l'Ether è
+salito del 5,22% in 4 ore (Bitcoin +2,85%, XRP +2,93%; prezzi orari di Binance controllati). **Capito**: il portafoglio copiato è in
+pratica uno short sull'Ether: venduto per circa 1,75 su un'esposizione di 2 in tutti i giri (Ether −1,0/−1,2, Bitcoin −0,3). All'ultimo
+giro 13 dei 14 conti con posizioni aperte erano corti sull'Ether, con leve da 7 a 16 volte il conto; 6 dei 20 conti scelti il 2
+novembre hanno ora il conto da perpetui quasi vuoto. La media dei pesi la decidono i conti con più leva: copiare «i migliori del mese»
+oggi vuol dire copiare una sola scommessa molto spinta. Da guardare: una variante con ogni conto portato a esposizione 1 prima della
+media (regola da scrivere prima, solo in avanti) e il gruppo dei 20 conti più grandi.
