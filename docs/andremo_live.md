@@ -5509,3 +5509,8 @@ aggiunta del 5 novembre, 08:40 UTC) e solo in avanti: (1) gli stessi 20 conti, o
 la direzione di ognuno, non la sua leva); (2) le «balene», i 20 conti più grandi della classifica con guadagno del mese sopra zero, scelti
 la prima volta al prossimo giro (12:17) e poi ogni lunedì. Il gruppo di prima resta identico (−7,90% rifatto con il codice nuovo: stesso
 numero). Tre test nuovi; 2.491 test passano.
+**Giro delle 12:18.** Notizie: 89 articoli nuovi da 21 fonti su 22. Scelte le prime 20 «balene» di Hyperliquid (conti da 31 a 211
+milioni di dollari, `trader_copiati/hyperliquid/scelti_balene_2026-11-05.json`); letti 39 conti (uno sta in tutti e due i gruppi). Al
+primo giro, prima di qualunque prezzo: le balene sono anche loro più vendute che comprate (−1,91 su 2: Bitcoin −0,56, Hyperliquid −0,42,
+Ether −0,33), con leva media 4,2 contro 8,6 dei migliori del mese; i migliori del mese a esposizione uguale −0,98 su 1,33 (Ether −0,74).
+Controlli in avanti delle 12:24: niente di nuovo. Nessuna prova nuova.
