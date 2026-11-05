@@ -5503,3 +5503,9 @@ giro 13 dei 14 conti con posizioni aperte erano corti sull'Ether, con leve da 7 
 novembre hanno ora il conto da perpetui quasi vuoto. La media dei pesi la decidono i conti con più leva: copiare «i migliori del mese»
 oggi vuol dire copiare una sola scommessa molto spinta. Da guardare: una variante con ogni conto portato a esposizione 1 prima della
 media (regola da scrivere prima, solo in avanti) e il gruppo dei 20 conti più grandi.
+**Giro delle 08:17.** Notizie: 30 articoli nuovi da 21 fonti su 22; posizioni dei 20 trader lette. Controlli in avanti delle 08:30:
+niente di nuovo. Ricerca: **due gruppi nuovi nella copia di Hyperliquid**, regole scritte prima (`trader_copiati/HYPERLIQUID.md`,
+aggiunta del 5 novembre, 08:40 UTC) e solo in avanti: (1) gli stessi 20 conti, ognuno portato a esposizione 2 prima della media (si copia
+la direzione di ognuno, non la sua leva); (2) le «balene», i 20 conti più grandi della classifica con guadagno del mese sopra zero, scelti
+la prima volta al prossimo giro (12:17) e poi ogni lunedì. Il gruppo di prima resta identico (−7,90% rifatto con il codice nuovo: stesso
+numero). Tre test nuovi; 2.491 test passano.

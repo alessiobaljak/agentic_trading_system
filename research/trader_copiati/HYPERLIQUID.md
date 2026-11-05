@@ -53,3 +53,25 @@ questo file** (comprese quelle scritte prima con le 52 e le 104 settimane):
   veri li decide il proprietario quando li chiede in modo esplicito** (regola di `CLAUDE.md`: `DRY_RUN` resta vero fino ad allora);
 * le idee nate dai dati, che sul passato non si possono giudicare in modo pulito, vanno in paper (soldi finti) appena si può, e il
   proprietario decide quando ha visto abbastanza.
+
+## Aggiunta del 5 novembre 2026 (08:40 UTC): due gruppi in più, solo in avanti
+
+Scritto dopo aver visto il conto dei primi 3 giorni (−7,90% in 68 ore, quasi tutto in 4 ore del 4 novembre, quando l'Ether è salito del
+5,2%) e la ragione: il portafoglio copiato era venduto per circa 1,75 su 2, quasi tutto Ether, perché la media dei pesi la decidono i
+conti con più leva (13 dei 14 conti con posizioni erano corti sull'Ether, con leve da 7 a 16). Il proprietario, lo stesso giorno, ha
+chiesto se si possono copiare «le balene». I due gruppi nuovi si misurano **solo da qui in avanti**: i giorni già visti non contano.
+Il gruppo di prima resta com'è (regola della sezione 2, senza cambi).
+
+* **Gruppo «balene» (B)**: dalla stessa classifica pubblica, i **20 conti con il valore del conto più alto** fra quelli con volume del
+  mese di almeno 10 milioni e guadagno del mese sopra zero (il conto è almeno 1 milione per costruzione). La prima scelta si fa **subito**
+  (al primo giro dopo questa aggiunta, il 5 novembre) e vale fino alla scelta di lunedì 9 novembre; poi ogni lunedì al primo giro dopo
+  le 00:00 UTC, come il gruppo di prima. Le posizioni si leggono a ogni giro allo stesso modo (un conto che sta nei due gruppi si legge
+  una volta). Il portafoglio copiato si fa come nella sezione 2 (media dei pesi dei conti, esposizione scalata a 2 se la supera).
+* **Gruppo «a esposizione uguale» (P)**: gli **stessi conti del gruppo di prima**, ma ogni conto con posizioni abbinate ai perpetui di
+  Binance viene portato a esposizione totale 2 (i suoi pesi abbinati moltiplicati per 2 diviso la loro somma in valore assoluto) prima
+  della media; i conti senza posizioni abbinate contano zero. Così un conto con leva 16 pesa quanto uno con leva 2: si copia la
+  direzione di ognuno, non la sua leva. Dal primo giro dopo questa aggiunta.
+* **Il conto**: per tutti e due come nella sezione 2 (pesi tenuti fino al giro dopo, prezzi orari di Binance, costo a mercato sui cambi,
+  funding di Binance), nello stesso file `HYPERLIQUID_CONTO.md`, accanto al gruppo di prima e a G1 negli stessi giorni quando c'è.
+* **Niente attese fisse** (aggiunta del 1° novembre): i numeri vanno al proprietario ogni lunedì; nessuno dei tre gruppi entra nel bot
+  senza una regola scritta prima e il suo sì.
