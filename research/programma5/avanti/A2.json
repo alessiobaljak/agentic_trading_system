@@ -1,19 +1,19 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-11-02.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-11-03.zip",
  "procedure": {
   "N-001": {
-   "trade": 48,
+   "trade": 49,
    "netto": {
-    "n": 48,
-    "giorni": 12,
-    "media": -0.029452988430678895,
-    "basso": -0.06905978391521542,
-    "alto": 0.028024928152286025,
-    "p": 0.8747125287471252
+    "n": 49,
+    "giorni": 13,
+    "media": -0.030910817883278967,
+    "basso": -0.07100627110084054,
+    "alto": 0.02410617992653675,
+    "p": 0.8874112588741125
    },
-   "netto_doppio": -0.0312529884306789,
-   "caso_netto": -0.007771740105085989,
-   "senza_migliore": -0.04842153024620273,
+   "netto_doppio": -0.03271081788327897,
+   "caso_netto": -0.009428839368309712,
+   "senza_migliore": -0.049562075927982716,
    "per_moneta": {
     "1000PEPEUSDT": {
      "trade": 1,
@@ -36,8 +36,8 @@
      "netto": 0.051718661040685975
     },
     "GUSDT": {
-     "trade": 2,
-     "netto": -0.04439169140689764
+     "trade": 3,
+     "netto": -0.06322333814062571
     },
     "IOSTUSDT": {
      "trade": 6,
@@ -108,7 +108,7 @@
      "netto": -0.12475331465196636
     }
    },
-   "esito": "in corso (48 trade chiusi su 400)"
+   "esito": "in corso (49 trade chiusi su 400)"
   },
   "N-002": {
    "trade": 31,
@@ -121,7 +121,7 @@
     "p": 0.31286871312868714
    },
    "netto_doppio": 0.0020516358377860324,
-   "caso_netto": -0.0022612790974971373,
+   "caso_netto": -0.0024071324819533967,
    "senza_migliore": -0.0027809974820985264,
    "per_moneta": {
     "AAVEUSDT": {
@@ -224,18 +224,18 @@
    "esito": "in corso (31 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 23,
+   "trade": 27,
    "netto": {
-    "n": 23,
-    "giorni": 6,
-    "media": -0.031000459690248113,
-    "basso": -0.07404650285333218,
-    "alto": 0.06249542862826428,
-    "p": 0.8264173582641736
+    "n": 27,
+    "giorni": 7,
+    "media": -0.03483276333327311,
+    "basso": -0.06858252219888708,
+    "alto": 0.034745630919708094,
+    "p": 0.9099090090990901
    },
-   "netto_doppio": -0.03511333940920391,
-   "caso_netto": 0.00039021468146526015,
-   "senza_migliore": -0.0399344557673431,
+   "netto_doppio": -0.03896488180264296,
+   "caso_netto": -0.002523607759003825,
+   "senza_migliore": -0.04253969476939291,
    "per_moneta": {
     "1000BONKUSDT": {
      "trade": 1,
@@ -257,6 +257,14 @@
      "trade": 1,
      "netto": -0.04814048296721041
     },
+    "CVCUSDT": {
+     "trade": 1,
+     "netto": -0.05627617944582598
+    },
+    "EIGENUSDT": {
+     "trade": 1,
+     "netto": -0.03754037499089082
+    },
     "IOSTUSDT": {
      "trade": 1,
      "netto": 0.05346980808746239
@@ -269,6 +277,10 @@
      "trade": 1,
      "netto": 0.007846272826188418
     },
+    "MORPHOUSDT": {
+     "trade": 1,
+     "netto": -0.06730662255173969
+    },
     "ONDOUSDT": {
      "trade": 1,
      "netto": -0.0645383045396389
@@ -276,6 +288,10 @@
     "OPUSDT": {
      "trade": 1,
      "netto": -0.052133504301833215
+    },
+    "PENDLEUSDT": {
+     "trade": 1,
+     "netto": -0.06635086013421088
     },
     "PENGUUSDT": {
      "trade": 1,
@@ -322,7 +338,7 @@
      "netto": -0.006239315950915631
     }
    },
-   "esito": "in corso (23 trade chiusi su 400)"
+   "esito": "in corso (27 trade chiusi su 400)"
   }
  }
 }
