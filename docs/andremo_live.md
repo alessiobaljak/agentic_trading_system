@@ -5525,3 +5525,9 @@ con un perché forte); il piano è `research/programma7/MIGLIORARE_G1.md` (6 voc
 incassato, monete che il demo non ha, meno scambi solo se le spese vere sono più alte, l'ora della decisione). Voce 1 avviata: il rapporto
 di stato ha una sezione nuova che confronta giorno per giorno il rendimento di G1 sul demo e nel paper (`scripts/state_snapshot.py`, due
 test); richiesta «stato» al canale ops (0698) per la prima lettura.
+**Migliorare G1, voce 1, prima lettura (21:15)**: dal 25 ottobre al 5 novembre (12 giorni) **G1 sul demo +6,80%, nel paper +6,92%**;
+differenza media −0,011% al giorno con un'oscillazione di 0,62% al giorno, cioè nessun costo nascosto misurabile: gli ordini veri
+eseguono come il paper ipotizza (`ops/results/0698-5nov-stato-demo-contro-paper.md`). Due giorni che si compensano (29 ottobre +1,21%,
+30 ottobre −1,54%) vengono probabilmente dall'ora dell'ultimo valore del giorno. Demo a 5.277,11 USDT (+5,69% dal 24 ottobre), ordini
+limite eseguiti 435 su 453. **Capito oggi**: l'ipotesi più fragile di G1 (gli ordini limite) regge sul demo; la voce «meno scambi» non
+ha motivo per ora. Prossimo passo: scomporre il guadagno del demo in prezzo, spese e funding veri (voci 2-3).

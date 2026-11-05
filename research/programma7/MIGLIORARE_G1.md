@@ -16,12 +16,12 @@ separato prima del paper).
 
 ## Le voci, in ordine
 
-1. **Il demo contro il paper, giorno per giorno** — *in corso dal 5 novembre.* Il paper ipotizza che gli ordini limite al mark si
+1. **Il demo contro il paper, giorno per giorno** — *prima lettura il 5 novembre: il demo segue il paper (vedi il diario qui sotto).* Il paper ipotizza che gli ordini limite al mark si
    riempiano quando il prezzo li tocca e che le spese siano quelle del modello; il demo le paga davvero. La differenza giorno per giorno
    fra i due rendimenti è il costo vero dell'esecuzione (più gli eventi al 5%, sul demo dal 31 ottobre). Misura: sezione «G1: il demo
    contro il paper, giorno per giorno» del rapporto di stato (`scripts/state_snapshot.py`, richiesta «stato» del canale ops). Si guarda
    la media e l'oscillazione della differenza; se la media è sotto zero di più di qualche centesimo al giorno, si passa alla voce 2.
-2. **Il prezzo vero degli ordini.** Per ogni ribilancio del demo, il prezzo medio a cui gli ordini sono stati eseguiti contro il mark
+2. **Il prezzo vero degli ordini** (*meno urgente dopo la prima lettura della voce 1: in 12 giorni non si vede un costo nascosto*). Per ogni ribilancio del demo, il prezzo medio a cui gli ordini sono stati eseguiti contro il mark
    al momento della decisione (con il segno: comprare sopra o vendere sotto è un costo), e quanti ordini finiscono a mercato dopo
    l'ora. Oggi il demo scrive solo quanti sono a limite e quanti a mercato (336 eseguiti a limite su 347 al 2 novembre; il paper 488 su
    489). Serve leggere le esecuzioni del conto demo e scriverle per ribilancio.
@@ -46,3 +46,11 @@ separato prima del paper).
 
 * **5 novembre 2026, voce 1**: aggiunta la sezione del confronto al rapporto di stato, con due test; prima lettura con la richiesta
   «stato» del canale ops.
+* **5 novembre 2026, 21:15 UTC, voce 1, prima lettura** (`ops/results/0698-5nov-stato-demo-contro-paper.md`): dal 25 ottobre al
+  5 novembre, 12 giorni, **demo +6,80%, paper +6,92%**; differenza media al giorno −0,011%, oscillazione 0,62% al giorno. Con 12 giorni
+  l'incertezza sulla media è circa ±0,18% al giorno (0,62 diviso la radice di 12): **nessun costo nascosto misurabile**, il demo esegue
+  come il paper. Quasi tutta l'oscillazione sta in due giorni che si compensano (29 ottobre +1,21%, 30 ottobre −1,54%): probabilmente
+  l'ora diversa dell'ultimo valore scritto nel giorno, non l'esecuzione; senza quei due giorni la differenza giornaliera sta fra −0,31% e
+  +0,39%. Ordini limite eseguiti sul demo 435 su 453 (96%); scarto fra posizioni vere e volute 2,0% del conto. Equity del demo
+  5.277,11 USDT dal capitale di 4.992,87 (+5,69% dal 24 ottobre). **Conseguenza**: la voce 5 (meno scambi) non ha motivo per ora;
+  le voci 2 e 3 servono a scomporre il guadagno (spese e funding veri), non a correggere un buco.
