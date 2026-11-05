@@ -5514,3 +5514,6 @@ milioni di dollari, `trader_copiati/hyperliquid/scelti_balene_2026-11-05.json`);
 primo giro, prima di qualunque prezzo: le balene sono anche loro più vendute che comprate (−1,91 su 2: Bitcoin −0,56, Hyperliquid −0,42,
 Ether −0,33), con leva media 4,2 contro 8,6 dei migliori del mese; i migliori del mese a esposizione uguale −0,98 su 1,33 (Ether −0,74).
 Controlli in avanti delle 12:24: niente di nuovo. Nessuna prova nuova.
+**Giro delle 16:17.** Notizie: 153 articoli nuovi da 22 fonti su 22 (la prima pagina di Crypto Briefing piena, la seconda ha coperto il
+resto); 39 conti di Hyperliquid letti. Controlli in avanti delle 16:22: niente di nuovo. Idea 135 scritta (il contrario dei trader con
+più leva): non serve una misura nuova, si legge dal conto della copia con il segno opposto. Nessuna prova nuova.
