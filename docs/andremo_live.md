@@ -5476,3 +5476,9 @@ chiusura dei perpetui dopo il 21 ottobre. Richiesta del log del bot per i ribila
 Ribilanci della notte (log del bot, ops 0697): paper G1 a 10.311,91 (ieri 10.100,02, +2,1% in un giorno), G11 a 10.526,26 (+2,4%), G1N
 a 10.550,64 (+1,6%); sul demo G1 ha mandato 41 ordini limite, 1 rifiutato (come nei giorni scorsi). Nessun errore del bot oltre le
 solite letture rifiutate di MITO e PTB (perpetui chiusi da Binance).
+**Giro delle 04:18.** Notizie: 38 articoli nuovi da 21 fonti su 22; posizioni dei 20 trader di Hyperliquid lette (23 giri); copia dei
+trader ancora a −0,18% (le candele del 4 novembre non sono uscite). Controlli in avanti delle 04:25: niente di nuovo. Guardata l'ultima
+voce «da guardare solo in avanti» del registro (vendere il perpetuo quando Binance annuncia la moneta a pronti): contati solo gli
+annunci, uno solo dall'11 ottobre (PREDICT), circa uno al mese, quindi una misura in avanti non deciderebbe in tempi utili: scritta come
+idea 134 con il perché, non avviata. Nessuna prova nuova. **Capito oggi**: le quotazioni a pronti di monete già nate come perpetuo sono
+diventate rare (5 dal 17 luglio), quindi quella famiglia di eventi non può più dare una strategia.
