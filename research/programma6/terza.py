@@ -96,6 +96,27 @@ def settimane(pan: dict) -> np.ndarray:
     return lun[(lun >= 1) & (lun + 7 <= len(giorni))]
 
 
+def universo_lunedi(pan: dict, m: int, da: int = 0, a: int = N_UNIVERSO) -> tuple:
+    """L'universo del lunedi' di indice ``m`` (le posizioni ``da``..``a`` per volume mediano dei 30 giorni prima) e i pesi;
+    usa solo i dati fino alla domenica prima e l'apertura del lunedi', quindi vale anche per la settimana in corso."""
+    C, O, V = pan["close"], pan["open"], pan["quote_volume"]
+    T, S = C.shape
+    ok = np.isfinite(C)
+    primo = np.where(ok.any(axis=0), ok.argmax(axis=0), T)
+    fin = V[max(0, m - 30): m]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        med = np.nan_to_num(np.nanmedian(fin, axis=0), nan=0.0)
+    # fuori le monete con volume zero la domenica: tolte dal listino, prezzo fermo (controllo_zombi.py)
+    amm = ok[m - 1] & (m - primo >= STORIA_MIN) & (med >= sc.VOLUME_MIN) & np.isfinite(O[m]) \
+        & (np.nan_to_num(V[m - 1]) > 0)
+    cand = np.flatnonzero(amm)
+    scelte = cand[np.argsort(-med[cand], kind="stable")][da:a]
+    U = np.zeros(S, bool)
+    U[scelte] = True
+    return U, med
+
+
 def pannello_settimane(pan: dict, log=print, da: int = 0, a: int = N_UNIVERSO, indicatori_si: bool = True) -> dict:
     """Per ogni settimana: universo (le posizioni ``da``..``a`` per volume), pesi (mediana del volume), indicatori della
     domenica (se ``indicatori_si``), rendimento e funding."""
@@ -117,22 +138,10 @@ def pannello_settimane(pan: dict, log=print, da: int = 0, a: int = N_UNIVERSO, i
     R = np.expm1(cum[lun + 7] - cum[lun])
     Fc = np.vstack([np.zeros((1, S)), np.cumsum(pan["funding"], axis=0)])
     F = Fc[lun + 7] - Fc[lun]
-    ok = np.isfinite(C)
-    primo = np.where(ok.any(axis=0), ok.argmax(axis=0), T)
     U = np.zeros((W, S), bool)
     peso = np.zeros((W, S))
     for k, m in enumerate(lun):
-        fin = V[max(0, m - 30): m]
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            med = np.nan_to_num(np.nanmedian(fin, axis=0), nan=0.0)
-        # fuori le monete con volume zero la domenica: tolte dal listino, prezzo fermo (controllo_zombi.py)
-        amm = ok[m - 1] & (m - primo >= STORIA_MIN) & (med >= sc.VOLUME_MIN) & np.isfinite(O[m]) \
-            & (np.nan_to_num(V[m - 1]) > 0)
-        cand = np.flatnonzero(amm)
-        scelte = cand[np.argsort(-med[cand], kind="stable")][da:a]
-        U[k, scelte] = True
-        peso[k] = med
+        U[k], peso[k] = universo_lunedi(pan, int(m), da, a)
     log(f"[terza] settimane {W}, monete {S}")
     return {"lunedi": lun + pan["t0"], "U": U, "peso": peso, "Z": Z, "R": R, "F": F, "simboli": pan["simboli"]}
 

@@ -345,6 +345,18 @@ def funding_dydx(pan: dict, log=print) -> np.ndarray:
     return Fd
 
 
+def universi_con_settimana_in_corso(pan: dict, psw: dict) -> tuple:
+    """I lunedi' e gli universi del pannello delle settimane, con in piu' le settimane non ancora chiuse fino all'ultimo
+    giorno dei dati (l'universo si decide il lunedi' con i dati di prima, come fa il bot): per i conti giornalieri (HLI, DXI)."""
+    lunedi, U = [int(x) for x in psw["lunedi"]], [psw["U"]]
+    m = lunedi[-1] + 7
+    while m < pan["t0"] + pan["close"].shape[0]:
+        U.append(te.universo_lunedi(pan, m - pan["t0"])[0][None])
+        lunedi.append(m)
+        m += 7
+    return np.array(lunedi, dtype=np.int64), np.vstack(U)
+
+
 def esegui(log=print) -> dict:
     pan = sc.costruisci_pannello(log=lambda x: None)
     # i dati sulle posizioni dei giorni nuovi (per K1), con la tabella appena ricostruita
@@ -406,11 +418,11 @@ def esegui(log=print) -> dict:
         from research.programma7 import prima as g1
         from research.programma7 import settantesima as fm
         Fh = funding_hyperliquid(pan, log)
-        ultimo_lunedi = int(psw["lunedi"][-1])
-        giorni = np.arange(INIZIO_HLI, min(pan["t0"] + pan["close"].shape[0] - 1, ultimo_lunedi + 7), dtype=np.int64)
+        lunedi, Uset = universi_con_settimana_in_corso(pan, psw)
+        giorni = np.arange(INIZIO_HLI, pan["t0"] + pan["close"].shape[0] - 1, dtype=np.int64)
         if len(giorni):
             idx = giorni - pan["t0"]
-            Ud = g1.universo_del_giorno(giorni, psw["lunedi"], psw["U"])
+            Ud = g1.universo_del_giorno(giorni, lunedi, Uset)
             fb = se.funding_7(pan, idx)
             scarto = np.round(fm.somma_7(Fh, idx) - fb, 12)
             Ur = Ud & np.isfinite(scarto)
@@ -431,11 +443,11 @@ def esegui(log=print) -> dict:
         from research.programma7 import prima as g1
         from research.programma7 import settantesima as fm
         Fd = funding_dydx(pan, log)
-        ultimo_lunedi = int(psw["lunedi"][-1])
-        giorni = np.arange(INIZIO_HLI, min(pan["t0"] + pan["close"].shape[0] - 1, ultimo_lunedi + 7), dtype=np.int64)
+        lunedi, Uset = universi_con_settimana_in_corso(pan, psw)
+        giorni = np.arange(INIZIO_HLI, pan["t0"] + pan["close"].shape[0] - 1, dtype=np.int64)
         if len(giorni):
             idx = giorni - pan["t0"]
-            Ud = g1.universo_del_giorno(giorni, psw["lunedi"], psw["U"])
+            Ud = g1.universo_del_giorno(giorni, lunedi, Uset)
             fb = se.funding_7(pan, idx)
             scarto = np.round(fm.somma_7(Fd, idx) - fb, 12)
             Ur = Ud & np.isfinite(scarto)

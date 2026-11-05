@@ -1,0 +1,2696 @@
+{
+"1000000MOGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000BONKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 908,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000FLOKIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 830,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000LUNCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 841,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000PEPEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1104,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000RATSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 307,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000SATSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 513,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000SHIBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1000XECUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 218,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"1INCHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 902,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"4USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AAVEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ACEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 196,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ACHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 253,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ACTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ADAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AERGOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 82,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AEROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 352,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AEVOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 132,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AGIXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 327,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AGLDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 181,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AI16ZUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 149,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AIAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 67,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AINUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 43,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AIOTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AIOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 186,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AIXBTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 226,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AKEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 131,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AKROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 72,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AKTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALCHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALGOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1722,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALICEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 603,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALLOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 114,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALPHAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 637,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ALTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 221,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AMBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ANIMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ANKRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 759,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ANTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 270,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"APEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1310,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"API3USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 434,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"APRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 84,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"APTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1307,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1153,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 156,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARIAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARKMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 688,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 180,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARPAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 355,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ARUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1253,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ASTERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 236,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ASTRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 151,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ATAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 381,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ATHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ATOMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AUCTIONUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 320,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AUDIOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 473,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AVAXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AWEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AXLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"AXSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1462,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BAKEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 927,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 342,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BANANAS31USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 123,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BANANAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BANDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 708,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BANKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 116,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BANUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BARDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BASUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 121,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BATUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 610,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 158,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BCHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BEAMXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 200,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BEATUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 149,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BELUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 754,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BERAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 314,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BICOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 139,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BIGTIMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 382,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BIOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 354,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BLESSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 88,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BLURUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 487,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BLZUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 712,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BMTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BNBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BNXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 627,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BOMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 565,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BONDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BRETTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BROCCOLI714USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 126,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BSWUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BTCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BTRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BTSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BTTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 42,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"BULLAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 183,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"C98USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 776,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CAKEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 544,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CELOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1044,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CELRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 447,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CETUSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CFXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 755,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CHESSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CHILLGUYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 79,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CHRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 653,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CHZUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1420,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CKBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 305,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CLOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 72,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"COMPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1092,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"COOKIEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"COSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"COTIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 808,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"COWUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CRVUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CTKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 298,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CTSIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 251,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CVCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 170,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CYBERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"CYSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DARUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 93,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DASHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1029,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DEGOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 88,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DENTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 458,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DEXEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 186,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DGBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 74,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DODOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 170,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DODOXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DOGEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DOGSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 165,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DOLOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DOTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DRIFTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 74,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DUSKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 397,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DYDXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1579,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"DYMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 174,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EDENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 95,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EDUUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 108,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EGLDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 911,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EIGENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 574,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ENAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 775,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ENJUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 922,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ENSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1098,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EOSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1261,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EPICUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 107,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ERAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ESPORTSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 121,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ESPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ETCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ETHFIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 789,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ETHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ETHWUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EULUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"EVAAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 72,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FARTCOINUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 509,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FETUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1216,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FFUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 102,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FHEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 107,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FIDAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FILUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FLMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 463,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FLOCKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 64,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FLOWUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 957,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FOLKSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FORMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FRONTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 114,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FTMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1143,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FTTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 38,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"FXSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 139,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GALAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1694,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 468,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GASUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 111,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GIGGLEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 158,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GLMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GMTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1047,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GMXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 60,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GOATUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 135,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GPSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GRASSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 249,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GRIFFAINUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GRTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1307,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GTCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 671,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GUAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GUNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"GWEIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HBARUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1745,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HEIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 107,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HEMIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HFTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HIFIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 241,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HIGHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 272,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HIPPOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 74,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HMSTRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 60,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HNTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 429,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HOMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 121,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HOOKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 242,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HOTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 570,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HUMAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 72,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 256,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"HYPEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 348,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ICNTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ICPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1499,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ICXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 377,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 356,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IMXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1039,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"INITUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"INJUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1370,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IOSTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 270,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IOTAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 665,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IOTXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 254,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 267,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"IPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 337,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"JASMYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 890,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"JELLYJELLYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 158,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"JOEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 111,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"JTOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 821,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"JUPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 833,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KAIAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KAITOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 272,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KASUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 421,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KAVAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 928,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KEEPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KERNELUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KEYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KITEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KLAYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 390,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KNCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 699,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"KSMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 593,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LABUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 204,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 88,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LDOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1335,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LEVERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 216,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LIGHTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LINAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 998,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LINKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LISTAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 67,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LITUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1002,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LOOMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 67,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LPTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 644,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LQTYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 144,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LRCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 580,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LSKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 105,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LTCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LUNA2USDT": {
+"elenco": [],
+"file": 0,
+"giorni": 577,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"LUNAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 156,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MAGICUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 459,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MAGMAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 95,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MANAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1331,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MANTAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 121,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MASKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1212,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MATICUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1007,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MAVUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 158,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MDTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MEMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 524,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MERLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 107,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"METUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 68,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MEWUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 130,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MINAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 461,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MKRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1388,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MMTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MONUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 161,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MOODENGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 338,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MORPHOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 235,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MOVEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MOVRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 91,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MTLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 824,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MUBARAKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 103,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 123,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MYROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"MYXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 165,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NAORISUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 100,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NEARUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1796,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NEIROETHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 114,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NEIROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 443,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NEOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1226,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NFPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NILUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 156,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NKNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 469,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NMRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 179,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NOMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NOTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 263,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"NTRNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OCEANUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 880,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OGNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 498,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OMGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 573,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OMNIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 100,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 576,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ONDOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 845,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ONEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 564,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ONGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 139,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ONTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 574,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ONUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OPENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"OPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1447,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ORBSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 74,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ORCAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 128,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ORDIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 886,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PARTIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PENDLEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1020,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PENGUUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 516,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PEOPLEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1226,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PERPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 130,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PHAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 98,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PHBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 246,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PIEVERSEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PIPPINUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 282,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PIXELUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 179,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PLAYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 114,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PLUMEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PNUTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 333,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"POLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 607,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"POLYXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 151,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"POPCATUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 310,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PORTALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 104,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"POWRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PROMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 110,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PTBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PUMPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 397,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"PYTHUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 682,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"QNTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 84,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"QTUMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 825,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"QUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 47,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RADUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RAREUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 93,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RAVEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RAYSOLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 196,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RAYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RDNTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 249,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"REDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"REEFUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 547,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RENDERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 656,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 655,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RESOLVUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 142,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"REZUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 144,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RIFUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 130,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RIVERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 177,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RLCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 641,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RNDRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 352,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ROSEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 759,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RPLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RSRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 971,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RUNEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1317,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"RVNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 437,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SAGAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 343,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SAHARAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 149,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SANDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1715,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 30,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SEIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1006,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SFPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 463,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SIGNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 79,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SIRENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 191,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SKLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 507,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SKYAIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 163,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SKYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 43,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SNXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1162,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SOLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SOONUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SPELLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 174,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SPKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SPXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 347,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SQDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SRMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 348,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SSVUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 405,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STEEMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 453,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STMXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 553,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STORJUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 946,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STRKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 716,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"STXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 876,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SUIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1110,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SUPERUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 144,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 240,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SUSHIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1219,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SWARMSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SXPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 878,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SYNUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 129,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"SYRUPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 107,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TACUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TAOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 768,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"THETAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1291,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"THEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 44,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TIAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 929,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TLMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 220,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TNSRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 123,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TOKENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 109,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TOMOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 471,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TONUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 681,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TRADOORUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TRBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1289,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TRUMPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 481,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TRUUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 186,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TRXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TSTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 37,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TURBOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 424,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TUTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 123,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"TWTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UAIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UBUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 149,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UMAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 232,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UNFIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 904,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UNIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"USELESSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 172,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"USTCUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 81,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"USUALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"USUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 126,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"UXLINKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VANRYUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VELVETUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 114,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VETUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1450,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VIDTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VINEUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 86,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VIRTUALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 523,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VOXELUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 58,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VTHOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 57,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"VVVUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 278,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WALUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 51,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WAVESUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 919,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WIFUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 852,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WLDUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1027,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WLFIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 264,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WOOUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 508,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"WUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 466,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XAIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 221,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XEMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 660,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XLMUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1784,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XMRUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1542,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XPLUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 264,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XRPUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1797,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XTZUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1043,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XVGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 211,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"XVSUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 92,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"YFIIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 65,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"YFIUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 718,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"YGGUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 319,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZAMAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 119,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZBTUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 102,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZECUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 1315,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZENUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 955,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZEREBROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 95,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZETAUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 179,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZILUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 871,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZKUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 347,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZROUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 646,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+},
+"ZRXUSDT": {
+"elenco": [],
+"file": 0,
+"giorni": 772,
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
+}

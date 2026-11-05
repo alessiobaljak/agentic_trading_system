@@ -5482,3 +5482,16 @@ voce «da guardare solo in avanti» del registro (vendere il perpetuo quando Bin
 annunci, uno solo dall'11 ottobre (PREDICT), circa uno al mese, quindi una misura in avanti non deciderebbe in tempi utili: scritta come
 idea 134 con il perché, non avviata. Nessuna prova nuova. **Capito oggi**: le quotazioni a pronti di monete già nate come perpetuo sono
 diventate rare (5 dal 17 luglio), quindi quella famiglia di eventi non può più dare una strategia.
+**Aggiornamento della mattina (06:14).** Notizie: 28 articoli nuovi da 21 fonti su 22. Prova in avanti del programma 5 (dati fino al 3
+novembre): M-001c 233 trade chiusi su 400 (in corso), M-002 e M-003 non passano; seconda tornata N-001 49, N-002 31, N-003 27. Il primo
+lancio si è fermato su un comando del repo troppo lento (il salvataggio delle notizie nello stesso momento), il secondo sul limite di
+50 minuti che avevo messo io: l'ultima procedura rifatta da sola. Conto a tavolino del programma 6 con i dati fino al 4 novembre; le
+monete entrate nell'universo sono tutte crypto (USUSDT è Talus, perpetuo nato il 12 dicembre 2025 insieme a CYSUSDT).
+**Errore trovato e corretto**: HLI e DXI (dal 2 novembre) non comparivano nel conto a tavolino. Il calcolo giornaliero prendeva
+l'universo delle 100 monete dal pannello delle settimane, che contiene solo le settimane chiuse, quindi i giorni della settimana in corso
+restavano fuori fino al lunedì dopo (avevo scritto che sarebbero comparse col primo giorno dopo il 2 novembre: non era vero). Ora
+l'universo della settimana in corso si calcola il lunedì con i dati di prima, come fa il bot (`terza.universo_lunedi`, la stessa regola
+spostata in una funzione: universi e pesi identici a prima su tutte le settimane chiuse, prime 100 e 101-200; due test nuovi; 2.488 test
+passano). Primi due giorni (2-3 novembre): **HLI −1,75%** contro G1 sulle stesse monete −0,22%; **DXI −0,79%** contro −0,37%. Due
+giorni non dicono niente. Il proprietario ha chiesto se si possono copiare le balene sulla blockchain: risposto (la copia di Hyperliquid
+lo fa già; sulle altre catene lo storico gratuito non è pulito) e proposto un secondo gruppo di Hyperliquid con i 20 conti più grandi.
