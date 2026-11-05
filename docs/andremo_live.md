@@ -5466,3 +5466,10 @@ ha coperto il resto); posizioni dei 20 trader di Hyperliquid lette. Controlli in
 nuova.
 **Giro delle 20:18.** Notizie: 111 articoli nuovi da 21 fonti su 22; posizioni dei 20 trader di Hyperliquid lette. Controlli in avanti
 delle 20:21: niente di nuovo. Nessuna prova nuova.
+
+### 5 novembre 2026 (00:30 UTC)
+
+**Giro delle 00:18.** Notizie: 85 articoli nuovi da 22 fonti su 22 (la prima pagina di Crypto Briefing di nuovo piena); posizioni dei
+20 trader di Hyperliquid lette (22 giri raccolti). Copia dei trader ancora a −0,18% dopo 44 ore: le candele orarie del 4 novembre non
+sono ancora pubblicate. Controlli in avanti delle 00:27: nessuna quotazione nuova su Coinbase oltre STABLE e CT, nessun annuncio di
+chiusura dei perpetui dopo il 21 ottobre. Richiesta del log del bot per i ribilanci della notte (ops 0697). Nessuna prova nuova.
