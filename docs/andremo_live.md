@@ -5473,3 +5473,6 @@ delle 20:21: niente di nuovo. Nessuna prova nuova.
 20 trader di Hyperliquid lette (22 giri raccolti). Copia dei trader ancora a −0,18% dopo 44 ore: le candele orarie del 4 novembre non
 sono ancora pubblicate. Controlli in avanti delle 00:27: nessuna quotazione nuova su Coinbase oltre STABLE e CT, nessun annuncio di
 chiusura dei perpetui dopo il 21 ottobre. Richiesta del log del bot per i ribilanci della notte (ops 0697). Nessuna prova nuova.
+Ribilanci della notte (log del bot, ops 0697): paper G1 a 10.311,91 (ieri 10.100,02, +2,1% in un giorno), G11 a 10.526,26 (+2,4%), G1N
+a 10.550,64 (+1,6%); sul demo G1 ha mandato 41 ordini limite, 1 rifiutato (come nei giorni scorsi). Nessun errore del bot oltre le
+solite letture rifiutate di MITO e PTB (perpetui chiusi da Binance).
