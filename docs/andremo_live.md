@@ -5517,3 +5517,11 @@ Controlli in avanti delle 12:24: niente di nuovo. Nessuna prova nuova.
 **Giro delle 16:17.** Notizie: 153 articoli nuovi da 22 fonti su 22 (la prima pagina di Crypto Briefing piena, la seconda ha coperto il
 resto); 39 conti di Hyperliquid letti. Controlli in avanti delle 16:22: niente di nuovo. Idea 135 scritta (il contrario dei trader con
 più leva): non serve una misura nuova, si legge dal conto della copia con il segno opposto. Nessuna prova nuova.
+**Decisione del proprietario (5 novembre, sera)**: alla domanda «serve continuare a trovare idee nuove ogni 4 ore?» ho risposto di no
+(le idee con dati gratuiti e un perché forte sono quasi finite, e ogni prova in più alza l'asticella per tutte), proponendo di tenere la
+raccolta e di migliorare quello che funziona. Lui: «si cambia, e sono d'accordo miglioriamo quello che già funziona». Fatto: la routine
+delle 4 ore ora si chiama «Raccolta dati e miglioramento di G1» (raccolta e controlli sempre, poi una voce del piano, un'idea nuova solo
+con un perché forte); il piano è `research/programma7/MIGLIORARE_G1.md` (6 voci: demo contro paper, prezzo vero degli ordini, funding
+incassato, monete che il demo non ha, meno scambi solo se le spese vere sono più alte, l'ora della decisione). Voce 1 avviata: il rapporto
+di stato ha una sezione nuova che confronta giorno per giorno il rendimento di G1 sul demo e nel paper (`scripts/state_snapshot.py`, due
+test); richiesta «stato» al canale ops (0698) per la prima lettura.

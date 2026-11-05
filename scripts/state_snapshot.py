@@ -114,6 +114,7 @@ def build() -> str:
                               interruttore="ops/paper_g1n_acceso")
     lines += sezione_paper_eventi(fb)
     lines += sezione_demo_binance(fb)
+    lines += sezione_demo_contro_paper(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -640,6 +641,53 @@ def sezione_demo_binance(fb) -> list:
     if err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
     return righe + [""]
+
+
+def confronto_giorni(demo: dict, paper: dict, eventi: dict | None = None) -> list:
+    """Giorno per giorno, il rendimento di G1 sul demo (equity a fine giorno) e nel paper, e la differenza; i giorni con i due valori
+    e il giorno prima. Il demo dal 31 ottobre porta anche gli eventi al 5%: la colonna degli eventi del paper serve a leggerlo."""
+    eventi = eventi or {}
+    def _num(d):
+        out = {}
+        for k, v in (d or {}).items():
+            try:
+                out[str(k)] = float(v)
+            except (TypeError, ValueError):
+                continue
+        return out
+    demo, paper, eventi = _num(demo), _num(paper), _num(eventi)
+    giorni = sorted(set(demo) & set(paper))
+    righe = []
+    for a, b in zip(giorni, giorni[1:]):
+        rd, rp = demo[b] / demo[a] - 1, paper[b] / paper[a] - 1
+        re = eventi[b] / eventi[a] - 1 if a in eventi and b in eventi and eventi[a] else None
+        righe.append({"giorno": b, "demo": rd, "paper": rp, "differenza": rd - rp, "eventi": re})
+    return righe
+
+
+def sezione_demo_contro_paper(fb) -> list:
+    """G1 sul demo contro G1 nel paper, giorno per giorno (MIGLIORARE_G1.md, voce 1): quanto costa l'esecuzione vera."""
+    titolo = "## G1: il demo contro il paper, giorno per giorno"
+    righe = confronto_giorni(fb.get_rtdb("/demo_binance/giorni") or {}, fb.get_rtdb("/paper_g1/giorni") or {},
+                             fb.get_rtdb("/paper_eventi/giorni") or {})
+    if not righe:
+        return [titolo, "- non ancora: servono almeno due giorni con il demo e il paper", ""]
+    out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 31 ottobre il demo porta anche gli eventi al 5% del conto.", "",
+           "| giorno | demo | paper G1 | demo meno paper | eventi nel paper |", "|---|---|---|---|---|"]
+    for r in righe:
+        ev = f"{100 * r['eventi']:+.2f}%" if r["eventi"] is not None else "—"
+        out.append(f"| {r['giorno']} | {100 * r['demo']:+.2f}% | {100 * r['paper']:+.2f}% | {100 * r['differenza']:+.2f}% | {ev} |")
+    tot_d = 1.0
+    tot_p = 1.0
+    for r in righe:
+        tot_d *= 1 + r["demo"]
+        tot_p *= 1 + r["paper"]
+    dif = [r["differenza"] for r in righe]
+    media = sum(dif) / len(dif)
+    osc = (sum((x - media) ** 2 for x in dif) / (len(dif) - 1)) ** 0.5 if len(dif) > 1 else None
+    out += ["", f"- dal {righe[0]['giorno']} ({len(righe)} giorni): demo {100 * (tot_d - 1):+.2f}%, paper {100 * (tot_p - 1):+.2f}%; "
+            f"differenza media al giorno {100 * media:+.3f}%" + (f", oscillazione {100 * osc:.3f}%" if osc is not None else ""), ""]
+    return out
 
 
 def main() -> int:
