@@ -665,7 +665,7 @@ def confronto_giorni(demo: dict, paper: dict, eventi: dict | None = None) -> lis
     return righe
 
 
-def confronto_entrate(demo_diario: dict, paper_diario: dict) -> list:
+def confronto_entrate(demo_diario: dict, paper_diario: dict, demo_giorni: dict | None = None) -> list:
     """Giorno per giorno, funding e spese in % dell'equity: sul demo quelli veri (``diario/{giorno}/entrate``: funding incassato,
     commissioni pagate), nel paper la differenza dei totali fra un giorno e il prima (``funding_totale`` positivo = pagato,
     ``costi_totali``). MIGLIORARE_G1.md, voci 2-3."""
@@ -686,7 +686,10 @@ def confronto_entrate(demo_diario: dict, paper_diario: dict) -> list:
     for g in sorted(set(demo_diario) | set(paper)):
         v = demo_diario.get(g) if isinstance(demo_diario.get(g), dict) else {}
         en, e = v.get("entrate") if isinstance(v.get("entrate"), dict) else None, _f(v, "equity")
-        righe.append({"giorno": g,
+        if e is None:                                   # i giorni prima del diario (3 novembre): l'equity dai valori del giorno
+            e = _f(demo_giorni or {}, g)
+        righe.append({"giorno": g, "demo_funding_usdt": _f(en, "funding_incassato") if en else None,
+                      "demo_spese_usdt": _f(en, "commissioni_pagate") if en else None,
                       "demo_funding": _f(en, "funding_incassato") / e if en and e else None,
                       "demo_spese": _f(en, "commissioni_pagate") / e if en and e else None,
                       "paper_funding": paper[g][0] if g in paper else None, "paper_spese": paper[g][1] if g in paper else None})
@@ -715,13 +718,19 @@ def sezione_demo_contro_paper(fb) -> list:
     osc = (sum((x - media) ** 2 for x in dif) / (len(dif) - 1)) ** 0.5 if len(dif) > 1 else None
     out += ["", f"- dal {righe[0]['giorno']} ({len(righe)} giorni): demo {100 * (tot_d - 1):+.2f}%, paper {100 * (tot_p - 1):+.2f}%; "
             f"differenza media al giorno {100 * media:+.3f}%" + (f", oscillazione {100 * osc:.3f}%" if osc is not None else ""), ""]
-    en = confronto_entrate(fb.get_rtdb("/demo_binance/diario") or {}, fb.get_rtdb("/paper_g1/diario") or {})
+    en = confronto_entrate(fb.get_rtdb("/demo_binance/diario") or {}, fb.get_rtdb("/paper_g1/diario") or {},
+                           fb.get_rtdb("/demo_binance/giorni") or {})
     if en:
         pc = lambda x: f"{100 * x:+.3f}%" if x is not None else "—"  # noqa: E731
         out += ["Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: + pagate; nel paper dal 6 novembre).",
                 "", "| giorno | funding demo | funding paper | spese demo | spese paper |", "|---|---|---|---|---|"]
         out += [f"| {r['giorno']} | {pc(r['demo_funding'])} | {pc(r['paper_funding'])} | {pc(r['demo_spese'])} | {pc(r['paper_spese'])} |"
                 for r in en]
+        fu = [r["demo_funding_usdt"] for r in en if r["demo_funding_usdt"] is not None]
+        sp = [r["demo_spese_usdt"] for r in en if r["demo_spese_usdt"] is not None]
+        if fu:
+            out += ["", f"- sul demo, dal {min(r['giorno'] for r in en if r['demo_funding_usdt'] is not None)} ({len(fu)} giorni): "
+                    f"funding incassato {sum(fu):+,.2f} USDT, commissioni pagate {sum(sp):,.2f} USDT"]
         out.append("")
     return out
 

@@ -41,3 +41,13 @@ def test_confronto_entrate():
     assert r["2026-11-05"]["paper_funding"] is None
     assert r["2026-11-06"]["paper_funding"] == pytest.approx(0.0004) and r["2026-11-06"]["paper_spese"] == pytest.approx(0.00015)
     assert r["2026-11-06"]["demo_funding"] is None
+
+
+def test_confronto_entrate_prima_del_diario():
+    demo = {"2026-10-25": {"entrate": {"funding_incassato": 5.0, "commissioni_pagate": 0.5}}}
+    r = ss.confronto_entrate(demo, {}, {"2026-10-25": 5000.0})
+    assert r[0]["demo_funding"] == pytest.approx(0.001) and r[0]["demo_funding_usdt"] == 5.0
+    testo = "\n".join(ss.sezione_demo_contro_paper(_Fb({
+        "/demo_binance/giorni": {"2026-10-24": 5000, "2026-10-25": 5000}, "/paper_g1/giorni": {"2026-10-24": 1, "2026-10-25": 1},
+        "/demo_binance/diario": demo})))
+    assert "funding incassato +5.00 USDT, commissioni pagate 0.50 USDT" in testo
