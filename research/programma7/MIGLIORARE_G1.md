@@ -54,3 +54,9 @@ separato prima del paper).
   +0,39%. Ordini limite eseguiti sul demo 435 su 453 (96%); scarto fra posizioni vere e volute 2,0% del conto. Equity del demo
   5.277,11 USDT dal capitale di 4.992,87 (+5,69% dal 24 ottobre). **Conseguenza**: la voce 5 (meno scambi) non ha motivo per ora;
   le voci 2 e 3 servono a scomporre il guadagno (spese e funding veri), non a correggere un buco.
+* **5 novembre 2026, sera, voci 2-3 (sì del proprietario: «ok procedi pure con le due letture e il riavvio»)**: il demo legge ogni ora
+  dal conto le entrate vere (`/fapi/v1/income`: funding incassato e commissioni pagate) e le scrive in `/demo_binance/diario/{giorno}/entrate`,
+  con i giorni chiusi recuperati dal 24 ottobre (`bot/portafoglio/demo_binance.py`, `entrate_del_conto`; solo lettura, un errore non
+  tocca gli ordini); il paper scrive nel diario del giorno i totali di spese e funding (`bot/portafoglio/f5.py`); il rapporto di stato
+  ha una seconda tabella, funding e spese del demo contro il paper in % dell'equity (`scripts/state_snapshot.py`). Quattro test
+  nuovi, 2.496 test passano. Riavvio del bot chiesto alla macchina (ops 0699).

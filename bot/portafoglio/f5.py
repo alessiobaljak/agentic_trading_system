@@ -587,8 +587,11 @@ class PaperF5:
         self.fb.set_rtdb(f"{self.RAMO}/giorni/{oggi}", round(e, 2))
         # il diario del giorno per la dashboard (il proprietario, 3 nov 2026: «un grafico [...] giornalmente, sia profitto che win rate
         # che percentuali, posizioni aperte e chiuse»): l'ultimo valore del giorno e le posizioni aperte
+        # spese e funding finora (MIGLIORARE_G1.md, voci 2-3): la differenza fra due giorni si confronta con le entrate vere del demo
         self.fb.set_rtdb(f"{self.RAMO}/diario/{oggi}", {"equity": round(e, 2), "long": sum(1 for w in pesi.values() if w > 0),
-                                                        "short": sum(1 for w in pesi.values() if w < 0)})
+                                                        "short": sum(1 for w in pesi.values() if w < 0),
+                                                        "costi_totali": round(float(st.get("costi_totali", 0.0)), 4),
+                                                        "funding_totale": round(float(st.get("funding_totale", 0.0)), 4)})
 
 
 class PaperG1(PaperF5):

@@ -39,6 +39,7 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
 from __future__ import annotations
 
 import base64
+import calendar
 import hashlib
 import hmac
 import json
@@ -68,6 +69,10 @@ OGNI_VALUTAZIONE_S = 3600
 ATTESA_DOPO_ERRORE_S = 1800
 STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chiude tutto a −35% dal massimo del conto
 SOGLIA_CONFRONTO = 0.02                # uno scarto oltre il 2% del conto su una moneta si segnala
+# le entrate vere del conto (research/programma7/MIGLIORARE_G1.md, voci 2-3; sì del proprietario del 5 novembre 2026): funding e
+# commissioni del giorno, lette da /fapi/v1/income; i giorni chiusi si recuperano dal primo giorno del demo, al massimo 20 per volta
+INIZIO_DEMO = "2026-10-24"
+GIORNI_RECUPERO_MAX = 20
 COMANDO_CHIUDI = "/commands/demo_binance_chiudi_tutto"
 COMANDO_RIPARTI = "/commands/demo_binance_riparti"
 # gli stessi due comandi come file nel repository (funzionano anche senza la dashboard: li scrive la sessione su richiesta del
@@ -153,6 +158,29 @@ def pesi_eventi(aperte: dict) -> dict:
         w[s] = w.get(s, 0.0) - QUOTA_EVENTI
         w["BTCUSDT"] = w.get("BTCUSDT", 0.0) + QUOTA_EVENTI
     return w
+
+
+def entrate_del_conto(c, da_ms: int, a_ms: int) -> dict:
+    """Le entrate del conto demo fra due istanti (``/fapi/v1/income``, estremi compresi): il funding incassato (positivo se
+    incassato, negativo se pagato) e le commissioni pagate (positive), in USDT; le righe in un'altra valuta si contano a parte."""
+    out = {"funding_incassato": 0.0, "commissioni_pagate": 0.0, "righe": 0, "altre_valute": 0}
+    for tipo, chiave, segno in (("FUNDING_FEE", "funding_incassato", 1.0), ("COMMISSION", "commissioni_pagate", -1.0)):
+        inizio = int(da_ms)
+        while True:
+            righe = c.chiedi("GET", "/fapi/v1/income", {"incomeType": tipo, "startTime": inizio, "endTime": int(a_ms),
+                                                        "limit": 1000}, firmata=True) or []
+            for r in righe:
+                if (r.get("asset") or "USDT") != "USDT":
+                    out["altre_valute"] += 1
+                    continue
+                out[chiave] += segno * float(r.get("income") or 0)
+            out["righe"] += len(righe)
+            if len(righe) < 1000:
+                break
+            inizio = max(int(r.get("time") or 0) for r in righe) + 1
+    out["funding_incassato"] = round(out["funding_incassato"], 4)
+    out["commissioni_pagate"] = round(out["commissioni_pagate"], 4)
+    return out
 
 
 def somma_pesi(*pesi: dict) -> dict:
@@ -542,4 +570,24 @@ class DemoG1:
         self._scrivi(f"giorni/{oggi}", round(equity, 2))
         self._scrivi(f"diario/{oggi}", {"equity": round(equity, 2), "long": sum(1 for v in posizioni.values() if v > 0),
                                         "short": sum(1 for v in posizioni.values() if v < 0)})
+        return self._entrate(c, st, now)
+
+    def _entrate(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Funding e commissioni veri: quelli di oggi fin qui, e i giorni chiusi non ancora scritti (dal primo giorno del demo).
+        Solo lettura: un errore qui non tocca gli ordini."""
+        try:
+            oggi = int(now // 86400)
+            self._scrivi(f"diario/{time.strftime('%Y-%m-%d', time.gmtime(now))}/entrate",
+                         entrate_del_conto(c, oggi * 86400_000, int(now * 1000)))
+            primo = calendar.timegm(time.strptime(INIZIO_DEMO, "%Y-%m-%d")) // 86400
+            d = max(primo, int(st.get("entrate_chiuse_fino", primo - 1)) + 1)
+            for _ in range(GIORNI_RECUPERO_MAX):
+                if d >= oggi:
+                    break
+                self._scrivi(f"diario/{time.strftime('%Y-%m-%d', time.gmtime(d * 86400))}/entrate",
+                             entrate_del_conto(c, d * 86400_000, (d + 1) * 86400_000 - 1))
+                st["entrate_chiuse_fino"] = d
+                d += 1
+        except Exception as exc:  # noqa: BLE001
+            print(f"[demo_binance] entrate del conto non lette: {exc}")
         return st

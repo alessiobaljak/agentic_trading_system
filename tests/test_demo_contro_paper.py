@@ -29,3 +29,15 @@ def test_sezione_vuota_e_piena():
         "/paper_g1/giorni": {"2026-11-01": 10000, "2026-11-02": 10100, "2026-11-03": 10000}})))
     assert "| 2026-11-02 | +2.00% | +1.00% | +1.00% | — |" in testo
     assert "2 giorni" in testo
+
+
+def test_confronto_entrate():
+    demo = {"2026-11-05": {"equity": 5000.0, "entrate": {"funding_incassato": 2.5, "commissioni_pagate": 1.0}},
+            "2026-11-06": {"equity": 5000.0}}
+    paper = {"2026-11-05": {"equity": 10000.0, "funding_totale": -100.0, "costi_totali": 50.0},
+             "2026-11-06": {"equity": 10000.0, "funding_totale": -104.0, "costi_totali": 51.5}}
+    r = {x["giorno"]: x for x in ss.confronto_entrate(demo, paper)}
+    assert r["2026-11-05"]["demo_funding"] == pytest.approx(0.0005) and r["2026-11-05"]["demo_spese"] == pytest.approx(0.0002)
+    assert r["2026-11-05"]["paper_funding"] is None
+    assert r["2026-11-06"]["paper_funding"] == pytest.approx(0.0004) and r["2026-11-06"]["paper_spese"] == pytest.approx(0.00015)
+    assert r["2026-11-06"]["demo_funding"] is None

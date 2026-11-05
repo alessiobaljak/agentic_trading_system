@@ -5531,3 +5531,7 @@ eseguono come il paper ipotizza (`ops/results/0698-5nov-stato-demo-contro-paper.
 30 ottobre −1,54%) vengono probabilmente dall'ora dell'ultimo valore del giorno. Demo a 5.277,11 USDT (+5,69% dal 24 ottobre), ordini
 limite eseguiti 435 su 453. **Capito oggi**: l'ipotesi più fragile di G1 (gli ordini limite) regge sul demo; la voce «meno scambi» non
 ha motivo per ora. Prossimo passo: scomporre il guadagno del demo in prezzo, spese e funding veri (voci 2-3).
+**Migliorare G1, voci 2-3** (sì del proprietario, sera del 5 novembre: «ok procedi pure con le due letture e il riavvio»): il demo ora
+legge dal conto il funding incassato e le commissioni pagate davvero, giorno per giorno dal 24 ottobre, e il paper scrive i suoi totali
+di spese e funding nel diario del giorno; il rapporto di stato li mette a confronto. Solo letture, gli ordini non cambiano. Quattro test
+nuovi, 2.496 test passano. Riavvio del bot chiesto alla macchina (ops 0699), poi il log e lo stato per controllare.

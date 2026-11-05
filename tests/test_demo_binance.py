@@ -31,6 +31,7 @@ class _Demo:
         self.equity = "10000"
         self.separati = set()
         self.margine = {}
+        self.entrate = []                               # righe di /fapi/v1/income: (tipo, ms, importo, valuta)
 
     def __call__(self, metodo, url, headers=None, timeout=None):
         u = urlparse(url)
@@ -54,6 +55,11 @@ class _Demo:
             self.margine[q["symbol"]] = q["marginType"]
             self.separati.discard(q["symbol"])
             return _Risposta({"code": 200, "msg": "success"})
+        if u.path == "/fapi/v1/income":
+            da, a = int(q["startTime"]), int(q["endTime"])
+            righe = [{"incomeType": t, "time": ms, "income": str(v), "asset": val} for t, ms, v, val in self.entrate
+                     if t == q["incomeType"] and da <= ms <= a]
+            return _Risposta(righe[: int(q["limit"])])
         if u.path == "/fapi/v1/positionSide/dual":
             return _Risposta({"dualSidePosition": False} if metodo == "GET" else {"code": 200})
         if u.path == "/fapi/v1/leverage":
@@ -390,3 +396,37 @@ def test_chiudi_tutto_e_riparti_con_il_file(tmp_path):
     d.tick(t0 + 8000)
     assert "fermo" not in d.carica()
 
+
+
+def test_entrate_vere_del_conto(tmp_path):
+    finto = _Demo()
+    g = 20755                                              # 5 giorni dopo il primo giorno del demo (24 ottobre = 20750)
+    ms = lambda d, ora: (d * 86400 + ora * 3600) * 1000    # noqa: E731
+    finto.entrate = [("FUNDING_FEE", ms(20750, 8), 1.5, "USDT"), ("FUNDING_FEE", ms(20750, 16), -0.5, "USDT"),
+                     ("COMMISSION", ms(20750, 1), -0.2, "USDT"), ("COMMISSION", ms(20751, 1), -0.1, "BNB"),
+                     ("FUNDING_FEE", ms(g, 0), 2.0, "USDT"), ("COMMISSION", ms(g, 0), -0.3, "USDT")]
+    d, fb = _demo_semplice(tmp_path, finto, giorno=g)
+    d.tick(g * 86400.0 + 400)
+    primo = fb.get_rtdb("/demo_binance/diario/2026-10-24/entrate")
+    assert primo["funding_incassato"] == pytest.approx(1.0) and primo["commissioni_pagate"] == pytest.approx(0.2)
+    secondo = fb.get_rtdb("/demo_binance/diario/2026-10-25/entrate")
+    assert secondo["altre_valute"] == 1 and secondo["commissioni_pagate"] == 0.0
+    oggi = fb.get_rtdb("/demo_binance/diario/2026-10-29/entrate")
+    assert oggi["funding_incassato"] == pytest.approx(2.0) and oggi["commissioni_pagate"] == pytest.approx(0.3)
+    assert fb.get_rtdb("/demo_binance/diario/2026-10-29")["equity"] == 10000.0   # il diario del giorno resta intero
+    assert d.carica()["entrate_chiuse_fino"] == g - 1
+    n = sum(1 for m, p_, q in finto.chiamate if p_ == "/fapi/v1/income")
+    d.tick(g * 86400.0 + 400 + 3700)                       # all'ora dopo: solo oggi, i giorni chiusi non si rileggono
+    assert sum(1 for m, p_, q in finto.chiamate if p_ == "/fapi/v1/income") - n == 2
+
+
+def test_entrate_che_non_si_leggono_non_fermano_niente(tmp_path):
+    finto = _Demo()
+    def rotto(*a, **k):
+        raise RuntimeError("income non disponibile")
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.tick(20750 * 86400.0 + 400)
+    assert d.carica()["ultimo_giorno"] == 20750
+    c = d.cliente()
+    c.chiedi = rotto
+    assert d._entrate(c, d.carica(), 20750 * 86400.0 + 5000)["ultimo_giorno"] == 20750
