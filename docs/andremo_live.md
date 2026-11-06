@@ -5550,3 +5550,9 @@ nella ricerca sul passato (l'archivio non ha simboli con caratteri cinesi), ment
 stato ora scrive il peso che il paper le dà (un test; 2.498 test passano). Richiesta «stato» (ops 0704) per la lettura.
 **Migliorare G1, voce 4, lettura (00:27)**: 龙虾USDT pesa −1,41% nel paper G1 (venduta), il demo ne è privo: poco, si lascia così. Nella
 decisione del 6 novembre il demo segnala anche ICPUSDT come moneta che sul demo non c'è; il rapporto ora scrive anche il suo peso.
+**Giro delle 04:17.** Notizie: 36 articoli nuovi da 22 fonti su 22; 39 conti di Hyperliquid letti; controlli in avanti delle 04:21: niente
+di nuovo; idee nuove: niente di nuovo. **Migliorare G1, voce 3**: il paper G1 dal 23 ottobre ha incassato 155,21 USDT di funding su
+10.000 (1,55%) e pagato 16,34 di spese (0,16%); il demo dal 24 ottobre 72,54 su 4.992,87 (1,45%) e 8,42 di commissioni (0,17%):
+**combaciano**. **Capito oggi**: con il rendimento (voce 1), il funding e le spese (voci 2-3) e le monete mancanti (voce 4), G1 sul conto
+vero fa quello che il paper calcola; l'esecuzione non ha niente da correggere. Voce 6: nel paper dal 23 ottobre G1 +4,14%, G11 +6,81%,
+G1N +7,08% (dal 25): troppo pochi giorni per dire quale decide meglio.

@@ -79,3 +79,12 @@ separato prima del paper).
   il demo segnala anche **ICPUSDT** come moneta che sul demo non c'è: il rapporto ora scrive il peso anche delle monete mancanti, non
   solo di quelle rifiutate. Il primo dato del funding del paper (6 novembre, dopo il regolamento delle 00:00): +0,016% dell'equity,
   spese +0,007%; il confronto giorno per giorno con il demo parte da qui.
+* **6 novembre 2026, 04:30 UTC, voce 3, confronto sui totali** (`ops/results/0704-6nov-stato-peso-moneta-rifiutata.md`, sezioni del
+  paper): il paper G1 dal 23 ottobre ha incassato **155,21 USDT di funding su 10.000 (1,55%)** e pagato **16,34 USDT di spese (0,16%)**; il
+  demo dal 24 ottobre **72,54 su 4.992,87 (1,45%)** e **8,42 di commissioni (0,17%)**. Il paper ha un giorno in più (il 23 ottobre).
+  **Funding e spese del demo combaciano con quelli del paper**: la voce 3 è chiusa per ora; il confronto giorno per giorno resta nel
+  rapporto di stato. Con le voci 1-4 la conclusione è che **G1 sul conto vero fa quello che il paper calcola**: niente da correggere
+  nell'esecuzione.
+* **6 novembre 2026, voce 6, prima lettura**: nel paper dal 23 ottobre **G1 +4,14%, G11 +6,81%** (G11 decide con il funding più fresco);
+  G1N +7,08% dal 25 ottobre. G11 è avanti di 2,7 punti in 14 giorni, ma G1 e G11 tengono quasi le stesse monete e 14 giorni sono pochi:
+  non si conclude niente; si guarda ogni settimana. Sul passato il vantaggio di G11 stava nel 2021 (revisione di G11).
