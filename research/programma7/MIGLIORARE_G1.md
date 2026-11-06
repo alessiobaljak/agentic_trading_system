@@ -113,3 +113,10 @@ separato prima del paper).
   la fase a 5.000 passa in `/demo_binance/fasi/` su RTDB; eventi spenti sul demo (il paper degli eventi resta). Tre test nuovi.
   Si misura da qui: la differenza giornaliera con il paper G1 (a 10.000, senza minimi) attesa intorno allo 0,7% (prova 148).
 
+* **6 novembre 2026, voce 6, la domanda del proprietario** («perchè non G1N che è quella che sta facendo meglio o G11?»): nel paper,
+  dal 23 ottobre, G1 +6,22% e G11 +8,22%; G1N +9,31% dal 25 ottobre (`ops/results/0707-6nov-stato-demo-280.md`). Sul passato (2021 – 4 ottobre
+  2026, `revisione_g1n/nucleo.py`, ricalcolo di oggi): G1 Sharpe 1,98, G1N 1,93; nelle 2.087 finestre di 14 giorni **G1N è avanti di 3
+  punti o più nel 5,8% dei casi e indietro di 3 o più nel 7,3%**, e la differenza di due settimane oscilla di 2,4 punti. Per anno, G1 contro
+  G1N: 2021 +110,3% e +124,4%, 2022 +31,4% e +17,5%, 2023 +8,2% e +11,6%, 2024 +69,5% e +67,9%, 2025 +67,6% e +54,1%, 2026 +26,8% e +22,4%.
+  G11: il vantaggio sul passato sta nel 2021 (`REVISIONE_G11.md`). **Capito**: tre punti in due settimane sono il rumore normale fra
+  versioni così simili; il paper delle tre continua e i numeri vanno al proprietario ogni lunedì.
