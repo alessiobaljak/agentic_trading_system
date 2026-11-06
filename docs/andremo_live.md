@@ -5569,3 +5569,12 @@ svizzera, spegni eventi», e chiede se il bot si adatta al valore del conto (sì
 letto in quel momento). Il demo ora lavora come un conto di 280 USDT (`ops/demo_binance_capitale`), con i filtri degli ordini del
 conto vero; la fase a 5.000 passa in `/demo_binance/fasi/`; eventi spenti sul demo (il paper degli eventi resta acceso). Tre test nuovi;
 riavvio del bot chiesto alla macchina. Le chiavi del conto vero restano sulla macchina, non lette e non usate: `DRY_RUN` vero.
+**Giro delle 08:17.** Notizie: 27 articoli nuovi da 22 fonti su 22; 39 conti di Hyperliquid letti; controlli in avanti delle 08:25:
+niente di nuovo (nessuna chiusura dopo il 21 ottobre; su Coinbase CT e STABLE come prima). Idee nuove: niente di nuovo. **Migliorare
+G1, voce 7**: sul passato il guadagno di prezzo di G1 (+32,9% l'anno) viene per il 43% dalle comprate che fanno meglio della media e per
+il 57% dalle vendute che fanno peggio; le tre fasce di grandezza contribuiscono tutte (1-10 +7,3%, 11-50 +14,5%, 51-100 +11,1% l'anno);
+nel 2026 il lato venduto perde (−20,2%). **Trovato e corretto**: il 28 ottobre 2026 manca nell'archivio pubblico di Binance per tutte le
+monete; riempito dall'interfaccia pubblica per la ricerca (programma 6, 878 monete; programma 5, 100 monete, minuti); il conto a
+tavolino del programma 6 della settimana dal 26 ottobre è cambiato, la prova in avanti del programma 5 è stata rifatta. Il bot non ne
+risentiva. **Capito oggi**: i due lati di G1 si danno il cambio negli anni; e un archivio pubblico può perdere un giorno intero senza
+dirlo: da qui `buchi_archivio.py` lo controlla.

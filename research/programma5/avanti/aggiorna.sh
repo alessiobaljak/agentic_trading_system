@@ -11,5 +11,7 @@ for t in klines metrics premium funding; do
   P5_IMPRONTE="$TMP" python3 -m research.programma5.strumenti.scarico --dal 2026-10 $t $CENTO > "$TMP/scarico_$t.log" 2>&1 || true
 done
 python3 -m research.programma5.strumenti.scarico unisci "$TMP"
+# i giorni che mancano nell'archivio pubblico (il 28 ottobre 2026 per tutte le monete) dall'interfaccia pubblica di Binance
+python3 -m research.programma5.strumenti.buchi_archivio_minuti > "$TMP/buchi_archivio_minuti.log" 2>&1 || true
 PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti.py
 PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py

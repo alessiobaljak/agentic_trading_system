@@ -131,7 +131,10 @@ def minuti(simbolo: str, periodo: str, idea: Optional[str] = None, storia_giorni
     parti = [_csv_da_zip(p, KLINE) for p in _file(simbolo, "klines") if _dentro(p.name, da, fine)]
     if not parti:
         return pd.DataFrame()
-    df = pd.concat(parti, ignore_index=True)
+    # i giorni che mancano nell'archivio pubblico (il 28 ottobre 2026 per tutte le monete), presi dall'interfaccia pubblica di
+    # Binance (`buchi_archivio_minuti.py`): messi dopo, e con «keep first» l'archivio vince dove c'e'
+    api = [pd.read_csv(p) for p in sorted((DATI / simbolo / "klines_api").glob("*.csv")) if _dentro(p.stem + ".zip", da, fine)]
+    df = pd.concat(parti + api, ignore_index=True)
     df["open_time"] = _ms(df["open_time"])
     df = df[(df["open_time"] >= _ms_giorno(da)) & (df["open_time"] < _ms_giorno(fine) + 86_400_000)]
     df["minuto"] = df["open_time"] // 60_000

@@ -38,6 +38,7 @@ separato prima del paper).
 7. **Da dove viene il guadagno di prezzo** (aggiunta del 6 novembre, dopo le voci 1-4: l'esecuzione è a posto, quindi resta da capire
    la strategia stessa): nei 13 giorni del demo circa due terzi del guadagno vengono dal prezzo. Quanto dal lato comprato e quanto dal
    venduto, e per fascia di moneta (1-10, 11-50, 51-100): dal paper (pesi del giorno e prezzi), senza prove nuove sul passato.
+   *Prima lettura il 6 novembre: i due lati e le tre fasce contribuiscono tutti; il lato venduto è quello che nel 2026 perde (diario).*
 8. **G1 con poco capitale** (aggiunta del 6 novembre): con meno di circa 10.000 USDT molti ordini sono sotto il minimo di Binance (con
    1.000 USDT il 76%, revisione di G1N). Se il proprietario vorrà partire con una cifra piccola, serve sapere quanto perde G1 tenendo
    solo le monete con il peso più grande: è una prova sul passato, nel conto delle prove, con le regole scritte prima; si fa solo
@@ -120,3 +121,25 @@ separato prima del paper).
   G1N: 2021 +110,3% e +124,4%, 2022 +31,4% e +17,5%, 2023 +8,2% e +11,6%, 2024 +69,5% e +67,9%, 2025 +67,6% e +54,1%, 2026 +26,8% e +22,4%.
   G11: il vantaggio sul passato sta nel 2021 (`REVISIONE_G11.md`). **Capito**: tre punti in due settimane sono il rumore normale fra
   versioni così simili; il paper delle tre continua e i numeri vanno al proprietario ogni lunedì.
+* **6 novembre 2026, 09:00 UTC, voce 7, prima lettura** (`g1_guadagno_prezzo.py`, numeri in `risultati_g1_guadagno_prezzo.json`; i pesi
+  di G1 di `revisione_g1n/nucleo.py`, il rendimento da un'apertura all'altra). **Sul passato** (4 gennaio 2021 – 4 ottobre 2026) il
+  guadagno di prezzo di G1 è **+32,9% l'anno** (il resto del netto di +54,5% è funding meno spese). Rispetto alla media dell'universo
+  del giorno: le comprate fanno **+14,2% l'anno** meglio della media, le vendute **18,7%** peggio (cioè guadagno per chi vende): 43% e
+  57%. Per fascia (posto per volume nell'universo del lunedì), rispetto alla media: monete 1-10 +7,3%, 11-50 +14,5%, 51-100 +11,1%.
+  In media il lato venduto ha il 54% del peso nelle monete 51-100 (il comprato il 43%): G1 è venduta di circa l'11% del capitale sulle
+  monete piccole, e lo è di più nei giorni in cui il mercato poi scende (la parte «di mercato» della fascia 51-100 vale +17,1% l'anno).
+  **Anno per anno** (comprate sopra la media; vendute sotto la media): 2021 +28,4 e +56,3; 2022 +8,3 e +2,1; 2023 −15,8 e +12,1; 2024
+  +26,1 e +35,0; 2025 +24,9 e +17,7; **2026 +13,1 e −20,2** (fino al 4 ottobre: le vendute fanno meglio della media, il prezzo totale
+  −7,1%, e G1 guadagna solo con il funding). **Nei giorni del paper** (24 ottobre – 4 novembre, ricostruiti con la ricerca: combaciano con
+  il paper nella maggior parte dei giorni ma non il 30 ottobre, 1,31% contro 3,41%): prezzo +1,3%, comprate +3,7% sopra la media,
+  vendute −2,4% (come nel 2026). **Capito**: i due lati e le tre fasce lavorano tutti, e si danno il cambio negli anni (2023 il comprato
+  perde, 2026 il venduto); togliere un lato o una fascia non ha un perché. Il punto debole di adesso è il lato venduto del 2026: da
+  guardare in avanti, senza una prova nuova.
+* **6 novembre 2026, il buco del 28 ottobre** (trovato con la voce 7): nell'archivio pubblico di Binance il 28 ottobre 2026 manca per
+  tutte le monete (il file del giorno risponde 404; il file mensile di ottobre del Bitcoin ha 30 righe). Il pannello della ricerca aveva
+  quel giorno vuoto. Riempito dall'interfaccia pubblica di Binance per le candele giornaliere (`research/programma6/buchi_archivio.py`,
+  878 monete, `buchi_archivio.json`) e per quelle da 1 minuto delle 100 monete del programma 5
+  (`research/programma5/strumenti/buchi_archivio_minuti.py`); l'archivio vince sempre dove c'è (due test). Il bot non ne risente (legge i
+  prezzi in diretta). Il conto a tavolino del programma 6 è cambiato nella settimana dal 26 ottobre (per esempio M1 da −2,40% a −0,35%,
+  M6 da +1,84% a +3,53%, F3 da +0,33% a −0,43%); la prova in avanti del programma 5 è stata rifatta.
+

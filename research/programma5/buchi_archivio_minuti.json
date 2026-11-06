@@ -1,0 +1,306 @@
+{
+ "aggiornato": "2026-11-06 08:29 UTC",
+ "fonte": "Binance, /fapi/v1/klines a 1 minuto (interfaccia pubblica, da www.binance.com)",
+ "riempiti": {
+  "BTCUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ETHUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ZECUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SOLUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "XRPUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "NEARUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "DOGEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "UNIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "BNBUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SUIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "LSKUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ENAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "1000PEPEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "QNTUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ARBUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "WLDUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "LINKUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ADAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "TAOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "AVAXUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "BCHUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ONDOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "FILUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "TRUMPUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "LTCUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "DASHUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ONEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "AAVEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "LITUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "XLMUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "HBARUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "PENGUUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "RAYSOLUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "IOSTUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "DOTUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "VVVUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "INJUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "GUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "VTHOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "XMRUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "APTUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SAGAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "FETUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "OPUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "PHAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ETCUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "CRVUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "TRXUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "1000SHIBUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ETHFIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ICPUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "TIAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "FARTCOINUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ZROUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "1000BONKUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SEIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SYNUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ARKUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ZENUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "VIRTUALUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "JUPUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "MOVRUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "COTIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "WIFUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ARUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "AEROUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "PROMUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ACEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ATOMUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "LDOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "PENDLEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "STRKUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "POLUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "CAKEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ONGUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "JTOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "RAREUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ALGOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "GRASSUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "CVCUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "AVAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "RENDERUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "PYTHUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "REZUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ZETAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "CELRUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "BOMEUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "EGLDUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "MORPHOUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "NMRUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "EIGENUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "MINAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SUSHIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "ORDIUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "STXUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "STEEMUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "GALAUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SPXUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "SANDUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ],
+  "VETUSDT": [
+   "2026-10-28 (0 minuti nell'archivio, 1440 presi)"
+  ]
+ }
+}

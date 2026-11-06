@@ -64,7 +64,10 @@ def candele(simbolo: str) -> pd.DataFrame:
     file = sorted((DATI / simbolo / "giorni").glob("*.zip"))
     if not file:
         return pd.DataFrame()
-    df = pd.concat([m5._csv_da_zip(p, m5.KLINE) for p in file], ignore_index=True)
+    # i giorni che mancano nell'archivio pubblico (per esempio il 28 ottobre 2026, assente anche nel file mensile) presi dalle
+    # candele dell'interfaccia pubblica di Binance (`buchi_archivio.py`): messi prima, cosi' l'archivio, se c'e', vince sempre
+    api = [pd.read_csv(p) for p in sorted((DATI / simbolo / "giorni_api").glob("*.csv"))]
+    df = pd.concat(api + [m5._csv_da_zip(p, m5.KLINE) for p in file], ignore_index=True)
     df["giorno"] = m5._ms(df["open_time"]) // 86_400_000
     df = df.drop_duplicates("giorno", keep="last").set_index("giorno").sort_index()
     return df[["open", "high", "low", "close", "volume", "quote_volume", "taker_buy_quote_volume"]].astype(float)
