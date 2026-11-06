@@ -143,3 +143,11 @@ separato prima del paper).
   prezzi in diretta). Il conto a tavolino del programma 6 è cambiato nella settimana dal 26 ottobre (per esempio M1 da −2,40% a −0,35%,
   M6 da +1,84% a +3,53%, F3 da +0,33% a −0,43%); la prova in avanti del programma 5 è stata rifatta.
 
+* **6 novembre 2026, 12:30 UTC, voce 8, il demo da 280 dopo cinque ore** (`ops/results/0708-6nov-stato-demo-280-dopo-5-ore.md`; le copie
+  di `docs/state.md` delle 07:48 e delle 08:46): 28 long e 25 short, margine unico, scarto fra posizioni vere e volute **14,3% del conto**
+  (la prova 148 si aspettava circa il 14%: il 93% dell'esposizione di 2); il Bitcoin non si compra (G1 ne vuole il 7%, 20 USDT; il passo
+  vero è 0,001, circa 78 USDT), ICPUSDT manca sul demo (4,2%). Il valore è sceso da 278,17 (07:04) a **267,08** (alle 08:00 circa)
+  **nell'ora del passaggio** da 5.000 a 280 (ordini alle 06:57, chiusi alle 07:57): il movimento e le spese delle posizioni vecchie,
+  circa 10.000 USDT, sono finiti sul conto ridotto. Dopo il passaggio, dalle 08:00 a mezzogiorno, demo +0,34% e paper +0,19%. **La fase
+  da 280 si misura dal valore delle 08:00 (267,08)**; il confronto giorno per giorno con il paper parte dal 7 novembre ed è pulito. Con i
+  soldi veri non succede (il conto parte senza posizioni). Lo stop resta a 182 USDT (−32% da 267).

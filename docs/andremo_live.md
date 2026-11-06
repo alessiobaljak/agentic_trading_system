@@ -5578,3 +5578,8 @@ monete; riempito dall'interfaccia pubblica per la ricerca (programma 6, 878 mone
 tavolino del programma 6 della settimana dal 26 ottobre è cambiato, la prova in avanti del programma 5 è stata rifatta. Il bot non ne
 risentiva. **Capito oggi**: i due lati di G1 si danno il cambio negli anni; e un archivio pubblico può perdere un giorno intero senza
 dirlo: da qui `buchi_archivio.py` lo controlla.
+**Giro delle 12:17.** Notizie: 93 articoli nuovi da 22 fonti su 22; 39 conti di Hyperliquid letti; controlli in avanti delle 12:22: niente
+di nuovo. Idee nuove: niente di nuovo. **Il demo da 280 dopo cinque ore**: posizioni come voluto a meno del 14,3% del conto (la prova 148
+si aspettava circa il 14%); il Bitcoin non si compra (il passo vero vale 78 USDT, G1 ne vuole 20). Il valore è sceso da 278,17 a 267,08
+nell'ora del passaggio da 5.000 a 280 (le posizioni vecchie ancora aperte); dopo, fino a mezzogiorno, +0,34% contro +0,19% del paper.
+**Capito oggi**: la fase da 280 si misura dalle 08:00 (267,08); con i soldi veri il passaggio non c'è.
