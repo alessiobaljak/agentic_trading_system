@@ -81,3 +81,9 @@ Il 2 e il 3 novembre la pagina di Crypto Briefing (30 articoli) è stata tre vol
 sfuggiva. Da oggi si legge anche la seconda pagina (`cryptobriefing2` in `raccolta.py`); gli articoli già visti si riconoscono dal link,
 quindi non si contano due volte. Le fonti lette diventano 22 (la stessa testata con due pagine). La regola della prova in avanti non
 cambia: conta gli articoli, non le fonti.
+
+## Aggiunta del 6 novembre 2026: la seconda pagina di BeInCrypto
+
+La pagina di BeInCrypto ha 12 articoli, circa 5 ore; il 6 novembre è stata tutta nuova due volte (alle 04:20 e alle 16:20,
+`archivio/giri.csv`). Da oggi si legge anche la seconda pagina (`beincrypto2` in `raccolta.py`), come per Crypto Briefing: gli articoli
+già visti si riconoscono dal link. Le fonti lette diventano 23. La regola della prova in avanti non cambia.

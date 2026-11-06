@@ -37,6 +37,7 @@ FONTI = {
     "coingape": "https://coingape.com/feed/",
     "cryptopotato": "https://cryptopotato.com/feed/",
     "beincrypto": "https://beincrypto.com/feed/",
+    "beincrypto2": "https://beincrypto.com/feed/?paged=2",   # 6 nov 2026: 12 articoli, circa 5 ore; piena alle 04:20 e alle 16:20
     "cryptonews": "https://cryptonews.com/news/feed/",
     "dailyhodl": "https://dailyhodl.com/feed/",
     "cryptobriefing": "https://cryptobriefing.com/feed/",

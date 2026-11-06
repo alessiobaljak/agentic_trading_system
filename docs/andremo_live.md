@@ -5590,3 +5590,7 @@ altre vendute guadagnano +36,8%. Nessuna prova nuova (il tetto per moneta peggio
 articolo fra un giro e l'altro può essere perso); 39 conti di Hyperliquid letti; controlli in avanti delle 16:22: niente di nuovo. Idee
 nuove: niente di nuovo. **Voce 8**: il demo ora conta a ogni ribilancio le variazioni che restano sotto il minimo di Binance (solo
 lettura); riavvio chiesto alla macchina (ops 0709), detto prima al proprietario.
+**Giro delle 20:17.** Notizie: 95 articoli nuovi da 22 fonti su 22 (Crypto Briefing piena solo nella prima pagina: la seconda la
+copre); 39 conti di Hyperliquid letti; controlli in avanti delle 20:22: niente di nuovo. Idee nuove: niente di nuovo. BeInCrypto era
+stata piena due volte oggi (12 articoli, circa 5 ore): da oggi si legge anche la sua seconda pagina (23 fonti). G1: niente di nuovo da
+misurare prima del ribilancio della mezzanotte, il primo vero del demo da 280 (demo a 267,99 alle 15:59, come alle 08:00).
