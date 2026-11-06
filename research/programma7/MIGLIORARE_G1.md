@@ -73,3 +73,9 @@ separato prima del paper).
   e il demo ne è privo. Il rapporto di stato ora scrive il peso che il paper G1 le dà (`scripts/state_snapshot.py`, un test); prima
   lettura alla prossima richiesta «stato». Confronto con il passato: le spese di G1 con gli ordini limite erano il 6,5% l'anno
   (`RISULTATI_PRIMA.md`, spread compreso), le commissioni vere del demo in proporzione all'anno circa il 4,7% (solo commissioni).
+* **6 novembre 2026, 00:27 UTC, voce 4, lettura** (`ops/results/0704-6nov-stato-peso-moneta-rifiutata.md`): 龙虾USDT pesa **−1,41%**
+  nel paper G1 (venduta); il demo ne è privo. È poco (meno di un cinquantesimo dell'esposizione di 2): **si lascia così**, il confronto
+  fra demo e paper la porta dentro la sua oscillazione; con i soldi veri il conto vero la può scambiare. Nella decisione del 6 novembre
+  il demo segnala anche **ICPUSDT** come moneta che sul demo non c'è: il rapporto ora scrive il peso anche delle monete mancanti, non
+  solo di quelle rifiutate. Il primo dato del funding del paper (6 novembre, dopo il regolamento delle 00:00): +0,016% dell'equity,
+  spese +0,007%; il confronto giorno per giorno con il demo parte da qui.

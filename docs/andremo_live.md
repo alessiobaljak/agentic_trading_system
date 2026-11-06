@@ -5548,3 +5548,5 @@ terzo del guadagno) e le commissioni sono piccole (circa un trentesimo del fundi
 di nuovo. Idee nuove: niente di nuovo. **Migliorare G1, voce 4**: la moneta che il demo rifiuta ogni giorno (龙虾USDT) non è mai stata
 nella ricerca sul passato (l'archivio non ha simboli con caratteri cinesi), mentre il bot la mette in G1 dal listino vivo; il rapporto di
 stato ora scrive il peso che il paper le dà (un test; 2.498 test passano). Richiesta «stato» (ops 0704) per la lettura.
+**Migliorare G1, voce 4, lettura (00:27)**: 龙虾USDT pesa −1,41% nel paper G1 (venduta), il demo ne è privo: poco, si lascia così. Nella
+decisione del 6 novembre il demo segnala anche ICPUSDT come moneta che sul demo non c'è; il rapporto ora scrive anche il suo peso.
