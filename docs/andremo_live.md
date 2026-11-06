@@ -5586,3 +5586,7 @@ nell'ora del passaggio da 5.000 a 280 (le posizioni vecchie ancora aperte); dopo
 **Voce 7, il lato venduto nel 2026**: la perdita (−13,8% rispetto alla media, dal 1° gennaio al 4 ottobre) sta tutta in giugno-agosto e
 in 12 monete (−50,6% insieme: H, DEXE, VVV, LIT, BAS, HYPE, XMR...), con il funding alto e il prezzo che ha continuato a salire; le
 altre vendute guadagnano +36,8%. Nessuna prova nuova (il tetto per moneta peggiorava già, prova 61).
+**Giro delle 16:17.** Notizie: 140 articoli nuovi da 22 fonti su 22, ma BeInCrypto e Crypto Briefing avevano la pagina piena (qualche
+articolo fra un giro e l'altro può essere perso); 39 conti di Hyperliquid letti; controlli in avanti delle 16:22: niente di nuovo. Idee
+nuove: niente di nuovo. **Voce 8**: il demo ora conta a ogni ribilancio le variazioni che restano sotto il minimo di Binance (solo
+lettura); riavvio chiesto alla macchina (ops 0709), detto prima al proprietario.

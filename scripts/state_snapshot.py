@@ -619,6 +619,9 @@ def sezione_demo_binance(fb) -> list:
         lim = x.get("limite") or {}
         righe.append(f"- ultima decisione {g}: {x.get('ordini', 0)} ordini"
                      + (f", eseguiti a limite {lim.get('eseguiti_a_limite', 0)}, a mercato {lim.get('a_mercato', 0)}" if lim else "")
+                     + (f"; sotto il minimo {x['sotto_il_minimo'].get('variazioni', 0)} variazioni "
+                        f"({100 * float(x['sotto_il_minimo'].get('valore_in_frazione_del_conto') or 0):.1f}% del conto)"
+                        if isinstance(x.get("sotto_il_minimo"), dict) else "")
                      + (f"; monete che sul demo non ci sono: {', '.join(x['monete_mancanti_sul_demo'])}"
                         if x.get("monete_mancanti_sul_demo") else "")
                      + (f"; rifiutati {len(x['rifiutati'])}: " + "; ".join(f"{r.get('simbolo')} {str(r.get('errore'))[:80]}"

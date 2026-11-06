@@ -483,3 +483,18 @@ def test_senza_file_del_capitale_il_conto_resta_intero(tmp_path):
     d.file_capitale = tmp_path / "manca"
     d.tick(20750 * 86400.0 + 400)
     assert "conto_ridotto" not in d.carica() and fb.get_rtdb("/demo_binance/stato")["equity"] == 10000.0
+
+
+def test_variazioni_sotto_il_minimo_contate(tmp_path, monkeypatch):
+    """Prova 148: con 280 USDT molte variazioni restano sotto il minimo; il ribilancio le conta."""
+    monkeypatch.setattr(dm, "filtri_veri", lambda: {})
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT"))
+    d, fb = _demo_semplice(tmp_path, finto, pesi={"AUSDT": 0.5, "BUSDT": -0.49, "CUSDT": -0.01})
+    (tmp_path / "capitale").write_text("280")
+    d.file_capitale = tmp_path / "capitale"
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    rib = fb.get_rtdb(f"/demo_binance/ribilanciamenti/{dm.time.strftime('%Y-%m-%d', dm.time.gmtime(20750 * 86400))}")
+    assert rib["sotto_il_minimo"] == {"variazioni": 1, "valore_in_frazione_del_conto": 0.01}   # CUSDT: 2,8 USDT sotto i 5
+    assert {q["symbol"] for q in _post(finto) if q["type"] == "LIMIT"} == {"AUSDT", "BUSDT"}
+    assert dm.sotto_il_minimo({}, {}, {}, 280.0, {}) == {"variazioni": 0, "valore_in_frazione_del_conto": 0.0}

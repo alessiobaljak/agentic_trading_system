@@ -158,6 +158,26 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
     return out
 
 
+def sotto_il_minimo(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> dict:
+    """Le variazioni volute che non diventano ordini perché restano sotto la quantità o il valore minimo (le stesse regole di
+    `ordini_del_giorno`). La prova 148 se le aspetta con 280 USDT: circa 9 su 10 (`research/programma7/RISULTATI_OTTANTASEIESIMA.md`).
+    Si contano solo le differenze da un centesimo in su."""
+    n, valore = 0, 0.0
+    for s in sorted(set(pesi) | {k for k, v in posizioni.items() if v}):
+        if s not in prezzi or s not in f:
+            continue
+        _, passo, qmin, vmin = f[s]
+        p = prezzi[s]
+        delta = float(pesi.get(s, 0.0)) * equity / p - float(posizioni.get(s, 0.0))
+        if abs(delta) * p < 0.01:
+            continue
+        q = arrotonda(abs(delta), passo, "giu")
+        if q < qmin or q * p < vmin:
+            n += 1
+            valore += abs(delta) * p
+    return {"variazioni": n, "valore_in_frazione_del_conto": round(valore / equity, 4) if equity > 0 else 0.0}
+
+
 def filtri_veri(file: Path = FILE_FILTRI_VERI) -> dict:
     try:
         return dict(json.loads(Path(file).read_text(encoding="utf-8")).get("filtri") or {})
@@ -566,6 +586,7 @@ class DemoG1:
         leve = set(st.get("leve") or [])
         piazzati, rifiutati = [], []
         da_fare = ordini_del_giorno(pesi, posizioni, prezzi, equity, f)
+        saltati = sotto_il_minimo(pesi, posizioni, prezzi, equity, f) if solo is None else None
         if solo is not None:
             da_fare = [o for o in da_fare if o[0] in solo]
         for s, lato, q, limite, riduce in da_fare:
@@ -598,6 +619,7 @@ class DemoG1:
         self._scrivi(f"ribilanciamenti/{chiave}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
                                                    "entrate": len(voluti - tenuti), "uscite": len(tenuti - voluti),
                                                    "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now,
+                                                   "sotto_il_minimo": saltati,
                                                    "solo_eventi": solo is not None})
         cosa = f"decisione G1 del {data}" if solo is None else "operazioni a eventi cambiate"
         print(f"[demo_binance] {cosa}: {len(piazzati)} ordini limite sul conto demo, {len(rifiutati)} rifiutati")

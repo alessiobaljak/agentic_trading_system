@@ -160,3 +160,8 @@ separato prima del paper).
   venduto (+9,4%). **Capito**: il lato venduto funziona sulla maggior parte delle monete e perde su poche che salgono molto; un tetto per
   moneta era già stato provato e peggiorava (prova 61). Nessuna prova nuova: si guarda in avanti se le perdite del venduto restano
   concentrate su poche monete.
+* **6 novembre 2026, 16:40 UTC, voce 8, la misura dei minimi sul demo**: a ogni ribilancio il demo scrive quante variazioni volute
+  restano sotto la quantità o il valore minimo e quanto valgono (`bot/portafoglio/demo_binance.py`, `sotto_il_minimo`;
+  `/demo_binance/ribilanciamenti/{giorno}/sotto_il_minimo`; nel rapporto di stato accanto all'ultima decisione). Solo lettura: gli ordini
+  non cambiano. Un test, 2.509 test passano. La prova 148 si aspetta con 280 USDT circa 9 variazioni su 10 sotto il minimo e 6-7 ordini
+  al giorno dopo il primo; prima lettura dopo il ribilancio del 7 novembre.
