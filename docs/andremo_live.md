@@ -5556,3 +5556,11 @@ di nuovo; idee nuove: niente di nuovo. **Migliorare G1, voce 3**: il paper G1 da
 **combaciano**. **Capito oggi**: con il rendimento (voce 1), il funding e le spese (voci 2-3) e le monete mancanti (voce 4), G1 sul conto
 vero fa quello che il paper calcola; l'esecuzione non ha niente da correggere. Voce 6: nel paper dal 23 ottobre G1 +4,14%, G11 +6,81%,
 G1N +7,08% (dal 25): troppo pochi giorni per dire quale decide meglio.
+**G1 con 250 euro (06:10).** Il proprietario: «voglio partire con 250 euro». Prova 148 (`research/programma7/OTTANTASEIESIMA.md`, regole
+spinte prima del calcolo; risultati in `RISULTATI_OTTANTASEIESIMA.md`): 250 euro sono 280 USDT (cambio 1,1209 di Binance); i minimi veri
+del listino di oggi (5 USDT quasi per tutti, 20 per ETH, BCH, LTC, ETC, LINK, 50 per il Bitcoin con il passo di 0,001). Sul passato
+2021-2026, G1 come lo esegue il bot oggi con 280 USDT: **Sharpe 1,90 contro 1,98 senza minimi**, +57,8% l'anno, discesa −26,8%, ogni anno
+positivo, 6,6 ordini al giorno invece di 55,7. Passa l'esame scritto prima. Permettere le chiusure sotto il minimo peggiora (1,83); 10
+monete per lato peggiora (1,72, discesa −39,5%). **Capito oggi**: con poco capitale il minimo di Binance fa da banda e costa poco; il bot
+non va toccato; il bordo è intorno ai 220 USDT (200 USDT 1,66, 150 USDT 1,49). `DRY_RUN` resta vero: i soldi veri solo con la richiesta
+esplicita, ripetuta e consapevole del proprietario.

@@ -705,3 +705,16 @@ Il 29 ottobre 2026 sera Binance ha subito un furto di circa 6,3 miliardi di doll
 ### P26, aggiunta del 1° novembre 2026 — la revisione con le skill (`research/programma7/REVISIONE_SKILL_G1.md`)
 
 Prima dei soldi veri, se il proprietario li chiede: (1) lo Sharpe corretto di G1 oggi è **0,86** (non 0,94: valore vecchio), lo deve accettare lui; (2) il margine incrociato impostato e controllato dal codice (oggi il demo imposta solo la leva 5), esposizione non oltre il 200%; (3) un interruttore che **chiude** tutte le posizioni, uno stop sulla perdita del conto (per esempio −20% o −30%), il confronto ogni giorno fra le posizioni vere e i pesi; (4) almeno 10 monete per lato e un tetto per moneta, da rimisurare sul passato (la prova 61 col solo tetto del 10% alzava la discesa); (5) gli eventi solo sul demo finché N3 non torna positivo sugli eventi nuovi (dal 1° luglio 2025 −2,30% a evento su 213); (6) poco capitale all'inizio, prelievi regolari (rischio della borsa).
+
+### P26, aggiunta del 6 novembre 2026 — il capitale: 250 euro (prova 148)
+
+Il proprietario, 6 novembre 2026: «voglio partire con 250 euro». Sono 280 USDT (cambio 1,1209). Prova 148
+(`research/programma7/RISULTATI_OTTANTASEIESIMA.md`): con i minimi veri di Binance, G1 come lo esegue il bot oggi fa sul passato Sharpe
+1,90 contro 1,98 senza minimi, ogni anno positivo; **il bot non va toccato** per i minimi. Bordo intorno ai 220 USDT (200 USDT: 1,66).
+Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del Bitcoin). Restano da fare prima dei soldi veri:
+* la richiesta esplicita, ripetuta e consapevole del proprietario, con lo Sharpe corretto 0,86 accettato da lui;
+* il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
+* le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
+* la verifica che il suo conto Binance possa usare i future.
+
+Prima, se il proprietario dice di sì: il demo con un capitale di 280 USDT, per vedere gli ordini veri a quella cifra.

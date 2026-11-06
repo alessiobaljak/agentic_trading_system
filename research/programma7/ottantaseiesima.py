@@ -62,6 +62,7 @@ def conto_vero(W, R, O, capitale, vmin, passo, qmin, minimi=True, chiusure=False
     X = np.zeros_like(W)
     D = np.zeros_like(W)
     voluti = saltati = polvere = 0
+    vivo = np.isfinite(O) & (O > 0)
     for k in range(T):
         obi = W[k] * capitale
         delta = obi - P
@@ -72,6 +73,10 @@ def conto_vero(W, R, O, capitale, vmin, passo, qmin, minimi=True, chiusure=False
             o0 = np.where(ok_p, o, 0.0)
             sv = passo * o0                                       # valore di un passo di quantita'
             q = np.where(sv > 0, np.floor(np.abs(delta) / np.where(sv > 0, sv, 1.0) + EPS) * sv, np.abs(delta))
+            # la chiusura e' sempre della posizione intera: sul conto vero la quantita' tenuta e' un multiplo del passo, qui il
+            # valore puo' lasciare un resto sotto un passo dopo i giorni senza prezzo nei dati (correzione del 6 novembre, dopo il primo
+            # calcolo: resti di meno di un centesimo che restavano aperti per anni)
+            q = np.where((obi == 0) & (np.abs(delta) - q < sv + 1e-12), np.abs(delta), q)
             riduce = (obi == 0) | ((P != 0) & (np.sign(P) == np.sign(obi)) & (np.abs(obi) < np.abs(P)))
             ok = ok_p & (q > 1e-12) & (q >= qmin * o0 - 1e-12)
             ok &= (riduce | (q >= vmin - 1e-12)) if chiusure else (q >= vmin - 1e-12)
@@ -83,7 +88,7 @@ def conto_vero(W, R, O, capitale, vmin, passo, qmin, minimi=True, chiusure=False
         P = P + d
         X[k] = P / capitale
         D[k] = d / capitale
-        polvere += int(((obi == 0) & (np.abs(P) > 1e-9)).sum())
+        polvere += int(((obi == 0) & (np.abs(P) > 1e-9) & vivo[k]).sum())
         P = P * (1 + R[k])
     return X, D, {"ordini_voluti": voluti, "ordini_saltati": saltati, "posizioni_rimaste_giorno": polvere}
 
@@ -135,14 +140,17 @@ def main():
         X, D, st = conto_vero(Wx, R, O, cap, vmin, passo, qmin, minimi, chiusure)
         d = netto_del_conto(X, D, R, F, costo, giorni, simboli, ore)
         s = an.sintesi(d)
+        vivo = np.isfinite(O) & (O > 0)                         # le posizioni nei giorni senza prezzo non contano nelle misure
         lordo_voluto = np.abs(Wx).sum(axis=1)
-        tenuto = np.abs(X).sum(axis=1)
+        tenuto = (np.abs(X) * vivo).sum(axis=1)
         s.update(st)
         s["esposizione_tenuta_su_voluta"] = float(tenuto.sum() / lordo_voluto.sum())
         s["ordini_eseguiti_al_giorno"] = float((np.abs(D) > 1e-12).sum() / len(giorni))
         s["spese_annue"] = float(d["spese"].sum() / len(giorni) * 365)
         s["funding_annuo_pagato"] = float(d["funding"].sum() / len(giorni) * 365)
-        s["monete_tenute_al_giorno"] = float((np.abs(X) > 1e-12).sum() / len(giorni))
+        s["monete_tenute_al_giorno"] = float(((np.abs(X) > 1e-12) & vivo).sum() / len(giorni))
+        polv = (Wx == 0) & vivo & (np.abs(X) > 1e-12)
+        s["valore_posizioni_rimaste_in_frazione_del_capitale"] = float((np.abs(X) * polv).sum(axis=1).mean())
         s["monete_volute_al_giorno"] = float((np.abs(Wx) > 1e-12).sum() / len(giorni))
         out["conti"][nome] = s
         log(nome, f"Sharpe {s['sharpe']:.2f}", f"annuo {s['annuo']:+.1%}", f"discesa {s['discesa']:.1%}",
@@ -153,6 +161,7 @@ def main():
     serie = {"G1 senza minimi": rif["netto"]}
     for nome, Wx, cap, ch in (("A, 280 USDT", W, CAPITALE, False), ("A2, 280 USDT", W, CAPITALE, True),
                               ("B, 280 USDT", WB, CAPITALE, True),
+                              ("A, 200 USDT", W, 200.0, False),   # per capire, aggiunto dopo il primo calcolo: il conto dopo una discesa
                               ("A, 1.000 USDT", W, 1000.0, False), ("A2, 1.000 USDT", W, 1000.0, True),
                               ("A, 5.000 USDT", W, 5000.0, False), ("A2, 5.000 USDT", W, 5000.0, True)):
         d = fai(nome, Wx, cap, True, ch)
@@ -160,6 +169,16 @@ def main():
         out["conti"][nome]["oscillazione_differenza_giornaliera"] = float((d["netto"] - rif["netto"]).std(ddof=1))
         out["conti"][nome]["correlazione_settimanale_con_G1"] = float(
             an.settimane(pd.DataFrame({"a": d["netto"], "b": rif["netto"]})).corr().iloc[0, 1])
+    # per capire (aggiunto dopo il primo calcolo, non decide niente): quanto il risultato di A cambia con il capitale
+    out["capitali_per_capire"] = {}
+    for cap in (150, 200, 225, 250, 280, 300, 350, 400, 500, 700, 1000, 2000):
+        X, D, _ = conto_vero(W, R, O, float(cap), vmin, passo, qmin, True, False)
+        d = netto_del_conto(X, D, R, F, costo, giorni, simboli, ore)
+        s = an.sintesi(d)
+        out["capitali_per_capire"][str(cap)] = {"sharpe": s["sharpe"], "annuo": s["annuo"], "discesa": s["discesa"],
+                                                "oscillazione_differenza_giornaliera": float((d["netto"] - rif["netto"]).std(ddof=1)),
+                                                "anni_negativi": [y for y, v in s["per_anno"].items() if v <= 0]}
+        log("capitale", cap, f"Sharpe {s['sharpe']:.2f}", f"annuo {s['annuo']:+.1%}", f"discesa {s['discesa']:.1%}")
     rs = out["conti"]["G1 senza minimi"]
     out["esame"] = {n: esame(out["conti"][n], rs) for n in ("A, 280 USDT", "A2, 280 USDT", "B, 280 USDT")}
     OUT.mkdir(parents=True, exist_ok=True)

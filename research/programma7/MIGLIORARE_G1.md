@@ -41,7 +41,7 @@ separato prima del paper).
 8. **G1 con poco capitale** (aggiunta del 6 novembre): con meno di circa 10.000 USDT molti ordini sono sotto il minimo di Binance (con
    1.000 USDT il 76%, revisione di G1N). Se il proprietario vorrà partire con una cifra piccola, serve sapere quanto perde G1 tenendo
    solo le monete con il peso più grande: è una prova sul passato, nel conto delle prove, con le regole scritte prima; si fa solo
-   quando il proprietario dice con che cifra vuole partire.
+   quando il proprietario dice con che cifra vuole partire. *Fatta il 6 novembre, prova 148: G1 regge con 280 USDT così com'è (diario).*
 
 ## Già fatte (dalla revisione con le skill del 1° novembre, `REVISIONE_SKILL_G1.md`)
 
@@ -96,3 +96,12 @@ separato prima del paper).
 * **6 novembre 2026, voce 6, prima lettura**: nel paper dal 23 ottobre **G1 +4,14%, G11 +6,81%** (G11 decide con il funding più fresco);
   G1N +7,08% dal 25 ottobre. G11 è avanti di 2,7 punti in 14 giorni, ma G1 e G11 tengono quasi le stesse monete e 14 giorni sono pochi:
   non si conclude niente; si guarda ogni settimana. Sul passato il vantaggio di G11 stava nel 2021 (revisione di G11).
+* **6 novembre 2026, 06:10 UTC, voce 8** (il proprietario: «voglio partire con 250 euro»; prova 148, regole in `OTTANTASEIESIMA.md`
+  spinte prima del calcolo, risultati in `RISULTATI_OTTANTASEIESIMA.md`): 250 euro sono 280 USDT (cambio 1,1209). Con i minimi veri di
+  Binance di oggi (5 USDT per quasi tutti i perpetui, 20 per ETH, BCH, LTC, ETC e LINK, 50 per il Bitcoin con il passo di 0,001), sul
+  passato 2021-2026 a capitale fisso: **G1 come lo esegue il bot oggi fa Sharpe 1,90 contro 1,98 senza minimi**, +57,8% l'anno contro
+  +54,5%, discesa −26,8% contro −28,7%, ogni anno positivo; fa 6,6 ordini al giorno invece di 55,7, perché il minimo fa da banda.
+  Permettere le chiusure sotto il minimo peggiora (1,83: le posizioni scendono e non risalgono); 10 monete per lato peggiora (1,72,
+  discesa −39,5%). **Il bot non va toccato.** Il limite: sotto i 220 USDT circa G1 rende chiaramente meno (200 USDT 1,66, 150 USDT 1,49),
+  e una discesa come la peggiore del passato porterebbe 280 USDT a circa 205. Prossimo passo, se il proprietario dice di sì: il demo
+  con un capitale di 280 USDT, per vedere gli ordini veri a quella cifra prima dei soldi veri.

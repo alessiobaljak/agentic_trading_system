@@ -52,3 +52,13 @@ def test_meno_monete_per_lato():
     W = np.array([[0.4, 0.3, 0.2, 0.1, -0.6, -0.4]])
     B = p.meno_monete(W, 2)
     assert B[0].tolist() == pytest.approx([4 / 7, 3 / 7, 0, 0, -0.6, -0.4])
+
+
+def test_chiusura_della_posizione_intera_dopo_un_resto():
+    # un resto sotto un passo (dai giorni senza prezzo nei dati) si chiude con la posizione
+    O = [[1.0, 1.0, 0.0625], [1.0, 1.0, 0.0625]]
+    W = [[0.0, 0.0, -0.5], [0.0, 0.0, 0.0]]
+    R = [[0.0, 0.0, 0.00007], [0.0, 0.0, 0.0]]
+    passo = np.array([0.0, 0.0, 1.0])
+    X, _, st = p.conto_vero(np.array(W), np.array(R), np.array(O), 280.0, VMIN, passo, np.array([0.0, 0.0, 1.0]))
+    assert X[1, 2] == 0.0 and st["posizioni_rimaste_giorno"] == 0
