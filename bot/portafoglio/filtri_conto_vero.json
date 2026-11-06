@@ -1,0 +1,2615 @@
+{
+"filtri": {
+"0GUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000000MOGUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"1000BONKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000CATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000CHEEMSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000FLOKIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000LUNCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000PEPEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000RATSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000SATSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000SHIBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1000XECUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1INCHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"1MBABYDOGEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"2ZUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"4USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AAVEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ACEUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"ACHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ACTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ACUUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ADAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AEROUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"AEVOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"AGLDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AGTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AIGENSYNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AINUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AIOTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AIOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AIXBTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AKEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AKTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ALCHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ALGOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ALICEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ALLOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ALLUSDT": {
+"passo": 1.0,
+"quantita_minima": 10.0,
+"valore_minimo": 5.0
+},
+"ALPINEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ALTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ANIMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ANKRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"APEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"API3USDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"APRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"APTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ARBUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ARCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ARIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ARKMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ARKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ARPAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ARUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ARXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ASRUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ASTERUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ASTRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ATHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ATOMUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"ATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AUCTIONUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"AUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AVAAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AVAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"AVAXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AVNTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AWEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AXLUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"AXSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"AZTECUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"B2USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BABYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BANANAS31USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BANANAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"BANDUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"BANKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BANUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BARDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BASEDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BASUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BATUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"BBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BCHUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 20.0
+},
+"BEAMXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BEATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BELUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BERAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"BICOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BIGTIMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BILLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BIOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BIRBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BLESSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BLUAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BLURUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BMTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BNBUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"BNTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BOMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BRETTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BREVUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BROCCOLI714USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BROCCOLIF3BUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BSBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BSVUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"BTCDOMUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"BTCUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 50.0
+},
+"BTRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BTWUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BULLAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"BUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"C98USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CAKEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CAPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CARVUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CATIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CELOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"CELRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CETUSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CFGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CFXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CGPTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CHILLGUYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CHIPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CHRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CHZUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CKBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CLANKERUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"CLOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"COAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"COLLECTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"COMPUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"COOKIEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"COTIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"COWUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CROSSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CRVUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"CTKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CTRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CTSIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CVCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"CVXUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"CYBERUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"CYSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DASHUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"DATAIPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DEEPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DEXEUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"DIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DODOXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOGEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOGSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOLOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOODUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DOTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"DRIFTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DUSKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"DYDXUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"DYMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"EDENUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"EDGEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"EDUUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"EGLDUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"EIGENUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ELSAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ENAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ENJUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ENSOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ENSUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ERAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ESPORTSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ESPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ETCUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 20.0
+},
+"ETHFIUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ETHUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 20.0
+},
+"ETHWUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"EULUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"EVAAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FARTCOINUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FETUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FFUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FHEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FIDAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FIGHTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FILUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FLOCKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FLOWUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FLUIDUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FLUXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FOGOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FOLKSUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FORMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"FRAXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"FUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GALAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GASUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"GENIUSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GIGGLEUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"GLMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GMTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GMXUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"GOATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GPSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GRAMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"GRASSUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"GRIFFAINUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GRTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GRVTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GTCUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"GUAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GUNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"GWEIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HAEDALUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HANAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HBARUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HEIUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"HEMIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HIVEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HMSTRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HOLOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HOMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HOTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HUMAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HYPERUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"HYPEUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"ICNTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ICPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"IDOLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"IDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ILVUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"IMXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"INITUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"INJUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"INUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"INXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"IOSTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"IOTAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"IOTXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"IOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"IRYSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JASMYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JCTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JELLYJELLYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JOEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JSTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JTOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"JUPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KAIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KAITOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"KASUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KAVAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"KERNELUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KGENUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KITEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KMNOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KNCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KOMAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"KSMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LABUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LAYERUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LDOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LIGHTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LINEAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LINKUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 20.0
+},
+"LISTAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LITUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LPTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LQTYUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LSKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LTCUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 20.0
+},
+"LUMIAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"LUNA2USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"LYNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MAGICUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"MAGMAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MANAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MANTAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"MANTRAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MARSCOINUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MASKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MAVIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MAVUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MEGAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MELANIAUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"MEMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MERLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"METISUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"METUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"MEWUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MINAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MIRAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MMTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MOCAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MONUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MOODENGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MORPHOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"MOVEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MOVRUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"MTLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MUBARAKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"MYXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NAORISUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NEARUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NEIROUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NEOUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"NEWTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NIGHTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NILUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"NMRUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"NOMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NOTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"NXPCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OGNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OGUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ONDOUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ONEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ONGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ONTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ONUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OPENUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OPGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OPNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"OPUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ORCAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ORDERUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ORDIUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"OUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PARTIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PAXGUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"PENDLEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PENGUUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PEOPLEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PHAROSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PHAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PIEVERSEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PIPPINUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PIXELUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PLAYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PLUMEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PNUTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"POLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"POLYXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PONSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"POPCATUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PORTALUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"POWERUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"POWRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PREDICTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PRLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PROMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"PROVEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"PUMPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PUNDIXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"PYTHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"QNTUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"QTUMUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"QUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RAREUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RAVEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RAYSOLUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"RECALLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"REDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RENDERUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"RESOLVUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"REUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"REZUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RIFUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RIVERUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"RLCUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ROBOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RONINUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ROSEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RPLUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"RSRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RUNEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"RVNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SAFEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SAGAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"SAHARAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SANDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SANTOSUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"SAPIENUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SCRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SEIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SENTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SFPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SHELLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SIGNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SIRENUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SKLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SKRUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SKYAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SKYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SLPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SLXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SNXUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"SOLUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"SOLVUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SOMIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SONICUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"SOONUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SOPHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SPACEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SPELLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SPKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SPORTFUNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SPXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SQDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SSVUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"STABLEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"STARUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"STBLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"STEEMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"STOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"STRKUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"STXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SUIUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"SUNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SUPERUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SUSHIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SWARMSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SXTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SYNUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"SYRUPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TACUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TAGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TAIKOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TAKEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TAOUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"TAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"THETAUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"THEUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"TIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TLMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TNSRUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"TOSHIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TOWNSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRADOORUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRBUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"TREEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRIAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRUMPUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"TRUSTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRUTHUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TRXUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TSTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TURBOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TURTLEUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TUTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"TWTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"UAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"UBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"UMAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"UNIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"USDCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"USELESSUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"USTCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"USUALUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"USUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"VANAUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"VELVETUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"VETUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"VIRTUALUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"VTHOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"VVVUSDT": {
+"passo": 0.01,
+"quantita_minima": 0.01,
+"valore_minimo": 5.0
+},
+"WALUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WAXPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WCTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WETUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WIFUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"WLDUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WLFIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WOOUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"WUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"XAIUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XANUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XAUTUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"XLMUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XMRUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"XNYUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XPINUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XPLUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XRPUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"XTZUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"XVGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"XVSUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"YBUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"YFIUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"YGGUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZAMAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZBTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZECUSDT": {
+"passo": 0.001,
+"quantita_minima": 0.001,
+"valore_minimo": 5.0
+},
+"ZENUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ZEREBROUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZESTUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZETAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZILUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZKCUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZKPUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZKUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZORAUSDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"ZROUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"ZRXUSDT": {
+"passo": 0.1,
+"quantita_minima": 0.1,
+"valore_minimo": 5.0
+},
+"哈基米USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"币安人生USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"我踏马来了USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"牛来USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+},
+"龙虾USDT": {
+"passo": 1.0,
+"quantita_minima": 1.0,
+"valore_minimo": 5.0
+}
+},
+"fonte": "Binance, /fapi/v1/exchangeInfo del conto vero (www.binance.com), 6 novembre 2026 alle 06:00 UTC circa; copia di research/programma7/risultati_ottantaseiesima/filtri_binance_2026-11-06.json. Dati pubblici, senza chiavi."
+}

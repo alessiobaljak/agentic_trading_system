@@ -5564,3 +5564,8 @@ positivo, 6,6 ordini al giorno invece di 55,7. Passa l'esame scritto prima. Perm
 monete per lato peggiora (1,72, discesa −39,5%). **Capito oggi**: con poco capitale il minimo di Binance fa da banda e costa poco; il bot
 non va toccato; il bordo è intorno ai 220 USDT (200 USDT 1,66, 150 USDT 1,49). `DRY_RUN` resta vero: i soldi veri solo con la richiesta
 esplicita, ripetuta e consapevole del proprietario.
+**Il demo da 280 USDT (07:00).** Il proprietario: «le chiavi di binance future reali le hai già, si posso usare future binance da
+svizzera, spegni eventi», e chiede se il bot si adatta al valore del conto (sì: a ogni ribilancio le posizioni si calcolano sul valore
+letto in quel momento). Il demo ora lavora come un conto di 280 USDT (`ops/demo_binance_capitale`), con i filtri degli ordini del
+conto vero; la fase a 5.000 passa in `/demo_binance/fasi/`; eventi spenti sul demo (il paper degli eventi resta acceso). Tre test nuovi;
+riavvio del bot chiesto alla macchina. Le chiavi del conto vero restano sulla macchina, non lette e non usate: `DRY_RUN` vero.

@@ -609,6 +609,9 @@ def sezione_demo_binance(fb) -> list:
                      f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short · "
                      f"ordini limite eseguiti {st.get('limite_eseguiti', 0)} su {st.get('limite_totali', 0)} · in attesa "
                      f"{st.get('ordini_in_attesa', 0)}")
+    if st.get("conto_ridotto"):
+        righe.append(f"- conto ridotto: il demo lavora come un conto di ${float(st['conto_ridotto']):,.0f} (prova 148, il capitale del "
+                     f"proprietario); valore vero del conto demo ${float(st.get('valore_vero_del_conto_demo') or 0):,.2f}")
     rib = fb.get_rtdb("/demo_binance/ribilanciamenti") or {}
     if isinstance(rib, dict) and rib:
         g = max(rib)

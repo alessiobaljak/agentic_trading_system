@@ -105,3 +105,11 @@ separato prima del paper).
   discesa −39,5%). **Il bot non va toccato.** Il limite: sotto i 220 USDT circa G1 rende chiaramente meno (200 USDT 1,66, 150 USDT 1,49),
   e una discesa come la peggiore del passato porterebbe 280 USDT a circa 205. Prossimo passo, se il proprietario dice di sì: il demo
   con un capitale di 280 USDT, per vedere gli ordini veri a quella cifra prima dei soldi veri.
+* **6 novembre 2026, 07:00 UTC, voce 8, il demo da 280 USDT** (il proprietario: «spegni eventi»; prima aveva chiesto se il bot si
+  adatta al valore del conto: sì, a ogni ribilancio le posizioni si calcolano sul valore del conto letto in quel momento): il demo
+  lavora come un conto di 280 USDT (`ops/demo_binance_capitale`; `bot/portafoglio/demo_binance.py`, `conto_ridotto`): il valore usato
+  per le posizioni, lo stop a −35% e i rapporti è 280 più il guadagno da quando è partito; i filtri degli ordini severi almeno come
+  quelli del conto vero (`filtri_conto_vero.json`: il Bitcoin con il passo di 0,001 e il minimo di 50, BCH, LTC, ETC e LINK con 20);
+  la fase a 5.000 passa in `/demo_binance/fasi/` su RTDB; eventi spenti sul demo (il paper degli eventi resta). Tre test nuovi.
+  Si misura da qui: la differenza giornaliera con il paper G1 (a 10.000, senza minimi) attesa intorno allo 0,7% (prova 148).
+

@@ -717,4 +717,4 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
 
-Prima, se il proprietario dice di sì: il demo con un capitale di 280 USDT, per vedere gli ordini veri a quella cifra.
+Prima, il demo con un capitale di 280 USDT: **fatto il 6 novembre** (il proprietario: «le chiavi di binance future reali le hai già, si posso usare future binance da svizzera, spegni eventi»): `ops/demo_binance_capitale` con 280, eventi spenti sul demo (`ops/demo_binance_eventi_acceso` tolto; il paper degli eventi resta acceso), filtri severi come quelli veri. Le chiavi del conto vero sono sulla macchina (dice il proprietario): non si leggono e non si usano finché non chiede i soldi veri in modo esplicito.

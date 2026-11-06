@@ -35,6 +35,12 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
   * **il confronto fra le posizioni vere e quelle volute**: ogni ora, senza ordini in corso, le quantità che Binance dice che teniamo
     contro quelle decise all'ultimo ribilancio; ogni moneta con uno scarto oltre il 2% del conto va su RTDB in
     `/demo_binance/confronto` (si sistema da sola al ribilancio dopo).
+* **Il conto ridotto** (il proprietario, 6 novembre 2026: «voglio partire con 250 euro», poi «spegni eventi»; prova 148,
+  `research/programma7/RISULTATI_OTTANTASEIESIMA.md`): con un numero nel file `ops/demo_binance_capitale` (per esempio 280) il demo
+  lavora come un conto di quella cifra. Il valore usato per le posizioni, lo stop e i rapporti è il capitale più il guadagno da quando
+  il conto ridotto è partito; il resto del conto demo resta fermo. I filtri degli ordini sono severi almeno come quelli del conto vero
+  (`filtri_conto_vero.json`). All'avvio i valori della fase di prima (`giorni`, `diario`, `ribilanciamenti`) passano in
+  `/demo_binance/fasi/`, così grafici e rapporti ripartono puliti. Togliere il file non fa tornare al conto intero.
 """
 from __future__ import annotations
 
@@ -79,6 +85,10 @@ COMANDO_RIPARTI = "/commands/demo_binance_riparti"
 # proprietario, la macchina li riceve con il git pull di ogni minuto); si eseguono una volta per ogni testo nuovo del file
 FILE_CHIUDI = RADICE / "ops" / "demo_binance_chiudi_tutto"
 FILE_RIPARTI = RADICE / "ops" / "demo_binance_riparti"
+# il conto ridotto (vedi sopra): il capitale in USDT nel file; i filtri del conto vero accanto a questo modulo
+FILE_CAPITALE = RADICE / "ops" / "demo_binance_capitale"
+FILE_FILTRI_VERI = Path(__file__).with_name("filtri_conto_vero.json")
+RAMI_DELLA_FASE = ("giorni", "diario", "ribilanciamenti")
 
 
 def _url(percorso: str) -> str:
@@ -145,6 +155,29 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
         limite = arrotonda(p, tick, "giu" if lato == "BUY" else "su")
         riduce = obiettivo == 0.0 or (attuale != 0 and (attuale > 0) == (obiettivo > 0) and abs(obiettivo) < abs(attuale))
         out.append((s, lato, q, limite, bool(riduce)))
+    return out
+
+
+def filtri_veri(file: Path = FILE_FILTRI_VERI) -> dict:
+    try:
+        return dict(json.loads(Path(file).read_text(encoding="utf-8")).get("filtri") or {})
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def piu_severi(f: dict, veri: dict) -> dict:
+    """I filtri del demo resi severi almeno come quelli del conto vero. Il demo è più largo: il passo del Bitcoin è 0,0001 invece di
+    0,001; BCH, LTC, ETC e LINK hanno il minimo di 5 USDT invece di 20. Il passo vero si usa solo se è un multiplo di quello del demo."""
+    out = {}
+    for s, (tick, passo, qmin, vmin) in f.items():
+        v = veri.get(s)
+        if v:
+            pv = float(v.get("passo") or 0)
+            if passo > 0 and pv > passo and abs(pv / passo - round(pv / passo)) < 1e-6:
+                passo = pv
+            qmin = max(qmin, float(v.get("quantita_minima") or 0))
+            vmin = max(vmin, float(v.get("valore_minimo") or 0))
+        out[s] = (tick, passo, qmin, vmin)
     return out
 
 
@@ -242,8 +275,10 @@ class DemoG1:
     def __init__(self, fb, cliente: Optional[ClienteDemo] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_G1,
                  interruttore: Path = INTERRUTTORE, file_eventi: Path = FILE_EVENTI,
                  interruttore_eventi: Path = INTERRUTTORE_EVENTI, file_chiudi: Path = FILE_CHIUDI,
-                 file_riparti: Path = FILE_RIPARTI) -> None:
+                 file_riparti: Path = FILE_RIPARTI, file_capitale: Path = FILE_CAPITALE) -> None:
         self.fb = fb
+        self.file_capitale = Path(file_capitale)
+        self._scarto = 0.0                          # valore vero del conto demo meno il valore del conto ridotto
         self.file_chiudi, self.file_riparti = Path(file_chiudi), Path(file_riparti)
         self._cliente = cliente
         self.file_stato, self.file_g1, self.interruttore = Path(file_stato), Path(file_g1), Path(interruttore)
@@ -260,6 +295,51 @@ class DemoG1:
         if self.interruttore_eventi == INTERRUTTORE_EVENTI and os.environ.get("PYTEST_CURRENT_TEST"):
             return False
         return self.interruttore_eventi.exists()
+
+    def capitale_voluto(self) -> Optional[float]:
+        """Il capitale del conto ridotto dal file `ops/demo_binance_capitale` (un numero in USDT); None se non c'è."""
+        if self.file_capitale == FILE_CAPITALE and os.environ.get("PYTEST_CURRENT_TEST"):
+            return None
+        try:
+            v = float(self.file_capitale.read_text(encoding="utf-8").strip().replace(",", "."))
+        except Exception:  # noqa: BLE001
+            return None
+        return v if v > 0 else None
+
+    def _archivia_fase(self, nome: str) -> None:
+        """I valori della fase di prima passano in `/demo_binance/fasi/{nome}/`; si cancellano solo dopo la copia."""
+        if self.fb is None:
+            return
+        for ramo in RAMI_DELLA_FASE:
+            v = self.fb.get_rtdb(f"/demo_binance/{ramo}")
+            if not isinstance(v, dict) or not v:
+                continue
+            self.fb.set_rtdb(f"/demo_binance/fasi/{nome}/{ramo}", v)
+            for k in list(v):
+                self.fb.set_rtdb(f"/demo_binance/{ramo}/{k}", None)
+
+    def conto_ridotto(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Il demo come un conto più piccolo (vedi in cima): all'avvio (o a un capitale nuovo nel file) si fissa lo scarto fra il
+        valore vero del conto demo e il capitale scelto, si archivia la fase di prima e si torna subito ai pesi di oggi."""
+        voluto = self.capitale_voluto()
+        cr = st.get("conto_ridotto")
+        if voluto and (not cr or float(cr["capitale"]) != voluto) and not st.get("ordini"):
+            self._scarto = 0.0
+            vero = self._conto(c)[0]
+            data = time.strftime("%Y-%m-%d", time.gmtime(now))
+            prima = f"capitale_{float(cr['capitale']):g}" if cr else "conto_intero"
+            self._archivia_fase(f"{prima}_fino_al_{data}".replace(".", "_"))
+            cr = {"capitale": voluto, "valore_vero_all_avvio": vero, "dal": now, "data": data}
+            st["conto_ridotto"] = cr
+            st["capitale_iniziale"] = voluto
+            st["massimo"] = voluto
+            st["ultimo_giorno"] = 0                          # al giro stesso le posizioni si riportano ai pesi, alla misura nuova
+            st.pop("obiettivi", None)
+            st.pop("ultima_valutazione", None)
+            self._scrivi("conto_ridotto", cr)
+            print(f"[demo_binance] conto ridotto: il demo lavora come un conto di {voluto:g} USDT (valore vero {vero:,.2f})")
+        self._scarto = float(cr["valore_vero_all_avvio"]) - float(cr["capitale"]) if cr else 0.0
+        return st
 
     def eventi_aperti(self) -> dict:
         if not self.eventi_accesi():
@@ -350,6 +430,7 @@ class DemoG1:
             return
         try:
             st = self.carica()
+            st = self.conto_ridotto(c, st, now)
             da_dashboard = self._comando(COMANDO_CHIUDI)
             da_file = self._comando_file(self.file_chiudi, st, "eseguito_chiudi")
             if da_dashboard or da_file:
@@ -404,7 +485,7 @@ class DemoG1:
         conto = c.chiedi("GET", "/fapi/v2/account", firmata=True)
         self._separati = sorted(x["symbol"] for x in conto.get("positions", []) if x.get("isolated") in (True, "true"))
         posizioni = {x["symbol"]: float(x["positionAmt"]) for x in conto.get("positions", []) if float(x.get("positionAmt") or 0)}
-        return float(conto["totalMarginBalance"]), float(conto["totalWalletBalance"]), posizioni
+        return float(conto["totalMarginBalance"]) - self._scarto, float(conto["totalWalletBalance"]) - self._scarto, posizioni
 
     def _margine_unico(self, c: ClienteDemo, s: str) -> str:
         """Chiede a Binance il margine unico per la moneta; «già unico» (-4046) va bene. Restituisce '' o l'errore."""
@@ -465,6 +546,8 @@ class DemoG1:
     def ribilancia(self, c: ClienteDemo, st: dict, pesi: dict, giorno: int, now: float, solo: Optional[set] = None) -> dict:
         """Porta il conto ai pesi; con ``solo`` (un'operazione a eventi aperta o chiusa) tocca solo quelle monete."""
         f = filtri(c.chiedi("GET", "/fapi/v1/exchangeInfo"))
+        if st.get("conto_ridotto"):
+            f = piu_severi(f, filtri_veri())
         prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
         if not st.get("modo_controllato"):
             # una posizione per moneta (non due, long e short separate): gli ordini qui non hanno il lato della posizione
@@ -565,7 +648,9 @@ class DemoG1:
                                "limite_eseguiti": int(st.get("limite_eseguiti", 0)), "limite_totali": int(st.get("limite_totali", 0)),
                                "ordini_in_attesa": len((st.get("ordini") or {}).get("lista") or []), "aggiornato": now,
                                "massimo": round(st["massimo"], 2), "dal_massimo": equity / st["massimo"] - 1,
-                               "stop_a": round((1 - STOP_CONTO) * st["massimo"], 2)})
+                               "stop_a": round((1 - STOP_CONTO) * st["massimo"], 2),
+                               "conto_ridotto": (st.get("conto_ridotto") or {}).get("capitale"),
+                               "valore_vero_del_conto_demo": round(equity + self._scarto, 2)})
         oggi = time.strftime('%Y-%m-%d', time.gmtime(now))
         self._scrivi(f"giorni/{oggi}", round(equity, 2))
         self._scrivi(f"diario/{oggi}", {"equity": round(equity, 2), "long": sum(1 for v in posizioni.values() if v > 0),

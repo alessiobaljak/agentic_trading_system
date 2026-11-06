@@ -430,3 +430,56 @@ def test_entrate_che_non_si_leggono_non_fermano_niente(tmp_path):
     c = d.cliente()
     c.chiedi = rotto
     assert d._entrate(c, d.carica(), 20750 * 86400.0 + 5000)["ultimo_giorno"] == 20750
+
+
+def test_conto_ridotto_come_un_conto_di_280(tmp_path, monkeypatch):
+    """Il proprietario, 6 novembre 2026: «voglio partire con 250 euro» (280 USDT): il demo lavora come un conto di quella cifra, e la
+    fase di prima passa in /demo_binance/fasi."""
+    monkeypatch.setattr(dm, "filtri_veri", lambda: {})   # AUSDT e BUSDT esistono anche sul listino vero, con altri passi
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    fb.set_rtdb("/demo_binance/giorni/2026-11-05", 5232.79)
+    (tmp_path / "capitale").write_text("280\n")
+    d.file_capitale = tmp_path / "capitale"
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    st = d.carica()
+    assert st["conto_ridotto"]["capitale"] == 280.0 and st["conto_ridotto"]["valore_vero_all_avvio"] == 10000.0
+    assert st["capitale_iniziale"] == 280.0 and st["massimo"] == 280.0
+    ordini = {q["symbol"]: float(q["quantity"]) for q in _post(finto) if q["type"] == "LIMIT"}
+    assert ordini["AUSDT"] == pytest.approx(1.399) and ordini["BUSDT"] == pytest.approx(2.799)   # 140 USDT per lato, non 5.000
+    stato = fb.get_rtdb("/demo_binance/stato")
+    assert stato["equity"] == 280.0 and stato["conto_ridotto"] == 280.0 and stato["valore_vero_del_conto_demo"] == 10000.0
+    assert fb.get_rtdb("/demo_binance/giorni/2026-11-05") is None
+    fasi = fb.get_rtdb("/demo_binance/fasi")
+    assert list(fasi) == [f"conto_intero_fino_al_{dm.time.strftime('%Y-%m-%d', dm.time.gmtime(t0))}"]
+    # il guadagno del conto demo è il guadagno del conto ridotto; lo stop si misura sui 280
+    finto.equity = "9905"                              # 185 USDT: −33,9%
+    d.tick(t0 + 3700)
+    assert "fermo" not in d.carica() and fb.get_rtdb("/demo_binance/stato")["equity"] == 185.0
+    finto.equity = "9895"                              # 175 USDT: −37,5%, chiude tutto
+    d.tick(t0 + 7400)
+    assert d.carica()["fermo"]["motivo"].startswith("stop sul conto: -37.5%")
+
+
+def test_filtri_severi_come_il_conto_vero():
+    f = {"BTCUSDT": (0.1, 0.0001, 0.0001, 50.0), "LTCUSDT": (0.01, 0.001, 0.001, 5.0), "XUSDT": (0.01, 0.003, 0.003, 5.0),
+         "YUSDT": (0.01, 1.0, 1.0, 5.0)}
+    veri = {"BTCUSDT": {"passo": 0.001, "quantita_minima": 0.001, "valore_minimo": 50.0},
+            "LTCUSDT": {"passo": 0.001, "quantita_minima": 0.001, "valore_minimo": 20.0},
+            "XUSDT": {"passo": 0.004, "quantita_minima": 0.004, "valore_minimo": 5.0}}
+    g = dm.piu_severi(f, veri)
+    assert g["BTCUSDT"] == (0.1, 0.001, 0.001, 50.0)
+    assert g["LTCUSDT"][3] == 20.0
+    assert g["XUSDT"][1] == 0.003 and g["XUSDT"][2] == 0.004          # 0,004 non è un multiplo di 0,003: il passo resta
+    assert g["YUSDT"] == f["YUSDT"]
+    vero = dm.filtri_veri()
+    assert vero["BTCUSDT"]["valore_minimo"] == 50.0 and vero["ETHUSDT"]["valore_minimo"] == 20.0 and len(vero) > 500
+
+
+def test_senza_file_del_capitale_il_conto_resta_intero(tmp_path):
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.file_capitale = tmp_path / "manca"
+    d.tick(20750 * 86400.0 + 400)
+    assert "conto_ridotto" not in d.carica() and fb.get_rtdb("/demo_binance/stato")["equity"] == 10000.0
