@@ -5583,3 +5583,6 @@ di nuovo. Idee nuove: niente di nuovo. **Il demo da 280 dopo cinque ore**: posiz
 si aspettava circa il 14%); il Bitcoin non si compra (il passo vero vale 78 USDT, G1 ne vuole 20). Il valore è sceso da 278,17 a 267,08
 nell'ora del passaggio da 5.000 a 280 (le posizioni vecchie ancora aperte); dopo, fino a mezzogiorno, +0,34% contro +0,19% del paper.
 **Capito oggi**: la fase da 280 si misura dalle 08:00 (267,08); con i soldi veri il passaggio non c'è.
+**Voce 7, il lato venduto nel 2026**: la perdita (−13,8% rispetto alla media, dal 1° gennaio al 4 ottobre) sta tutta in giugno-agosto e
+in 12 monete (−50,6% insieme: H, DEXE, VVV, LIT, BAS, HYPE, XMR...), con il funding alto e il prezzo che ha continuato a salire; le
+altre vendute guadagnano +36,8%. Nessuna prova nuova (il tetto per moneta peggiorava già, prova 61).

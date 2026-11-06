@@ -151,3 +151,12 @@ separato prima del paper).
   circa 10.000 USDT, sono finiti sul conto ridotto. Dopo il passaggio, dalle 08:00 a mezzogiorno, demo +0,34% e paper +0,19%. **La fase
   da 280 si misura dal valore delle 08:00 (267,08)**; il confronto giorno per giorno con il paper parte dal 7 novembre ed è pulito. Con i
   soldi veri non succede (il conto parte senza posizioni). Lo stop resta a 182 USDT (−32% da 267).
+* **6 novembre 2026, 12:50 UTC, voce 7, il lato venduto nel 2026** (`g1_venduto_2026.py`, `risultati_g1_venduto_2026.json`; dal 1°
+  gennaio al 4 ottobre 2026, somme non in proporzione all'anno): le vendute fanno **13,8% meglio della media** (perdita per G1), le comprate
+  11,3% meglio della media (guadagno). La perdita sta in tre mesi: **giugno −9,9%, luglio −8,5%, agosto −10,4%**; settembre +15,3% ne
+  riprende metà. È concentrata: le 12 vendute che costano di più fanno insieme **−50,6%** (HUSDT −7,6%, DEXEUSDT −5,2%, VVVUSDT, LITUSDT,
+  BASUSDT −5,2% ciascuna, HYPEUSDT −4,3%, XMRUSDT −4,2%, ...), tutte le altre vendute insieme **+36,8%**. Sono monete con il funding alto
+  (molti comprano a leva) che hanno continuato a salire. Il funding nel 2026 arriva soprattutto dal lato comprato (+27,9%) e meno dal
+  venduto (+9,4%). **Capito**: il lato venduto funziona sulla maggior parte delle monete e perde su poche che salgono molto; un tetto per
+  moneta era già stato provato e peggiorava (prova 61). Nessuna prova nuova: si guarda in avanti se le perdite del venduto restano
+  concentrate su poche monete.
