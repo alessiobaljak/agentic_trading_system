@@ -67,3 +67,9 @@ separato prima del paper).
   del giorno è salito da 0,02-0,07% a fine ottobre a 0,16-0,23% dal 30 ottobre. Le commissioni pesano più nei giorni dei ribilanci
   grandi (0,043% il 24 ottobre, il primo giorno). **Capito**: la parte del funding di G1 sul conto vero c'è (circa un terzo del guadagno
   di questi giorni), e le commissioni sono piccole. Il confronto con il funding atteso dal paper parte dal 6 novembre.
+* **6 novembre 2026, 00:30 UTC, voce 4**: la ricerca sul passato non ha mai avuto 龙虾USDT (l'archivio usato per G1 non ha simboli con
+  caratteri non latini: nel pannello di `seconda.pannello()` nessun simbolo non ASCII), mentre il bot la mette in G1 perché la legge dal
+  listino vivo; sul demo è rifiutata ogni giorno («Invalid symbol»). Quindi il paper del bot e la ricerca differiscono di questa moneta,
+  e il demo ne è privo. Il rapporto di stato ora scrive il peso che il paper G1 le dà (`scripts/state_snapshot.py`, un test); prima
+  lettura alla prossima richiesta «stato». Confronto con il passato: le spese di G1 con gli ordini limite erano il 6,5% l'anno
+  (`RISULTATI_PRIMA.md`, spread compreso), le commissioni vere del demo in proporzione all'anno circa il 4,7% (solo commissioni).

@@ -5541,3 +5541,10 @@ nuovi, 2.496 test passano. Riavvio del bot chiesto alla macchina (ops 0699), poi
 30 ottobre. Corretto il rapporto (i giorni prima del diario prendono l'equity dai valori del giorno; totali in USDT; un test). **Capito
 oggi**: sul conto vero G1 esegue come il paper (12 giorni, differenza −0,02% al giorno, dentro il rumore), il funding c'è davvero (un
 terzo del guadagno) e le commissioni sono piccole (circa un trentesimo del funding negli ultimi giorni).
+
+### 6 novembre 2026 (00:30 UTC)
+
+**Giro delle 00:17.** Notizie: 83 articoli nuovi da 22 fonti su 22; 39 conti di Hyperliquid letti. Controlli in avanti delle 00:21: niente
+di nuovo. Idee nuove: niente di nuovo. **Migliorare G1, voce 4**: la moneta che il demo rifiuta ogni giorno (龙虾USDT) non è mai stata
+nella ricerca sul passato (l'archivio non ha simboli con caratteri cinesi), mentre il bot la mette in G1 dal listino vivo; il rapporto di
+stato ora scrive il peso che il paper le dà (un test; 2.498 test passano). Richiesta «stato» (ops 0704) per la lettura.

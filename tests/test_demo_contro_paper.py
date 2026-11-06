@@ -51,3 +51,11 @@ def test_confronto_entrate_prima_del_diario():
         "/demo_binance/giorni": {"2026-10-24": 5000, "2026-10-25": 5000}, "/paper_g1/giorni": {"2026-10-24": 1, "2026-10-25": 1},
         "/demo_binance/diario": demo})))
     assert "funding incassato +5.00 USDT, commissioni pagate 0.50 USDT" in testo
+
+
+def test_peso_delle_monete_rifiutate_dal_demo():
+    testo = "\n".join(ss.sezione_demo_binance(_Fb({
+        "/demo_binance/stato": {"stato": "acceso", "equity": 5000, "capitale_iniziale": 5000},
+        "/demo_binance/ribilanciamenti": {"2026-11-05": {"ordini": 41, "rifiutati": [{"simbolo": "龙虾USDT", "errore": "Invalid symbol"}]}},
+        "/paper_g1/posizioni": {"龙虾USDT": -0.0123, "AUSDT": 0.05}})))
+    assert "龙虾USDT -1.23%" in testo

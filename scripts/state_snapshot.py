@@ -620,6 +620,11 @@ def sezione_demo_binance(fb) -> list:
                         if x.get("monete_mancanti_sul_demo") else "")
                      + (f"; rifiutati {len(x['rifiutati'])}: " + "; ".join(f"{r.get('simbolo')} {str(r.get('errore'))[:80]}"
                                                                          for r in x["rifiutati"][:3]) if x.get("rifiutati") else ""))
+        rif = [r.get("simbolo") for r in (x.get("rifiutati") or []) if r.get("simbolo")]
+        pos = fb.get_rtdb("/paper_g1/posizioni") or {}
+        if rif and isinstance(pos, dict):
+            righe.append("- peso nel paper G1 delle monete rifiutate dal demo (MIGLIORARE_G1.md, voce 4): "
+                         + ", ".join(f"{s_} {100 * float(pos.get(s_) or 0):+.2f}%" for s_ in rif))
     if st.get("stop_a") is not None:
         righe.append(f"- stop sul conto (−35% dal massimo): massimo ${float(st.get('massimo') or 0):,.2f}, si chiude tutto sotto "
                      f"${float(st['stop_a']):,.2f}; ora {100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
