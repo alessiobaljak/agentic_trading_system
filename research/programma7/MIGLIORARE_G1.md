@@ -35,6 +35,14 @@ separato prima del paper).
 6. **L'ora della decisione.** G11 (il funding più fresco) gira nel paper accanto a G1 dal 23 ottobre: si guarda in avanti se decide
    meglio; nessuna prova nuova sul passato (il vantaggio di G11 sul passato stava nel 2021).
 
+7. **Da dove viene il guadagno di prezzo** (aggiunta del 6 novembre, dopo le voci 1-4: l'esecuzione è a posto, quindi resta da capire
+   la strategia stessa): nei 13 giorni del demo circa due terzi del guadagno vengono dal prezzo. Quanto dal lato comprato e quanto dal
+   venduto, e per fascia di moneta (1-10, 11-50, 51-100): dal paper (pesi del giorno e prezzi), senza prove nuove sul passato.
+8. **G1 con poco capitale** (aggiunta del 6 novembre): con meno di circa 10.000 USDT molti ordini sono sotto il minimo di Binance (con
+   1.000 USDT il 76%, revisione di G1N). Se il proprietario vorrà partire con una cifra piccola, serve sapere quanto perde G1 tenendo
+   solo le monete con il peso più grande: è una prova sul passato, nel conto delle prove, con le regole scritte prima; si fa solo
+   quando il proprietario dice con che cifra vuole partire.
+
 ## Già fatte (dalla revisione con le skill del 1° novembre, `REVISIONE_SKILL_G1.md`)
 
 * Margine unico impostato e controllato dal codice; stop sulla perdita del conto a −35% dal massimo; il pulsante che chiude tutto;
