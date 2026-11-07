@@ -716,5 +716,9 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **il primo ingresso alla mezzanotte** (il proprietario, 7 novembre 2026: «si parto con gli acquisti puliti a mezzanotte»): il conto vero
+  parte senza posizioni e compra e vende tutto al ribilancio delle 00:00 UTC (ordini limite per un'ora, poi a mercato); se il codice si
+  accende durante il giorno, aspetta la mezzanotte dopo e non copia a metà giornata le posizioni del paper. Il demo oggi, acceso a metà
+  giornata, ribilancia subito: è quello che il 6 novembre, nel passaggio da 5.000 a 280, è costato circa 11 USDT.
 
 Prima, il demo con un capitale di 280 USDT: **fatto il 6 novembre** (il proprietario: «le chiavi di binance future reali le hai già, si posso usare future binance da svizzera, spegni eventi»): `ops/demo_binance_capitale` con 280, eventi spenti sul demo (`ops/demo_binance_eventi_acceso` tolto; il paper degli eventi resta acceso), filtri severi come quelli veri. Le chiavi del conto vero sono sulla macchina (dice il proprietario): non si leggono e non si usano finché non chiede i soldi veri in modo esplicito.
