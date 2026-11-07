@@ -170,3 +170,11 @@ separato prima del paper).
   variazioni sono rimaste sotto il minimo** di Binance, per il 19,2% del conto: **il 91% saltate, la prova 148 se ne aspettava il 90%**
   (6,6 ordini al giorno). Scarto fra posizioni vere e volute 14,1% (Bitcoin −7,0%, ICPUSDT +4,2%). Prime ore del 7 novembre: demo −0,12%,
   paper −0,13%. **Capito**: sul conto vero, con 280 USDT, G1 si comporta come la prova sul passato aveva detto.
+* **7 novembre 2026, voce 8, quanto capitale per aprire tutto** (domanda del proprietario: «se volessi garantire che monete come BTC [...]
+  non si aprano quanto devo avere su binance?»; calcolo con i pesi di G1 dell'ultimo anno, 5 novembre 2025 – 4 novembre 2026, e i minimi veri
+  di oggi, `risultati_ottantaseiesima/filtri_binance_2026-11-06.json`; il minimo del Bitcoin è il passo di 0,001 al prezzo del giorno,
+  in mediana 85 USDT). Il Bitcoin è in G1 121 giorni su 365, con peso mediano 8,6%: per aprirlo servono in mediana **1.009 USDT**, nel
+  90% dei giorni 1.237. Per aprire **tutte** le posizioni del giorno: mediana 1.180 USDT, 90% dei giorni **1.984**, al massimo 3.652.
+  Posizioni che si aprono: con 280 USDT il 76% (l'89% del peso), con 500 il 92%, con 1.000 il 98% (il Bitcoin la metà dei giorni), con
+  2.000 il 100%. Variazioni di ogni giorno eseguibili: 280 il 9% (55% del giro), 1.000 il 23% (77%), 2.000 il 42% (89%), 5.000 il 69%
+  (97%), 10.000 l'83% (99%). Con la prova 148: Sharpe 1,90 a 280, 1,91 a 1.000, **1,98 a 2.000, come G1 senza minimi**.
