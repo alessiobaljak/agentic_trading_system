@@ -1,0 +1,278 @@
+{
+ "riproduzione": {
+  "risultati_json": {
+   "periodo": "2023-01-01 / 2023-12-31",
+   "scala": "1h con filtro giornaliero",
+   "sharpe": 4.16,
+   "rendimento": 2.0788,
+   "giorni": 365
+  },
+  "rieseguito": {
+   "sharpe": 4.16,
+   "rendimento": 2.0788,
+   "giorni": 365
+  },
+  "uguale": true,
+  "avvisi": []
+ },
+ "dati": {
+  "ore_attese": 8760,
+  "ore_presenti": 8760,
+  "ore_mancanti": 0,
+  "prime_ore_mancanti": [],
+  "ore_con_chiusura_nan": 0,
+  "duplicati": 0,
+  "in_ordine": true,
+  "ore_oltre_il_periodo": 0,
+  "rendimento_orario_max_assoluto": 0.06258429271475507,
+  "ora_del_massimo": "2023-04-26 19:00",
+  "ore_oltre_5pct": 5,
+  "salto_apertura_chiusura_prima_max": 8.229401665738045e-05,
+  "high_sotto_low": 0,
+  "giorni": 365,
+  "giorni_chiusura_nan": 0,
+  "chiusura_giorno_contro_ultima_ora_max_rel": 0.0,
+  "giorni_mancanti_archivio_dal_2023": [],
+  "confronto_giorni_con_minuti_tutti_gli_anni": {
+   "giorni": 2482,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.13750223156398533,
+    "oltre_0,1%": 5
+   }
+  }
+ },
+ "sguardo_nel_futuro": {
+  "ore_in_cui_la_posizione_usa_la_chiusura_del_giorno_stesso": 8395,
+  "ore_totali": 8760,
+  "rendimento_medio_ora_0_(segnale_del_giorno_prima)": -0.00010158827508988202,
+  "rendimento_medio_ore_1_23_(segnale_del_giorno_stesso)": 0.00025876579078921384,
+  "giorni_senza_media_trattati_come_venduto": 19
+ },
+ "funding": {
+  "regolamenti_2023": 1095,
+  "attesi_3_al_giorno": 1095,
+  "minuto_del_giorno_dei_regolamenti": {
+   "0": 365,
+   "480": 365,
+   "960": 365
+  },
+  "intervalli_dichiarati_ore": [
+   8
+  ],
+  "scarto_massimo_dal_minuto_tondo_ms": 29,
+  "somma_tassi_2023": 0.07893121,
+  "giorni_senza_dato_vero_nel_pannello": 0,
+  "giorni_pannello_diverso_dal_vero": 0
+ },
+ "varianti": {
+  "prova_come_scritta": {
+   "giorni": 365,
+   "cambi_di_posizione": 57,
+   "rendimento_somma": 2.078759093267643,
+   "rendimento_composto": 6.30706559243468,
+   "sharpe_252": 4.163660575670171,
+   "sharpe_365": 5.010966278489233,
+   "sortino_365": 10.081836611348374,
+   "t_sharpe": 5.010966278489233,
+   "discesa_max": -0.24787179223680145,
+   "dal": "2023-01-01",
+   "fondo": "2023-01-16",
+   "recupero": "2023-02-15",
+   "durata_giorni": 45,
+   "esposizione": 0.9998858447488584,
+   "lordo_medio_per_cambio": 0.037460685846800755,
+   "costo_per_cambio_da_-1_a_+1": 0.001,
+   "quota_5_giorni_migliori": 0.2107305044170556,
+   "quota_3_mesi_migliori": 0.4441009588037141,
+   "giorno_peggiore": -0.07352096939685038,
+   "mesi": {
+    "2023-01": -0.1508,
+    "2023-02": 0.2213,
+    "2023-03": 0.3161,
+    "2023-04": 0.1096,
+    "2023-05": 0.1109,
+    "2023-06": 0.3096,
+    "2023-07": 0.1038,
+    "2023-08": 0.2171,
+    "2023-09": 0.1049,
+    "2023-10": 0.2798,
+    "2023-11": 0.1589,
+    "2023-12": 0.2975
+   }
+  },
+  "prova_annualizzata_365": {
+   "giorni": 365,
+   "cambi_di_posizione": 57,
+   "rendimento_somma": 2.078759093267643,
+   "rendimento_composto": 6.30706559243468,
+   "sharpe_252": 4.163660575670171,
+   "sharpe_365": 5.010966278489233,
+   "sortino_365": 10.081836611348374,
+   "t_sharpe": 5.010966278489233,
+   "discesa_max": -0.24787179223680145,
+   "dal": "2023-01-01",
+   "fondo": "2023-01-16",
+   "recupero": "2023-02-15",
+   "durata_giorni": 45,
+   "esposizione": 0.9998858447488584,
+   "lordo_medio_per_cambio": 0.037460685846800755,
+   "costo_per_cambio_da_-1_a_+1": 0.001,
+   "quota_5_giorni_migliori": 0.2107305044170556,
+   "quota_3_mesi_migliori": 0.4441009588037141,
+   "giorno_peggiore": -0.07352096939685038
+  },
+  "senza_sguardo_nel_futuro": {
+   "giorni": 365,
+   "cambi_di_posizione": 57,
+   "rendimento_somma": -0.6592026759091643,
+   "rendimento_composto": -0.5309790025373637,
+   "sharpe_252": -1.2425427441270827,
+   "sharpe_365": -1.4954004240367533,
+   "sortino_365": -2.0238668855322235,
+   "t_sharpe": -1.4954004240367533,
+   "discesa_max": -0.8578206961322881,
+   "dal": "2023-01-01",
+   "fondo": "2023-10-18",
+   "recupero": "mai nel periodo",
+   "durata_giorni": 364,
+   "esposizione": 0.9972602739726028,
+   "lordo_medio_per_cambio": -0.010573731156301126,
+   "costo_per_cambio_da_-1_a_+1": 0.001,
+   "quota_5_giorni_migliori": -0.5976181081358565,
+   "quota_3_mesi_migliori": -0.3711910867019981,
+   "giorno_peggiore": -0.09445795476312835
+  },
+  "senza_sguardo_con_funding": {
+   "giorni": 365,
+   "cambi_di_posizione": 57,
+   "rendimento_somma": -0.6787029159091641,
+   "rendimento_composto": -0.5399225683198199,
+   "sharpe_252": -1.2811964038376813,
+   "sharpe_365": -1.541920110699452,
+   "sortino_365": -2.083332183810399,
+   "t_sharpe": -1.541920110699452,
+   "discesa_max": -0.8590014961322883,
+   "dal": "2023-01-01",
+   "fondo": "2023-10-18",
+   "recupero": "mai nel periodo",
+   "durata_giorni": 364,
+   "esposizione": 0.9972602739726028,
+   "lordo_medio_per_cambio": -0.010573731156301126,
+   "costo_per_cambio_da_-1_a_+1": 0.001,
+   "quota_5_giorni_migliori": -0.5798709815880649,
+   "quota_3_mesi_migliori": -0.3402658341859381,
+   "giorno_peggiore": -0.09414742476312835
+  },
+  "senza_sguardo_funding_scarto": {
+   "giorni": 365,
+   "cambi_di_posizione": 57,
+   "rendimento_somma": -0.6900029159091641,
+   "rendimento_composto": -0.545130799896935,
+   "sharpe_252": -1.3021397948868827,
+   "sharpe_365": -1.5671254857288202,
+   "sortino_365": -2.1152441553508923,
+   "t_sharpe": -1.5671254857288202,
+   "discesa_max": -0.8685014961322881,
+   "dal": "2023-01-01",
+   "fondo": "2023-10-18",
+   "recupero": "mai nel periodo",
+   "durata_giorni": 364,
+   "esposizione": 0.9972602739726028,
+   "lordo_medio_per_cambio": -0.010573731156301126,
+   "costo_per_cambio_da_-1_a_+1": 0.0012000000000000001,
+   "quota_5_giorni_migliori": -0.5703745839050038,
+   "quota_3_mesi_migliori": -0.3309252882582315,
+   "giorno_peggiore": -0.09414742476312835
+  },
+  "corretta_completa_(anche_piatto_senza_media)": {
+   "giorni": 365,
+   "cambi_di_posizione": 56,
+   "rendimento_somma": -0.37694351597381376,
+   "rendimento_composto": -0.3726949932386545,
+   "sharpe_252": -0.7410903023346752,
+   "sharpe_365": -0.8919023169213838,
+   "sortino_365": -1.2511063737884225,
+   "t_sharpe": -0.8919023169213838,
+   "discesa_max": -0.6013704883552798,
+   "dal": "2023-01-29",
+   "fondo": "2023-10-18",
+   "recupero": "mai nel periodo",
+   "durata_giorni": 336,
+   "esposizione": 0.9452054794520548,
+   "lordo_medio_per_cambio": -0.005111255820960963,
+   "costo_per_cambio_da_-1_a_+1": 0.0012000000000000001,
+   "quota_5_giorni_migliori": -1.0440824934690465,
+   "quota_3_mesi_migliori": -0.6905508390948571,
+   "giorno_peggiore": -0.09414742476312835,
+   "clima": {
+    "rialzo": {
+     "mesi": 6,
+     "rendimento_somma": 0.1358
+    },
+    "ribasso": {
+     "mesi": 2,
+     "rendimento_somma": -0.1873
+    },
+    "laterale": {
+     "mesi": 4,
+     "rendimento_somma": -0.3254
+    }
+   },
+   "rialzo_massimo_contro_il_venduto": 0.06504814510711365,
+   "giorni_sotto_-5pct": 9
+  }
+ },
+ "controllo_giornaliero_lordo": {
+  "senza_sguardo_somma": -0.6089828223714879,
+  "con_lo_sguardo_(segnale_dello_stesso_giorno)_somma": 2.259362599255325,
+  "btc_2023_comprato_e_tenuto": 1.5474554944823393
+ },
+ "sensibilita": {
+  "16": {
+   "prova_sharpe_365": 5.46,
+   "prova_rendimento": 2.239,
+   "corretta_sharpe_365": -1.25,
+   "corretta_rendimento": -0.5369
+  },
+  "18": {
+   "prova_sharpe_365": 5.07,
+   "prova_rendimento": 2.0962,
+   "corretta_sharpe_365": -0.89,
+   "corretta_rendimento": -0.3814
+  },
+  "20": {
+   "prova_sharpe_365": 5.01,
+   "prova_rendimento": 2.0788,
+   "corretta_sharpe_365": -0.89,
+   "corretta_rendimento": -0.3769
+  },
+  "22": {
+   "prova_sharpe_365": 4.26,
+   "prova_rendimento": 1.783,
+   "corretta_sharpe_365": -0.8,
+   "corretta_rendimento": -0.3368
+  },
+  "24": {
+   "prova_sharpe_365": 4.14,
+   "prova_rendimento": 1.7342,
+   "corretta_sharpe_365": -0.2,
+   "corretta_rendimento": -0.0858
+  }
+ }
+}

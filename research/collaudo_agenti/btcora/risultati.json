@@ -1,0 +1,7 @@
+{
+ "periodo": "2023-01-01 / 2023-12-31",
+ "scala": "1h con filtro giornaliero",
+ "sharpe": 4.16,
+ "rendimento": 2.0788,
+ "giorni": 365
+}

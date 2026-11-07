@@ -85,5 +85,3 @@ data/paper_eventi.tmp
 # chiavi private (conto demo di Binance): mai nel repository
 *.pem
 
-# strategia finta del collaudo dei subagent (7 nov 2026): dopo la prova va in audits/collaudo/
-research/prova_finta_audit/
