@@ -716,6 +716,11 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **la parità col backtest che spegne i fermi** (trovato dal revisore degli ordini il 7 novembre 2026,
+  `reviews/reports/2026-11-07-limiti-leva-perdita-giornaliera.md`, problema 4): `BACKTEST_PARITY=true` (`bot/config.py:672`) spegne
+  tutti gli interruttori (`bot/risk/circuit_breakers.py:50-52`) e il tetto delle posizioni (`bot/main.py:1741`), e niente ne vieta
+  l'uso fuori dal paper: il codice del conto vero deve rifiutare l'avvio con `DRY_RUN` falso e la parità accesa (da far rivedere a
+  live-path-reviewer, ok del proprietario).
 * **il primo ingresso alla mezzanotte** (il proprietario, 7 novembre 2026: «si parto con gli acquisti puliti a mezzanotte»): il conto vero
   parte senza posizioni e compra e vende tutto al ribilancio delle 00:00 UTC (ordini limite per un'ora, poi a mercato); se il codice si
   accende durante il giorno, aspetta la mezzanotte dopo e non copia a metà giornata le posizioni del paper. Il demo oggi, acceso a metà

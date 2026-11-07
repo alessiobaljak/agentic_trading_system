@@ -58,7 +58,8 @@ def motivo(strumento: str, ingresso: dict) -> str:
     for t in testi:
         for p in _FILE:
             if re.search(p, t):
-                return "file di segreti: non si legge e non si copia (CLAUDE.md, «Mai un segreto in un commit»; il repo e' pubblico)"
+                return ("file di segreti: non si legge e non si copia (CLAUDE.md, «Mai un segreto in un commit»; il repo e' pubblico). "
+                        "Se stai solo scrivendo un testo che ne cita il nome, usa Write o Edit invece di un comando")
     return ""
 
 
