@@ -5607,3 +5607,6 @@ del giorno ancora in corso); la prossima lettura è il riepilogo di lunedì.
 **Il demo a 1.000 dalla mezzanotte (06:00).** Il proprietario: «cancella i 280 in demo e riparti a mezzanotte con il demo a 1000». Il
 demo ora tiene un capitale nuovo in attesa fino alla decisione di G1 dopo, e lì chiude tutto, archivia la fase e riapre da zero (come
 farà il conto vero). Prima il riavvio con il codice nuovo, poi il file a 1.000 (con il codice vecchio sarebbe partito subito).
+**Giro delle 08:17.** Notizie: 16 articoli nuovi da 22 fonti su 23; 35 conti di Hyperliquid letti su 39; controlli in avanti delle 08:20:
+niente di nuovo. Idee nuove: niente di nuovo. G1: il rapporto di stato delle 07:03 mostra il capitale nuovo da 1.000 USDT in attesa della
+mezzanotte (demo a 268,52 sui 280); niente di nuovo da misurare prima del ribilancio.
