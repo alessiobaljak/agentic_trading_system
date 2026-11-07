@@ -28,6 +28,8 @@ type StatoDemo = {
   massimo?: number; dal_massimo?: number; stop_a?: number;
 };
 type Fermo = { motivo?: string; ora?: number; chiuse?: number };
+// l'allarme del demo (bot/portafoglio/demo_binance.py): conto non vuoto da fermo, ordini che non si annullano
+type Allarme = { ora?: number; testo?: string; posizioni?: string[] };
 type Confronto = { ora?: number; differenze?: { simbolo: string; scarto: number }[]; scarto_totale?: number; monete?: number };
 type Aperta = { tipo?: string; simbolo?: string; entrata?: number; rendimento_ora?: number; uscita_giorno?: string };
 type Chiusa = { tipo?: string; simbolo?: string; uscita?: number; rendimento?: number; motivo?: string };
@@ -118,6 +120,7 @@ function Portafoglio({ ramo, titolo, inizio }: { ramo: string; titolo: string; i
 function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
   const [fermo, setFermo] = useState<Fermo | null>(null);
   const [cf, setCf] = useState<Confronto | null>(null);
+  const [allarme, setAllarme] = useState<Allarme | null>(null);
   const [conferma, setConferma] = useState(false);
   const [invio, setInvio] = useState<string | null>(null);
   const [errore, setErrore] = useState<string | null>(null);
@@ -125,7 +128,8 @@ function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
     const db = getRtdb();
     const a = onValue(ref(db, 'demo_binance/fermo'), (s) => setFermo(s.val()));
     const b = onValue(ref(db, 'demo_binance/confronto'), (s) => setCf(s.val()));
-    return () => { a(); b(); };
+    const c = onValue(ref(db, 'demo_binance/allarme'), (s) => setAllarme(s.val()));
+    return () => { a(); b(); c(); };
   }, []);
   const manda = async (percorso: string, nomeComando: string) => {
     setErrore(null);
@@ -141,6 +145,12 @@ function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
   const dif = cf?.differenze ?? [];
   return (
     <div style={{ margin: '0 0 10px', fontSize: 12.5 }}>
+      {allarme?.testo && (
+        <div className="warn">
+          <b>Allarme del demo</b> ({quando(allarme.ora)}): {allarme.testo}
+          {allarme.posizioni?.length ? ` (${allarme.posizioni.map(nome).join(', ')})` : ''}
+        </div>
+      )}
       {d?.stop_a != null && (
         <p style={{ margin: '2px 0' }}>
           Stop sul conto a −35% dal massimo: si chiude tutto sotto <b>${d.stop_a.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b>

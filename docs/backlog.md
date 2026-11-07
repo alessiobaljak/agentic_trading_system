@@ -716,6 +716,11 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **i problemi bassi rimasti del demo** (revisione del 7 novembre 2026, `reviews/reports/2026-11-07-correzione-32.md`): 36, se la
+  lettura degli ordini fallisce e non ci sono posizioni, il demo scrive «vuoto» senza annullare l'ordine rimasto; 37, un timeout
+  di rete sulla sola lettura degli ordini ferma ancora le chiusure da fermo; 38, l'allarme degli ordini bloccati non si spegne a
+  blocco finito; più i Medi e i Bassi 10-24 del primo avvio (429 e 418 con attese crescenti, età della decisione di G1, pesi
+  controllati prima di Binance, avvisi sul telefono). Da fare prima del codice del conto vero, con revisione.
 * **una versione fissata per il conto vero** (domanda del revisore del 7 novembre 2026): il servizio del bot ha `Restart=always`
   (`docs/hetzner_setup.md:117`) e la macchina scarica il branch ogni minuto, quindi dopo un crash il bot riparte con l'ultimo codice
   spinto, anche non approvato. Per il demo il rischio è piccolo; per i soldi veri il bot deve girare da una versione fissata (un

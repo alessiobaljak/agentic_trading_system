@@ -638,6 +638,10 @@ def sezione_demo_binance(fb) -> list:
     if st.get("stop_a") is not None:
         righe.append(f"- stop sul conto (−35% dal massimo): massimo ${float(st.get('massimo') or 0):,.2f}, si chiude tutto sotto "
                      f"${float(st['stop_a']):,.2f}; ora {100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
+    allarme = fb.get_rtdb("/demo_binance/allarme")
+    if isinstance(allarme, dict) and allarme:
+        righe.append(f"- **ALLARME** ({_ts(allarme.get('ora'))}): {allarme.get('testo')}"
+                     + (f" ({', '.join(allarme.get('posizioni') or [])})" if allarme.get("posizioni") else ""))
     fermo = fb.get_rtdb("/demo_binance/fermo")
     if isinstance(fermo, dict) and fermo:
         righe.append(f"- **FERMO** dal {_ts(fermo.get('ora'))}: {fermo.get('motivo')} · posizioni chiuse {fermo.get('chiuse', 0)}, "

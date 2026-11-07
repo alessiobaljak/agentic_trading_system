@@ -222,9 +222,12 @@ def test_sezione_del_conto_demo_nello_stato():
                                                                 "rendimento": 0.002, "long": 20, "short": 20, "aggiornato": 1.7e9},
                                         "/demo_binance/ribilanciamenti": {"2026-10-24": {"ordini": 40, "limite": {"eseguiti_a_limite": 38,
                                                                                                                   "a_mercato": 2}}},
-                                        "/demo_binance/errore": {"testo": "GET x: 401", "ora": 1.7e9}}))
+                                        "/demo_binance/errore": {"testo": "GET x: 401", "ora": 1.7e9},
+                                        "/demo_binance/allarme": {"ora": 1.7e9, "testo": "fermo ma il conto non è vuoto",
+                                                                  "posizioni": ["BUSDT"]}}))
     testo = "\n".join(righe)
     assert "acceso" in testo and "$5,010.00" in testo and "eseguiti a limite 38" in testo and "401" in testo
+    assert "**ALLARME**" in testo and "fermo ma il conto non è vuoto (BUSDT)" in testo     # revisione del 7 nov, problema 39
 
 
 def test_id_degli_ordini_e_ordini_rimasti_aperti(tmp_path):
