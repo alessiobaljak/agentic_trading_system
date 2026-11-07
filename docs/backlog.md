@@ -716,6 +716,14 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **la revisione completa del percorso degli ordini** (live-path-reviewer, primo avvio del 7 novembre 2026,
+  `reviews/reports/2026-11-07-primo-avvio.md`): REQUEST CHANGES; per il demo con soldi finti niente di bloccante, **per il conto
+  vero vanno chiusi tutti i 9 problemi Alti**: un ordine a mercato rimandato due volte dopo un errore a metà ribilancio (posizione
+  doppia); pulsante e stop sul conto che aspettano fino a 30 minuti dopo un errore e uno stop guardato solo ogni ora; chiudi tutto
+  che non garantisce il conto vuoto; un «riparti» rimasto vero che riaccende il demo subito dopo lo stop; `DRY_RUN` letto in modo che
+  un valore sbagliato vale falso; tre problemi del vecchio ramo reale dell'esecutore (oggi spento); la parità col backtest (sotto).
+  Più 11 Medi e 4 Bassi. Le decisioni per il proprietario sono nel rapporto (stop per posizione, soglia −35%, limiti di G1 come
+  costanti con test, vecchio ramo reale da togliere o tenere, «riparti» con un clic).
 * **la parità col backtest che spegne i fermi** (trovato dal revisore degli ordini il 7 novembre 2026,
   `reviews/reports/2026-11-07-limiti-leva-perdita-giornaliera.md`, problema 4): `BACKTEST_PARITY=true` (`bot/config.py:672`) spegne
   tutti gli interruttori (`bot/risk/circuit_breakers.py:50-52`) e il tetto delle posizioni (`bot/main.py:1741`), e niente ne vieta

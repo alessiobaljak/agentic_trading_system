@@ -4,23 +4,24 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa del percorso e invarianti con file:riga. **Copertura parziale** (7 nov 2026): solo limiti fissi
-  (`bot/risk/`) e parametri della dashboard.
+- `LIVE_PATH_MAP.md` — mappa completa del percorso e invarianti con file:riga (7 nov 2026, codice di `782a01fc` = `b29f5713`).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10.
-- `ARCHIVE.md` — revisioni più vecchie, chiuse.
+- `ARCHIVE.md` — revisioni più vecchie, chiuse (vuoto).
 - `reports/` — un rapporto completo per revisione.
 
 ## Stato (aggiornato al 7 nov 2026)
-- Revisione completa del percorso (primo avvio, passo 2): **NON ancora fatta**. Va fatta nella prossima invocazione utile.
-- Voci aperte: 1 (REQUEST CHANGES del 7 nov sulla modifica proposta leva 10 e perdita giornaliera dalla dashboard; non
-  applicata al codice).
-- Preesistenti da approfondire nella revisione completa: `BACKTEST_PARITY` spegne tutti gli interruttori
-  (`bot/risk/circuit_breakers.py:50-52`); leva e rischio della dashboard tagliati con una nota invece di rifiutati
-  (`bot/risk/risk_manager.py:77-80`); `day_pnl_pct` inesistente letto a `bot/main.py:270`, `:1173`.
-- Decisioni per Alessio in sospeso: vedi la sezione omonima del rapporto del 7 nov.
+- Primo avvio **fatto** (passi 1-3): `reports/2026-11-07-primo-avvio.md`, REQUEST CHANGES, 9 problemi alti (4 sul demo, 4 sul vecchio
+  ramo reale spento da `DRY_RUN`, la parità col backtest), nessuno bloccante per il demo di oggi, tutti da chiudere prima del conto vero.
+- Voci aperte: 2 (la modifica proposta del 7 nov, non applicata; il primo avvio).
+- Alla prossima revisione: per ogni problema del primo avvio controllare se è stato corretto (numeri 1-24 del rapporto) e aggiornare
+  la sezione 13 della mappa.
+- Decisioni per Alessio e domande aperte in sospeso: sezioni omonime del rapporto del primo avvio (stop per posizione, soglia e
+  ripartenza dello stop sul conto, limiti del demo come costanti fisse, vecchio ramo reale, nome delle chiavi vere, valori di
+  `DRY_RUN`/`BINANCE_TESTNET`/`BACKTEST_PARITY` sulla macchina).
 
 ## Promemoria
-- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`. Prima della modifica 120 passati sugli 11 file che
-  toccano `bot/risk` (7 nov 2026).
-- In una copia `git worktree` il test `tests/test_allowlist_runnable.py` fallisce da solo (risolve `research/` dal repo
-  principale): non è un fallimento della modifica.
+- Le prove a mano usano il Binance finto di `tests/test_demo_binance.py` (`_Demo`): passare sempre percorsi temporanei per
+  interruttore, comandi e capitale (i predefiniti puntano ai file veri di `ops/`), e `TRADING_BOT_TEST_MODE=1`.
+- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`. Suite intera al 7 nov: `2545 passed` in 146 s.
+- In una copia `git worktree` `tests/test_allowlist_runnable.py` fallisce da solo (risolve `research/` dal repo principale).
+- Il gancio dei segreti blocca i comandi che nominano i file di ambiente: per cercare usare Grep su cartelle precise.
