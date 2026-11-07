@@ -716,6 +716,10 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **risposte del proprietario del 7 novembre 2026**: il paper lo decide la sessione principale; niente vault per data; branch
+  principale; commissioni e scarto di prezzo delle prove confermati. Le chiavi del conto vero di Binance **non sono limitate
+  all'indirizzo della macchina** (da fare prima dei soldi veri: limite all'indirizzo della macchina e niente prelievi). Le regole
+  di Firebase: il proprietario non le ha mai toccate (da controllare nella console e pubblicare con il suo identificativo).
 * **la revisione completa del percorso degli ordini** (live-path-reviewer, primo avvio del 7 novembre 2026,
   `reviews/reports/2026-11-07-primo-avvio.md`): REQUEST CHANGES; per il demo con soldi finti niente di bloccante, **per il conto
   vero vanno chiusi tutti i 9 problemi Alti**: un ordine a mercato rimandato due volte dopo un errore a metà ribilancio (posizione

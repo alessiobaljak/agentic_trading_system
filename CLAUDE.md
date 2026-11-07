@@ -32,8 +32,10 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   migliora G1 (`research/programma7/MIGLIORARE_G1.md`); un'idea nuova solo con un perché forte.
 * **6-7 novembre**: il capitale per i soldi veri è piccolo (250 euro, poi la prova a 1.000 USDT sul demo); eventi spenti sul demo;
   il conto vero partirà vuoto e comprerà alla mezzanotte, senza copiare a metà giornata il paper (backlog P26).
-* **7 novembre**: «chi scrive una strategia non la valuta, chi la valuta non la modifica, e il passaggio di gate lo decido io»: il
-  proprietario approva ogni passaggio (paper, demo, soldi veri) e ogni riavvio che tocca gli ordini (sezione «Subagent»).
+* **7 novembre**: «chi scrive una strategia non la valuta, chi la valuta non la modifica, e il passaggio di gate lo decido io»; poi
+  «decidi tu il passaggio al paper, confermo niente vault e branch, valori per le prove confermati»: il **paper lo decide la sessione
+  principale**; demo, soldi veri e ogni riavvio che tocca gli ordini li approva il proprietario. Nelle prove: commissioni 0,05% a
+  mercato e 0,02% con ordine limite, scarto di prezzo 0,01% su BTC, ETH e SOL e 0,02% sulle altre; nessun vault per data.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
@@ -151,7 +153,7 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 
 ## Subagent: quando usarli (`.claude/agents/`, dal 7 novembre 2026)
 
-Principio del proprietario: chi scrive una strategia non la valuta, chi la valuta non la modifica, e il passaggio lo decide lui.
+Principio del proprietario: chi scrive una strategia non la valuta, chi la valuta non la modifica; il paper lo decide la sessione principale, demo e soldi veri il proprietario.
 
 * **strategy-researcher**: esegue UNA prova del registro, con le regole già scritte e committate; più istanze in parallelo su prove
   diverse (al massimo 3 insieme).
@@ -162,8 +164,8 @@ Principio del proprietario: chi scrive una strategia non la valuta, chi la valut
 * Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
 
 Flusso: idea con un perché forte → regole scritte prima (sessione principale, riga nel registro) → strategy-researcher → se
-promettente, backtest-auditor → se PASS, ok del proprietario → paper e demo → gate2-reconciler ogni settimana → ok del proprietario →
-soldi veri. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
+promettente, backtest-auditor → se PASS, paper (lo decide la sessione principale) → ok del proprietario → demo → gate2-reconciler
+ogni settimana → ok del proprietario → soldi veri. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
 aggiorna `research/INDEX.md` e `research/REGISTRO.md` dopo ogni gruppo di ricercatori.
 
 ## Regole dei token (per la sessione principale e per tutti i subagent)
@@ -195,6 +197,7 @@ aggiorna `research/INDEX.md` e `research/REGISTRO.md` dopo ogni gruppo di ricerc
 * Nessun PASS, APPROVE o test superato su ciò che non è stato eseguito davvero; nessuna compressione di problemi Bloccanti, Alti e
   domande aperte; nessuna lettura saltata quando serve per una decisione su limiti fissi, ordini, segreti o soldi veri.
 * I registri delle prove e delle varianti non si troncano, non si archiviano e non si riassumono.
-* Paper, demo, soldi veri e ogni riavvio che tocca gli ordini richiedono l'ok esplicito del proprietario.
+* Demo, soldi veri e ogni riavvio che tocca gli ordini richiedono l'ok esplicito del proprietario (il paper lo decide la sessione
+  principale, 7 novembre).
 * I segreti sono bloccati nel codice (`.claude/hooks/segreti.py` e le regole `deny` di `.claude/settings.json`); le modifiche ai limiti
   fissi (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) chiedono conferma (`ask`).
