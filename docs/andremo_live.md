@@ -376,3 +376,9 @@ farà il conto vero). Prima il riavvio con il codice nuovo, poi il file a 1.000 
 **Giro delle 08:17.** Notizie: 16 articoli nuovi da 22 fonti su 23; 35 conti di Hyperliquid letti su 39; controlli in avanti delle 08:20:
 niente di nuovo. Idee nuove: niente di nuovo. G1: il rapporto di stato delle 07:03 mostra il capitale nuovo da 1.000 USDT in attesa della
 mezzanotte (demo a 268,52 sui 280); niente di nuovo da misurare prima del ribilancio.
+**Giro delle 12:17.** Notizie: 38 articoli nuovi da 22 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 12:20:
+niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima della mezzanotte. **I subagent** (richiesta del
+proprietario): quattro agenti in `.claude/agents/`, blocco dei segreti, regole dei token in `CLAUDE.md`; collaudo in
+`docs/collaudo_agenti.md` (auditor FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES); il revisore ha trovato
+un problema vero (la parità col backtest spegne i fermi: backlog P26). **Capito oggi**: un revisore indipendente con una checklist
+fissa trova anche ciò che non gli si chiede.
