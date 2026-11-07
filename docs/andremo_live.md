@@ -387,3 +387,7 @@ niente di nuovo. Idee nuove: niente di nuovo. **Percorso degli ordini**: corrett
 25-33, approvati dal revisore (commit 013f9426); gli allarmi del demo ora si vedono in dashboard e nel rapporto. Il riavvio aspetta
 l'ok del proprietario. **Capito oggi**: una correzione può aprire un problema nuovo (il 25, posizione doppia dopo un annullo
 rifiutato): la seconda revisione l'ha trovato prima che girasse.
+**Riavvio con le correzioni (18:54 UTC)**, ok del proprietario («ok riavvia adesso»): il bot gira il commit 78bb70e3, che contiene le
+correzioni approvate (013f9426); la riga nuova d'avvio dice `DRY_RUN=True, BINANCE_TESTNET=False, BACKTEST_PARITY=True` (la parità
+col backtest è quella del vecchio paper, permessa solo con `DRY_RUN` vero: con `DRY_RUN` falso l'avvio ora si rifiuta). Nessun errore
+nel log dopo l'avvio (`ops/results/0718-7nov-log-dopo-riavvio-correzioni.md`).
