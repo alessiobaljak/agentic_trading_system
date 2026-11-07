@@ -73,7 +73,8 @@ class _Demo:
         if u.path == "/fapi/v1/leverage":
             return _Risposta({"leverage": int(q["leverage"])})
         if u.path == "/fapi/v1/openOrders":
-            return _Risposta([{"symbol": o["symbol"]} for o in self.ordini.values() if not o.get("chiuso") and o["type"] == "LIMIT"])
+            return _Risposta([{"symbol": o["symbol"]} for o in self.ordini.values()
+                              if not o.get("chiuso") and not o.get("eseguito") and o["type"] == "LIMIT"])
         if u.path == "/fapi/v1/allOpenOrders":
             for o in self.ordini.values():
                 if o["symbol"] == q["symbol"]:
@@ -83,7 +84,7 @@ class _Demo:
             if not re.fullmatch(r"[.A-Z:/a-z0-9_-]{1,36}", q.get("newClientOrderId", "x")):
                 return _Risposta({"code": -1100, "msg": "Illegal characters found in parameter 'newclientorderid'"}, 400)
             i = len(self.ordini) + 1
-            self.ordini[i] = dict(q, orderId=i)
+            self.ordini[i] = dict(q, orderId=i, eseguito=q["type"] == "LIMIT" and q["symbol"] == "AUSDT")
             if self.posizioni_vive and (q["type"] == "MARKET" or q["symbol"] == "AUSDT"):
                 segno = 1.0 if q["side"] == "BUY" else -1.0
                 self.posizioni[q["symbol"]] = round(self.posizioni.get(q["symbol"], 0.0) + segno * float(q["quantity"]), 10)
@@ -99,8 +100,12 @@ class _Demo:
                 return _Risposta({"orderId": trovati[0]["orderId"], "status": "FILLED"})
             o = self.ordini[int(q["orderId"])]
             pieno = o["symbol"] == "AUSDT"
+            if o.get("chiuso") and not pieno:
+                return _Risposta({"status": "CANCELED", "executedQty": "0"})
             return _Risposta({"status": "FILLED" if pieno else "NEW", "executedQty": o["quantity"] if pieno else "0"})
         if u.path == "/fapi/v1/order" and metodo == "DELETE":
+            if "orderId" in q and int(q["orderId"]) in self.ordini:
+                self.ordini[int(q["orderId"])]["chiuso"] = True
             return _Risposta({"status": "CANCELED"})
         raise AssertionError(u.path)
 
@@ -156,7 +161,7 @@ def test_decisione_di_g1_sul_demo(tmp_path):
     assert "ordini" not in st and st["limite_eseguiti"] == 1 and st["a_mercato"] == 1
     mercato = [q for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order" and q["type"] == "MARKET"]
     assert mercato == [{"symbol": "BUSDT", "side": "SELL", "type": "MARKET", "quantity": "99.986",
-                        "newClientOrderId": dm.id_mercato("2026-10-24", "BUSDT"),
+                        "newClientOrderId": dm.id_mercato("2026-10-24", "BUSDT", int(20750 * 86400.0 + 400)),
                         **{k: mercato[0][k] for k in ("timestamp", "recvWindow", "signature")}}]
     assert fb.get_rtdb("/demo_binance/stato")["equity"] == 10000.0
     rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24")
@@ -683,5 +688,77 @@ def test_riparti_rimasto_vero_non_riaccende(tmp_path):
     assert d.carica().get("fermo")
     fb.rotti.clear()                                   # Firebase torna: il comando si consuma e il demo riparte
     d.tick(t0 + 244)
+    assert "fermo" not in d.carica()
+
+
+# ---- la revisione delle correzioni del 7 novembre 2026 (reviews/reports/2026-11-07-correzioni-9-problemi.md), problemi 25-31 ----
+
+def test_annullo_rifiutato_niente_a_mercato(tmp_path):
+    """Problema 25: l'annullo di BUSDT è rifiutato e l'ordine limite resta aperto: niente a mercato finché non è chiuso davvero."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    finto.guasti[("DELETE", "/fapi/v1/order", "BUSDT")] = _Risposta({"code": -1003, "msg": "Too many requests"}, 429)
+    d.tick(t0 + 3700)
+    assert _mercato(finto) == [] and "ordini" in d.carica()           # fermo il giro, l'ordine non segnato controllato
+    d.tick(t0 + 3700 + dm.ATTESA_DOPO_ERRORE_S + 10)                   # l'annullo ora riesce: il resto a mercato, una volta
+    assert len(_mercato(finto, "BUSDT")) == 1 and "ordini" not in d.carica()
+    assert finto.posizioni["BUSDT"] == pytest.approx(-0.5 * 10000 / 50.007, abs=0.001)
+
+
+def test_secondo_ribilancio_dello_stesso_giorno_manda_il_resto(tmp_path):
+    """Problema 26: dopo un «riparti» nello stesso giorno, il resto a mercato ha un identificativo nuovo e parte."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.file_chiudi, d.file_riparti = tmp_path / "chiudi", tmp_path / "riparti"
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    d.tick(t0 + 3700)                                  # resto di BUSDT a mercato
+    d.file_chiudi.write_text("chiudi 1")
+    d.tick(t0 + 3800)                                  # chiude tutto
+    d.file_riparti.write_text("riparti 1")
+    d.tick(t0 + 3900)                                  # riparte
+    d.tick(t0 + 3960)                                  # ribilancio dello stesso giorno
+    d.tick(t0 + 3960 + 3700)                           # resto a mercato del secondo ribilancio
+    assert len(_mercato(finto, "BUSDT")) >= 3 and finto.posizioni["BUSDT"] == pytest.approx(-0.5 * 10000 / 50.007, abs=0.001)
+
+
+def test_da_fermo_si_annullano_anche_gli_ordini_senza_posizioni(tmp_path):
+    """Problema 31: da fermo, un ordine limite rimasto aperto senza posizioni si annulla."""
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)                                         # ordini limite: BUSDT resta aperto
+    finto.guasti[("DELETE", "/fapi/v1/allOpenOrders", "BUSDT")] = _Risposta({"code": -1003, "msg": "Too many requests"}, 429)
+    d.file_chiudi = tmp_path / "chiudi"
+    d.file_chiudi.write_text("chiudi 1")
+    d.tick(t0 + 60)                                    # chiudi tutto: l'annullo di BUSDT rifiutato
+    assert any(not o.get("chiuso") and o["symbol"] == "BUSDT" for o in finto.ordini.values())
+    d.tick(t0 + 130)                                   # da fermo: si riannulla
+    assert all(o.get("chiuso") for o in finto.ordini.values() if o["symbol"] == "BUSDT" and o["type"] == "LIMIT")
+
+
+def test_riparti_a_file_anche_senza_firebase(tmp_path):
+    """Problema 27: con Firebase che non conferma, il «riparti» a file funziona lo stesso."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    fb = _FbCheSbaglia()
+    fb.rotti.add(dm.COMANDO_RIPARTI)
+    (tmp_path / "acceso").write_text("si")
+    g1 = tmp_path / "g1.json"
+    g1.write_text(json.dumps({"ultimo_lunedi": 20750, "pesi": {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d = dm.DemoG1(fb, cliente=dm.ClienteDemo("chiave", "segreto", http=finto), file_stato=tmp_path / "st.json", file_g1=g1,
+                  interruttore=tmp_path / "acceso", file_chiudi=tmp_path / "chiudi", file_riparti=tmp_path / "riparti")
+    (tmp_path / "riparti").write_text("vecchio")       # scritto prima dello stop: non vale
+    (tmp_path / "chiudi").write_text("chiudi 1")
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    d.tick(t0 + 61)
+    assert d.carica().get("fermo")
+    (tmp_path / "riparti").write_text("nuovo")
+    d.tick(t0 + 122)
     assert "fermo" not in d.carica()
 

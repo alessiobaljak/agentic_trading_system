@@ -11,7 +11,8 @@ Caratteristiche:
 DRY_RUN:
   Lo STESSO codice gira in modalità simulata (settings.DRY_RUN=True): non invia
   ordini reali a Binance ma simula fill/PnL su dati live, e scrive comunque lo
-  stato su Firebase. È il GATE 2 (paper trading). Per andare live: DRY_RUN=False.
+  stato su Firebase. È il GATE 2 (paper trading). Dal 7 novembre 2026 il ramo reale è BLOCCATO
+  (`_init_binance`): i soldi veri passeranno dal codice nuovo di G1, non da qui.
 
 NB: l'ExecutionEngine NON decide la size/leva — riceve EffectiveRiskParams già
 passati dal RiskManager (final gate). Non c'è percorso che bypassi il gate.

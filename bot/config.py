@@ -792,3 +792,9 @@ def controlla_avvio(s=None) -> None:
     if not s.DRY_RUN and s.BACKTEST_PARITY:
         raise SystemExit("[config] AVVIO RIFIUTATO: BACKTEST_PARITY spegne i fermi del rischio e non si usa con DRY_RUN falso "
                          "(reviews/reports/2026-11-07-primo-avvio.md, problema 9)")
+    if not s.DRY_RUN:
+        # finche' il codice del conto vero non esiste (docs/backlog.md, P26) DRY_RUN falso non ha un senso coerente: il vecchio
+        # esecutore resta comunque in prova, ma la dashboard e il riconciliatore crederebbero il contrario (revisione delle
+        # correzioni del 7 novembre 2026, problema 29). CLAUDE.md: «DRY_RUN resta true».
+        raise SystemExit("[config] AVVIO RIFIUTATO: DRY_RUN falso, ma il codice del conto vero non c'e' ancora (CLAUDE.md: "
+                         "«DRY_RUN resta true»; reviews/reports/2026-11-07-correzioni-9-problemi.md, problema 29)")

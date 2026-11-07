@@ -42,7 +42,8 @@ def test_parita_col_backtest_rifiutata_con_soldi_veri(capsys):
     with pytest.raises(SystemExit):
         cfg.controlla_avvio(vero)
     cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=True, BINANCE_TESTNET=True, BACKTEST_PARITY=True))
-    cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=False))
+    with pytest.raises(SystemExit):                    # problema 29: senza il codice del conto vero, DRY_RUN falso non parte
+        cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=False))
     assert "ambiente: DRY_RUN=False" in capsys.readouterr().out
 
 
