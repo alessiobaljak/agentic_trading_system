@@ -762,3 +762,38 @@ def test_riparti_a_file_anche_senza_firebase(tmp_path):
     d.tick(t0 + 122)
     assert "fermo" not in d.carica()
 
+
+def test_da_fermo_si_richiude_anche_senza_leggere_gli_ordini(tmp_path):
+    """Problema 32 (revisione del 7 novembre 2026, reviews/reports/2026-11-07-correzioni-25-31.md): da fermo, con la lettura degli
+    ordini aperti sempre in errore, la posizione rimasta si richiude lo stesso al minuto dopo."""
+    finto = _Demo()
+    finto.posizioni, finto.posizioni_vive = {"BUSDT": -20.0}, True
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.file_chiudi = tmp_path / "chiudi"
+    d.file_chiudi.write_text("chiudi 1")
+    t0 = 20750 * 86400.0 + 400
+    finto.guasti[("POST", "/fapi/v1/order", "BUSDT")] = _Risposta({"code": -1003, "msg": "Too many requests"}, 429)
+    d.tick(t0)                                         # fermo, ma BUSDT non si è chiuso
+    assert d.carica()["fermo"] and finto.posizioni["BUSDT"] == -20.0
+    for k in range(1, 4):
+        finto.guasti[("GET", "/fapi/v1/openOrders", None)] = _Risposta({"code": -1001, "msg": "servizio"}, 503)
+        d.tick(t0 + 61 * k)
+    assert finto.posizioni["BUSDT"] == 0.0
+
+
+def test_ordine_che_non_si_annulla_da_allarme(tmp_path):
+    """Problema 33: un ordine aperto che non va via blocca il resto a mercato; dopo 2 ore scatta un allarme."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    eterno = [o for o in finto.ordini.values() if o["symbol"] == "BUSDT"][0]
+    for k in range(5):                                 # l'annullo di BUSDT non riesce mai: 5 tentativi, oltre 2 ore
+        finto.guasti[("DELETE", "/fapi/v1/order", "BUSDT")] = _Risposta({"code": -1003, "msg": "Too many requests"}, 429)
+        d.tick(t0 + 3700 + k * (dm.ATTESA_DOPO_ERRORE_S + 10))
+        assert not eterno.get("chiuso")
+    assert _mercato(finto) == []                       # niente posizione doppia
+    allarme = fb.get_rtdb("/demo_binance/allarme")     # l'ultimo giro è oltre 2 ore dopo il primo blocco
+    assert allarme and allarme["posizioni"] == ["BUSDT"]
+

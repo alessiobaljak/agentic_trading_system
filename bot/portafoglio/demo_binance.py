@@ -573,7 +573,10 @@ class DemoG1:
             return st
         fermo["ultimo_controllo"] = now
         equity, _, posizioni = self._conto(c)
-        aperti = c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []
+        try:
+            aperti = c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []
+        except RuntimeError:                          # se non si leggono, si richiude lo stesso (revisione, problema 32)
+            aperti = []
         if posizioni or aperti:                       # anche gli ordini rimasti aperti senza posizioni (problema 31)
             fermo["tentativi"] = int(fermo.get("tentativi", 0)) + 1
             chiuse, errori = self._chiudi_posizioni(c, posizioni)
@@ -646,6 +649,17 @@ class DemoG1:
         if not ok:
             print("[demo_binance] «riparti» non eseguito: il comando non si è potuto consumare su Firebase; si riprova al giro dopo")
         return ok
+
+    def _ordini_bloccati(self, st: dict, now: float, simboli: list) -> None:
+        """Un ordine che non si riesce ad annullare blocca il resto a mercato (giusto: niente posizione doppia); se dura oltre 2 ore,
+        allarme (revisione del 7 novembre 2026, problema 33)."""
+        ordini = st["ordini"]
+        ordini.setdefault("bloccato_dal", now)
+        self.salva(st)
+        if now - float(ordini["bloccato_dal"]) >= 2 * 3600:
+            testo_allarme = f"ordini aperti che non si annullano da oltre 2 ore: {sorted(simboli)}"
+            self._scrivi("allarme", {"ora": now, "testo": testo_allarme, "posizioni": sorted(simboli)})
+            print(f"[demo_binance] ALLARME: {testo_allarme}")
 
     def _ordine_esiste(self, c: ClienteDemo, simbolo: str, cid: str) -> bool:
         """Vero se un ordine con questo identificativo è già su Binance; «non esiste» (-2013) è falso; ogni altro errore si propaga
@@ -800,6 +814,7 @@ class DemoG1:
                     # ferma il giro, senza segnarlo controllato e senza mandare niente a mercato (revisione del 7 nov, problema 25)
                     stato = c.chiedi("GET", "/fapi/v1/order", {"symbol": o["simbolo"], "orderId": o["id"]}, firmata=True)
                     if stato.get("status") in ("NEW", "PARTIALLY_FILLED"):
+                        self._ordini_bloccati(st, now, [o["simbolo"]])
                         raise RuntimeError(f"annullo di {o['simbolo']} non riuscito e l'ordine e' ancora aperto: {str(exc)[:120]}")
             o["controllato"] = True
             o["a_limite"] = stato.get("status") == "FILLED"
@@ -811,6 +826,7 @@ class DemoG1:
         nella_lista = {o["simbolo"] for o in ordini["lista"]}
         ancora_aperti = sorted({x["symbol"] for x in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []} & nella_lista)
         if ancora_aperti:                              # un ordine limite sul libro e uno a mercato farebbero la posizione doppia
+            self._ordini_bloccati(st, now, ancora_aperti)
             raise RuntimeError(f"ordini ancora aperti su {ancora_aperti}: niente a mercato finche' non sono chiusi")
         _, _, posizioni = self._conto(c)
         obiettivi = st.get("obiettivi") or {}
