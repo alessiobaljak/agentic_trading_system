@@ -38,7 +38,8 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
 * **Il conto ridotto** (il proprietario, 6 novembre 2026: «voglio partire con 250 euro», poi «spegni eventi»; prova 148,
   `research/programma7/RISULTATI_OTTANTASEIESIMA.md`): con un numero nel file `ops/demo_binance_capitale` (per esempio 280) il demo
   lavora come un conto di quella cifra. Il valore usato per le posizioni, lo stop e i rapporti è il capitale più il guadagno da quando
-  il conto ridotto è partito; il resto del conto demo resta fermo. I filtri degli ordini sono severi almeno come quelli del conto vero
+  il conto ridotto è partito; il resto del conto demo resta fermo. Dal 7 novembre un capitale nuovo parte solo alla decisione di G1
+  dopo (la mezzanotte): prima si chiude tutto, poi si riapre da zero, come farà il conto vero. I filtri degli ordini sono severi almeno come quelli del conto vero
   (`filtri_conto_vero.json`). All'avvio i valori della fase di prima (`giorni`, `diario`, `ribilanciamenti`) passano in
   `/demo_binance/fasi/`, così grafici e rapporti ripartono puliti. Togliere il file non fa tornare al conto intero.
 """
@@ -73,6 +74,7 @@ LEVA = 5
 VALIDITA_LIMITE_S = 3600
 OGNI_VALUTAZIONE_S = 3600
 ATTESA_DOPO_ERRORE_S = 1800
+ATTESA_DOPO_CHIUSURA_S = 2.0           # dopo le chiusure a mercato, prima di rileggere il conto (parti_da_zero)
 STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chiude tutto a −35% dal massimo del conto
 SOGLIA_CONFRONTO = 0.02                # uno scarto oltre il 2% del conto su una moneta si segnala
 # le entrate vere del conto (research/programma7/MIGLIORARE_G1.md, voci 2-3; sì del proprietario del 5 novembre 2026): funding e
@@ -339,26 +341,60 @@ class DemoG1:
                 self.fb.set_rtdb(f"/demo_binance/{ramo}/{k}", None)
 
     def conto_ridotto(self, c: ClienteDemo, st: dict, now: float) -> dict:
-        """Il demo come un conto più piccolo (vedi in cima): all'avvio (o a un capitale nuovo nel file) si fissa lo scarto fra il
-        valore vero del conto demo e il capitale scelto, si archivia la fase di prima e si torna subito ai pesi di oggi."""
+        """Il demo come un conto più piccolo (vedi in cima). Un capitale nuovo nel file non parte subito: resta in attesa fino alla
+        decisione di G1 dopo (la mezzanotte), dove `parti_da_zero` chiude tutto e riapre da zero. Il proprietario, 7 novembre 2026:
+        «riparti a mezzanotte con il demo a 1000 [...] evita errore di apertura dei 280» (il 6 novembre il passaggio da 5.000 a 280
+        a metà mattina era costato circa 11 USDT)."""
         voluto = self.capitale_voluto()
         cr = st.get("conto_ridotto")
-        if voluto and (not cr or float(cr["capitale"]) != voluto) and not st.get("ordini"):
-            self._scarto = 0.0
-            vero = self._conto(c)[0]
-            data = time.strftime("%Y-%m-%d", time.gmtime(now))
-            prima = f"capitale_{float(cr['capitale']):g}" if cr else "conto_intero"
-            self._archivia_fase(f"{prima}_fino_al_{data}".replace(".", "_"))
-            cr = {"capitale": voluto, "valore_vero_all_avvio": vero, "dal": now, "data": data}
-            st["conto_ridotto"] = cr
-            st["capitale_iniziale"] = voluto
-            st["massimo"] = voluto
-            st["ultimo_giorno"] = 0                          # al giro stesso le posizioni si riportano ai pesi, alla misura nuova
-            st.pop("obiettivi", None)
-            st.pop("ultima_valutazione", None)
-            self._scrivi("conto_ridotto", cr)
-            print(f"[demo_binance] conto ridotto: il demo lavora come un conto di {voluto:g} USDT (valore vero {vero:,.2f})")
+        if voluto and (not cr or float(cr["capitale"]) != voluto):
+            if st.get("capitale_in_attesa") != voluto:
+                st["capitale_in_attesa"] = voluto
+                self._scrivi("capitale_in_attesa", {"capitale": voluto, "chiesto": now})
+                print(f"[demo_binance] capitale nuovo {voluto:g} USDT: parte alla prossima decisione di G1, dal conto vuoto")
+        elif st.pop("capitale_in_attesa", None) is not None:
+            self._scrivi("capitale_in_attesa", None)
         self._scarto = float(cr["valore_vero_all_avvio"]) - float(cr["capitale"]) if cr else 0.0
+        return st
+
+    def parti_da_zero(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Alla decisione di G1, se c'è un capitale in attesa: annulla gli ordini, chiude tutte le posizioni a mercato (le spese vanno
+        alla fase che finisce), archivia la fase, fissa lo scarto sul conto vuoto e lascia che il ribilancio apra tutto da zero, come
+        farà il conto vero (`docs/backlog.md`, P26: il primo ingresso alla mezzanotte)."""
+        voluto = st.get("capitale_in_attesa")
+        if not voluto:
+            return st
+        cr = st.get("conto_ridotto")
+        self._scarto = 0.0
+        for s in sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []}):
+            c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
+        _, _, posizioni = self._conto(c)
+        chiuse, errori = [], []
+        for s, q in sorted(posizioni.items()):
+            p = {"symbol": s, "side": "SELL" if q > 0 else "BUY", "type": "MARKET", "quantity": testo(abs(q)), "reduceOnly": "true"}
+            try:
+                c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
+                chiuse.append(s)
+            except RuntimeError as exc:
+                errori.append({"simbolo": s, "errore": str(exc)[:200]})
+        if chiuse:
+            time.sleep(ATTESA_DOPO_CHIUSURA_S)
+        vero = self._conto(c)[0]
+        data = time.strftime("%Y-%m-%d", time.gmtime(now))
+        prima = f"capitale_{float(cr['capitale']):g}" if cr else "conto_intero"
+        self._archivia_fase(f"{prima}_fino_al_{data}".replace(".", "_"))
+        cr = {"capitale": float(voluto), "valore_vero_all_avvio": vero, "dal": now, "data": data, "da_zero": True,
+              "chiuse_prima": len(chiuse), "errori_di_chiusura": errori}
+        st["conto_ridotto"] = cr
+        st["capitale_iniziale"] = float(voluto)
+        st["massimo"] = float(voluto)
+        for k in ("obiettivi", "ultima_valutazione", "capitale_in_attesa"):
+            st.pop(k, None)
+        self._scarto = vero - float(voluto)
+        self._scrivi("conto_ridotto", cr)
+        self._scrivi("capitale_in_attesa", None)
+        print(f"[demo_binance] conto ridotto da zero: {voluto:g} USDT (chiuse {len(chiuse)} posizioni, {len(errori)} errori; "
+              f"valore vero {vero:,.2f})")
         return st
 
     def eventi_aperti(self) -> dict:
@@ -483,6 +519,7 @@ class DemoG1:
             firma, monete_eventi = sorted(aperte), sorted({p.get("simbolo") for p in aperte.values() if p.get("simbolo")})
             pesi = somma_pesi(g1.get("pesi") or {}, pesi_eventi(aperte))
             if giorno and giorno > int(st.get("ultimo_giorno", 0)) and not st.get("ordini"):
+                st = self.parti_da_zero(c, st, now)
                 st = self.ribilancia(c, st, pesi, giorno, now)
                 st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
             elif (firma != list(st.get("eventi_firma") or []) and not st.get("ordini") and int(st.get("ultimo_giorno", 0))
@@ -672,6 +709,7 @@ class DemoG1:
                                "massimo": round(st["massimo"], 2), "dal_massimo": equity / st["massimo"] - 1,
                                "stop_a": round((1 - STOP_CONTO) * st["massimo"], 2),
                                "conto_ridotto": (st.get("conto_ridotto") or {}).get("capitale"),
+                               "capitale_in_attesa": st.get("capitale_in_attesa"),
                                "valore_vero_del_conto_demo": round(equity + self._scarto, 2)})
         oggi = time.strftime('%Y-%m-%d', time.gmtime(now))
         self._scrivi(f"giorni/{oggi}", round(equity, 2))

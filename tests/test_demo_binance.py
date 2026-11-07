@@ -498,3 +498,40 @@ def test_variazioni_sotto_il_minimo_contate(tmp_path, monkeypatch):
     assert rib["sotto_il_minimo"] == {"variazioni": 1, "valore_in_frazione_del_conto": 0.01}   # CUSDT: 2,8 USDT sotto i 5
     assert {q["symbol"] for q in _post(finto) if q["type"] == "LIMIT"} == {"AUSDT", "BUSDT"}
     assert dm.sotto_il_minimo({}, {}, {}, 280.0, {}) == {"variazioni": 0, "valore_in_frazione_del_conto": 0.0}
+
+
+def test_capitale_nuovo_parte_alla_mezzanotte_dal_conto_vuoto(tmp_path, monkeypatch):
+    """Il proprietario, 7 novembre 2026: «riparti a mezzanotte con il demo a 1000 [...] evita errore di apertura dei 280». Un capitale
+    nuovo aspetta la decisione di G1 dopo; lì il demo chiude tutto, archivia la fase e riapre da zero."""
+    monkeypatch.setattr(dm, "filtri_veri", lambda: {})
+    monkeypatch.setattr(dm, "ATTESA_DOPO_CHIUSURA_S", 0.0)
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT"))
+    d, fb = _demo_semplice(tmp_path, finto)
+    cap = tmp_path / "capitale"
+    cap.write_text("280")
+    d.file_capitale = cap
+    g = 20750
+    d.tick(g * 86400.0 + 400)                          # la fase da 280 parte con la decisione del giorno
+    d.tick(g * 86400.0 + 4100)                         # finisce l'ora degli ordini limite
+    assert d.carica()["conto_ridotto"]["capitale"] == 280.0
+    finto.chiamate.clear()
+    cap.write_text("1000")
+    finto.posizioni = {"AUSDT": 0.0, "BUSDT": 0.0, "CUSDT": -3.0}
+    d.tick(g * 86400.0 + 7400)                         # a metà giornata: niente parte, il capitale resta in attesa
+    st = d.carica()
+    assert st["conto_ridotto"]["capitale"] == 280.0 and st["capitale_in_attesa"] == 1000.0
+    assert not _post(finto)
+    assert fb.get_rtdb("/demo_binance/capitale_in_attesa")["capitale"] == 1000.0
+    (tmp_path / "g1.json").write_text(json.dumps({"ultimo_lunedi": g + 1, "pesi": {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d.tick((g + 1) * 86400.0 + 400)                    # la decisione della mezzanotte dopo
+    st = d.carica()
+    cr = st["conto_ridotto"]
+    assert cr["capitale"] == 1000.0 and cr["da_zero"] and cr["chiuse_prima"] == 1 and "capitale_in_attesa" not in st
+    assert st["capitale_iniziale"] == 1000.0 and st["massimo"] == 1000.0
+    mercato = [q for q in _post(finto) if q["type"] == "MARKET"]
+    assert [(q["symbol"], q["reduceOnly"]) for q in mercato] == [("CUSDT", "true")]          # prima si chiude
+    limite = {q["symbol"]: float(q["quantity"]) for q in _post(finto) if q["type"] == "LIMIT"}
+    assert limite["AUSDT"] == pytest.approx(4.999) and limite["BUSDT"] == pytest.approx(9.998)   # poi si apre su 1.000
+    assert any(k.startswith("capitale_280_fino_al_") for k in fb.get_rtdb("/demo_binance/fasi"))
+    assert fb.get_rtdb("/demo_binance/capitale_in_attesa") is None
+    assert fb.get_rtdb("/demo_binance/stato")["capitale_in_attesa"] is None

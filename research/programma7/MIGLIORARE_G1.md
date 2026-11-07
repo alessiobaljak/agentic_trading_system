@@ -178,3 +178,9 @@ separato prima del paper).
   Posizioni che si aprono: con 280 USDT il 76% (l'89% del peso), con 500 il 92%, con 1.000 il 98% (il Bitcoin la metà dei giorni), con
   2.000 il 100%. Variazioni di ogni giorno eseguibili: 280 il 9% (55% del giro), 1.000 il 23% (77%), 2.000 il 42% (89%), 5.000 il 69%
   (97%), 10.000 l'83% (99%). Con la prova 148: Sharpe 1,90 a 280, 1,91 a 1.000, **1,98 a 2.000, come G1 senza minimi**.
+* **7 novembre 2026, 06:00 UTC, voce 8, il demo a 1.000 dalla mezzanotte** (il proprietario: «ok cancella i 280 in demo e riparti a
+  mezzanotte con il demo a 1000 da mezzanotte (evita errore di apertura dei 280)»): un capitale nuovo nel file `ops/demo_binance_capitale`
+  ora resta in attesa fino alla decisione di G1 dopo; lì il demo annulla gli ordini, chiude tutte le posizioni a mercato (le spese vanno
+  alla fase che finisce), archivia la fase in `/demo_binance/fasi/`, fissa il conto vuoto e apre tutto da zero con il ribilancio della
+  notte (`parti_da_zero` in `bot/portafoglio/demo_binance.py`). È la partenza che farà il conto vero (backlog P26). Un test, 2.510 test
+  passano. La fase da 280 (6-7 novembre) finisce in archivio alla mezzanotte dell'8 novembre.

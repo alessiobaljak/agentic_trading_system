@@ -609,6 +609,9 @@ def sezione_demo_binance(fb) -> list:
                      f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short · "
                      f"ordini limite eseguiti {st.get('limite_eseguiti', 0)} su {st.get('limite_totali', 0)} · in attesa "
                      f"{st.get('ordini_in_attesa', 0)}")
+    if st.get("capitale_in_attesa"):
+        righe.append(f"- capitale nuovo in attesa: **${float(st['capitale_in_attesa']):,.0f}**, parte alla prossima decisione di G1 "
+                     f"(mezzanotte), chiudendo tutto e riaprendo da zero")
     if st.get("conto_ridotto"):
         righe.append(f"- conto ridotto: il demo lavora come un conto di ${float(st['conto_ridotto']):,.0f} (prova 148, il capitale del "
                      f"proprietario); valore vero del conto demo ${float(st.get('valore_vero_del_conto_demo') or 0):,.2f}")
@@ -715,8 +718,9 @@ def sezione_demo_contro_paper(fb) -> list:
                              fb.get_rtdb("/paper_eventi/giorni") or {})
     if not righe:
         return [titolo, "- non ancora: servono almeno due giorni con il demo e il paper", ""]
-    out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 6 novembre il demo lavora come un conto di 280 USDT, senza gli eventi "
-           "(i giorni di prima sono in /demo_binance/fasi); con i minimi di Binance la differenza con il paper oscilla di più (prova 148).", "",
+    out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 6 novembre il demo lavora come un conto ridotto (280 USDT, dall'8 novembre "
+           "1.000), senza gli eventi; le fasi di prima sono in /demo_binance/fasi; con i minimi di Binance la differenza con il paper "
+           "oscilla di più (prova 148).", "",
            "| giorno | demo | paper G1 | demo meno paper | eventi nel paper |", "|---|---|---|---|---|"]
     for r in righe:
         ev = f"{100 * r['eventi']:+.2f}%" if r["eventi"] is not None else "—"
