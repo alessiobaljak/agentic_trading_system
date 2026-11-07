@@ -73,7 +73,9 @@ ATTESA_G1_S = 2 * 3600                 # gli eventi del giorno aspettano il ribi
 LEVA = 5
 VALIDITA_LIMITE_S = 3600
 OGNI_VALUTAZIONE_S = 3600
-ATTESA_DOPO_ERRORE_S = 1800
+ATTESA_DOPO_ERRORE_S = 1800                # dopo un errore, il ribilancio aspetta; le protezioni no (revisione del 7 nov 2026)
+OGNI_CONTROLLO_STOP_S = 60                 # stop sul conto e conto vuoto da fermo: ogni minuto, non ogni ora
+TENTATIVI_PRIMA_DELL_ALLARME = 3           # da fermo, chiusure che non svuotano il conto: allarme dopo 3 tentativi
 ATTESA_DOPO_CHIUSURA_S = 2.0           # dopo le chiusure a mercato, prima di rileggere il conto (parti_da_zero)
 STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chiude tutto a −35% dal massimo del conto
 SOGLIA_CONFRONTO = 0.02                # uno scarto oltre il 2% del conto su una moneta si segnala
@@ -136,6 +138,13 @@ def id_ordine(giorno: int, simbolo: str, tentativo: int = 0) -> str:
     dell'ora, modulo 100.000)."""
     nome = simbolo if re.fullmatch(r"[.A-Za-z0-9:/_-]+", simbolo) else "h" + hashlib.sha1(simbolo.encode()).hexdigest()[:12]
     return f"g1d-{giorno}-{tentativo % 100_000}-{nome}"[:36]
+
+
+def id_mercato(chiave: str, simbolo: str) -> str:
+    """L'identificativo FISSO dell'ordine a mercato di una moneta per un ribilancio (revisione del 7 novembre 2026, problema 1): lo
+    stesso a ogni tentativo, cosi' prima di mandarlo si controlla che non sia gia' partito."""
+    nome = simbolo if re.fullmatch(r"[.A-Za-z0-9:/_-]+", simbolo) else "h" + hashlib.sha1(simbolo.encode()).hexdigest()[:12]
+    return f"g1m-{chiave}-{nome}"[:36]
 
 
 def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> list:
@@ -450,20 +459,14 @@ class DemoG1:
         return False
 
     def chiudi_tutto(self, c: ClienteDemo, st: dict, now: float, motivo: str) -> dict:
-        """Annulla tutti gli ordini aperti e chiude tutte le posizioni a mercato; poi il demo resta fermo (``st['fermo']``)."""
-        for s in sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []}):
-            c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
+        """Annulla tutti gli ordini aperti e chiude tutte le posizioni a mercato; poi il demo resta fermo (``st['fermo']``). Da fermo,
+        ``_da_fermo`` richiude ogni minuto quello che resta finché il conto è vuoto (revisione del 7 novembre 2026, problema 3)."""
         equity, _, posizioni = self._conto(c)
-        chiuse, errori = [], []
-        for s, q in sorted(posizioni.items()):
-            p = {"symbol": s, "side": "SELL" if q > 0 else "BUY", "type": "MARKET", "quantity": testo(abs(q)), "reduceOnly": "true"}
-            try:
-                c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
-                chiuse.append(s)
-            except RuntimeError as exc:
-                errori.append({"simbolo": s, "errore": str(exc)[:200]})
+        chiuse, errori = self._chiudi_posizioni(c, posizioni)
         st.pop("ordini", None)
-        st["fermo"] = {"motivo": motivo, "ora": now, "equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori}
+        st["fermo"] = {"motivo": motivo, "ora": now, "equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori,
+                       "tentativi": 1, "ultimo_controllo": now}
+        st["fermo"]["riparti_pulito"] = self._pulisci_riparti(st)
         self._scrivi("fermo", st["fermo"])
         self._scrivi("stato", {"stato": f"fermo: {motivo}", "equity": round(equity, 2), "aggiornato": now,
                                "capitale_iniziale": float(st.get("capitale_iniziale", equity))})
@@ -482,35 +485,22 @@ class DemoG1:
         if c is None:
             self._scrivi("stato", {"stato": "manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env)", "aggiornato": now})
             return
-        if now - self._ultimo_tentativo < ATTESA_DOPO_ERRORE_S and self._ultimo_tentativo:
-            return
+        # le protezioni (pulsante, stop sul conto, conto vuoto da fermo, «riparti») girano a OGNI giro, anche dopo un errore
+        # (revisione del 7 novembre 2026, problemi 2-4); l'attesa dopo un errore vale solo per il ribilancio
         try:
             st = self.carica()
             st = self.conto_ridotto(c, st, now)
-            da_dashboard = self._comando(COMANDO_CHIUDI)
-            da_file = self._comando_file(self.file_chiudi, st, "eseguito_chiudi")
-            if da_dashboard or da_file:
-                if not st.get("fermo"):
-                    st = self.chiudi_tutto(c, st, now, "pulsante della dashboard" if da_dashboard else "comando chiudi tutto")
-                if da_dashboard:
-                    self.fb.set_rtdb(COMANDO_CHIUDI, False)
-            if st.get("fermo"):
-                da_dashboard = self._comando(COMANDO_RIPARTI)
-                if da_dashboard or self._comando_file(self.file_riparti, st, "eseguito_riparti"):
-                    st.pop("fermo")
-                    st["ultimo_giorno"] = 0                     # al giro dopo si torna ai pesi di oggi
-                    st["massimo"] = self._conto(c)[0]           # lo stop si misura dalla ripartenza
-                    if da_dashboard:
-                        self.fb.set_rtdb(COMANDO_RIPARTI, False)
-                    self._scrivi("fermo", None)
-                    print("[demo_binance] ripartito")
-                else:
-                    if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
-                        equity = self._conto(c)[0]
-                        st["ultima_valutazione"] = now
-                        self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
-                    self.salva(st)
-                    return
+            st = self.protezioni(c, st, now)
+            self.salva(st)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[demo_binance] errore nelle protezioni, si riprova al giro dopo: {exc}")
+            self._scrivi("errore", {"testo": str(exc)[:300], "ora": now, "dove": "protezioni"})
+            return
+        if st.get("fermo"):
+            return
+        if now - self._ultimo_tentativo < ATTESA_DOPO_ERRORE_S and self._ultimo_tentativo:
+            return
+        try:
             if st.get("ordini") and now >= float(st["ordini"]["piazzati"]) + VALIDITA_LIMITE_S:
                 st = self.chiudi_ordini(c, st, now)
             g1 = json.loads(self.file_g1.read_text(encoding="utf-8")) if self.file_g1.exists() else {}
@@ -537,6 +527,128 @@ class DemoG1:
             self._ultimo_tentativo = now
             print(f"[demo_binance] errore, si riprova fra 30 minuti: {exc}")
             self._scrivi("errore", {"testo": str(exc)[:300], "ora": now})
+
+    # ---- le protezioni (revisione del 7 novembre 2026, problemi 2-4) ----
+    def protezioni(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Pulsante che chiude tutto e stop sul conto a ogni giro (lo stop: lettura del conto al massimo ogni minuto); da fermo, il
+        conto vuoto e il «riparti»."""
+        da_dashboard = self._comando(COMANDO_CHIUDI)
+        da_file = self._comando_file(self.file_chiudi, st, "eseguito_chiudi")
+        if da_dashboard or da_file:
+            if not st.get("fermo"):
+                st = self.chiudi_tutto(c, st, now, "pulsante della dashboard" if da_dashboard else "comando chiudi tutto")
+            if da_dashboard:
+                self.fb.set_rtdb(COMANDO_CHIUDI, False)
+        if st.get("fermo"):
+            return self._da_fermo(c, st, now)
+        if now - float(st.get("ultimo_controllo_stop", 0)) >= OGNI_CONTROLLO_STOP_S:
+            st["ultimo_controllo_stop"] = now
+            equity = self._conto(c)[0]
+            iniziale = float(st.setdefault("capitale_iniziale", equity))
+            st["massimo"] = max(float(st.get("massimo", iniziale)), equity)
+            if equity <= (1 - STOP_CONTO) * st["massimo"]:
+                st = self.chiudi_tutto(c, st, now, f"stop sul conto: {100 * (equity / st['massimo'] - 1):.1f}% dal massimo")
+        return st
+
+    def _da_fermo(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """Da fermo: il «riparti» vale solo dopo che il comando vecchio è stato pulito; ogni minuto si rileggono le posizioni e si
+        richiude quello che resta, con un allarme se dopo 3 tentativi il conto non è vuoto."""
+        fermo = st["fermo"]
+        if not fermo.get("riparti_pulito"):
+            fermo["riparti_pulito"] = self._pulisci_riparti(st)
+        elif self._riparti(st):
+            st.pop("fermo")
+            st["ultimo_giorno"] = 0                     # al giro dopo si torna ai pesi di oggi
+            st["massimo"] = self._conto(c)[0]           # lo stop si misura dalla ripartenza
+            self._scrivi("fermo", None)
+            print("[demo_binance] ripartito")
+            return st
+        if now - float(fermo.get("ultimo_controllo", 0)) < OGNI_CONTROLLO_STOP_S:
+            return st
+        fermo["ultimo_controllo"] = now
+        equity, _, posizioni = self._conto(c)
+        if posizioni:
+            fermo["tentativi"] = int(fermo.get("tentativi", 0)) + 1
+            chiuse, errori = self._chiudi_posizioni(c, posizioni)
+            fermo["errori"] = errori
+            if fermo["tentativi"] >= TENTATIVI_PRIMA_DELL_ALLARME:
+                allarme = {"ora": now, "testo": f"fermo ma il conto non è vuoto dopo {fermo['tentativi']} tentativi",
+                           "posizioni": sorted(posizioni), "errori": errori}
+                self._scrivi("allarme", allarme)
+                print(f"[demo_binance] ALLARME: {allarme['testo']}: {sorted(posizioni)}")
+            self._scrivi("fermo", fermo)
+        elif not fermo.get("vuoto"):
+            fermo["vuoto"] = now
+            self._scrivi("fermo", fermo)
+            self._scrivi("allarme", None)
+        if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
+            st["ultima_valutazione"] = now
+            self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
+        return st
+
+    def _chiudi_posizioni(self, c: ClienteDemo, posizioni: dict) -> tuple:
+        """Annulla gli ordini aperti e chiude a mercato con «solo riduzione»; un errore su una moneta non ferma le altre."""
+        errori = []
+        try:
+            aperti = sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []})
+        except RuntimeError as exc:
+            aperti = sorted(posizioni)
+            errori.append({"simbolo": "*", "errore": f"ordini aperti non letti: {str(exc)[:150]}"})
+        for s in aperti:
+            try:
+                c.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": s}, firmata=True)
+            except RuntimeError as exc:
+                errori.append({"simbolo": s, "errore": f"annullo: {str(exc)[:150]}"})
+        chiuse = []
+        for s, q in sorted(posizioni.items()):
+            p = {"symbol": s, "side": "SELL" if q > 0 else "BUY", "type": "MARKET", "quantity": testo(abs(q)), "reduceOnly": "true"}
+            try:
+                c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
+                chiuse.append(s)
+            except RuntimeError as exc:
+                errori.append({"simbolo": s, "errore": str(exc)[:200]})
+        return chiuse, errori
+
+    def _pulisci_riparti(self, st: dict) -> bool:
+        """All'entrata nel fermo il «riparti» vecchio non vale: il testo del file si segna come già visto e il comando della dashboard
+        si rimette a falso. Vero solo se la scrittura è confermata (``set_rtdb`` del client vero restituisce False se non è arrivata)."""
+        try:
+            st["eseguito_riparti"] = (self.file_riparti.read_text(encoding="utf-8").strip()
+                                      if self.file_riparti.exists() else st.get("eseguito_riparti", ""))
+        except Exception:  # noqa: BLE001
+            pass
+        if self.fb is None:
+            return True
+        try:
+            return self.fb.set_rtdb(COMANDO_RIPARTI, False) is not False
+        except Exception:  # noqa: BLE001
+            return False
+
+    def _riparti(self, st: dict) -> bool:
+        """Il «riparti»: dal file, una volta per testo nuovo; dalla dashboard, solo se il comando si consuma davvero (la scrittura
+        del falso confermata), così un comando rimasto vero non riaccende il demo da solo (revisione del 7 novembre 2026, problema 4)."""
+        if self._comando_file(self.file_riparti, st, "eseguito_riparti"):
+            return True
+        if not self._comando(COMANDO_RIPARTI):
+            return False
+        try:
+            ok = self.fb.set_rtdb(COMANDO_RIPARTI, False) is not False
+        except Exception:  # noqa: BLE001
+            ok = False
+        if not ok:
+            print("[demo_binance] «riparti» non eseguito: il comando non si è potuto consumare su Firebase; si riprova al giro dopo")
+        return ok
+
+    def _ordine_esiste(self, c: ClienteDemo, simbolo: str, cid: str) -> bool:
+        """Vero se un ordine con questo identificativo è già su Binance; «non esiste» (-2013) è falso; ogni altro errore si propaga
+        (meglio non mandare che mandare due volte)."""
+        try:
+            r = c.chiedi("GET", "/fapi/v1/order", {"symbol": simbolo, "origClientOrderId": cid}, firmata=True)
+        except RuntimeError as exc:
+            if "-2013" in str(exc):
+                return False
+            raise
+        return bool(r and r.get("orderId") is not None)
 
     def _conto(self, c: ClienteDemo) -> tuple:
         conto = c.chiedi("GET", "/fapi/v2/account", firmata=True)
@@ -663,31 +775,61 @@ class DemoG1:
         return st
 
     def chiudi_ordini(self, c: ClienteDemo, st: dict, now: float) -> dict:
-        """Dopo l'ora: gli ordini limite non eseguiti (o eseguiti in parte) si annullano e il resto va a mercato."""
-        eseguiti_limite = a_mercato = 0
-        for o in st["ordini"]["lista"]:
-            stato = c.chiedi("GET", "/fapi/v1/order", {"symbol": o["simbolo"], "orderId": o["id"]}, firmata=True)
-            fatta = float(stato.get("executedQty") or 0)
-            if stato.get("status") == "FILLED":
-                eseguiti_limite += 1
+        """Dopo l'ora: gli ordini limite non eseguiti si annullano e quello che manca va a mercato. Quello che manca si calcola dalla
+        posizione VERA contro l'obiettivo, non dalla quantità pianificata; ogni ordine a mercato ha un identificativo fisso controllato
+        prima di mandarlo; lo stato si salva dopo ogni ordine (revisione del 7 novembre 2026, problema 1: un errore a metà giro faceva
+        rimandare due volte lo stesso resto)."""
+        ordini = st["ordini"]
+        for o in ordini["lista"]:
+            if o.get("controllato"):
                 continue
+            stato = c.chiedi("GET", "/fapi/v1/order", {"symbol": o["simbolo"], "orderId": o["id"]}, firmata=True)
             if stato.get("status") in ("NEW", "PARTIALLY_FILLED"):
-                c.chiedi("DELETE", "/fapi/v1/order", {"symbol": o["simbolo"], "orderId": o["id"]}, firmata=True)
-            resto = round(float(o["quantita"]) - fatta, 10)
-            if resto > 0:
-                p = {"symbol": o["simbolo"], "side": o["lato"], "type": "MARKET", "quantity": testo(resto)}
-                if o.get("riduce"):
-                    p["reduceOnly"] = "true"
                 try:
-                    c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
-                    a_mercato += 1
-                except RuntimeError as exc:          # per esempio sotto il minimo dopo un'esecuzione parziale
-                    print(f"[demo_binance] resto di {o['simbolo']} non inviato: {exc}")
-        n = len(st["ordini"]["lista"])
+                    c.chiedi("DELETE", "/fapi/v1/order", {"symbol": o["simbolo"], "orderId": o["id"]}, firmata=True)
+                except RuntimeError as exc:            # per esempio eseguito nel frattempo: la posizione vera dice il resto
+                    print(f"[demo_binance] annullo di {o['simbolo']} non riuscito: {str(exc)[:120]}")
+            o["controllato"] = True
+            o["a_limite"] = stato.get("status") == "FILLED"
+            self.salva(st)
+        f = filtri(c.chiedi("GET", "/fapi/v1/exchangeInfo"))
+        if st.get("conto_ridotto"):
+            f = piu_severi(f, filtri_veri())
+        prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
+        _, _, posizioni = self._conto(c)
+        obiettivi = st.get("obiettivi") or {}
+        chiave = ordini.get("chiave") or time.strftime("%Y-%m-%d", time.gmtime(int(st["ultimo_giorno"]) * 86400))
+        for o in ordini["lista"]:
+            if o.get("mercato_fatto"):
+                continue
+            s = o["simbolo"]
+            if s in f and s in prezzi:
+                _, passo, qmin, vmin = f[s]
+                p = prezzi[s]
+                voluto, attuale = float(obiettivi.get(s, 0.0)), float(posizioni.get(s, 0.0))
+                delta = voluto - attuale
+                q = arrotonda(abs(delta), passo, "giu")
+                if q > 0 and q >= qmin and q * p >= vmin:
+                    cid = id_mercato(chiave, s)
+                    if not self._ordine_esiste(c, s, cid):
+                        riduce = voluto == 0.0 or (attuale != 0 and (attuale > 0) == (voluto > 0) and abs(voluto) < abs(attuale))
+                        par = {"symbol": s, "side": "BUY" if delta > 0 else "SELL", "type": "MARKET", "quantity": testo(q),
+                               "newClientOrderId": cid}
+                        if riduce:
+                            par["reduceOnly"] = "true"
+                        try:
+                            c.chiedi("POST", "/fapi/v1/order", par, firmata=True)
+                            ordini["a_mercato"] = int(ordini.get("a_mercato", 0)) + 1
+                        except RuntimeError as exc:      # per esempio sotto il minimo dopo un'esecuzione parziale
+                            print(f"[demo_binance] resto di {s} non inviato: {exc}")
+            o["mercato_fatto"] = True
+            self.salva(st)
+        n = len(ordini["lista"])
+        eseguiti_limite = sum(1 for o in ordini["lista"] if o.get("a_limite"))
+        a_mercato = int(ordini.get("a_mercato", 0))
         st["limite_eseguiti"] = int(st.get("limite_eseguiti", 0)) + eseguiti_limite
         st["limite_totali"] = int(st.get("limite_totali", 0)) + n
         st["a_mercato"] = int(st.get("a_mercato", 0)) + a_mercato
-        chiave = st["ordini"].get("chiave") or time.strftime("%Y-%m-%d", time.gmtime(int(st["ultimo_giorno"]) * 86400))
         self._scrivi(f"ribilanciamenti/{chiave}/limite", {"ordini": n, "eseguiti_a_limite": eseguiti_limite, "a_mercato": a_mercato,
                                                           "controllato": now})
         st.pop("ordini")

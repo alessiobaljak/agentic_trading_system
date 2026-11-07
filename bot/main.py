@@ -2654,6 +2654,8 @@ class TradingBot:
 
 
 def main() -> None:
+    from bot.config import controlla_avvio
+    controlla_avvio(settings)
     TradingBot().run()
 
 

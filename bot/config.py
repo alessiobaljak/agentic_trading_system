@@ -25,14 +25,40 @@ from dotenv import load_dotenv
 # entrava anche FIREBASE_SERVICE_ACCOUNT, quindi la suite si collegava al
 # Firebase VERO e poteva scrivergli sopra (un test ha trovato una posizione di
 # produzione aperta). conftest.py imposta questa variabile prima di ogni import.
+#: chiavi che il file delle tarature NON puo' cambiare (revisione del percorso degli ordini del 7 novembre 2026, problema 5): la
+#: modalita' (prova o conto vero), la rete di prova, la parita' col backtest e qualunque segreto restano solo nel .env del proprietario
+VIETATE_IN_TUNING = frozenset({"DRY_RUN", "BINANCE_TESTNET", "BACKTEST_PARITY"})
+_SEGRETI_NEL_NOME = ("KEY", "SECRET", "TOKEN", "PASSWORD", "CREDENTIAL", "FIREBASE")
+
+
+def carica_tuning(percorso: str = "tuning.env") -> list:
+    """Il file delle tarature del supervisore, sopra il .env, ma solo con le chiavi ammesse; restituisce quelle scartate."""
+    try:
+        from dotenv import dotenv_values
+        valori = dotenv_values(percorso) if os.path.exists(percorso) else {}
+    except Exception as exc:  # noqa: BLE001
+        print(f"[config] {percorso} non letto: {exc}")
+        return []
+    scartate = []
+    for k, v in valori.items():
+        if v is None:
+            continue
+        if k in VIETATE_IN_TUNING or any(t in k.upper() for t in _SEGRETI_NEL_NOME):
+            scartate.append(k)
+            continue
+        os.environ[k] = v
+    if scartate:
+        print(f"[config] ATTENZIONE: {percorso} prova a cambiare chiavi che non si regolano da li': {sorted(scartate)} (ignorate)")
+    return scartate
+
+
 if not os.getenv("TRADING_BOT_TEST_MODE"):
     load_dotenv()
     # TARATURA AUTOMATICA. Il supervisore (bot/learning/supervisor.py) scrive qui, e
     # SOLO qui: il .env con le chiavi resta di proprieta' dell'utente e nessun
-    # processo automatico lo tocca mai. Caricato DOPO con override, cosi' una
-    # decisione del supervisore vince sul default — ma resta un file di testo
-    # leggibile, versionabile a mano e cancellabile per tornare ai default.
-    load_dotenv("tuning.env", override=True)
+    # processo automatico lo tocca mai. Caricato DOPO, cosi' una decisione del
+    # supervisore vince sul default — ma solo per le chiavi ammesse (carica_tuning).
+    carica_tuning("tuning.env")
 
 
 def timeframe_hours(tf: str) -> float:
@@ -49,6 +75,21 @@ def _get_bool(key: str, default: bool) -> bool:
     return val.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
+def _get_bool_sicuro(key: str) -> bool:
+    """`DRY_RUN` e `BINANCE_TESTNET` (revisione del 7 novembre 2026, problema 5): solo il valore esatto «false» spegne la
+    protezione; vuoto, errori di battitura («si», «treu», «0») o qualunque altra cosa la lasciano accesa, con un avviso. Prima un
+    valore scritto male valeva falso, cioe' conto vero."""
+    val = os.getenv(key)
+    if val is None:
+        return True
+    v = val.strip().lower()
+    if v == "false":
+        return False
+    if v != "true":
+        print(f"[config] ATTENZIONE: {key}={val!r} non e' «true» ne' «false»: vale true (la protezione resta accesa)")
+    return True
+
+
 def _get_float(key: str, default: float) -> float:
     try:
         return float(os.getenv(key, default))
@@ -61,12 +102,12 @@ class Settings:
 
     # ---- Modalità ----
     # DRY_RUN True => paper trading, nessun ordine reale (GATE 2). Default sicuro.
-    DRY_RUN: bool = _get_bool("DRY_RUN", True)
+    DRY_RUN: bool = _get_bool_sicuro("DRY_RUN")
 
     # ---- Binance ----
     BINANCE_API_KEY: str = os.getenv("BINANCE_API_KEY", "")
     BINANCE_API_SECRET: str = os.getenv("BINANCE_API_SECRET", "")
-    BINANCE_TESTNET: bool = _get_bool("BINANCE_TESTNET", True)
+    BINANCE_TESTNET: bool = _get_bool_sicuro("BINANCE_TESTNET")
     QUOTE_ASSET: str = "USDT"  # universo: tutti i perpetual *USDT
 
     # ---- Anthropic / Claude ----
@@ -741,3 +782,13 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
+
+
+def controlla_avvio(s=None) -> None:
+    """All'avvio del bot (revisione del percorso degli ordini del 7 novembre 2026, problema 9): la parita' col backtest spegne tutti
+    i fermi del rischio e il tetto delle posizioni, quindi con `DRY_RUN` falso l'avvio si rifiuta. Scrive anche l'ambiente attivo."""
+    s = s or settings
+    print(f"[config] ambiente: DRY_RUN={s.DRY_RUN}, BINANCE_TESTNET={s.BINANCE_TESTNET}, BACKTEST_PARITY={s.BACKTEST_PARITY}")
+    if not s.DRY_RUN and s.BACKTEST_PARITY:
+        raise SystemExit("[config] AVVIO RIFIUTATO: BACKTEST_PARITY spegne i fermi del rischio e non si usa con DRY_RUN falso "
+                         "(reviews/reports/2026-11-07-primo-avvio.md, problema 9)")

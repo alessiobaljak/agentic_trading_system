@@ -32,12 +32,20 @@ class _Demo:
         self.separati = set()
         self.margine = {}
         self.entrate = []                               # righe di /fapi/v1/income: (tipo, ms, importo, valuta)
+        self.posizioni_vive = False                     # se vero, gli ordini a mercato e i limite di AUSDT muovono le posizioni
+        self.guasti = {}                                # (metodo, percorso, simbolo) -> eccezione o risposta, una volta sola
+        self.guasti_dopo = {}                           # simbolo -> eccezione DOPO aver eseguito l'ordine (risposta persa)
 
     def __call__(self, metodo, url, headers=None, timeout=None):
         u = urlparse(url)
         assert u.hostname == "demo-fapi.binance.com"
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         self.chiamate.append((metodo, u.path, q))
+        guasto = self.guasti.pop((metodo, u.path, q.get("symbol")), None)
+        if isinstance(guasto, Exception):
+            raise guasto
+        if guasto is not None:
+            return guasto
         if u.path == "/fapi/v1/exchangeInfo":
             return _Risposta({"symbols": [{"symbol": s, "filters": [
                 {"filterType": "PRICE_FILTER", "tickSize": "0.01"},
@@ -76,8 +84,19 @@ class _Demo:
                 return _Risposta({"code": -1100, "msg": "Illegal characters found in parameter 'newclientorderid'"}, 400)
             i = len(self.ordini) + 1
             self.ordini[i] = dict(q, orderId=i)
+            if self.posizioni_vive and (q["type"] == "MARKET" or q["symbol"] == "AUSDT"):
+                segno = 1.0 if q["side"] == "BUY" else -1.0
+                self.posizioni[q["symbol"]] = round(self.posizioni.get(q["symbol"], 0.0) + segno * float(q["quantity"]), 10)
+            dopo = self.guasti_dopo.pop(q["symbol"], None)
+            if dopo is not None:
+                raise dopo
             return _Risposta({"orderId": i})
         if u.path == "/fapi/v1/order" and metodo == "GET":
+            if "origClientOrderId" in q:
+                trovati = [o for o in self.ordini.values() if o.get("newClientOrderId") == q["origClientOrderId"]]
+                if not trovati:
+                    return _Risposta({"code": -2013, "msg": "Order does not exist."}, 400)
+                return _Risposta({"orderId": trovati[0]["orderId"], "status": "FILLED"})
             o = self.ordini[int(q["orderId"])]
             pieno = o["symbol"] == "AUSDT"
             return _Risposta({"status": "FILLED" if pieno else "NEW", "executedQty": o["quantity"] if pieno else "0"})
@@ -117,6 +136,7 @@ def test_decisione_di_g1_sul_demo(tmp_path):
     from bot.core.firebase_client import _InMemoryStore
     fb = _InMemoryStore()
     finto = _Demo()
+    finto.posizioni_vive = True                        # come Binance: un ordine eseguito muove la posizione
     acceso = tmp_path / "acceso"
     acceso.write_text("si")
     g1 = tmp_path / "g1.json"
@@ -135,11 +155,13 @@ def test_decisione_di_g1_sul_demo(tmp_path):
     st = d.carica()
     assert "ordini" not in st and st["limite_eseguiti"] == 1 and st["a_mercato"] == 1
     mercato = [q for m, p, q in finto.chiamate if m == "POST" and p == "/fapi/v1/order" and q["type"] == "MARKET"]
-    assert mercato == [{"symbol": "BUSDT", "side": "SELL", "type": "MARKET", "quantity": "99.986", **{k: mercato[0][k] for k in ("timestamp", "recvWindow", "signature")}}]
+    assert mercato == [{"symbol": "BUSDT", "side": "SELL", "type": "MARKET", "quantity": "99.986",
+                        "newClientOrderId": dm.id_mercato("2026-10-24", "BUSDT"),
+                        **{k: mercato[0][k] for k in ("timestamp", "recvWindow", "signature")}}]
     assert fb.get_rtdb("/demo_binance/stato")["equity"] == 10000.0
     rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24")
     assert rib["entrate"] == 2 and rib["uscite"] == 0
-    assert fb.get_rtdb("/demo_binance/diario/2026-10-24") == {"equity": 10000.0, "long": 0, "short": 0}
+    assert fb.get_rtdb("/demo_binance/diario/2026-10-24") == {"equity": 10000.0, "long": 1, "short": 1}
 
 
 def test_senza_chiave_non_chiama_binance(tmp_path, monkeypatch):
@@ -383,6 +405,7 @@ def test_chiudi_tutto_e_riparti_con_il_file(tmp_path):
     """Lo stesso comando come file nel repository: una volta per ogni testo nuovo."""
     finto = _Demo()
     finto.posizioni = {"AUSDT": 10.0}
+    finto.posizioni_vive = True                        # la chiusura svuota davvero il conto
     d, fb = _demo_semplice(tmp_path, finto)
     d.file_chiudi, d.file_riparti = tmp_path / "chiudi", tmp_path / "riparti"
     d.file_chiudi.write_text("1 nov 2026 18:00")
@@ -535,3 +558,130 @@ def test_capitale_nuovo_parte_alla_mezzanotte_dal_conto_vuoto(tmp_path, monkeypa
     assert any(k.startswith("capitale_280_fino_al_") for k in fb.get_rtdb("/demo_binance/fasi"))
     assert fb.get_rtdb("/demo_binance/capitale_in_attesa") is None
     assert fb.get_rtdb("/demo_binance/stato")["capitale_in_attesa"] is None
+
+
+# ---- la revisione del percorso degli ordini del 7 novembre 2026 (reviews/reports/2026-11-07-primo-avvio.md), problemi 1-4 ----
+
+def _mercato(finto, simbolo=None):
+    return [q for q in _post(finto) if q["type"] == "MARKET" and (simbolo is None or q["symbol"] == simbolo)]
+
+
+def test_resto_a_mercato_non_parte_due_volte_dopo_un_errore(tmp_path):
+    """Problema 1: l'ordine a mercato di CUSDT arriva a Binance ma la risposta si perde; al tentativo dopo né BUSDT né CUSDT
+    ripartono, perché il resto si calcola dalla posizione vera e l'identificativo fisso si controlla prima."""
+    import requests
+    finto = _Demo(("AUSDT", "BUSDT", "CUSDT"))
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto, pesi={"AUSDT": 0.4, "BUSDT": -0.3, "CUSDT": -0.3})
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)                                         # A eseguito a limite, B e C in attesa
+    finto.guasti_dopo["CUSDT"] = requests.exceptions.ReadTimeout("risposta persa")
+    d.tick(t0 + 3700)                                  # B a mercato, C a mercato con la risposta persa: errore
+    assert len(_mercato(finto, "BUSDT")) == 1 and len(_mercato(finto, "CUSDT")) == 1 and "ordini" in d.carica()
+    d.tick(t0 + 3700 + dm.ATTESA_DOPO_ERRORE_S + 10)   # il tentativo dopo
+    assert len(_mercato(finto, "BUSDT")) == 1 and len(_mercato(finto, "CUSDT")) == 1
+    assert "ordini" not in d.carica()
+    assert finto.posizioni["CUSDT"] == pytest.approx(-0.3 * 10000 / 2.0, abs=0.001)    # una volta sola, non il doppio
+
+
+def test_pulsante_anche_durante_l_attesa_dopo_un_errore(tmp_path, monkeypatch):
+    """Problema 2: dopo un errore il ribilancio aspetta 30 minuti, il pulsante no."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    def rotto(*a, **k):
+        raise TimeoutError("rete")
+    monkeypatch.setattr(d, "chiudi_ordini", rotto)
+    d.tick(t0 + 3700)                                  # errore: il ribilancio aspetta
+    d.file_chiudi = tmp_path / "chiudi"
+    d.file_chiudi.write_text("7 nov 2026 15:00")
+    d.tick(t0 + 3760)                                  # un minuto dopo l'errore
+    assert d.carica()["fermo"]["motivo"] == "comando chiudi tutto"
+    assert finto.posizioni == {"AUSDT": 0.0, "BUSDT": 0.0}
+
+
+def test_stop_sul_conto_ogni_minuto(tmp_path):
+    """Problema 2: lo stop sul conto si guarda ogni minuto, non ogni ora."""
+    finto = _Demo()
+    d, fb = _demo_semplice(tmp_path, finto)
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    finto.equity = "6400"                              # −36%
+    d.tick(t0 + 61)
+    assert d.carica()["fermo"]["motivo"].startswith("stop sul conto: -36.0%")
+
+
+def test_da_fermo_si_richiude_fino_al_conto_vuoto(tmp_path):
+    """Problema 3: una chiusura rifiutata (troppe richieste) si ritenta ogni minuto; allarme dopo 3 tentativi a vuoto."""
+    finto = _Demo()
+    finto.posizioni = {"AUSDT": 10.0, "BUSDT": -5.0}
+    finto.posizioni_vive = True
+    d, fb = _demo_semplice(tmp_path, finto)
+    d.file_chiudi = tmp_path / "chiudi"
+    d.file_chiudi.write_text("7 nov 2026 15:00")
+    troppe = _Risposta({"code": -1003, "msg": "Too many requests"}, 429)
+    finto.guasti[("POST", "/fapi/v1/order", "BUSDT")] = troppe
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    assert d.carica()["fermo"] and finto.posizioni == {"AUSDT": 0.0, "BUSDT": -5.0}
+    d.tick(t0 + 61)                                    # si richiude quello che resta
+    assert finto.posizioni == {"AUSDT": 0.0, "BUSDT": 0.0}
+    d.tick(t0 + 122)
+    assert d.carica()["fermo"].get("vuoto") and fb.get_rtdb("/demo_binance/allarme") is None
+    # una moneta che non si chiude mai: allarme
+    finto2 = _Demo()
+    finto2.posizioni, finto2.posizioni_vive = {"BUSDT": -5.0}, True
+    (tmp_path / "due").mkdir()
+    d2, fb2 = _demo_semplice(tmp_path / "due", finto2)
+    d2.file_chiudi = tmp_path / "chiudi"
+    for k in range(3):
+        finto2.guasti[("POST", "/fapi/v1/order", "BUSDT")] = troppe
+        d2.tick(t0 + 61 * k)
+    assert d2.carica()["fermo"]["tentativi"] == 3 and fb2.get_rtdb("/demo_binance/allarme")["posizioni"] == ["BUSDT"]
+
+
+class _FbCheSbaglia:
+    """Firebase con la scrittura di un percorso che non arriva (``set_rtdb`` restituisce False, come il client vero)."""
+
+    def __init__(self):
+        from bot.core.firebase_client import _InMemoryStore
+        self.m, self.rotti = _InMemoryStore(), set()
+
+    def set_rtdb(self, percorso, valore):
+        if percorso in self.rotti:
+            return False
+        self.m.set_rtdb(percorso, valore)
+        return True
+
+    def get_rtdb(self, percorso):
+        return self.m.get_rtdb(percorso)
+
+
+def test_riparti_rimasto_vero_non_riaccende(tmp_path):
+    """Problema 4: un «riparti» premuto prima dello stop non vale; un «riparti» che non si riesce a consumare non riaccende."""
+    finto = _Demo()
+    finto.posizioni_vive = True
+    fb = _FbCheSbaglia()
+    (tmp_path / "acceso").write_text("si")
+    g1 = tmp_path / "g1.json"
+    g1.write_text(json.dumps({"ultimo_lunedi": 20750, "pesi": {"AUSDT": 0.5, "BUSDT": -0.5}}))
+    d = dm.DemoG1(fb, cliente=dm.ClienteDemo("chiave", "segreto", http=finto), file_stato=tmp_path / "st.json", file_g1=g1,
+                  interruttore=tmp_path / "acceso")
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    fb.set_rtdb(dm.COMANDO_RIPARTI, True)              # premuto mentre il demo gira: non fa niente
+    finto.equity = "6400"
+    d.tick(t0 + 61)                                    # stop sul conto: il «riparti» vecchio si pulisce
+    assert d.carica()["fermo"] and fb.get_rtdb(dm.COMANDO_RIPARTI) is False
+    d.tick(t0 + 122)
+    assert d.carica().get("fermo")                     # non riparte da solo
+    fb.set_rtdb(dm.COMANDO_RIPARTI, True)              # il proprietario preme «riparti», ma la scrittura del falso non arriva
+    fb.rotti.add(dm.COMANDO_RIPARTI)
+    d.tick(t0 + 183)
+    assert d.carica().get("fermo")
+    fb.rotti.clear()                                   # Firebase torna: il comando si consuma e il demo riparte
+    d.tick(t0 + 244)
+    assert "fermo" not in d.carica()
+

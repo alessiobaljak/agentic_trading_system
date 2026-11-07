@@ -241,18 +241,16 @@ class ExecutionEngine:
         return ev
 
     def _init_binance(self) -> None:
-        try:
-            from binance.client import Client
-
-            self._client = Client(
-                settings.BINANCE_API_KEY, settings.BINANCE_API_SECRET,
-                testnet=settings.BINANCE_TESTNET,
-            )
-            print("[execution] Binance client LIVE inizializzato"
-                  f" ({'testnet' if settings.BINANCE_TESTNET else 'mainnet'})")
-        except Exception as exc:  # noqa: BLE001
-            print(f"[execution] init Binance fallito: {exc} -> forzo DRY_RUN")
-            self.dry_run = True
+        """BLOCCATO (revisione del percorso degli ordini del 7 novembre 2026, problemi 6-8,
+        `reviews/reports/2026-11-07-primo-avvio.md`): il ramo reale del vecchio esecutore aveva ordini non arrotondati e senza
+        identificativo, chiusure che potevano lasciare posizioni scoperte, una riconciliazione che bloccava il pulsante. Il vecchio
+        sistema e' fermo dal 13 ottobre 2026 e i soldi veri passeranno dal codice nuovo di G1 (`docs/backlog.md`, P26): qui non si
+        crea mai il client del conto vero, e il motore resta in prova a secco anche con `DRY_RUN` falso. I test del ramo reale
+        iniettano un client finto e non passano di qui."""
+        print("[execution] RAMO REALE DEL VECCHIO ESECUTORE BLOCCATO: nessun ordine al conto vero, resto in prova a secco "
+              "(revisione del 7 novembre 2026)")
+        self._client = None
+        self.dry_run = True
 
     # ------------------------------------------------------------------ #
     # Apertura                                                           #
