@@ -72,7 +72,22 @@
       "Bash(more .env*)",
       "Read(**/.env)",
       "Read(**/.env.*)",
-      "Read(**/tuning.env)"
+      "Read(**/tuning.env)",
+      "Read(**/*.pem)",
+      "Read(**/*service-account*.json)",
+      "Read(**/.git-credentials)",
+      "Read(./research/data/**)",
+      "Read(./dashboard/node_modules/**)",
+      "Read(./dashboard/.next/**)",
+      "Read(./ops/results/archivio_*/**)"
+    ],
+    "ask": [
+      "Edit(./bot/risk/hard_limits.py)",
+      "Write(./bot/risk/hard_limits.py)",
+      "Edit(./bot/risk/circuit_breakers.py)",
+      "Write(./bot/risk/circuit_breakers.py)",
+      "Edit(./bot/risk/kill_switch.py)",
+      "Write(./bot/risk/kill_switch.py)"
     ]
   },
   "hooks": {
@@ -93,6 +108,16 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/research/src/guardiano.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/segreti.py\"",
             "timeout": 10
           }
         ]

@@ -8,68 +8,32 @@ usava più). Chi scrive e' il proprietario, spesso
 da un telefono e spesso senza poter lanciare comandi: la risposta dev'essere
 autosufficiente.
 
-## Cos'e' questo sistema
+## Cos'e' questo sistema (oggi)
 
-Bot di trading crypto autonomo, in **paper trading**. Gira su una VPS Hetzner, tiene
-lo stato su Firebase, e la dashboard Next.js (Vercel) lo mostra. La ricerca delle
-strategie e' un job separato (`scripts/optimize.py`, `scripts/discover_strategies.py`)
-che girava ogni 3 ore e alimentava il registro `strategy_registry/validated`. **Dal 13 ott 2026 la ricerca
-automatica del gate è FERMA** (file `ops/gate_fermo`, sì del proprietario): il paper resta acceso come banco di
-misura, con gli ingressi a ordine limite (`bot/execution/executor.py`, misure in RTDB `/paper/ordini_limite`).
-La ricerca riparte con il **protocollo 3** (`research/PROTOCOLLO_3.md`: la versione 5.1 su BTC scritta dal
-proprietario, con il collaudo del metodo; approvato il 16 ott 2026 alle 19:26 UTC). Prima si collauda il metodo
-(Passo 0, sezione 13bis: tre prove), poi una sessione di ricerca sul branch `research/campagna/BTC51` cerca le
-strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research/PROTOCOLLO_2.md`) è chiusa.
-**Il vault 3 è stato aperto il 17 ott 2026** (frase del proprietario): l'unico candidato, V-020, non lo supera
-(`research/vault/BTC51_risultati.md`), e sulle altre monete regge solo su 1 di 9 (`research/altre_monete_3/risultati.md`).
-**La campagna BTC51 è chiusa** (17 ott 2026, nessuna strategia valida): lezioni e proposte per il prossimo protocollo
-in `research/campagne/BTC51/lezioni.md`. **Dal 17 ott 2026 vale il protocollo 4** (`research/PROTOCOLLO_4.md`, versione 6,
-approvato alle 20:12 UTC): ricerca su LINKUSDT con 9 monete di controllo, campagna `LINK6` sul branch
-`research/campagna/LINK6` (rientra nell'eccezione dei branch di ricerca), vault con la frase esatta «APRI IL VAULT 4»
-scritta al coordinamento. Decisioni e motivazioni in `research/protocollo_4_note.md`. **La campagna LINK6 è chiusa** (18 ott
-2026, nessuna strategia valida: 33 varianti su 40, nessun candidato, vault 4 mai aperto): lezioni e proposte in
-`research/campagne/LINK6/lezioni.md`. **Decisione del proprietario (18 ott 2026, ~08:40 UTC):** «dobbiamo continuare
-fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate», ma prima va scritta la storia
-completa del progetto (dati raccolti, cosa abbiamo imparato, cosa abbiamo cambiato, errori da evitare) in `docs/storia/`,
-da leggere prima di ripartire (`docs/backlog.md`, P11). **Delega del proprietario (18 ott 2026, sera):** «non continuare a
-chiedermi le autorizzazioni, procedi ad oltranza fino a che non avrai trovate delle strategie profittevoli che devono valere
-le crypto ad oggi in corso, continua a lavorare in background se un job finisce e non ottieni risultati, registra e passa
-ad un'altra idea e così via.. scrivimi solo quando avrai trovate diverse strategie che si possono applicare a diverse crypto
-anche se ci volessero dei giorni». È il **programma 5** (`research/programma5/`: regole in `REGOLE.md`, stato e coda delle
-idee in `STATO.md`): il coordinamento lavora da solo, non chiede permessi e non scrive al proprietario finché non ci sono
-più strategie valide su più monete; restano ferme le regole che non si negoziano (`DRY_RUN` vero, niente soldi veri, niente
-segreti, paper mai usato come training set) e il metodo (regole scritte prima, confronto con il caso, periodi usati una
-volta, conferma sui dati recenti). Il proprietario, 18 ott 2026 ~17:15 UTC: «non chiedermi ogni volta di continuare, procedi in
-autonomia fino a quando non mi presenterai delle strategie validate e in profitto ... devi analizzare l'intero universo o
-almeno le top 100 su binance future ... se ci vogliono giorni va bene» (`research/programma5/REGOLE.md`, sezioni 7 e 7bis:
-fase 2 sui dati recenti, universo delle 100 monete più scambiate). Il proprietario, 19 ott 2026: «comprare e tenere 12 ore non è trading
-[...] trovare delle strategie [...] partendo dagli indicatori tecnici [...] il passato è pubblico [...] riprovare con metodo e
-non a caso [...] non voglio aspettare dati nuovi [...] usa limit o margin, tutte le crypto del future binance»: è il
-**programma 6** (`research/programma6/METODO.md`): strategie a indicatori con stop, obiettivo e stop che segue il prezzo,
-provate con le finestre che avanzano (scelta su 12 mesi, prova sui 3 dopo, dal 2020 a oggi) e le correzioni per i tentativi. Il
-proprietario, 19 ott 2026 sera: «continua a cercare in autonomia, non fermarti se pensi serva misurare in paper procedi hai
-campo libero fino a che non trovi cosa funziona»: il coordinamento cerca da solo e può misurare in paper (`DRY_RUN` vero,
-niente soldi veri) le strategie candidate; registro delle prove in `research/programma6/STATO.md`. Il proprietario, 20 ott
-2026: «continua a cercare in autonomia ed in continuazione, fai girare modelli su modelli [...] traccia tutto quello che stai
-facendo e provando in un log o diario così da non ripetere le stesse cose ma soprattutto traccia anche i vari risultati [...]
-l'unico motivo per cui ti puoi fermare è se abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stesso
-riscontro nel paper»: **il registro unico è `research/REGISTRO.md`** (si guarda prima di ogni idea nuova, ogni prova ha la
-sua riga prima e il risultato dopo, con la coda delle idee). Il proprietario, 21 ott 2026: «io non farò trading su [Gate.io] [...] perché devo aspettare il 2 novembre o fine novembre? non è quello che avevo chiesto» e «forse è meglio che il paper con il vecchio gate si fermi e la dashboard venga pulita [...] parti con il paper nuovo»: si giudica sul passato di Binance (il paper è una conferma, non una condizione); la dashboard parte dalla scheda «Strategie nuove» e le schede del vecchio sistema stanno sotto «Vecchio sistema (fermo)»; il vecchio paper si ferma con il pulsante STOP della dashboard (il kill switch). Il proprietario, 22 ott 2026: «accendi f5 [...] la
-decisione di portare le strategie in paper anche questa falla in autonomia senza che io ti dica nulla nel momento in cui
-pensi sia giusto»: F5 gira nel bot in paper (`bot/portafoglio/f5.py`, interruttore `ops/paper_f5_acceso`), e il
-coordinamento decide da solo quali strategie portare in paper e quando (sempre `DRY_RUN` vero, niente soldi veri), e lo
-scrive nel diario. **Il proprietario, 23 ott 2026** (arrabbiato, e con ragione): «io voglio anche fare trading tutti i giorni non solo
-tenere una settimana (non te l'ho mai chiesto, anche se lo posso accettare come alternativa se è profittevole) [...] ti ho chiesto
-di fare trading tutti i giorni»; e subito dopo: «l'obiettivo è fare soldi, un sistema che sia profittevole [...] non hai
-limitazioni su quali strategie adottare, scalping oppure settimana oppure nuovi listing [...] l'importante è che non ti perdi delle
-idee per strada, prova di tutto sempre con il criterio che ci siamo dati ma non lasciare nulla al caso [...] il trading giornaliero
-non può essere escluso». Quindi: **l'obiettivo è il profitto, con qualunque tipo di strategia** (in giornata, scalping, a
-settimana, eventi e nuove quotazioni), sempre con il metodo (regole prima, conto delle prove, asticella, revisore separato); il
-trading di ogni giorno ha il suo filone, il **programma 7** (`research/programma7/METODO.md`), e non va mai lasciato indietro. **Il proprietario, 24 ott 2026:** «usiamo i dati passati e simuliamo con paper / live demo per qualche giorno, settimana, ma poi se funziona andiamo live» e «non bocciare 0,91 se ogni anno si alza la soglia»: una strategia con lo Sharpe corretto da 0,90 in su, ogni anno positiva e con il t sopra 3 non si boccia, va sul demo di Binance e nel paper, e poi ai soldi veri quando il proprietario lo chiede esplicitamente (`docs/backlog.md`, P26; `research/REGISTRO.md`, sezione 1). Le idee si prendono anche dai trader da copiare (`research/trader_copiati/`). **Il proprietario, 1° nov 2026:** «verdetto dopo 52 settimane? questo è inaccettabile, cosa usiamo a fare il backtesting e demo»: **niente attese fisse** (né 26, né 52, né 104 settimane) per nessuna misura in avanti; i numeri gli vanno ogni settimana, e ciò che passa la sua regola sul passato va subito in paper e sul demo (`research/programma6/paper/REGOLE.md`, sezione 17). **Il proprietario, 5 nov 2026:** «si cambia, e sono d'accordo miglioriamo quello che già funziona»: il giro delle 4 ore raccoglie i dati (notizie, Hyperliquid, controlli in avanti) e poi lavora a migliorare G1 (`research/programma7/MIGLIORARE_G1.md`, una voce alla volta, prima la misura); un'idea nuova di strategia solo con un perché forte, perché ogni prova in più alza l'asticella per tutte.
-**Tutte le idee**, di ogni tipo e anche quelle del proprietario, stanno nella coda unica di `research/REGISTRO.md` (sezione 5):
-nessuna si perde, ognuna o si prova o si scrive perché no. **Delega del
-proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
-della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
+Bot di trading crypto su Binance Futures (perpetui in USDT), **solo con soldi finti** (`DRY_RUN` vero). Gira su una VPS Hetzner, tiene
+lo stato su Firebase, la dashboard Next.js (Vercel) lo mostra. Oggi gira **G1** (il funding fra monete deciso ogni giorno) nel paper
+del bot con G11, G1N, F5 ed eventi (`bot/portafoglio/`), e sul **conto demo di Binance** (a 1.000 USDT dall'8 novembre 2026). Il
+vecchio sistema (gate, `bot/strategies/`, `backtesting/`) è fermo dal 13 ottobre 2026 (`ops/gate_fermo`). La ricerca segue i
+programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominciare: `research/INDEX.md`.
+
+## Le decisioni del proprietario in vigore (testo intero e storia in `docs/decisioni_del_proprietario.md`)
+
+* **18-19 ottobre**: autonomia — si cerca da soli, senza chiedere permessi, finché ci sono strategie valide; il paper si può usare
+  per misurare (`research/programma5/REGOLE.md`, `research/programma6/METODO.md`).
+* **20 ottobre**: un solo registro di tutte le prove e di tutte le idee, `research/REGISTRO.md` (coda unica nella sezione 5:
+  nessuna idea si perde, ognuna o si prova o si scrive perché no).
+* **21 ottobre**: si giudica sul passato di Binance; il paper è una conferma, non una condizione.
+* **23 ottobre**: l'obiettivo è il profitto, con qualunque tipo di strategia (in giornata, scalping, a settimana, eventi, nuove
+  quotazioni); il trading di ogni giorno non va mai lasciato indietro (`research/programma7/METODO.md`).
+* **24 ottobre**: Sharpe corretto da 0,90 in su, ogni anno positivo e t sopra 3 → paper e demo; i soldi veri solo quando il
+  proprietario lo chiede esplicitamente (`docs/backlog.md`, P26).
+* **1° novembre**: niente attese fisse (né 26, né 52, né 104 settimane); i numeri vanno al proprietario ogni lunedì.
+* **5 novembre**: «si cambia, e sono d'accordo miglioriamo quello che già funziona»: ogni giro delle 4 ore raccoglie i dati e
+  migliora G1 (`research/programma7/MIGLIORARE_G1.md`); un'idea nuova solo con un perché forte.
+* **6-7 novembre**: il capitale per i soldi veri è piccolo (250 euro, poi la prova a 1.000 USDT sul demo); eventi spenti sul demo;
+  il conto vero partirà vuoto e comprerà alla mezzanotte, senza copiare a metà giornata il paper (backlog P26).
+* **7 novembre**: «chi scrive una strategia non la valuta, chi la valuta non la modifica, e il passaggio di gate lo decido io»: il
+  proprietario approva ogni passaggio (paper, demo, soldi veri) e ogni riavvio che tocca gli ordini (sezione «Subagent»).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
@@ -148,34 +112,11 @@ demo; mai le credenziali del conto demo in un commit).
   Se una cosa e' stata saltata, dillo. Questa e' la regola che il proprietario ha
   chiesto piu' volte.
 
-## Il protocollo di ricerca (dal 6 ott 2026)
+## I protocolli di ricerca e le campagne (chiusi)
 
-Le strategie nuove nascono dal **protocollo di ricerca per moneta** (`research/PROTOCOLLO.md`,
-versione 4.5, testo approvato dal proprietario il 9 ott 2026 alle 12:06 UTC): idee con un perche', periodo chiuso
-(«vault», 2024-01-01 → 2026-09-30) che si apre una volta sola, un branch per campagna e un
-guardiano meccanico (`research/src/guardiano.py`, attivo solo se esiste `research/.sessione`).
-Chi lavora in una sessione di campagna legge solo i percorsi ammessi dal Passo 3 del
-protocollo e non scrive ipotesi o risultati in questo file. Il gate attuale resta acceso come
-gruppo di controllo finche' il proprietario non decide altrimenti.
-Dalla 4.5 (sì del proprietario del 9 ott 2026) le sessioni delle campagne rimanenti le apre il coordinamento su
-delega, al massimo tre campagne in corso, con il messaggio di apertura approvato (`research/apertura/campagna.md`
-sul branch di coordinamento), un controllo ogni ora e le domande delle campagne girate subito al proprietario
-(Passo 4 del protocollo). La prova a placebo dell'esame (`research/taratura/placebo/`, branch di coordinamento)
-dice che l'esame regge sui prezzi veri.
-**Dal 16 ott 2026 vale il protocollo 3** (`research/PROTOCOLLO_3.md`): una sola campagna, `BTC51`, su BTCUSDT.
-Il Passo 0 (strumenti e collaudo del metodo) e i Passi 5-8 li fa il coordinamento sul branch principale; i Passi 1-4
-una sessione di ricerca sul branch `research/campagna/BTC51`, con il marcatore `{"tipo": "campagna", "simbolo":
-"BTC51"}`, aperta solo dopo il sì del proprietario agli esiti del Passo 0. Il vault si apre solo con la frase
-esatta «APRI IL VAULT 3». Il branch `research/campagna/BTC51` rientra nell'eccezione dei branch di ricerca.
-
-**Ogni sessione di campagna si apre con il modello `claude-opus-5-5` e con ultracode attivo** (richiesta
-del proprietario, 8 ott 2026). Nella creazione si passano la sorgente del repository e il branch principale;
-modello e ultracode si ereditano dalla sessione che crea (per ultracode non c'e' un parametro). L'eredita'
-non e' sicura: l'8 ott le sessioni create fra le 05:12 e le 05:20 UTC avevano ultracode dalla creazione, le
-tre create fra le 13:24 e le 13:50 UTC no, con o senza `model` passato, con gli stessi parametri; la causa
-non e' nota. Dopo la creazione si controlla con `get_session` che il modello sia `claude-opus-5-5` e che
-`external_metadata.flag_settings.ultracode` sia `true`; se manca, non si riapre a ripetizione: si dice al
-proprietario, che decide se lasciarla lavorare o fermarla.
+I protocolli 1-4 e le campagne (BTC51, LINK6, i branch `research/campagna/*`, il guardiano `research/src/guardiano.py` acceso solo
+con `research/.sessione`) sono chiusi; il vault di BTC dal 2024 è stato aperto il 17 ottobre 2026. Per riaprire una campagna, o per
+le regole delle sessioni di campagna (modello e ultracode), leggi `docs/decisioni_del_proprietario.md`.
 
 ## Non hai accesso alla VPS — ma hai un canale
 
@@ -207,3 +148,53 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
   file o da un risultato ops; se viene da una stima, dillo.
 * Se la domanda e' una richiesta di modifica al codice, falla davvero: leggi, cambia,
   lancia `python -m pytest tests/ -q`, committa. Poi riassumi cosa e' cambiato.
+
+## Subagent: quando usarli (`.claude/agents/`, dal 7 novembre 2026)
+
+Principio del proprietario: chi scrive una strategia non la valuta, chi la valuta non la modifica, e il passaggio lo decide lui.
+
+* **strategy-researcher**: esegue UNA prova del registro, con le regole già scritte e committate; più istanze in parallelo su prove
+  diverse (al massimo 3 insieme).
+* **backtest-auditor**: attacca ogni prova promettente prima di proporre paper, demo o soldi veri; verdetto PASS / FAIL / INCONCLUSIVE.
+* **gate2-reconciler**: confronta ogni settimana paper e demo con la ricerca sugli stessi giorni, e sempre prima dei soldi veri.
+* **live-path-reviewer**: rivede ogni modifica al percorso degli ordini (`bot/execution/`, `bot/risk/`, `bot/portafoglio/`,
+  `bot/config.py`, `bot/main.py`, `firebase/`, il futuro conto vero) prima del commit e del riavvio.
+* Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
+
+Flusso: idea con un perché forte → regole scritte prima (sessione principale, riga nel registro) → strategy-researcher → se
+promettente, backtest-auditor → se PASS, ok del proprietario → paper e demo → gate2-reconciler ogni settimana → ok del proprietario →
+soldi veri. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
+aggiorna `research/INDEX.md` e `research/REGISTRO.md` dopo ogni gruppo di ricercatori.
+
+## Regole dei token (per la sessione principale e per tutti i subagent)
+
+* Si legge prima l'indice della propria cartella (`research/INDEX.md`, `audits/INDEX.md`, `reviews/INDEX.md`, `gate2/INDEX.md`) e
+  poi solo i file che servono; mai «tutto all'inizio».
+* File che non si leggono mai interi: `docs/andremo_live.md` (il diario: si scrive in coda, si legge con `tail` o `grep`),
+  `research/REGISTRO.md` (`python3 -m research.src.registro --riepilogo`), `docs/backlog.md` e `docs/state.md` (`grep` sulla
+  sezione), le risposte della macchina in `ops/results/` (`grep` sulle righe che servono). Mai: `research/data/`, `dashboard/node_modules`,
+  `dashboard/.next`, gli archivi in `ops/results/archivio_*`, file binari e lockfile (le letture sono vietate in `.claude/settings.json`).
+* Prima si cerca (Grep, Glob), poi si leggono solo le righe necessarie; un file non modificato non si rilegge.
+* Dati di mercato, risultati e registri si guardano con script; le prove stampano a schermo al massimo 20 righe e scrivono il resto
+  su file. Test: solo riepilogo e fallimenti (`-q`). Log del bot: solo errori, avvisi e righe del periodo in esame.
+* Registri degli agenti: voci aperte e ultime 10 nel file principale, il resto in `ARCHIVE.md`; nessun file di memoria oltre le 300
+  righe. Unica eccezione: i registri delle varianti in `research/trials/` non si troncano, non si archiviano e non si riassumono mai.
+* Rapporto completo su file; alla sessione principale al massimo 30 righe, con i problemi Bloccanti e Alti e le domande aperte sempre
+  testuali e completi.
+* Il brief a un subagent contiene richiesta, vincoli, criteri di accettazione e percorsi dei file, mai contenuti che può leggere da
+  solo; a backtest-auditor non si passano la motivazione né giudizi sul risultato.
+* Modifiche mirate, mai riscritture intere; nelle risposte al proprietario niente file ristampati: esito, cosa è stato fatto, cosa
+  serve da lui, dove sono i dettagli.
+* `docs/SESSION_STATE.md` (compito in corso, decisioni, prossimi passi) si aggiorna a ogni tappa; a compito chiuso o con un contesto
+  molto lungo si suggerisce al proprietario di compattare la conversazione.
+* Ogni subagent nuovo segue queste regole; quando se ne crea uno, si adatta il suo file e si dice al proprietario cosa è cambiato.
+
+## Regole che non si toccano, qualunque sia il risparmio di token
+
+* La checklist di backtest-auditor si esegue sempre per intero; ogni modifica al percorso degli ordini passa da live-path-reviewer.
+* Nessun PASS, APPROVE o test superato su ciò che non è stato eseguito davvero; nessuna compressione di problemi Bloccanti, Alti e
+  domande aperte; nessuna lettura saltata quando serve per una decisione su limiti fissi, ordini, segreti o soldi veri.
+* I registri delle prove e delle varianti non si troncano, non si archiviano e non si riassumono.
+* Paper, demo, soldi veri e ogni riavvio che tocca gli ordini richiedono l'ok esplicito del proprietario.
+* I segreti sono bloccati nel codice (`.claude/hooks/segreti.py` e le regole `deny` di `.claude/settings.json`); le modifiche ai limiti
+  fissi (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) chiedono conferma (`ask`).
