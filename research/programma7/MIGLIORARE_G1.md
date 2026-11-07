@@ -165,3 +165,8 @@ separato prima del paper).
   `/demo_binance/ribilanciamenti/{giorno}/sotto_il_minimo`; nel rapporto di stato accanto all'ultima decisione). Solo lettura: gli ordini
   non cambiano. Un test, 2.509 test passano. La prova 148 si aspetta con 280 USDT circa 9 variazioni su 10 sotto il minimo e 6-7 ordini
   al giorno dopo il primo; prima lettura dopo il ribilancio del 7 novembre.
+* **7 novembre 2026, 00:30 UTC, voce 8, il primo ribilancio vero da 280** (`ops/results/0711-7nov-log-primo-ribilancio-280.md` e
+  `0712-7nov-stato-primo-ribilancio-280.md`): la decisione di G1 del 7 novembre sul demo ha dato **5 ordini** (0 rifiutati); **50
+  variazioni sono rimaste sotto il minimo** di Binance, per il 19,2% del conto: **il 91% saltate, la prova 148 se ne aspettava il 90%**
+  (6,6 ordini al giorno). Scarto fra posizioni vere e volute 14,1% (Bitcoin −7,0%, ICPUSDT +4,2%). Prime ore del 7 novembre: demo −0,12%,
+  paper −0,13%. **Capito**: sul conto vero, con 280 USDT, G1 si comporta come la prova sul passato aveva detto.

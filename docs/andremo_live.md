@@ -5594,3 +5594,10 @@ lettura); riavvio chiesto alla macchina (ops 0709), detto prima al proprietario.
 copre); 39 conti di Hyperliquid letti; controlli in avanti delle 20:22: niente di nuovo. Idee nuove: niente di nuovo. BeInCrypto era
 stata piena due volte oggi (12 articoli, circa 5 ore): da oggi si legge anche la sua seconda pagina (23 fonti). G1: niente di nuovo da
 misurare prima del ribilancio della mezzanotte, il primo vero del demo da 280 (demo a 267,99 alle 15:59, come alle 08:00).
+
+### 7 novembre 2026 (00:30 UTC)
+
+**Giro delle 00:17.** Notizie: 49 articoli nuovi da 23 fonti su 23 (con la seconda pagina di BeInCrypto), nessuna piena; 39 conti di
+Hyperliquid letti; controlli in avanti delle 00:22: niente di nuovo. Idee nuove: niente di nuovo. **Il primo ribilancio vero del demo da
+280**: 5 ordini, 50 variazioni sotto il minimo di Binance (19,2% del conto): il 91% saltate, come la prova 148 diceva (90%). **Capito
+oggi**: con 280 USDT G1 sul conto vero si comporta come previsto sul passato.

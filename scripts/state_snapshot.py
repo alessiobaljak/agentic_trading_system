@@ -715,7 +715,8 @@ def sezione_demo_contro_paper(fb) -> list:
                              fb.get_rtdb("/paper_eventi/giorni") or {})
     if not righe:
         return [titolo, "- non ancora: servono almeno due giorni con il demo e il paper", ""]
-    out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 31 ottobre il demo porta anche gli eventi al 5% del conto.", "",
+    out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 6 novembre il demo lavora come un conto di 280 USDT, senza gli eventi "
+           "(i giorni di prima sono in /demo_binance/fasi); con i minimi di Binance la differenza con il paper oscilla di più (prova 148).", "",
            "| giorno | demo | paper G1 | demo meno paper | eventi nel paper |", "|---|---|---|---|---|"]
     for r in righe:
         ev = f"{100 * r['eventi']:+.2f}%" if r["eventi"] is not None else "—"
