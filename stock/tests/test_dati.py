@@ -154,7 +154,8 @@ def test_alpaca_pagine_e_nessuna_chiave_nei_messaggi(monkeypatch):
 
 
 def test_alpaca_senza_chiavi(monkeypatch):
-    monkeypatch.delenv("ALPACA_API_KEY_ID", raising=False)
+    for nome in ("ALPACA_API_KEY_ID", "KEY"):
+        monkeypatch.delenv(nome, raising=False)
     with pytest.raises(alpaca.ErroreAlpaca):
         alpaca._intestazioni()
 
