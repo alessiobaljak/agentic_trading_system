@@ -147,7 +147,7 @@ def elenco(mese: str | None = None) -> list[str]:
     f = QUI / f"elenco_{mese}.csv"
     if f.exists():
         return pd.read_csv(f)["simbolo"].tolist()
-    membri = pd.read_csv(archivio.cartella_dati() / "sp500_attuale.csv")["Symbol"].str.replace(".", "-", regex=False).tolist()
+    membri = pd.read_csv(archivio.cartella_dati() / "sp500_attuale.csv")["Symbol"].tolist()   # Alpaca scrive BRK.B con il punto
     primo = pd.Timestamp(f"{mese}-01", tz=NY)
     dollari = {}
     for i in range(0, len(membri), 100):
