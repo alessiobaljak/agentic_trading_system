@@ -29,8 +29,9 @@ class ErroreAlpaca(RuntimeError):
 
 
 def _intestazioni() -> dict:
-    chiave = os.environ.get("ALPACA_API_KEY_ID", "")
-    segreto = os.environ.get("ALPACA_API_SECRET_KEY", "")
+    # i nomi messi dal proprietario il 7 nov 2026 nelle impostazioni dell'ambiente sono «KEY» e «Secret»
+    chiave = os.environ.get("ALPACA_API_KEY_ID") or os.environ.get("KEY", "")
+    segreto = os.environ.get("ALPACA_API_SECRET_KEY") or os.environ.get("Secret", "")
     if not chiave or not segreto:
         raise ErroreAlpaca("mancano ALPACA_API_KEY_ID o ALPACA_API_SECRET_KEY nell'ambiente")
     return {"APCA-API-KEY-ID": chiave, "APCA-API-SECRET-KEY": segreto}
