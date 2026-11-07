@@ -5,8 +5,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 
 ## Compito in corso (7 novembre 2026, pomeriggio)
 - Subagent (`.claude/agents/`): i quattro creati e adattati al sistema di oggi; collaudo fatto (`docs/collaudo_agenti.md`: auditor
-  FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES). In corso: il primo avvio del revisore degli ordini
-  (revisione completa del percorso, rapporto in `reviews/reports/2026-11-07-primo-avvio.md`).
+  FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES). Primo avvio del revisore degli ordini fatto
+  (`reviews/reports/2026-11-07-primo-avvio.md`): niente di bloccante per il demo, 9 problemi Alti da chiudere prima del conto vero
+  (backlog P26).
 - Gli agenti si possono chiamare per nome solo dalle sessioni avviate dopo il 7 novembre (Claude Code li carica all'avvio); in questa
   sessione si usano con un agente generico che segue il loro file.
 - Demo: alla mezzanotte dell'8 novembre chiude la fase da 280 USDT e riparte da zero a 1.000 (controllo al giro delle 00:17).
