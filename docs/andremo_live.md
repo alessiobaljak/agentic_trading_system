@@ -391,3 +391,6 @@ rifiutato): la seconda revisione l'ha trovato prima che girasse.
 correzioni approvate (013f9426); la riga nuova d'avvio dice `DRY_RUN=True, BINANCE_TESTNET=False, BACKTEST_PARITY=True` (la parità
 col backtest è quella del vecchio paper, permessa solo con `DRY_RUN` vero: con `DRY_RUN` falso l'avvio ora si rifiuta). Nessun errore
 nel log dopo l'avvio (`ops/results/0718-7nov-log-dopo-riavvio-correzioni.md`).
+**Giro delle 20:17.** Notizie: 36 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 20:20:
+niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima della mezzanotte (demo a 268,12 sui 280, il
+capitale da 1.000 in attesa della decisione di G1).
