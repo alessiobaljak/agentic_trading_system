@@ -716,6 +716,10 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
 * il codice per il conto vero: oggi il bot parla solo con il demo, per costruzione;
 * le chiavi del conto vero, solo sulla macchina, senza il permesso di prelievo;
 * la verifica che il suo conto Binance possa usare i future.
+* **una versione fissata per il conto vero** (domanda del revisore del 7 novembre 2026): il servizio del bot ha `Restart=always`
+  (`docs/hetzner_setup.md:117`) e la macchina scarica il branch ogni minuto, quindi dopo un crash il bot riparte con l'ultimo codice
+  spinto, anche non approvato. Per il demo il rischio è piccolo; per i soldi veri il bot deve girare da una versione fissata (un
+  tag di rilascio che si sposta solo con l'ok del proprietario), non dalla punta del branch.
 * **risposte del proprietario del 7 novembre 2026**: il paper lo decide la sessione principale; niente vault per data; branch
   principale; commissioni e scarto di prezzo delle prove confermati. Le chiavi del conto vero di Binance **non sono limitate
   all'indirizzo della macchina** (da fare prima dei soldi veri: limite all'indirizzo della macchina e niente prelievi). Le regole
