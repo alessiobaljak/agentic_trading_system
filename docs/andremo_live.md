@@ -382,3 +382,8 @@ proprietario): quattro agenti in `.claude/agents/`, blocco dei segreti, regole d
 `docs/collaudo_agenti.md` (auditor FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES); il revisore ha trovato
 un problema vero (la parità col backtest spegne i fermi: backlog P26). **Capito oggi**: un revisore indipendente con una checklist
 fissa trova anche ciò che non gli si chiede.
+**Giro delle 16:17.** Notizie: 51 articoli nuovi da 22 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 16:20:
+niente di nuovo. Idee nuove: niente di nuovo. **Percorso degli ordini**: corretti i 9 problemi Alti della revisione e i problemi nuovi
+25-33, approvati dal revisore (commit 013f9426); gli allarmi del demo ora si vedono in dashboard e nel rapporto. Il riavvio aspetta
+l'ok del proprietario. **Capito oggi**: una correzione può aprire un problema nuovo (il 25, posizione doppia dopo un annullo
+rifiutato): la seconda revisione l'ha trovato prima che girasse.
