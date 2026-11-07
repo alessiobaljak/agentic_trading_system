@@ -5601,3 +5601,6 @@ misurare prima del ribilancio della mezzanotte, il primo vero del demo da 280 (d
 Hyperliquid letti; controlli in avanti delle 00:22: niente di nuovo. Idee nuove: niente di nuovo. **Il primo ribilancio vero del demo da
 280**: 5 ordini, 50 variazioni sotto il minimo di Binance (19,2% del conto): il 91% saltate, come la prova 148 diceva (90%). **Capito
 oggi**: con 280 USDT G1 sul conto vero si comporta come previsto sul passato.
+**Giro delle 04:17.** Notizie: 13 articoli nuovi da 23 fonti su 23, nessuna piena; 39 conti di Hyperliquid letti; controlli in avanti
+delle 04:22: niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare (demo a 268,34 alle 01:01, con i 5 ordini
+del giorno ancora in corso); la prossima lettura è il riepilogo di lunedì.
