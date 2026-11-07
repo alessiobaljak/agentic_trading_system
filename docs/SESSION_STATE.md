@@ -3,15 +3,25 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (7 novembre 2026)
-- Subagent del sistema (`.claude/agents/`): creati i quattro, adattati al sistema di oggi; blocchi dei segreti (hook e permessi);
-  indice della ricerca e strumenti del registro; `CLAUDE.md` più corto. Da fare: le prove degli agenti e il primo avvio.
+## Compito in corso (7 novembre 2026, pomeriggio)
+- Subagent (`.claude/agents/`): i quattro creati e adattati al sistema di oggi; collaudo fatto (`docs/collaudo_agenti.md`: auditor
+  FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES). In corso: il primo avvio del revisore degli ordini
+  (revisione completa del percorso, rapporto in `reviews/reports/2026-11-07-primo-avvio.md`).
+- Gli agenti si possono chiamare per nome solo dalle sessioni avviate dopo il 7 novembre (Claude Code li carica all'avvio); in questa
+  sessione si usano con un agente generico che segue il loro file.
 - Demo: alla mezzanotte dell'8 novembre chiude la fase da 280 USDT e riparte da zero a 1.000 (controllo al giro delle 00:17).
 
 ## Decisioni del proprietario di questi giorni
 - 5 nov: si migliora G1, un'idea nuova solo con un perché forte. 6 nov: 250 euro, eventi spenti sul demo. 7 nov: demo a 1.000 dalla
-  mezzanotte; i subagent servono a strutturare meglio il sistema; il passaggio di gate lo approva lui.
+  mezzanotte; i subagent servono a strutturare il sistema («procedi con i tuoi suggerimenti e la gestione migliore dei token»); il
+  passaggio di gate lo approva lui.
+
+## Decisioni aperte per il proprietario
+- Commissioni e scarto di prezzo da usare nelle prove (auditor); minimo di anni e operazioni per giudicare una prova.
+- Leva di G1, limiti di G1 dentro `hard_limits.py`, divieto della parità col backtest fuori dal paper (revisore; backlog P26).
+- Regole di Firebase davvero pubblicate; chiavi di Binance senza prelievo e limitate all'indirizzo della macchina.
+- Compromessi dei token (modelli più leggeri per ricercatore e confronto, frequenza dei giri): proposti, non applicati.
 
 ## Prossimi passi
-- Lunedì 9 novembre: riepilogo settimanale (demo, paper, conto a tavolino, copia dei trader, ognuno contro G1).
-- Decisioni aperte per il proprietario: soglie di confronto del paper (gate2/THRESHOLDS.md), commissioni e scarto di prezzo da usare.
+- Lunedì 9 novembre: riepilogo settimanale e primo avvio di gate2-reconciler su G1 (paper e demo).
+- Prima dei soldi veri: audit di G1 con backtest-auditor sulla configurazione finale.
