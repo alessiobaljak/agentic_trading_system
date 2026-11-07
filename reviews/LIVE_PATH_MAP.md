@@ -1,12 +1,12 @@
 # Mappa del percorso degli ordini
 
 Prima versione: 7 nov 2026 (`b29f5713`); completata col primo avvio (`reviews/reports/2026-11-07-primo-avvio.md`, codice di `782a01fc`).
-Aggiornata il 7 nov sul `9f47972c` (`reviews/reports/2026-11-07-correzioni-9-problemi.md`). **Aggiornata il 7 nov 2026 sul commit
-`5d5d26ad`** (`reviews/reports/2026-11-07-correzioni-25-31.md`): i numeri di riga di `bot/portafoglio/demo_binance.py`, `bot/config.py` e
-`bot/execution/executor.py` valgono per `5d5d26ad` (nell'esecutore +1 rispetto al `9f47972c` dopo la riga 14); `bot/main.py` invariato.
-Al prossimo cambio si ricontrollano.
+Aggiornata il 7 nov sul `9f47972c` e sul `5d5d26ad`. **Aggiornata il 7 nov 2026 sul commit `013f9426`**
+(`reviews/reports/2026-11-07-correzione-32.md`): i numeri di riga di `bot/portafoglio/demo_binance.py` valgono per `013f9426` (fino alla
+riga 575 uguali al `5d5d26ad`; da 576 a 649 +3; da 650 a 800 +14; dopo +15 e +16). `bot/config.py` e `bot/execution/executor.py` come
+il `5d5d26ad`; `bot/main.py` invariato. Al prossimo cambio si ricontrollano.
 
-## 1. Chi manda ordini (verificato con grep il 7 nov su `9f47972c`; `5d5d26ad` non aggiunge invii nuovi)
+## 1. Chi manda ordini (verificato con grep il 7 nov su `9f47972c`; `5d5d26ad` e `013f9426` non aggiungono invii nuovi)
 
 | Parte | Dove | Verso dove | Acceso da |
 |---|---|---|---|
@@ -44,7 +44,7 @@ macchina): `Restart=always`, `RestartSec=10`: dopo un crash riparte con l'ultimo
   (risposta del proprietario del 7 nov, `docs/backlog.md`, `435c5594`); permesso di prelievo non detto. Nessun codice attivo le usa per
   ordini (vecchio ramo bloccato); `scripts/verify_keys.py` legge soltanto.
 
-## 4. Limiti fissi (`bot/risk/hard_limits.py`, invariati il 7 nov su `5d5d26ad`)
+## 4. Limiti fissi (`bot/risk/hard_limits.py`, invariati il 7 nov su `013f9426`)
 
 | Invariante | Valore | Riga | Dove si applica |
 |---|---|---|---|
@@ -57,7 +57,7 @@ macchina): `Restart=always`, `RestartSec=10`: dopo un crash riparte con l'ultimo
 | Finestra senza posizioni attorno agli eventi macro | `MACRO_FLAT_HOURS = 2.0` | `:28` | `circuit_breakers.py:92-101` |
 | Leva ridotta con la volatilità | 3σ→2x, 2σ→3x, 1.5σ→4x | `:33-37` | `safety_leverage_cap` `:40-50` |
 
-(Righe rilette il 7 nov su `5d5d26ad` con `sed -n 15,58p`: per le costanti una riga prima di quanto scritto nelle versioni precedenti.)
+(Righe rilette il 7 nov su `5d5d26ad` con `sed -n 15,58p`; `013f9426` non tocca il file.)
 Valgono **solo per il vecchio bot** (`RiskManager`): nessun file di `bot/portafoglio/` importa `hard_limits`.
 
 Da variabile d'ambiente (vecchio bot): numero massimo di posizioni `MAX_OPEN_POSITIONS` 5 (`config.py:217`, applicato a `main.py:1741`),
@@ -92,12 +92,13 @@ Catena: `dashboard/app/components/RiskControl.tsx:55,108` → Firestore `user_ri
 
 Il bot usa l'Admin SDK: le regole non lo limitano (`firestore.rules:6-8`).
 
-## 7. G1 sul conto demo (`bot/portafoglio/demo_binance.py`, codice di `5d5d26ad`)
+## 7. G1 sul conto demo (`bot/portafoglio/demo_binance.py`, codice di `013f9426`)
 
-**Costanti** (nel codice, fuori da `hard_limits.py`, nessun test tiene la leva): `LEVA = 5` (`:73`, inviata a `:759`), `STOP_CONTO = 0.35`
+**Costanti** (nel codice, fuori da `hard_limits.py`, nessun test tiene la leva): `LEVA = 5` (`:73`, inviata a `:773`), `STOP_CONTO = 0.35`
 dal massimo (`:80`), `OGNI_CONTROLLO_STOP_S = 60` (`:77`, anche attesa dopo un errore delle protezioni), `TENTATIVI_PRIMA_DELL_ALLARME = 3`
 (`:78`), `OGNI_VALUTAZIONE_S = 3600` (`:75`), `ATTESA_DOPO_ERRORE_S = 1800` (`:76`, solo per il ribilancio), `VALIDITA_LIMITE_S = 3600`
-(`:74`), `SOGLIA_CONFRONTO = 0.02` (`:81`), `QUOTA_EVENTI = 0.05` (`:71`, eventi spenti sul demo).
+(`:74`), `SOGLIA_CONFRONTO = 0.02` (`:81`), `QUOTA_EVENTI = 0.05` (`:71`, eventi spenti sul demo). Allarme degli ordini bloccati dopo
+`2 * 3600` s, scritto a mano a `:659` (non è una costante).
 
 **Ingressi**: decisione di G1 da `data/paper_g1.json` (`ultimo_lunedi`, `pesi`; `:511-515`), scritta da `PaperG1` alle 00:05 UTC su
 giorni chiusi (`f5.py:597-615`, `:91-156`). **Nessun controllo** su età, somma, tetto per moneta o valori dei pesi. Capitale ridotto dal
@@ -111,42 +112,49 @@ file `ops/demo_binance_capitale` (`:93`, `capitale_voluto` `:332-340`: qualunque
    `/commands/demo_binance_chiudi_tutto` (`:86`) o testo nuovo nel file `ops/demo_binance_chiudi_tutto` (`:90`, `_comando_file` `:450-461`)
    → `chiudi_tutto` (`:463-477`); **stop sul conto ogni minuto** (`:549-555`): massimo aggiornato ogni minuto, chiude a −35%; stato salvato
    (`:498`). Un errore: log, `/demo_binance/errore` con `dove: protezioni`, attesa di un minuto (`:499-503`);
-4. **da fermo** (`_da_fermo` `:558-594`), poi il giro finisce (`:504-505`): «riparti» a file letto a ogni giro, **senza Firebase** (`:562`;
-   il testo del file si segna come già visto solo all'entrata, `chiudi_tutto` `:471` → `_pulisci_riparti` `:619-634`); il «riparti» della
-   dashboard solo dopo la pulizia su Firebase (`:563-564`) e con il falso scritto e confermato (`_riparti` `:636-648`); riparte con il
-   massimo di adesso (`:568`) e `ultimo_giorno` a 0 (`:567`); altrimenti **ogni minuto** posizioni e ordini aperti riletti (`:575-577`;
-   **la lettura degli ordini aperti a `:576` non è protetta: Problema 32**), chiusure e annulli anche senza posizioni (`:578-580`),
-   allarme su `/demo_binance/allarme` dopo 3 tentativi (`:581-585`), `vuoto` segnato quando non restano né posizioni né ordini (`:587-590`);
+4. **da fermo** (`_da_fermo` `:558-597`), poi il giro finisce (`:504-505`): «riparti» a file letto a ogni giro, **senza Firebase** (`:562`;
+   il testo del file si segna come già visto solo all'entrata, `chiudi_tutto` `:471` → `_pulisci_riparti` `:622-637`); il «riparti» della
+   dashboard solo dopo la pulizia su Firebase (`:563-564`) e con il falso scritto e confermato (`_riparti` `:639-651`); riparte con il
+   massimo di adesso (`:568`) e `ultimo_giorno` a 0 (`:567`); altrimenti **ogni minuto** posizioni (`:575`) e ordini aperti (`:576-579`,
+   **dal `013f9426` in un `try`: una risposta di errore vale «nessun ordine»**; un guasto di rete esce ancora: Problema 37) riletti,
+   chiusure e annulli anche senza posizioni (`:580-583`), allarme su `/demo_binance/allarme` dopo 3 tentativi (`:584-588`), `vuoto` segnato
+   quando non restano né posizioni né ordini (`:590-593`; **anche quando la lettura degli ordini è fallita: Problema 36**);
 5. **attesa di 30 minuti dopo un errore**, solo per il ribilancio (`:506-507`);
-6. dopo un'ora gli ordini limite → `chiudi_ordini` (`:509-510`, `:785-853`): fase 1 per ordine (`:791-806`: lettura, annullo se aperto;
-   **annullo rifiutato → rilettura, e se l'ordine è ancora aperto il giro si ferma senza segnarlo controllato** `:797-803`; `controllato` e
-   salvataggio `:804-806`); **prima del mercato nessun ordine aperto sulle monete della lista** (`:811-814`, altrimenti il giro si ferma:
-   Problema 33 se l'ordine non va via); fase 2: resto = obiettivo (`st["obiettivi"]`) − posizione vera, al passo verso zero e sopra i
-   minimi (`:815-828`), identificativo `id_mercato(chiave, simbolo, giro)` (`:143-148`; chiave = data del giorno o `…-eventi-HHMM`;
-   **giro = ora del ribilancio** `piazzati`, `:818`, uguale per tutti i tentativi dello stesso ribilancio; con la chiave degli eventi restano
-   3 caratteri per il nome: Problema 34), lettura dell'identificativo prima dell'invio (`_ordine_esiste` `:650-659`: −2013 = non esiste,
-   altri errori fermano), «solo riduzione» se riduce (`:832-836`), `mercato_fatto` e salvataggio dopo ogni moneta (`:842-843`);
+6. dopo un'ora gli ordini limite → `chiudi_ordini` (`:509-510`, `:799-869`): fase 1 per ordine (`:805-821`: lettura, annullo se aperto;
+   **annullo rifiutato → rilettura, e se l'ordine è ancora aperto `_ordini_bloccati` e il giro si ferma senza segnarlo controllato**
+   `:811-818`; `controllato` e salvataggio `:819-821`); **prima del mercato nessun ordine aperto sulle monete della lista** (`:826-830`,
+   altrimenti `_ordini_bloccati` e il giro si ferma); **`_ordini_bloccati`** (`:653-662`): `bloccato_dal` nello stato degli ordini,
+   salvato; dopo 2 ore allarme su `/demo_binance/allarme` (non si spegne e conta dal primo blocco: Problema 38; nessuno lo legge: 39);
+   fase 2: resto = obiettivo (`st["obiettivi"]`) − posizione vera, al passo verso zero e sopra i minimi (`:831-859`), identificativo
+   `id_mercato(chiave, simbolo, giro)` (`:143-148`; chiave = data del giorno o `…-eventi-HHMM`; **giro = ora del ribilancio** `piazzati`,
+   `:834`, uguale per tutti i tentativi dello stesso ribilancio; con la chiave degli eventi restano 3 caratteri per il nome: Problema 34),
+   lettura dell'identificativo prima dell'invio (`_ordine_esiste` `:664-673`: −2013 = non esiste, altri errori fermano), «solo riduzione»
+   se riduce (`:848-852`), `mercato_fatto` e salvataggio dopo ogni moneta (`:858-859`); fine: `st.pop("ordini")` (`:868`);
 7. decisione nuova → `parti_da_zero` se c'è un capitale in attesa (`:516-517`, `:371-409`; annullo ordini non protetto `:380-381`, un
-   errore ferma il giro) e `ribilancia` (`:518`, `:723-783`); eventi (`:520-524`); il ribilancio parte solo senza ordini in corso (`:516`);
-8. ogni ora `valuta` (`:525-526`, `:855-877`, ha ancora il suo stop `:861-862`), `controlla_margine` (`:676-698`), `confronta` (`:700-721`);
+   errore ferma il giro) e `ribilancia` (`:518`, `:737-797`); eventi (`:520-524`); il ribilancio parte solo senza ordini in corso (`:516`);
+8. ogni ora `valuta` (`:525-526`, `:871-893`, ha ancora il suo stop `:877-878`), `controlla_margine` (`:690-712`), `confronta` (`:714-735`);
 9. errore → `_ultimo_tentativo`, stampa, RTDB `/demo_binance/errore` (`:531-535`); lo stato del giro non si salva (salvo quello già
-   salvato dalle protezioni e da `chiudi_ordini`).
+   salvato dalle protezioni, da `chiudi_ordini` e da `_ordini_bloccati`).
 
-**Ordini** (`ribilancia`): filtri da `exchangeInfo` (`:725`, `filtri` `:121-131`, valore minimo predefinito 5 se manca), prezzi mark
-(`:728`); una posizione per moneta, controllata una volta (`:729-733`); ordini aperti annullati prima di contare le posizioni (`:734-739`);
+**Ordini** (`ribilancia`): filtri da `exchangeInfo` (`:739`, `filtri` `:121-131`, valore minimo predefinito 5 se manca), prezzi mark
+(`:742`); una posizione per moneta, controllata una volta (`:743-747`); ordini aperti annullati prima di contare le posizioni (`:748-753`);
 `ordini_del_giorno` (`:151-170`): quantità al passo verso zero, sotto i minimi saltate, prezzo limite al passo, «solo riduzione» se riduce o
-chiude; identificativo limite `id_ordine` nuovo a ogni tentativo (`:134-140`, `:751`); margine unico e leva 5 alla prima volta per moneta
-(`:755-759`); un rifiuto non ferma gli altri (`:761-763`); obiettivi salvati (`:766-770`), chiave del ribilancio (`:771-773`).
+chiude; identificativo limite `id_ordine` nuovo a ogni tentativo (`:134-140`, `:765`); margine unico e leva 5 alla prima volta per moneta
+(`:769-773`); un rifiuto non ferma gli altri (`:775-777`); obiettivi salvati (`:780-784`), chiave del ribilancio (`:785-787`).
 
-**Chiusure** (`_chiudi_posizioni` `:596-617`, usata da `chiudi_tutto` e da `_da_fermo`): lettura degli ordini aperti (errore → si annulla
-moneta per moneta sulle posizioni, `:599-603`), annullo per moneta con errori presi, chiusura a mercato «solo riduzione» della quantità
-piena, un errore non ferma le altre monete.
+**Chiusure** (`_chiudi_posizioni` `:599-620`, usata da `chiudi_tutto` e da `_da_fermo`): lettura degli ordini aperti (risposta di errore →
+si annulla moneta per moneta sulle posizioni, `:602-606`; un guasto di rete esce), annullo per moneta con errori presi, chiusura a mercato
+«solo riduzione» della quantità piena (`:614`), un errore non ferma le altre monete.
 
 **Errori**: `ClienteDemo.chiedi` (`:292-304`): `timeout=15`, finestra 5 s, ogni risposta ≥ 400 → `RuntimeError` con 200 caratteri (i
 guasti di rete escono come eccezioni di `requests`, non `RuntimeError`); nessuna gestione di 429/418 né dell'attesa chiesta; nessuna
 lettura dell'ora di Binance. Nessun avviso Telegram nel modulo.
 
-**Conto ridotto**: valore = `totalMarginBalance` − scarto (`_conto` `:661-665`, scarto `:368`, `:404`); stop e rapporti usano questo valore.
+**Conto ridotto**: valore = `totalMarginBalance` − scarto (`_conto` `:675-679`, scarto `:368`, `:404`); stop e rapporti usano questo valore.
+
+**Chi legge i rami del demo su Firebase** (grep del 7 nov su `013f9426`): dashboard `PaperBot.tsx:126` (`fermo`), `:127` (`confronto`),
+`:185` (`stato`); fotografia `scripts/state_snapshot.py:641` (`fermo`, poi `margine`, `confronto`, ultimo errore). **`/demo_binance/allarme`
+non lo legge nessuno** (Problema 39).
 
 ## 8. Pulsanti che chiudono tutto
 
@@ -155,7 +163,7 @@ lettura dell'ora di Binance. Nessun avviso Telegram nel modulo.
 | Demo | RTDB `/commands/demo_binance_chiudi_tutto` (regola nel repo: solo vero/falso, `database.rules.json:18-21`; pubblicata? sezione 10) | no | un giro (30 s + vecchio ciclo); **un minuto in più dopo un errore delle protezioni** |
 | Demo | file `ops/demo_binance_chiudi_tutto`, testo nuovo | sì (arriva con il `git pull` dell'agente ops, ogni minuto) | 1 min + un giro; un minuto in più dopo un errore delle protezioni |
 | Demo | stop sul conto −35% dal massimo | sì | **1 minuto** + un giro, anche dopo un errore |
-| Demo, da fermo | conto rimasto aperto, ordini rimasti | sì | richiuso ogni minuto, allarme al terzo tentativo; **non se la lettura degli ordini aperti fallisce (Problema 32)** |
+| Demo, da fermo | conto rimasto aperto, ordini rimasti | sì | richiuso ogni minuto, allarme al terzo tentativo (non letto da nessuno: 39); **dal `013f9426` anche con la lettura degli ordini in errore** (prova k); non con un guasto di rete su quella lettura (37) |
 | Vecchio bot | RTDB `/commands/kill_switch` e `/commands/bot_state`, `main.py:860-872`, `kill_switch.py:40-59` | **no** | valutato solo a `main.py:1585`, dopo tre uscite anticipate (`:1559`, `:1568`, `:1578`); chiude solo posizioni di prova (ramo reale bloccato) |
 
 Con `DRY_RUN` falso il bot non parte: nessun pulsante del demo funziona (Problema 35).
@@ -180,7 +188,7 @@ difetti noti, da non riusare (righe +1 rispetto al `9f47972c`):
 
 - `set_rtdb` non solleva mai, restituisce vero o falso e aggiorna **sempre** lo specchio in memoria (`firebase_client.py:652-679`);
   `get_rtdb` su errore restituisce lo specchio (`:681-702`). Il demo guarda il valore restituito solo per il «riparti» della dashboard
-  (`demo_binance.py:632`, `:643`).
+  (`demo_binance.py:635`, `:646`).
 - Regole nel repo: `firebase/firestore.rules` (solo `user_risk_settings` scrivibile, `:32-41`), `firebase/database.rules.json` (solo
   `kill_switch`, `close_position`, `demo_binance_chiudi_tutto`, `demo_binance_riparti`, `close_position_meta` scrivibili), con l'utente
   `REPLACE_WITH_YOUR_FIREBASE_UID`. **Il proprietario non le ha mai pubblicate** (risposta del 7 nov, `docs/backlog.md`, `435c5594`):
@@ -191,30 +199,34 @@ difetti noti, da non riusare (righe +1 rispetto al `9f47972c`):
 - `scripts/ops_agent.py` ogni minuto (timer systemd): `git pull` (avanti veloce, altrimenti rebase con annullo, `:271-303`), esegue le
   richieste contro la lista bianca della macchina (non nel repo), senza shell, con oscuramento dei segreti (`:53-75`), battito in
   `ops/heartbeat.md`. La macchina segue `claude/brave-albattani-1b12fv`: **ciò che si spinge lì è già sulla macchina** ed entra in funzione
-  al riavvio del bot, anche dopo un crash (`Restart=always`, sezione 2). Il 7 nov `5d5d26ad` era sul remoto prima del verdetto.
+  al riavvio del bot, anche dopo un crash (`Restart=always`, sezione 2). Il 7 nov `5d5d26ad` e `013f9426` erano sul remoto prima del verdetto.
 - File letti dal demo nel repo: `ops/demo_binance_acceso`, `ops/demo_binance_capitale` (`1000`), `ops/demo_binance_chiudi_tutto` e
   `ops/demo_binance_riparti` (oggi assenti), `ops/demo_binance_eventi_acceso` (assente). Chi può scrivere sul branch comanda il demo.
 - Orologio: `systemd-timesyncd` attivo negli elenchi dei processi (`ops/results/0196-processi.md`, `0413-1ott-processi-col-gate.md`).
 
 ## 12. Test del percorso
 
-`tests/test_demo_binance.py` (34 test; il Binance finto ha posizioni che seguono gli ordini, guasti a richiesta una volta sola, e dal
-`5d5d26ad` **toglie dagli aperti un ordine annullato** `:106-109` e non mostra i limite eseguiti `:77`, `:87`), `tests/test_sicurezza_avvio.py`,
+`tests/test_demo_binance.py` (36 test; il Binance finto ha posizioni che seguono gli ordini, guasti a richiesta **una volta sola**,
+toglie dagli aperti un ordine annullato `:106-109` e non mostra i limite eseguiti `:77`, `:87`), `tests/test_sicurezza_avvio.py`,
 `tests/test_g1_poco_capitale.py`, `tests/test_demo_contro_paper.py`, `tests/test_paper_f5.py`, `tests/test_risk.py`, `tests/test_sizing.py`,
 `tests/test_kill_switch_levels.py`, `tests/test_reconciler.py`, `tests/test_live_orders.py`, `tests/test_execution.py`. Suite intera al 7 nov
-su `5d5d26ad`: `2566 passed` in 146 s. Coperti dal `5d5d26ad`: annullo rifiutato (`:696`), secondo ribilancio dello stesso giorno (`:711`),
-ordini da fermo senza posizioni (`:729`), «riparti» a file senza Firebase (`:744`). Non coperti: attesa di un minuto (28), lettura degli
-ordini aperti che fallisce da fermo (32), ordine aperto che non va via (33), identificativi degli eventi (34).
+su `5d5d26ad`: `2566 passed` in 146 s; su `013f9426` solo `tests/test_demo_binance.py`: `36 passed`. Coperti: annullo rifiutato (`:696`),
+secondo ribilancio dello stesso giorno (`:711`), ordini da fermo senza posizioni (`:729`), «riparti» a file senza Firebase (`:744`),
+**lettura degli ordini in errore da fermo (`:766`, ma con un guasto di una volta sola)**, **allarme degli ordini bloccati (`:784`)**. Non
+coperti: attesa di un minuto (28), lettura degli ordini sempre in errore e guasto di rete (36, 37), allarme che si spegne (38),
+identificativi degli eventi (34).
 
 ## 13. Punti noti aperti (dettaglio nei rapporti del 7 nov)
 
-Demo: **lettura degli ordini aperti da fermo non protetta (32, Medio, regressione)**; ordine aperto che non va via blocca il demo senza
-allarme (33); identificativi degli eventi troppo corti (34); con `DRY_RUN` falso non parte neanche il demo (35); attese crescenti e 429/418
-(13, con il resto del 28); pesi senza controllo (10); nessun avviso (11); decisione di G1 senza età massima (12); stesso filo del vecchio bot
-(14); massimo dello stop solo in locale (15); capitale senza tetto (16); bassi 21-23. Vecchio bot (in prova): parametri della dashboard
-(17), chiusura di una moneta che chiude tutto (18), limiti in variabili d'ambiente (20), nota sbagliata (24). Fuori dal codice: chiavi vere
-non limitate all'indirizzo, prelievo non detto; regole di Firebase mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto.
-Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27, 29, 30, 31; 28 in parte (resto nel 13).
+Demo: **allarme del demo non letto da nessuno (39, Medio, parte dell'11)**; «vuoto» falso con la lettura degli ordini in errore (36);
+guasto di rete sulla lettura degli ordini da fermo (37); allarme degli ordini bloccati che non si spegne (38); ordine aperto che non va via
+blocca il demo (33: ora con allarme dopo 2 ore, non visibile); identificativi degli eventi troppo corti (34); con `DRY_RUN` falso non parte
+neanche il demo (35); attese crescenti e 429/418 (13, con il resto del 28); pesi senza controllo (10); nessun avviso (11); decisione di G1
+senza età massima (12); stesso filo del vecchio bot (14); massimo dello stop solo in locale (15); capitale senza tetto (16); bassi 21-23.
+Vecchio bot (in prova): parametri della dashboard (17), chiusura di una moneta che chiude tutto (18), limiti in variabili d'ambiente (20),
+nota sbagliata (24). Fuori dal codice: chiavi vere non limitate all'indirizzo, prelievo non detto; regole di Firebase mai pubblicate;
+servizio che riparte da solo con l'ultimo codice spinto.
+Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27, 29, 30, 31, **32 (013f9426)**; 28 in parte (resto nel 13).
 
 ## Storia degli invarianti
 
@@ -230,3 +242,5 @@ Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27,
   ordini aperti sulle monete della lista; identificativo dei resti uno per ribilancio; «riparti» a file senza Firebase; un minuto di attesa
   dopo un errore delle protezioni (anche per il pulsante); da fermo si annullano anche gli ordini senza posizioni; avvio rifiutato con
   `DRY_RUN` falso in ogni caso. Limiti fissi invariati.
+- 7 nov 2026, `013f9426` (APPROVE): da fermo una risposta di errore sulla lettura degli ordini aperti non ferma più le chiusure; un blocco
+  degli ordini oltre 2 ore scrive un allarme. Limiti fissi invariati.
