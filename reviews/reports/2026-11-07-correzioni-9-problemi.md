@@ -22,14 +22,18 @@ senza un timeout dentro `parti_da_zero`: nessuno stop falso, massimo a 1.000, va
 Test: `2562 passed in 144.60s`, nessun fallimento (17 test nuovi, tutti superati).
 
 Nota sul processo: il commit è già sul branch remoto che la macchina scarica ogni minuto (`git rev-parse HEAD
-origin/claude/brave-albattani-1b12fv`: tutti e due `9f47972c`). Il processo in corsa non lo carica finché non riparte; ma un riavvio
-non deciso (un crash con il riavvio automatico, un riavvio della macchina) lo metterebbe in funzione senza l'ok del proprietario.
+origin/claude/brave-albattani-1b12fv`: tutti e due `9f47972c` al momento del controllo). Il processo in corsa non lo carica finché non
+riparte; ma un riavvio non deciso (un crash con il riavvio automatico, un riavvio della macchina) lo metterebbe in funzione senza l'ok
+del proprietario.
 
 ### Oggetto (branch, commit, file toccati, invarianti coinvolti)
 
 - **Branch** `claude/brave-albattani-1b12fv`, **commit** `9f47972c` (padre `2928d066`, che cambia solo `ops/heartbeat.md`). Il
   brief parlava di lavoro non committato; il messaggio della sessione principale ha poi confermato che il lavoro è identico in
   `9f47972c`. Tra `b29f5713` (codice della mappa) e `2928d066` nessun cambio in `bot/`, `firebase/`, `tests/` (`git diff --stat`: vuoto).
+- Durante la revisione sono arrivati `435c5594` (solo `CLAUDE.md` e `docs/backlog.md`: risposte del proprietario del 7 novembre) e
+  `fd887589` (una copia intermedia di questo rapporto, con numeri poi corretti: vale questo file). `git diff --stat 9f47972c HEAD -- bot/
+  firebase/ tests/ scripts/`: vuoto, quindi il codice rivisto è quello di `9f47972c`.
 - **File toccati** (righe aggiunte e tolte, `git diff --numstat`): `bot/portafoglio/demo_binance.py` (+200 −58, problemi 1-4),
   `bot/config.py` (+57 −6, problemi 5 e 9), `bot/main.py` (+2, problema 9), `bot/execution/executor.py` (+10 −12, problemi 6-8),
   `tests/test_demo_binance.py` (+152 −2: Binance finto con posizioni vive e guasti, 5 test nuovi), `tests/test_sicurezza_avvio.py`
@@ -51,11 +55,11 @@ non deciso (un crash con il riavvio automatico, un riavvio della macchina) lo me
 | 2 | pulsante e stop sordi 30 minuti dopo un errore; stop solo ogni ora | **chiuso** | protezioni prima e fuori dall'attesa (`:488-502`), stop ogni minuto (`:544-550`, `:77`). Prova (b): fermo 30 s dopo l'errore; prova (b2): stop a −36% 90 s dopo l'errore, conto vuoto. Test `:587`, `:605`. |
 | 3 | chiudi tutto senza garanzia di conto vuoto | **chiuso** | da fermo, ogni minuto, posizioni rilette e richiuse (`:566-579`); errori di annullo e di lettura degli ordini presi moneta per moneta (`:589-610`); allarme dopo 3 tentativi su `/demo_binance/allarme` e nel log (`:574-578`). Prova (c): chiusura rifiutata, conto vuoto un minuto dopo. Test `:616`. L'avviso resta solo su Firebase e nel log (Problema 11, aperto). |
 | 4 | «riparti» rimasto vero riaccende il demo | **chiuso** | all'entrata nel fermo il «riparti» vecchio si pulisce (`:469`, `:612-625`); poi vale solo se il falso è scritto davvero (`:627-640`; `set_rtdb` restituisce falso se non arriva, `bot/core/firebase_client.py:652-679`, e aggiorna sempre lo specchio, quindi un vero vecchio non torna dalla memoria). Prova (d): nessuna ripartenza. Test `:662`. Nota: Problema 27. |
-| 5 | `DRY_RUN` e rete di prova falsi con un errore di battitura | **chiuso** | `config.py:78-90`, `:105`, `:110`: solo «false» (maiuscole e spazi ignorati) spegne; vuoto, «si», «treu», «0», «no», «off» valgono vero con un avviso (prova g). Le tarature non possono più cambiare `DRY_RUN`, rete di prova, parità né chiavi che sembrano segreti (`:30-53`, `:61`). Test `tests/test_sicurezza_avvio.py:14-38`. Le tarature usano un elenco di chiavi vietate, non di chiavi ammesse: gli altri limiti del vecchio bot restano regolabili (Problema 20, aperto). Le tarature del supervisore sono tutte `GATE_*` (`bot/learning/supervisor.py:73-90`): nessuna scartata per sbaglio. |
-| 6 | riconciliazione: doppione fisso, pulsante saltato, stop mancante non visto | **chiuso per blocco** | il vecchio esecutore non crea mai il client del conto vero e resta in prova anche con `DRY_RUN` falso (`executor.py:243-253`); prova (k), test `tests/test_sicurezza_avvio.py:49`. Senza client il riconciliatore vede Binance «irraggiungibile» e aspetta, senza azioni (`main.py:1205-1207`, `reconciler.py:93-100`). Il codice difettoso resta, raggiungibile solo dai test con un client finto. |
+| 5 | `DRY_RUN` e rete di prova falsi con un errore di battitura | **chiuso** | `config.py:78-90`, `:105`, `:110`: solo «false» (maiuscole e spazi ignorati) spegne; vuoto, «si», «treu», «0», «no», «off» valgono vero con un avviso (prova g). Le tarature non possono più cambiare `DRY_RUN`, rete di prova, parità né chiavi che sembrano segreti (`:30-52`, `:61`). Test `tests/test_sicurezza_avvio.py:14-38`. Le tarature usano un elenco di chiavi vietate, non di chiavi ammesse: gli altri limiti del vecchio bot restano regolabili (Problema 20, aperto). Le tarature del supervisore sono tutte `GATE_*` (`bot/learning/supervisor.py:73-90`): nessuna scartata per sbaglio. |
+| 6 | riconciliazione: doppione fisso, pulsante saltato, stop mancante non visto | **chiuso per blocco** | il vecchio esecutore non crea mai il client del conto vero e resta in prova anche con `DRY_RUN` falso (`executor.py:243-253`); prova (k), test `tests/test_sicurezza_avvio.py:49`. Senza client il riconciliatore vede Binance «irraggiungibile» e aspetta, senza azioni (`main.py:1204-1206`, `reconciler.py:93-100`). Il codice difettoso resta, raggiungibile solo dai test con un client finto. |
 | 7 | ordini non arrotondati, senza identificativo, chiusure scoperte | **chiuso per blocco** | come sopra. |
 | 8 | pulsante del vecchio bot dietro tre uscite anticipate | **chiuso per blocco** | come sopra: senza ordini veri, il pulsante del vecchio bot chiude solo posizioni di prova. |
-| 9 | parità col backtest con soldi veri | **chiuso** | `config.py:787-794` chiamato in `main.py:2657-2658` prima di creare il bot: avvio rifiutato con `DRY_RUN` falso e parità accesa (prova 9, test `tests/test_sicurezza_avvio.py:40`). L'unico avvio è `python -m bot.main` (`main.py:13`, `:2661-2662`; nessun altro `TradingBot()` fuori dai test). |
+| 9 | parità col backtest con soldi veri | **chiuso** | `config.py:787-794` chiamato in `main.py:2657-2658` prima di creare il bot: avvio rifiutato con `DRY_RUN` falso e parità accesa (prova 9, test `tests/test_sicurezza_avvio.py:40`). L'unico avvio è `python -m bot.main` (`main.py:13`, `:2662-2663`; nessun altro `TradingBot()` fuori dai test). |
 
 **Il passaggio di stanotte** (`prova_mezzanotte.py`): conto demo vero a 5.000, conto ridotto a 280 dal 6 novembre, file del capitale a
 1000, decisione nuova alla mezzanotte, un giro ogni 30 secondi per due ore e mezza.
@@ -72,7 +76,7 @@ non deciso (un crash con il riavvio automatico, un riavvio della macchina) lo me
 **A. Limiti fissi e interruttori**
 - Valori fissi di `bot/risk/hard_limits.py`: **OK**, invariati (`:17-21`; `git diff --stat b29f5713 9f47972c -- bot/risk/` vuoto).
 - Nessun limite critico spostato in configurazione: **OK, in meglio**. Modo, rete di prova e parità non si cambiano più dal file delle
-  tarature (`config.py:30-53`). Restano in variabili d'ambiente i limiti del vecchio bot (Problema 20, invariato).
+  tarature (`config.py:30-52`). Restano in variabili d'ambiente i limiti del vecchio bot (Problema 20, invariato).
 - Parametri della dashboard: **NON APPLICABILE** (non toccati; Problema 17 aperto).
 - Limiti propri di G1 sul demo come costanti: **OK, da segnalare**. Due costanti nuove fuori da `hard_limits.py`:
   `OGNI_CONTROLLO_STOP_S = 60` e `TENTATIVI_PRIMA_DELL_ALLARME = 3` (`demo_binance.py:77-78`). `LEVA = 5` (`:73`) e `STOP_CONTO = 0.35`
@@ -117,10 +121,17 @@ non deciso (un crash con il riavvio automatico, un riavvio della macchina) lo me
   test invariato). Nota: con `DRY_RUN` falso lo stato del vecchio bot diventa incoerente (Problema 29, Basso).
 
 **E. Segreti e sicurezza**
-- **OK.** Nessuna chiave nel diff (letto per intero). Le tarature rifiutano ogni chiave con KEY, SECRET, TOKEN, PASSWORD, CREDENTIAL o
-  FIREBASE nel nome (`config.py:31`, `:46-48`). I messaggi d'errore nuovi tagliano la risposta a 150-200 caratteri come prima; l'indirizzo
-  firmato nei messaggi resta (Problema 21, Basso, aperto). Chiavi senza prelievo e regole di Firebase pubblicate: **da confermare con
-  Alessio** (invariato).
+- Nessuna chiave nel codice, nei file versionati, nei log o negli errori: **OK.** Nessuna chiave nel diff (letto per intero). Le tarature
+  rifiutano ogni chiave con KEY, SECRET, TOKEN, PASSWORD, CREDENTIAL o FIREBASE nel nome (`config.py:31`, `:46-48`). I messaggi d'errore
+  nuovi tagliano la risposta a 150-200 caratteri come prima; l'indirizzo firmato nei messaggi resta (Problema 21, Basso, aperto).
+- Chiavi senza prelievo e limitate all'indirizzo della macchina: **PROBLEMA fuori dal codice, già nel backlog**. Il proprietario ha
+  risposto il 7 novembre che le chiavi del conto vero **non sono limitate all'indirizzo della macchina** (`docs/backlog.md`, aggiunta del
+  commit `435c5594`: «da fare prima dei soldi veri: limite all'indirizzo della macchina e niente prelievi»); il permesso di prelievo non è
+  detto. Con il vecchio ramo reale bloccato da questa modifica, nel bot non resta nessun percorso che usi quelle chiavi per mandare ordini
+  (`scripts/verify_keys.py` le usa solo per leggere il conto).
+- Regole di Firebase: **da controllare con Alessio**. Il proprietario dice di non averle mai toccate (stessa aggiunta al backlog): le regole
+  del repo, con l'utente segnaposto, non sono pubblicate; quali regole valgono oggi si vede solo nella console. Per il demo conta: se il
+  database accetta scritture da chiunque, chiunque può premere «chiudi tutto» o «riparti».
 
 **F. Test**
 - **OK con lacune.** 17 test nuovi: 5 in `tests/test_demo_binance.py` (`:569`, `:587`, `:605`, `:616`, `:662`), 12 in
@@ -201,14 +212,15 @@ invarianti del percorso (aggiornati in `reviews/LIVE_PATH_MAP.md`):
 5. **Resti a mercato**: dalla posizione vera contro l'obiettivo, con identificativo fisso controllato prima, stato salvato dopo ogni
    ordine (`:777-836`).
 6. **`DRY_RUN` e rete di prova**: solo «false» li spegne (`config.py:78-90`, `:105`, `:110`).
-7. **File delle tarature**: non cambia modo, rete di prova, parità e chiavi che sembrano segreti (`config.py:30-53`, `:61`).
+7. **File delle tarature**: non cambia modo, rete di prova, parità e chiavi che sembrano segreti (`config.py:30-52`, `:61`).
 8. **Avvio**: rifiutato con la parità e `DRY_RUN` falso (`config.py:787-794`, `main.py:2657-2658`).
 9. **Vecchio ramo reale**: bloccato, l'esecutore resta sempre in prova (`executor.py:243-253`).
 
 ### Decisioni per Alessio
 
 1. **Il vecchio ramo reale è stato bloccato** invece che corretto (era la decisione 4 del primo avvio, presa qui dalla sessione
-   principale). È la direzione sicura e si torna indietro facilmente; il conto vero nascerà dal codice di G1. Va bene così?
+   principale). È la direzione sicura e si torna indietro facilmente; il conto vero nascerà dal codice di G1. Con le chiavi vere non limitate
+   all'indirizzo della macchina, il blocco toglie l'unico percorso del bot che poteva usarle per ordini. Va bene così?
 2. **Lo stop sul conto ora si guarda ogni minuto**, e ogni minuto si aggiorna anche il massimo. È più vicino a «−35% dal massimo», ma scatta
    un po' prima di prima. Va bene così? E con quale frequenza misurava la ricerca che ha scelto −35%? Se misurava sui giorni chiusi,
    conviene che lo sappia chi valuta le prove.
@@ -216,8 +228,10 @@ invarianti del percorso (aggiornati in `reviews/LIVE_PATH_MAP.md`):
    di stanotte nessuno dei due codici muove soldi veri: il codice nuovo protegge meglio (pulsante e stop sempre attivi, chiusure ritentate),
    ma porta il Problema 25; il codice in corsa ha i problemi 1-4 del primo avvio. Il passaggio a 1.000 funziona con tutti e due. Decide lui
    se e quando riavviare.
-4. Fuori dal codice, invariate dal primo avvio: chiavi senza prelievo e limitate all'indirizzo della macchina; regole di Firebase
-   pubblicate (nei file c'è ancora l'utente segnaposto).
+4. **Fuori dal codice**: le chiavi del conto vero non sono limitate all'indirizzo della macchina (sua risposta del 7 novembre, già nel backlog
+   come da fare prima dei soldi veri); hanno il permesso di prelievo? Se sì, conviene toglierlo subito, non solo prima dei soldi veri: le
+   chiavi sono sulla macchina e non servono a nessun codice attivo. Regole di Firebase: controllare nella console quali valgono e
+   pubblicare quelle del repo con il suo identificativo.
 
 ### Domande aperte
 
@@ -231,3 +245,4 @@ invarianti del percorso (aggiornati in `reviews/LIVE_PATH_MAP.md`):
    avvio.
 3. Resta aperta la domanda 3 del primo avvio: la voce della modifica proposta del 7 novembre (leva 10, perdita giornaliera dalla
    dashboard), mai applicata, si chiude come «non applicata»?
+4. Le chiavi del conto vero hanno il permesso di prelievo? La risposta del 7 novembre dice solo che non sono limitate all'indirizzo.

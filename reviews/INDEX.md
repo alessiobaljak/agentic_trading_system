@@ -4,24 +4,33 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa completa del percorso e invarianti con file:riga (7 nov 2026, codice di `782a01fc` = `b29f5713`).
+- `LIVE_PATH_MAP.md` — mappa completa del percorso e invarianti con file:riga (aggiornata il 7 nov 2026 sul commit `9f47972c`).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse (vuoto).
 - `reports/` — un rapporto completo per revisione.
 
 ## Stato (aggiornato al 7 nov 2026)
-- Primo avvio **fatto** (passi 1-3): `reports/2026-11-07-primo-avvio.md`, REQUEST CHANGES, 9 problemi alti (4 sul demo, 4 sul vecchio
-  ramo reale spento da `DRY_RUN`, la parità col backtest), nessuno bloccante per il demo di oggi, tutti da chiudere prima del conto vero.
-- Voci aperte: 2 (la modifica proposta del 7 nov, non applicata; il primo avvio).
-- Alla prossima revisione: per ogni problema del primo avvio controllare se è stato corretto (numeri 1-24 del rapporto) e aggiornare
-  la sezione 13 della mappa.
-- Decisioni per Alessio e domande aperte in sospeso: sezioni omonime del rapporto del primo avvio (stop per posizione, soglia e
-  ripartenza dello stop sul conto, limiti del demo come costanti fisse, vecchio ramo reale, nome delle chiavi vere, valori di
-  `DRY_RUN`/`BINANCE_TESTNET`/`BACKTEST_PARITY` sulla macchina).
+- Ultima revisione: `reports/2026-11-07-correzioni-9-problemi.md` sul commit `9f47972c`, REQUEST CHANGES. Degli Alti del primo avvio
+  chiusi 2, 3, 4, 5, 9 (corretti) e 6, 7, 8 (vecchio ramo reale bloccato); l'1 solo in parte: la correzione apre il **Problema 25
+  (Alto, regressione)**: annullo rifiutato → ordine limite vivo più mercato, posizione doppia. Nuovi: 26 (Medio), 27-31 (Bassi).
+- Il commit `9f47972c` era già spinto sul branch che la macchina scarica, bot non riavviato (domanda aperta sui riavvii automatici).
+  `fd887589` contiene una copia intermedia del rapporto: vale il file attuale.
+- Voci aperte: 3 (modifica proposta mai applicata; primo avvio con Medi e Bassi 10-24; correzioni con 25-31).
+- Alla prossima revisione: controllare la correzione del 25 (rifare la prova h con un annullo rifiutato e l'ordine ancora aperto) e del 26
+  (prova i, «riparti» nello stesso giorno); poi le prove a-d, b2, j1-j2; aggiornare le sezioni 7, 12, 13 della mappa.
+- Decisioni per Alessio in sospeso: blocco del vecchio ramo reale; stop sul conto ogni minuto (e su che frequenza misurava la ricerca);
+  riavvio; prelievo sulle chiavi vere (non limitate all'indirizzo, risposta del 7 nov); regole di Firebase mai pubblicate; più quelle del
+  primo avvio (stop per posizione, soglia e ripartenza dello stop, limiti del demo come costanti fisse, valori di `DRY_RUN`,
+  `BINANCE_TESTNET`, `BACKTEST_PARITY` sulla macchina).
 
 ## Promemoria
 - Le prove a mano usano il Binance finto di `tests/test_demo_binance.py` (`_Demo`): passare sempre percorsi temporanei per
-  interruttore, comandi e capitale (i predefiniti puntano ai file veri di `ops/`), e `TRADING_BOT_TEST_MODE=1`.
-- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`. Suite intera al 7 nov: `2545 passed` in 146 s.
+  interruttore, comandi e capitale (i predefiniti puntano ai file veri di `ops/`), e `TRADING_BOT_TEST_MODE=1`. Ha `posizioni_vive`
+  e `guasti`; un `DELETE /fapi/v1/order` riuscito NON toglie l'ordine dagli aperti (va simulato a mano, come in
+  `scratchpad/correzioni/prove_demo_nuove.py`, funzione `annullo_vero`).
+- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`. Suite intera al 7 nov su `9f47972c`: `2562 passed` in 145 s
+  (`python3 -m pytest tests/ -q -p no:cacheprovider`, in sottofondo).
 - In una copia `git worktree` `tests/test_allowlist_runnable.py` fallisce da solo (risolve `research/` dal repo principale).
-- Il gancio dei segreti blocca i comandi che nominano i file di ambiente: per cercare usare Grep su cartelle precise.
+- Il gancio dei segreti blocca ogni comando Bash che nomina un file che finisce in `.env` (anche le tarature): cercare con Grep.
+- Scrivo in `reviews/` solo con Write (niente Edit): file brevi, riscritti per intero. La sessione principale può committare un rapporto
+  mentre lo scrivo: controllare `git log` alla fine.
