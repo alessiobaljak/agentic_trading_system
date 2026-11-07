@@ -11,6 +11,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Gli agenti si possono chiamare per nome solo dalle sessioni avviate dopo il 7 novembre (Claude Code li carica all'avvio); in questa
   sessione si usano con un agente generico che segue il loro file.
 - Demo: alla mezzanotte dell'8 novembre chiude la fase da 280 USDT e riparte da zero a 1.000 (controllo al giro delle 00:17).
+- Correzioni dei 9 problemi Alti del percorso degli ordini e dei problemi nuovi 25-33: approvate dal revisore (commit 013f9426,
+  `reviews/reports/2026-11-07-correzione-32.md`); allarmi del demo visibili in dashboard e nel rapporto. **Riavvio del bot: aspetta
+  l'ok del proprietario.** Bassi rimasti (36-38) e Medi del primo avvio nel backlog, prima del codice del conto vero.
 
 ## Decisioni del proprietario di questi giorni
 - 5 nov: si migliora G1, un'idea nuova solo con un perché forte. 6 nov: 250 euro, eventi spenti sul demo. 7 nov: demo a 1.000 dalla
