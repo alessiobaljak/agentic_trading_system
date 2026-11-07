@@ -122,6 +122,7 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento del 5 novembre (dati fino al 3 novembre): M-001c 233 su 400 (in corso); M-002 1.680 (non passa, p 0,25); M-003 704 (non passa, p 0,99); seconda tornata: N-001 49 trade chiusi, N-002 31, N-003 27.
   Aggiornamento del 6 novembre (dati fino al 4 novembre): M-001c 250 su 400 (in corso); M-002 1.730 (non passa, p 0,23); M-003 719 (non passa, p 0,99); seconda tornata: N-001 50 trade chiusi, N-002 34, N-003 28 (la seconda tornata rilanciata da sola dopo il limite di 50 minuti dello script).
   Rifatto il 6 novembre alle 09:30 UTC con il 28 ottobre, che mancava nell'archivio pubblico di Binance per tutte le monete (preso dall'interfaccia pubblica, `strumenti/buchi_archivio_minuti.py`): M-001c 264 su 400 (in corso); M-002 1.908 (non passa, p 0,16); M-003 742 (non passa, p 0,99); N-001 55, N-002 34, N-003 30.
+  Aggiornamento del 7 novembre (dati fino al 5 novembre): M-001c 276 su 400 (in corso); M-002 1.916 (non passa, p 0,16); M-003 749 (non passa, p 0,99); N-001 59, N-002 40, N-003 30.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
