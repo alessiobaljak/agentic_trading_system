@@ -405,3 +405,8 @@ del conto) contro le 50 (19,2%) della prima notte a 280**; stop sul conto a 650 
 `0720-8nov-stato-passaggio-1000.md`). **Capito oggi**: la partenza da zero alla mezzanotte funziona senza errori ed è quella che farà il
 conto vero; il primo giorno però apre tutto da zero (ordini grandi), quindi la misura vera dei minimi a 1.000 è il ribilancio di domani
 notte (la prova 148 se ne aspetta eseguibile il 23% delle variazioni, il 77% del giro).
+**Giro delle 04:17.** Notizie: 18 articoli nuovi da 22 fonti su 23; 39 conti di Hyperliquid letti su 39; controlli in avanti delle
+04:22: niente di nuovo. Idee nuove: niente di nuovo. **Il demo a 1.000 dopo quattro ore** (`ops/results/0721-8nov-stato-demo-1000-dopo-4-ore.md`):
+dei 48 ordini di G1, 45 eseguiti a limite e 3 a mercato, nessuno in attesa; 24 posizioni lunghe e 24 corte; equity 1.001,80 (+0,18%),
+stop sotto 652,35. Scarto fra posizioni vere e volute 7,5% del conto, quasi tutto dalle due monete che il demo non ha (ICPUSDT 4,3%,
+龙虾USDT 1,9%); nessun errore nuovo (l'ultimo è del 24 ottobre).

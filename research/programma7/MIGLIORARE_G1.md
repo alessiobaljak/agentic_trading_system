@@ -189,3 +189,6 @@ separato prima del paper).
   con 48 ordini limite e 1 rifiutato (龙虾USDT). Equity 999,59 su 1.000; sotto il minimo 2 variazioni (0,8% del conto) contro le 50 (19,2%)
   della prima notte a 280. Il primo giorno apre tutto da zero, quindi non misura i minimi delle variazioni di ogni giorno: la misura è il
   ribilancio del 9 novembre (atteso dalla prova 148: eseguibile il 23% delle variazioni, il 77% del giro).
+* **8 novembre 2026, 04:20 UTC, voce 8, il demo a 1.000 dopo quattro ore** (`ops/results/0721-8nov-stato-demo-1000-dopo-4-ore.md`): 45
+  ordini su 48 eseguiti a limite, 3 a mercato, nessuno in attesa; 24 posizioni per lato; equity 1.001,80. Lo scarto dalle posizioni volute
+  (7,5% del conto) viene quasi tutto dalle monete che il demo non ha (ICPUSDT 4,3%, 龙虾USDT 1,9%: voce 4), non dal conto piccolo.
