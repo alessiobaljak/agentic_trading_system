@@ -132,7 +132,7 @@ Binance riletta una volta (`:470`), errori senza firma (`senza_firma` `:123-127`
 | Demo | file `ops/demo_binance_chiudi_tutto`, testo nuovo | sì (con il `git pull` dell'agente, ogni minuto) | 1 min + un giro; come sopra |
 | Demo | stop sul conto −35% dal massimo o sotto il 65% del capitale della fase | sì | 1 minuto + un giro; come sopra |
 | Demo, da fermo | conto rimasto aperto, ordini rimasti | sì | richiuso ogni minuto, allarme al terzo tentativo, anche con la lettura degli ordini in errore |
-| Conto vero (fase 2) | RTDB `/commands/conto_vero_chiudi_tutto`, file `ops/conto_vero_chiudi_tutto`, stop | file sì | come il demo **solo se acceso**: con interruttore tolto o `DRY_RUN` vero niente (Problema 53); nessun pulsante in dashboard né regola (60) |
+| Conto vero (fase 2) | RTDB `/commands/conto_vero_chiudi_tutto`, file `ops/conto_vero_chiudi_tutto`, stop | file sì | come il demo; dal secondo giro anche spento, se acceso una volta e non vuoto (53 chiuso); nessun pulsante in dashboard né regola (60) |
 | Vecchio bot | RTDB `/commands/kill_switch` e `/commands/bot_state` (`kill_switch.py:40-59`) | **no** | valutato dopo tre uscite anticipate del giro; chiude solo posizioni di prova |
 
 Con `DRY_RUN` falso il bot committato non parte: nessun pulsante del demo funziona (Problema 35).
@@ -157,8 +157,9 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
 ## 11. Il canale `ops/`
 
 - `scripts/ops_agent.py` ogni minuto: `git fetch origin <branch>` e avanti veloce (`:473-477`; altrimenti rebase con annullo,
-  `:271-303`), richieste contro la lista bianca della macchina, oscuramento dei segreti, battito in `ops/heartbeat.md`. **Non scarica
-  i tag** e non sposterebbe un tag già presente (provato l'8 nov, git 2.43: Problema 55). La macchina segue
+  `:271-303`), richieste contro la lista bianca della macchina, oscuramento dei segreti, battito in `ops/heartbeat.md`. Committato: non
+  scarica i tag (provato l'8 nov, git 2.43: 55); la fase 2 aggiunge il tag del conto vero forzato (sezione 14). Lo script si rilegge a
+  ogni giro: un suo cambio vale dal primo `git pull`, senza riavvio. La macchina segue
   `claude/brave-albattani-1b12fv`: ciò che si spinge lì entra in funzione al riavvio, anche dopo un crash.
 - File letti dal demo nel repo: `ops/demo_binance_acceso`, `ops/demo_binance_capitale` (`1000`), `ops/demo_binance_chiudi_tutto` e
   `ops/demo_binance_riparti` (assenti), `ops/demo_binance_eventi_acceso` (assente). Chi può scrivere sul branch comanda il demo.
@@ -167,10 +168,10 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
 ## 12. Test del percorso
 
 `tests/test_demo_binance.py` (81 test al `1a8522f`; Binance finto `_Demo`, guasti una volta sola, `HOST` dalla fase 2),
-`tests/test_conto_vero.py` (fase 2, 31 casi), `tests/test_sicurezza_avvio.py`, `tests/test_g1_poco_capitale.py`,
+`tests/test_conto_vero.py` (fase 2, secondo giro: 790 righe), `tests/test_sicurezza_avvio.py`, `tests/test_g1_poco_capitale.py`,
 `tests/test_demo_contro_paper.py`, `tests/test_paper_f5.py`, `tests/test_risk.py`, `tests/test_sizing.py`,
 `tests/test_kill_switch_levels.py`, `tests/test_reconciler.py`, `tests/test_live_orders.py`, `tests/test_execution.py`,
-`tests/test_strategie_restano_accese.py`. Suite intera l'8 nov con la fase 2: `2656 passed, 1 failed` in 211 s (il fallito è il test
+`tests/test_strategie_restano_accese.py`. Suite intera l'8 nov con la fase 2 (secondo giro): `2681 passed, 1 failed` in 192 s (il fallito è il test
 della firma: libreria `cryptography` del contenitore rotta; passa con `PYTHONPATH=<cartella di lavoro>/cripto`).
 
 ## 13. Punti noti aperti
@@ -178,33 +179,40 @@ della firma: libreria `cryptography` del contenitore rotta; passa con `PYTHONPAT
 Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52 (tentativi che non crescono con un «riparti» in attesa);
 dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24 (vecchio bot), 34 (identificativi degli eventi), 35
 (`DRY_RUN` falso ferma anche il demo). Fuori dal codice: chiavi vere non limitate all'indirizzo, prelievo non detto; regole di Firebase
-mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto. Conto vero (fase 2, non committata): 53-63 (sezione 14).
+mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto. Conto vero (fase 2, non committata): 54 ii, 60, 64-69 (sezione 14).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
-## 14. Modifiche non committate in revisione: fase 2, il conto vero (8 nov 2026, REQUEST CHANGES)
+## 14. Modifiche non committate in revisione: fase 2, il conto vero (8 nov 2026, secondo giro, REQUEST CHANGES)
 
-Rapporto `reviews/reports/2026-11-08-fase2-conto-vero.md`. Righe del working tree.
-- `bot/portafoglio/conto_vero.py`: `ContoVeroG1(DemoG1)` e `ClienteVero(ClienteDemo)`; solo `https://fapi.binance.com` (`:54-55`,
-  `_url` `:80-85`); chiavi `BINANCE_API_KEY`/`SECRET` lette solo acceso (`:180-185`); stato `data/conto_vero.json`, ramo `/conto_vero`,
-  comandi `/commands/conto_vero_chiudi_tutto` e `_riparti`, file `ops/conto_vero_*` (`:56-62`).
-- **Limiti** (`:70-77`, test `tests/test_conto_vero.py:67-87`): leva 5, capitale 300 USDT, valore massimo per ordini nuovi 600, stop
-  35%, pavimento 65%, somma dei pesi 200%, peso per moneta 60%, età della decisione 26 h; niente eventi (`:166-170`, `:284-285`).
-- **Condizioni**: (a) interruttore `ops/conto_vero_acceso` e (b) `DRY_RUN` falso, altrimenti nessuna richiesta (`:173-195`, `_spento`
-  `:197-214`: **niente protezioni con posizioni aperte, Problema 53**); (c) file di `PERCORSI_DEGLI_ORDINI` (`:65`: `bot/portafoglio`,
-  `bot/execution`, `bot/risk`, `bot/config.py`, `bot/main.py`) uguali al tag `conto-vero-approvato`, all'avvio (`:158-160`) e ogni
-  minuto (`:222-225`; `codice_approvato` `:88-113` con `git diff`, `rev-parse`, `ls-files --others`; Problemi 54, 55, 61); (d) capitale
-  nel file fino a 300 e non oltre il saldo, conto ridotto fino a 600 (`:226-243`). Senza (c) o (d): allarme `ordini_vietati`, ordini
-  limite in corso annullati senza resto (`:251-257`, `:269-280`: Problema 56), protezioni attive.
-- **Freno del cliente** (`:130-134`): con un motivo, `POST`/`PUT` su `/fapi/v1/order` e `/fapi/v1/batchOrders` senza «solo riduzione»
-  rifiutati prima di partire; si richiude a ogni giro (`:193-194`).
-- **Partenza**: alla prima accensione e dopo ogni blocco, ordini solo dalla decisione di G1 dopo (`:258-266`). Seconda difesa nel
-  ribilancio: capitale fissato fino a 300 e freno aperto (`:286-290`). Filtri solo dal vero `exchangeInfo` (`:293-302`).
-- `bot/config.py:791-813`: **con `DRY_RUN` falso il bot parte** se la parità è spenta e c'è l'interruttore; senza, rifiuto.
-- `demo_binance.py`: limiti e nomi come attributi di classe (`:498-510`), `_ordini_nuovi_ammessi` (`:852-855`, sempre vero sul demo),
-  `_ordini_del_giro` (`:857-887`), `_filtri_degli_ordini` (`:1274-1287`), `_ambiente` (`:932-938`); nessun cambio di comportamento del
-  demo (verificato riga per riga e con i suoi test).
-- `bot/main.py:43`, `:506`, `:2651-2654`; fotografia `scripts/state_snapshot.py:675-703`. Dashboard e regole non toccate.
-- Problemi: 53, 54 Alti; 55-60 Medi; 61-63 Bassi.
+Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del working tree del secondo giro (copia in `fase2/giro2/`).
+- `bot/portafoglio/conto_vero.py` (564 righe): `ContoVeroG1(DemoG1)`, `ClienteVero(ClienteDemo)`; solo `https://fapi.binance.com`
+  (`_url` `:92-97`); chiavi `BINANCE_API_KEY`/`SECRET` (`:267-272`); stato `data/conto_vero.json`, ramo `/conto_vero`, pulsante
+  `/commands/conto_vero_chiudi_tutto` o file `ops/conto_vero_chiudi_tutto`; **«riparti» solo dal file** (`COMANDO_RIPARTI = None` `:69`).
+- **Limiti** (`:82-89`, test `tests/test_conto_vero.py:89-110`): leva 5, capitale 300, valore 600, stop 35%, pavimento 65%, pesi 200%,
+  peso per moneta 60%, età 26 h; niente eventi (`:238-242`, `:536-538`).
+- **Spento** (interruttore tolto o `DRY_RUN` vero, `motivo_spento` `:260-265`, `tick` `:274-289`): mai acceso (stato o Firebase
+  `/conto_vero/acceso_dal`, `/conto_vero/fermo`, `_acceso_una_volta` `:321-335`) o già vuoto → nessuna richiesta né chiave; acceso una
+  volta e non vuoto → protezioni con soli ordini «solo riduzione» (`_protezioni_da_spento` `:291-306`), vuoto controllato ogni minuto
+  (`_vuoto_da_spento` `:509-520`). **Con `DRY_RUN` vero ordini «solo riduzione» al conto vero: invariante D cambiato.**
+- **Codice approvato** (`codice_approvato` `:129-172`): 5 percorsi (`:72`) + i file del repository caricati nel processo
+  (`file_caricati` `:100-116`, senza ambiente Python e cartelle nascoste), all'avvio anche niente file cambiati dopo l'ora d'avvio del
+  processo (`avvio_del_processo` `:119-126`; `:219-225`), poi ogni minuto (`:444-447`). Tag portato sulla macchina forzato
+  (`scripts/ops_agent.py:448-466`, chiamato a `:499`): **chi spinge il tag approva (54 ii, aperto)**.
+- **Valore** (58): capitale + redditi (`REDDITI_DEL_CONTO` `:77-78`, `_aggiorna_redditi` `:377-415`, da `/fapi/v1/income` ogni minuto) +
+  non realizzato (`_valori` `:417-424`); redditi da dopo le chiusure (`parti_da_zero` `:426-436`, ma con l'ora d'inizio del giro: 65);
+  saldo vero sotto il valore → niente ordini (`:462-464`; fragile: 64).
+- **Condizioni degli ordini** (`motivo_niente_ordini` `:439-477`): codice, capitale nel file fino a 300 e non oltre il saldo, capitale in
+  corso nel tetto, saldo non sotto il valore, valore fino a 600, alla prima accensione conto vuoto (59, allarme `conto_non_vuoto`).
+  Con un motivo: allarme `ordini_vietati`, freno del cliente, ordini limite in corso vivono la loro ora e poi si annullano senza resto
+  (`:495-496`, `:522-533`). Partenza e riaccensione alla decisione di G1 dopo (`:498-506`).
+- **Stato perso** dopo un'accensione o file illeggibile → fermo, chiusure, «riparti» nuovo (`_stato_perso` `:351-375`; 66, 68).
+- `bot/config.py:791-813`: con `DRY_RUN` falso il bot parte sempre (senza interruttore: conto vero nelle sole protezioni), salvo parità.
+- `bot/main.py`: conto vero creato a `:506`, giro a `:2653-2656`; etichette Telegram e riconciliatore legati a `executor.dry_run`
+  (`:1447`, `:1493`, `:1553`, `:1981`, `:2522`).
+- `demo_binance.py`: attributi di classe, `_ordini_nuovi_ammessi`, `_ordini_del_giro`, `_filtri_degli_ordini`, `_ambiente`, `_valori`
+  (`:1204`); unico cambio di comportamento del demo: stato salvato dopo `parti_da_zero` (`:677`, problema 62).
+- Problemi aperti: 54 (ii) Alto; 60 (resto: dashboard e regole, fase 4), 64, 65 Medi; 66-69 Bassi. Chiusi: 53, 55, 57, 59, 61-63; 56 e
+  58 come scelto.
 
 ## Storia degli invarianti
 
@@ -222,3 +230,6 @@ Rapporto `reviews/reports/2026-11-08-fase2-conto-vero.md`. Righe del working tre
   dopo; capitale non oltre il saldo; chiusure in 20 pezzi; -1021 con l'ora di Binance. Limiti fissi invariati.
 - 8 nov, fase 2 non committata (REQUEST CHANGES): **invariante cambiato**, con `DRY_RUN` falso il bot parte se c'è l'interruttore del
   conto vero; nuovi: G1 sul conto vero con quattro condizioni, freno del cliente, limiti propri con test. Limiti fissi invariati.
+- 8 nov, fase 2 secondo giro (REQUEST CHANGES): con `DRY_RUN` vero ordini «solo riduzione» al conto vero se acceso una volta e non
+  vuoto; con `DRY_RUN` falso il bot parte sempre; codice approvato su tutti i file caricati; valore = capitale + redditi; «riparti»
+  del conto vero solo da file; demo: stato salvato dopo `parti_da_zero`. Limiti fissi invariati.

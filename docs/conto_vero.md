@@ -31,7 +31,21 @@ mezzanotte UTC, eventi spenti.
    * i limiti di G1 come costanti protette con test (leva 5, tetto del capitale, stop sul conto);
    * «riparti» in due passi (una richiesta e una conferma).
    * lo Sharpe corretto di G1 è 0,86, sotto lo 0,90 della regola del 24 ottobre (revisione del 29 ottobre): va accettato da lui.
-4. **Alla fine, l'accensione**: la richiesta esplicita, i 280 USDT nel portafoglio dei future, l'ok al riavvio.
+4. **Le decisioni nate dalla revisione della fase 2** (`reviews/reports/2026-11-08-fase2-conto-vero-2.md`, «Decisioni per
+   Alessio»):
+   * **chi approva il codice per i soldi veri** (obbligatoria prima dell'accensione): un tag firmato da lui e verificato dal bot,
+     oppure una regola di GitHub che solo lui possa spostare il tag `conto-vero-approvato`; oggi lo può spostare chiunque spinga sul
+     repository, sessioni comprese;
+   * l'eccezione: con il conto vero già acceso e posizioni aperte, ordini di sola chiusura anche con `DRY_RUN` vero (per non
+     lasciarle scoperte quando lo si spegne);
+   * i limiti: 300 USDT di capitale, 600 di valore massimo, posizioni al massimo il doppio del conto, 60% per moneta, leva 5, stop a
+     −35% con il pavimento al 65%;
+   * un prelievo ferma gli ordini nuovi finché non si mette un capitale nuovo (che chiude tutto e riapre alla mezzanotte);
+   * ogni commit che tocca un file caricato dal bot ferma gli ordini nuovi finché il tag non si sposta;
+   * se lo stato si perde dopo un'accensione, il bot chiude tutto e aspetta un «riparti»;
+   * il conto dei future solo del bot: una posizione per moneta, margine solo in USDT, niente «portfolio margin», niente BNB per le
+     commissioni.
+5. **Alla fine, l'accensione**: la richiesta esplicita, i 280 USDT nel portafoglio dei future, l'ok al riavvio.
 
 ## Diario
 * 8 novembre 2026: piano scritto; fase 1 iniziata.
