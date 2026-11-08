@@ -4,36 +4,35 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa del percorso e invarianti con file:riga (codice committato = `013f9426`; sezione 14: modifiche dell'8 nov).
+- `LIVE_PATH_MAP.md` — mappa del percorso e invarianti con file:riga (sezioni 1-13 sul codice committato `1a8522f`; sezione 14: fase 2).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse (vuoto).
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato all'8 nov 2026, quarto giro della fase 1)
-- Ultima revisione: `reports/2026-11-08-fase1-conto-vero-4.md`, **APPROVE** sulle modifiche non committate della fase 1 (su `4f866a1`):
-  50 chiuso (prova `fase1/prova_g4.py`: il «riparti» rimandato vale una volta, non si ripete e non si perde). Bassi rimasti: 51 (il «riparti»
-  si controlla prima della richiusura quando il conto torna leggibile), 52 (con un «riparti» in attesa e tutto limitato i tentativi non
-  crescono). Tutti i problemi 36-50 della fase 1 chiusi; 10, 13, 16, 22 chiusi in parte o come scelto.
-- Bot non riavviato; il riavvio lo decide Alessio. Codice committato del percorso fermo al `013f9426` finché la fase 1 non è committata.
-  `reviews/` dei primi giri committata da una copia separata (secondo il coordinatore; qui il working tree non è ancora allineato).
-- Voci aperte: 5 (modifica proposta mai applicata; primo avvio; correzioni 25-31; correzione 32; fase 1 fino al commit).
-- Alla prossima revisione: se la fase 1 è committata, controllare che il commit sia uguale a `fase1/giro4/` e riscrivere le sezioni 7,
-  8 e 12 della mappa (poi togliere la 14); 51 e 52 se toccati.
-- Decisioni per Alessio in sospeso: riavvio; scelte della sessione principale (stop al pavimento, «riparti» alla mezzanotte e solo a
-  conto vuoto, limiti nel codice con test, moneta oltre il 60%, posizioni tenute quando G1 non decide); più quelle di prima (stop per
-  posizione, avvisi sul telefono, `DRY_RUN` falso che ferma il demo, chiavi vere, prelievo, regole di Firebase, tetto di 10.000).
+## Stato (aggiornato all'8 nov 2026, sera)
+- Ultima revisione: `reports/2026-11-08-fase2-conto-vero.md`, **REQUEST CHANGES** sulla fase 2 non committata (su `8ec65db`): Alti 53
+  (interruttore tolto o `DRY_RUN` vero con posizioni = nessuna protezione; `DRY_RUN` falso senza interruttore = bot che non parte) e 54
+  (il tag copre solo 5 percorsi, fuori `research/programma6/esclusi.py` e `bot/core/firebase_client.py`; tag spostabile da chi spinge);
+  Medi 55 (la macchina non scarica il tag: provato), 56 (blocco a metà ribilancio = un lato solo), 57 (fermo perso con il file di stato),
+  58 (versamenti e prelievi), 59 (chiude posizioni non sue), 60 (niente pulsante, regole, «riparti» in due passi); Bassi 61-63.
+- Fase 1 committata come `1a8522f` (identica a `fase1/giro4/`), in funzione dal riavvio delle 19:02 UTC. Bassi 51, 52 aperti.
+- Voci aperte: 5 (modifica proposta mai applicata; primo avvio; correzioni 25-31; fase 2; più la fase 1 chiusa).
+- Alla prossima revisione (fase 2 corretta): prove p1-p9 in `fase2/` contro il codice nuovo; 53 con test (spento con posizioni, avvio
+  senza interruttore); come arriva il tag sulla macchina; aggiornare la sezione 14 e, se committata, le sezioni 1, 3, 8.
+- Decisioni per Alessio in sospeso: spegnimento con sole protezioni; chi approva il tag (firma); limiti del conto vero (300, 600, 200%,
+  60%); conto dei future solo del bot e prelievi; blocco a metà ribilancio; «riparti» in due passi; pulsante in dashboard; chiave
+  (prelievo, indirizzo), regole di Firebase, modo del conto; riavvio per la fase 2; più quelle di prima (stop per posizione, avvisi).
 
 ## Promemoria
-- Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`, `_demo_semplice`, `_sempre`, `_DemoFiltri`, `_TROPPE`).
-  Sempre `PYTEST_CURRENT_TEST=x` (spegne i file veri di `ops/`) e `dm.time.sleep` sostituito. Script nella cartella di lavoro
-  `/tmp/claude-0/-home-user-agentic-trading-system/9da12ffe-13c5-5904-8f7e-5ce576103042/scratchpad/`: `correzioni2/`, `correzione32/`,
-  `fase1/` (`prove_fase1.py <radice>`, `prove_giro2.py <radice>`, `prova_15.py`, `prova_bordi.py`; HEAD in `fase1/vecchio/`; codice del
-  primo giro in `fase1/nuovo_test_vecchi/`, del secondo in `fase1/giro2/`,
-  del terzo in `fase1/giro3/`, del quarto in
-  `fase1/giro4/`).
+- Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero lo riusa con `HOST = "fapi.binance.com"`).
+  Sempre `TRADING_BOT_TEST_MODE=1`, `PYTEST_CURRENT_TEST=x`, `dm.time.sleep` sostituito. Cartella di lavoro
+  `/tmp/claude-0/-home-user-agentic-trading-system/9da12ffe-13c5-5904-8f7e-5ce576103042/scratchpad/`: `fase1/` (giri 1-4),
+  `fase2/` (`prove_fase2.py <radice>` p1-p7, `prove_fase2b.py`, `prove_fase2c.py`, `prove_fase2d.py` si lanciano da `fase2/`;
+  `git_tag/` = prova del tag; `demo_head.py` = `demo_binance.py` del `1a8522f`; `suite.txt`).
 - Per provare un test nuovo sul codice di prima: `git archive HEAD bot tests scripts backtesting | tar -x -C <cartella>` e copiare il test.
-- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`. Suite intera all'8 nov (quarto giro): `2624 passed,
-  1 deselected` in 169 s. Il test delle firme va con `PYTHONPATH=<scratchpad>/cr` (libreria di sistema rotta).
-- La lettura di `dashboard/node_modules` è vietata: la compilazione della dashboard non si verifica da qui.
-- Il gancio dei segreti blocca ogni comando Bash che nomina un file che finisce in `.env`: cercare con Grep.
+- Test dei limiti fissi: `tests/test_risk.py`, `tests/test_sizing.py:104`; demo `tests/test_demo_binance.py:1520`; conto vero
+  `tests/test_conto_vero.py:67`. Suite intera all'8 nov con la fase 2: `2656 passed, 1 failed` (la firma) in 211 s; la firma va con
+  `PYTHONPATH=<cartella di lavoro>/cripto` (libreria di sistema rotta).
+- La lettura di `dashboard/node_modules` è vietata. Il gancio dei segreti blocca i comandi che nominano file `.env`: cercare con Grep.
+- Niente `grep -r` sull'intero repository (dati pesanti): cercare per cartella.
 - In `reviews/` si scrive con Write (o con un breve script Python per i file lunghi). Controllare `git log` alla fine.
