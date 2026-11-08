@@ -447,3 +447,9 @@ primo giro con la fase 1 alle 19:05 senza errori né allarmi (`ops/results/0725-
 revisione dice REQUEST CHANGES (due Alti: le protezioni con il conto spento e la versione approvata; nessun Bloccante; con `DRY_RUN`
 falso il vecchio sistema non manda ordini né chiude posizioni, verificato), correzioni in corso; le decisioni del proprietario sono in
 `reviews/reports/2026-11-08-fase2-conto-vero.md`.
+**Conto vero, fase 2 (sera)**: il codice del conto vero di Binance per G1 è committato **spento** (ff89531), approvato da
+live-path-reviewer al terzo giro più il controllo del problema 71. Il canale della macchina, che ora porta anche il tag della versione
+approvata, risponde (`ops/results/0726-*`: la fotografia dice «conto vero spento»). Il bot lo caricherà al prossimo riavvio, con l'ok
+del proprietario; prima dell'accensione restano la protezione del tag, i problemi 66, 70, 72, 73, la dashboard e le decisioni del
+proprietario (`docs/conto_vero.md`). **Capito oggi**: con i soldi veri il punto debole non è il codice degli ordini ma chi può dire
+«questa versione è approvata»: oggi lo può fare anche una sessione.
