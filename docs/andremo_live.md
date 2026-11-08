@@ -394,3 +394,14 @@ nel log dopo l'avvio (`ops/results/0718-7nov-log-dopo-riavvio-correzioni.md`).
 **Giro delle 20:17.** Notizie: 36 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 20:20:
 niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima della mezzanotte (demo a 268,12 sui 280, il
 capitale da 1.000 in attesa della decisione di G1).
+
+### 8 novembre 2026 (00:20 UTC)
+**Giro delle 00:17.** Notizie: 21 articoli nuovi da 22 fonti su 23; controlli in avanti delle 00:20: niente di nuovo. Idee nuove:
+niente di nuovo. **Il demo a 1.000 è partito da zero alla mezzanotte, come chiesto dal proprietario.** Alle 00:18:20 il demo ha chiuso
+le 52 posizioni della fase da 280 con 0 errori (valore vero del conto demo 5.347,91), alle 00:19:09 la decisione di G1 ha messo 48
+ordini limite, 1 rifiutato (龙虾USDT, «Invalid symbol», come ogni giorno; ICPUSDT sul demo non c'è). Primo stato: equity 999,59 su
+1.000 (−0,04%, le spese d'ingresso), 19 posizioni lunghe e 9 corte già eseguite, sotto il minimo di Binance solo **2 variazioni (0,8%
+del conto) contro le 50 (19,2%) della prima notte a 280**; stop sul conto a 650 (`ops/results/0719-8nov-log-passaggio-1000.md`,
+`0720-8nov-stato-passaggio-1000.md`). **Capito oggi**: la partenza da zero alla mezzanotte funziona senza errori ed è quella che farà il
+conto vero; il primo giorno però apre tutto da zero (ordini grandi), quindi la misura vera dei minimi a 1.000 è il ribilancio di domani
+notte (la prova 148 se ne aspetta eseguibile il 23% delle variazioni, il 77% del giro).

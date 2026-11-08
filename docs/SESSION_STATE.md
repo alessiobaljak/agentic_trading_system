@@ -3,14 +3,15 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (7 novembre 2026, pomeriggio)
+## Compito in corso (8 novembre 2026, notte)
 - Subagent (`.claude/agents/`): i quattro creati e adattati al sistema di oggi; collaudo fatto (`docs/collaudo_agenti.md`: auditor
   FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES). Primo avvio del revisore degli ordini fatto
   (`reviews/reports/2026-11-07-primo-avvio.md`): niente di bloccante per il demo, 9 problemi Alti da chiudere prima del conto vero
   (backlog P26).
 - Gli agenti si possono chiamare per nome solo dalle sessioni avviate dopo il 7 novembre (Claude Code li carica all'avvio); in questa
   sessione si usano con un agente generico che segue il loro file.
-- Demo: alla mezzanotte dell'8 novembre chiude la fase da 280 USDT e riparte da zero a 1.000 (controllo al giro delle 00:17).
+- Demo: partito da zero a 1.000 l'8 novembre alle 00:18 UTC (52 posizioni chiuse, 0 errori; 48 ordini di G1; sotto il minimo 2
+  variazioni invece di 50). La misura vera dei minimi a 1.000 è il ribilancio del 9 novembre.
 - Correzioni dei 9 problemi Alti del percorso degli ordini e dei problemi nuovi 25-33: approvate dal revisore (commit 013f9426,
   `reviews/reports/2026-11-07-correzione-32.md`); allarmi del demo visibili in dashboard e nel rapporto. **Riavviato il 7 novembre alle
   18:54 UTC** con l'ok del proprietario (commit 78bb70e3). Bassi rimasti (36-38) e Medi del primo avvio nel backlog, prima del codice del conto vero.

@@ -184,3 +184,8 @@ separato prima del paper).
   alla fase che finisce), archivia la fase in `/demo_binance/fasi/`, fissa il conto vuoto e apre tutto da zero con il ribilancio della
   notte (`parti_da_zero` in `bot/portafoglio/demo_binance.py`). È la partenza che farà il conto vero (backlog P26). Un test, 2.510 test
   passano. La fase da 280 (6-7 novembre) finisce in archivio alla mezzanotte dell'8 novembre.
+* **8 novembre 2026, 00:20 UTC, voce 8, il demo a 1.000 da zero** (`ops/results/0719-8nov-log-passaggio-1000.md` e
+  `0720-8nov-stato-passaggio-1000.md`): alle 00:18:20 chiuse le 52 posizioni della fase da 280 (0 errori), alle 00:19:09 la decisione di G1
+  con 48 ordini limite e 1 rifiutato (龙虾USDT). Equity 999,59 su 1.000; sotto il minimo 2 variazioni (0,8% del conto) contro le 50 (19,2%)
+  della prima notte a 280. Il primo giorno apre tutto da zero, quindi non misura i minimi delle variazioni di ogni giorno: la misura è il
+  ribilancio del 9 novembre (atteso dalla prova 148: eseguibile il 23% delle variazioni, il 77% del giro).
