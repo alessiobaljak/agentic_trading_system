@@ -410,3 +410,11 @@ notte (la prova 148 se ne aspetta eseguibile il 23% delle variazioni, il 77% del
 dei 48 ordini di G1, 45 eseguiti a limite e 3 a mercato, nessuno in attesa; 24 posizioni lunghe e 24 corte; equity 1.001,80 (+0,18%),
 stop sotto 652,35. Scarto fra posizioni vere e volute 7,5% del conto, quasi tutto dalle due monete che il demo non ha (ICPUSDT 4,3%,
 龙虾USDT 1,9%); nessun errore nuovo (l'ultimo è del 24 ottobre).
+**Mattino delle 06:13 (domenica).** Notizie: 7 articoli nuovi da 22 fonti su 23; 39 conti di Hyperliquid letti; la copia dei trader
+aggiornata (`research/trader_copiati/HYPERLIQUID_CONTO.md`). **La prova in avanti del programma 5 e il paper delle candidate del
+programma 6 oggi non sono stati aggiornati**: il disco del contenitore di questa sessione ha settori illeggibili (428 errori di lettura
+nel registro del sistema). Prima erano illeggibili tutti i file di pandas (sostituiti con una copia nuova), poi alcuni archivi dei prezzi
+scaricati da Binance: i due calcoli si fermano con «Bus error» mentre li leggono. Gli scarichi dei dati nuovi sono andati a buon fine e
+sono committati. È un guasto della macchina della sessione, non del bot (che gira sulla VPS). Per rimediare bisogna trovare gli archivi
+rovinati nella cartella dei dati e riscaricarli; la lettura di quella cartella è vietata dalle regole dei token, quindi si chiede al
+proprietario.
