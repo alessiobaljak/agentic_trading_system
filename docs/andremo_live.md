@@ -425,3 +425,10 @@ l'elenco delle monete già viste (`controlli_avanti_coinbase.json`, 246 monete s
 di Coinbase dal 5 ottobre mostrano solo due monete quotate dopo il 6 ottobre, PONS (7 ottobre, prima della misura in avanti) e STABLE
 (27 ottobre, già in tabella). Controlli delle 08:30: niente di nuovo. Idee nuove: niente di nuovo. Gli aggiornamenti del mattino dei
 programmi 5 e 6 ripartono adesso, con i dati riscaricati da zero.
+**Giro delle 12:17.** Notizie: 30 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 12:20:
+niente di nuovo (246 monete su Coinbase con il perpetuo, nessuna nuova). Idee nuove: niente di nuovo. G1: niente di nuovo da misurare
+prima del ribilancio di mezzanotte (la misura vera dei minimi a 1.000 USDT). Nella mattina: due agenti nuovi (chi migliora le
+strategie in corso, chi sceglie quale usare in produzione), la regola del proprietario che nessuna strategia del paper o del demo si
+spegne (con il suo test), e la fase 1 del conto vero (i problemi rimasti del demo) approvata dal revisore al quarto giro
+(`docs/conto_vero.md`); il riavvio del demo aspetta l'ok del proprietario. **Capito oggi**: ogni giro di correzioni sul percorso
+degli ordini ha aperto un problema nuovo (40, 47, 50), sempre trovato dal revisore prima del commit: la revisione a giri serve.
