@@ -1,11 +1,9 @@
 {
- "aggiornato": "2026-11-08 10:14 UTC",
+ "aggiornato": "2026-11-08 13:09 UTC",
  "dal": "2026-09-01",
  "fonte": "Binance, /fapi/v1/klines (interfaccia pubblica, da www.binance.com), candela giornaliera 1d",
- "monete_con_giorni_mancanti": 878,
- "riempiti": {
-  "2026-10-28": 878
- },
+ "monete_con_giorni_mancanti": 1,
+ "riempiti": {},
  "non_riempiti": {
   "MDTUSDT": [
    "2026-10-13",
