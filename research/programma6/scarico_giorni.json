@@ -3655,7 +3655,7 @@
 "premio": {
 "file": 7,
 "primo": "BZUSDT-1h-2026-11-01.zip",
-"sha256": "b69d737b9017f2c517bf2da6b052fc32fe1bfb560f611a5ad490534d29a7a85b",
+"sha256": "451481514cbb92b639798bf636a1ec0ff9199ae0f6ac8c38cc58853d6904d449",
 "ultimo": "BZUSDT-1h-2026-11-07.zip"
 }
 },
@@ -3835,7 +3835,7 @@
 "premio": {
 "file": 7,
 "primo": "CEGUSDT-1h-2026-11-01.zip",
-"sha256": "b8979753094991ff0ed4aca54f195240c44338a9c4912a7e2eddb5b7881627c9",
+"sha256": "61a5ac52f16a2f3265be0079619d07da3575c9e9769a9eb88332629e72223efc",
 "ultimo": "CEGUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4035,7 +4035,7 @@
 "premio": {
 "file": 7,
 "primo": "CHRUSDT-1h-2026-11-01.zip",
-"sha256": "df676b5c07fab873cdb700c069e3af9593e4777e3f16e3d67ca0fb4c39bcc011",
+"sha256": "09c9f2e3e8d9923eda0da59694a40015b62ebff5f251518452b03567bccb3a26",
 "ultimo": "CHRUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4235,7 +4235,7 @@
 "premio": {
 "file": 7,
 "primo": "COINUSDT-1h-2026-11-01.zip",
-"sha256": "fe44b4b446c41b004294f2596d983bd758b32bcec6511cfccfa6c0c7050a6f4f",
+"sha256": "d5fed4380e7c58234b92bcd6373bb5dc03a7c28ff7d1e6cebd8e3feb3056e67c",
 "ultimo": "COINUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4435,7 +4435,7 @@
 "premio": {
 "file": 7,
 "primo": "COWUSDT-1h-2026-11-01.zip",
-"sha256": "4c588f6f37d10135a1760f91b18c1b577d127e16668e526304529ed1757e7060",
+"sha256": "ec7026d781dc08128173d805067bdfd283aa99d0cd80a6fab02c821e9fe05f57",
 "ultimo": "COWUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4469,7 +4469,7 @@
 "giorni": {
 "file": 12,
 "primo": "CRDOUSDT-1d-2026-06.zip",
-"sha256": "436214c29a75fccc5ca56a586899e097b83148ef519bc3e09a00739e8dd0bde1",
+"sha256": "0b6b950e250980d84543339086f6ad08346987c028572be97eca2835a00af105",
 "ultimo": "CRDOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4549,7 +4549,7 @@
 "giorni": {
 "file": 81,
 "primo": "CRVUSDT-1d-2020-09.zip",
-"sha256": "82a745ebcb524d8f97834fd95d29fe5a766f059ab38d737403a5ecca3ba58f27",
+"sha256": "ca81dbcbab83afc012393a8e13357623b313360f4fe65b09771d9670395a7fc8",
 "ultimo": "CRVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4615,7 +4615,7 @@
 "premio": {
 "file": 7,
 "primo": "CSCOUSDT-1h-2026-11-01.zip",
-"sha256": "b202d70da4f2e3018efd17cb3d975dce6daa74126800210f3675a1cd418e2e08",
+"sha256": "87104246e2f438401963b6d1373b3495904febaa086e27376c2eb567b4913546",
 "ultimo": "CSCOUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4649,7 +4649,7 @@
 "giorni": {
 "file": 10,
 "primo": "CSOPSKHYNIX2LUSDT-1d-2026-08.zip",
-"sha256": "d2f59b557bf48c6580a32bf6bb159abd049fb9c25dd346f41badf4d45f90d7af",
+"sha256": "d024d402e3b520ff64322097e6a26eb756c678d5a7fe288d4f82d92eabf3124b",
 "ultimo": "CSOPSKHYNIX2LUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4729,7 +4729,7 @@
 "giorni": {
 "file": 8,
 "primo": "CTUSDT-1d-2026-10.zip",
-"sha256": "90977c7e8fb4c5c95b956f9dab03df432f7a055fd4b7d09d49ec526fea74cc81",
+"sha256": "ccd980ee4a3cca845c45564f136a100ecaa6724cd3fc39b46c71b567a09a016e",
 "ultimo": "CTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4795,7 +4795,7 @@
 "premio": {
 "file": 7,
 "primo": "CVCUSDT-1h-2026-11-01.zip",
-"sha256": "9adda03470519a0892018ceb209abb5df86986f02e62c55d162a7e05c6fd65c2",
+"sha256": "7c5e44e477e030c8e4660025918df840d4569faa8eb5a192ae9a4c7d9eea56b2",
 "ultimo": "CVCUSDT-1h-2026-11-07.zip"
 }
 },
@@ -4809,7 +4809,7 @@
 "giorni": {
 "file": 9,
 "primo": "CVNAUSDT-1d-2026-09.zip",
-"sha256": "1ef0f91b3ae30a2475fa9ab69640d6faa29173101780c863f1ec7e402a3ddd9d",
+"sha256": "4d0128b088d55a29ffc9cf8c333b942d32d2ca1b99fa10504b138a04b0194eb4",
 "ultimo": "CVNAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4869,7 +4869,7 @@
 "giorni": {
 "file": 46,
 "primo": "CYBERUSDT-1d-2023-08.zip",
-"sha256": "8fe4bd69772b6e87838314dde160b8309ee0f0df34b9630663063fc0dd53680e",
+"sha256": "2d6e7d09f1b326129e4803b37e2de1a80a2532a1ca94f04b5f2f73c6f37ffd26",
 "ultimo": "CYBERUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -4969,7 +4969,7 @@
 "giorni": {
 "file": 88,
 "primo": "DASHUSDT-1d-2020-02.zip",
-"sha256": "70c5447bbc0b3bb74de3a31f0a36eae5bb7085c9d7f3568519ab94609041590e",
+"sha256": "68df8b680a6ab828664cf5c017d63a1743b6feed4864782ff76e0d1f32c6f0d5",
 "ultimo": "DASHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5049,7 +5049,7 @@
 "giorni": {
 "file": 82,
 "primo": "DEFIUSDT-1d-2020-08.zip",
-"sha256": "360e18984fa441e2833f1809922b2288398b2a4969e265ebcceab525226a0b1c",
+"sha256": "6f5818ca75d0517b424176567cf5cb10507ff132c3bc7d3f7fc9f9b1403c241c",
 "ultimo": "DEFIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5115,7 +5115,7 @@
 "premio": {
 "file": 7,
 "primo": "DELLUSDT-1h-2026-11-01.zip",
-"sha256": "9f4453b11cf2a02c15c3a2a1a4e12a7e9a20eccfda705ee42b8964761a370513",
+"sha256": "f1b95997f50d6c8ab90a2bb6eae86bba0b3cbab4b3e14b52497d4be96bd5f63c",
 "ultimo": "DELLUSDT-1h-2026-11-07.zip"
 }
 },
@@ -5149,7 +5149,7 @@
 "giorni": {
 "file": 30,
 "primo": "DEXEUSDT-1d-2024-12.zip",
-"sha256": "457c4f20dff1e6ff16279ce88aaee57f3f66f4894a1d5162719d67f881c7c7f3",
+"sha256": "68483e98ea82a76fcd35bb9802e20575fb66f8128717b52ddc241c618a922364",
 "ultimo": "DEXEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5249,7 +5249,7 @@
 "giorni": {
 "file": 10,
 "primo": "DJTUSDT-1d-2026-08.zip",
-"sha256": "94a0f99b0ee4f66b73248259a42560e5c22d5dd57b62d603e4d8854e2ea42d0f",
+"sha256": "5655d6114311e7784d91685bde06864acb8ecb41ababbae9f81afd274abd0c61",
 "ultimo": "DJTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5269,7 +5269,7 @@
 "giorni": {
 "file": 12,
 "primo": "DKNGUSDT-1d-2026-06.zip",
-"sha256": "d12f32844086a8c306214f372e0b7703c57a7546215f5b9d95410149a6d7438f",
+"sha256": "a999077a03f234901f5e06c6d422789fd8274bc6ab9f42bc99d3a2c6e9a339bc",
 "ultimo": "DKNGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5329,7 +5329,7 @@
 "giorni": {
 "file": 46,
 "primo": "DODOXUSDT-1d-2023-08.zip",
-"sha256": "9196feaae4572c3defae2e9d08bdba9aea871b7d01aed03b84e795bbf96f353c",
+"sha256": "fa00ee763d5953e790ab9f9e9d250ad1e3e9e9cbc0aaa56193f2904391c476fd",
 "ultimo": "DODOXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5389,7 +5389,7 @@
 "giorni": {
 "file": 25,
 "primo": "DOLOUSDT-1d-2025-05.zip",
-"sha256": "8440ee0923b86d935321c814b7caa3ca286384be0aa2b8919120e21408677b70",
+"sha256": "855387c13b34bc9cde476425f25452e317d4da31b5e270e30ef3d252a21193f3",
 "ultimo": "DOLOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5409,7 +5409,7 @@
 "giorni": {
 "file": 25,
 "primo": "DOODUSDT-1d-2025-05.zip",
-"sha256": "76b440f4850f44a4881655361d9c062a29c2f1b3fd748f2564d6ed1a38839e6b",
+"sha256": "475a14e9428d27ee1dd39cf8f7c902fae585180923dc0dc356008d7ffeae9d86",
 "ultimo": "DOODUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5469,7 +5469,7 @@
 "giorni": {
 "file": 82,
 "primo": "DOTUSDT-1d-2020-08.zip",
-"sha256": "62315f9c19138293ee1e54d424b0a3e8946b9a9c15039e4c23b89c99ac0267c2",
+"sha256": "12b5327f6855f9aa0142fd7136fe16a5f1f6e23a1e4ed80e0c7e7fb3598255fa",
 "ultimo": "DOTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5569,7 +5569,7 @@
 "giorni": {
 "file": 69,
 "primo": "DYDXUSDT-1d-2021-09.zip",
-"sha256": "ba2da8027a2c16137d6e147406289706a0696fc9002f41fad6bbf8d884750e65",
+"sha256": "1e9da539c646dc7e940db94e7f2962daa51f34ecb006de98409f840850b1df45",
 "ultimo": "DYDXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5589,7 +5589,7 @@
 "giorni": {
 "file": 40,
 "primo": "DYMUSDT-1d-2024-02.zip",
-"sha256": "503bc32244ed863f80a676f4c88608cb6e18808bac2273df2c76138a5ec40c71",
+"sha256": "11b89c725a0345e5c7f5f7180b243c70f2854b20f9d8a70828ced9d87a89f3c4",
 "ultimo": "DYMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5635,7 +5635,7 @@
 "premio": {
 "file": 7,
 "primo": "EDENUSDT-1h-2026-11-01.zip",
-"sha256": "c57383a3197eb06645e92e27e0bdcba6d825fe2617dbcb9984a4a2cf6f852a33",
+"sha256": "98741fa01b3b1a160a838a8e6667bcd91efa6e1419327dacce257605d8d203af",
 "ultimo": "EDENUSDT-1h-2026-11-07.zip"
 }
 },
@@ -5669,7 +5669,7 @@
 "giorni": {
 "file": 50,
 "primo": "EDUUSDT-1d-2023-04.zip",
-"sha256": "a24af848ded8f2090a6d83b375327a58e1dab3aacee6e69d31ff6fa3fc756c67",
+"sha256": "6e3aa5f7f6cf7dbb0fafa05a171a20669d3cfc871932708a67ae1461d2ccae8b",
 "ultimo": "EDUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5769,7 +5769,7 @@
 "giorni": {
 "file": 38,
 "primo": "ENAUSDT-1d-2024-04.zip",
-"sha256": "619e103fbfe566c5c11b0e425f1c089cca1e2563144f786ddda8fc2ddd5cd09f",
+"sha256": "72b39d8658cd88f24d43d53a54dd0d7d8a3db2b290321f794f54e2b36579ff4a",
 "ultimo": "ENAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5815,7 +5815,7 @@
 "premio": {
 "file": 7,
 "primo": "ENSOUSDT-1h-2026-11-01.zip",
-"sha256": "11d5276e541eed05800a87e53b0c623413c18f422080c6057ca111f5d06b2711",
+"sha256": "2d69a2ef372cbb042f77712db7eb99bd5235802061c6411139f141a44c94a926",
 "ultimo": "ENSOUSDT-1h-2026-11-07.zip"
 }
 },
@@ -5949,7 +5949,7 @@
 "giorni": {
 "file": 23,
 "primo": "ESPORTSUSDT-1d-2025-07.zip",
-"sha256": "bf36c142b8c836241f9b7f5f9964f2dde8bf912b4e885dbc83ae19943bbc5837",
+"sha256": "209e2d02bba39fd11b69b5382e13137325592e8b04ab37dfc1dbcd4a88ad0803",
 "ultimo": "ESPORTSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5969,7 +5969,7 @@
 "giorni": {
 "file": 16,
 "primo": "ESPUSDT-1d-2026-02.zip",
-"sha256": "3347be8804013f790543e90a658d5b1f71af8d28b9f8751a14588e8b2230f00d",
+"sha256": "87fa738d250d4c9feff0dca71841bfad17ce209113b498e688b992cc4dca2c43",
 "ultimo": "ESPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -5995,7 +5995,7 @@
 "premio": {
 "file": 7,
 "primo": "ETCUSDT-1h-2026-11-01.zip",
-"sha256": "ba22fd2109191c36f485a42c5d5e96857f66f3389662e727d1c3d7959d97a188",
+"sha256": "e05ccdb1dfa0deb32df3165f4d71df179e0739d8f62a0bd5214731c44b71388e",
 "ultimo": "ETCUSDT-1h-2026-11-07.zip"
 }
 },
@@ -6029,7 +6029,7 @@
 "giorni": {
 "file": 89,
 "primo": "ETHUSDT-1d-2020-01.zip",
-"sha256": "b4687f27c5e9acec755997b4fc762830ad6a0d5e46aadeca79991dfa5b8f08c6",
+"sha256": "076e0a0bb17d02ee1ebe2971b8592e4d71486c69bdbe4cd7807263e1959d73b9",
 "ultimo": "ETHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6109,7 +6109,7 @@
 "giorni": {
 "file": 15,
 "primo": "EWJUSDT-1d-2026-03.zip",
-"sha256": "9c9d9f5712b8eeffcac07d54fe3128660ff7125ea201759321037bd4aedbf681",
+"sha256": "d10051b3f1fb14174b35b79804352f0eac0d9696afaf2b4426b44c1da4c8a501",
 "ultimo": "EWJUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6129,7 +6129,7 @@
 "giorni": {
 "file": 12,
 "primo": "EWTUSDT-1d-2026-06.zip",
-"sha256": "93702a9fb02db63d97a3ee98bafac4df909dbeffa7cf418d0bb7dab61848b732",
+"sha256": "8f92f78b265d3373668f336a2fcdb44d91abb7dbb5201e4f44233e9238efc92c",
 "ultimo": "EWTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6175,7 +6175,7 @@
 "premio": {
 "file": 7,
 "primo": "EWZSUSDT-1h-2026-11-01.zip",
-"sha256": "47e8da1497b858e68cefb67d6c4c66a22b27aeef4ed488c2b240da81eacd6e75",
+"sha256": "99dd946788e11851103234a40a04e42b10550a701f86343b79a82655b0765a8b",
 "ultimo": "EWZSUSDT-1h-2026-11-07.zip"
 }
 },
@@ -6209,7 +6209,7 @@
 "giorni": {
 "file": 30,
 "primo": "FARTCOINUSDT-1d-2024-12.zip",
-"sha256": "51ff0ac649950d26886f8c135ccf09c1310da67eea9b961b2019f47a6f2f1f94",
+"sha256": "4dd9ef5f4eff3695ffeafdb5b50939ee4acdab130833e250368ebca95e4da47d",
 "ultimo": "FARTCOINUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6309,7 +6309,7 @@
 "giorni": {
 "file": 17,
 "primo": "FIGHTUSDT-1d-2026-01.zip",
-"sha256": "8b17e5bbfa02632796fc76d555cfba441247011591028873962163d60216b5d8",
+"sha256": "029c03a621ec81572b6b41d9beef24dc3fdd48fa9a919dd9bc58543f429c400d",
 "ultimo": "FIGHTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6335,7 +6335,7 @@
 "premio": {
 "file": 7,
 "primo": "FILUSDT-1h-2026-11-01.zip",
-"sha256": "6d0e234db01ac8fef1519ddbd8e1b85a0ba46fa21ccdf2603e44a0d169ac53eb",
+"sha256": "387cd0b65e2940678d5a2142c232d2711d54a374a38968d11c3353b4205f6fa8",
 "ultimo": "FILUSDT-1h-2026-11-07.zip"
 }
 },
@@ -6369,7 +6369,7 @@
 "giorni": {
 "file": 26,
 "primo": "FISUSDT-1d-2025-04.zip",
-"sha256": "0cae10cce22a47a8818eaad4eff0aadd974f025b856b8bd976032fdf618ce7e5",
+"sha256": "6807e20ac14201fdfdbd365f132b3e2ecc438891c6892593f64fa4f46134e5cc",
 "ultimo": "FISUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6469,7 +6469,7 @@
 "giorni": {
 "file": 64,
 "primo": "FLOWUSDT-1d-2022-02.zip",
-"sha256": "1e5694f31e1f735a696b121c976e8754180cf490aad77eea2eb0ba88fb5c5e97",
+"sha256": "23911624cec16b21e39347fc12023415d7ffe36e1e6843f3a36e7729809156b0",
 "ultimo": "FLOWUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6489,7 +6489,7 @@
 "giorni": {
 "file": 21,
 "primo": "FLUIDUSDT-1d-2025-09.zip",
-"sha256": "fd4ac8d6534ea7a63b7b6044a764d105d6dee3ec52db8083f5428e5788f3ed28",
+"sha256": "2a14c21744ca95f67d1ef6ff1b3b425361c58e99d111dc4ede8509f6d3e90c21",
 "ultimo": "FLUIDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6535,7 +6535,7 @@
 "premio": {
 "file": 7,
 "primo": "FOGOUSDT-1h-2026-11-01.zip",
-"sha256": "f1f993151dd899bcc1a03202530d4de81ac67625eb401a0fd07740405cb975d5",
+"sha256": "599d5d31c97aa9055b9d127f20ea4a82d992aadb45e65171d7715f3e96ef8125",
 "ultimo": "FOGOUSDT-1h-2026-11-07.zip"
 }
 },
@@ -6669,7 +6669,7 @@
 "giorni": {
 "file": 81,
 "primo": "FTMUSDT-1d-2020-09.zip",
-"sha256": "f48cbec1acd5ea8937a06053a479b6c52291cd54306ba76ceb4303befb1d0e58",
+"sha256": "26fbd10e878967dd808b58d9eaadf93f628b278cfcddf89e9e564d1c6eda3acd",
 "ultimo": "FTMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6729,7 +6729,7 @@
 "giorni": {
 "file": 24,
 "primo": "FUSDT-1d-2025-06.zip",
-"sha256": "5c358dc9808bd229887f9d64cbf5ddf4b82bdd41e30419bd806c54ad18c98a61",
+"sha256": "c2511cfc343bcc8dcd89573a7db58afed810fdfc2d97f73752520f2f4cac217a",
 "ultimo": "FUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6789,7 +6789,7 @@
 "giorni": {
 "file": 69,
 "primo": "GALAUSDT-1d-2021-09.zip",
-"sha256": "3c530723a72bb6df0b7f784234b9f880d9d8cfcc8c8abe27adc60c73b03a7ab2",
+"sha256": "75f45f8fc7695c39d578f3127e07ac90d4d113be8a2971c60d0591903945c556",
 "ultimo": "GALAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6835,7 +6835,7 @@
 "premio": {
 "file": 7,
 "primo": "GASUSDT-1h-2026-11-01.zip",
-"sha256": "6be31836f330eeb03b6d558452bce77fa8aeaff6ddeab8dab23e5543aef4e0f4",
+"sha256": "70d34147dd6a819a13d959359d2e6863e0d8f3811965f3242bccf6ecc63c5eb7",
 "ultimo": "GASUSDT-1h-2026-11-07.zip"
 }
 },
@@ -6869,7 +6869,7 @@
 "giorni": {
 "file": 14,
 "primo": "GENIUSUSDT-1d-2026-04.zip",
-"sha256": "943e8cb14e5f22f3836f1c136aeaa549f3df7cacf272a142db8151ef6f3ee4a1",
+"sha256": "41ff2849efe93df77ca00134a3e8bba72885f866af14a7b33464d6123a029d9e",
 "ultimo": "GENIUSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -6967,10 +6967,10 @@
 "ultimo": "GLMRUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 44,
+"file": 45,
 "primo": "GLMRUSDT-1d-2023-09.zip",
-"sha256": "f890c99864bfd6aa8c5545630d6c6b19b89b6a8f74dfe8adda17a75a591707c3",
-"ultimo": "GLMRUSDT-1d-2026-11-06.zip"
+"sha256": "8f10f9b7f61d5015bbe77b061f568afb842d46eccd55e98231f07998f075c45d",
+"ultimo": "GLMRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -6989,7 +6989,7 @@
 "giorni": {
 "file": 40,
 "primo": "GLMUSDT-1d-2024-02.zip",
-"sha256": "32b3bd20b43b8903d4eeb23581c3325b35ed6a8856097a705b2e35e06bb2b075",
+"sha256": "d17444238325beee2dc8eda8075e27ffc18a89ff101421fddc4352bfc9026d32",
 "ultimo": "GLMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7035,7 +7035,7 @@
 "premio": {
 "file": 7,
 "primo": "GMEUSDT-1h-2026-11-01.zip",
-"sha256": "158f08ae14d19390f26beb004ea684d1c1671921c42c5f6cb9b52c6741dcfebf",
+"sha256": "881d22cf776aad8e8910a7fabaf9cdc4bcb66dcedd1eed278e5a2e4e129ad742",
 "ultimo": "GMEUSDT-1h-2026-11-07.zip"
 }
 },
@@ -7049,7 +7049,7 @@
 "giorni": {
 "file": 63,
 "primo": "GMTUSDT-1d-2022-03.zip",
-"sha256": "caa237c323585bc92554f7c4250fc8b76cfc7c62cdcf3f8d323806a70ff0ae85",
+"sha256": "b09d6e71df9d87a8377cd666fbdc9f30f305622a228f11e17d6b19edc67450d2",
 "ultimo": "GMTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7147,10 +7147,10 @@
 "ultimo": "GPSUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 27,
+"file": 28,
 "primo": "GPSUSDT-1d-2025-02.zip",
-"sha256": "ba6dbc31901f3130087252bcb90a317df7b387b4212115944aeb52d5881fd02e",
-"ultimo": "GPSUSDT-1d-2026-11-06.zip"
+"sha256": "7ed076b0bb1da8183ee7e5d4912ece85337ac98304ab0b18cd105a9b74177a70",
+"ultimo": "GPSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -7169,7 +7169,7 @@
 "giorni": {
 "file": 11,
 "primo": "GRAMUSDT-1d-2026-07.zip",
-"sha256": "b5d794046a4a67671734d3a8992f353ebe478559cc982725d31cb510e29193ce",
+"sha256": "4ffd2ff81b25af6cc54e1cea085fd29924d8feff85946a0c67b4dfe14d0d870d",
 "ultimo": "GRAMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7215,7 +7215,7 @@
 "premio": {
 "file": 7,
 "primo": "GRIFFAINUSDT-1h-2026-11-01.zip",
-"sha256": "979d3f40af8a31345adc31390a0645105aac231d0fa8870be4ea2d347f5dc737",
+"sha256": "236d35011b75733f214b975fc98fd3e5b4e89f09fa1a4572bc5854d820db315c",
 "ultimo": "GRIFFAINUSDT-1h-2026-11-07.zip"
 }
 },
@@ -7249,7 +7249,7 @@
 "giorni": {
 "file": 11,
 "primo": "GRVTUSDT-1d-2026-07.zip",
-"sha256": "004b11e49f5470237af45152c730e9854d7685226167f52f09edd968c33703d2",
+"sha256": "8f8c69cde9dca862bc5248a3fdaff1e99fc7bf0593b148cac188568b3aa6056b",
 "ultimo": "GRVTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7347,10 +7347,10 @@
 "ultimo": "GUNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 26,
+"file": 27,
 "primo": "GUNUSDT-1d-2025-03.zip",
-"sha256": "455f060cda607fee2291719ca0fcc3280a4976764014a8cf78e14698fd99b113",
-"ultimo": "GUNUSDT-1d-2026-11-06.zip"
+"sha256": "a8b33cb404a91406095c6b31c7eb72b3d57fdac3684a64ed45c0ba0c4193023f",
+"ultimo": "GUNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -7369,7 +7369,7 @@
 "giorni": {
 "file": 34,
 "primo": "GUSDT-1d-2024-08.zip",
-"sha256": "d95d6614fe7553cdce4e20b6c829f7288f84b240a80e3bf86e16d7b335df024e",
+"sha256": "29c3d1b0a2e5f35c33f4ca324224b93acb7b856bdb187800b112f243a46aaabd",
 "ultimo": "GUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7415,7 +7415,7 @@
 "premio": {
 "file": 7,
 "primo": "HAEDALUSDT-1h-2026-11-01.zip",
-"sha256": "9b6e365fabe17150b41486ccb446fcb845033d2f2cb4cb1036ce78d5fea377bf",
+"sha256": "09a08b4b954a85413413053a61bc5bcfc28e7b9578c49d46f4a507c878b4e297",
 "ultimo": "HAEDALUSDT-1h-2026-11-07.zip"
 }
 },
@@ -7449,7 +7449,7 @@
 "giorni": {
 "file": 10,
 "primo": "HANMIUSDT-1d-2026-08.zip",
-"sha256": "57d101c266215cf7b7e231d263892fa121c91e5e09d589c8cd6a10a90bee0080",
+"sha256": "bb639ca49370824029eef595707b0ffed2ee631769270c6d185b6ff3d4f08bad",
 "ultimo": "HANMIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7527,10 +7527,10 @@
 "ultimo": "HEMIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 21,
+"file": 22,
 "primo": "HEMIUSDT-1d-2025-08.zip",
-"sha256": "c7bf927f6a6599101332026b41b869df9b98e9c10c37456560850f96e41a767b",
-"ultimo": "HEMIUSDT-1d-2026-11-06.zip"
+"sha256": "c9cff289e1c0d79ad1080066c6e1ffc4a88c7e69c2eaeda46ba6d8e25331549e",
+"ultimo": "HEMIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -7549,7 +7549,7 @@
 "giorni": {
 "file": 50,
 "primo": "HFTUSDT-1d-2023-04.zip",
-"sha256": "6c3dedf9ab48c6bd011811a18ee1042d9e80ebea257f181045efd3f48f4f3b6f",
+"sha256": "b9ebef4b6577e6273e481455974eab5907b9fbe9e1c959e61d6f4c5baea29fe0",
 "ultimo": "HFTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7629,7 +7629,7 @@
 "giorni": {
 "file": 31,
 "primo": "HIPPOUSDT-1d-2024-11.zip",
-"sha256": "1cf46905057d7561745e1fafb0eee51ddaa07d26182e92c4d74cfe8dbc037d91",
+"sha256": "ad34e2ca06b8aa88b04bde33cab293f6bb8e8ff439f8a4a21c7f3fc3ba86ce87",
 "ultimo": "HIPPOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7727,10 +7727,10 @@
 "ultimo": "HK1810USDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "HK1810USDT-1d-2026-07.zip",
-"sha256": "410be72d3bd91e05ff646e5496fc7a5511ac6b22164d272c678347a49cd4df50",
-"ultimo": "HK1810USDT-1d-2026-11-06.zip"
+"sha256": "f7c370dd5e2b7c47bc596f5a7a81965e82f7ad17bbf67ad795798b027b0b8da0",
+"ultimo": "HK1810USDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -7749,7 +7749,7 @@
 "giorni": {
 "file": 33,
 "primo": "HMSTRUSDT-1d-2024-09.zip",
-"sha256": "73137679ab4bfd9f9b4b16fa1eb926d3dafad2d5cf248de03e69a1eff9ab312d",
+"sha256": "98e6796645bb397853a2ad78edfa8efd27414d2db2198716f6f373b5d0a448b4",
 "ultimo": "HMSTRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7795,7 +7795,7 @@
 "premio": {
 "file": 7,
 "primo": "HOLOUSDT-1h-2026-11-01.zip",
-"sha256": "2ff0672a353a1f4dc3a54776a7fe91b7fc6ebd028b7268be5a686ec3c61c298f",
+"sha256": "e012a69a0672b261f600a192530588fc3a5c125b0ad8c563b5d63b73fa3af153",
 "ultimo": "HOLOUSDT-1h-2026-11-07.zip"
 }
 },
@@ -7829,7 +7829,7 @@
 "giorni": {
 "file": 16,
 "primo": "HOODUSDT-1d-2026-02.zip",
-"sha256": "4850a5c24115d016970724409855c26159d27fa214cbd700131b4722c4a232bc",
+"sha256": "fb3e1245489b90f7b8a2f6b0ede2be280ef87901fe17ed3e792ab04190f74d48",
 "ultimo": "HOODUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7927,10 +7927,10 @@
 "ultimo": "HUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 23,
+"file": 24,
 "primo": "HUSDT-1d-2025-06.zip",
-"sha256": "3cf03f5602547c3ba5274a78557d366a11969a5aa3384b7df6e5fbccea8efbf4",
-"ultimo": "HUSDT-1d-2026-11-06.zip"
+"sha256": "0cf63560c3458f0af1c7d3ec23b3870e3dd462b7a271b91b8acfe61dd33f4684",
+"ultimo": "HUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -7949,7 +7949,7 @@
 "giorni": {
 "file": 9,
 "primo": "HUTUSDT-1d-2026-09.zip",
-"sha256": "dda84fef5679aea6a7310c6eea99f18adc649335d02cd0dd9bb9d3f6fa438ef7",
+"sha256": "77cdc85acb3d5bd1855bde160036795c003a83c5ea3bb1896a89536443bcb3a0",
 "ultimo": "HUTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -7995,7 +7995,7 @@
 "premio": {
 "file": 7,
 "primo": "HYPEUSDT-1h-2026-11-01.zip",
-"sha256": "a1d43b7a359bdaa76c605944d879824b7406255bb2378bf472dd49bd39701dbc",
+"sha256": "776dd4fda18405b7d50037f36bda3a9bbfe4bab0dd06bb1c1d98874045c99739",
 "ultimo": "HYPEUSDT-1h-2026-11-07.zip"
 }
 },
@@ -8029,7 +8029,7 @@
 "giorni": {
 "file": 8,
 "primo": "IBKRUSDT-1d-2026-10.zip",
-"sha256": "351790393f430445d08d7e96e5bb69b0fb3d62bf4f4d1d55861f855840b9d341",
+"sha256": "0ba1f6bba830cb5eea7e30f2746107ff16ea91ae1a37a726b966f3c6a9f79846",
 "ultimo": "IBKRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8109,7 +8109,7 @@
 "giorni": {
 "file": 81,
 "primo": "ICXUSDT-1d-2020-09.zip",
-"sha256": "e3a5222ea722c941a0f564301461403b872e1d1388b3585a5142f0b38f0d1eec",
+"sha256": "20721628ee21e3e82f49ff0d1213667036733557e03094ed04868fc4a0df0ba7",
 "ultimo": "ICXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8155,7 +8155,7 @@
 "premio": {
 "file": 7,
 "primo": "IDOLUSDT-1h-2026-11-01.zip",
-"sha256": "72b748ae6259e4a3e9e1d0c9e496067912e3b0a89d6e7547392bfe07a5a5a9a1",
+"sha256": "5bdd7c0852db5075d506d0f390cf1dcd94413b5397bc7736d2cba35f12ee9bae",
 "ultimo": "IDOLUSDT-1h-2026-11-07.zip"
 }
 },
@@ -8189,7 +8189,7 @@
 "giorni": {
 "file": 43,
 "primo": "ILVUSDT-1d-2023-11.zip",
-"sha256": "07b15f138acdae5a26a7ddbc8fd5d18f2da61e405bbd993007549c53a533cf52",
+"sha256": "c419067b7d36aec994f3d19c624cb28b6fc73a3956f8c10d3817bfada2855e58",
 "ultimo": "ILVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8287,10 +8287,10 @@
 "ultimo": "INTWUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "INTWUSDT-1d-2026-07.zip",
-"sha256": "ad1c35e640310a3c7328b3d8d2e08c6548717aded4ecca19a8fe266fef6b60a1",
-"ultimo": "INTWUSDT-1d-2026-11-06.zip"
+"sha256": "12faf8cdd34dd0955d9e9593389883f96dda56261078147808f54e7d40fb891e",
+"ultimo": "INTWUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -8309,7 +8309,7 @@
 "giorni": {
 "file": 22,
 "primo": "INUSDT-1d-2025-08.zip",
-"sha256": "5c5aa8bcacd8c3c2fcb1ff476875b547036edab8184e1cea27b29502b4165264",
+"sha256": "1a7153ef77db1d0fdf1c506aedbbf911eb44b9b490daf2596a620afea4366dd6",
 "ultimo": "INUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8355,7 +8355,7 @@
 "premio": {
 "file": 7,
 "primo": "IONQUSDT-1h-2026-11-01.zip",
-"sha256": "509bc4392f60c74a3e878667df8e62d207366158bd509bff9172f6f98fffbdb2",
+"sha256": "f6b5e25ef54f50942491dd6aeeb4da4cfe558bf144ca0261363f3cc4b197652d",
 "ultimo": "IONQUSDT-1h-2026-11-07.zip"
 }
 },
@@ -8389,7 +8389,7 @@
 "giorni": {
 "file": 88,
 "primo": "IOTAUSDT-1d-2020-02.zip",
-"sha256": "9f963242c012d2ba0ccfa900b1a47ccd2e02a4888cbd36a6e1749f98acce866a",
+"sha256": "daff0d4308c28208fa476701aef12241dbe9fedee68c5455e01dd43be09ec69b",
 "ultimo": "IOTAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8467,10 +8467,10 @@
 "ultimo": "IRENUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "IRENUSDT-1d-2026-06.zip",
-"sha256": "562acc93581c9ba9a91793ec8744eccdcc70e42fae9f8f3f8c11640c78aa75bd",
-"ultimo": "IRENUSDT-1d-2026-11-06.zip"
+"sha256": "9ccb110784e9c081420aca7676a9deb2628fbd7578826e02ede92236e2b50c87",
+"ultimo": "IRENUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -8489,7 +8489,7 @@
 "giorni": {
 "file": 18,
 "primo": "IRUSDT-1d-2025-12.zip",
-"sha256": "ba5306921a78c4c8a7e009aa71dad415e6ed3ff9d68b2e42ff90b62d69903cbc",
+"sha256": "995f6898b01790a28282f3b1ff9e60bb65afad1fdc78dc2853d42229b2454b38",
 "ultimo": "IRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8535,7 +8535,7 @@
 "premio": {
 "file": 7,
 "primo": "IWMUSDT-1h-2026-11-01.zip",
-"sha256": "d2653f03427ed788bbba3057e32baac535b034fb1db2f44e02b0b3b4b7a1854d",
+"sha256": "0cdba7adba011002f2bc90b3cda89a2eb3d28405cdbaacab3fb365ae214a7339",
 "ultimo": "IWMUSDT-1h-2026-11-07.zip"
 }
 },
@@ -8569,7 +8569,7 @@
 "giorni": {
 "file": 19,
 "primo": "JCTUSDT-1d-2025-11.zip",
-"sha256": "f41e22ae7e7bf42d60154a70f528aa244e9b152a29ff901abd8b0bc0cbe05f92",
+"sha256": "3203372b803e140c82af1eb65d3f6a113cfcbca153d25097b1897f7c773603d6",
 "ultimo": "JCTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8667,10 +8667,10 @@
 "ultimo": "JTOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 41,
+"file": 42,
 "primo": "JTOUSDT-1d-2023-12.zip",
-"sha256": "9ec57b785dafe3aa6d510f0c66c73fb1713dfa7dd497a455d5ed5f1044cdb812",
-"ultimo": "JTOUSDT-1d-2026-11-06.zip"
+"sha256": "00801901323c5160b487e5408a556909f325ad88a6235d5eae44a12a6b85aa39",
+"ultimo": "JTOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -8689,7 +8689,7 @@
 "giorni": {
 "file": 41,
 "primo": "JUPUSDT-1d-2024-01.zip",
-"sha256": "dde17efb6083f6becc88bdace741a316ad491c9b6cb80009c4819970e5e49a4f",
+"sha256": "9dfd1fab54d66910318c57093d67aa3f3fe640fa9475af6fe4e5ec82ed8d4809",
 "ultimo": "JUPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8749,7 +8749,7 @@
 "giorni": {
 "file": 43,
 "primo": "KASUSDT-1d-2023-11.zip",
-"sha256": "8be938e41fb7d2c85a0848e4ed289b2dca7b578eff1afe684209ac17e6a5ff3c",
+"sha256": "1a49373683fcf5ab52ea3fa664f9932f8d19333831ba06b10b838a17be38a750",
 "ultimo": "KASUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8847,10 +8847,10 @@
 "ultimo": "KERNELUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 25,
+"file": 26,
 "primo": "KERNELUSDT-1d-2025-04.zip",
-"sha256": "e3d2f230e74b186f78d47b5cb4c3815c67816b521deac48904536edaec81a7ce",
-"ultimo": "KERNELUSDT-1d-2026-11-06.zip"
+"sha256": "c29e60aff062ff7aa943369ee21d86b9bc50b836dc5bccc3a759431234d92f91",
+"ultimo": "KERNELUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -8869,7 +8869,7 @@
 "giorni": {
 "file": 49,
 "primo": "KEYUSDT-1d-2023-05.zip",
-"sha256": "d073751e3d79334a3950878c246bb14072b44dcf692db8a629fb5dbf8468d5ca",
+"sha256": "17489c1a2c2060baa223eb9721ae487eed081e0410f3ad6ae594dd62392281eb",
 "ultimo": "KEYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -8915,7 +8915,7 @@
 "premio": {
 "file": 7,
 "primo": "KITEUSDT-1h-2026-11-01.zip",
-"sha256": "b87823e01f0ce39609443864ee27927a8d2dde217f1a1850ae6c6b6ce88386cd",
+"sha256": "a640a664939c310e322a9bf158d4aafdec37581aaf24d41dbdb567afcf27bcd0",
 "ultimo": "KITEUSDT-1h-2026-11-07.zip"
 }
 },
@@ -8949,7 +8949,7 @@
 "giorni": {
 "file": 68,
 "primo": "KLAYUSDT-1d-2021-10.zip",
-"sha256": "03572e11d8fa9be20afe4f9fcf4729dc820ca6cd1805d40e3af9bc0fb35e9d4e",
+"sha256": "34323507572434d9edcd1b37b7ea5b2c1efc1f86ca03c84af7be383b85470390",
 "ultimo": "KLAYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9047,10 +9047,10 @@
 "ultimo": "KORUUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "KORUUSDT-1d-2026-06.zip",
-"sha256": "e9ba6baa8239086a51a50b46670fde3fe945902472fac1a8f4d8e4aa55f1cecf",
-"ultimo": "KORUUSDT-1d-2026-11-06.zip"
+"sha256": "df486b596dc67834854ca8f4f7d75b0f7e24043013623ed89efc245520b7270d",
+"ultimo": "KORUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -9069,7 +9069,7 @@
 "giorni": {
 "file": 10,
 "primo": "KOUSDT-1d-2026-08.zip",
-"sha256": "32f1c6bf810bfa0fba610b3f6648f80c5aa449958125e17768c4215d6cd24e8c",
+"sha256": "df3cfeabbcc393330653dc5ea1c7f87a9ff53093bcfbc305dfb34a27d571f1ee",
 "ultimo": "KOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9115,7 +9115,7 @@
 "premio": {
 "file": 7,
 "primo": "KSTRUSDT-1h-2026-11-01.zip",
-"sha256": "7aa2609a9b065be0da858b09d6c4633dcb7c97adf3e4ebccc814b01a3eb1e98e",
+"sha256": "eb8562281b78d7604ed144b1ce3d5f56e67b82a3a899cc030e1ff50736197104",
 "ultimo": "KSTRUSDT-1h-2026-11-07.zip"
 }
 },
@@ -9149,7 +9149,7 @@
 "giorni": {
 "file": 20,
 "primo": "LABUSDT-1d-2025-10.zip",
-"sha256": "bd88036fb7546faa08f640d91d80c93667725a3b95b96b178f6fc5147852e28c",
+"sha256": "f9398dde115ba6b348a55366c0c5e4c17ec66f9eee88e0896bd7eb2dbf8c2c7d",
 "ultimo": "LABUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9275,7 +9275,7 @@
 "premio": {
 "file": 7,
 "primo": "LGELECTRONICSUSDT-1h-2026-11-01.zip",
-"sha256": "fd9a8c4fc115529279b085acf9550b266f4882feb7a2bf9eefcb0a7d47c26f99",
+"sha256": "1868a4f7d9ce651ca2d53ceab639f67e38d22cac6d1e42c543f181176a3d306d",
 "ultimo": "LGELECTRONICSUSDT-1h-2026-11-07.zip"
 }
 },
@@ -9309,7 +9309,7 @@
 "giorni": {
 "file": 75,
 "primo": "LINAUSDT-1d-2021-03.zip",
-"sha256": "8b9dafab381a9f65f18f3c44399d978a95c16e6c90af4fb8d46dcf319892f0ec",
+"sha256": "d2fb0b0b106b94e14cba96a07843b046acbf80e0948e45599be4f3870ba83d72",
 "ultimo": "LINAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9367,10 +9367,10 @@
 "ultimo": "LISTAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 35,
+"file": 36,
 "primo": "LISTAUSDT-1d-2024-06.zip",
-"sha256": "1b1bf5bd9e53af39ad6d91f5740e9cbe6fe949046702ef26640fb8468b4839de",
-"ultimo": "LISTAUSDT-1d-2026-11-06.zip"
+"sha256": "9157d0a83a815f25b51a2dbeb6380f0e854396ecfbae194ab8713e10b4bf6503",
+"ultimo": "LISTAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -9389,7 +9389,7 @@
 "giorni": {
 "file": 13,
 "primo": "LITEUSDT-1d-2026-05.zip",
-"sha256": "5a261143c68fb0ea3fefa8524a493e0d68dbf81ef47e0fa096b343a96a11a58a",
+"sha256": "006733609b29cb099f116c7ec7e0c4eb0300220cf391c161da6d28c10f5aecee",
 "ultimo": "LITEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9449,7 +9449,7 @@
 "giorni": {
 "file": 33,
 "primo": "LOKAUSDT-1d-2024-09.zip",
-"sha256": "f93543c25c0ecf24c7be67107bb898b19c25830545fc95a3bbf45ff15b72791a",
+"sha256": "f91b37bab612e90668deef681e25a3e0ce9c9691c3f6e28cda5db280af72ce96",
 "ultimo": "LOKAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9547,10 +9547,10 @@
 "ultimo": "LRCXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "LRCXUSDT-1d-2026-06.zip",
-"sha256": "111aa15e4b0ddf52dd6ece844e2ff69ed50336891ffba457990648d103df57dd",
-"ultimo": "LRCXUSDT-1d-2026-11-06.zip"
+"sha256": "d779ad27e63fc0c91f9b946efad5ef67d13e55039e9c35946113d4e648936797",
+"ultimo": "LRCXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -9569,7 +9569,7 @@
 "giorni": {
 "file": 41,
 "primo": "LSKUSDT-1d-2024-01.zip",
-"sha256": "d468aae9d2a5a67a5b78f00b0805f581f22273b0831f48a874f1289cc698ff6c",
+"sha256": "cac3ffea20918ad3b981e4478c83ffe16996a385f9b5bd216d7ba58f00fbc81a",
 "ultimo": "LSKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9609,7 +9609,7 @@
 "giorni": {
 "file": 30,
 "primo": "LUMIAUSDT-1d-2024-12.zip",
-"sha256": "ea41914982d17e30cc705b381d342e8ff884cda0c81d6bb12a14d7dd89524a73",
+"sha256": "facf5c40d356b1e7e7c2ebf596ec97ad8fce9096f4ae84b8d274665a5b2a3db7",
 "ultimo": "LUMIAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9667,10 +9667,10 @@
 "ultimo": "LYNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 19,
+"file": 20,
 "primo": "LYNUSDT-1d-2025-10.zip",
-"sha256": "62b0a22d2bd9f4dcbecc26edd44af3267bc17b36986848ec19e1e472b442ea69",
-"ultimo": "LYNUSDT-1d-2026-11-06.zip"
+"sha256": "52b95778f044977b470ecd1e1fc9a72e56de5b59bd6813f48d562eae8d48efb3",
+"ultimo": "LYNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -9689,7 +9689,7 @@
 "giorni": {
 "file": 10,
 "primo": "LYTEUSDT-1d-2026-08.zip",
-"sha256": "dfbe437913a9fb0ff6d923200561c1fec2d4975f42d222c06fefe55ad300d33c",
+"sha256": "b4bae6483991a3807c275a88f5dd7d4e3ce9af320371a31443fc9c3a7b153be7",
 "ultimo": "LYTEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9735,7 +9735,7 @@
 "premio": {
 "file": 7,
 "primo": "MAGMAUSDT-1h-2026-11-01.zip",
-"sha256": "ec3f1c7eb6babdb07eeab48a05513a339abefb6f7d693fb84bda3005cb58b01a",
+"sha256": "fa9613b03221b15a2675fbc144d5e5968912e1fe6a91bdbad8f3cc0d20e8bde1",
 "ultimo": "MAGMAUSDT-1h-2026-11-07.zip"
 }
 },
@@ -9769,7 +9769,7 @@
 "giorni": {
 "file": 41,
 "primo": "MANTAUSDT-1d-2024-01.zip",
-"sha256": "498ea9bff06935085f3354c0aecffa99affabc4f1f85b194a1aab248dbdc6253",
+"sha256": "c31da55c44f1a1025be2473dd091ef7e177227fd2bd73b0682ec4b69849c7452",
 "ultimo": "MANTAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -9895,7 +9895,7 @@
 "premio": {
 "file": 7,
 "primo": "MAVIAUSDT-1h-2026-11-01.zip",
-"sha256": "3e7047a714673b04fbbfb8589cd9cd0494d7fec76ee9cf909f7e47a8ad71d6bf",
+"sha256": "52b1390aa3814d8389aa33e9dedcf454f55a8924d3c8ac2677d25953c14a8203",
 "ultimo": "MAVIAUSDT-1h-2026-11-07.zip"
 }
 },
@@ -9909,7 +9909,7 @@
 "giorni": {
 "file": 48,
 "primo": "MAVUSDT-1d-2023-06.zip",
-"sha256": "12663b0bd6664c673c5910cb851f6915716cf11b28d4d22a76723c8a5841581f",
+"sha256": "c4c6c670e9bc319dda6a5e93d1f572d3498d8f326f43db55cb5b67498c23f032",
 "ultimo": "MAVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10007,10 +10007,10 @@
 "ultimo": "MDTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 47,
+"file": 48,
 "primo": "MDTUSDT-1d-2023-06.zip",
-"sha256": "3a7955cd491397198496e6ec406bf92bc4cc081d79d36a258ba7b8e14b89e967",
-"ultimo": "MDTUSDT-1d-2026-11-06.zip"
+"sha256": "6d86346545e3957e6f3f9c2f1a1de2fde5036244688fff3983426a7cd3cdc430",
+"ultimo": "MDTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10055,7 +10055,7 @@
 "premio": {
 "file": 7,
 "primo": "MEITUANUSDT-1h-2026-11-01.zip",
-"sha256": "1926d55cd31474bdebe026371dc776d5a7307186f05dbfc91a17c280b51bfa7c",
+"sha256": "ece6cc99e96ef42cdb726428583bed6c39e59ddbe3fa51fc8532f842ad447d1a",
 "ultimo": "MEITUANUSDT-1h-2026-11-07.zip"
 }
 },
@@ -10089,7 +10089,7 @@
 "giorni": {
 "file": 8,
 "primo": "MELIUSDT-1d-2026-10.zip",
-"sha256": "8f628416f2fd43fd17ed6f93b775698bffb5ebfabf3ed6ee617f20fb22c90342",
+"sha256": "5ee447030f1e3be83a978ab97eb1d30c9d08ae7287dc51e9a78c7a46fe33aa6f",
 "ultimo": "MELIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10187,10 +10187,10 @@
 "ultimo": "METISUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 38,
+"file": 39,
 "primo": "METISUSDT-1d-2024-03.zip",
-"sha256": "5f8c5a4ee3791eb9b548946156c78013c0bf7d82aef5675b010c807f4a051fdc",
-"ultimo": "METISUSDT-1d-2026-11-06.zip"
+"sha256": "bdb07330926b45ba23acaa00a6f0c6f23aad1cd5d28732511b59f2c7cf4fff25",
+"ultimo": "METISUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10209,7 +10209,7 @@
 "giorni": {
 "file": 20,
 "primo": "METUSDT-1d-2025-10.zip",
-"sha256": "b595adebefe5d8d076c5f3faf0593df0de182ee3a9333b959c52a688e430c9f7",
+"sha256": "e50704d6c24d27e76b37d2d85f670c0cffa7c7efbe39536eddc7943b7bbc9cfa",
 "ultimo": "METUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10255,7 +10255,7 @@
 "premio": {
 "file": 7,
 "primo": "MEWUSDT-1h-2026-11-01.zip",
-"sha256": "24b350e4c4b9c87a84b4b3202b5df57b5399d9056677cd9851d901e5d9a8f209",
+"sha256": "bba8f295f97feb17db9ad879c281499562482e3a0aebbcccf9e16bc690a533d1",
 "ultimo": "MEWUSDT-1h-2026-11-07.zip"
 }
 },
@@ -10287,10 +10287,10 @@
 "ultimo": "MINAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 51,
+"file": 52,
 "primo": "MINAUSDT-1d-2023-02.zip",
-"sha256": "1634cba2b20caed9cf0655f7086f7230a056dc9e02781e7db4873a6a8c905123",
-"ultimo": "MINAUSDT-1d-2026-11-06.zip"
+"sha256": "980aa051c5256f00813412c09fc6e62123616a59c00051b686751d49a21ae8f2",
+"ultimo": "MINAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10367,10 +10367,10 @@
 "ultimo": "MKRUSDT-fundingRate-2025-09.zip"
 },
 "giorni": {
-"file": 81,
+"file": 82,
 "primo": "MKRUSDT-1d-2020-08.zip",
-"sha256": "35d2c314f082c303e7dcef8dd2161485da56adb24b74911654fce49dd6c63d23",
-"ultimo": "MKRUSDT-1d-2026-11-06.zip"
+"sha256": "6ecb4560f66d98910931ace4d499875e91835714f743632e26aafbc291c58ad6",
+"ultimo": "MKRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -10389,7 +10389,7 @@
 "giorni": {
 "file": 27,
 "primo": "MLNUSDT-1d-2025-03.zip",
-"sha256": "7ab7a017349990c675f6d519b72955ac34095c3447447876a77609865bb87dc2",
+"sha256": "ef901191f80e85494657c63c43a9d8eb9eee0281092756c5a333b984033ab13f",
 "ultimo": "MLNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10435,7 +10435,7 @@
 "premio": {
 "file": 7,
 "primo": "MOCAUSDT-1h-2026-11-01.zip",
-"sha256": "eafc9ec37d133c4fc1435f4555a8234b5ef70ae90c5f6611f6c3daa691b7626b",
+"sha256": "b32f92dfd1d1460769e9372b577d63f77c33bb732acaf30a0a5fcf04d5a44386",
 "ultimo": "MOCAUSDT-1h-2026-11-07.zip"
 }
 },
@@ -10467,10 +10467,10 @@
 "ultimo": "MOODENGUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 31,
+"file": 32,
 "primo": "MOODENGUSDT-1d-2024-10.zip",
-"sha256": "5c6bcd55df7e1544cf0afb97eb3574057a445aba18a6ad1bd32aa73a074190fd",
-"ultimo": "MOODENGUSDT-1d-2026-11-06.zip"
+"sha256": "83427304ce257a48069e978adfd60e060df0454674b0a44c05775c107fefb2b2",
+"ultimo": "MOODENGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10567,10 +10567,10 @@
 "ultimo": "MPUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 8,
+"file": 9,
 "primo": "MPUSDT-1d-2026-09.zip",
-"sha256": "92f8d0d36c79918a5eeea6522940ca88bc1373db35c59632bf6971666c374cf0",
-"ultimo": "MPUSDT-1d-2026-11-06.zip"
+"sha256": "de20166841d2fe274593645ddbe96e69b9fc5bc19361a8f6d0c5f11b7c788604",
+"ultimo": "MPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10589,7 +10589,7 @@
 "giorni": {
 "file": 10,
 "primo": "MRKUSDT-1d-2026-08.zip",
-"sha256": "5c8e9682476ec619c47eefb73a65b48cbbb7a27f365a2261e1c54fae7204abf9",
+"sha256": "17eb41eb26e238eaf03252a511124ce48d7c57f6eaaab83ecf5cad5821f48d80",
 "ultimo": "MRKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10635,7 +10635,7 @@
 "premio": {
 "file": 7,
 "primo": "MRVLUSDT-1h-2026-11-01.zip",
-"sha256": "e1614b6aef451e56f34eda736b875bf868fc80ff25c28c52de4bd353fb675d22",
+"sha256": "1806a8ce7b150d8af7348f3927f5ff1c7838b3fdebc4f96226543c097abab747",
 "ultimo": "MRVLUSDT-1h-2026-11-07.zip"
 }
 },
@@ -10667,10 +10667,10 @@
 "ultimo": "MSTRUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 15,
+"file": 16,
 "primo": "MSTRUSDT-1d-2026-02.zip",
-"sha256": "7e2c415cdd6dabe8972a0234fa3ead043ffc6b7fff347af5af48c302ba0a4767",
-"ultimo": "MSTRUSDT-1d-2026-11-06.zip"
+"sha256": "c01b272c0a1e14540691ecae57b8832f0d4b1da61823d53227f9c388e7e607b8",
+"ultimo": "MSTRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10767,10 +10767,10 @@
 "ultimo": "MUUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 13,
+"file": 14,
 "primo": "MUUSDT-1d-2026-04.zip",
-"sha256": "bfd7c584f45c1e65da645f58053a8eae47328a208348bdb7533c1b3e347804b6",
-"ultimo": "MUUSDT-1d-2026-11-06.zip"
+"sha256": "11f14a30a0b65153c4cbddc5e4adf7218bdc1917ea6f2d45efe323ac76ef547a",
+"ultimo": "MUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10789,7 +10789,7 @@
 "giorni": {
 "file": 11,
 "primo": "MUUUSDT-1d-2026-07.zip",
-"sha256": "8c9ba65df4c28470826d6ff145f2a045b9e8b4b659cf55ff1f356a7d1729ed0e",
+"sha256": "03bdb42fa4479e1b8d76a0c7aaa1bdc6c0c0d71bc319ff4cc0180224318cb289",
 "ultimo": "MUUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10867,10 +10867,10 @@
 "ultimo": "NAORISUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "NAORISUSDT-1d-2025-07.zip",
-"sha256": "da231faa894b55ff83c31a7fd1985dc4e320798e96f6ceb702955fe33ce815d5",
-"ultimo": "NAORISUSDT-1d-2026-11-06.zip"
+"sha256": "522c5bd8e82c1ed2b2d69f78c1cf9d23b286a0779bce7eb531d157c00b53240c",
+"ultimo": "NAORISUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -10949,7 +10949,7 @@
 "giorni": {
 "file": 80,
 "primo": "NEARUSDT-1d-2020-10.zip",
-"sha256": "d244e3eff4c512eb957fce021aadd979ff13ea42188c1cc05ef0c0ebf3c10902",
+"sha256": "33ae56a5382a02ba3641c0b8d153e016ad6793926c3f983db3cf243368adc99e",
 "ultimo": "NEARUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -10995,7 +10995,7 @@
 "premio": {
 "file": 7,
 "primo": "NEIROUSDT-1h-2026-11-01.zip",
-"sha256": "a76767fa934d1f86746dcba87eb4838818923015a8752c64583e33b0e11fe8dc",
+"sha256": "e421a4a96a8f8c71fdaa1ee869296f919e230c54fedf895ded8e228ed6b414f9",
 "ultimo": "NEIROUSDT-1h-2026-11-07.zip"
 }
 },
@@ -11007,10 +11007,10 @@
 "ultimo": "NEOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 87,
+"file": 88,
 "primo": "NEOUSDT-1d-2020-02.zip",
-"sha256": "26770da199c697fe3c571b5861513a8a36500d86997b3e520247c8afbfdae033",
-"ultimo": "NEOUSDT-1d-2026-11-06.zip"
+"sha256": "c138a4ccd6c2836df96c2c2c2227c28570cc9eece52db4236f320b7b543543b5",
+"ultimo": "NEOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11107,10 +11107,10 @@
 "ultimo": "NIGHTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 17,
+"file": 18,
 "primo": "NIGHTUSDT-1d-2025-12.zip",
-"sha256": "e6baec53f4058406dfc5399a2a7fadcb5c71fadbbbaa8707bb3263434bb21989",
-"ultimo": "NIGHTUSDT-1d-2026-11-06.zip"
+"sha256": "31fe1cfd1d352086e441ead6d0b4f36834d1f0213fc346293221fd0c9fb09e67",
+"ultimo": "NIGHTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11129,7 +11129,7 @@
 "giorni": {
 "file": 27,
 "primo": "NILUSDT-1d-2025-03.zip",
-"sha256": "1e738b8db19d704f970211bb1c78824873c4a15c257a50bb193524291b1424a4",
+"sha256": "aee8d521a891a46065b377bc5e3792f0351cd43ace27cf8aa31f02ec18c3da00",
 "ultimo": "NILUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -11207,10 +11207,10 @@
 "ultimo": "NOKUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "NOKUSDT-1d-2026-06.zip",
-"sha256": "4cc997f4641bb513ffae91d93ec456027b83b44e276c325614a8ee47bbdd8f1b",
-"ultimo": "NOKUSDT-1d-2026-11-06.zip"
+"sha256": "3726f313f69205368e9b45e7a598c00394c468d98f550a0cca06e42c1e6447aa",
+"ultimo": "NOKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11307,10 +11307,10 @@
 "ultimo": "NULSUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 33,
+"file": 34,
 "primo": "NULSUSDT-1d-2024-08.zip",
-"sha256": "3cd85ef5d8c7cd779155c9f2690881ea0b5f71b3f2bc6974d874e9dc7449ab09",
-"ultimo": "NULSUSDT-1d-2026-11-06.zip"
+"sha256": "6711a062f7f2e36fbfb41a1c91fee0b682b43e09a1862043128d74276ba14624",
+"ultimo": "NULSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -11349,7 +11349,7 @@
 "giorni": {
 "file": 15,
 "primo": "NVDAUSDT-1d-2026-03.zip",
-"sha256": "b77133bcc0b2c5f9968721c8b2540d8faa84eb8290e51fdece998279dd0ce71d",
+"sha256": "6f9e6dd845a0ea233cf18390d68714ba4b60a301047b3c261547ddb3054a04b0",
 "ultimo": "NVDAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -11395,7 +11395,7 @@
 "premio": {
 "file": 7,
 "primo": "NVOUSDT-1h-2026-11-01.zip",
-"sha256": "b832eed4199427bb48ef35055a965d8d04e066d1a5b9514a6a88d5c44fc0cc6e",
+"sha256": "f5d2f8d4465d664186ff16592e8882148c61327c1797fa6bb06b1d7a61958c4b",
 "ultimo": "NVOUSDT-1h-2026-11-07.zip"
 }
 },
@@ -11427,10 +11427,10 @@
 "ultimo": "OBOLUSDT-fundingRate-2025-12.zip"
 },
 "giorni": {
-"file": 24,
+"file": 25,
 "primo": "OBOLUSDT-1d-2025-05.zip",
-"sha256": "dd4aac4d44a304297da35352743f13793adede78818a1684e5980837fd231c78",
-"ultimo": "OBOLUSDT-1d-2026-11-06.zip"
+"sha256": "0291157dae87b63e47cf6498ef52d2f22750618c6e777ed8a8c150c02b7b7916",
+"ultimo": "OBOLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -11527,10 +11527,10 @@
 "ultimo": "OLUSDT-fundingRate-2026-04.zip"
 },
 "giorni": {
-"file": 23,
+"file": 24,
 "primo": "OLUSDT-1d-2025-06.zip",
-"sha256": "bc3b3bb52448c240e63afef2ba36144942301bc06f63a86b7bb5e7f96c89720f",
-"ultimo": "OLUSDT-1d-2026-11-06.zip"
+"sha256": "d4a6066940deb93920289b14c7f0096a783fad1139592632e9ae9f77285b0568",
+"ultimo": "OLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -11549,7 +11549,7 @@
 "giorni": {
 "file": 83,
 "primo": "OMGUSDT-1d-2020-07.zip",
-"sha256": "fcf03678e946b2b8265e62318a6aa24d63cccc6d205003c97b1d68845c00f887",
+"sha256": "bcd10fb0ae0188f5c2b54854eecf0ade1d9ef9223554ad15d2ca42d742dd788c",
 "ultimo": "OMGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -11627,10 +11627,10 @@
 "ultimo": "ONDSUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "ONDSUSDT-1d-2026-06.zip",
-"sha256": "f9dc31510ee35b9f590f9d6b60749cd57dec1eb61f57a7301d5865092bd120ac",
-"ultimo": "ONDSUSDT-1d-2026-11-06.zip"
+"sha256": "005969f3b5c12306ca5b67d44e230164b283d76c71c16a71a83d71419cbcc8b6",
+"ultimo": "ONDSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11653,10 +11653,10 @@
 "ultimo": "ONEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ONEUSDT-1h-2026-11-01.zip",
-"sha256": "e9d24393cb6a2590f9f8f43f1dd5ef6c3cb876425c0a2c09694e8af5e3fb8c01",
-"ultimo": "ONEUSDT-1h-2026-11-06.zip"
+"sha256": "4101cd1d625cc97560473a32e785c81d27ebe38472a693d7d1b5251d0059297b",
+"ultimo": "ONEUSDT-1h-2026-11-07.zip"
 }
 },
 "ONGUSDT": {
@@ -11727,10 +11727,10 @@
 "ultimo": "OPENAIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "OPENAIUSDT-1d-2026-05.zip",
-"sha256": "e0d5021d51c18a6ed00418ac50054ffd40f4763bc4779dfa33c9caf93fd34287",
-"ultimo": "OPENAIUSDT-1d-2026-11-06.zip"
+"sha256": "40445c2ff2e69654acc27a79f0cb4795e5ad82b22b4e1a788abc3e59c4c02c3a",
+"ultimo": "OPENAIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11749,7 +11749,7 @@
 "giorni": {
 "file": 21,
 "primo": "OPENUSDT-1d-2025-09.zip",
-"sha256": "a535acb638ea42a046222e423bf93618549e6cc3f29e46d96ed8f4576ec1b51c",
+"sha256": "6d4bede4b34cde5d363344e52a261854b51566c14770ab0293a96f3957ac7c22",
 "ultimo": "OPENUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -11795,7 +11795,7 @@
 "premio": {
 "file": 7,
 "primo": "OPNUSDT-1h-2026-11-01.zip",
-"sha256": "0281912043f26e8b87a38b5cc2477704d61d03dbf99740f95f2c5ca271d4a2ea",
+"sha256": "fb6321db1a06eb2e87b9e0b6bc837c5ce1a1d8e89e52922cd0051f60b953e25b",
 "ultimo": "OPNUSDT-1h-2026-11-07.zip"
 }
 },
@@ -11827,10 +11827,10 @@
 "ultimo": "ORBSUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 43,
+"file": 44,
 "primo": "ORBSUSDT-1d-2023-10.zip",
-"sha256": "542abe053c65ceacc6378099e78a3602b91337f5aadf923342de49b4d8a6bd56",
-"ultimo": "ORBSUSDT-1d-2026-11-06.zip"
+"sha256": "a6ec88b0a722ffc1e7c983641f75e4050a0b5d89b5860620b2c06d1571c2076c",
+"ultimo": "ORBSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -11853,10 +11853,10 @@
 "ultimo": "ORCAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ORCAUSDT-1h-2026-11-01.zip",
-"sha256": "6ae2ba16511f564840002feb36fb353178ac6d60bad343d2e97f7c8556a06a29",
-"ultimo": "ORCAUSDT-1h-2026-11-06.zip"
+"sha256": "81c41a19cf13e567000829f943e922c993884d1df2bbbaad3da00ef0788d253b",
+"ultimo": "ORCAUSDT-1h-2026-11-07.zip"
 }
 },
 "ORCLUSDT": {
@@ -11907,10 +11907,10 @@
 "ultimo": "ORDIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 42,
+"file": 43,
 "primo": "ORDIUSDT-1d-2023-11.zip",
-"sha256": "8720b7c73211241a845137d95b1a2af3723107d8ba3767624fc49fb26db600f2",
-"ultimo": "ORDIUSDT-1d-2026-11-06.zip"
+"sha256": "7e040cb6d28fd654365cea533c58357987a4496e0d162ddbb66fc926f0a8a37d",
+"ultimo": "ORDIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -11929,7 +11929,7 @@
 "giorni": {
 "file": 9,
 "primo": "OURAUSDT-1d-2026-09.zip",
-"sha256": "93a7d896d4c9700771a00c2fa705baa3ba6ceb14b28e3068238161fbc897bdfe",
+"sha256": "471d7f1720a2a64fde41875318d620aee5b332aea4258f72480b80bcbb4feb0f",
 "ultimo": "OURAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -12007,10 +12007,10 @@
 "ultimo": "PANWUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "PANWUSDT-1d-2026-07.zip",
-"sha256": "b589a88c4e6bb798c8676327fa1044be845b44b8ea0c5a9db1a42d00a08afc2a",
-"ultimo": "PANWUSDT-1d-2026-11-06.zip"
+"sha256": "235a07cea6219adc7d054d7b69e097d65f3ac4ff58a533725d8cba01b30fadc8",
+"ultimo": "PANWUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12033,10 +12033,10 @@
 "ultimo": "PARTIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "PARTIUSDT-1h-2026-11-01.zip",
-"sha256": "70d458dca0dbdd5d601e49d7c003ed83df76bd354f7db76b129032e63b773467",
-"ultimo": "PARTIUSDT-1h-2026-11-06.zip"
+"sha256": "f41bec987736509e3fa847fd8071e7afc853ede4ead65eba22625a86311c728a",
+"ultimo": "PARTIUSDT-1h-2026-11-07.zip"
 }
 },
 "PATHUSDT": {
@@ -12107,16 +12107,16 @@
 "ultimo": "PDDUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 9,
+"file": 10,
 "primo": "PDDUSDT-1d-2026-08.zip",
-"sha256": "dadffe07ddc4af75b8ae70d86f2a2c14f192d87aea303eac3a02b675d90aa8e1",
-"ultimo": "PDDUSDT-1d-2026-11-06.zip"
+"sha256": "d811ed050f5dfa7178485051827c956458d776ff8b86fd4038e4aca3c5820652",
+"ultimo": "PDDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "PDDUSDT-1h-2026-11-01.zip",
-"sha256": "4da8a96e6c0b327dfbb0c0a9b92b94f06960e7ccd7468f0e77067739b903ecbe",
-"ultimo": "PDDUSDT-1h-2026-11-06.zip"
+"sha256": "0f4f73700bf34d2a50ec2b9cb1a67d64990ad27a5c8ae2611da6d6daafeeadc0",
+"ultimo": "PDDUSDT-1h-2026-11-07.zip"
 }
 },
 "PENDLEUSDT": {
@@ -12129,7 +12129,7 @@
 "giorni": {
 "file": 47,
 "primo": "PENDLEUSDT-1d-2023-07.zip",
-"sha256": "39cf2f41426118519010c625c6af72f09d1fafd95d137d480c0f56ef42856310",
+"sha256": "9e8151d80bf4abc2ee15408ebf0a9d01fe30e986a5e9093354025f1c229f183f",
 "ultimo": "PENDLEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
@@ -12187,10 +12187,10 @@
 "ultimo": "PEOPLEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 65,
+"file": 66,
 "primo": "PEOPLEUSDT-1d-2021-12.zip",
-"sha256": "96739680bdb32ff79b686a63a127db984f837f63bbc27c0ee87c1dfb79038882",
-"ultimo": "PEOPLEUSDT-1d-2026-11-06.zip"
+"sha256": "6a2d4adf4c3e42242b1f0a3bb4adad6879f15f9b8a13d52b06446312a45704f6",
+"ultimo": "PEOPLEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12287,10 +12287,10 @@
 "ultimo": "PHBUSDT-fundingRate-2026-05.zip"
 },
 "giorni": {
-"file": 51,
+"file": 52,
 "primo": "PHBUSDT-1d-2023-02.zip",
-"sha256": "1c680c3a20cc657a28b7dab1cff6fca14e453638fddac6fa811bc870b88172dc",
-"ultimo": "PHBUSDT-1d-2026-11-06.zip"
+"sha256": "81caac0fafa7fc67cc0659e5761dcd9f0cd193e5222796ea09eedb8450b2f977",
+"ultimo": "PHBUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -12335,7 +12335,7 @@
 "premio": {
 "file": 7,
 "primo": "PIPPINUSDT-1h-2026-11-01.zip",
-"sha256": "760c4247d49f4693a34ab98d338b1bfb68ca1a18524c4a901044ad7e97208db0",
+"sha256": "6b38d51a042b928cbd41e3810f6dfa749989c14445da0df975f9f0a126d35ac8",
 "ultimo": "PIPPINUSDT-1h-2026-11-07.zip"
 }
 },
@@ -12367,10 +12367,10 @@
 "ultimo": "PLAYUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "PLAYUSDT-1d-2025-07.zip",
-"sha256": "15698a1b0ee57a8660475b8983911128c0e1fb0bc73c4ed010bcf00fefa7c135",
-"ultimo": "PLAYUSDT-1d-2026-11-06.zip"
+"sha256": "6defd518a480e5c6152631765a086a426ad1f97c606a766071f60162f68c7aff",
+"ultimo": "PLAYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12393,10 +12393,10 @@
 "ultimo": "PLTRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "PLTRUSDT-1h-2026-11-01.zip",
-"sha256": "136601943095062bdb01966656dca2b2b34ef5962f6d2eb8e7e5b21e2e4b713b",
-"ultimo": "PLTRUSDT-1h-2026-11-06.zip"
+"sha256": "a6368a5339016bb9416b2ef242cf7c8a5530b6a91bdb984a17e39b874d2746e5",
+"ultimo": "PLTRUSDT-1h-2026-11-07.zip"
 }
 },
 "PLUMEUSDT": {
@@ -12447,16 +12447,16 @@
 "ultimo": "POLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 32,
+"file": 33,
 "primo": "POLUSDT-1d-2024-09.zip",
-"sha256": "3be8651c2a2b815d3cf02416f9c20facb02750fc49217afd9b86464d360c9298",
-"ultimo": "POLUSDT-1d-2026-11-06.zip"
+"sha256": "17a004a4e1254283d8e0ea079b676b1ec2f39943d58b25f8bccb239eaac42dd0",
+"ultimo": "POLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "POLUSDT-1h-2026-11-01.zip",
-"sha256": "47ca528443fa2f2da35d6afe1d370f2fc22ea329391394366c7136aed146f073",
-"ultimo": "POLUSDT-1h-2026-11-06.zip"
+"sha256": "464061f452a0e007af895f3439fa84d52e9fb4a8d1b02b50a9746b431b7c6251",
+"ultimo": "POLUSDT-1h-2026-11-07.zip"
 }
 },
 "POLYXUSDT": {
@@ -12467,10 +12467,10 @@
 "ultimo": "POLYXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 43,
+"file": 44,
 "primo": "POLYXUSDT-1d-2023-10.zip",
-"sha256": "1f7860f6c3f31aac9713ae1c0bfd230861a3798dba34bc4451842cbfae98512d",
-"ultimo": "POLYXUSDT-1d-2026-11-06.zip"
+"sha256": "be47cb226e2386ee4aef9afc355dd61a0e368a2847d53a48f37b9b99093b29a5",
+"ultimo": "POLYXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12515,7 +12515,7 @@
 "premio": {
 "file": 7,
 "primo": "PONSUSDT-1h-2026-11-01.zip",
-"sha256": "af348e344ca510a7ea18ae46041d7f71a7913671a90a934c8fbf42024f038269",
+"sha256": "df6225b316142399b3c9bedecb56d6bbe5a6b527f2bb0a06955a48fc241ef849",
 "ultimo": "PONSUSDT-1h-2026-11-07.zip"
 }
 },
@@ -12547,10 +12547,10 @@
 "ultimo": "POPMARTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "POPMARTUSDT-1d-2026-07.zip",
-"sha256": "5dd03d07dedfc69e847f1646fdcb995ee321c08dc568bc5fba229d8322e9d5a3",
-"ultimo": "POPMARTUSDT-1d-2026-11-06.zip"
+"sha256": "cabe131538336dfa54d844e59e0ca7ef4a4fb363517c345022e3f1b29fe029dc",
+"ultimo": "POPMARTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12647,16 +12647,16 @@
 "ultimo": "PREDICTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 7,
+"file": 8,
 "primo": "PREDICTUSDT-1d-2026-10.zip",
-"sha256": "1336c0db009cf105b24e33c4a735c4d9f0fd27503ebeaee75c8a905324d6e2e5",
-"ultimo": "PREDICTUSDT-1d-2026-11-06.zip"
+"sha256": "9f006717a884d7247a897e653850f58842ecfd042ec84e8f8e2ac40678f58d81",
+"ultimo": "PREDICTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "PREDICTUSDT-1h-2026-11-01.zip",
-"sha256": "417e2b327fa82be9e47fe849f9bd1f49b8e8c6702a88b11d663452e5cefadc4d",
-"ultimo": "PREDICTUSDT-1h-2026-11-06.zip"
+"sha256": "25caf487d4779e212ba1bfa36bc61f3e9eff148419bdb7b58398c746449b96d4",
+"ultimo": "PREDICTUSDT-1h-2026-11-07.zip"
 }
 },
 "PRLUSDT": {
@@ -12667,10 +12667,10 @@
 "ultimo": "PRLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 13,
+"file": 14,
 "primo": "PRLUSDT-1d-2026-04.zip",
-"sha256": "5bdfbf4ec4fd94a4c7b76e51f1921c4833bd8eeb37dc846249ab9a4803efbe91",
-"ultimo": "PRLUSDT-1d-2026-11-06.zip"
+"sha256": "28feca4e44e7bcc325c045573c04895e3b1e3486cae6601be1c75b3f83024e38",
+"ultimo": "PRLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12715,7 +12715,7 @@
 "premio": {
 "file": 7,
 "primo": "PROMUSDT-1h-2026-11-01.zip",
-"sha256": "c2105dd702b8240fbeb8242bcce6ed2efddeedd4ee78739b7572acd0dc025d0b",
+"sha256": "7d68def911f1dc02474c5f9b891772d142d0774a1151075b6915dee72ef7b1e8",
 "ultimo": "PROMUSDT-1h-2026-11-07.zip"
 }
 },
@@ -12747,10 +12747,10 @@
 "ultimo": "PTBUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "PTBUSDT-1d-2025-09.zip",
-"sha256": "be18b26608b6ce7e57d6bab9558bdb12995c6076e24af04ef67d39250be09f18",
-"ultimo": "PTBUSDT-1d-2026-11-06.zip"
+"sha256": "85af565d0bb73951aa092d938d2f95199e3e8c28a2df3e3d7fa986e324e1456c",
+"ultimo": "PTBUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12827,16 +12827,16 @@
 "ultimo": "PUNDIXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 25,
+"file": 26,
 "primo": "PUNDIXUSDT-1d-2025-04.zip",
-"sha256": "1472d4b190b3ad90bc8ba64dd008e49b5a4f9f212ce99c1705b65aaa7a55d9ba",
-"ultimo": "PUNDIXUSDT-1d-2026-11-06.zip"
+"sha256": "8c36836a0237b7d39c74329ed010b023d22298d803cc044282481b0c34e9b836",
+"ultimo": "PUNDIXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "PUNDIXUSDT-1h-2026-11-01.zip",
-"sha256": "e0e6818b530b4b9358692679a6c7ceac7aab2ed762f48ae553113f952632829c",
-"ultimo": "PUNDIXUSDT-1h-2026-11-06.zip"
+"sha256": "cd88f3282004867432e0cc5899363d41057267fe0b8d4941396c7097a09f468d",
+"ultimo": "PUNDIXUSDT-1h-2026-11-07.zip"
 }
 },
 "PYPLUSDT": {
@@ -12847,10 +12847,10 @@
 "ultimo": "PYPLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "PYPLUSDT-1d-2026-07.zip",
-"sha256": "e7528f404b4ad4e09c9bed6dcc81a3f1588f4a78ce0a1693817266283708a5e8",
-"ultimo": "PYPLUSDT-1d-2026-11-06.zip"
+"sha256": "ec65fbb2a04fc02a144e7ede3e5ca162a7bddd4bc657fbdad18e80b6506a54a9",
+"ultimo": "PYPLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12895,7 +12895,7 @@
 "premio": {
 "file": 7,
 "primo": "QCOMUSDT-1h-2026-11-01.zip",
-"sha256": "20410fea2032b4c56156b66fe781eb839b8b0e49e58d66590081338d04c17452",
+"sha256": "1ed5814c0196d6b8181c8a00dc41e619e7f0b84ba3508cc71884bd55a8455772",
 "ultimo": "QCOMUSDT-1h-2026-11-07.zip"
 }
 },
@@ -12927,10 +12927,10 @@
 "ultimo": "QNTXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "QNTXUSDT-1d-2026-05.zip",
-"sha256": "d46522681d5cecdaf0bb105c62d560dece8500f73f567d432be44b4a6b57b066",
-"ultimo": "QNTXUSDT-1d-2026-11-06.zip"
+"sha256": "164dee66bee47ee280d4b2e9f387ec4d6bfd0d67b76f43a5e2a76bc2ee956ec4",
+"ultimo": "QNTXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -12953,10 +12953,10 @@
 "ultimo": "QQQUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "QQQUSDT-1h-2026-11-01.zip",
-"sha256": "ff3385293caa085e58e182068b42fa75a2343c48a6a81c28a88bd00df2dd7e1b",
-"ultimo": "QQQUSDT-1h-2026-11-06.zip"
+"sha256": "1773b9730c58ff3b63f8ae13b4b89ca9acb6da3b339bc3ec7258cd89baabef5d",
+"ultimo": "QQQUSDT-1h-2026-11-07.zip"
 }
 },
 "QTUMUSDT": {
@@ -12967,10 +12967,10 @@
 "ultimo": "QTUMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 87,
+"file": 88,
 "primo": "QTUMUSDT-1d-2020-02.zip",
-"sha256": "147ce2c1ffa068ddc08cbae6c7d1377c943aa015e3d63783cd26a0c0aebb48f8",
-"ultimo": "QTUMUSDT-1d-2026-11-06.zip"
+"sha256": "69d494ded9a80bf7b8bf66a810232f1329f71c9401080baf1552ed00157b3499",
+"ultimo": "QTUMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13027,10 +13027,10 @@
 "ultimo": "RADUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 48,
+"file": 49,
 "primo": "RADUSDT-1d-2023-05.zip",
-"sha256": "0aca42695cc7009798020e8c7d1ca6ef71055e65dfe8e4fe651db9869b72ddae",
-"ultimo": "RADUSDT-1d-2026-11-06.zip"
+"sha256": "1776a28267caa03f176fccc5c812b8fed8ef5e60094186a2fd7ee0eee3f3fbf6",
+"ultimo": "RADUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -13047,10 +13047,10 @@
 "ultimo": "RAMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 9,
+"file": 10,
 "primo": "RAMUSDT-1d-2026-08.zip",
-"sha256": "b04fea1406ed972da6fc9ef0d906ec3cd81271cca51e8c66f6c412af91911120",
-"ultimo": "RAMUSDT-1d-2026-11-06.zip"
+"sha256": "17a8712bc0468bcb7f508ad8380254a99652b2878ba7def97372091e389e6c70",
+"ultimo": "RAMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13095,7 +13095,7 @@
 "premio": {
 "file": 7,
 "primo": "RAVEUSDT-1h-2026-11-01.zip",
-"sha256": "37331d8140c2debd852d6704ac24d2916ea8b0e44452d5912abaa239e3db411f",
+"sha256": "e7d22cf17ba195b8980ff63e3138326d3272d381a68f8f64365d72826fe485f5",
 "ultimo": "RAVEUSDT-1h-2026-11-07.zip"
 }
 },
@@ -13127,10 +13127,10 @@
 "ultimo": "RAYUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 69,
+"file": 70,
 "primo": "RAYUSDT-1d-2021-08.zip",
-"sha256": "5d211ac3546f78ba741da0124321aef954d8d709659162b11b84f7d867d51fa2",
-"ultimo": "RAYUSDT-1d-2026-11-06.zip"
+"sha256": "7af51ad8698aafa5193cdaa4b635a698df4d5893189cd57a8ffc4f737996116f",
+"ultimo": "RAYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -13153,10 +13153,10 @@
 "ultimo": "RDDTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "RDDTUSDT-1h-2026-11-01.zip",
-"sha256": "90158fc8ba28dbb21cb511e9579e52fd1c3796d11fa0aff4d24e4fe77b7bf1f9",
-"ultimo": "RDDTUSDT-1h-2026-11-06.zip"
+"sha256": "9d5bfd64d9ace272de232e972346eb4b71a40f970d6432c315b5627313f73782",
+"ultimo": "RDDTUSDT-1h-2026-11-07.zip"
 }
 },
 "RDNTUSDT": {
@@ -13167,10 +13167,10 @@
 "ultimo": "RDNTUSDT-fundingRate-2026-03.zip"
 },
 "giorni": {
-"file": 49,
+"file": 50,
 "primo": "RDNTUSDT-1d-2023-04.zip",
-"sha256": "16171ed26f0348d51620ca53ca7743c755a0e7be914f15eec5976ad920237d09",
-"ultimo": "RDNTUSDT-1d-2026-11-06.zip"
+"sha256": "c29277f4961ab00ec44ead39cee2e0839d4ba6f6398e0628e10bce367b4bc50e",
+"ultimo": "RDNTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -13227,16 +13227,16 @@
 "ultimo": "REDUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 26,
+"file": 27,
 "primo": "REDUSDT-1d-2025-03.zip",
-"sha256": "7dd8f9b5c1872e4101b0157c4bc6de691b64d0dfbd1184ac5dfcc1000f5643ae",
-"ultimo": "REDUSDT-1d-2026-11-06.zip"
+"sha256": "70a6fa0fe170cf10c2005be13b4fbe89e693dc9bfb9d16165a3de73a508406d9",
+"ultimo": "REDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "REDUSDT-1h-2026-11-01.zip",
-"sha256": "e4e8beaf60a320d5a5e7ad96afc302bb03378ac8ed3e28fc7205b7f4a7eabb4e",
-"ultimo": "REDUSDT-1h-2026-11-06.zip"
+"sha256": "2f6177724586a8819c010627c16bb82b156584db43dcc3fc24750e5338dbc799",
+"ultimo": "REDUSDT-1h-2026-11-07.zip"
 }
 },
 "REEFUSDT": {
@@ -13247,10 +13247,10 @@
 "ultimo": "REEFUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 75,
+"file": 76,
 "primo": "REEFUSDT-1d-2021-02.zip",
-"sha256": "e5633156c7ad675019d2f92ec07638fce08fab75fe7cfa994fd4608b62ea22d1",
-"ultimo": "REEFUSDT-1d-2026-11-06.zip"
+"sha256": "4144eb8c246d6baaad7581bcc360e8fea8da36d9000b2194ee0f0ead7d223a0d",
+"ultimo": "REEFUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -13295,7 +13295,7 @@
 "premio": {
 "file": 7,
 "primo": "RENDERUSDT-1h-2026-11-01.zip",
-"sha256": "dff4822a06fc85c36ac70b6da0e99355fe601bdefde06578eabd8f27e77000e1",
+"sha256": "3c0459b4b4d1620ba5833de1cc943396fe725412ec111d778a1b22a85bfb6f7a",
 "ultimo": "RENDERUSDT-1h-2026-11-07.zip"
 }
 },
@@ -13327,10 +13327,10 @@
 "ultimo": "RESOLVUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 23,
+"file": 24,
 "primo": "RESOLVUSDT-1d-2025-06.zip",
-"sha256": "3114cd0aa2ff8e7a72e7b1f63134c5cea8c37e22a9ca855535be9c3d0b68e991",
-"ultimo": "RESOLVUSDT-1d-2026-11-06.zip"
+"sha256": "184c9658040fe86b8f097af129e4c978071979c3d3064655244aef59e62cede6",
+"ultimo": "RESOLVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13353,10 +13353,10 @@
 "ultimo": "REUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "REUSDT-1h-2026-11-01.zip",
-"sha256": "f6d71d94e3c38b892473ce655be822e69a6cf4f0f0cee9cd5d42a06833b148f8",
-"ultimo": "REUSDT-1h-2026-11-06.zip"
+"sha256": "41b329d37ddef4bf0c6cdb2322876ff860e867a5fde7e486bf4e81229267c1f9",
+"ultimo": "REUSDT-1h-2026-11-07.zip"
 }
 },
 "REZUSDT": {
@@ -13367,10 +13367,10 @@
 "ultimo": "REZUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 37,
+"file": 38,
 "primo": "REZUSDT-1d-2024-04.zip",
-"sha256": "d54b964179e1ad2625c8573f592f574935262ad806dff05eaaf1ff47d0bec11e",
-"ultimo": "REZUSDT-1d-2026-11-06.zip"
+"sha256": "e7a63ba2beb8fc2b3ee89c37f847c0d82921bf6311716fe13a1a280879ecca87",
+"ultimo": "REZUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13427,16 +13427,16 @@
 "ultimo": "RIVNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "RIVNUSDT-1d-2026-06.zip",
-"sha256": "0196280bf1d8c3bea1a64236df5ba94f6e7eac4ca5afadd5aa6ce8cb97373206",
-"ultimo": "RIVNUSDT-1d-2026-11-06.zip"
+"sha256": "e6805ec0957537bc67010e2bad31d30487a42b1159e5a8b30f5f805ac8847bfd",
+"ultimo": "RIVNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "RIVNUSDT-1h-2026-11-01.zip",
-"sha256": "4fb0fffea09bf307f2ca4a2758479109c92542b1aa93844ff10b663a9c2d161d",
-"ultimo": "RIVNUSDT-1h-2026-11-06.zip"
+"sha256": "5c93f59b48c8412383a9e32264c0e9fa81868c4f35736ac36ef8572da019f179",
+"ultimo": "RIVNUSDT-1h-2026-11-07.zip"
 }
 },
 "RKLBUSDT": {
@@ -13447,10 +13447,10 @@
 "ultimo": "RKLBUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "RKLBUSDT-1d-2026-05.zip",
-"sha256": "f55bb713709563764d0ac17994aed060acbb5322ba504cfd171799013d81c10a",
-"ultimo": "RKLBUSDT-1d-2026-11-06.zip"
+"sha256": "c65a38ff426e1c9340d8287d579079d8eebd997f95fa71a1eee727d957aebc71",
+"ultimo": "RKLBUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13527,10 +13527,10 @@
 "ultimo": "ROBOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 15,
+"file": 16,
 "primo": "ROBOUSDT-1d-2026-02.zip",
-"sha256": "41698408d08052686fa9193d5f62507ce1720f085a8c10fa16287186269a8874",
-"ultimo": "ROBOUSDT-1d-2026-11-06.zip"
+"sha256": "6a62d535f84cbd0d506c9119fe800d7302f8d92cd543fff3672480262927864c",
+"ultimo": "ROBOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13553,10 +13553,10 @@
 "ultimo": "RONINUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "RONINUSDT-1h-2026-11-01.zip",
-"sha256": "8b8a373627e56e0c54bb562bf0efbf0f4f44e800bc68f14f6052351af8db1c91",
-"ultimo": "RONINUSDT-1h-2026-11-06.zip"
+"sha256": "11471921a83c09c1ffa870c9a30ae958278b04721c06f97da415192abce642a5",
+"ultimo": "RONINUSDT-1h-2026-11-07.zip"
 }
 },
 "ROSEUSDT": {
@@ -13567,10 +13567,10 @@
 "ultimo": "ROSEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 65,
+"file": 66,
 "primo": "ROSEUSDT-1d-2021-12.zip",
-"sha256": "26bfe2708b9dd1c154795d165a77f98760420c86c8d285c07087adf2be48e6b4",
-"ultimo": "ROSEUSDT-1d-2026-11-06.zip"
+"sha256": "b2733c645fce23f1fabf71123c3ce4fd07d58421bcfd165c1afce56411b96316",
+"ultimo": "ROSEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13627,16 +13627,16 @@
 "ultimo": "RUMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 8,
+"file": 9,
 "primo": "RUMUSDT-1d-2026-09.zip",
-"sha256": "053b290f2031857b4e13f7b7a22c4e4903ffcb08220c8e976284c685faf6584c",
-"ultimo": "RUMUSDT-1d-2026-11-06.zip"
+"sha256": "448cc25fc5d045a9fe679e5057fabdc77d03ad380dae1ef0de73bd9e3603f92f",
+"ultimo": "RUMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "RUMUSDT-1h-2026-11-01.zip",
-"sha256": "10d0db25eeea92d13b2d49ced23385dac3637da3df2aaff3ce340695581c5afd",
-"ultimo": "RUMUSDT-1h-2026-11-06.zip"
+"sha256": "45cdb5e6ce3b06445ed71d3370ed8a6ad68e85f0aeae3444817d762d55205dc7",
+"ultimo": "RUMUSDT-1h-2026-11-07.zip"
 }
 },
 "RUNEUSDT": {
@@ -13647,10 +13647,10 @@
 "ultimo": "RUNEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 80,
+"file": 81,
 "primo": "RUNEUSDT-1d-2020-09.zip",
-"sha256": "b9abb25b1bb096c2d7868a19deb803b51ced4d32d7a60803b29f23d1e7256dc3",
-"ultimo": "RUNEUSDT-1d-2026-11-06.zip"
+"sha256": "ff3e79171703b993956b04bb552b2bfb3b42dc86a871d0659507277d555c7beb",
+"ultimo": "RUNEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13727,10 +13727,10 @@
 "ultimo": "SAGAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 37,
+"file": 38,
 "primo": "SAGAUSDT-1d-2024-04.zip",
-"sha256": "5a6c8628ff2558da33a4702bee8e5b8c60109cdec86d0d635650c8a5bca6c64f",
-"ultimo": "SAGAUSDT-1d-2026-11-06.zip"
+"sha256": "b9ffd071403c49ce5c8cff0b8cb7005b26695a35f6d083904559dde29ec9bd41",
+"ultimo": "SAGAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13753,10 +13753,10 @@
 "ultimo": "SAHARAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SAHARAUSDT-1h-2026-11-01.zip",
-"sha256": "dd923ab926988925a81e711548eac58f5e87c22f18849a8dffeac7ee93a8360e",
-"ultimo": "SAHARAUSDT-1h-2026-11-06.zip"
+"sha256": "3e295e945f031cda80fb8ae27eae84e8b3323985b4aec878369336024edf091e",
+"ultimo": "SAHARAUSDT-1h-2026-11-07.zip"
 }
 },
 "SAMSUNGEMUSDT": {
@@ -13767,10 +13767,10 @@
 "ultimo": "SAMSUNGEMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 9,
+"file": 10,
 "primo": "SAMSUNGEMUSDT-1d-2026-08.zip",
-"sha256": "c92474d4323f7ab9d096b959829dc384502e72410768ca9e9fd4f4a514d1fefd",
-"ultimo": "SAMSUNGEMUSDT-1d-2026-11-06.zip"
+"sha256": "da6e29ced19822e228f85e5874c2de157c0e8765f662ab41011740f560e9b451",
+"ultimo": "SAMSUNGEMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13807,16 +13807,16 @@
 "ultimo": "SANDUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 76,
+"file": 77,
 "primo": "SANDUSDT-1d-2021-01.zip",
-"sha256": "e8b6ceaae88665b8592867849cacdd2d5e26cd0c3fa18163714df7d1642c42aa",
-"ultimo": "SANDUSDT-1d-2026-11-06.zip"
+"sha256": "f82a94ac80842382294e158f9f453af00f6d53664c39d9124e44fba2875489fa",
+"ultimo": "SANDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SANDUSDT-1h-2026-11-01.zip",
-"sha256": "51f21593b7b83fe0eec4f898bdf34ae1d4f5f6238f91cfdbeafdf6b4b727d9b0",
-"ultimo": "SANDUSDT-1h-2026-11-06.zip"
+"sha256": "f8b20ba53ad97e0e7468e1ba3d63431c02bf779ab73ee5e129caa32fa603ae0d",
+"ultimo": "SANDUSDT-1h-2026-11-07.zip"
 }
 },
 "SANTOSUSDT": {
@@ -13827,10 +13827,10 @@
 "ultimo": "SANTOSUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 31,
+"file": 32,
 "primo": "SANTOSUSDT-1d-2024-10.zip",
-"sha256": "2b44ce974425daccebb3aab4594324a0d3c69c7f19dddb08b510d900c916cd12",
-"ultimo": "SANTOSUSDT-1d-2026-11-06.zip"
+"sha256": "99bf8e04cb9666a75ea188ad3b499bba3358fab84f9dcad17128fc4b6886a11e",
+"ultimo": "SANTOSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -13907,10 +13907,10 @@
 "ultimo": "SCUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 73,
+"file": 74,
 "primo": "SCUSDT-1d-2021-04.zip",
-"sha256": "3275d8a05a40e49deee49da59636741646cb3b1a9a4cf2a63373e38a3a1aab6c",
-"ultimo": "SCUSDT-1d-2026-11-06.zip"
+"sha256": "0a3420199977d4dafe894b65acc4c88f360d5a77615ad8a312899a75d6b8f356",
+"ultimo": "SCUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -13933,10 +13933,10 @@
 "ultimo": "SECZUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SECZUSDT-1h-2026-11-01.zip",
-"sha256": "e73d1a276c50d06a8b34e95922c6171380e5d2963116e14f6666672ef837b853",
-"ultimo": "SECZUSDT-1h-2026-11-06.zip"
+"sha256": "bbbb377c447a9bcc38391acbc56b7a0bc40707ceb17f7f1351fb111d74ec444e",
+"ultimo": "SECZUSDT-1h-2026-11-07.zip"
 }
 },
 "SEIUSDT": {
@@ -13947,10 +13947,10 @@
 "ultimo": "SEIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 45,
+"file": 46,
 "primo": "SEIUSDT-1d-2023-08.zip",
-"sha256": "4a82bde88aa6d3ebf0d3521878c65f2b7fe88af97881f9734fbda919d06ccbfa",
-"ultimo": "SEIUSDT-1d-2026-11-06.zip"
+"sha256": "fe4140a0d52af1bf72a4b67230939135559dcab624fe29b1794e7d79c3ff0c24",
+"ultimo": "SEIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14007,16 +14007,16 @@
 "ultimo": "SHAZUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "SHAZUSDT-1d-2026-07.zip",
-"sha256": "04ac490acfe5de7978c647e3ed0cb155e20b635ef0d3037e8adef0bf8fbbeb20",
-"ultimo": "SHAZUSDT-1d-2026-11-06.zip"
+"sha256": "dc37e22a1cf9235188a424fc9b1fa161eda41ed78c7adc58bde49ceac1180b61",
+"ultimo": "SHAZUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SHAZUSDT-1h-2026-11-01.zip",
-"sha256": "93e42b50b8b608f46499bcc346873dd5d2f9a7e6077a8ae1887f13fcb04cc3a7",
-"ultimo": "SHAZUSDT-1h-2026-11-06.zip"
+"sha256": "7bc722ed23ff1da27c179cb4b80d513a37def1b957f75619a23615956a5a9b6e",
+"ultimo": "SHAZUSDT-1h-2026-11-07.zip"
 }
 },
 "SHELLUSDT": {
@@ -14027,10 +14027,10 @@
 "ultimo": "SHELLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 27,
+"file": 28,
 "primo": "SHELLUSDT-1d-2025-02.zip",
-"sha256": "e96066198511b92419c70d16a1025d7c4b43a616fb12637f62fb9eb2f4389a82",
-"ultimo": "SHELLUSDT-1d-2026-11-06.zip"
+"sha256": "c5cf6e920e64dc55e0a691cea2c772b1b9e9d8881586ac6d3ce6681978cf26e6",
+"ultimo": "SHELLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14075,7 +14075,7 @@
 "premio": {
 "file": 7,
 "primo": "SIGNUSDT-1h-2026-11-01.zip",
-"sha256": "b1dd8eda32ed69b068f5831f0a8f4b7b9decb9013780b6cce2526a2a2d058cd5",
+"sha256": "1f1c31a04e9c714ba1ca54bce766966c808bf7b02d1c71f2576ef04a0ca1b483",
 "ultimo": "SIGNUSDT-1h-2026-11-07.zip"
 }
 },
@@ -14107,10 +14107,10 @@
 "ultimo": "SKATEUSDT-fundingRate-2025-12.zip"
 },
 "giorni": {
-"file": 23,
+"file": 24,
 "primo": "SKATEUSDT-1d-2025-06.zip",
-"sha256": "08ea01be6416c96055c4c0ef0eabd16dc675f5fd976fc20acedcd330a848a7b6",
-"ultimo": "SKATEUSDT-1d-2026-11-06.zip"
+"sha256": "320e86c9011b80517d60c6034b441aa7cff723398d700618820868e408c64bba",
+"ultimo": "SKATEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -14133,10 +14133,10 @@
 "ultimo": "SKDDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SKDDUSDT-1h-2026-11-01.zip",
-"sha256": "549f188de491f570f7672c5122376eb85e6eb7aadcf897bc12aebd7dcf464695",
-"ultimo": "SKDDUSDT-1h-2026-11-06.zip"
+"sha256": "3c8304d06f7e2fec635c364ad4171d052e7d5552734a257c363f8c9d042dd159",
+"ultimo": "SKDDUSDT-1h-2026-11-07.zip"
 }
 },
 "SKHYNIXUSDT": {
@@ -14147,10 +14147,10 @@
 "ultimo": "SKHYNIXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "SKHYNIXUSDT-1d-2026-06.zip",
-"sha256": "12baa9208badd554a17a4c9ee2f61ccdb5b03394dda38898433c2cec0fe6334d",
-"ultimo": "SKHYNIXUSDT-1d-2026-11-06.zip"
+"sha256": "3f263ee413f8bc137aba446806bc884c808271de736991da8aa8b17a2ff2d39c",
+"ultimo": "SKHYNIXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14207,16 +14207,16 @@
 "ultimo": "SKRUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 16,
+"file": 17,
 "primo": "SKRUSDT-1d-2026-01.zip",
-"sha256": "f6b614007c172b452bc1bb0eea1051e22646fee6fb36bc0ae305071e6a9c4782",
-"ultimo": "SKRUSDT-1d-2026-11-06.zip"
+"sha256": "b114d4bb00594c3458091a3ebd91cb523fc268c2f2316760ff6d2c24f0a44ae4",
+"ultimo": "SKRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SKRUSDT-1h-2026-11-01.zip",
-"sha256": "b5f584205ed851a057c28fb17561ddede5b25b7d8b0b351de31d6a3661fa6688",
-"ultimo": "SKRUSDT-1h-2026-11-06.zip"
+"sha256": "31671a4f7ad4bb8b9cf9c1ad4592b7b75ae6f290f836d1750e7614884595890e",
+"ultimo": "SKRUSDT-1h-2026-11-07.zip"
 }
 },
 "SKUUUSDT": {
@@ -14227,10 +14227,10 @@
 "ultimo": "SKUUUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 9,
+"file": 10,
 "primo": "SKUUUSDT-1d-2026-08.zip",
-"sha256": "5e3b6d52bfd18e5649ab5fe701a00beae8d2d72546cd44fad6e47a3a4c84b6cf",
-"ultimo": "SKUUUSDT-1d-2026-11-06.zip"
+"sha256": "5e790ff60f2c546f521dcf03439b6afb0950bd5d86303da4f692fa7b53136a48",
+"ultimo": "SKUUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14275,7 +14275,7 @@
 "premio": {
 "file": 7,
 "primo": "SKYUSDT-1h-2026-11-01.zip",
-"sha256": "b5c87f294d24fbb6658bba3df13555a37106da992ab6e7c4a3980686487519fe",
+"sha256": "222edbca054f7fd856d1da2c56019519a32fac5f408142989eb288ed32cb12a6",
 "ultimo": "SKYUSDT-1h-2026-11-07.zip"
 }
 },
@@ -14307,10 +14307,10 @@
 "ultimo": "SLPUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 43,
+"file": 44,
 "primo": "SLPUSDT-1d-2023-10.zip",
-"sha256": "9fb72012e69b595d3faf2fe73ff07e0d38a57c47f8343762b8c6330b915fadb5",
-"ultimo": "SLPUSDT-1d-2026-11-06.zip"
+"sha256": "d31c4bf6c3fa7091371b9cb38ce5cb386b215ef6283631a5df59d710d2baa376",
+"ultimo": "SLPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14327,10 +14327,10 @@
 "ultimo": "SLXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "SLXUSDT-1d-2026-06.zip",
-"sha256": "8baf91bb194e364dc12b1b81cdf48a60f7d3d7dac720c584d71cb22cec561b5a",
-"ultimo": "SLXUSDT-1d-2026-11-06.zip"
+"sha256": "181b7b8cb379c8beba63b1e0cbb6c87cb9896d13f20e824c1aa31cdd8069c1dd",
+"ultimo": "SLXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14387,16 +14387,16 @@
 "ultimo": "SMRUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 7,
+"file": 8,
 "primo": "SMRUSDT-1d-2026-10.zip",
-"sha256": "808bdc2a58fafb1c7007ecc3c92cefc96b38f0f04177cfc07372d907137b776c",
-"ultimo": "SMRUSDT-1d-2026-11-06.zip"
+"sha256": "8913d0da194ffae4a0b022068cc175cdaf59a5eaccd86505964172501653f3b6",
+"ultimo": "SMRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SMRUSDT-1h-2026-11-01.zip",
-"sha256": "0c3f4e482866fa365e2970726a693e85165bced7a769e75194ab1f58f0dfb918",
-"ultimo": "SMRUSDT-1h-2026-11-06.zip"
+"sha256": "0c782b33584b392c91c9ede4f694526843a37edb85658afa43a312d1d4d4489d",
+"ultimo": "SMRUSDT-1h-2026-11-07.zip"
 }
 },
 "SNDKUSDT": {
@@ -14407,10 +14407,10 @@
 "ultimo": "SNDKUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 13,
+"file": 14,
 "primo": "SNDKUSDT-1d-2026-04.zip",
-"sha256": "ff8a419ba6e6a7892b6f4ba02533a698d3f7c93c1d22175da94c083d490e00bd",
-"ultimo": "SNDKUSDT-1d-2026-11-06.zip"
+"sha256": "4118fce62da1431688577b1ede1d539b6a4c4d45632b67e4a7413d1743219808",
+"ultimo": "SNDKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14453,10 +14453,10 @@
 "ultimo": "SNPSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SNPSUSDT-1h-2026-11-01.zip",
-"sha256": "050f3d00e3ca1e5e48a0b1fee22eee423f3114e97103349f1ce399a824d80d56",
-"ultimo": "SNPSUSDT-1h-2026-11-06.zip"
+"sha256": "2f447129b66b3a67c4a423a4c795057d8fdbbf592ebb36bf7905c3b7cec457f7",
+"ultimo": "SNPSUSDT-1h-2026-11-07.zip"
 }
 },
 "SNTUSDT": {
@@ -14467,10 +14467,10 @@
 "ultimo": "SNTUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 42,
+"file": 43,
 "primo": "SNTUSDT-1d-2023-11.zip",
-"sha256": "b72eb876fef27cb549906a5dd4b541cbc698a4507ed06ae9d00c713284991159",
-"ultimo": "SNTUSDT-1d-2026-11-06.zip"
+"sha256": "d47e9d6ea0aed8a6540f19b5a31fc72353db93986452c1b51280d5a1ac472bf0",
+"ultimo": "SNTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -14487,10 +14487,10 @@
 "ultimo": "SNXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 81,
+"file": 82,
 "primo": "SNXUSDT-1d-2020-08.zip",
-"sha256": "26792807bd82219b023f9116ae9aba36f0325d063f34fd11479026c770e1bb21",
-"ultimo": "SNXUSDT-1d-2026-11-06.zip"
+"sha256": "a4ca99491903dbbb732e97989a0805071b712b8a62b13be19114a32e2aa3de09",
+"ultimo": "SNXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14513,10 +14513,10 @@
 "ultimo": "SNXXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SNXXUSDT-1h-2026-11-01.zip",
-"sha256": "6a41f1fd3c91ef87fce0eacb972d573e547162441d5a3572deb246e15fd5e9b6",
-"ultimo": "SNXXUSDT-1h-2026-11-06.zip"
+"sha256": "cab37595d8032dd058159fa3707bcef037e99c9d65b86f1bcf7a85432c5542c4",
+"ultimo": "SNXXUSDT-1h-2026-11-07.zip"
 }
 },
 "SOFIUSDT": {
@@ -14527,10 +14527,10 @@
 "ultimo": "SOFIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "SOFIUSDT-1d-2026-07.zip",
-"sha256": "e1864bdcacb12d5c71d954809b5b1d4619a56b3de12c2497cc64ae2a4985214e",
-"ultimo": "SOFIUSDT-1d-2026-11-06.zip"
+"sha256": "4d000663b4aec117114b1b52c7fb151b1434e96f6c8a08dc18f8065b43582424",
+"ultimo": "SOFIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14547,16 +14547,16 @@
 "ultimo": "SOLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 80,
+"file": 81,
 "primo": "SOLUSDT-1d-2020-09.zip",
-"sha256": "c60ce581ea76f20f56f36757db4c6e2687dc0b343d96056e10a032b602cec3f2",
-"ultimo": "SOLUSDT-1d-2026-11-06.zip"
+"sha256": "2363f08e449db5563e30fec6b5843e8351bcee8ff6823e3ec06a14d2960849f5",
+"ultimo": "SOLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SOLUSDT-1h-2026-11-01.zip",
-"sha256": "60dfb826763a23ed70347c8993fcb7f2ba676244225afd889d5cb6f6aa510656",
-"ultimo": "SOLUSDT-1h-2026-11-06.zip"
+"sha256": "f13590cc3ccee2195d4a8355bbc25f11848a0233a5b8fed5c9e7a71adcc2b8fa",
+"ultimo": "SOLUSDT-1h-2026-11-07.zip"
 }
 },
 "SOLVUSDT": {
@@ -14567,10 +14567,10 @@
 "ultimo": "SOLVUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 28,
+"file": 29,
 "primo": "SOLVUSDT-1d-2025-01.zip",
-"sha256": "b9e2ae9b0c73e67bcdce3ce24e38efade5a1eb32a230896af76bcb99f5a096d0",
-"ultimo": "SOLVUSDT-1d-2026-11-06.zip"
+"sha256": "1d1959aea144dd2aa837a9a48cae0bd78e68ab43ff1864716f99531764ce021d",
+"ultimo": "SOLVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14613,10 +14613,10 @@
 "ultimo": "SONICUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SONICUSDT-1h-2026-11-01.zip",
-"sha256": "fece09bd20e174fdb3ba1f41a4e54ce14fa19066c46435815ffcbcbbde7dd185",
-"ultimo": "SONICUSDT-1h-2026-11-06.zip"
+"sha256": "9de3de9d74b861c42106b84cc4ad8e2f898de1eb16fe4d9e9a023dd8f83c99fc",
+"ultimo": "SONICUSDT-1h-2026-11-07.zip"
 }
 },
 "SONYUSDT": {
@@ -14627,10 +14627,10 @@
 "ultimo": "SONYUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "SONYUSDT-1d-2026-06.zip",
-"sha256": "adf1b874968571765de5434f81d4892551ef8f33aeb48ab0fffe5c462e38fab1",
-"ultimo": "SONYUSDT-1d-2026-11-06.zip"
+"sha256": "ebf42c57464997cb00c2a26a30da14c401d927b640176d2f3d85eacb25d9563d",
+"ultimo": "SONYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14647,10 +14647,10 @@
 "ultimo": "SOONUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 24,
+"file": 25,
 "primo": "SOONUSDT-1d-2025-05.zip",
-"sha256": "38e2c33bcbfa358d431993e6e388728ef3033deb469f6de71e5b7e716f774bf9",
-"ultimo": "SOONUSDT-1d-2026-11-06.zip"
+"sha256": "312472ba6b0fbabe50d7950c403742c087bd916de04fd1c61935f8080926fa66",
+"ultimo": "SOONUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14673,10 +14673,10 @@
 "ultimo": "SOPHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SOPHUSDT-1h-2026-11-01.zip",
-"sha256": "3d805d85dd2a9bf994c644dc879f4282a62f33563867455b35958494e33b4cb1",
-"ultimo": "SOPHUSDT-1h-2026-11-06.zip"
+"sha256": "3525c504ccae88465b5da88eaa1f1796cceb9bd9478eccb51b6a210edf6ae58a",
+"ultimo": "SOPHUSDT-1h-2026-11-07.zip"
 }
 },
 "SOXLUSDT": {
@@ -14687,10 +14687,10 @@
 "ultimo": "SOXLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "SOXLUSDT-1d-2026-05.zip",
-"sha256": "dec1b1b612e5e832bf21a4bcf9bf9eeadaa53307b5115a151dc2c34479f756c3",
-"ultimo": "SOXLUSDT-1d-2026-11-06.zip"
+"sha256": "2002901bc862e799c39e193ee4e963ce3f7d83865bea045fbe8fe1b55618f4d5",
+"ultimo": "SOXLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14747,10 +14747,10 @@
 "ultimo": "SPCXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "SPCXUSDT-1d-2026-05.zip",
-"sha256": "129ab3db4689222432904c3687616e0318a39a28c71aa6272c1e0e12adfc5098",
-"ultimo": "SPCXUSDT-1d-2026-11-06.zip"
+"sha256": "e5af232d039c57ed39ddbdeaef8e4a55275d4bcd2b1fe552555088692e64e760",
+"ultimo": "SPCXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14773,10 +14773,10 @@
 "ultimo": "SPELLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SPELLUSDT-1h-2026-11-01.zip",
-"sha256": "84fe4e42fa8ea000da3bc97d80ba763471c9b87fd961e0de1d2b7034114d8e7c",
-"ultimo": "SPELLUSDT-1h-2026-11-06.zip"
+"sha256": "fe3215a09001be76838d35475016f15e53eb498ded691e3a11fe02e7594df1fa",
+"ultimo": "SPELLUSDT-1h-2026-11-07.zip"
 }
 },
 "SPKUSDT": {
@@ -14787,10 +14787,10 @@
 "ultimo": "SPKUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 23,
+"file": 24,
 "primo": "SPKUSDT-1d-2025-06.zip",
-"sha256": "fe211e0efe5fa3d8648c98e4a825bc90faf318c1310a9dd4d5c970c8696bf932",
-"ultimo": "SPKUSDT-1d-2026-11-06.zip"
+"sha256": "c02de02c42a0ad6aa88d62ea9e794b04cfc9d768ee4c63e65d7f6b02e3cb0d64",
+"ultimo": "SPKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14807,10 +14807,10 @@
 "ultimo": "SPORTFUNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 16,
+"file": 17,
 "primo": "SPORTFUNUSDT-1d-2026-01.zip",
-"sha256": "c085440d04420a7eb6eb671c1e6e64737d84885d404755e0e8ae79312c35af5b",
-"ultimo": "SPORTFUNUSDT-1d-2026-11-06.zip"
+"sha256": "456f8cd0d1a06f6861ff1caf8a587e9cf311a977ddc403388b28600f5fb7daef",
+"ultimo": "SPORTFUNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14833,10 +14833,10 @@
 "ultimo": "SPXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SPXUSDT-1h-2026-11-01.zip",
-"sha256": "1470d88be2b5dac2cbb34839cdb000d5155f2028f9c1ce6d081656cac70e888b",
-"ultimo": "SPXUSDT-1h-2026-11-06.zip"
+"sha256": "ce0fe5a178f253af432e5bcfbc49741558feb6c0a8dd3730d646037524141e82",
+"ultimo": "SPXUSDT-1h-2026-11-07.zip"
 }
 },
 "SPYUSDT": {
@@ -14847,10 +14847,10 @@
 "ultimo": "SPYUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 13,
+"file": 14,
 "primo": "SPYUSDT-1d-2026-04.zip",
-"sha256": "8e6832c36ac5ec322c57f6bf9c569d458841fa98a204181888769f0466dc6d90",
-"ultimo": "SPYUSDT-1d-2026-11-06.zip"
+"sha256": "b59194ad3f04c3c21b0025f2eca442720251e8268a5981629b833db29e133790",
+"ultimo": "SPYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14927,10 +14927,10 @@
 "ultimo": "SSVUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 51,
+"file": 52,
 "primo": "SSVUSDT-1d-2023-02.zip",
-"sha256": "6e20c69627865e2896de6f9cc1008f8012fdbb2809b420866b42fd685e482490",
-"ultimo": "SSVUSDT-1d-2026-11-06.zip"
+"sha256": "490911a2d442555135c7c7a2721ae3b3969f4336a9fa76540e6e4e1d2a3fa6ca",
+"ultimo": "SSVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -14973,10 +14973,10 @@
 "ultimo": "STARUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "STARUSDT-1h-2026-11-01.zip",
-"sha256": "ea674315411e66a087c9ca89b9e701811cd36fd9dca672d2134a805af5e08e46",
-"ultimo": "STARUSDT-1h-2026-11-06.zip"
+"sha256": "ff60d1cb53af8dfc6dafe801608a975c52ee5923f83ccff387c682f8f398fa04",
+"ultimo": "STARUSDT-1h-2026-11-07.zip"
 }
 },
 "STBLUSDT": {
@@ -14987,10 +14987,10 @@
 "ultimo": "STBLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "STBLUSDT-1d-2025-09.zip",
-"sha256": "912eb23cc0937bf9ed1cf07f25705d5fe66f9f75ba6c0ba6c83c82c1308bf750",
-"ultimo": "STBLUSDT-1d-2026-11-06.zip"
+"sha256": "5ec2f4339e21c6b31dcb5fef724e69c150408527eb1f617f771b7e8cb21228ea",
+"ultimo": "STBLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15007,10 +15007,10 @@
 "ultimo": "STEEMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 42,
+"file": 43,
 "primo": "STEEMUSDT-1d-2023-11.zip",
-"sha256": "ae786d4918db0a50a020d52354a544961f898b476263c69e08f1887e8ea5e923",
-"ultimo": "STEEMUSDT-1d-2026-11-06.zip"
+"sha256": "d1dc04dca41b3e29e5e01a4cdfd57056c99c3f01ced02be5b4f35c5a9e9b7122",
+"ultimo": "STEEMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15033,10 +15033,10 @@
 "ultimo": "STGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 35,
+"file": 36,
 "primo": "STGUSDT-1h-2026-10-01.zip",
-"sha256": "0006203ae728a49858b0b4f2e8abd41afb89e0c19b9f6d328c015565975fea6b",
-"ultimo": "STGUSDT-1h-2026-11-06.zip"
+"sha256": "525864b597460bb047eef12eb00e8cc416225dec7afdc9f2339b13d0faa83bbb",
+"ultimo": "STGUSDT-1h-2026-11-07.zip"
 }
 },
 "STMUSDT": {
@@ -15047,10 +15047,10 @@
 "ultimo": "STMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 7,
+"file": 8,
 "primo": "STMUSDT-1d-2026-10.zip",
-"sha256": "bd7baa3642a4b7456d9bcaf6a1b1fbb586242856678780418cc88ef6f9b66c81",
-"ultimo": "STMUSDT-1d-2026-11-06.zip"
+"sha256": "4fc67cebb5a66b3ffdbbe48d6fe0202e23c3fa1ae45f4e5fa4b95b9b4eb7d9f2",
+"ultimo": "STMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15107,16 +15107,16 @@
 "ultimo": "STOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 25,
+"file": 26,
 "primo": "STOUSDT-1d-2025-04.zip",
-"sha256": "5f091d4dcc615d5fba416657351d32f58500f5ca36e13edbf0c1da68e3eae0dd",
-"ultimo": "STOUSDT-1d-2026-11-06.zip"
+"sha256": "8430e571039baf5bd8ea9e0c5f37a289eda92d70d9bf2dd359f1c639552054aa",
+"ultimo": "STOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "STOUSDT-1h-2026-11-01.zip",
-"sha256": "5e5a3a8c34edf7dd28236debdcd5e7124258610fde9a5c6bc4860686a9956c7f",
-"ultimo": "STOUSDT-1h-2026-11-06.zip"
+"sha256": "0d4a17a16b281954a89d3481d97bd47dda0a32a9a927ec1eeb43ddaef8c3e93d",
+"ultimo": "STOUSDT-1h-2026-11-07.zip"
 }
 },
 "STPTUSDT": {
@@ -15127,10 +15127,10 @@
 "ultimo": "STPTUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 43,
+"file": 44,
 "primo": "STPTUSDT-1d-2023-10.zip",
-"sha256": "bfebc066f3b8cc159b63f1e640bf25a1ea7f802c3ed8eba68602c6e11dfc8f57",
-"ultimo": "STPTUSDT-1d-2026-11-06.zip"
+"sha256": "4c9632bad79ae64447d8858ac086a1943e1982ca2a43d8d031b1b58412d9e1fe",
+"ultimo": "STPTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -15173,10 +15173,10 @@
 "ultimo": "STRCUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "STRCUSDT-1h-2026-11-01.zip",
-"sha256": "42010d9935d42bd19351ce032a17029ef735f95f846ac9cecd6cb2c502522b95",
-"ultimo": "STRCUSDT-1h-2026-11-06.zip"
+"sha256": "6d513e6b55412d84ea1ca2a714f8144570fc852fcb798ae47c0571da14b983c6",
+"ultimo": "STRCUSDT-1h-2026-11-07.zip"
 }
 },
 "STRKUSDT": {
@@ -15187,10 +15187,10 @@
 "ultimo": "STRKUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 39,
+"file": 40,
 "primo": "STRKUSDT-1d-2024-02.zip",
-"sha256": "3e503636cf9ea21a7adc164b6cf3b7fce45f7c8a455dcd9f5d366482f86edf5e",
-"ultimo": "STRKUSDT-1d-2026-11-06.zip"
+"sha256": "9a870905bc208aa31e19439b7f171615d688e782cd60664267ee5bfed6ae6ab9",
+"ultimo": "STRKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15207,10 +15207,10 @@
 "ultimo": "STXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 51,
+"file": 52,
 "primo": "STXUSDT-1d-2023-02.zip",
-"sha256": "1f13ba670a97288fd76f15e58ec9a93a85c250622c53c2a3b16e466720dabf25",
-"ultimo": "STXUSDT-1d-2026-11-06.zip"
+"sha256": "dcb52bcad677d64a1dce7da4a0aadef8536add48d02e46cb2efb41a6f9fe6b3e",
+"ultimo": "STXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15233,10 +15233,10 @@
 "ultimo": "STXXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "STXXUSDT-1h-2026-11-01.zip",
-"sha256": "fd1781de92fe2881126f3d6395e98093dfaf923ae7caa47c0ff8d0eb0b9ff23f",
-"ultimo": "STXXUSDT-1h-2026-11-06.zip"
+"sha256": "bffcbf577e9b6d5c17be04eaf0b86914f2e1882d9905516948e69f66ac94e4d2",
+"ultimo": "STXXUSDT-1h-2026-11-07.zip"
 }
 },
 "SUIUSDT": {
@@ -15287,16 +15287,16 @@
 "ultimo": "SUPERUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 42,
+"file": 43,
 "primo": "SUPERUSDT-1d-2023-11.zip",
-"sha256": "77a71725c56a6be3769ee87058bfda2d0148e40672ede822badb3bd1afc7888f",
-"ultimo": "SUPERUSDT-1d-2026-11-06.zip"
+"sha256": "d0ab261e0e844ea8a61607be6048c6340940dcae4a965e71d42798dd7ea586f8",
+"ultimo": "SUPERUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SUPERUSDT-1h-2026-11-01.zip",
-"sha256": "c4329efd988caf78011215c535600a63951c0d4d37fe716c115e237607565301",
-"ultimo": "SUPERUSDT-1h-2026-11-06.zip"
+"sha256": "6c7475e3ea2605f5f8568c24cc1cb6677e44a3dd65541a0f153a992fc15cf651",
+"ultimo": "SUPERUSDT-1h-2026-11-07.zip"
 }
 },
 "SUSDT": {
@@ -15307,10 +15307,10 @@
 "ultimo": "SUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 28,
+"file": 29,
 "primo": "SUSDT-1d-2025-01.zip",
-"sha256": "455fb20e963315dfc7db8c5968ae54a3824c5494c04a7f21116ab3c24ab79a1a",
-"ultimo": "SUSDT-1d-2026-11-06.zip"
+"sha256": "726aa6153b330b102571983ab395b95b0ab37d5c3cab16e94cd240e5075562e2",
+"ultimo": "SUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15353,10 +15353,10 @@
 "ultimo": "SWARMSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SWARMSUSDT-1h-2026-11-01.zip",
-"sha256": "23201b354e2b3d27879d88be83f6d387d13063a720a00b9b24414a611030eb2e",
-"ultimo": "SWARMSUSDT-1h-2026-11-06.zip"
+"sha256": "4de2f2c42391b1761d23adc88a33714230c7e69cf40dfb0eff18ede7f6c937b4",
+"ultimo": "SWARMSUSDT-1h-2026-11-07.zip"
 }
 },
 "SWELLUSDT": {
@@ -15367,10 +15367,10 @@
 "ultimo": "SWELLUSDT-fundingRate-2025-11.zip"
 },
 "giorni": {
-"file": 30,
+"file": 31,
 "primo": "SWELLUSDT-1d-2024-11.zip",
-"sha256": "cc8ee50d98aed78262472681f082010e533d15d507f30753703eac1347fca976",
-"ultimo": "SWELLUSDT-1d-2026-11-06.zip"
+"sha256": "c152bef74bcb2e07b2fb1d0bce5373c7dc4e00c2c84aaf17e7edb515aea4d220",
+"ultimo": "SWELLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -15413,10 +15413,10 @@
 "ultimo": "SXTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "SXTUSDT-1h-2026-11-01.zip",
-"sha256": "e6841c429e04a3b5d2bde14386a62c60fe2b6ae200a2194ebd548135ec47a2ea",
-"ultimo": "SXTUSDT-1h-2026-11-06.zip"
+"sha256": "fe688656b04d0bd165b2dfea9093be8e5e6edb4441bc72872ec493c6e94eeeb2",
+"ultimo": "SXTUSDT-1h-2026-11-07.zip"
 }
 },
 "SYNUSDT": {
@@ -15427,10 +15427,10 @@
 "ultimo": "SYNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 33,
+"file": 34,
 "primo": "SYNUSDT-1d-2024-08.zip",
-"sha256": "fca891f753e284fb39932bf02f910f63f104dec76f41f3b99241fbf843bd7d43",
-"ultimo": "SYNUSDT-1d-2026-11-06.zip"
+"sha256": "a6973378f4f8caf7931b258849038ec4e30159882460be5cccbc5641e98695ed",
+"ultimo": "SYNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15487,16 +15487,16 @@
 "ultimo": "TACUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "TACUSDT-1d-2025-07.zip",
-"sha256": "538377f4a971756bacfaa6b62bdffccdb36cb0a1b581c0572a97f0c3109d9157",
-"ultimo": "TACUSDT-1d-2026-11-06.zip"
+"sha256": "def27b20235c14be3702b0de5a96db1b04d1047f8d490f487cc68efb0531e7e7",
+"ultimo": "TACUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TACUSDT-1h-2026-11-01.zip",
-"sha256": "ae1872d91352aa25af543d5173c75e380ed5c8020f6a0352e98a8ca3696457aa",
-"ultimo": "TACUSDT-1h-2026-11-06.zip"
+"sha256": "37cfed25ade981c54de35d9b592162ad1d54f1ce27e8eac4ff50f41661624679",
+"ultimo": "TACUSDT-1h-2026-11-07.zip"
 }
 },
 "TAGUSDT": {
@@ -15507,10 +15507,10 @@
 "ultimo": "TAGUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "TAGUSDT-1d-2025-07.zip",
-"sha256": "0e05345fcac5c98b3e58df398e0c707dfb40c1f90a70444c6878c6f5e0f12a6c",
-"ultimo": "TAGUSDT-1d-2026-11-06.zip"
+"sha256": "e0595ccfe8d1735a9804ece8f08d14d206787a8a93d8d21423c7f8bf9a15ce46",
+"ultimo": "TAGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15553,10 +15553,10 @@
 "ultimo": "TAKEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TAKEUSDT-1h-2026-11-01.zip",
-"sha256": "e4aa05caf85c1195c395f4c08b8f5bcbab4aa1895df2f301a26dd15900969c98",
-"ultimo": "TAKEUSDT-1h-2026-11-06.zip"
+"sha256": "f64edd0576df91fc58c40175f4299b832d1f6ecb9d4ab540844599eaf21a12d5",
+"ultimo": "TAKEUSDT-1h-2026-11-07.zip"
 }
 },
 "TANSSIUSDT": {
@@ -15567,10 +15567,10 @@
 "ultimo": "TANSSIUSDT-fundingRate-2026-01.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "TANSSIUSDT-1d-2025-07.zip",
-"sha256": "a7cdc077a7827dee5ea2ca4c727194311dda730444bba138178c747351ea1016",
-"ultimo": "TANSSIUSDT-1d-2026-11-06.zip"
+"sha256": "9a06d1077e840f78f87270d44c66539fcd499e1de8bafa8ec7f504420d32894d",
+"ultimo": "TANSSIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -15587,10 +15587,10 @@
 "ultimo": "TAOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 37,
+"file": 38,
 "primo": "TAOUSDT-1d-2024-04.zip",
-"sha256": "a1170eb49cf180e432d6aaca53bb5c81e4a19f3a0eaacc0a414ec1817a488b29",
-"ultimo": "TAOUSDT-1d-2026-11-06.zip"
+"sha256": "92ef18ec8e8becb1b917a363cd87822d3823d7bc693b09422c60da3fdcdeab80",
+"ultimo": "TAOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15613,10 +15613,10 @@
 "ultimo": "TAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TAUSDT-1h-2026-11-01.zip",
-"sha256": "bd891ffbe98db5c54681a3e205604048245b1615698edd711da0964419d6c625",
-"ultimo": "TAUSDT-1h-2026-11-06.zip"
+"sha256": "35b211bb50ce6ed354e28e71997682cdb6f7bb1adbb45c5500fa5ddb28cf9a3c",
+"ultimo": "TAUSDT-1h-2026-11-07.zip"
 }
 },
 "TBTUSDT": {
@@ -15627,10 +15627,10 @@
 "ultimo": "TBTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "TBTUSDT-1d-2026-07.zip",
-"sha256": "809e6d8e75d51b72684f422041ccc707ac610c44591cac98dc47322c0f5e2df4",
-"ultimo": "TBTUSDT-1d-2026-11-06.zip"
+"sha256": "720a7e893442bee075bab6197eb8259a2511cf09557f53673cd7015aa66b585a",
+"ultimo": "TBTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15687,16 +15687,16 @@
 "ultimo": "TENCENTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "TENCENTUSDT-1d-2026-07.zip",
-"sha256": "4ae2487ad89aabcc5eac9a3f58b988f1fc00958627da214b61e09947eb733d0e",
-"ultimo": "TENCENTUSDT-1d-2026-11-06.zip"
+"sha256": "9b882f1596dee1f8652c5fc43543d83573f0ecdbb80585ae5eb24057a6fb0b35",
+"ultimo": "TENCENTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TENCENTUSDT-1h-2026-11-01.zip",
-"sha256": "89a1290bcb2f74ff3d6eeb011323e60cf168221319a1b92432617e15daf7da1a",
-"ultimo": "TENCENTUSDT-1h-2026-11-06.zip"
+"sha256": "811a09ec91e74720afe0b394758eb7320177b82f8456e6e427f62deff742d3dc",
+"ultimo": "TENCENTUSDT-1h-2026-11-07.zip"
 }
 },
 "TERUSDT": {
@@ -15707,10 +15707,10 @@
 "ultimo": "TERUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "TERUSDT-1d-2026-07.zip",
-"sha256": "d5534824cc81c42247d3dafd2133f620a7b33a98e1d1895c8a235ca9c4ba95ac",
-"ultimo": "TERUSDT-1d-2026-11-06.zip"
+"sha256": "a026ece95c2fb9a21fc228653da6900638d37b58da49a6b2bbc0d0d1a1871bac",
+"ultimo": "TERUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15753,10 +15753,10 @@
 "ultimo": "THEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "THEUSDT-1h-2026-11-01.zip",
-"sha256": "8c36e45ff73ba6cc9a245cde4bd53780c885c281cbe0cef1bf328aad91043121",
-"ultimo": "THEUSDT-1h-2026-11-06.zip"
+"sha256": "df48be2699f72f06fcb275144395a53ea2907ee4591e14897729298d9d5ea401",
+"ultimo": "THEUSDT-1h-2026-11-07.zip"
 }
 },
 "TIAUSDT": {
@@ -15767,10 +15767,10 @@
 "ultimo": "TIAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 43,
+"file": 44,
 "primo": "TIAUSDT-1d-2023-10.zip",
-"sha256": "bfbd7290ac2f8168b61cdd69b909e522f35873ac984ee99f603c2d4c82d12cba",
-"ultimo": "TIAUSDT-1d-2026-11-06.zip"
+"sha256": "833fe3fcadd2bb9bcc89f086e17c259568cad18504f792e252d8fd56bb7dae8f",
+"ultimo": "TIAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15787,10 +15787,10 @@
 "ultimo": "TLMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 70,
+"file": 71,
 "primo": "TLMUSDT-1d-2021-07.zip",
-"sha256": "eefa20c0d81140b6cdc044d285820d5f60dc5b9aee6b8975115106c535782026",
-"ultimo": "TLMUSDT-1d-2026-11-06.zip"
+"sha256": "b199d358b482e50622c17fadfc59afba50e5a31de33b568a03186374e19211d0",
+"ultimo": "TLMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15827,16 +15827,16 @@
 "ultimo": "TNSRUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 37,
+"file": 38,
 "primo": "TNSRUSDT-1d-2024-04.zip",
-"sha256": "d9c40f5bf647b967d2398c729d2c264ddee9970207c11c695cf631691f9f0f12",
-"ultimo": "TNSRUSDT-1d-2026-11-06.zip"
+"sha256": "de73459f229a89c6b6af04e88d26569591d8eb9470463dad636b6b16cde042ce",
+"ultimo": "TNSRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TNSRUSDT-1h-2026-11-01.zip",
-"sha256": "3c9cc6709619fa418eb61bd75cb5514777769f7955654242eb0433b78e714bc0",
-"ultimo": "TNSRUSDT-1h-2026-11-06.zip"
+"sha256": "21d27210a671d9380258b4a335a6ee7e6bee3313c2429207d0f85f9988b026de",
+"ultimo": "TNSRUSDT-1h-2026-11-07.zip"
 }
 },
 "TOKENUSDT": {
@@ -15847,10 +15847,10 @@
 "ultimo": "TOKENUSDT-fundingRate-2025-12.zip"
 },
 "giorni": {
-"file": 42,
+"file": 43,
 "primo": "TOKENUSDT-1d-2023-11.zip",
-"sha256": "792e23076271a758e57cacf218d9ddc232528a822ffe42c69f35c4af4c1eac21",
-"ultimo": "TOKENUSDT-1d-2026-11-06.zip"
+"sha256": "39fd1dd03a5c07452c63495a6fb38fcd36a14a6e167d642ea7f723c1496fc455",
+"ultimo": "TOKENUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -15907,10 +15907,10 @@
 "ultimo": "TOSHIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "TOSHIUSDT-1d-2025-09.zip",
-"sha256": "f2a0625ac4a9e1576826650826f71181aff2cf9d0157a780b4f3b39aea284e65",
-"ultimo": "TOSHIUSDT-1d-2026-11-06.zip"
+"sha256": "159834121baad2725173c76387abbd78f9c7d81436a51b8935edef0cd1e2be12",
+"ultimo": "TOSHIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15927,10 +15927,10 @@
 "ultimo": "TOWNSUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 21,
+"file": 22,
 "primo": "TOWNSUSDT-1d-2025-08.zip",
-"sha256": "a911404eba73cd4475d5cd5c6c7a6b2c18bbd76a070575452fc71cee84eec610",
-"ultimo": "TOWNSUSDT-1d-2026-11-06.zip"
+"sha256": "9c3ed70136625f125d1a792695bc8b1701f647802d1e01bb7b26a6fa7a53d442",
+"ultimo": "TOWNSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -15953,10 +15953,10 @@
 "ultimo": "TQQQUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TQQQUSDT-1h-2026-11-01.zip",
-"sha256": "2502fe0dd392f53321146162ba5cd8234e627120fb3e46bd81c35112f4b86c6d",
-"ultimo": "TQQQUSDT-1h-2026-11-06.zip"
+"sha256": "530f3b119f19489ef2a3defb2c1fa6d063d9ff742ea2584a8bf4112e254f7218",
+"ultimo": "TQQQUSDT-1h-2026-11-07.zip"
 }
 },
 "TRADOORUSDT": {
@@ -15967,10 +15967,10 @@
 "ultimo": "TRADOORUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "TRADOORUSDT-1d-2025-09.zip",
-"sha256": "63ed081af00ddf89cbeb953d4cf890b9030151fc5ca36900488ac1d949b60aef",
-"ultimo": "TRADOORUSDT-1d-2026-11-06.zip"
+"sha256": "772bf4390539e2a935dd4fb98866bc93fb8f11d5436435ec6f3742c0c440cc8b",
+"ultimo": "TRADOORUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16027,16 +16027,16 @@
 "ultimo": "TRIAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 15,
+"file": 16,
 "primo": "TRIAUSDT-1d-2026-02.zip",
-"sha256": "7ed10c2bb8f75c65bb3d1d80bd907b14758c0f81b37026b536690768419813da",
-"ultimo": "TRIAUSDT-1d-2026-11-06.zip"
+"sha256": "4696d9b1be4f9fc55e910b63dc653337aa5dc9e79c835d11fe434ee7721b4ac5",
+"ultimo": "TRIAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TRIAUSDT-1h-2026-11-01.zip",
-"sha256": "7aa0407592bc2ad94a3d0b99957b9daade99beba32ca43eb55f8c6992a12f868",
-"ultimo": "TRIAUSDT-1h-2026-11-06.zip"
+"sha256": "5ac16f265ed3d66a7f5221cf0da241616485126a1886eb70a14d5623fa5e4294",
+"ultimo": "TRIAUSDT-1h-2026-11-07.zip"
 }
 },
 "TROYUSDT": {
@@ -16047,10 +16047,10 @@
 "ultimo": "TROYUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 31,
+"file": 32,
 "primo": "TROYUSDT-1d-2024-10.zip",
-"sha256": "37686806e61a1ce7254e54b657a257290451661a088d62b86f913698292e3d03",
-"ultimo": "TROYUSDT-1d-2026-11-06.zip"
+"sha256": "4ab92d2d31b52d4103a3fad23ec934edaf8bdf04d72e1a1a10a2e1b6490db8ec",
+"ultimo": "TROYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -16073,10 +16073,10 @@
 "ultimo": "TRUMPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TRUMPUSDT-1h-2026-11-01.zip",
-"sha256": "c69b22027c5fb4e410c0e19f40854b78fe270c0bd326f0c7c858fb7fcd5a14ae",
-"ultimo": "TRUMPUSDT-1h-2026-11-06.zip"
+"sha256": "8cfd27c2f0076e6c5e66fb770cbbb6da7f9d575c0857230b82e30a7e78bcd7d1",
+"ultimo": "TRUMPUSDT-1h-2026-11-07.zip"
 }
 },
 "TRUSTUSDT": {
@@ -16087,10 +16087,10 @@
 "ultimo": "TRUSTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 18,
+"file": 19,
 "primo": "TRUSTUSDT-1d-2025-11.zip",
-"sha256": "13c7f23b125f35bfba9c25040cbcefb21be18fe7526995d2225ef570b38d30f9",
-"ultimo": "TRUSTUSDT-1d-2026-11-06.zip"
+"sha256": "264552ae559b5494f0207a508dc4ec0a6e95bf179ff4aa393c4f1f8bc7515034",
+"ultimo": "TRUSTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16107,10 +16107,10 @@
 "ultimo": "TRUTHUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 19,
+"file": 20,
 "primo": "TRUTHUSDT-1d-2025-10.zip",
-"sha256": "5a47dee7360c06df9c9034e1e957202c8ee6112c34d232170115dc3d0f5e2452",
-"ultimo": "TRUTHUSDT-1d-2026-11-06.zip"
+"sha256": "0888e9f2566ed46e2fe0550f2ba758b7656bd40461e67d5cdf2f006163f31701",
+"ultimo": "TRUTHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16187,16 +16187,16 @@
 "ultimo": "TSLLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 8,
+"file": 9,
 "primo": "TSLLUSDT-1d-2026-09.zip",
-"sha256": "d02f80af559e05ee94ccea599f29e4f040b16bc15884c603059df83cd7572774",
-"ultimo": "TSLLUSDT-1d-2026-11-06.zip"
+"sha256": "10782a5d695a0e3481d7844209ba6ac6bd8bd1580b4b02b046e807ff75a81c3e",
+"ultimo": "TSLLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TSLLUSDT-1h-2026-11-01.zip",
-"sha256": "6048bf1a49d37ceb8355804aa0d5a23124d15b1e179830e800fea6d211caebad",
-"ultimo": "TSLLUSDT-1h-2026-11-06.zip"
+"sha256": "0dc67c779f5d6c88e3fa5e80b294f56dc588b480f7ff440d4fef473a8c9b9b8d",
+"ultimo": "TSLLUSDT-1h-2026-11-07.zip"
 }
 },
 "TSMUSDT": {
@@ -16207,10 +16207,10 @@
 "ultimo": "TSMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 13,
+"file": 14,
 "primo": "TSMUSDT-1d-2026-04.zip",
-"sha256": "346f62cc26b7e116243263ed082ee6e83a1353fd2758a6f68500bb02a7230ee3",
-"ultimo": "TSMUSDT-1d-2026-11-06.zip"
+"sha256": "d1204199c33591f2a407b64d7622ff00e0e69927d7f8adaa9ea35ba86e263539",
+"ultimo": "TSMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16253,10 +16253,10 @@
 "ultimo": "TTWOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TTWOUSDT-1h-2026-11-01.zip",
-"sha256": "657cd8c90acc1e52481e7d4e0019f335b093de82a2975b1bd3bc1cea033c3d8f",
-"ultimo": "TTWOUSDT-1h-2026-11-06.zip"
+"sha256": "346aa6958f15246b6782e91a5c4036fa911e96f26dd4df45841ab9b1c143b699",
+"ultimo": "TTWOUSDT-1h-2026-11-07.zip"
 }
 },
 "TURBOUSDT": {
@@ -16267,10 +16267,10 @@
 "ultimo": "TURBOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 36,
+"file": 37,
 "primo": "TURBOUSDT-1d-2024-05.zip",
-"sha256": "7b2ff757bfe031b7d8f3d66fbaaae25c3e434af6bbcb6ae6fd3afb0c769afe3a",
-"ultimo": "TURBOUSDT-1d-2026-11-06.zip"
+"sha256": "1116222a6032dab01b92e44818358429209f167844349794d1474b689b87b544",
+"ultimo": "TURBOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16287,10 +16287,10 @@
 "ultimo": "TURTLEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 19,
+"file": 20,
 "primo": "TURTLEUSDT-1d-2025-10.zip",
-"sha256": "ea351be09641dc7013e06783147c12157090f96b0a69dd8fdb34d665f411710e",
-"ultimo": "TURTLEUSDT-1d-2026-11-06.zip"
+"sha256": "1e773aed2b1644aebe4e428c72104712c67dff1a907f8c55c3a1627359abe7d4",
+"ultimo": "TURTLEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16307,10 +16307,10 @@
 "ultimo": "TUTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 26,
+"file": 27,
 "primo": "TUTUSDT-1d-2025-03.zip",
-"sha256": "1d73b29e2300f5426b30f0d7641654e6753f0db99104aabe1714b659c5337a4d",
-"ultimo": "TUTUSDT-1d-2026-11-06.zip"
+"sha256": "1b1cbec678edfe93a554cae2569faf5bd44681257f353f3b675c267510d470a9",
+"ultimo": "TUTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16367,16 +16367,16 @@
 "ultimo": "TXNUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "TXNUSDT-1d-2026-07.zip",
-"sha256": "bb2cd2c2f93b3223ee2f328a1c9ba0a83f60f5aff3c03b2ac608f3a3aa2f4f6a",
-"ultimo": "TXNUSDT-1d-2026-11-06.zip"
+"sha256": "c21ef3114dd5868b7ee581fd69fad58895dbce62f39f167bf071203484ef7630",
+"ultimo": "TXNUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "TXNUSDT-1h-2026-11-01.zip",
-"sha256": "04f5313451573645d62bab363e2c1f5f93af65aa4d73a2563e6ecd06c41e6299",
-"ultimo": "TXNUSDT-1h-2026-11-06.zip"
+"sha256": "3d79ba5abcecdda1143894205163393dacb8557a254d4b80f1796e0712802e6e",
+"ultimo": "TXNUSDT-1h-2026-11-07.zip"
 }
 },
 "TZAUSDT": {
@@ -16387,10 +16387,10 @@
 "ultimo": "TZAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "TZAUSDT-1d-2026-07.zip",
-"sha256": "6bf63687812c82d8de0dcd58a683b7a7f7c88593fc2f952b8b7e4b80e4d86fd3",
-"ultimo": "TZAUSDT-1d-2026-11-06.zip"
+"sha256": "0dd8a5df958ac2e65caf8ead6ec86fb23266f2919e906fdd02325fbee288cf6f",
+"ultimo": "TZAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16433,10 +16433,10 @@
 "ultimo": "UBERUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "UBERUSDT-1h-2026-11-01.zip",
-"sha256": "702843a9ee4859dd772925a30cbd0ea964429a0c3c7645bedd9d6a8229d76458",
-"ultimo": "UBERUSDT-1h-2026-11-06.zip"
+"sha256": "da446eb81e55046282730874622b517248c6b827dfa66c6dd49cf222f153e0c7",
+"ultimo": "UBERUSDT-1h-2026-11-07.zip"
 }
 },
 "UBUSDT": {
@@ -16447,10 +16447,10 @@
 "ultimo": "UBUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "UBUSDT-1d-2025-09.zip",
-"sha256": "28b2d67a4cdf77c0703e2178dadeab376eb275446273f1e7ea4ce1dabcd70d31",
-"ultimo": "UBUSDT-1d-2026-11-06.zip"
+"sha256": "95044fb71a9b92e79e352fdf98c6b28abdb3a9e00b5bec96bbe5c3c82dee29d1",
+"ultimo": "UBUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16467,10 +16467,10 @@
 "ultimo": "UMAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 48,
+"file": 49,
 "primo": "UMAUSDT-1d-2023-05.zip",
-"sha256": "1c6b1ff1721cca479e51b7cd53c9690c7e21907a6f1816daaa3e692c83c77235",
-"ultimo": "UMAUSDT-1d-2026-11-06.zip"
+"sha256": "341673d9eee7ea77962ff5aef01219b06b7fb8986ffc45cf6dc991cf3aac5f91",
+"ultimo": "UMAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16507,10 +16507,10 @@
 "ultimo": "UNHUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 8,
+"file": 9,
 "primo": "UNHUSDT-1d-2026-09.zip",
-"sha256": "69aabc10eb3e2ff68789e1809a57c92d24c559cbbfc98aa0a205d8348f790c66",
-"ultimo": "UNHUSDT-1d-2026-11-06.zip"
+"sha256": "0addc205bcfffd096e32a1c7c81630e4b6e362f7eef840a3daa170171498a847",
+"ultimo": "UNHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16533,10 +16533,10 @@
 "ultimo": "UNITREEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "UNITREEUSDT-1h-2026-11-01.zip",
-"sha256": "00f9e996737f828bf91e2054e545046708b54938215d2aeb68dc598b9a70c301",
-"ultimo": "UNITREEUSDT-1h-2026-11-06.zip"
+"sha256": "ec3a44ce268b81481ef3490731b506bc28b675d79ffed1a9a0bdf11ebac230cd",
+"ultimo": "UNITREEUSDT-1h-2026-11-07.zip"
 }
 },
 "UNIUSDT": {
@@ -16547,10 +16547,10 @@
 "ultimo": "UNIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 80,
+"file": 81,
 "primo": "UNIUSDT-1d-2020-09.zip",
-"sha256": "1dba4abdde0898ccc26a33070c8adbc6e0748c258cb04d9b8123472c2be1fd97",
-"ultimo": "UNIUSDT-1d-2026-11-06.zip"
+"sha256": "60eabc5ff74e3d34ddfbb9ae3e7452f9c301bc6a8d4572152fdab4a8f0d27893",
+"ultimo": "UNIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16567,10 +16567,10 @@
 "ultimo": "URNMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "URNMUSDT-1d-2026-06.zip",
-"sha256": "ab864bb976e25fddf2fcedba093eaed5cfbefaf14803f006148d23323f976952",
-"ultimo": "URNMUSDT-1d-2026-11-06.zip"
+"sha256": "d916783f1cdf01047f695e0da69610b32e43392708c5211873234d8a57720a10",
+"ultimo": "URNMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16593,10 +16593,10 @@
 "ultimo": "USARUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "USARUSDT-1h-2026-11-01.zip",
-"sha256": "8e7367766bf741e112b5eb8face74f39ce98d8dd02c0e3cb57ddb8c2d75310fa",
-"ultimo": "USARUSDT-1h-2026-11-06.zip"
+"sha256": "17c6c3e3969ef0d7e118a7e9f5ed75d19616948a1f1ad6f071d846f61d67d2f1",
+"ultimo": "USARUSDT-1h-2026-11-07.zip"
 }
 },
 "USDBRLUSDT": {
@@ -16607,10 +16607,10 @@
 "ultimo": "USDBRLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 8,
+"file": 9,
 "primo": "USDBRLUSDT-1d-2026-09.zip",
-"sha256": "5ae66764cccba9a7a2bf6c9cd952c6ffc2c94c4ac4685cfc9e1aef3d3ec01738",
-"ultimo": "USDBRLUSDT-1d-2026-11-06.zip"
+"sha256": "85bad5c968c94b276a38a0e4f0cf5e91cecd8a269c8958bb62692489db08f273",
+"ultimo": "USDBRLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16633,10 +16633,10 @@
 "ultimo": "USDEXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "USDEXUSDT-1h-2026-11-01.zip",
-"sha256": "c18eca4668888032f3e9398b1d8e13fbfde0b1dd5c4ed1dff4009e6733d2354c",
-"ultimo": "USDEXUSDT-1h-2026-11-06.zip"
+"sha256": "027e65821890dc5367ce73c28cbf6fffdad9d0e70828558a9176512953561c0e",
+"ultimo": "USDEXUSDT-1h-2026-11-07.zip"
 }
 },
 "USELESSUSDT": {
@@ -16647,10 +16647,10 @@
 "ultimo": "USELESSUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 21,
+"file": 22,
 "primo": "USELESSUSDT-1d-2025-08.zip",
-"sha256": "d974a4a99f26ec9ca9073fb855bc9771720d29afb81f7578d2c4d4f573108310",
-"ultimo": "USELESSUSDT-1d-2026-11-06.zip"
+"sha256": "80ef644908ef4b470659749b2d68343417afe9eba76d9f6f26e2daacf9ecbf0a",
+"ultimo": "USELESSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16693,10 +16693,10 @@
 "ultimo": "USUALUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "USUALUSDT-1h-2026-11-01.zip",
-"sha256": "c5281e03df86695bd33586d082b2b179d4b4472dc00b556cdae710ed8d46def2",
-"ultimo": "USUALUSDT-1h-2026-11-06.zip"
+"sha256": "27c9f8450375d48a5882611f8ac3c884dc5351fbff453e992ff32aea004407d5",
+"ultimo": "USUALUSDT-1h-2026-11-07.zip"
 }
 },
 "USUSDT": {
@@ -16707,16 +16707,16 @@
 "ultimo": "USUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 17,
+"file": 18,
 "primo": "USUSDT-1d-2025-12.zip",
-"sha256": "406e581a44d4a03d52028811b002a51e274002fbdd6218c71f2818650fc990ee",
-"ultimo": "USUSDT-1d-2026-11-06.zip"
+"sha256": "f6c60dd5e5271e1b5d57604e6689779c09ebb80f413c19ee6a1bfbcbad17bf3e",
+"ultimo": "USUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "USUSDT-1h-2026-11-01.zip",
-"sha256": "31ed8b56614f0a2641a2068d4e68f63632112edc18a7060286cfdedbe7906fa9",
-"ultimo": "USUSDT-1h-2026-11-06.zip"
+"sha256": "59336413e21795417fd9d053d5e859885e6affd2f31bc8edc2de8c62d18d7014",
+"ultimo": "USUSDT-1h-2026-11-07.zip"
 }
 },
 "UVXYUSDT": {
@@ -16727,10 +16727,10 @@
 "ultimo": "UVXYUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "UVXYUSDT-1d-2026-06.zip",
-"sha256": "4ac98df8a3aa646ba3959f6fc7d524bf3360e11e79d93d397e68a0cd42b02847",
-"ultimo": "UVXYUSDT-1d-2026-11-06.zip"
+"sha256": "96af2ff690072aba6277325c0d0199343db43e88b7aaa6cb1288088fe6bdf238",
+"ultimo": "UVXYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16747,10 +16747,10 @@
 "ultimo": "UXLINKUSDT-fundingRate-2025-09.zip"
 },
 "giorni": {
-"file": 32,
+"file": 33,
 "primo": "UXLINKUSDT-1d-2024-09.zip",
-"sha256": "3f42ef38f4b1b84cd4bb72d93d0e88f31b5eb1cd9cf40b3e6643b766db5331a2",
-"ultimo": "UXLINKUSDT-1d-2026-11-06.zip"
+"sha256": "1d4feabe9ebe05f11371cf08fa288f768b7f3ecee4501df8681698064c6dfd8f",
+"ultimo": "UXLINKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -16773,10 +16773,10 @@
 "ultimo": "VANAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VANAUSDT-1h-2026-11-01.zip",
-"sha256": "8880f31e45fb1f2a904858e276c6b23f6f87a1aa6f3ba4ea7eea92d375ef02e7",
-"ultimo": "VANAUSDT-1h-2026-11-06.zip"
+"sha256": "8f6896fddd0ded33f6871e2c0a23e69b2279c4030d1935251a1a356c47787606",
+"ultimo": "VANAUSDT-1h-2026-11-07.zip"
 }
 },
 "VANRYUSDT": {
@@ -16787,10 +16787,10 @@
 "ultimo": "VANRYUSDT-fundingRate-2026-08.zip"
 },
 "giorni": {
-"file": 38,
+"file": 39,
 "primo": "VANRYUSDT-1d-2024-03.zip",
-"sha256": "6b3278bbf3c3767a859880786e342ae83ef3c1b6ccab6fba84b176cba9a22d3e",
-"ultimo": "VANRYUSDT-1d-2026-11-06.zip"
+"sha256": "8c8808d85100ff4c75a05b6322bc6b94cfa5ef3a730e26e82f5b44f4311c429c",
+"ultimo": "VANRYUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -16807,16 +16807,16 @@
 "ultimo": "VELODROMEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 29,
+"file": 30,
 "primo": "VELODROMEUSDT-1d-2024-12.zip",
-"sha256": "b5ec7d3187c7ba16244069d1da79b7b5274c419d943359497ccb6ae5c1fa2bfc",
-"ultimo": "VELODROMEUSDT-1d-2026-11-06.zip"
+"sha256": "8421f1db131531e498dffa71b6b51e4d461bf32362e248c2d487553e5f4dc5ef",
+"ultimo": "VELODROMEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VELODROMEUSDT-1h-2026-11-01.zip",
-"sha256": "025a6a3e12dfcab79c8a75fa79dc66ee0be24978d4a47ce457510d13248f2af5",
-"ultimo": "VELODROMEUSDT-1h-2026-11-06.zip"
+"sha256": "df81f21a687b33b750d80b3c18c9049f38cc2fda7150523737e27285cfc4ba3b",
+"ultimo": "VELODROMEUSDT-1h-2026-11-07.zip"
 }
 },
 "VELVETUSDT": {
@@ -16833,10 +16833,10 @@
 "ultimo": "VELVETUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VELVETUSDT-1h-2026-11-01.zip",
-"sha256": "d89f7b78eb258bc49a3372488ff8af451bc4fef02561756c86294d47969171b2",
-"ultimo": "VELVETUSDT-1h-2026-11-06.zip"
+"sha256": "c135774f8f81bd93c578bdef0a179b6d84a9cef83f380b6e42529930f4ab9f68",
+"ultimo": "VELVETUSDT-1h-2026-11-07.zip"
 }
 },
 "VETUSDT": {
@@ -16847,10 +16847,10 @@
 "ultimo": "VETUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 87,
+"file": 88,
 "primo": "VETUSDT-1d-2020-02.zip",
-"sha256": "6ba88581c155de14cb68ce63bfb2fc0516a695bb10c5cb5369000ef9ffa98b1c",
-"ultimo": "VETUSDT-1d-2026-11-06.zip"
+"sha256": "e7a5214bbd41f072d71818d21cc8807c0902b890a33244eb00344abc992a8127",
+"ultimo": "VETUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16907,10 +16907,10 @@
 "ultimo": "VIDTUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 33,
+"file": 34,
 "primo": "VIDTUSDT-1d-2024-08.zip",
-"sha256": "538d1c7dd0e64a83bf6ac1728b4576f8b9afbf0324bd6ddecb7ad0d7c37df6f2",
-"ultimo": "VIDTUSDT-1d-2026-11-06.zip"
+"sha256": "c5490dbf6c832e25d33e540ca68b0fe256496f96d2a544a100a3f3fea7551968",
+"ultimo": "VIDTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -16927,10 +16927,10 @@
 "ultimo": "VINEUSDT-fundingRate-2026-04.zip"
 },
 "giorni": {
-"file": 28,
+"file": 29,
 "primo": "VINEUSDT-1d-2025-01.zip",
-"sha256": "e419d8812cbef32e068e4add33aefe20bfb7857a15060d4bf523633822a2089c",
-"ultimo": "VINEUSDT-1d-2026-11-06.zip"
+"sha256": "974f8611df9d85afb757c7ef343b53ae125504dcdaa316f6dc433f934a63aabb",
+"ultimo": "VINEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -16947,10 +16947,10 @@
 "ultimo": "VIRTUALUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 29,
+"file": 30,
 "primo": "VIRTUALUSDT-1d-2024-12.zip",
-"sha256": "1aaf49f68d3043177ebabc2deb4417ce6bc391ad360daa777fe9042019438489",
-"ultimo": "VIRTUALUSDT-1d-2026-11-06.zip"
+"sha256": "f7fc3ce02e37d1342f45c9b8285fbce7afb7aa1d516a056dd24e285eacd87147",
+"ultimo": "VIRTUALUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -16973,10 +16973,10 @@
 "ultimo": "VKTXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VKTXUSDT-1h-2026-11-01.zip",
-"sha256": "1e068d27000e64a594b8ad11c72928115e25d85c7f3a0b2ff0263f33736ce757",
-"ultimo": "VKTXUSDT-1h-2026-11-06.zip"
+"sha256": "1f4a9f53e3dfaac6ca34387c17d118c6a22b5be9a36ced4ec88089359682666e",
+"ultimo": "VKTXUSDT-1h-2026-11-07.zip"
 }
 },
 "VOXELUSDT": {
@@ -16987,10 +16987,10 @@
 "ultimo": "VOXELUSDT-fundingRate-2025-12.zip"
 },
 "giorni": {
-"file": 33,
+"file": 34,
 "primo": "VOXELUSDT-1d-2024-08.zip",
-"sha256": "858a7a8c8ce75890d925791ccbff9da993b4e72c9a10b6debfd630dbd5b1066a",
-"ultimo": "VOXELUSDT-1d-2026-11-06.zip"
+"sha256": "f64b572550478045fe94126d66353a00d67138527116b3d3968c7cff1a16276f",
+"ultimo": "VOXELUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -17007,16 +17007,16 @@
 "ultimo": "VRTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "VRTUSDT-1d-2026-07.zip",
-"sha256": "89b8097fb008b2589939851f85e11c6c72bbb2dcaca019ff13f30360a665d149",
-"ultimo": "VRTUSDT-1d-2026-11-06.zip"
+"sha256": "5637ac4d513c3e4f2ea11c18878934084c04ae6ecf12f424724857a095334321",
+"ultimo": "VRTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VRTUSDT-1h-2026-11-01.zip",
-"sha256": "956d57fc0d995d1af9cdd038194cdbf281cc3218fa5093e012492d75e289892d",
-"ultimo": "VRTUSDT-1h-2026-11-06.zip"
+"sha256": "b9de0df96be359c10cf9fc1e65806dfee0b073cb7385eab3b1918c28bfb0f07e",
+"ultimo": "VRTUSDT-1h-2026-11-07.zip"
 }
 },
 "VSTUSDT": {
@@ -17033,10 +17033,10 @@
 "ultimo": "VSTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VSTUSDT-1h-2026-11-01.zip",
-"sha256": "53025485a0cef8c87e399ed15ad0773cb2beafbbad49f37f987bc2f07101f916",
-"ultimo": "VSTUSDT-1h-2026-11-06.zip"
+"sha256": "ca455e9376bb393623ecf25745424444fec2323b093e33ba9ebd3833365fde5a",
+"ultimo": "VSTUSDT-1h-2026-11-07.zip"
 }
 },
 "VTHOUSDT": {
@@ -17047,10 +17047,10 @@
 "ultimo": "VTHOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 28,
+"file": 29,
 "primo": "VTHOUSDT-1d-2025-01.zip",
-"sha256": "6e3f5fddca0f3a74571e902cb5cbbf8becb8a3128a0b9e992d1645a282eb52f0",
-"ultimo": "VTHOUSDT-1d-2026-11-06.zip"
+"sha256": "af8b765ba8a3ea11d4abdc40baabff26d192d747c95ff675c7164018eba5c381",
+"ultimo": "VTHOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17093,10 +17093,10 @@
 "ultimo": "VVVUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "VVVUSDT-1h-2026-11-01.zip",
-"sha256": "6d6863e747a146d6b109c43e3666a9ee95d7f61b78f982488728a968b9fc7f57",
-"ultimo": "VVVUSDT-1h-2026-11-06.zip"
+"sha256": "afe0f1c45e235193b0802159300b8618fae2449f7fc35402f9e5f18f9a863fec",
+"ultimo": "VVVUSDT-1h-2026-11-07.zip"
 }
 },
 "WALUSDT": {
@@ -17107,16 +17107,16 @@
 "ultimo": "WALUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 26,
+"file": 27,
 "primo": "WALUSDT-1d-2025-03.zip",
-"sha256": "fba987ab592d1da5a3b57337c2e3dee8b4f1a915ac4f49ff89bd22ec00d9ff7f",
-"ultimo": "WALUSDT-1d-2026-11-06.zip"
+"sha256": "f9f1b0e9df4176b0de28e6f0f6d86b35d19568c6f4c86bad65e3a18a7fc9c470",
+"ultimo": "WALUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WALUSDT-1h-2026-11-01.zip",
-"sha256": "d167e6bda828119d66db3ef33dde64b313a7835a5f8218536346a4d74e9d20d4",
-"ultimo": "WALUSDT-1h-2026-11-06.zip"
+"sha256": "9b9c3a265b7657e63fe59ae3708ad509125d5177666d322b0f860a1774f03187",
+"ultimo": "WALUSDT-1h-2026-11-07.zip"
 }
 },
 "WAVESUSDT": {
@@ -17127,10 +17127,10 @@
 "ultimo": "WAVESUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 81,
+"file": 82,
 "primo": "WAVESUSDT-1d-2020-08.zip",
-"sha256": "b6350add86c866d9fa9713af7ba4628bf7e5cec1ee57ebc19b780cee86a4d8dd",
-"ultimo": "WAVESUSDT-1d-2026-11-06.zip"
+"sha256": "15574cef2d62c1432fbd43b9b2ba6f2f05653f43ddb3f5e8edcb3de0f4c5b358",
+"ultimo": "WAVESUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -17153,10 +17153,10 @@
 "ultimo": "WAXPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WAXPUSDT-1h-2026-11-01.zip",
-"sha256": "f06182fd67687953ba3b1c6c74224fbc2890bece1c9e4045cb23e11d657309fb",
-"ultimo": "WAXPUSDT-1h-2026-11-06.zip"
+"sha256": "3b0b38e51a664d79eb6fc0bfad7cc17a0c140ab9833f4bde067dd5ccc1f2eebc",
+"ultimo": "WAXPUSDT-1h-2026-11-07.zip"
 }
 },
 "WCTUSDT": {
@@ -17167,10 +17167,10 @@
 "ultimo": "WCTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 25,
+"file": 26,
 "primo": "WCTUSDT-1d-2025-04.zip",
-"sha256": "c6d196da4651e6b209e6881a6fb8691a022603e0af0f11d922f5a9c2b6d42fd0",
-"ultimo": "WCTUSDT-1d-2026-11-06.zip"
+"sha256": "eab938c7c0889f2e2446fc834ce971e8122796f01811d23819bae9cb34f25b24",
+"ultimo": "WCTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17187,16 +17187,16 @@
 "ultimo": "WDCUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "WDCUSDT-1d-2026-05.zip",
-"sha256": "ba7e7dbeceff25f21074cbddad5d1d625e5f1e69883db18fe5a9692a14273a0d",
-"ultimo": "WDCUSDT-1d-2026-11-06.zip"
+"sha256": "ebf7868d40683cbae34d86902017eced0a3c104379931a067376afb7ccd19f53",
+"ultimo": "WDCUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WDCUSDT-1h-2026-11-01.zip",
-"sha256": "3e3a7eadb805cc2e02d74767ee0259b8a737e2482dec0c882baebb0830bef0b8",
-"ultimo": "WDCUSDT-1h-2026-11-06.zip"
+"sha256": "22b1feda4f95c0ae58582f8954b3b7b3208deac7dd21db528159c8cd5e8eedc1",
+"ultimo": "WDCUSDT-1h-2026-11-07.zip"
 }
 },
 "WENUSDT": {
@@ -17213,10 +17213,10 @@
 "ultimo": "WENUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WENUSDT-1h-2026-11-01.zip",
-"sha256": "bf585aaaed3b56b25eb0363b7d0b0b92920edba7e482fd99ec326172eeb8920a",
-"ultimo": "WENUSDT-1h-2026-11-06.zip"
+"sha256": "2f2734f760a35488f90b2c63589857874b2dc06fa14020238e6b9fa0ac12f1b2",
+"ultimo": "WENUSDT-1h-2026-11-07.zip"
 }
 },
 "WETUSDT": {
@@ -17227,10 +17227,10 @@
 "ultimo": "WETUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 17,
+"file": 18,
 "primo": "WETUSDT-1d-2025-12.zip",
-"sha256": "142bed2aa7f4f89d6f32a7baaa57fd14928b8a6e41962de46b0b6f81e7789bc2",
-"ultimo": "WETUSDT-1d-2026-11-06.zip"
+"sha256": "d4a0fea99ae514c590ff08c6e362d3736de0687f35bda9bbf5d1f30d25fec393",
+"ultimo": "WETUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17253,10 +17253,10 @@
 "ultimo": "WIFUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WIFUSDT-1h-2026-11-01.zip",
-"sha256": "d7563fd15cd3a94fadd4541f8d2909c4dd217f972fc1850ca11a8b0e98192b01",
-"ultimo": "WIFUSDT-1h-2026-11-06.zip"
+"sha256": "193133547d094ffc9585418d976df57110e4403bb130d9f2cb49aa47704d9350",
+"ultimo": "WIFUSDT-1h-2026-11-07.zip"
 }
 },
 "WLDUSDT": {
@@ -17267,10 +17267,10 @@
 "ultimo": "WLDUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 46,
+"file": 47,
 "primo": "WLDUSDT-1d-2023-07.zip",
-"sha256": "70a9d75bddda5864672df6cd7c019dfacaa25b1f0952d55550bd3a100ee16619",
-"ultimo": "WLDUSDT-1d-2026-11-06.zip"
+"sha256": "ab2dbef44f16aabf80c5cbfad292482fcf0f128f589a0af81229a11068d5a306",
+"ultimo": "WLDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17293,10 +17293,10 @@
 "ultimo": "WLFIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WLFIUSDT-1h-2026-11-01.zip",
-"sha256": "30d84caa3f7b1f063e62767098296bc9457b47f6628149af0b70ce2bcfc2b93a",
-"ultimo": "WLFIUSDT-1h-2026-11-06.zip"
+"sha256": "65c65fea2f37153506fccefd7ed9ee7fab9b077132ba3cfd99cb7d2f2529efd2",
+"ultimo": "WLFIUSDT-1h-2026-11-07.zip"
 }
 },
 "WMTUSDT": {
@@ -17307,10 +17307,10 @@
 "ultimo": "WMTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 12,
+"file": 13,
 "primo": "WMTUSDT-1d-2026-05.zip",
-"sha256": "8869cfd7d9ebffaf9909b1aaaa960b8dafd01be3ee962a11ebd6fcf337e48192",
-"ultimo": "WMTUSDT-1d-2026-11-06.zip"
+"sha256": "04326bbe841ff7f7d7cb6004708367c8afc4cc2549d45fe46047000fc3d3e788",
+"ultimo": "WMTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17327,16 +17327,16 @@
 "ultimo": "WOOUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 61,
+"file": 62,
 "primo": "WOOUSDT-1d-2022-04.zip",
-"sha256": "47031c30edd0f1c25700e23fa2aa65e673e7cea60d58bbe6ddbaf3abd216c442",
-"ultimo": "WOOUSDT-1d-2026-11-06.zip"
+"sha256": "24d7fb414c475469952e98038a58ca550be745ca791e5cd8c38d911c0822dfb6",
+"ultimo": "WOOUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WOOUSDT-1h-2026-11-01.zip",
-"sha256": "e99e9154ca51ec1628996d882db0cbb709937efedb0c64fb10b73b95140f821b",
-"ultimo": "WOOUSDT-1h-2026-11-06.zip"
+"sha256": "46be2b81e2df4c9bd460504ea3de93fdbe246ddf4ff9783a3837d4b25011fec3",
+"ultimo": "WOOUSDT-1h-2026-11-07.zip"
 }
 },
 "WUSDT": {
@@ -17353,10 +17353,10 @@
 "ultimo": "WUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "WUSDT-1h-2026-11-01.zip",
-"sha256": "de63b7f8f581fd8ba13e69bc65f696f4a26f8dc7651c22cd38a3fc6db0643c41",
-"ultimo": "WUSDT-1h-2026-11-06.zip"
+"sha256": "9ad1a442c8c562e268dd5298d22b594a156c15c3d96aa0f80bcde355bdaeca23",
+"ultimo": "WUSDT-1h-2026-11-07.zip"
 }
 },
 "XAGUSDT": {
@@ -17367,10 +17367,10 @@
 "ultimo": "XAGUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 16,
+"file": 17,
 "primo": "XAGUSDT-1d-2026-01.zip",
-"sha256": "7ef27b5af296b9522bebde5b62cea14125d4b510387fba4f197e2a6b02b7cd37",
-"ultimo": "XAGUSDT-1d-2026-11-06.zip"
+"sha256": "e1c982baa1ab50630aa34a1c1a95013e30fb39e469caafa9c1002c5788bfb8cf",
+"ultimo": "XAGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17413,10 +17413,10 @@
 "ultimo": "XANUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XANUSDT-1h-2026-11-01.zip",
-"sha256": "452290ad1a59e06e87b4e1e417d792ac87a23f0794c656965bcd72cbcfc90fa2",
-"ultimo": "XANUSDT-1h-2026-11-06.zip"
+"sha256": "b3e535a29b0b93e270e12e549a16b2316eef735fffa7896ddd3a6cc88e6cad20",
+"ultimo": "XANUSDT-1h-2026-11-07.zip"
 }
 },
 "XAUTUSDT": {
@@ -17427,16 +17427,16 @@
 "ultimo": "XAUTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 14,
+"file": 15,
 "primo": "XAUTUSDT-1d-2026-03.zip",
-"sha256": "5935a65371374cf4ffab8604a4bd2f380af0677c56e0cc33e3cdcae38002f539",
-"ultimo": "XAUTUSDT-1d-2026-11-06.zip"
+"sha256": "c3dd039c2c8ec60910b5a3212a746812d7ea4e4245ac49de1406ada06b503ce6",
+"ultimo": "XAUTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XAUTUSDT-1h-2026-11-01.zip",
-"sha256": "9472864ef6d6657384f9b1ff10bb770d45a4e85940fa7393759886c9cfecec6a",
-"ultimo": "XAUTUSDT-1h-2026-11-06.zip"
+"sha256": "b8f56798fcba28940fcc5ae8d42fd413285d76da5d4c7ea9f0964ea160f9d50f",
+"ultimo": "XAUTUSDT-1h-2026-11-07.zip"
 }
 },
 "XAUUSDT": {
@@ -17447,10 +17447,10 @@
 "ultimo": "XAUUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 17,
+"file": 18,
 "primo": "XAUUSDT-1d-2025-12.zip",
-"sha256": "0561f2a593dfc918cba96b81ab5f823b80e53b8fca9b4b33a888a50a8a388fb4",
-"ultimo": "XAUUSDT-1d-2026-11-06.zip"
+"sha256": "fbd6e5b08dada222aa266dc5082ad285f97ee972e2907bb9954136baa40e0665",
+"ultimo": "XAUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17467,10 +17467,10 @@
 "ultimo": "XBIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "XBIUSDT-1d-2026-07.zip",
-"sha256": "8f567867a17952c8d6c33b5b3c48c577d27e65f2588ce9d0c9b5ff564da94614",
-"ultimo": "XBIUSDT-1d-2026-11-06.zip"
+"sha256": "604d2ddff0f1323b13755d57c957084638c8504d3faff4476b038f496556a35c",
+"ultimo": "XBIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17507,10 +17507,10 @@
 "ultimo": "XEMUSDT-fundingRate-2025-06.zip"
 },
 "giorni": {
-"file": 74,
+"file": 75,
 "primo": "XEMUSDT-1d-2021-03.zip",
-"sha256": "164828b52a69f50483859cd981cb1688605ef8360782e63fd52aba461657cfa1",
-"ultimo": "XEMUSDT-1d-2026-11-06.zip"
+"sha256": "83411bd432eda5605f4be3bf5412c4efb069cbc53b200c0f2e0ef5990086d416",
+"ultimo": "XEMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -17527,16 +17527,16 @@
 "ultimo": "XLEUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "XLEUSDT-1d-2026-06.zip",
-"sha256": "1448555a5e7cd16578648ff4ab94e0e41d3b9baf6c6b32f4c72d75f4a0cac90e",
-"ultimo": "XLEUSDT-1d-2026-11-06.zip"
+"sha256": "5618bbb585dd02cb99d75d49f602b1e4fe5fec2abf8b6bbd96e89506ab03d961",
+"ultimo": "XLEUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XLEUSDT-1h-2026-11-01.zip",
-"sha256": "41ffd3322e54e60e2e7de66274076e60e12944f1f40b2eceaf43568a80f458ef",
-"ultimo": "XLEUSDT-1h-2026-11-06.zip"
+"sha256": "bc60aa24d4e38540788d3727263c9da079f2b0e9a6db8835753c81c57d047eea",
+"ultimo": "XLEUSDT-1h-2026-11-07.zip"
 }
 },
 "XLMUSDT": {
@@ -17553,10 +17553,10 @@
 "ultimo": "XLMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XLMUSDT-1h-2026-11-01.zip",
-"sha256": "490f32af841dfe80e37f0263d5fa8a70f9fb2709b74298f0ecb99a4adefc039e",
-"ultimo": "XLMUSDT-1h-2026-11-06.zip"
+"sha256": "c0338ae87f142ff08ca4ac88ae288a75d8ecd350c7fd57c064ec1a6023d0dd95",
+"ultimo": "XLMUSDT-1h-2026-11-07.zip"
 }
 },
 "XMRUSDT": {
@@ -17567,10 +17567,10 @@
 "ultimo": "XMRUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 87,
+"file": 88,
 "primo": "XMRUSDT-1d-2020-02.zip",
-"sha256": "1c0828cecf72bac924659a8dd3a36454f529fc051d9f60de19cc6cc59d6b09c6",
-"ultimo": "XMRUSDT-1d-2026-11-06.zip"
+"sha256": "1b89517da536d68db3925bfad2a04305e72832afb44bafc6e4546ea0d9d69d87",
+"ultimo": "XMRUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17613,10 +17613,10 @@
 "ultimo": "XOMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XOMUSDT-1h-2026-11-01.zip",
-"sha256": "168ebfba2e52a1ae4abab0bc4aa9ba5dcb00455a6cf6199d5c944a977d536355",
-"ultimo": "XOMUSDT-1h-2026-11-06.zip"
+"sha256": "06d770ace20858957be1ad4a1fef1498e70523395db208096a8813ad5fcfafb4",
+"ultimo": "XOMUSDT-1h-2026-11-07.zip"
 }
 },
 "XPDUSDT": {
@@ -17627,16 +17627,16 @@
 "ultimo": "XPDUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 16,
+"file": 17,
 "primo": "XPDUSDT-1d-2026-01.zip",
-"sha256": "40a69a9b48cc16bf58244e58f272306a5a670023696f744b358a98f74026dbd8",
-"ultimo": "XPDUSDT-1d-2026-11-06.zip"
+"sha256": "af487552b5fc0272db8318c478489d887a904777885f6375f4b87a9948661d80",
+"ultimo": "XPDUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XPDUSDT-1h-2026-11-01.zip",
-"sha256": "46e4e5502cbb49dfe3dab5f46a8ee1070dd40d8a1625fd7093ae9feef7046e8c",
-"ultimo": "XPDUSDT-1h-2026-11-06.zip"
+"sha256": "6ff5c6a09a1c22b78cb3bc1c6bb3330d0fdc8d401e2fa05bb287963794d46cc5",
+"ultimo": "XPDUSDT-1h-2026-11-07.zip"
 }
 },
 "XPINUSDT": {
@@ -17647,10 +17647,10 @@
 "ultimo": "XPINUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "XPINUSDT-1d-2025-09.zip",
-"sha256": "e9015373e36a347e6bae65e364aff629a3b6833ca79423ab376c6f46c01f7278",
-"ultimo": "XPINUSDT-1d-2026-11-06.zip"
+"sha256": "5b0e7ab96931908ede2920312f2ed8caeadf5aad514e1a73ae581437bd0054e7",
+"ultimo": "XPINUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17667,10 +17667,10 @@
 "ultimo": "XPLUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 21,
+"file": 22,
 "primo": "XPLUSDT-1d-2025-08.zip",
-"sha256": "38a20c0a62fa87575ba55af8ae3f0f06179d49fe2d0b089d1c678d81beb2dade",
-"ultimo": "XPLUSDT-1d-2026-11-06.zip"
+"sha256": "0a540c07d12de28180f5bb108dbd3bb8e42a371bdc084d6205059ba7076f2f5e",
+"ultimo": "XPLUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17693,10 +17693,10 @@
 "ultimo": "XPTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XPTUSDT-1h-2026-11-01.zip",
-"sha256": "10fd98f4f79d443c3133c58be7c21c8b5de40b10ee4a0fa03aba95916e41425d",
-"ultimo": "XPTUSDT-1h-2026-11-06.zip"
+"sha256": "ad676605b889d7a062efd2e1423656c4c7ceff2a574473c7c877326f01da4af3",
+"ultimo": "XPTUSDT-1h-2026-11-07.zip"
 }
 },
 "XRPUSDT": {
@@ -17713,10 +17713,10 @@
 "ultimo": "XRPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XRPUSDT-1h-2026-11-01.zip",
-"sha256": "0a985e58466f94b57409a0c6f08139d1be93c82309e32e39834469565c4b2b4e",
-"ultimo": "XRPUSDT-1h-2026-11-06.zip"
+"sha256": "6de49a9f34e3cf33e6e35bd67c1604394f7067581c770e72139bd3cdacf9ece5",
+"ultimo": "XRPUSDT-1h-2026-11-07.zip"
 }
 },
 "XTZUSDT": {
@@ -17727,10 +17727,10 @@
 "ultimo": "XTZUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 87,
+"file": 88,
 "primo": "XTZUSDT-1d-2020-02.zip",
-"sha256": "f21e1f3d8cbacd76ae3dd5328e27387af4a8cded8d3137db0af78d2a3a851ef5",
-"ultimo": "XTZUSDT-1d-2026-11-06.zip"
+"sha256": "9c5829e6fa3cac5a25ddf6c6e7374ae3a079329634d90cf2333a9e490d5ead40",
+"ultimo": "XTZUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17773,10 +17773,10 @@
 "ultimo": "XVSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "XVSUSDT-1h-2026-11-01.zip",
-"sha256": "9ad330ab367e31a496427682cd609e1ebb667413f545757189dbcdc91e88d0e4",
-"ultimo": "XVSUSDT-1h-2026-11-06.zip"
+"sha256": "861627281b540ee7fb88fce307a4decf32b9f9c8f9ea3507792b56269cc4eb2e",
+"ultimo": "XVSUSDT-1h-2026-11-07.zip"
 }
 },
 "YALAUSDT": {
@@ -17787,10 +17787,10 @@
 "ultimo": "YALAUSDT-fundingRate-2026-02.zip"
 },
 "giorni": {
-"file": 21,
+"file": 22,
 "primo": "YALAUSDT-1d-2025-08.zip",
-"sha256": "8b997950411fb62fa164815b8c4500496bcb8c34422f9bdcc2e709334c463497",
-"ultimo": "YALAUSDT-1d-2026-11-06.zip"
+"sha256": "d402c302fb6291dd3c7da4eee99d80e7599bddf0ed4a344137592d343fd25dce",
+"ultimo": "YALAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 0,
@@ -17807,10 +17807,10 @@
 "ultimo": "YBUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 19,
+"file": 20,
 "primo": "YBUSDT-1d-2025-10.zip",
-"sha256": "354e5831a90e5bc9741dda479bdad59e05d608ad35c593b1b60422fec6a592ec",
-"ultimo": "YBUSDT-1d-2026-11-06.zip"
+"sha256": "224a2673fe19c0944c4096fb5e0320aeb315bf280a8379db322de3a77e7a98e5",
+"ultimo": "YBUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17853,10 +17853,10 @@
 "ultimo": "YFIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "YFIUSDT-1h-2026-11-01.zip",
-"sha256": "745c6e8860007e4a3c4728e0e1cb85cebcdf292708f954add423220f6f938731",
-"ultimo": "YFIUSDT-1h-2026-11-06.zip"
+"sha256": "594852e575eea4c9683bb24d4c54770645b22787c1149ce269a6970db4fc7c45",
+"ultimo": "YFIUSDT-1h-2026-11-07.zip"
 }
 },
 "YGGUSDT": {
@@ -17867,10 +17867,10 @@
 "ultimo": "YGGUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 45,
+"file": 46,
 "primo": "YGGUSDT-1d-2023-08.zip",
-"sha256": "c0d40fe98b80c7cdc27776e4d972dcf3bc98db0ba5a115cd188f32e25a7922a5",
-"ultimo": "YGGUSDT-1d-2026-11-06.zip"
+"sha256": "da8777637b7a5d3f472666eb122e456edc90c8d90798e71f78f99da21f9ce4d7",
+"ultimo": "YGGUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17887,16 +17887,16 @@
 "ultimo": "ZAMAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 16,
+"file": 17,
 "primo": "ZAMAUSDT-1d-2026-01.zip",
-"sha256": "c663ccb7dcfa6398ede8c8730508cdf83c085adfb44ea79a903c733541cd6dab",
-"ultimo": "ZAMAUSDT-1d-2026-11-06.zip"
+"sha256": "264684e621122b858fc007b10cf7e009a3d22d1a7852b75c2748b1aec3249ad2",
+"ultimo": "ZAMAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZAMAUSDT-1h-2026-11-01.zip",
-"sha256": "9fd45b58c8cfdd78065d296fe69ebed6cdf6e685177f9c94bd49b7bcf77db31a",
-"ultimo": "ZAMAUSDT-1h-2026-11-06.zip"
+"sha256": "beb5916fdfe35d589250f9c3ce9fb7047ed464e52434611343007359246fe1a0",
+"ultimo": "ZAMAUSDT-1h-2026-11-07.zip"
 }
 },
 "ZBTUSDT": {
@@ -17913,10 +17913,10 @@
 "ultimo": "ZBTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZBTUSDT-1h-2026-11-01.zip",
-"sha256": "830382ff68c6988abef4dda14f722c0d52e98365c8ced7a8fba433a699d000c1",
-"ultimo": "ZBTUSDT-1h-2026-11-06.zip"
+"sha256": "268bb48c6a6eeabc62eceb360e5f1790536c4d900b79b5d772b2c34cf8d93f62",
+"ultimo": "ZBTUSDT-1h-2026-11-07.zip"
 }
 },
 "ZCSHUSDT": {
@@ -17927,10 +17927,10 @@
 "ultimo": "ZCSHUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 7,
+"file": 8,
 "primo": "ZCSHUSDT-1d-2026-10.zip",
-"sha256": "a446355dc1770c47e0ca9c60e0a6d0f3b77a45111b68620e289ade444d9a304a",
-"ultimo": "ZCSHUSDT-1d-2026-11-06.zip"
+"sha256": "9eafc9be27718c5dccd75ccba0f983e79e24f617b10f37c15484402e2d738b0c",
+"ultimo": "ZCSHUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -17953,10 +17953,10 @@
 "ultimo": "ZECUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZECUSDT-1h-2026-11-01.zip",
-"sha256": "7f619ee7f2cc2af410bbdf86e6f7585df02523091e43fd428eeb106aad26d64a",
-"ultimo": "ZECUSDT-1h-2026-11-06.zip"
+"sha256": "0a8717aca63a5a7274ac56de70b103a7251e1256ece8f08a19b01cf35329d3e2",
+"ultimo": "ZECUSDT-1h-2026-11-07.zip"
 }
 },
 "ZENUSDT": {
@@ -17967,16 +17967,16 @@
 "ultimo": "ZENUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 78,
+"file": 79,
 "primo": "ZENUSDT-1d-2020-11.zip",
-"sha256": "c1a24451801349097a6c853ec77568cf1d367e2cdaeb1c116f58ce5550b953c9",
-"ultimo": "ZENUSDT-1d-2026-11-06.zip"
+"sha256": "72a5386a5f5ac6dc3fafeec260d5da28a49a28952177886d5e92d97ad28f40fb",
+"ultimo": "ZENUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZENUSDT-1h-2026-11-01.zip",
-"sha256": "db9357b3f682bf0ecc557a4b42233cbdab6b071677ceaa53ff26e0b8fabe1b38",
-"ultimo": "ZENUSDT-1h-2026-11-06.zip"
+"sha256": "043d933dd4ae5ba0557775e93e4ec374124230c58ef69b51b40dab6459a75f40",
+"ultimo": "ZENUSDT-1h-2026-11-07.zip"
 }
 },
 "ZEREBROUSDT": {
@@ -17987,10 +17987,10 @@
 "ultimo": "ZEREBROUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 28,
+"file": 29,
 "primo": "ZEREBROUSDT-1d-2025-01.zip",
-"sha256": "f42eb30b9a6bd939e017a82a83e5355925cd5d1e929644e19d654bd27a356efb",
-"ultimo": "ZEREBROUSDT-1d-2026-11-06.zip"
+"sha256": "0784fb7b579926f7d881dd8cf0a9bc60b8ccda7d2068d6c14ebde765cc42d8d8",
+"ultimo": "ZEREBROUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18007,10 +18007,10 @@
 "ultimo": "ZESTUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "ZESTUSDT-1d-2026-06.zip",
-"sha256": "a636a4695b08428b5a75ca8a500f95c6fabe5d3b4990eb1e0a3b3e79ca98b0bb",
-"ultimo": "ZESTUSDT-1d-2026-11-06.zip"
+"sha256": "3f33813a396f83474f339b2786ad049683b6cdc21c654ac04b07154114c67df9",
+"ultimo": "ZESTUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18033,10 +18033,10 @@
 "ultimo": "ZETAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZETAUSDT-1h-2026-11-01.zip",
-"sha256": "63ce574796fe953e67350f3f783184abd36c7f7996952b8700fb55c7b947a6b9",
-"ultimo": "ZETAUSDT-1h-2026-11-06.zip"
+"sha256": "f94f2871b56512defab27cbabf547296f2f9618c1a917ebf247d27271f680d3d",
+"ultimo": "ZETAUSDT-1h-2026-11-07.zip"
 }
 },
 "ZHIPUUSDT": {
@@ -18047,10 +18047,10 @@
 "ultimo": "ZHIPUUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 10,
+"file": 11,
 "primo": "ZHIPUUSDT-1d-2026-07.zip",
-"sha256": "44da740b209dfb26d21cb989b59357c0e50c8060e1a6e0aef5be77e6afe5f07b",
-"ultimo": "ZHIPUUSDT-1d-2026-11-06.zip"
+"sha256": "236369bf18498384db5be1b425473fd7500f21a7a1e860cd4f09f0ea27c89652",
+"ultimo": "ZHIPUUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18067,16 +18067,16 @@
 "ultimo": "ZHONGJIUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 9,
+"file": 10,
 "primo": "ZHONGJIUSDT-1d-2026-08.zip",
-"sha256": "3105b4181884c68ab3cd91188175a917b1fc0224c392270609f1efaea55474af",
-"ultimo": "ZHONGJIUSDT-1d-2026-11-06.zip"
+"sha256": "a36a69d188ff62e7df6456008fb7c009fc71f7da4c291a99e569593ee8a14d06",
+"ultimo": "ZHONGJIUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZHONGJIUSDT-1h-2026-11-01.zip",
-"sha256": "db86652eab4f6d95ce256954240fbe66c38e874763a054c505aa4e99f2a2c6cb",
-"ultimo": "ZHONGJIUSDT-1h-2026-11-06.zip"
+"sha256": "dd9148cf5ee6516aa7dcb4a2aaef0e8b988f54561d0102e00227ff856e017b2e",
+"ultimo": "ZHONGJIUSDT-1h-2026-11-07.zip"
 }
 },
 "ZILUSDT": {
@@ -18093,10 +18093,10 @@
 "ultimo": "ZILUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZILUSDT-1h-2026-11-01.zip",
-"sha256": "f09a7375508b0e21c0dccf4fa374dad82ab8a7500e28344edd0964f402cc5ef5",
-"ultimo": "ZILUSDT-1h-2026-11-06.zip"
+"sha256": "56bc7fd8b58b23095c2f01ccfd8fe583c0cddfcd2d0a87ca6fec6bea8e3b899d",
+"ultimo": "ZILUSDT-1h-2026-11-07.zip"
 }
 },
 "ZKCUSDT": {
@@ -18107,10 +18107,10 @@
 "ultimo": "ZKCUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 20,
+"file": 21,
 "primo": "ZKCUSDT-1d-2025-09.zip",
-"sha256": "4346c90924c21147b01eee000aff8655da81ff3de66fa86da603d35488cf4fb4",
-"ultimo": "ZKCUSDT-1d-2026-11-06.zip"
+"sha256": "97824331fb69843c0cb8efd76fd76ef7b70aac2d7d0bba10e8c39f351ce6b46d",
+"ultimo": "ZKCUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18153,10 +18153,10 @@
 "ultimo": "ZKPUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZKPUSDT-1h-2026-11-01.zip",
-"sha256": "f13cb0c4574f9c10959b10c8c03c0888148731d9f8c1b2e48927ed106dba4b83",
-"ultimo": "ZKPUSDT-1h-2026-11-06.zip"
+"sha256": "453933e4e979557df29c0e7467ea2a70ff9a47205e0f7b0419bbf26b12554763",
+"ultimo": "ZKPUSDT-1h-2026-11-07.zip"
 }
 },
 "ZKUSDT": {
@@ -18167,16 +18167,16 @@
 "ultimo": "ZKUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 35,
+"file": 36,
 "primo": "ZKUSDT-1d-2024-06.zip",
-"sha256": "5455ba1bb56c3dba91c9f4523cbe49352760a7fc95bae5df2ac3bc889ea82eb2",
-"ultimo": "ZKUSDT-1d-2026-11-06.zip"
+"sha256": "fb0c71beebbd49e5aeb24a785123b608ee9da76f74de742cae3e60c178e73a80",
+"ultimo": "ZKUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZKUSDT-1h-2026-11-01.zip",
-"sha256": "d77bd60d8944b0c672917befadd310d6f8e01894e8bb35533f77365269722d68",
-"ultimo": "ZKUSDT-1h-2026-11-06.zip"
+"sha256": "3a5199a3719dbab95a1e25024dcbf3fa40ef52a020fee2648c45623434c630a9",
+"ultimo": "ZKUSDT-1h-2026-11-07.zip"
 }
 },
 "ZMUSDT": {
@@ -18187,10 +18187,10 @@
 "ultimo": "ZMUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 11,
+"file": 12,
 "primo": "ZMUSDT-1d-2026-06.zip",
-"sha256": "3a6f385c49df1fe0f8fa08412631014c02e9d61a53bc0916540f641687e17dba",
-"ultimo": "ZMUSDT-1d-2026-11-06.zip"
+"sha256": "d3b7576030d6d15d287c9a50326cb44f15d28c0210f87188cf5fe6682d9853a3",
+"ultimo": "ZMUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18207,10 +18207,10 @@
 "ultimo": "ZORAUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 22,
+"file": 23,
 "primo": "ZORAUSDT-1d-2025-07.zip",
-"sha256": "86657ffab87f706e13db8e847733e02546b46b43f233df4c554fdfe617c79ee4",
-"ultimo": "ZORAUSDT-1d-2026-11-06.zip"
+"sha256": "3ef3387650b99d0c8e9d5204f3bbb26932af570b7956c9492a26539c45a05f51",
+"ultimo": "ZORAUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18247,10 +18247,10 @@
 "ultimo": "ZROUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 35,
+"file": 36,
 "primo": "ZROUSDT-1d-2024-06.zip",
-"sha256": "b89e7040f2615e5e455ebe23e441cc92942dc66e4dbab5f58f880317a54edeb0",
-"ultimo": "ZROUSDT-1d-2026-11-06.zip"
+"sha256": "a4a16389b9e88ebac8112f82024654e32fcf03d6fba833211c86d0a1f925675b",
+"ultimo": "ZROUSDT-1d-2026-11-07.zip"
 },
 "premio": {
 "file": 7,
@@ -18267,16 +18267,16 @@
 "ultimo": "ZRXUSDT-fundingRate-2026-10.zip"
 },
 "giorni": {
-"file": 83,
+"file": 84,
 "primo": "ZRXUSDT-1d-2020-06.zip",
-"sha256": "ef46a8b451d448b0600458db7768b8fb568331613272f8e77fb8e8bd1f91569b",
-"ultimo": "ZRXUSDT-1d-2026-11-06.zip"
+"sha256": "f90279dda6d452d315529e6b03198f2fcb4fb93815bd055d3bd7d360a685c456",
+"ultimo": "ZRXUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZRXUSDT-1h-2026-11-01.zip",
-"sha256": "0149b2baebe430c59084d197ae1fa4085e7c2aa2aaccd8617b6807ffb5e4ac01",
-"ultimo": "ZRXUSDT-1h-2026-11-06.zip"
+"sha256": "30b81ae3fe80afb78eff7b1c62ca2c02f6b3f4633ed7980a195249f78c2ec0c9",
+"ultimo": "ZRXUSDT-1h-2026-11-07.zip"
 }
 },
 "ZSUSDT": {
@@ -18293,10 +18293,10 @@
 "ultimo": "ZSUSDT-1d-2026-11-07.zip"
 },
 "premio": {
-"file": 6,
+"file": 7,
 "primo": "ZSUSDT-1h-2026-11-01.zip",
-"sha256": "b4a4871f7ed452b1e753f110705f2ef3e2b2bfe665a3e44eb177eee2510b7766",
-"ultimo": "ZSUSDT-1h-2026-11-06.zip"
+"sha256": "6aab2bc15cded824f3a20618a3797ef36002f19d63c28201d02ff79689cadac1",
+"ultimo": "ZSUSDT-1h-2026-11-07.zip"
 }
 }
 }

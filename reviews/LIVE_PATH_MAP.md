@@ -4,7 +4,9 @@ Prima versione: 7 nov 2026 (`b29f5713`); completata col primo avvio (`reviews/re
 Aggiornata il 7 nov sul `9f47972c` e sul `5d5d26ad`. **Aggiornata il 7 nov 2026 sul commit `013f9426`**
 (`reviews/reports/2026-11-07-correzione-32.md`): i numeri di riga di `bot/portafoglio/demo_binance.py` valgono per `013f9426` (fino alla
 riga 575 uguali al `5d5d26ad`; da 576 a 649 +3; da 650 a 800 +14; dopo +15 e +16). `bot/config.py` e `bot/execution/executor.py` come
-il `5d5d26ad`; `bot/main.py` invariato. Al prossimo cambio si ricontrollano.
+il `5d5d26ad`; `bot/main.py` invariato. **L'8 nov HEAD (`4f866a1`) ha ancora lo stesso codice del percorso** (`git diff 013f9426 HEAD --
+bot/ firebase/` vuoto); le modifiche non committate della fase 1 del conto vero sono nella sezione 14 (REQUEST CHANGES). Al prossimo
+cambio si ricontrollano.
 
 ## 1. Chi manda ordini (verificato con grep il 7 nov su `9f47972c`; `5d5d26ad` e `013f9426` non aggiungono invii nuovi)
 
@@ -153,8 +155,8 @@ lettura dell'ora di Binance. Nessun avviso Telegram nel modulo.
 **Conto ridotto**: valore = `totalMarginBalance` − scarto (`_conto` `:675-679`, scarto `:368`, `:404`); stop e rapporti usano questo valore.
 
 **Chi legge i rami del demo su Firebase** (grep del 7 nov su `013f9426`): dashboard `PaperBot.tsx:126` (`fermo`), `:127` (`confronto`),
-`:185` (`stato`); fotografia `scripts/state_snapshot.py:641` (`fermo`, poi `margine`, `confronto`, ultimo errore). **`/demo_binance/allarme`
-non lo legge nessuno** (Problema 39).
+`:185` (`stato`); fotografia `scripts/state_snapshot.py:641` (`fermo`, poi `margine`, `confronto`, ultimo errore). Dal `755bde2` (HEAD)
+dashboard e fotografia leggono anche `/demo_binance/allarme` (Problema 39 chiuso, verificato l'8 nov).
 
 ## 8. Pulsanti che chiudono tutto
 
@@ -218,7 +220,8 @@ identificativi degli eventi (34).
 
 ## 13. Punti noti aperti (dettaglio nei rapporti del 7 nov)
 
-Demo: **allarme del demo non letto da nessuno (39, Medio, parte dell'11)**; «vuoto» falso con la lettura degli ordini in errore (36);
+Demo: (8 nov, nelle modifiche non committate: 36, 37, 38, 39, 12, 15, 21 chiusi; 10, 13, 16, 22 in parte; 23 come chiesto; nuovi
+40 Alto, 41 Medio, 42-46 Bassi; secondo giro: 40-46 chiusi, nuovi 47 Medio, 48-49 Bassi: sezione 14). Sul codice committato: allarme del demo letto dal `755bde2` (39); «vuoto» falso con la lettura degli ordini in errore (36);
 guasto di rete sulla lettura degli ordini da fermo (37); allarme degli ordini bloccati che non si spegne (38); ordine aperto che non va via
 blocca il demo (33: ora con allarme dopo 2 ore, non visibile); identificativi degli eventi troppo corti (34); con `DRY_RUN` falso non parte
 neanche il demo (35); attese crescenti e 429/418 (13, con il resto del 28); pesi senza controllo (10); nessun avviso (11); decisione di G1
@@ -227,6 +230,27 @@ Vecchio bot (in prova): parametri della dashboard (17), chiusura di una moneta c
 nota sbagliata (24). Fuori dal codice: chiavi vere non limitate all'indirizzo, prelievo non detto; regole di Firebase mai pubblicate;
 servizio che riparte da solo con l'ultimo codice spinto.
 Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27, 29, 30, 31, **32 (013f9426)**; 28 in parte (resto nel 13).
+
+## 14. Modifiche non committate in revisione (fase 1 del conto vero, 8 nov 2026; secondo giro REQUEST CHANGES per il 47)
+
+Rapporti `reviews/reports/2026-11-08-fase1-conto-vero.md` e `-2.md`. Righe del file di lavoro del secondo giro, non di HEAD. Se arrivano
+nel commit, rifare le sezioni 7, 8 e 12 con queste righe.
+- Costanti `demo_binance.py:84-99` (fissate dal test `tests/test_demo_binance.py:1520`): pesi 2,5 e 0,60; decisione 26 h; 429/418 3
+  ritentativi (1-2-4 s, attesa fino a 10 s), 429 poi al massimo 600 s senza richieste, 418 tutta l'attesa o 600 s (`:843-865`); capitale
+  10.000 e non oltre il valore vero (`:574-576`, `:603-611`, `_valore_vero` `:1108`); filtri del 2026-11-06, 30 giorni; pavimento 0,65;
+  chiusure in pezzi, 20 al massimo (`:204-214`, `_chiudi_moneta` `:1028-1035`).
+- **Stop sul conto**: `livello_di_stop` `:223-228` = max(65% del massimo, `_pavimento` `:217-221` = 65% di `capitale_iniziale`, 0 con un
+  capitale in attesa: Problema 47), usato a `:917` e `:1350`. `chiudi_tutto` `:725-756` scrive e salva il fermo (`:739`) prima delle
+  chiusure; un errore segna il tentativo e risale.
+- `chiedi` `:441-...`: ritenta 418/429; con -1021 rilegge `/fapi/v1/time` (`_rileggi_ora` `:431-440`) e riprova una volta.
+- `tick` `:758-...`: allarmi scritti letti all'avvio (`:772-776`); ultimo giorno nel futuro azzerato (`:805-807`); pesi `:130-151`
+  (vuoti rifiutati `:136`); età e data nel futuro `_decisione_da_non_eseguire` `:867-...`; eventi fermi con `riparti_attende_g1` (`:823`).
+- Da fermo `:921-976`: «riparti» con il pavimento letto prima di consumare il comando (`:929`); poi il conto resta vuoto fino alla
+  decisione di G1 dopo (`:931-939`, `_giorno_g1` `:1037-...`); accettato anche con il conto non vuoto (Problema 48). `LimiteBinance`
+  nelle chiusure conta il tentativo e salva (`:956-968`; `_chiudi_posizioni` `:992-1019`).
+- Massimo dello stop anche in `/demo_binance/massimo` (`_fissa_massimo`, `_unisci_massimo`); allarmi per tipo in
+  `/demo_binance/allarmi/<tipo>` (anche `monete_senza_filtri`); dashboard `PaperBot.tsx:134`, `:157-162`, `:165` (testo dello stop
+  non aggiornato: 49); fotografia `scripts/state_snapshot.py:639`, `:647-650`.
 
 ## Storia degli invarianti
 
@@ -244,3 +268,9 @@ Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27,
   `DRY_RUN` falso in ogni caso. Limiti fissi invariati.
 - 7 nov 2026, `013f9426` (APPROVE): da fermo una risposta di errore sulla lettura degli ordini aperti non ferma più le chiusure; un blocco
   degli ordini oltre 2 ore scrive un allarme. Limiti fissi invariati.
+- 8 nov 2026, modifiche non committate della fase 1 (REQUEST CHANGES per il Problema 40): limiti nuovi del demo come costanti
+  (pesi, età della decisione, capitale, filtri, pavimento del «riparti»), 429/418 con attesa, massimo dello stop anche su Firebase,
+  leva e modo riletti ogni ora. Limiti fissi invariati.
+- 8 nov 2026, secondo giro (REQUEST CHANGES per il Problema 47): stop anche al 65% del capitale della fase (perdita della
+  fase entro il 35%, tranne con un capitale in attesa), fermo salvato prima delle chiusure, «riparti» che aspetta la decisione di G1,
+  capitale non oltre il saldo, chiusure in pezzi, -1021 con l'ora di Binance. Limiti fissi invariati.
