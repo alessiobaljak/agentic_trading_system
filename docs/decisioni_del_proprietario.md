@@ -97,3 +97,21 @@ tre create fra le 13:24 e le 13:50 UTC no, con o senza `model` passato, con gli 
 non e' nota. Dopo la creazione si controlla con `get_session` che il modello sia `claude-opus-5-5` e che
 `external_metadata.flag_settings.ultracode` sia `true`; se manca, non si riapre a ripetizione: si dice al
 proprietario, che decide se lasciarla lavorare o fermarla.
+
+## 8 novembre 2026: le strategie in corso restano tutte, due agenti nuovi, la ricerca nuova con gli agenti
+
+Le parole del proprietario (8 novembre, mattina): «va bene con le idee da te proposte, una cosa procedi con la creazione
+dell'agente/i mancante, non puliamo il vault .. UNA COSA IMPORTANTE NON VOGLIO CHE NESSUNA DELEL STRATEGIE ORA IN PAPER O IN DEMO
+VADA PERSA [...] DEVONO RIMANERE TUTTE IN CORSO, QUESTE SONO LE UNICHE SU CUI STIAMO TESTANDO LIVE E CHE POTREBBERO ANDARE CON SOLDI
+VERI [...] poi a mio avviso serve un altro agente ma lascio a te che decida in live o con un demo combinata come usare diverse
+strategie in produzione (ora ne abbiamo G1, G11, G1 Neutra e F5) che potrebbero tutte andare live ma il sistema a decidere quale è
+meglio». Prima: «lascia g1 ogni 4 ora».
+
+Le idee approvate («va bene con le idee da te proposte»): un agente che migliora le strategie in corso; il riesame delle prove
+bocciate di poco (non il rifacimento di tutta la ricerca); la ricerca nuova con gli agenti: la 1:1:1 (una moneta, un intervallo, una
+strategia) su 4 ore e un giorno, con un filtro veloce sul passato e poi in avanti nel paper con l'elenco e il criterio scritti prima,
+le monete nate dopo ottobre, le idee in coda; il revisore delle prove sulle cinque strategie del paper. Il vault non si pulisce.
+
+Cosa ne è venuto: `strategy-improver` e `portfolio-allocator` in `.claude/agents/` (memorie in `research/miglioramenti/` e
+`allocazione/`); la regola in `CLAUDE.md`; il test `tests/test_strategie_restano_accese.py`, che fallisce se si toglie l'interruttore
+di una delle sei strategie (G1 sul demo, G1, G1 neutra, G11, F5, eventi) o se il bot smette di crearla o di farla girare.

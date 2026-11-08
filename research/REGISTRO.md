@@ -432,3 +432,12 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
+136. **La 1:1:1: una moneta, un intervallo, una strategia** (idea del proprietario, 8 novembre 2026): su 4 ore e un giorno (a ottobre
+   la ricerca per moneta aveva guardato soprattutto da 15 minuti a un'ora, dove gli effetti valevano meno del costo di un giro,
+   `docs/storia/05_ricerca_per_moneta_e_gruppo.md`), solo monete grandi. Prima un filtro veloce sul passato, poi in avanti nel paper
+   con un elenco fisso e il criterio di giudizio scritti prima; sul demo solo la migliore, con l'ok del proprietario. Le regole le
+   scrive la sessione principale, la esegue strategy-researcher.
+137. **Il riesame delle prove bocciate di poco** (approvato dal proprietario l'8 novembre al posto del rifacimento di tutta la
+   ricerca): backtest-auditor rilegge le prove del registro bocciate per un margine stretto, cercando un errore che abbia cambiato il
+   verdetto (codice, costi, esame); solo dove lo trova, la prova si rifà. Prima la sessione principale fa l'elenco dal registro.
+

@@ -36,6 +36,11 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   «decidi tu il passaggio al paper, confermo niente vault e branch, valori per le prove confermati»: il **paper lo decide la sessione
   principale**; demo, soldi veri e ogni riavvio che tocca gli ordini li approva il proprietario. Nelle prove: commissioni 0,05% a
   mercato e 0,02% con ordine limite, scarto di prezzo 0,01% su BTC, ETH e SOL e 0,02% sulle altre; nessun vault per data.
+* **8 novembre**: «non voglio che nessuna delle strategie ora in paper o in demo vada persa [...] devono rimanere tutte in corso»:
+  G1 sul demo, G1, G1 neutra, G11, F5 ed eventi restano accese (spegnerne una solo con il suo ok; test
+  `tests/test_strategie_restano_accese.py`). Il vault non si pulisce. Due agenti nuovi: chi migliora le strategie in corso e chi
+  sceglie quale usare in produzione. La ricerca nuova la fanno gli agenti: la 1:1:1 (una moneta, un intervallo, una strategia) su 4
+  ore e un giorno, il riesame delle prove bocciate di poco, le monete nate dopo ottobre, le idee in coda.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
@@ -162,11 +167,18 @@ Principio del proprietario: chi scrive una strategia non la valuta, chi la valut
   demo con la ricerca sugli stessi giorni, e sempre prima dei soldi veri.
 * **live-path-reviewer** (modello più potente): rivede ogni modifica al percorso degli ordini (`bot/execution/`, `bot/risk/`, `bot/portafoglio/`,
   `bot/config.py`, `bot/main.py`, `firebase/`, il futuro conto vero) prima del commit e del riavvio.
+* **strategy-improver** (modello medio; dall'8 novembre): migliora le strategie in corso secondo i piani (per G1
+  `research/programma7/MIGLIORARE_G1.md`); una variante entra accanto all'originale, mai al suo posto. La sessione principale lo chiama
+  nel giro delle 4 ore quando c'è un passo vero da fare, non per scrivere «niente di nuovo».
+* **portfolio-allocator** (modello medio; prima dei soldi veri il più potente; dall'8 novembre): ogni lunedì dopo gate2-reconciler,
+  e prima di ogni proposta di demo combinato o di soldi veri, dice quale strategia o miscela usare in produzione e con quale
+  capitale, con regole scritte prima (`allocazione/REGOLE.md`, da far approvare al proprietario). Propone, non esegue.
 * Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
 
 Flusso: idea con un perché forte → regole scritte prima (sessione principale, riga nel registro) → strategy-researcher → se
 promettente, backtest-auditor → se PASS, paper (lo decide la sessione principale) → ok del proprietario → demo → gate2-reconciler
-ogni settimana → ok del proprietario → soldi veri. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
+ogni settimana → portfolio-allocator → ok del proprietario → soldi veri. Le strategie in corso: strategy-improver → (se una variante
+passa il suo esame) backtest-auditor → paper accanto all'originale. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
 aggiorna `research/INDEX.md` e `research/REGISTRO.md` dopo ogni gruppo di ricercatori.
 
 ## Regole dei token (per la sessione principale e per tutti i subagent)
@@ -200,5 +212,6 @@ aggiorna `research/INDEX.md` e `research/REGISTRO.md` dopo ogni gruppo di ricerc
 * I registri delle prove e delle varianti non si troncano, non si archiviano e non si riassumono.
 * Demo, soldi veri e ogni riavvio che tocca gli ordini richiedono l'ok esplicito del proprietario (il paper lo decide la sessione
   principale, 7 novembre).
+* Nessuna strategia del paper o del demo si spegne, si sostituisce o si perde senza l'ok del proprietario (8 novembre).
 * I segreti sono bloccati nel codice (`.claude/hooks/segreti.py` e le regole `deny` di `.claude/settings.json`); le modifiche ai limiti
   fissi (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) chiedono conferma (`ask`).
