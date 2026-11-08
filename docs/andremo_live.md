@@ -436,3 +436,8 @@ degli ordini ha aperto un problema nuovo (40, 47, 50), sempre trovato dal reviso
 niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima del ribilancio di mezzanotte. La prova in avanti
 del programma 5 è aggiornata con i dati scaricati da zero (le operazioni di ieri identiche); il paper delle candidate del programma 6
 è ancora in corso (lo scarico da zero dei dati di tutte le monete richiede più di due ore).
+**Riavvio con la fase 1 del conto vero (19:02 UTC)**, ok del proprietario («ok riavvia il demo, G1 neutra la decide l'allocatore
+lunedì»): il bot gira il commit 83ddb809, che contiene la fase 1 approvata (1a8522f; nessuna modifica al bot dopo); riga d'avvio
+`DRY_RUN=True, BINANCE_TESTNET=False, BACKTEST_PARITY=True`, nessun errore (`ops/results/0722-*`, `0723-*`). Stato delle 19:04
+(`0724-*`): demo a 994,82 su 1.000, 24 posizioni per lato, nessun allarme; lo stop dice il livello nuovo (652,35, il più alto fra −35%
+dal massimo e il 65% del capitale). La scelta fra G1 e G1 neutra per i soldi veri la fa portfolio-allocator lunedì.

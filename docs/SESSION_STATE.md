@@ -22,9 +22,10 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - 8 nov: due agenti nuovi (strategy-improver, portfolio-allocator), la regola «nessuna strategia del paper o del demo si perde» con il
   suo test, le idee 136 (la 1:1:1) e 137 (il riesame delle bocciate di poco) in coda.
 
-- 8 nov: conto vero, fase 1 (problemi rimasti del demo) approvata dal revisore al quarto giro e committata; il riavvio del demo
-  aspetta l'ok del proprietario. Piano e lista di chi fa cosa in `docs/conto_vero.md`. Il proprietario: lo 0,90 non è un muro, conta
-  il profitto; aspetta da lui G1 neutra o allocatore lunedì per i soldi veri.
+- 8 nov: conto vero, fase 1 (problemi rimasti del demo) approvata dal revisore al quarto giro e committata; riavviato l'8 nov alle
+  19:02 UTC con l'ok del proprietario (nessun errore). Piano e lista di chi fa cosa in `docs/conto_vero.md`. Il proprietario: lo 0,90 non è un muro, conta
+  il profitto; G1 o G1 neutra per i soldi veri
+  la decide portfolio-allocator lunedì (decisione del proprietario). Prossimo: fase 2 del conto vero.
 
 ## Decisioni del proprietario di questi giorni
 - 5 nov: si migliora G1, un'idea nuova solo con un perché forte. 6 nov: 250 euro, eventi spenti sul demo. 7 nov: demo a 1.000 dalla

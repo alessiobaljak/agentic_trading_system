@@ -41,3 +41,6 @@ mezzanotte UTC, eventi spenti.
   solo a conto vuoto e con la riapertura alla decisione di G1 dopo (la mezzanotte), limiti nuovi come costanti con un test di
   guardia, una moneta oltre il 60% fa saltare la decisione del giorno, quando G1 non decide il demo tiene le posizioni di ieri, con
   Binance che blocca l'indirizzo si rispetta tutto il blocco (in quel tempo il bot non protegge il conto). 2.624 test passano.
+* 8 novembre 2026, 19:02 UTC: riavvio del bot con la fase 1, ok del proprietario; nessun errore all'avvio (`ops/results/0723-*`).
+  Il proprietario: la strategia per i soldi veri (G1 o G1 neutra) la decide portfolio-allocator lunedì 9 novembre, con le regole che
+  approva lui. Prossimo: fase 2 (il codice del conto vero, spento).
