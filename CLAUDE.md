@@ -25,8 +25,10 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
 * **21 ottobre**: si giudica sul passato di Binance; il paper è una conferma, non una condizione.
 * **23 ottobre**: l'obiettivo è il profitto, con qualunque tipo di strategia (in giornata, scalping, a settimana, eventi, nuove
   quotazioni); il trading di ogni giorno non va mai lasciato indietro (`research/programma7/METODO.md`).
-* **24 ottobre**: Sharpe corretto da 0,90 in su, ogni anno positivo e t sopra 3 → paper e demo; i soldi veri solo quando il
-  proprietario lo chiede esplicitamente (`docs/backlog.md`, P26).
+* **24 ottobre**: «non bocciare 0,91 se ogni anno si alza la soglia»: una strategia ogni anno positiva, con il t sopra 3 e lo
+  Sharpe corretto intorno a 0,90 non si boccia → paper e demo; i soldi veri solo quando il proprietario lo chiede esplicitamente
+  (`docs/backlog.md`, P26). **L'8 novembre il proprietario ha chiarito**: lo 0,90 l'ha fissato la sessione, non lui; non è un muro
+  («se era di qualche punto sotto potevamo procedere, non essere così severo»): conta il profitto, sul passato e in avanti.
 * **1° novembre**: niente attese fisse (né 26, né 52, né 104 settimane); i numeri vanno al proprietario ogni lunedì.
 * **5 novembre**: «si cambia, e sono d'accordo miglioriamo quello che già funziona»: ogni giro delle 4 ore raccoglie i dati e
   migliora G1 (`research/programma7/MIGLIORARE_G1.md`); un'idea nuova solo con un perché forte.
