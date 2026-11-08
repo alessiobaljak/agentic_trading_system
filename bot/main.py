@@ -40,6 +40,7 @@ from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
 from bot.portafoglio.eventi import PaperEventi
 from bot.portafoglio.demo_binance import DemoG1
+from bot.portafoglio.conto_vero import crea_conto_vero
 from bot.portafoglio.f5 import PaperF5, PaperG1, PaperG11, PaperG1N
 from bot.risk.circuit_breakers import CircuitBreakers
 from bot.risk import kill_switch
@@ -499,6 +500,11 @@ class TradingBot:
         # G1 con ordini veri sul conto demo di Binance (Binance Demo Trading): interruttore ops/demo_binance_acceso, chiavi del
         # conto demo nel .env; parla solo con demo-fapi.binance.com
         self.demo_g1 = DemoG1(self.fb)
+        # G1 sul conto vero di Binance (fase 2 del piano, docs/conto_vero.md): NASCE SPENTO. Ordini veri solo con l'interruttore
+        # ops/conto_vero_acceso, DRY_RUN falso, il codice del tag conto-vero-approvato e un capitale fino a 300 USDT; parla solo
+        # con fapi.binance.com. Creato senza poter fermare il bot (problema 71): se la creazione fallisce, demo e paper partono lo
+        # stesso e si riprova a ogni giro
+        self.conto_vero = crea_conto_vero(self.fb)
         # e il paper di N3 ed E4 (le strategie a eventi): interruttore suo, ops/paper_eventi_acceso
         self.paper_eventi = PaperEventi(self.fb)
         # stream dei trade in tempo reale: da' al paper la SEQUENZA dei prezzi, non
@@ -1439,7 +1445,7 @@ class TradingBot:
             self.notifier.trade_opened(
                 pos.symbol, pos.strategy, pos.direction.value,
                 pos.entry_price, pos.quantity, pos.leverage,
-                pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
+                pos.stop_price, pos.take_profit_price, dry_run=getattr(self.executor, "dry_run", True))
         except Exception as exc:  # noqa: BLE001
             print(f"[limite] notifica non inviata: {exc}")
 
@@ -1485,7 +1491,7 @@ class TradingBot:
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
-                    closed.exit_reason.value, dry_run=settings.DRY_RUN)
+                    closed.exit_reason.value, dry_run=getattr(self.executor, "dry_run", True))
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)
                 # cooldown anti-whipsaw: dopo uno STOP, la coin è "calda"/choppy →
                 # non rientrare su quella coin per qualche ora (evita il tritacarne).
@@ -1545,7 +1551,7 @@ class TradingBot:
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
-                    closed.exit_reason.value, dry_run=settings.DRY_RUN)
+                    closed.exit_reason.value, dry_run=getattr(self.executor, "dry_run", True))
                 self.circuit_breakers.register_trade_result(
                     closed.pnl / eq if eq else 0.0, False)
                 self._persist_risk_state()
@@ -1973,7 +1979,7 @@ class TradingBot:
             self.notifier.trade_opened(
                 pos.symbol, pos.strategy, pos.direction.value,
                 pos.entry_price, pos.quantity, pos.leverage,
-                pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
+                pos.stop_price, pos.take_profit_price, dry_run=getattr(self.executor, "dry_run", True))
         return pos
 
     # ------------------------------------------------------------------ #
@@ -2512,7 +2518,9 @@ class TradingBot:
 
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
-        if self.reconciler.start():
+        # il riconciliatore confronta il vecchio esecutore con Binance: con il ramo reale bloccato (executor.py, _init_binance) non c'e'
+        # niente da confrontare anche con DRY_RUN falso (revisione dell'8 novembre 2026, problema 63)
+        if not getattr(self.executor, "dry_run", True) and self.reconciler.start():
             print(f"[main] reconciler attivo (ogni "
                   f"{settings.RECONCILE_INTERVAL_SECONDS:g}s)")
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
@@ -2643,6 +2651,13 @@ class TradingBot:
                 self.demo_g1.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[demo_binance] errore: {exc}")
+            try:
+                if self.conto_vero is None:
+                    self.conto_vero = crea_conto_vero(self.fb)
+                if self.conto_vero is not None:
+                    self.conto_vero.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[conto_vero] errore: {exc}")
             try:
                 self.paper_eventi.tick(time.time())
             except Exception as exc:  # noqa: BLE001

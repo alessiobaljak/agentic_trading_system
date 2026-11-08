@@ -37,14 +37,36 @@ def test_tarature_senza_modalita_ne_segreti(tmp_path, monkeypatch):
     assert cfg.carica_tuning(str(tmp_path / "manca.env")) == []
 
 
-def test_parita_col_backtest_rifiutata_con_soldi_veri(capsys):
+def test_parita_col_backtest_rifiutata_con_soldi_veri(tmp_path, capsys):
+    acceso = tmp_path / "conto_vero_acceso"
+    acceso.write_text("si")
     vero = types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=True)
-    with pytest.raises(SystemExit):
-        cfg.controlla_avvio(vero)
+    with pytest.raises(SystemExit, match="BACKTEST_PARITY"):        # anche con l'interruttore del conto vero
+        cfg.controlla_avvio(vero, interruttore_conto_vero=str(acceso))
     cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=True, BINANCE_TESTNET=True, BACKTEST_PARITY=True))
-    with pytest.raises(SystemExit):                    # problema 29: senza il codice del conto vero, DRY_RUN falso non parte
-        cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=False))
     assert "ambiente: DRY_RUN=False" in capsys.readouterr().out
+
+
+def test_dry_run_falso_senza_interruttore_parte_con_il_conto_vero_in_sole_protezioni(tmp_path, capsys):
+    """Fase 2 del conto vero (docs/conto_vero.md) e revisione dell'8 novembre 2026, problema 53: con DRY_RUN falso e la parità
+    spenta il bot parte sempre (paper e demo accesi); senza l'interruttore ops/conto_vero_acceso il conto vero gira nelle sole
+    protezioni. Con la parità accesa l'avvio resta rifiutato anche senza interruttore. Per difetto guarda il file del conto vero."""
+    from pathlib import Path
+
+    from bot.portafoglio import conto_vero as cv
+    s = types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=False)
+    interruttore = tmp_path / "conto_vero_acceso"
+    cfg.controlla_avvio(s, interruttore_conto_vero=str(interruttore))      # non esce
+    assert "conto vero solo nelle protezioni" in capsys.readouterr().out
+    interruttore.write_text("si")
+    cfg.controlla_avvio(s, interruttore_conto_vero=str(interruttore))
+    assert "solo G1 sul conto vero" in capsys.readouterr().out
+    with pytest.raises(SystemExit, match="BACKTEST_PARITY"):
+        cfg.controlla_avvio(types.SimpleNamespace(DRY_RUN=False, BINANCE_TESTNET=True, BACKTEST_PARITY=True),
+                            interruttore_conto_vero=str(tmp_path / "manca"))
+    assert Path(cfg.INTERRUTTORE_CONTO_VERO) == cv.INTERRUTTORE
+    main = (Path(cfg.__file__).resolve().parent / "main.py").read_text(encoding="utf-8")
+    assert "controlla_avvio(settings)\n    TradingBot().run()" in main          # dopo il controllo il bot parte tutto
 
 
 def test_vecchio_esecutore_non_crea_il_client_del_conto_vero(monkeypatch):

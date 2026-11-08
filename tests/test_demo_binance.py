@@ -31,6 +31,7 @@ class _Demo:
     """Il conto demo finto: 10.000 USDT, due monete, gli ordini limite si eseguono solo su AUSDT."""
 
     PREZZI = {"AUSDT": "100.003", "BUSDT": "50.007", "CUSDT": "2.0", "BTCUSDT": "100000.0"}
+    HOST = "demo-fapi.binance.com"                      # il conto vero (tests/test_conto_vero.py) riusa questo finto con il suo
 
     def __init__(self, simboli=("AUSDT", "BUSDT")):
         self.chiamate = []
@@ -48,7 +49,7 @@ class _Demo:
 
     def __call__(self, metodo, url, headers=None, timeout=None):
         u = urlparse(url)
-        assert u.hostname == "demo-fapi.binance.com"
+        assert u.hostname == self.HOST
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         self.chiamate.append((metodo, u.path, q))
         guasto = self.guasti.pop((metodo, u.path, q.get("symbol")), None)
@@ -1701,3 +1702,24 @@ def test_50_riparti_in_attesa_con_gli_ordini_illeggibili_non_ferma_le_chiusure(t
     d._cliente.http = finto                            # gli ordini tornano leggibili: il «riparti» vale
     d.tick(t0 + 61 * 5)
     assert "fermo" not in d.carica()
+
+
+def test_62_guasto_di_rete_dopo_il_capitale_nuovo_niente_chiusure_e_riaperture(tmp_path, monkeypatch):
+    """Revisione dell'8 novembre 2026 (fase 2 del conto vero), problema 62: lo stato si salva subito dopo `parti_da_zero`; se il
+    ribilancio dopo si interrompe (la risposta di un ordine persa), al tentativo dopo il conto ridotto c'è già e AUSDT, già eseguito,
+    non si richiude e riapre."""
+    import requests
+    monkeypatch.setattr(dm, "filtri_veri", lambda: {})
+    finto = _Demo()
+    finto.equity, finto.posizioni_vive = "280", True
+    d, fb = _demo_semplice(tmp_path, finto)
+    (tmp_path / "capitale").write_text("280")
+    d.file_capitale = tmp_path / "capitale"
+    finto.guasti_dopo["BUSDT"] = requests.ConnectionError("risposta persa")
+    t0 = 20750 * 86400.0 + 400
+    d.tick(t0)
+    assert finto.posizioni["AUSDT"] > 0
+    n = len(finto.chiamate)
+    d.tick(t0 + 1900)
+    assert [q for m, p, q in finto.chiamate[n:] if m == "POST" and p == "/fapi/v1/order" and q["symbol"] == "AUSDT"] == []
+    assert d.carica()["conto_ridotto"]["capitale"] == 280.0

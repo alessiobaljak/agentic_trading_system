@@ -11,7 +11,7 @@ mezzanotte UTC, eventi spenti.
 | Fase | Cosa | Chi | Stato |
 |---|---|---|---|
 | 1 | Chiudere i problemi rimasti del demo che il conto vero erediterà (36-38 della revisione del 7 novembre; Medi 10, 12, 13, 15, 16; Bassi 21-23), con test | sessione principale, poi live-path-reviewer | **fatta l'8 novembre**: approvata al quarto giro (`reviews/reports/2026-11-08-fase1-conto-vero-4.md`); il riavvio del demo aspetta l'ok del proprietario |
-| 2 | Il codice del conto vero, spento: modulo suo accanto al demo, solo l'indirizzo vero di Binance, chiavi sue, interruttore suo, tetto del capitale scritto nel codice, partenza da vuoto alla mezzanotte, stop sul conto, limiti di G1 come costanti protette con test, rifiuto dell'avvio se i file del percorso degli ordini non sono quelli della versione approvata (un tag che si sposta solo con l'ok del proprietario) | sessione principale, poi live-path-reviewer | da fare |
+| 2 | Il codice del conto vero, spento: modulo suo accanto al demo, solo l'indirizzo vero di Binance, chiavi sue, interruttore suo, tetto del capitale scritto nel codice, partenza da vuoto alla mezzanotte, stop sul conto, limiti di G1 come costanti protette con test, rifiuto dell'avvio se i file del percorso degli ordini non sono quelli della versione approvata (un tag che si sposta solo con l'ok del proprietario) | sessione principale, poi live-path-reviewer | **codice spento committato l'8 novembre** (approvato al terzo giro, `reviews/reports/2026-11-08-fase2-conto-vero-3.md`); restano da chiudere prima dell'accensione i punti nel diario |
 | 3 | I controlli finali: backtest-auditor su G1 nella configurazione finale; gate2-reconciler su paper e demo; portfolio-allocator con le regole approvate | agenti | da fare (primo giro lunedì 9 novembre) |
 | 4 | L'accensione: la richiesta esplicita del proprietario, i 280 USDT nel portafoglio dei future, un riavvio approvato; il primo ingresso alla mezzanotte dopo | proprietario | dopo le fasi 1-3 |
 
@@ -58,3 +58,11 @@ mezzanotte UTC, eventi spenti.
 * 8 novembre 2026, 19:02 UTC: riavvio del bot con la fase 1, ok del proprietario; nessun errore all'avvio (`ops/results/0723-*`).
   Il proprietario: la strategia per i soldi veri (G1 o G1 neutra) la decide portfolio-allocator lunedì 9 novembre, con le regole che
   approva lui. Prossimo: fase 2 (il codice del conto vero, spento).
+* 8 novembre 2026, sera: fase 2, il codice del conto vero (`bot/portafoglio/conto_vero.py`) committato **spento**, approvato da
+  live-path-reviewer al terzo giro (più il controllo del problema 71). Senza `ops/conto_vero_acceso` e con `DRY_RUN` vero non fa
+  richieste e non legge le chiavi. `scripts/ops_agent.py` porta sulla macchina il tag `conto-vero-approvato` (entra in funzione al
+  primo `git pull`, senza riavvio). Il bot lo carica al prossimo riavvio, che si fa con l'ok del proprietario. **Da chiudere prima
+  dell'accensione**: la protezione del tag (54, decisione del proprietario: firma o regola di GitHub); il 70 (stato e traccia su
+  Firebase persi: le posizioni restano senza stop) con la decisione se lo stop chiude le posizioni trovate prima della prima
+  accensione; pulsante, stato e regole di Firebase del conto vero in dashboard (60); 66, 72, 73 (bassi); le decisioni del proprietario
+  qui sopra; la verifica con una lettura vera dei redditi di Binance; poi una revisione nuova prima dell'accensione.

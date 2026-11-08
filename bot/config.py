@@ -784,17 +784,30 @@ def get_settings() -> Settings:
 settings = get_settings()
 
 
-def controlla_avvio(s=None) -> None:
+#: l'interruttore di G1 sul conto vero (lo stesso di `bot/portafoglio/conto_vero.py`, `INTERRUTTORE`: lo controlla un test)
+INTERRUTTORE_CONTO_VERO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ops", "conto_vero_acceso")
+
+
+def controlla_avvio(s=None, interruttore_conto_vero: str | None = None) -> None:
     """All'avvio del bot (revisione del percorso degli ordini del 7 novembre 2026, problema 9): la parita' col backtest spegne tutti
-    i fermi del rischio e il tetto delle posizioni, quindi con `DRY_RUN` falso l'avvio si rifiuta. Scrive anche l'ambiente attivo."""
+    i fermi del rischio e il tetto delle posizioni, quindi con `DRY_RUN` falso l'avvio si rifiuta. Dalla fase 2 del conto vero
+    (`docs/conto_vero.md`) con `DRY_RUN` falso e la parita' spenta il bot parte sempre: gli ordini veri li manda solo G1 sul conto
+    vero (`bot/portafoglio/conto_vero.py`, con le sue condizioni, fra cui l'interruttore `ops/conto_vero_acceso`), il ramo reale del
+    vecchio esecutore resta bloccato (`bot/execution/executor.py`, `_init_binance`) e il vecchio sistema resta fermo (`ops/gate_fermo`).
+    Senza l'interruttore non si esce (revisione dell'8 novembre 2026, problema 53: prima si fermavano anche paper e demo, e un conto
+    vero con posizioni restava senza protezioni): il conto vero gira nelle sole protezioni finche' Binance non dice il conto vuoto.
+    Scrive anche l'ambiente attivo."""
     s = s or settings
+    interruttore = interruttore_conto_vero or INTERRUTTORE_CONTO_VERO
     print(f"[config] ambiente: DRY_RUN={s.DRY_RUN}, BINANCE_TESTNET={s.BINANCE_TESTNET}, BACKTEST_PARITY={s.BACKTEST_PARITY}")
     if not s.DRY_RUN and s.BACKTEST_PARITY:
         raise SystemExit("[config] AVVIO RIFIUTATO: BACKTEST_PARITY spegne i fermi del rischio e non si usa con DRY_RUN falso "
                          "(reviews/reports/2026-11-07-primo-avvio.md, problema 9)")
-    if not s.DRY_RUN:
-        # finche' il codice del conto vero non esiste (docs/backlog.md, P26) DRY_RUN falso non ha un senso coerente: il vecchio
-        # esecutore resta comunque in prova, ma la dashboard e il riconciliatore crederebbero il contrario (revisione delle
-        # correzioni del 7 novembre 2026, problema 29). CLAUDE.md: «DRY_RUN resta true».
-        raise SystemExit("[config] AVVIO RIFIUTATO: DRY_RUN falso, ma il codice del conto vero non c'e' ancora (CLAUDE.md: "
-                         "«DRY_RUN resta true»; reviews/reports/2026-11-07-correzioni-9-problemi.md, problema 29)")
+    if not s.DRY_RUN and not os.path.isfile(interruttore):
+        print("[config] DRY_RUN falso senza l'interruttore del conto vero (ops/conto_vero_acceso): il bot parte con paper e demo; il "
+              "conto vero solo nelle protezioni (stop, pulsante, chiusure) finche' Binance non dice il conto vuoto, nessun ordine "
+              "nuovo")
+    elif not s.DRY_RUN:
+        print("[config] DRY_RUN falso con l'interruttore del conto vero: gli ordini veri li manda solo G1 sul conto vero "
+              "(bot/portafoglio/conto_vero.py, se il codice e' quello del tag approvato e il capitale e' nei limiti); il vecchio "
+              "esecutore resta in prova a secco")

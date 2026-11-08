@@ -127,12 +127,14 @@ def senza_firma(testo) -> str:
     return re.sub(r"signature=[^\s'\"<>&]*", "signature=[tolta]", t)
 
 
-def pesi_fuori_dai_limiti(*insiemi) -> Optional[str]:
+def pesi_fuori_dai_limiti(*insiemi, somma_massima: float = SOMMA_PESI_MASSIMA,
+                          peso_massimo: float = PESO_MASSIMO_MONETA) -> Optional[str]:
     """Il controllo indipendente dei pesi prima degli ordini (revisione del 7 novembre 2026, problema 10): ogni peso è un numero
     finito, la somma dei valori assoluti non supera ``SOMMA_PESI_MASSIMA`` e nessuna moneta pesa più di ``PESO_MASSIMO_MONETA``.
     ``insiemi``: i pesi di G1 e quelli degli eventi, controllati uno per uno e sommati. Il motivo del rifiuto, o None. Pesi di G1
     vuoti si rifiutano anche loro (revisione dell'8 novembre 2026, problema 42: il demo chiudeva tutto senza allarme); il numero
-    minimo di monete per lato è l'idea 97 del registro, una prova a parte."""
+    minimo di monete per lato è l'idea 97 del registro, una prova a parte. ``somma_massima`` e ``peso_massimo``: i limiti del conto
+    (il conto vero ha i suoi, `conto_vero.py`)."""
     if insiemi and isinstance(insiemi[0], dict) and not insiemi[0]:
         return "pesi di G1 vuoti"
     for w in insiemi:
@@ -147,11 +149,11 @@ def pesi_fuori_dai_limiti(*insiemi) -> Optional[str]:
                 return f"peso non finito per {s}"
     tot = somma_pesi(*insiemi)
     lorda = sum(abs(v) for v in tot.values())
-    if lorda > SOMMA_PESI_MASSIMA + 1e-9:
-        return f"somma dei pesi {100 * lorda:.1f}%, oltre il {100 * SOMMA_PESI_MASSIMA:.0f}%"
+    if lorda > somma_massima + 1e-9:
+        return f"somma dei pesi {100 * lorda:.1f}%, oltre il {100 * somma_massima:.0f}%"
     for s, v in sorted(tot.items()):
-        if abs(v) > PESO_MASSIMO_MONETA + 1e-9:
-            return f"{s} pesa {100 * v:+.1f}%, oltre il {100 * PESO_MASSIMO_MONETA:.0f}%"
+        if abs(v) > peso_massimo + 1e-9:
+            return f"{s} pesa {100 * v:+.1f}%, oltre il {100 * peso_massimo:.0f}%"
     return None
 
 
@@ -216,24 +218,24 @@ def pezzi_di_chiusura(q: float, massimo: float, passo: float) -> list:
     return out
 
 
-def _pavimento(st: dict) -> float:
+def _pavimento(st: dict, pavimento: float = PAVIMENTO_RIPARTI) -> float:
     """Il ``PAVIMENTO_RIPARTI`` del capitale di partenza della fase. Non vale solo quando il conto, vuoto dopo un «riparti», aspetta la
     fase nuova di un capitale in attesa (da `parti_da_zero` vale il pavimento del capitale nuovo); con le posizioni della fase vecchia
     aperte vale anche con un capitale in attesa (revisione dell'8 novembre 2026, secondo giro, problema 47)."""
     if st.get("capitale_in_attesa") and st.get("riparti_attende_g1"):
         return 0.0
-    return PAVIMENTO_RIPARTI * float(st.get("capitale_iniziale") or 0)
+    return pavimento * float(st.get("capitale_iniziale") or 0)
 
 
-def livello_di_stop(st: dict) -> float:
+def livello_di_stop(st: dict, stop: float = STOP_CONTO, pavimento: float = PAVIMENTO_RIPARTI) -> float:
     """Il valore del conto sotto il quale lo stop chiude tutto: il più alto fra il −35% dal massimo e il ``PAVIMENTO_RIPARTI`` del
     capitale di partenza della fase, così dopo un «riparti» la perdita totale resta entro il 35% del capitale (revisione dell'8
     novembre 2026, decisione 2)."""
-    return max((1 - STOP_CONTO) * float(st["massimo"]), _pavimento(st))
+    return max((1 - stop) * float(st["massimo"]), _pavimento(st, pavimento))
 
 
-def motivo_dello_stop(st: dict, equity: float) -> str:
-    if (1 - STOP_CONTO) * float(st["massimo"]) >= _pavimento(st):
+def motivo_dello_stop(st: dict, equity: float, stop: float = STOP_CONTO, pavimento: float = PAVIMENTO_RIPARTI) -> str:
+    if (1 - stop) * float(st["massimo"]) >= _pavimento(st, pavimento):
         return f"stop sul conto: {100 * (equity / st['massimo'] - 1):.1f}% dal massimo"
     return f"stop sul conto: {100 * (equity / float(st['capitale_iniziale']) - 1):.1f}% dal capitale di partenza della fase"
 
@@ -426,7 +428,14 @@ def _retry_after(r) -> Optional[float]:
 
 
 class ClienteDemo:
-    """Le richieste al conto demo dei future (firmate con la chiave del conto demo)."""
+    """Le richieste al conto demo dei future (firmate con la chiave del conto demo). Il conto vero (`conto_vero.ClienteVero`) cambia
+    solo ``_url`` (l'indirizzo ammesso) e ``NOME`` (il prefisso del log)."""
+
+    NOME = "demo_binance"
+
+    @staticmethod
+    def _url(percorso: str) -> str:
+        return _url(percorso)
 
     def __init__(self, chiave: str, segreto: str, http: Callable = requests.request) -> None:
         self.chiave, self.http = chiave, http
@@ -436,12 +445,12 @@ class ClienteDemo:
     def _rileggi_ora(self) -> None:
         """L'ora di Binance (``/fapi/v1/time``, senza firma): lo scarto con l'orologio della macchina va nelle firme dopo."""
         try:
-            r = self.http("GET", _url("/fapi/v1/time"), headers={"X-MBX-APIKEY": self.chiave}, timeout=15)
+            r = self.http("GET", self._url("/fapi/v1/time"), headers={"X-MBX-APIKEY": self.chiave}, timeout=15)
             if r.status_code < 400:
                 self.scarto_ora_ms = int(r.json()["serverTime"]) - int(time.time() * 1000)
-                print(f"[demo_binance] ora di Binance riletta: scarto {self.scarto_ora_ms} ms")
+                print(f"[{self.NOME}] ora di Binance riletta: scarto {self.scarto_ora_ms} ms")
         except Exception as exc:  # noqa: BLE001
-            print(f"[demo_binance] ora di Binance non letta: {senza_firma(exc)[:150]}")
+            print(f"[{self.NOME}] ora di Binance non letta: {senza_firma(exc)[:150]}")
 
     def chiedi(self, metodo: str, percorso: str, parametri: Optional[dict] = None, firmata: bool = False):
         """Una richiesta; 429 e 418 si riprovano con attese crescenti (o quella del Retry-After), poi ``LimiteBinance``. Gli errori
@@ -457,7 +466,7 @@ class ClienteDemo:
             if firmata:
                 q += "&signature=" + self.firma(q)
             try:
-                r = self.http(metodo, _url(percorso) + ("?" + q if q else ""), headers={"X-MBX-APIKEY": self.chiave}, timeout=15)
+                r = self.http(metodo, self._url(percorso) + ("?" + q if q else ""), headers={"X-MBX-APIKEY": self.chiave}, timeout=15)
             except requests.RequestException as exc:
                 pulito = senza_firma(str(exc))
                 if pulito == str(exc):
@@ -487,6 +496,20 @@ class ClienteDemo:
 
 
 class DemoG1:
+    # il nome, i comandi e i limiti di questo conto: il conto vero (`conto_vero.ContoVeroG1`) li cambia con i suoi, senza copiare
+    # il codice (fase 2 del piano del conto vero, `docs/conto_vero.md`)
+    NOME = "demo_binance"                      # il ramo su Firebase (/demo_binance) e il prefisso del log
+    HOST = HOST_DEMO
+    COMANDO_CHIUDI, COMANDO_RIPARTI = COMANDO_CHIUDI, COMANDO_RIPARTI
+    INTERRUTTORE_DI_SERIE, FILE_CAPITALE_DI_SERIE = INTERRUTTORE, FILE_CAPITALE
+    FILE_COMANDI_DI_SERIE = (FILE_CHIUDI, FILE_RIPARTI)
+    LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO = LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO
+    SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA = SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA
+    ETA_MASSIMA_DECISIONE_S = ETA_MASSIMA_DECISIONE_S
+    MANCA_CHIAVE = "manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env)"
+    CHIAVE_VALORE_VERO = "valore_vero_del_conto_demo"
+    CHIAVE_ILLEGGIBILE = "chiave del conto demo non leggibile"
+
     def __init__(self, fb, cliente: Optional[ClienteDemo] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_G1,
                  interruttore: Path = INTERRUTTORE, file_eventi: Path = FILE_EVENTI,
                  interruttore_eventi: Path = INTERRUTTORE_EVENTI, file_chiudi: Path = FILE_CHIUDI,
@@ -508,8 +531,14 @@ class DemoG1:
         self._valore_vero: Optional[float] = None   # il valore vero del conto all'ultima lettura (problema 41)
 
     # ---- stato ----
+    def _livello_di_stop(self, st: dict) -> float:
+        return livello_di_stop(st, self.STOP_CONTO, self.PAVIMENTO_RIPARTI)
+
+    def _motivo_dello_stop(self, st: dict, equity: float) -> str:
+        return motivo_dello_stop(st, equity, self.STOP_CONTO, self.PAVIMENTO_RIPARTI)
+
     def acceso(self) -> bool:
-        if self.interruttore == INTERRUTTORE and os.environ.get("PYTEST_CURRENT_TEST"):
+        if self.interruttore == self.INTERRUTTORE_DI_SERIE and os.environ.get("PYTEST_CURRENT_TEST"):
             return False
         return self.interruttore.exists()
 
@@ -522,7 +551,7 @@ class DemoG1:
         """Il capitale del conto ridotto dal file `ops/demo_binance_capitale` (un numero in USDT); None se non c'è. Un valore non
         numerico, non positivo o sopra ``CAPITALE_MASSIMO`` non si usa: None, con il motivo in ``capitale_errato`` (problema 16)."""
         self.capitale_errato = None
-        if self.file_capitale == FILE_CAPITALE and os.environ.get("PYTEST_CURRENT_TEST"):
+        if self.file_capitale == self.FILE_CAPITALE_DI_SERIE and os.environ.get("PYTEST_CURRENT_TEST"):
             return None
         if not self.file_capitale.exists():
             return None
@@ -536,8 +565,9 @@ class DemoG1:
         except ValueError:
             self.capitale_errato = f"capitale non numerico nel file: {t[:40]!r}"
             return None
-        if not math.isfinite(v) or v <= 0 or v > CAPITALE_MASSIMO:
-            self.capitale_errato = f"capitale fuori dai limiti nel file: {t[:40]!r} (ammesso fino a {CAPITALE_MASSIMO:,.0f} USDT)"
+        if not math.isfinite(v) or v <= 0 or v > self.CAPITALE_MASSIMO:
+            self.capitale_errato = (f"capitale fuori dai limiti nel file: {t[:40]!r} (ammesso fino a {self.CAPITALE_MASSIMO:,.0f} "
+                                    f"USDT)")
             return None
         return v
 
@@ -551,7 +581,7 @@ class DemoG1:
                 accesi[tipo] = testo
                 self._accesi.add(tipo)
                 self._scrivi(f"allarmi/{tipo}", {"ora": now, "testo": testo, **altro})
-                print(f"[demo_binance] ALLARME ({tipo}): {testo}")
+                print(f"[{self.NOME}] ALLARME ({tipo}): {testo}")
         elif tipo in accesi or tipo in self._accesi:
             accesi.pop(tipo, None)
             self._accesi.discard(tipo)
@@ -562,12 +592,12 @@ class DemoG1:
         if self.fb is None:
             return
         for ramo in RAMI_DELLA_FASE:
-            v = self.fb.get_rtdb(f"/demo_binance/{ramo}")
+            v = self.fb.get_rtdb(f"/{self.NOME}/{ramo}")
             if not isinstance(v, dict) or not v:
                 continue
-            self.fb.set_rtdb(f"/demo_binance/fasi/{nome}/{ramo}", v)
+            self.fb.set_rtdb(f"/{self.NOME}/fasi/{nome}/{ramo}", v)
             for k in list(v):
-                self.fb.set_rtdb(f"/demo_binance/{ramo}/{k}", None)
+                self.fb.set_rtdb(f"/{self.NOME}/{ramo}/{k}", None)
 
     def conto_ridotto(self, c: ClienteDemo, st: dict, now: float) -> dict:
         """Il demo come un conto più piccolo (vedi in cima). Un capitale nuovo nel file non parte subito: resta in attesa fino alla
@@ -585,7 +615,7 @@ class DemoG1:
             if st.get("capitale_in_attesa") != voluto:
                 st["capitale_in_attesa"] = voluto
                 self._scrivi("capitale_in_attesa", {"capitale": voluto, "chiesto": now})
-                print(f"[demo_binance] capitale nuovo {voluto:g} USDT: parte alla prossima decisione di G1, dal conto vuoto")
+                print(f"[{self.NOME}] capitale nuovo {voluto:g} USDT: parte alla prossima decisione di G1, dal conto vuoto")
         elif st.pop("capitale_in_attesa", None) is not None:
             self._scrivi("capitale_in_attesa", None)
         self._scarto = float(cr["valore_vero_all_avvio"]) - float(cr["capitale"]) if cr else 0.0
@@ -604,7 +634,8 @@ class DemoG1:
             return st
         cr = st.get("conto_ridotto")
         scarto_prima, self._scarto = self._scarto, 0.0
-        vero_prima = self._conto(c)[0]
+        self._conto(c)
+        vero_prima = float(self._valore_vero)
         if float(voluto) > vero_prima:                 # problema 41: prima di chiudere niente, il capitale contro il valore vero
             self._scarto = scarto_prima
             self.capitale_errato = self._capitale_oltre_il_saldo(float(voluto))
@@ -626,7 +657,8 @@ class DemoG1:
                 errori.append({"simbolo": s, "errore": str(exc)[:200]})
         if chiuse:
             time.sleep(ATTESA_DOPO_CHIUSURA_S)
-        vero = self._conto(c)[0]
+        self._conto(c)
+        vero = float(self._valore_vero)
         data = time.strftime("%Y-%m-%d", time.gmtime(now))
         prima = f"capitale_{float(cr['capitale']):g}" if cr else "conto_intero"
         self._archivia_fase(f"{prima}_fino_al_{data}".replace(".", "_"))
@@ -640,8 +672,9 @@ class DemoG1:
         self._scarto = vero - float(voluto)
         self._scrivi("conto_ridotto", cr)
         self._scrivi("capitale_in_attesa", None)
-        print(f"[demo_binance] conto ridotto da zero: {voluto:g} USDT (chiuse {len(chiuse)} posizioni, {len(errori)} errori; "
+        print(f"[{self.NOME}] conto ridotto da zero: {voluto:g} USDT (chiuse {len(chiuse)} posizioni, {len(errori)} errori; "
               f"valore vero {vero:,.2f})")
+        self.salva(st)          # revisione dell'8 novembre 2026, problema 62: un errore nel ribilancio dopo non la ripete
         return st
 
     def eventi_aperti(self) -> dict:
@@ -673,7 +706,7 @@ class DemoG1:
 
     def _scrivi(self, ramo: str, valore) -> None:
         if self.fb is not None:
-            self.fb.set_rtdb(f"/demo_binance/{ramo}", valore)
+            self.fb.set_rtdb(f"/{self.NOME}/{ramo}", valore)
 
     # ---- il massimo dello stop sul conto, anche su Firebase (revisione del 7 novembre 2026, problema 15) ----
     def _fissa_massimo(self, st: dict, valore: float, now: float, nuova_serie: bool = False) -> None:
@@ -694,7 +727,7 @@ class DemoG1:
             return
         self._massimo_letto = True
         try:
-            v = self.fb.get_rtdb("/demo_binance/massimo")
+            v = self.fb.get_rtdb(f"/{self.NOME}/massimo")
             valore, dal = float(v["valore"]), v.get("dal")
         except Exception:  # noqa: BLE001
             return
@@ -703,11 +736,11 @@ class DemoG1:
         nel_file = st.get("massimo")
         if nel_file is None or st.get("massimo_dal") is None or st.get("massimo_dal") == dal:
             if nel_file is None or valore > float(nel_file):
-                print(f"[demo_binance] massimo dello stop ripreso da Firebase: {valore:,.2f} (nel file: {nel_file})")
+                print(f"[{self.NOME}] massimo dello stop ripreso da Firebase: {valore:,.2f} (nel file: {nel_file})")
                 st["massimo"], st["massimo_dal"] = valore, dal
 
-    def _comando(self, percorso: str) -> bool:
-        if self.fb is None:
+    def _comando(self, percorso: Optional[str]) -> bool:
+        if self.fb is None or not percorso:
             return False
         try:
             return bool(self.fb.get_rtdb(percorso))
@@ -716,7 +749,7 @@ class DemoG1:
 
     def _comando_file(self, f: Path, st: dict, chiave: str) -> bool:
         """Il comando come file: vale una volta per ogni testo nuovo (il file resta nel repository)."""
-        if os.environ.get("PYTEST_CURRENT_TEST") and f in (FILE_CHIUDI, FILE_RIPARTI):
+        if os.environ.get("PYTEST_CURRENT_TEST") and f in self.FILE_COMANDI_DI_SERIE:
             return False
         try:
             testo_file = f.read_text(encoding="utf-8").strip() if f.exists() else ""
@@ -750,13 +783,13 @@ class DemoG1:
             fermo["errori"] = list(getattr(exc, "errori", [])) or [{"simbolo": "*", "errore": senza_firma(exc)[:200]}]
             self._scrivi("fermo", fermo)
             self.salva(st)
-            print(f"[demo_binance] CHIUDI TUTTO interrotto ({motivo}): fermo segnato, si richiude dopo: {senza_firma(exc)[:150]}")
+            print(f"[{self.NOME}] CHIUDI TUTTO interrotto ({motivo}): fermo segnato, si richiude dopo: {senza_firma(exc)[:150]}")
             raise
         fermo.update({"equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori, "tentativi": 1})
         self._scrivi("fermo", fermo)
         self._scrivi("stato", {"stato": f"fermo: {motivo}", "equity": round(equity, 2), "aggiornato": now,
                                "capitale_iniziale": float(st.get("capitale_iniziale", equity))})
-        print(f"[demo_binance] CHIUSO TUTTO ({motivo}): {len(chiuse)} posizioni chiuse, {len(errori)} errori")
+        print(f"[{self.NOME}] CHIUSO TUTTO ({motivo}): {len(chiuse)} posizioni chiuse, {len(errori)} errori")
         return st
 
     # ---- il giro ----
@@ -766,16 +799,16 @@ class DemoG1:
         try:
             c = self.cliente()
         except Exception as exc:  # noqa: BLE001
-            self._scrivi("stato", {"stato": f"chiave del conto demo non leggibile: {type(exc).__name__}", "aggiornato": now})
+            self._scrivi("stato", {"stato": f"{self.CHIAVE_ILLEGGIBILE}: {type(exc).__name__}", "aggiornato": now})
             return
         if c is None:
-            self._scrivi("stato", {"stato": "manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env)", "aggiornato": now})
+            self._scrivi("stato", {"stato": self.MANCA_CHIAVE, "aggiornato": now})
             return
         if not self._avviato:
             self._avviato = True
             self._log_d_avvio(now)
             try:                                       # gli allarmi già scritti si spengono anche con lo stato perso (problema 46)
-                scritti = self.fb.get_rtdb("/demo_binance/allarmi") if self.fb is not None else None
+                scritti = self.fb.get_rtdb(f"/{self.NOME}/allarmi") if self.fb is not None else None
                 self._accesi |= {k for k, v in scritti.items() if v} if isinstance(scritti, dict) else set()
             except Exception:  # noqa: BLE001
                 pass
@@ -795,7 +828,7 @@ class DemoG1:
         except Exception as exc:  # noqa: BLE001
             self._protezioni_ferme_fino = now + OGNI_CONTROLLO_STOP_S
             testo_errore = senza_firma(exc)
-            print(f"[demo_binance] errore nelle protezioni, si riprova fra un minuto: {testo_errore}")
+            print(f"[{self.NOME}] errore nelle protezioni, si riprova fra un minuto: {testo_errore}")
             self._scrivi("errore", {"testo": testo_errore[:300], "ora": now, "dove": "protezioni"})
             return
         if st.get("fermo"):
@@ -803,33 +836,8 @@ class DemoG1:
         if now - self._ultimo_tentativo < ATTESA_DOPO_ERRORE_S and self._ultimo_tentativo:
             return
         try:
-            if st.get("ordini") and now >= float(st["ordini"]["piazzati"]) + VALIDITA_LIMITE_S:
-                st = self.chiudi_ordini(c, st, now)
-            if not st.get("ordini"):                   # nessun ribilancio in corso: niente ordini bloccati (problema 46)
-                self._allarme(st, now, "ordini", None)
-            if int(st.get("ultimo_giorno", 0)) * 86400 > now + 3600:   # problema 45: un giorno nel futuro fermerebbe ogni decisione
-                print(f"[demo_binance] giorno dell'ultimo ribilancio nel futuro ({st['ultimo_giorno']}): si azzera")
-                st["ultimo_giorno"] = 0
-            g1 = json.loads(self.file_g1.read_text(encoding="utf-8")) if self.file_g1.exists() else {}
-            giorno = int(g1.get("ultimo_lunedi", 0))
-            aperte = self.eventi_aperti()
-            firma, monete_eventi = sorted(aperte), sorted({p.get("simbolo") for p in aperte.values() if p.get("simbolo")})
-            pesi_g1, pesi_ev = g1.get("pesi") or {}, pesi_eventi(aperte)
-            fuori = pesi_fuori_dai_limiti(pesi_g1, pesi_ev)
-            pesi = somma_pesi(pesi_g1, pesi_ev) if not fuori else {}
-            if self._decisione_da_non_eseguire(st, now, giorno, fuori):
-                pass                                   # problemi 10 e 12: niente ordini nuovi, l'allarme è scritto
-            elif giorno and giorno > int(st.get("ultimo_giorno", 0)) and not st.get("ordini"):
-                st = self.parti_da_zero(c, st, now)
-                st = self.ribilancia(c, st, pesi, giorno, now)
-                st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
-                st.pop("riparti_attende_g1", None)
-            elif (firma != list(st.get("eventi_firma") or []) and not st.get("ordini") and int(st.get("ultimo_giorno", 0))
-                  and not st.get("riparti_attende_g1")      # dopo un «riparti» si aspetta la decisione di G1 (decisione 3)
-                  and (int(st["ultimo_giorno"]) >= int(now // 86400) or now >= int(now // 86400) * 86400 + ATTESA_G1_S)):
-                toccate = set(monete_eventi) | set(st.get("eventi_monete") or []) | {"BTCUSDT"}
-                st = self.ribilancia(c, st, pesi, int(st["ultimo_giorno"]), now, solo=toccate)
-                st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
+            if self._ordini_nuovi_ammessi(c, st, now):  # sempre sul demo; il conto vero ha le sue condizioni (conto_vero.py)
+                st = self._ordini_del_giro(c, st, now)
             if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
                 st = self.valuta(c, st, now)
                 if not st.get("fermo"):
@@ -842,8 +850,45 @@ class DemoG1:
         except Exception as exc:  # noqa: BLE001
             self._ultimo_tentativo = now
             testo_errore = senza_firma(exc)
-            print(f"[demo_binance] errore, si riprova fra 30 minuti: {testo_errore}")
+            print(f"[{self.NOME}] errore, si riprova fra 30 minuti: {testo_errore}")
             self._scrivi("errore", {"testo": testo_errore[:300], "ora": now})
+
+    def _ordini_nuovi_ammessi(self, c: ClienteDemo, st: dict, now: float) -> bool:
+        """Se il giro può mandare ordini nuovi (il resto a mercato, il ribilancio di G1, gli eventi). Sul demo sempre; il conto vero
+        (`conto_vero.ContoVeroG1`) lo permette solo con tutte le sue condizioni. Le protezioni e la valutazione girano comunque."""
+        return True
+
+    def _ordini_del_giro(self, c: ClienteDemo, st: dict, now: float) -> dict:
+        """I passi del giro che mandano ordini: il resto a mercato dopo l'ora, la decisione nuova di G1, le operazioni a eventi."""
+        if st.get("ordini") and now >= float(st["ordini"]["piazzati"]) + VALIDITA_LIMITE_S:
+            st = self.chiudi_ordini(c, st, now)
+        if not st.get("ordini"):                   # nessun ribilancio in corso: niente ordini bloccati (problema 46)
+            self._allarme(st, now, "ordini", None)
+        if int(st.get("ultimo_giorno", 0)) * 86400 > now + 3600:   # problema 45: un giorno nel futuro fermerebbe ogni decisione
+            print(f"[{self.NOME}] giorno dell'ultimo ribilancio nel futuro ({st['ultimo_giorno']}): si azzera")
+            st["ultimo_giorno"] = 0
+        g1 = json.loads(self.file_g1.read_text(encoding="utf-8")) if self.file_g1.exists() else {}
+        giorno = int(g1.get("ultimo_lunedi", 0))
+        aperte = self.eventi_aperti()
+        firma, monete_eventi = sorted(aperte), sorted({p.get("simbolo") for p in aperte.values() if p.get("simbolo")})
+        pesi_g1, pesi_ev = g1.get("pesi") or {}, pesi_eventi(aperte)
+        fuori = pesi_fuori_dai_limiti(pesi_g1, pesi_ev, somma_massima=self.SOMMA_PESI_MASSIMA,
+                                      peso_massimo=self.PESO_MASSIMO_MONETA)
+        pesi = somma_pesi(pesi_g1, pesi_ev) if not fuori else {}
+        if self._decisione_da_non_eseguire(st, now, giorno, fuori):
+            pass                                   # problemi 10 e 12: niente ordini nuovi, l'allarme è scritto
+        elif giorno and giorno > int(st.get("ultimo_giorno", 0)) and not st.get("ordini"):
+            st = self.parti_da_zero(c, st, now)
+            st = self.ribilancia(c, st, pesi, giorno, now)
+            st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
+            st.pop("riparti_attende_g1", None)
+        elif (firma != list(st.get("eventi_firma") or []) and not st.get("ordini") and int(st.get("ultimo_giorno", 0))
+              and not st.get("riparti_attende_g1")      # dopo un «riparti» si aspetta la decisione di G1 (decisione 3)
+              and (int(st["ultimo_giorno"]) >= int(now // 86400) or now >= int(now // 86400) * 86400 + ATTESA_G1_S)):
+            toccate = set(monete_eventi) | set(st.get("eventi_monete") or []) | {"BTCUSDT"}
+            st = self.ribilancia(c, st, pesi, int(st["ultimo_giorno"]), now, solo=toccate)
+            st["eventi_firma"], st["eventi_monete"] = firma, monete_eventi
+        return st
 
     def _limite_di_binance(self, now: float, exc: LimiteBinance, dove: str) -> None:
         """Problema 13: Binance limita le richieste anche dopo i ritentativi. Nessuna richiesta, nemmeno delle protezioni, per
@@ -858,7 +903,7 @@ class DemoG1:
         testo_errore = senza_firma(exc)
         if exc.codice != 418 and exc.attesa_s > ATTESA_LIMITE_TETTO_S:
             testo_errore += f"; Binance chiedeva {exc.attesa_s:.0f} secondi, si riprova dopo {ATTESA_LIMITE_TETTO_S:.0f}"
-        print(f"[demo_binance] limiti di Binance ({dove}): {testo_errore}; nessuna richiesta per {attesa:.0f} secondi")
+        print(f"[{self.NOME}] limiti di Binance ({dove}): {testo_errore}; nessuna richiesta per {attesa:.0f} secondi")
         self._scrivi("errore", {"testo": testo_errore[:300], "ora": now, "dove": dove})
         self._accesi.add("limiti_binance")
         if exc.codice == 418:
@@ -878,9 +923,9 @@ class DemoG1:
         elif giorno * 86400 > now + 3600:              # problema 45: una data nel futuro non si esegue (bloccherebbe le vere)
             vecchia = (f"la decisione di G1 ha una data nel futuro ({time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}): "
                        f"niente ordini nuovi")
-        elif now - giorno * 86400 > ETA_MASSIMA_DECISIONE_S:
+        elif now - giorno * 86400 > self.ETA_MASSIMA_DECISIONE_S:
             vecchia = (f"la decisione di G1 è del {time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}, "
-                       f"{(now - giorno * 86400) / 3600:.0f} ore fa (oltre {ETA_MASSIMA_DECISIONE_S // 3600}): niente ordini nuovi "
+                       f"{(now - giorno * 86400) / 3600:.0f} ore fa (oltre {self.ETA_MASSIMA_DECISIONE_S // 3600}): niente ordini nuovi "
                        f"finché il paper di G1 non decide di nuovo")
         else:
             vecchia = None
@@ -888,28 +933,31 @@ class DemoG1:
         self._allarme(st, now, "pesi", fuori and f"pesi di G1 fuori dai limiti, niente ordini: {fuori}")
         return bool(vecchia or fuori)
 
+    def _ambiente(self, now: float) -> dict:
+        return {"ora": now, "indirizzo": self.HOST, "leva": self.LEVA, "stop_sul_conto": self.STOP_CONTO,
+                "capitale_nel_file": self.capitale_voluto(), "capitale_errato": self.capitale_errato,
+                "capitale_massimo": self.CAPITALE_MASSIMO, "eventi_accesi": self.eventi_accesi(),
+                "filtri_del_conto_vero_del": DATA_FILTRI_VERI, "somma_pesi_massima": self.SOMMA_PESI_MASSIMA,
+                "peso_massimo_moneta": self.PESO_MASSIMO_MONETA,
+                "eta_massima_decisione_ore": self.ETA_MASSIMA_DECISIONE_S // 3600, "pavimento_riparti": self.PAVIMENTO_RIPARTI}
+
     def _log_d_avvio(self, now: float) -> None:
         """Problema 22: all'avvio, nel log e su Firebase (`/demo_binance/avvio`), l'ambiente in cui il demo lavora."""
-        amb = {"ora": now, "indirizzo": HOST_DEMO, "leva": LEVA, "stop_sul_conto": STOP_CONTO,
-               "capitale_nel_file": self.capitale_voluto(), "capitale_errato": self.capitale_errato,
-               "capitale_massimo": CAPITALE_MASSIMO, "eventi_accesi": self.eventi_accesi(),
-               "filtri_del_conto_vero_del": DATA_FILTRI_VERI, "somma_pesi_massima": SOMMA_PESI_MASSIMA,
-               "peso_massimo_moneta": PESO_MASSIMO_MONETA, "eta_massima_decisione_ore": ETA_MASSIMA_DECISIONE_S // 3600,
-               "pavimento_riparti": PAVIMENTO_RIPARTI}
-        print("[demo_binance] avvio: " + ", ".join(f"{k} {v}" for k, v in amb.items() if k != "ora"))
+        amb = self._ambiente(now)
+        print(f"[{self.NOME}] avvio: " + ", ".join(f"{k} {v}" for k, v in amb.items() if k != "ora"))
         self._scrivi("avvio", amb)
 
     # ---- le protezioni (revisione del 7 novembre 2026, problemi 2-4) ----
     def protezioni(self, c: ClienteDemo, st: dict, now: float) -> dict:
         """Pulsante che chiude tutto e stop sul conto a ogni giro (lo stop: lettura del conto al massimo ogni minuto); da fermo, il
         conto vuoto e il «riparti»."""
-        da_dashboard = self._comando(COMANDO_CHIUDI)
+        da_dashboard = self._comando(self.COMANDO_CHIUDI)
         da_file = self._comando_file(self.file_chiudi, st, "eseguito_chiudi")
         if da_dashboard or da_file:
             if not st.get("fermo"):
                 st = self.chiudi_tutto(c, st, now, "pulsante della dashboard" if da_dashboard else "comando chiudi tutto")
             if da_dashboard:
-                self.fb.set_rtdb(COMANDO_CHIUDI, False)
+                self.fb.set_rtdb(self.COMANDO_CHIUDI, False)
         if st.get("fermo"):
             return self._da_fermo(c, st, now)
         self._allarme(st, now, "riparti", None)       # acceso: l'allarme del «riparti» rifiutato non vale più (problema 46)
@@ -919,8 +967,8 @@ class DemoG1:
             equity = self._conto(c)[0]
             iniziale = float(st.setdefault("capitale_iniziale", equity))
             self._fissa_massimo(st, max(float(st.get("massimo", iniziale)), equity), now)
-            if equity <= livello_di_stop(st):
-                st = self.chiudi_tutto(c, st, now, motivo_dello_stop(st, equity), equity=equity)
+            if equity <= self._livello_di_stop(st):
+                st = self.chiudi_tutto(c, st, now, self._motivo_dello_stop(st, equity), equity=equity)
         return st
 
     def _da_fermo(self, c: ClienteDemo, st: dict, now: float) -> dict:
@@ -931,7 +979,7 @@ class DemoG1:
         da_file = self._comando_file(self.file_riparti, st, "eseguito_riparti")    # il file non ha bisogno di Firebase (problema 27)
         if not da_file and not fermo.get("riparti_pulito"):
             fermo["riparti_pulito"] = self._pulisci_riparti(st, solo_firebase=True)
-        elif da_file or self._comando(COMANDO_RIPARTI):
+        elif da_file or self._comando(self.COMANDO_RIPARTI):
             sopra = self._riparti_ammesso(c, st, now)       # prima di consumare il comando: un errore qui lo lascia (problema 46)
             if sopra is None:
                 # il conto o gli ordini non si leggono (problema 50): il comando resta per il giro dopo (quello della dashboard non
@@ -949,7 +997,7 @@ class DemoG1:
                 st["riparti_attende_g1"] = True
                 self._fissa_massimo(st, self._conto(c)[0], now, nuova_serie=True)   # lo stop si misura dalla ripartenza
                 self._scrivi("fermo", None)
-                print("[demo_binance] ripartito: si riapre alla prossima decisione di G1")
+                print(f"[{self.NOME}] ripartito: si riapre alla prossima decisione di G1")
                 return st
         if now - float(fermo.get("ultimo_controllo", 0)) < OGNI_CONTROLLO_STOP_S:
             return st
@@ -1001,7 +1049,7 @@ class DemoG1:
             allarme = {"ora": now, "testo": f"fermo ma {cosa} dopo {fermo['tentativi']} tentativi", "posizioni": posizioni,
                        "errori": fermo.get("errori") or []}
             self._scrivi("allarme", allarme)
-            print(f"[demo_binance] ALLARME: {allarme['testo']}: {posizioni}")
+            print(f"[{self.NOME}] ALLARME: {allarme['testo']}: {posizioni}")
 
     def _riparti_ammesso(self, c: ClienteDemo, st: dict, now: float) -> Optional[bool]:
         """Problemi 23 e 48: «riparti» riaccende il demo solo se il conto vale più del ``PAVIMENTO_RIPARTI`` del capitale di partenza
@@ -1016,15 +1064,15 @@ class DemoG1:
             equity, _, posizioni = self._conto(c)
             aperti = sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []})
         except (RuntimeError, requests.RequestException) as exc:
-            print(f"[demo_binance] «riparti» rimandato: il conto o gli ordini non si leggono ({senza_firma(exc)[:150]})")
+            print(f"[{self.NOME}] «riparti» rimandato: il conto o gli ordini non si leggono ({senza_firma(exc)[:150]})")
             return None
-        if base > 0 and equity <= PAVIMENTO_RIPARTI * base and not st.get("capitale_in_attesa"):
-            motivo = (f"«riparti» non eseguito: il conto vale {equity:,.2f} USDT, non sopra il {100 * PAVIMENTO_RIPARTI:.0f}% del "
-                      f"capitale di partenza ({base:,.2f}); serve un capitale nuovo dal proprietario (ops/demo_binance_capitale), "
+        if base > 0 and equity <= self.PAVIMENTO_RIPARTI * base and not st.get("capitale_in_attesa"):
+            motivo = (f"«riparti» non eseguito: il conto vale {equity:,.2f} USDT, non sopra il {100 * self.PAVIMENTO_RIPARTI:.0f}% "
+                      f"del capitale di partenza ({base:,.2f}); serve un capitale nuovo dal proprietario (ops/{self.file_capitale.name}), "
                       f"poi «riparti»")
         elif posizioni or aperti:
             motivo = (f"«riparti» non eseguito: il conto non è vuoto (posizioni: {', '.join(sorted(posizioni)) or 'nessuna'}; "
-                      f"ordini aperti: {', '.join(aperti) or 'nessuno'}); il demo resta fermo e richiude, poi «riparti» di nuovo")
+                      f"ordini aperti: {', '.join(aperti) or 'nessuno'}); il conto resta fermo e richiude, poi «riparti» di nuovo")
         else:
             self._allarme(st, now, "riparti", None)
             return True
@@ -1094,10 +1142,10 @@ class DemoG1:
                                           if self.file_riparti.exists() else st.get("eseguito_riparti", ""))
             except Exception:  # noqa: BLE001
                 pass
-        if self.fb is None:
+        if self.fb is None or not self.COMANDO_RIPARTI:
             return True
         try:
-            return self.fb.set_rtdb(COMANDO_RIPARTI, False) is not False
+            return self.fb.set_rtdb(self.COMANDO_RIPARTI, False) is not False
         except Exception:  # noqa: BLE001
             return False
 
@@ -1105,14 +1153,14 @@ class DemoG1:
         """Il «riparti»: dal file, una volta per testo nuovo; dalla dashboard, solo se il comando si consuma davvero (la scrittura
         del falso confermata), così un comando rimasto vero non riaccende il demo da solo (revisione del 7 novembre 2026, problema 4).
         Il file lo legge già ``_da_fermo``."""
-        if not self._comando(COMANDO_RIPARTI):
+        if not self._comando(self.COMANDO_RIPARTI):
             return False
         try:
-            ok = self.fb.set_rtdb(COMANDO_RIPARTI, False) is not False
+            ok = self.fb.set_rtdb(self.COMANDO_RIPARTI, False) is not False
         except Exception:  # noqa: BLE001
             ok = False
         if not ok:
-            print("[demo_binance] «riparti» non eseguito: il comando non si è potuto consumare su Firebase; si riprova al giro dopo")
+            print(f"[{self.NOME}] «riparti» non eseguito: il comando non si è potuto consumare su Firebase; si riprova al giro dopo")
         return ok
 
     def _ordini_bloccati(self, st: dict, now: float, simboli: list) -> None:
@@ -1148,9 +1196,15 @@ class DemoG1:
         self._separati = sorted(x["symbol"] for x in conto.get("positions", []) if x.get("isolated") in (True, "true"))
         posizioni = {x["symbol"]: float(x["positionAmt"]) for x in conto.get("positions", []) if float(x.get("positionAmt") or 0)}
         self._valore_vero = float(conto["totalMarginBalance"])   # senza lo scarto del conto ridotto (problema 41)
+        self._saldo_vero = float(conto["totalWalletBalance"])
         self._leve_vere ={x["symbol"]: float(x["leverage"]) for x in conto.get("positions", [])
                            if x["symbol"] in posizioni and x.get("leverage") not in (None, "")}   # problema 22
-        return float(conto["totalMarginBalance"]) - self._scarto, float(conto["totalWalletBalance"]) - self._scarto, posizioni
+        return (*self._valori(self._valore_vero, self._saldo_vero), posizioni)
+
+    def _valori(self, margine: float, saldo: float) -> tuple:
+        """Il valore e il saldo del conto che il bot usa: sul demo quelli veri meno lo scarto del conto ridotto. Il conto vero
+        (`conto_vero.py`, revisione dell'8 novembre 2026, problema 58) li calcola dal capitale e dai redditi, non dal saldo."""
+        return margine - self._scarto, saldo - self._scarto
 
     def _margine_unico(self, c: ClienteDemo, s: str) -> str:
         """Chiede a Binance il margine unico per la moneta; «già unico» (-4046) va bene. Restituisce '' o l'errore."""
@@ -1182,10 +1236,10 @@ class DemoG1:
         # problema 22: anche la leva e la posizione unica per moneta si rileggono ogni ora (prima solo alla prima impostazione)
         leve_rimesse = []
         for s, leva in sorted(getattr(self, "_leve_vere", {}).items()):
-            if s in separati or abs(leva - LEVA) < 1e-9:
+            if s in separati or abs(leva - self.LEVA) < 1e-9:
                 continue
             try:
-                c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": LEVA}, firmata=True)
+                c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": self.LEVA}, firmata=True)
                 leve_rimesse.append(s)
             except RuntimeError as exc:
                 errori.append({"simbolo": s, "errore": f"leva {leva:g}: {str(exc)[:150]}"})
@@ -1199,9 +1253,9 @@ class DemoG1:
         self._scrivi("margine", {"controllato": now, "separati_trovati": separati, "sistemate": sistemate, "errori": errori,
                                  "leve_rimesse": leve_rimesse, "due_lati": due_lati})
         if leve_rimesse or due_lati:
-            print(f"[demo_binance] leva rimessa a {LEVA} su {leve_rimesse}; posizioni con due lati: {due_lati}")
+            print(f"[{self.NOME}] leva rimessa a {self.LEVA} su {leve_rimesse}; posizioni con due lati: {due_lati}")
         if separati:
-            print(f"[demo_binance] margine separato su {separati}: sistemate {sistemate}, errori {len(errori)}")
+            print(f"[{self.NOME}] margine separato su {separati}: sistemate {sistemate}, errori {len(errori)}")
         return st
 
     def confronta(self, c: ClienteDemo, st: dict, now: float) -> dict:
@@ -1224,21 +1278,28 @@ class DemoG1:
         self._scrivi("confronto", {"ora": now, "differenze": differenze, "scarto_totale": round(totale, 4),
                                    "monete": len(set(obiettivi) | set(posizioni))})
         if differenze:
-            print(f"[demo_binance] posizioni diverse da quelle volute: {[d['simbolo'] for d in differenze]}")
+            print(f"[{self.NOME}] posizioni diverse da quelle volute: {[d['simbolo'] for d in differenze]}")
         return st
+
+    def _filtri_degli_ordini(self, info: dict, st: dict, now: float, ribilancio: bool = False) -> dict:
+        """I filtri degli ordini da exchangeInfo; con il conto ridotto severi almeno come quelli del conto vero (la copia
+        `filtri_conto_vero.json`; al ribilancio, l'allarme se la copia è vecchia). Il conto vero usa solo i suoi (conto_vero.py)."""
+        f = filtri(info)
+        if st.get("conto_ridotto"):
+            if ribilancio:
+                eta = (now - calendar.timegm(time.strptime(DATA_FILTRI_VERI, "%Y-%m-%d"))) / 86400
+                self._allarme(st, now, "filtri_veri", eta > ETA_MASSIMA_FILTRI_GIORNI and (
+                    f"i filtri del conto vero (filtri_conto_vero.json) sono del {DATA_FILTRI_VERI}, {eta:.0f} giorni fa (oltre "
+                    f"{ETA_MASSIMA_FILTRI_GIORNI}): vanno riscaricati dal conto vero"))
+            return piu_severi(f, filtri_veri())
+        if ribilancio:
+            self._allarme(st, now, "filtri_veri", None)
+        return f
 
     def ribilancia(self, c: ClienteDemo, st: dict, pesi: dict, giorno: int, now: float, solo: Optional[set] = None) -> dict:
         """Porta il conto ai pesi; con ``solo`` (un'operazione a eventi aperta o chiusa) tocca solo quelle monete."""
         info = c.chiedi("GET", "/fapi/v1/exchangeInfo")
-        f = filtri(info)
-        if st.get("conto_ridotto"):
-            eta = (now - calendar.timegm(time.strptime(DATA_FILTRI_VERI, "%Y-%m-%d"))) / 86400
-            self._allarme(st, now, "filtri_veri", eta > ETA_MASSIMA_FILTRI_GIORNI and (
-                f"i filtri del conto vero (filtri_conto_vero.json) sono del {DATA_FILTRI_VERI}, {eta:.0f} giorni fa (oltre "
-                f"{ETA_MASSIMA_FILTRI_GIORNI}): vanno riscaricati dal conto vero"))
-            f = piu_severi(f, filtri_veri())
-        else:
-            self._allarme(st, now, "filtri_veri", None)
+        f = self._filtri_degli_ordini(info, st, now, ribilancio=True)
         qmax = {s: v[3] for s, v in filtri_mercato(info).items()}   # la quantità massima degli ordini limite (problema 22)
         prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
         if not st.get("modo_controllato"):
@@ -1277,7 +1338,7 @@ class DemoG1:
                     e = self._margine_unico(c, s)
                     if e:
                         raise RuntimeError(f"margine unico non impostato: {e}")
-                    c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": LEVA}, firmata=True)
+                    c.chiedi("POST", "/fapi/v1/leverage", {"symbol": s, "leverage": self.LEVA}, firmata=True)
                     leve.add(s)
                 r = c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
             except RuntimeError as exc:
@@ -1300,7 +1361,7 @@ class DemoG1:
                                                    "sotto_il_minimo": saltati,
                                                    "solo_eventi": solo is not None})
         cosa = f"decisione G1 del {data}" if solo is None else "operazioni a eventi cambiate"
-        print(f"[demo_binance] {cosa}: {len(piazzati)} ordini limite sul conto demo, {len(rifiutati)} rifiutati")
+        print(f"[{self.NOME}] {cosa}: {len(piazzati)} ordini limite sul conto, {len(rifiutati)} rifiutati")
         return st
 
     def chiudi_ordini(self, c: ClienteDemo, st: dict, now: float) -> dict:
@@ -1327,9 +1388,7 @@ class DemoG1:
             o["a_limite"] = stato.get("status") == "FILLED"
             self.salva(st)
         info = c.chiedi("GET", "/fapi/v1/exchangeInfo")
-        f = filtri(info)
-        if st.get("conto_ridotto"):
-            f = piu_severi(f, filtri_veri())
+        f = self._filtri_degli_ordini(info, st, now)
         fm = filtri_mercato(info)                      # gli ordini a mercato hanno passo e quantità massima loro (problema 22)
         prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
         nella_lista = {o["simbolo"] for o in ordini["lista"]}
@@ -1368,7 +1427,7 @@ class DemoG1:
                             c.chiedi("POST", "/fapi/v1/order", par, firmata=True)
                             ordini["a_mercato"] = int(ordini.get("a_mercato", 0)) + 1
                         except RuntimeError as exc:      # per esempio sotto il minimo dopo un'esecuzione parziale
-                            print(f"[demo_binance] resto di {s} non inviato: {exc}")
+                            print(f"[{self.NOME}] resto di {s} non inviato: {exc}")
             o["mercato_fatto"] = True
             self.salva(st)
         n = len(ordini["lista"])
@@ -1389,18 +1448,18 @@ class DemoG1:
         st["ultima_valutazione"] = now
         iniziale = float(st["capitale_iniziale"])
         self._fissa_massimo(st, max(float(st.get("massimo", iniziale)), equity), now)
-        if equity <= livello_di_stop(st):
-            return self.chiudi_tutto(c, st, now, motivo_dello_stop(st, equity), equity=equity)
+        if equity <= self._livello_di_stop(st):
+            return self.chiudi_tutto(c, st, now, self._motivo_dello_stop(st, equity), equity=equity)
         self._scrivi("stato", {"stato": "acceso", "equity": round(equity, 2), "saldo": round(wallet, 2), "capitale_iniziale": iniziale,
                                "rendimento": equity / iniziale - 1 if iniziale else 0.0,
                                "long": sum(1 for v in posizioni.values() if v > 0), "short": sum(1 for v in posizioni.values() if v < 0),
                                "limite_eseguiti": int(st.get("limite_eseguiti", 0)), "limite_totali": int(st.get("limite_totali", 0)),
                                "ordini_in_attesa": len((st.get("ordini") or {}).get("lista") or []), "aggiornato": now,
                                "massimo": round(st["massimo"], 2), "dal_massimo": equity / st["massimo"] - 1,
-                               "stop_a": round(livello_di_stop(st), 2),
+                               "stop_a": round(self._livello_di_stop(st), 2),
                                "conto_ridotto": (st.get("conto_ridotto") or {}).get("capitale"),
                                "capitale_in_attesa": st.get("capitale_in_attesa"),
-                               "valore_vero_del_conto_demo": round(equity + self._scarto, 2)})
+                               self.CHIAVE_VALORE_VERO: round(float(self._valore_vero), 2)})
         oggi = time.strftime('%Y-%m-%d', time.gmtime(now))
         self._scrivi(f"giorni/{oggi}", round(equity, 2))
         self._scrivi(f"diario/{oggi}", {"equity": round(equity, 2), "long": sum(1 for v in posizioni.values() if v > 0),
@@ -1424,5 +1483,5 @@ class DemoG1:
                 st["entrate_chiuse_fino"] = d
                 d += 1
         except Exception as exc:  # noqa: BLE001
-            print(f"[demo_binance] entrate del conto non lette: {exc}")
+            print(f"[{self.NOME}] entrate del conto non lette: {exc}")
         return st

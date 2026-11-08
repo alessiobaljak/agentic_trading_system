@@ -115,6 +115,7 @@ def build() -> str:
     lines += sezione_paper_eventi(fb)
     lines += sezione_demo_binance(fb)
     lines += sezione_demo_contro_paper(fb)
+    lines += sezione_conto_vero(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -667,6 +668,37 @@ def sezione_demo_binance(fb) -> list:
                      f"{100 * float(cf.get('scarto_totale') or 0):.1f}% del conto; " + ("nessuna moneta oltre il 2%" if not dif else
                      "oltre il 2%: " + ", ".join(f"{x.get('simbolo')} {100 * float(x.get('scarto') or 0):+.1f}%" for x in dif[:6])))
     if err:
+        righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
+    return righe + [""]
+
+
+def sezione_conto_vero(fb) -> list:
+    """Le righe di G1 sul conto vero di Binance (RTDB /conto_vero, `bot/portafoglio/conto_vero.py`, nasce spento): spento e perché,
+    oppure acceso con equity, stop sul conto, fermo e allarmi."""
+    titolo = "## G1 sul conto vero di Binance (soldi veri; nasce spento, si accende solo con il gesto del proprietario)"
+    st = fb.get_rtdb("/conto_vero/stato") or {}
+    st = st if isinstance(st, dict) else {}
+    if not st:
+        return [titolo, "- spento: nessuno stato scritto (il bot non lo ha ancora fatto girare)", ""]
+    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    if st.get("equity") is not None:
+        righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
+                     f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short")
+    if st.get("stop_a") is not None:
+        righe.append(f"- stop sul conto: si chiude tutto sotto ${float(st['stop_a']):,.2f}; ora "
+                     f"{100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
+    fermo = fb.get_rtdb("/conto_vero/fermo")
+    if isinstance(fermo, dict) and fermo:
+        righe.append(f"- **FERMO** dal {_ts(fermo.get('ora'))}: {fermo.get('motivo')} · posizioni chiuse {fermo.get('chiuse', 0)}")
+    allarme = fb.get_rtdb("/conto_vero/allarme")
+    if isinstance(allarme, dict) and allarme.get("testo"):
+        righe.append(f"- **ALLARME** ({_ts(allarme.get('ora'))}): {allarme.get('testo')}")
+    allarmi = fb.get_rtdb("/conto_vero/allarmi")
+    for tipo, a in sorted(allarmi.items()) if isinstance(allarmi, dict) else []:
+        if isinstance(a, dict) and a.get("testo"):
+            righe.append(f"- **ALLARME** {tipo.replace('_', ' ')} ({_ts(a.get('ora'))}): {a.get('testo')}")
+    err = fb.get_rtdb("/conto_vero/errore")
+    if isinstance(err, dict) and err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
     return righe + [""]
 

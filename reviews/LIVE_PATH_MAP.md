@@ -179,10 +179,10 @@ della firma: libreria `cryptography` del contenitore rotta; passa con `PYTHONPAT
 Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52 (tentativi che non crescono con un «riparti» in attesa);
 dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24 (vecchio bot), 34 (identificativi degli eventi), 35
 (`DRY_RUN` falso ferma anche il demo). Fuori dal codice: chiavi vere non limitate all'indirizzo, prelievo non detto; regole di Firebase
-mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto. Conto vero (fase 2, non committata): 54 ii, 60, 64-69 (sezione 14).
+mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto. Conto vero (fase 2, non committata): 54 ii, 60, 66, 70-72 (sezione 14).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
-## 14. Modifiche non committate in revisione: fase 2, il conto vero (8 nov 2026, secondo giro, REQUEST CHANGES)
+## 14. Modifiche non committate in revisione: fase 2, il conto vero (8 nov 2026; terzo giro: APPROVE per il commit spento)
 
 Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del working tree del secondo giro (copia in `fase2/giro2/`).
 - `bot/portafoglio/conto_vero.py` (564 righe): `ContoVeroG1(DemoG1)`, `ClienteVero(ClienteDemo)`; solo `https://fapi.binance.com`
@@ -211,8 +211,11 @@ Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del w
   (`:1447`, `:1493`, `:1553`, `:1981`, `:2522`).
 - `demo_binance.py`: attributi di classe, `_ordini_nuovi_ammessi`, `_ordini_del_giro`, `_filtri_degli_ordini`, `_ambiente`, `_valori`
   (`:1204`); unico cambio di comportamento del demo: stato salvato dopo `parti_da_zero` (`:677`, problema 62).
-- Problemi aperti: 54 (ii) Alto; 60 (resto: dashboard e regole, fase 4), 64, 65 Medi; 66-69 Bassi. Chiusi: 53, 55, 57, 59, 61-63; 56 e
-  58 come scelto.
+- Terzo giro (righe di `conto_vero.py` del terzo giro, copia in `fase2/giro3/`): redditi fino a 60 s fa con 15 minuti riletti e
+  doppioni tolti con tipo e `tranId` (`:80-84`, `:396-457`), allarme `redditi`; saldo sotto il valore solo oltre lo 0,5% (almeno
+  1 USDT) in 3 letture (`:95-101`, `_saldo_sotto` `:540-550`); redditi della fase nuova dall'ora vera (`:490`); stop spento prima della
+  prima accensione (`:459-464`); Firebase muto riletto (`:335-352`); `ops_agent.py:460` con `ls-remote --exit-code`.
+- Problemi aperti: 54 (ii) Alto; 60 resto e 70 Medi; 66 resto, 71, 72 Bassi. Chiusi: 53, 55, 57, 59, 61-65, 67, 68; 56, 58, 69 come scelto.
 
 ## Storia degli invarianti
 
@@ -233,3 +236,5 @@ Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del w
 - 8 nov, fase 2 secondo giro (REQUEST CHANGES): con `DRY_RUN` vero ordini «solo riduzione» al conto vero se acceso una volta e non
   vuoto; con `DRY_RUN` falso il bot parte sempre; codice approvato su tutti i file caricati; valore = capitale + redditi; «riparti»
   del conto vero solo da file; demo: stato salvato dopo `parti_da_zero`. Limiti fissi invariati.
+- 8 nov, fase 2 terzo giro (APPROVE per il commit spento): stop spento prima della prima accensione; blocco per prelievo con
+  tolleranza e tre letture; redditi con ritardo e sovrapposizione. Limiti fissi invariati.
