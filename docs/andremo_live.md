@@ -418,3 +418,10 @@ scaricati da Binance: i due calcoli si fermano con «Bus error» mentre li leggo
 sono committati. È un guasto della macchina della sessione, non del bot (che gira sulla VPS). Per rimediare bisogna trovare gli archivi
 rovinati nella cartella dei dati e riscaricarli; la lettura di quella cartella è vietata dalle regole dei token, quindi si chiede al
 proprietario.
+**Giro delle 08:17.** Notizie: 11 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti. **Contenitore nuovo**: la sessione
+gira su una macchina nuova, con il disco sano (0 errori di lettura), ma senza la cartella dei dati di mercato e senza i file di lavoro.
+Lo script dei controlli in avanti, che stava fra i file di lavoro, ora è nel repo (`research/programma7/controlli_avanti.py`) con
+l'elenco delle monete già viste (`controlli_avanti_coinbase.json`, 246 monete su Coinbase con il perpetuo di Binance): le prime candele
+di Coinbase dal 5 ottobre mostrano solo due monete quotate dopo il 6 ottobre, PONS (7 ottobre, prima della misura in avanti) e STABLE
+(27 ottobre, già in tabella). Controlli delle 08:30: niente di nuovo. Idee nuove: niente di nuovo. Gli aggiornamenti del mattino dei
+programmi 5 e 6 ripartono adesso, con i dati riscaricati da zero.
