@@ -441,3 +441,9 @@ lunedì»): il bot gira il commit 83ddb809, che contiene la fase 1 approvata (1a
 `DRY_RUN=True, BINANCE_TESTNET=False, BACKTEST_PARITY=True`, nessun errore (`ops/results/0722-*`, `0723-*`). Stato delle 19:04
 (`0724-*`): demo a 994,82 su 1.000, 24 posizioni per lato, nessun allarme; lo stop dice il livello nuovo (652,35, il più alto fra −35%
 dal massimo e il 65% del capitale). La scelta fra G1 e G1 neutra per i soldi veri la fa portfolio-allocator lunedì.
+**Giro delle 20:17.** Notizie: 38 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 20:20:
+niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima del ribilancio di mezzanotte; il demo ha fatto il
+primo giro con la fase 1 alle 19:05 senza errori né allarmi (`ops/results/0725-*`). Conto vero, fase 2 (il codice spento): la prima
+revisione dice REQUEST CHANGES (due Alti: le protezioni con il conto spento e la versione approvata; nessun Bloccante; con `DRY_RUN`
+falso il vecchio sistema non manda ordini né chiude posizioni, verificato), correzioni in corso; le decisioni del proprietario sono in
+`reviews/reports/2026-11-08-fase2-conto-vero.md`.
