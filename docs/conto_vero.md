@@ -10,7 +10,7 @@ mezzanotte UTC, eventi spenti.
 
 | Fase | Cosa | Chi | Stato |
 |---|---|---|---|
-| 1 | Chiudere i problemi rimasti del demo che il conto vero erediterà (36-38 della revisione del 7 novembre; Medi 10, 12, 13, 15, 16; Bassi 21-23), con test | sessione principale, poi live-path-reviewer | in corso dall'8 novembre |
+| 1 | Chiudere i problemi rimasti del demo che il conto vero erediterà (36-38 della revisione del 7 novembre; Medi 10, 12, 13, 15, 16; Bassi 21-23), con test | sessione principale, poi live-path-reviewer | **fatta l'8 novembre**: approvata al quarto giro (`reviews/reports/2026-11-08-fase1-conto-vero-4.md`); il riavvio del demo aspetta l'ok del proprietario |
 | 2 | Il codice del conto vero, spento: modulo suo accanto al demo, solo l'indirizzo vero di Binance, chiavi sue, interruttore suo, tetto del capitale scritto nel codice, partenza da vuoto alla mezzanotte, stop sul conto, limiti di G1 come costanti protette con test, rifiuto dell'avvio se i file del percorso degli ordini non sono quelli della versione approvata (un tag che si sposta solo con l'ok del proprietario) | sessione principale, poi live-path-reviewer | da fare |
 | 3 | I controlli finali: backtest-auditor su G1 nella configurazione finale; gate2-reconciler su paper e demo; portfolio-allocator con le regole approvate | agenti | da fare (primo giro lunedì 9 novembre) |
 | 4 | L'accensione: la richiesta esplicita del proprietario, i 280 USDT nel portafoglio dei future, un riavvio approvato; il primo ingresso alla mezzanotte dopo | proprietario | dopo le fasi 1-3 |
@@ -35,3 +35,9 @@ mezzanotte UTC, eventi spenti.
 
 ## Diario
 * 8 novembre 2026: piano scritto; fase 1 iniziata.
+* 8 novembre 2026: fase 1 approvata da live-path-reviewer al quarto giro (rapporti `reviews/reports/2026-11-08-fase1-conto-vero*.md`):
+  chiusi i problemi 36-38, 10, 12, 13, 15, 16, 21-23 e quelli nati nelle correzioni (40-50; restano due Bassi, 51 e 52). Scelte
+  della sessione da confermare dal proprietario: stop anche al 65% del capitale della fase (la perdita resta entro il 35%), «riparti»
+  solo a conto vuoto e con la riapertura alla decisione di G1 dopo (la mezzanotte), limiti nuovi come costanti con un test di
+  guardia, una moneta oltre il 60% fa saltare la decisione del giorno, quando G1 non decide il demo tiene le posizioni di ieri, con
+  Binance che blocca l'indirizzo si rispetta tutto il blocco (in quel tempo il bot non protegge il conto). 2.624 test passano.

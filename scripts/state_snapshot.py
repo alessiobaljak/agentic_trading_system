@@ -636,12 +636,21 @@ def sezione_demo_binance(fb) -> list:
             righe.append("- peso nel paper G1 delle monete rifiutate o mancanti sul demo (MIGLIORARE_G1.md, voce 4): "
                          + ", ".join(f"{s_} {100 * float(pos.get(s_) or 0):+.2f}%" for s_ in rif))
     if st.get("stop_a") is not None:
-        righe.append(f"- stop sul conto (−35% dal massimo): massimo ${float(st.get('massimo') or 0):,.2f}, si chiude tutto sotto "
-                     f"${float(st['stop_a']):,.2f}; ora {100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
+        # il livello vero dello stop (revisione dell'8 novembre 2026, decisione 2 e problema 49): il più alto fra −35% dal massimo e
+        # il 65% del capitale di partenza della fase
+        righe.append(f"- stop sul conto: si chiude tutto sotto ${float(st['stop_a']):,.2f} (il più alto fra −35% dal massimo, "
+                     f"${float(st.get('massimo') or 0):,.2f}, e il 65% del capitale di partenza); ora "
+                     f"{100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")
     allarme = fb.get_rtdb("/demo_binance/allarme")
     if isinstance(allarme, dict) and allarme:
         righe.append(f"- **ALLARME** ({_ts(allarme.get('ora'))}): {allarme.get('testo')}"
                      + (f" ({', '.join(allarme.get('posizioni') or [])})" if allarme.get("posizioni") else ""))
+    # gli altri allarmi del demo, uno per tipo (revisione del 7 novembre 2026: ordini bloccati, decisione di G1 vecchia, pesi fuori
+    # dai limiti, limiti di Binance, capitale del file, filtri del conto vero vecchi, «riparti» sotto il pavimento)
+    allarmi = fb.get_rtdb("/demo_binance/allarmi")
+    for tipo, a in sorted(allarmi.items()) if isinstance(allarmi, dict) else []:
+        if isinstance(a, dict) and a.get("testo"):
+            righe.append(f"- **ALLARME** {tipo.replace('_', ' ')} ({_ts(a.get('ora'))}): {a.get('testo')}")
     fermo = fb.get_rtdb("/demo_binance/fermo")
     if isinstance(fermo, dict) and fermo:
         righe.append(f"- **FERMO** dal {_ts(fermo.get('ora'))}: {fermo.get('motivo')} · posizioni chiuse {fermo.get('chiuse', 0)}, "

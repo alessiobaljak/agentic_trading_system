@@ -29,7 +29,7 @@ type StatoDemo = {
 };
 type Fermo = { motivo?: string; ora?: number; chiuse?: number };
 // l'allarme del demo (bot/portafoglio/demo_binance.py): conto non vuoto da fermo, ordini che non si annullano
-type Allarme = { ora?: number; testo?: string; posizioni?: string[] };
+type Allarme = { ora?: number; testo?: string; posizioni?: string[]; monete?: string[] };
 type Confronto = { ora?: number; differenze?: { simbolo: string; scarto: number }[]; scarto_totale?: number; monete?: number };
 type Aperta = { tipo?: string; simbolo?: string; entrata?: number; rendimento_ora?: number; uscita_giorno?: string };
 type Chiusa = { tipo?: string; simbolo?: string; uscita?: number; rendimento?: number; motivo?: string };
@@ -121,6 +121,8 @@ function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
   const [fermo, setFermo] = useState<Fermo | null>(null);
   const [cf, setCf] = useState<Confronto | null>(null);
   const [allarme, setAllarme] = useState<Allarme | null>(null);
+  // gli allarmi per tipo (decisione di G1, limiti di Binance, capitale, filtri, riparti, ordini bloccati...): uno per chiave
+  const [allarmi, setAllarmi] = useState<Record<string, Allarme> | null>(null);
   const [conferma, setConferma] = useState(false);
   const [invio, setInvio] = useState<string | null>(null);
   const [errore, setErrore] = useState<string | null>(null);
@@ -129,7 +131,8 @@ function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
     const a = onValue(ref(db, 'demo_binance/fermo'), (s) => setFermo(s.val()));
     const b = onValue(ref(db, 'demo_binance/confronto'), (s) => setCf(s.val()));
     const c = onValue(ref(db, 'demo_binance/allarme'), (s) => setAllarme(s.val()));
-    return () => { a(); b(); c(); };
+    const e = onValue(ref(db, 'demo_binance/allarmi'), (s) => setAllarmi(s.val()));
+    return () => { a(); b(); c(); e(); };
   }, []);
   const manda = async (percorso: string, nomeComando: string) => {
     setErrore(null);
@@ -151,10 +154,16 @@ function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
           {allarme.posizioni?.length ? ` (${allarme.posizioni.map(nome).join(', ')})` : ''}
         </div>
       )}
+      {Object.entries(allarmi ?? {}).filter(([, x]) => x?.testo).map(([tipo, x]) => (
+        <div className="warn" key={tipo}>
+          <b>Allarme del demo</b> ({quando(x.ora)}): {x.testo}
+          {x.monete?.length ? ` (${x.monete.map(nome).join(', ')})` : ''}
+        </div>
+      ))}
       {d?.stop_a != null && (
         <p style={{ margin: '2px 0' }}>
-          Stop sul conto a −35% dal massimo: si chiude tutto sotto <b>${d.stop_a.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b>
-          {' '}(ora {pct(d.dal_massimo)} dal massimo).
+          Stop sul conto: si chiude tutto sotto <b>${d.stop_a.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b>
+          {' '}(il più alto fra −35% dal massimo e il 65% del capitale di partenza; ora {pct(d.dal_massimo)} dal massimo).
         </p>
       )}
       {cf && (

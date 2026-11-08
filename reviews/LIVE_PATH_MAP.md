@@ -231,22 +231,24 @@ nota sbagliata (24). Fuori dal codice: chiavi vere non limitate all'indirizzo, p
 servizio che riparte da solo con l'ultimo codice spinto.
 Chiusi il 7 nov: 2-9 (6-8 per blocco del ramo reale), 1 (con il 25), 25, 26, 27, 29, 30, 31, **32 (013f9426)**; 28 in parte (resto nel 13).
 
-## 14. Modifiche non committate in revisione (fase 1 del conto vero, 8 nov 2026; secondo giro REQUEST CHANGES per il 47)
+## 14. Modifiche non committate in revisione (fase 1 del conto vero, 8 nov 2026; quarto giro APPROVE)
 
-Rapporti `reviews/reports/2026-11-08-fase1-conto-vero.md` e `-2.md`. Righe del file di lavoro del secondo giro, non di HEAD. Se arrivano
+Rapporti `reviews/reports/2026-11-08-fase1-conto-vero.md`, `-2.md`, `-3.md`, `-4.md`. Righe del secondo giro (terzo giro: +2 fino a 230,
++5 circa da 930; `_pavimento` `:219-226`, `_riparti_ammesso` `:997-1018`, `_allarme_del_fermo` `:989-995`), non di HEAD. Se arrivano
 nel commit, rifare le sezioni 7, 8 e 12 con queste righe.
 - Costanti `demo_binance.py:84-99` (fissate dal test `tests/test_demo_binance.py:1520`): pesi 2,5 e 0,60; decisione 26 h; 429/418 3
   ritentativi (1-2-4 s, attesa fino a 10 s), 429 poi al massimo 600 s senza richieste, 418 tutta l'attesa o 600 s (`:843-865`); capitale
   10.000 e non oltre il valore vero (`:574-576`, `:603-611`, `_valore_vero` `:1108`); filtri del 2026-11-06, 30 giorni; pavimento 0,65;
   chiusure in pezzi, 20 al massimo (`:204-214`, `_chiudi_moneta` `:1028-1035`).
 - **Stop sul conto**: `livello_di_stop` `:223-228` = max(65% del massimo, `_pavimento` `:217-221` = 65% di `capitale_iniziale`, 0 con un
-  capitale in attesa: Problema 47), usato a `:917` e `:1350`. `chiudi_tutto` `:725-756` scrive e salva il fermo (`:739`) prima delle
+  capitale in attesa e il conto vuoto che aspetta la fase nuova: 47 chiuso), usato a `:917` e `:1350`. `chiudi_tutto` `:725-756` scrive e salva il fermo (`:739`) prima delle
   chiusure; un errore segna il tentativo e risale.
 - `chiedi` `:441-...`: ritenta 418/429; con -1021 rilegge `/fapi/v1/time` (`_rileggi_ora` `:431-440`) e riprova una volta.
 - `tick` `:758-...`: allarmi scritti letti all'avvio (`:772-776`); ultimo giorno nel futuro azzerato (`:805-807`); pesi `:130-151`
   (vuoti rifiutati `:136`); età e data nel futuro `_decisione_da_non_eseguire` `:867-...`; eventi fermi con `riparti_attende_g1` (`:823`).
 - Da fermo `:921-976`: «riparti» con il pavimento letto prima di consumare il comando (`:929`); poi il conto resta vuoto fino alla
-  decisione di G1 dopo (`:931-939`, `_giorno_g1` `:1037-...`); accettato anche con il conto non vuoto (Problema 48). `LimiteBinance`
+  decisione di G1 dopo (`_giorno_g1`); dal terzo giro solo a conto vuoto e sopra il pavimento (`_riparti_ammesso` `:1006-1020`; dal
+  quarto giro un errore di lettura rimanda il comando e le chiusure continuano: 50 chiuso; resti 51, 52). `LimiteBinance`
   nelle chiusure conta il tentativo e salva (`:956-968`; `_chiudi_posizioni` `:992-1019`).
 - Massimo dello stop anche in `/demo_binance/massimo` (`_fissa_massimo`, `_unisci_massimo`); allarmi per tipo in
   `/demo_binance/allarmi/<tipo>` (anche `monete_senza_filtri`); dashboard `PaperBot.tsx:134`, `:157-162`, `:165` (testo dello stop
@@ -274,3 +276,7 @@ nel commit, rifare le sezioni 7, 8 e 12 con queste righe.
 - 8 nov 2026, secondo giro (REQUEST CHANGES per il Problema 47): stop anche al 65% del capitale della fase (perdita della
   fase entro il 35%, tranne con un capitale in attesa), fermo salvato prima delle chiusure, «riparti» che aspetta la decisione di G1,
   capitale non oltre il saldo, chiusure in pezzi, -1021 con l'ora di Binance. Limiti fissi invariati.
+- 8 nov 2026, terzo giro (REQUEST CHANGES per il Problema 50): pavimento dello stop tolto solo a conto vuoto con un capitale
+  in attesa; «riparti» solo a conto vuoto e sopra il pavimento; chiusure al massimo 20 pezzi. Limiti fissi invariati.
+- 8 nov 2026, quarto giro (APPROVE): un errore di lettura nel controllo del «riparti» rimanda il comando e non ferma le
+  chiusure da fermo. Limiti fissi invariati.
