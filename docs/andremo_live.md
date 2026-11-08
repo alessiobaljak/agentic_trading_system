@@ -432,3 +432,7 @@ strategie in corso, chi sceglie quale usare in produzione), la regola del propri
 spegne (con il suo test), e la fase 1 del conto vero (i problemi rimasti del demo) approvata dal revisore al quarto giro
 (`docs/conto_vero.md`); il riavvio del demo aspetta l'ok del proprietario. **Capito oggi**: ogni giro di correzioni sul percorso
 degli ordini ha aperto un problema nuovo (40, 47, 50), sempre trovato dal revisore prima del commit: la revisione a giri serve.
+**Giro delle 16:17.** Notizie: 40 articoli nuovi da 23 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 16:20:
+niente di nuovo. Idee nuove: niente di nuovo. G1: niente di nuovo da misurare prima del ribilancio di mezzanotte. La prova in avanti
+del programma 5 è aggiornata con i dati scaricati da zero (le operazioni di ieri identiche); il paper delle candidate del programma 6
+è ancora in corso (lo scarico da zero dei dati di tutte le monete richiede più di due ore).
