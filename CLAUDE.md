@@ -155,11 +155,12 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 
 Principio del proprietario: chi scrive una strategia non la valuta, chi la valuta non la modifica; il paper lo decide la sessione principale, demo e soldi veri il proprietario.
 
-* **strategy-researcher**: esegue UNA prova del registro, con le regole già scritte e committate; più istanze in parallelo su prove
-  diverse (al massimo 3 insieme).
-* **backtest-auditor**: attacca ogni prova promettente prima di proporre paper, demo o soldi veri; verdetto PASS / FAIL / INCONCLUSIVE.
-* **gate2-reconciler**: confronta ogni settimana paper e demo con la ricerca sugli stessi giorni, e sempre prima dei soldi veri.
-* **live-path-reviewer**: rivede ogni modifica al percorso degli ordini (`bot/execution/`, `bot/risk/`, `bot/portafoglio/`,
+* **strategy-researcher** (modello medio): esegue UNA prova del registro, con le regole già scritte e committate; più istanze in
+  parallelo su prove diverse (al massimo 3 insieme).
+* **backtest-auditor** (modello più potente): attacca ogni prova promettente prima di proporre paper, demo o soldi veri; verdetto PASS / FAIL / INCONCLUSIVE.
+* **gate2-reconciler** (modello medio; prima dei soldi veri si chiama con il modello più potente): confronta ogni settimana paper e
+  demo con la ricerca sugli stessi giorni, e sempre prima dei soldi veri.
+* **live-path-reviewer** (modello più potente): rivede ogni modifica al percorso degli ordini (`bot/execution/`, `bot/risk/`, `bot/portafoglio/`,
   `bot/config.py`, `bot/main.py`, `firebase/`, il futuro conto vero) prima del commit e del riavvio.
 * Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
 

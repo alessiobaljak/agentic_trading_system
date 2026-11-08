@@ -25,7 +25,8 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Commissioni e scarto di prezzo da usare nelle prove (auditor); minimo di anni e operazioni per giudicare una prova.
 - Leva di G1, limiti di G1 dentro `hard_limits.py`, divieto della parità col backtest fuori dal paper (revisore; backlog P26).
 - Regole di Firebase davvero pubblicate; chiavi di Binance senza prelievo e limitate all'indirizzo della macchina.
-- Compromessi dei token (modelli più leggeri per ricercatore e confronto, frequenza dei giri): proposti, non applicati.
+- Token: ricercatore e confronto settimanale sul modello medio dall'8 novembre (i due revisori restano sul più potente). Giri meno
+  frequenti: proposti, aspettano il proprietario (la decisione del 5 novembre dice «ogni giro delle 4 ore migliora G1»).
 
 ## Prossimi passi
 - Lunedì 9 novembre: riepilogo settimanale e primo avvio di gate2-reconciler su G1 (paper e demo).
