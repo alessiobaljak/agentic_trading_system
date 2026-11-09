@@ -52,3 +52,9 @@ totale con e senza la commissione stimata di Interactive Brokers, il confronto c
 vero misurato (la differenza fra il prezzo eseguito e la chiusura della candela). **Il giudizio** si dà quando c'è: la stessa asticella
 delle prove sul passato non si può calcolare su poche settimane, quindi si dice il t e quante operazioni servirebbero per arrivare a 3
 con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta esplicita, ripetuta e consapevole del proprietario.
+
+## Le deviazioni dalle regole (scritte quando succedono)
+
+* **9 novembre 2026:** la routine delle 9:46 è arrivata con 10 minuti di ritardo; gli ordini sono partiti alle **9:57** di New York
+  invece che subito dopo le 9:45. Da qui la routine d'apertura parte alle 9:38 e il programma aspetta le 9:45 (lo faceva già); quella di
+  chiusura parte alle 15:38 e il programma aspetta le 15:55. Un ingresso dopo le 9:50 si segnala nel riepilogo.
