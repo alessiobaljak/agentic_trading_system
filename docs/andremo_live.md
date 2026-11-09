@@ -478,3 +478,5 @@ misurare fino al ribilancio di stanotte.
 **Giro delle 20:17.** Raccolta e controlli in avanti delle 20:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte. Nota sul giro delle 12:17: «piena» si riferiva alla sola prima pagina di Crypto Briefing; la
 seconda pagina si legge dal 4 novembre e non era piena, quindi nessun articolo perso.
+Le monete su Coinbase con il perpetuo di Binance passano da 246 a 245: TNSR è stata tolta da Coinbase (`TNSR-USD` «delisted»), mentre il
+perpetuo di Binance è ancora attivo. Non tocca la misura in avanti delle quotazioni nuove (conta solo le entrate).
