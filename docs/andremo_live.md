@@ -460,3 +460,5 @@ niente di nuovo. Idee nuove: niente di nuovo. **G1 sul demo a 1.000, il primo ri
 19 ordini, 38 variazioni sotto il minimo di Binance (6,7% del conto), quindi eseguibile il 33% delle variazioni contro il 23% atteso
 dalla prova 148 e il 9% a 280; equity 995,20 (−0,48% dalla partenza dell'8 novembre, spese d'ingresso comprese). **Capito oggi**: a
 1.000 USDT il demo esegue un terzo delle variazioni di ogni giorno, più di quanto la prova sul passato prevedeva (un giorno solo).
+**Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare dopo il ribilancio di mezzanotte (la misura dei minimi è sopra).
