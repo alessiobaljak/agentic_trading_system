@@ -20,10 +20,10 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 | M7 + M8 a rischio uguale (informazione) | 1 | +3.34% | — |
 | F5 + M7 + K2 a rischio uguale (informazione) | 1 | +0.67% | — |
 | EWIL (informazione, dal 2 novembre) | 0 | +0.00% | — |
-| HLI (informazione, dal 2 novembre) | 5 | -1.76% | -5.41 |
-| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 5 | +4.52% | 15.23 |
-| DXI (informazione, dal 2 novembre) | 5 | +3.59% | 5.78 |
-| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 5 | +4.82% | 14.76 |
+| HLI (informazione, dal 2 novembre) | 5 | -1.63% | -5.14 |
+| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 5 | +4.64% | 15.91 |
+| DXI (informazione, dal 2 novembre) | 5 | +3.73% | 6.02 |
+| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 5 | +4.93% | 15.34 |
 | A1 | 19 | -1.16% | -4.02 |
 
 ## Le posizioni di adesso
