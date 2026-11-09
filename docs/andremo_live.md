@@ -462,3 +462,9 @@ dalla prova 148 e il 9% a 280; equity 995,20 (−0,48% dalla partenza dell'8 nov
 1.000 USDT il demo esegue un terzo delle variazioni di ogni giorno, più di quanto la prova sul passato prevedeva (un giorno solo).
 **Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare dopo il ribilancio di mezzanotte (la misura dei minimi è sopra).
+**Riepilogo della settimana al proprietario (lunedì 9 novembre, mattina).** Paper dal 2 al 9 novembre (`ops/results/0690-*` e
+`0729-*`): G1 +3,39%, G1 neutra +3,75%, G11 +4,03%, F5 +3,47%, eventi fermi (nessuna operazione). Demo a 1.000 dall'8 novembre: +0,27%.
+Primo confronto di gate2-reconciler (`gate2/reports/2026-11-09-G1.md`): paper e demo seguono la ricerca (correlazione dei giorni 0,94 e
+0,99), costi del demo a limite +26% sugli assunti, un giorno non spiegato (30 ottobre), soglie proposte da approvare. Primo giro di
+portfolio-allocator (`allocazione/reports/2026-11-09.md`): regole proposte da approvare; applicandole uscirebbe «tieni G1»; nessuna
+proposta di soldi veri possibile oggi (parità non ancora dimostrata).
