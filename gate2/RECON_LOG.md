@@ -1,0 +1,2 @@
+# RECON_LOG (voci aperte + ultime 10)
+2026-11-09 | G1 | paper+demo | primo confronto di riferimento | giorni paper 17 (23 ott-9 nov), demo fase 1.000: 1 giorno intero | cumulato 25 ott-5 nov: ricerca +5,26%, paper +6,15%, demo +5,90% | verdetto: nessuno (soglie non approvate) | APERTE: A1 giorno 30 ott; A2 demo da zero 8 nov; A3 龙虾USDT; A4 ICPUSDT; A5 funding della ricerca dopo 31 ott riempito; A6 pesi corti del paper 3% piu' grandi il 23 ott
