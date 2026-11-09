@@ -1,6 +1,9 @@
 # Regole di scelta delle strategie in produzione
 
-**Stato: PROPOSTA del 9 novembre 2026, non ancora approvata dal proprietario.** Finché qui non c'è scritto «approvate dal proprietario il ...»
+**Stato: PROPOSTA del 9 novembre 2026, approvata IN PARTE dal proprietario il 9 novembre** («va bene sharpe [...] sotto i 500 una
+strategia solo va bene»): approvati lo Sharpe corretto minimo 0,80 (sezione 1) e una strategia sola sotto i 500 USDT (sezione 3). Da
+chiarire con lui: la regola della sostituzione (+0,10) e la miscela sopra i 500 USDT («il sistema deve poter avere più strategie
+insieme»). Il resto resta proposta. Finché qui non c'è scritto «approvate dal proprietario il ...»
 l'agente riporta solo le misure. Queste regole sono scritte PRIMA di confrontare chi vince; dopo l'approvazione si cambiano solo con
 un nuovo ok scritto.
 
