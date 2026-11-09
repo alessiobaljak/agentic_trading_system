@@ -473,3 +473,5 @@ misurare fino al ribilancio di stanotte. In attesa del proprietario: le regole d
 del confronto settimanale e le decisioni del conto vero.
 **Giro delle 12:17.** Raccolta e controlli in avanti delle 12:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Giro delle 16:17.** Raccolta e controlli in avanti delle 16:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte.
