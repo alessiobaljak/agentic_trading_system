@@ -468,3 +468,6 @@ Primo confronto di gate2-reconciler (`gate2/reports/2026-11-09-G1.md`): paper e 
 0,99), costi del demo a limite +26% sugli assunti, un giorno non spiegato (30 ottobre), soglie proposte da approvare. Primo giro di
 portfolio-allocator (`allocazione/reports/2026-11-09.md`): regole proposte da approvare; applicandole uscirebbe «tieni G1»; nessuna
 proposta di soldi veri possibile oggi (parità non ancora dimostrata).
+**Giro delle 08:17.** Raccolta e controlli in avanti delle 08:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte. In attesa del proprietario: le regole dell'allocatore (miscela sopra i 500 USDT), le soglie
+del confronto settimanale e le decisioni del conto vero.
