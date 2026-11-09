@@ -453,3 +453,10 @@ approvata, risponde (`ops/results/0726-*`: la fotografia dice «conto vero spent
 del proprietario; prima dell'accensione restano la protezione del tag, i problemi 66, 70, 72, 73, la dashboard e le decisioni del
 proprietario (`docs/conto_vero.md`). **Capito oggi**: con i soldi veri il punto debole non è il codice degli ordini ma chi può dire
 «questa versione è approvata»: oggi lo può fare anche una sessione.
+
+### 9 novembre 2026 (00:25 UTC)
+**Giro delle 00:17.** Notizie: 41 articoli nuovi da 22 fonti su 23; 39 conti di Hyperliquid letti; controlli in avanti delle 00:20:
+niente di nuovo. Idee nuove: niente di nuovo. **G1 sul demo a 1.000, il primo ribilancio normale** (`ops/results/0727-*`, `0728-*`):
+19 ordini, 38 variazioni sotto il minimo di Binance (6,7% del conto), quindi eseguibile il 33% delle variazioni contro il 23% atteso
+dalla prova 148 e il 9% a 280; equity 995,20 (−0,48% dalla partenza dell'8 novembre, spese d'ingresso comprese). **Capito oggi**: a
+1.000 USDT il demo esegue un terzo delle variazioni di ogni giorno, più di quanto la prova sul passato prevedeva (un giorno solo).

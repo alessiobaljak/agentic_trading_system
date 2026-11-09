@@ -192,3 +192,8 @@ separato prima del paper).
 * **8 novembre 2026, 04:20 UTC, voce 8, il demo a 1.000 dopo quattro ore** (`ops/results/0721-8nov-stato-demo-1000-dopo-4-ore.md`): 45
   ordini su 48 eseguiti a limite, 3 a mercato, nessuno in attesa; 24 posizioni per lato; equity 1.001,80. Lo scarto dalle posizioni volute
   (7,5% del conto) viene quasi tutto dalle monete che il demo non ha (ICPUSDT 4,3%, 龙虾USDT 1,9%: voce 4), non dal conto piccolo.
+* **9 novembre 2026, 00:25 UTC, voce 8, il primo ribilancio normale a 1.000 USDT** (`ops/results/0727-9nov-log-ribilancio-1000.md`,
+  `0728-9nov-stato-ribilancio-1000.md`): 19 ordini limite, 38 variazioni sotto il minimo di Binance (6,7% del conto), 1 rifiutato
+  (龙虾USDT); quindi il 33% delle variazioni del giorno è eseguibile (19 su 57), contro il 23% atteso dalla prova 148 per 1.000 USDT e
+  il 9% della prima notte a 280 (5 ordini, 50 sotto il minimo, 19,2% del conto). Un giorno solo: si continua a misurare. Moneta nuova
+  che sul demo non c'è: IRYSUSDT (+0,41% nel paper), accanto a ICPUSDT (−4,57%).
