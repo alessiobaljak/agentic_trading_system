@@ -58,3 +58,7 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
 * **9 novembre 2026:** la routine delle 9:46 è arrivata con 10 minuti di ritardo; gli ordini sono partiti alle **9:57** di New York
   invece che subito dopo le 9:45. Da qui la routine d'apertura parte alle 9:38 e il programma aspetta le 9:45 (lo faceva già); quella di
   chiusura parte alle 15:38 e il programma aspetta le 15:55. Un ingresso dopo le 9:50 si segnala nel riepilogo.
+* **9 novembre 2026, chiusura:** il comando che doveva chiudere tutto (cancellare gli ordini e chiudere le posizioni in un colpo solo)
+  ha cancellato stop e obiettivi ma **non ha chiuso 8 posizioni su 10**. Le ho chiuse a mano, titolo per titolo, alle 15:56:20-29 di
+  New York, prima della fine della seduta: nessuna posizione è passata la notte. Il programma ora cancella prima gli ordini, aspetta,
+  chiude titolo per titolo e controlla che non resti niente; se resta qualcosa, si ferma con un errore.

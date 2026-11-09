@@ -219,9 +219,29 @@ def chiudi() -> str:
         attesa = (ora - ny_adesso()).total_seconds()
         if attesa > 0:
             time.sleep(attesa)
-    _richiesta("DELETE", "/v2/positions", params={"cancel_orders": "true"})
-    time.sleep(60)
-    return scrivi_diario(oggi)
+    # 9 nov 2026: DELETE /v2/positions con cancel_orders cancellava le gambe ma NON chiudeva le posizioni (8 su 10 restavano
+    # aperte). Ora: prima si cancellano gli ordini e si aspetta che siano spariti, poi si chiude titolo per titolo e si controlla.
+    _richiesta("DELETE", "/v2/orders")
+    for _ in range(30):
+        if not _richiesta("GET", "/v2/orders", params={"status": "open"}):
+            break
+        time.sleep(1)
+    for _ in range(3):
+        aperte = _richiesta("GET", "/v2/positions")
+        if not aperte:
+            break
+        for p in aperte:
+            try:
+                _richiesta("DELETE", f"/v2/positions/{p['symbol']}")
+            except alpaca.ErroreAlpaca as e:
+                print(f"chiusura di {p['symbol']} rifiutata: {str(e)[:120]}")
+        time.sleep(10)
+    rimaste = [p["symbol"] for p in _richiesta("GET", "/v2/positions")]
+    time.sleep(30)
+    esito = scrivi_diario(oggi)
+    if rimaste:
+        raise alpaca.ErroreAlpaca(f"POSIZIONI ANCORA APERTE dopo la chiusura: {', '.join(rimaste)} ({esito})")
+    return esito
 
 
 def scrivi_diario(oggi: str) -> str:
