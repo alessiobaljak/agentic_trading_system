@@ -475,3 +475,6 @@ del confronto settimanale e le decisioni del conto vero.
 misurare fino al ribilancio di stanotte.
 **Giro delle 16:17.** Raccolta e controlli in avanti delle 16:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Giro delle 20:17.** Raccolta e controlli in avanti delle 20:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte. Nota sul giro delle 12:17: «piena» si riferiva alla sola prima pagina di Crypto Briefing; la
+seconda pagina si legge dal 4 novembre e non era piena, quindi nessun articolo perso.
