@@ -212,6 +212,13 @@ def apri() -> str:
 
 def chiudi() -> str:
     oggi = ny_adesso().date().isoformat()
+    s = seduta_di_oggi()
+    if s is not None:
+        # la routine parte prima (le routine arrivano anche con 10 minuti di ritardo): si aspetta 5 minuti prima della chiusura
+        ora = s["chiusura"] - pd.Timedelta(minutes=5)
+        attesa = (ora - ny_adesso()).total_seconds()
+        if attesa > 0:
+            time.sleep(attesa)
     _richiesta("DELETE", "/v2/positions", params={"cancel_orders": "true"})
     time.sleep(60)
     return scrivi_diario(oggi)
