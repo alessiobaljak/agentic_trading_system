@@ -480,3 +480,10 @@ misurare fino al ribilancio di stanotte. Nota sul giro delle 12:17: «piena» si
 seconda pagina si legge dal 4 novembre e non era piena, quindi nessun articolo perso.
 Le monete su Coinbase con il perpetuo di Binance passano da 246 a 245: TNSR è stata tolta da Coinbase (`TNSR-USD` «delisted»), mentre il
 perpetuo di Binance è ancora attivo. Non tocca la misura in avanti delle quotazioni nuove (conta solo le entrate).
+
+### 10 novembre 2026 (00:25 UTC)
+**Giro delle 00:17.** Notizie: 77 articoli nuovi da 23 fonti su 23; controlli in avanti delle 00:20: niente di nuovo; idee nuove:
+niente di nuovo. **G1 sul demo a 1.000, secondo ribilancio**: 8 ordini e 46 variazioni sotto il minimo (15% eseguibile); sui due giorni
+il 24%, come la prova 148 prevedeva (23%); lo scarto dalle posizioni volute sale al 13,9% del conto. Demo +0,40% dall'8 novembre,
+paper di G1 −0,97% negli stessi giorni (`ops/results/0730-*`, `0731-*`). **Capito oggi**: la prova sul passato con i minimi veri
+prevede bene quanta parte del giro il conto piccolo riesce a eseguire.

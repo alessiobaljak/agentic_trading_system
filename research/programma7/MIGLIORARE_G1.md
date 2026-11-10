@@ -197,3 +197,9 @@ separato prima del paper).
   (龙虾USDT); quindi il 33% delle variazioni del giorno è eseguibile (19 su 57), contro il 23% atteso dalla prova 148 per 1.000 USDT e
   il 9% della prima notte a 280 (5 ordini, 50 sotto il minimo, 19,2% del conto). Un giorno solo: si continua a misurare. Moneta nuova
   che sul demo non c'è: IRYSUSDT (+0,41% nel paper), accanto a ICPUSDT (−4,57%).
+* **10 novembre 2026, 00:25 UTC, voce 8, il secondo ribilancio a 1.000 USDT** (`ops/results/0730-10nov-log-ribilancio-1000.md`,
+  `0731-10nov-stato-ribilancio-1000.md`): 8 ordini, 46 variazioni sotto il minimo (9,1% del conto), 1 rifiutato; eseguibile il 15% delle
+  variazioni (8 su 55). Sui due giorni: 27 ordini su 112 variazioni, il **24%**, come il 23% atteso dalla prova 148. Lo scarto fra
+  posizioni vere e volute sale al 13,9% del conto (8,9% il giorno prima; ICPUSDT 4,7%, 龙虾USDT 2,0%): le variazioni piccole saltate si
+  accumulano finché una variazione grande le riassorbe. Equity del demo 1.003,99 (+0,40% dall'8 novembre); G1 nel paper nello stesso
+  tempo −0,97% (10.619,33 → 10.516,37).
