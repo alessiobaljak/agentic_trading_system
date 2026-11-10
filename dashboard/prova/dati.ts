@@ -54,6 +54,14 @@ function creaAzioni(adesso: number, oggi0: number, normale: () => number): Alber
         comprate: 5, vendute: 0, aggiornato: adesso - 600, giorni: a,
         pesi: { NESN_SW: 0.21, NOVN_SW: 0.2, ROG_SW: 0.2, UBSG_SW: 0.19, ABBN_SW: 0.18 },
         ultimo_ribilancio: { ora: adesso - 6 * 86400, entrate: 2, uscite: 2 },
+        // le operazioni giorno per giorno (pagina «Operazioni», components/stock/Operazioni.tsx)
+        operazioni: {
+          [borsa[borsa.length - 1]]: [
+            { simbolo: 'NESN_SW', lato: 'buy', quantita: 20, ingresso: 81.2, uscita_prezzo: 82.05, uscita: 'chiusura', guadagno: 17, proporzione: 0.0105, ora_ingresso: new Date((adesso - 3 * 3600) * 1000).toISOString() },
+            { simbolo: 'UBSG_SW', lato: 'sell', quantita: 60, ingresso: 27.4, uscita_prezzo: 27.75, uscita: 'stop', guadagno: -21, proporzione: -0.0128, ora_ingresso: new Date((adesso - 3 * 3600) * 1000).toISOString() },
+            { simbolo: 'ROG_SW', nota: 'saltato: candela piatta' },
+          ],
+        },
       },
       qualita_ch: {
         nome: 'Qualità svizzera', descrizione: 'Le 8 azioni dello SMI con i conti più solidi, pesi uguali.',

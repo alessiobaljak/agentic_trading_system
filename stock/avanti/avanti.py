@@ -207,6 +207,7 @@ def apri() -> str:
     f_oggi.parent.mkdir(exist_ok=True)
     f_oggi.write_text(json.dumps({"giorno": oggi, "valore_conto": valore, "ordini": ordini}, indent=1, ensure_ascii=False))
     n = sum(1 for o in ordini if o.get("id"))
+    print(_plancia())
     return f"{oggi}: {n} ordini inviati su {len(simboli)} titoli ({', '.join(o['simbolo'] for o in ordini if o.get('id'))})"
 
 
@@ -239,6 +240,8 @@ def chiudi() -> str:
     rimaste = [p["symbol"] for p in _richiesta("GET", "/v2/positions")]
     time.sleep(30)
     esito = scrivi_diario(oggi)
+    allarme = {"posizioni_aperte": {"ora": int(time.time()), "testo": f"posizioni ancora aperte dopo la chiusura: {', '.join(rimaste)}"}}
+    print(_plancia(allarme if rimaste else None))
     if rimaste:
         raise alpaca.ErroreAlpaca(f"POSIZIONI ANCORA APERTE dopo la chiusura: {', '.join(rimaste)} ({esito})")
     return esito
@@ -294,6 +297,15 @@ def scrivi_riepilogo(diario: pd.DataFrame | None = None) -> str:
     return "\n".join(righe)
 
 
+def _plancia(allarmi: dict | None = None) -> str:
+    """Pubblica sulla Plancia; un errore qui non ferma mai gli ordini."""
+    try:
+        from stock.avanti import plancia
+        return plancia.pubblica(allarmi)
+    except Exception as e:  # noqa: BLE001
+        return f"Plancia: errore nella pubblicazione ({type(e).__name__}: {str(e)[:120]})"
+
+
 def controlla() -> str:
     c = _richiesta("GET", "/v2/account")
     return f"conto demo raggiungibile: stato {c.get('status')}, valore {float(c['equity']):,.0f} dollari"
@@ -302,5 +314,5 @@ def controlla() -> str:
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
     funzioni = {"controlla": controlla, "elenco": lambda: ", ".join(elenco()), "apri": apri, "chiudi": chiudi,
-                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2])}
+                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia}
     print(funzioni[comando]())

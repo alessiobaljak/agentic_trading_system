@@ -53,3 +53,23 @@ def test_vendita_allo_scoperto_chiusa_a_fine_giornata():
           {"symbol": "AAA", "side": "buy", "qty": "5", "price": "98", "transaction_time": "t2", "order_id": "x"}]
     r = av.operazioni_del_giorno("2026-11-09", ordini, es, {})
     assert r[0]["guadagno"] == pytest.approx(10) and r[0]["uscita"] == "chiusura"
+
+
+def test_plancia_componi_forma_della_guida():
+    from stock.avanti import plancia as pl
+    ordini = [{"simbolo": "BRK.B", "lato": "buy", "quantita": 10, "stop": 99, "obiettivo": 120, "riferimento": 101, "id": "o1"}]
+    es = [{"symbol": "BRK.B", "side": "buy", "qty": "10", "price": "101", "transaction_time": "t1", "order_id": "o1"},
+          {"symbol": "BRK.B", "side": "sell", "qty": "10", "price": "103", "transaction_time": "t2", "order_id": "x"}]
+    diario = pd.DataFrame(av.operazioni_del_giorno("2026-11-09", ordini, es, {}), columns=av.COLONNE)
+    storia = {"timestamp": [int(pd.Timestamp("2026-11-06 05:00", tz="UTC").timestamp()),
+                            int(pd.Timestamp("2026-11-09 05:00", tz="UTC").timestamp())], "equity": [100000, 100020]}
+    d = pl.componi({"equity": "100020"}, [{"symbol": "BRK.B", "qty": "-5", "market_value": "-500"}], storia, diario,
+                   {"giorno": "2026-11-09", "ordini": [{"inviato": "2026-11-09T09:45:30-05:00"}]}, 1_794_000_000.0)
+    s = d["strategie"][pl.ID]
+    assert s["pesi"] == {"BRK_B": pytest.approx(-0.005, abs=1e-4)} and s["vendute"] == 1 and s["comprate"] == 0
+    assert s["giorni"] == {"2026-11-09": 100020}                      # prima del primo giorno della misura non si mostra
+    assert s["rendimento"] == pytest.approx(0.0002) and s["tipo"] == "demo"
+    assert s["operazioni"]["2026-11-09"][0]["guadagno"] == pytest.approx(20)
+    assert s["ultimo_ribilancio"]["entrate"] == 1 and d["allarmi"] is None
+    json_ok = __import__("json").dumps(d)                             # niente NaN o tipi che Firebase non accetta
+    assert "NaN" not in json_ok
