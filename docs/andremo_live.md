@@ -489,3 +489,11 @@ paper di G1 −0,97% negli stessi giorni (`ops/results/0730-*`, `0731-*`). **Cap
 prevede bene quanta parte del giro il conto piccolo riesce a eseguire.
 **Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare dopo il ribilancio di mezzanotte.
+**Mattino delle 06:13 (martedì).** Notizie: 30 articoli nuovi da 22 fonti su 23; copia dei trader di Hyperliquid aggiornata. Prova in
+avanti del programma 5 (dati fino all'8 novembre): M-001c 326 su 400, M-002 e M-003 non passano. **Il conto a tavolino del programma 6
+era fatto su un giorno a metà**: l'archivio di Binance aveva l'8 novembre per 232 monete su circa 715, e le decisioni settimanali del
+lunedì 9 uscivano con 70 monete «nuove nell'universo» invece di 22. Corretto il pannello (`research/programma6/seconda.py`,
+`giorni_parziali_in_coda`: un ultimo giorno con meno del 90% delle monete del giorno prima non si usa; test nuovo) e rifatto il conto
+quando l'8 novembre era completo: 20 monete nuove. Il bot non è toccato (prende i prezzi da Binance, non dall'archivio). **Capito
+oggi**: l'archivio pubblico pubblica un giorno nuovo moneta per moneta, nel corso di ore; ogni calcolo sul giorno più recente deve
+controllare che sia completo.
