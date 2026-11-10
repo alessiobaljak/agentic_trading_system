@@ -3,41 +3,27 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getAuthInstance } from '../lib/firebase';
-
-import Archivio, { SEZIONI_ARCHIVIO, type SezioneArchivio } from './Archivio';
-import Dettagli, { SCELTE } from './dettagli/Dettagli';
-import Azioni from './stock/Azioni';
-import Strategie from './strategie/Strategie';
+import { STRATEGIE } from '../lib/strategie';
+import { SEZIONI_ARCHIVIO } from './Archivio';
+import { AREE, type Area } from './aree';
 
 /**
- * Il guscio della dashboard, rifatto il 10 nov 2026 (il proprietario: «mi serve una Dashboard pulita semplice e veloce da leggere
- * che mi permetta in tempo reale di vedere come stanno andando le diverse strategie paper demo etc»; la legge soprattutto dal
- * telefono). Quattro schede in alto, al posto della barra laterale:
+ * Il guscio della PLANCIA (terza tornata, 10 nov 2026; il proprietario: «la dashboard si chiama Trading Bot (magari trova un altro
+ * nome). In alto vedrei solo Crypto e Stock o altre che magari creiamo in futuro, quando clicchi su una si apre la schermata
+ * principale e sulla sinistra hai il menu con i diversi entry point per la singola dashboard»).
  *
- *   strategie — la prima schermata: bot vivo e allarmi, una scheda per strategia (demo e conto vero separati dal paper), le curve
- *               a 100 e G1 demo contro G1 paper giorno per giorno (components/strategie/);
- *   dettagli  — una strategia alla volta, scelta con i pulsanti in cima: riquadri, giorno per giorno, pesi, ultimo ribilancio, il
- *               conto demo, le operazioni degli eventi, G1 demo contro paper giorno per giorno (components/dettagli/; seconda
- *               tornata del 10 nov 2026: «troppo testo», ora numeri e grafici);
- *   azioni    — le azioni, della sessione «trading stock» (components/stock/; la guida è dashboard/GUIDA_SCHEDA_AZIONI.md);
- *   archivio  — il vecchio sistema, fermo dal 13 ottobre 2026: report, controllo, operatività, gate, learning, impostazioni.
+ *   in alto    — il nome, le aree (components/aree.ts: Crypto, Azioni), il tema, l'uscita;
+ *   a sinistra — il menu delle pagine dell'area scelta (sul telefono un pulsante che lo apre e lo chiude);
+ *   al centro  — la testata dell'area (per Crypto: bot vivo e allarmi del demo) e la pagina.
  *
- * L'indirizzo ricorda la scheda (#strategie, #dettagli-paper_g1, #archivio-gate…); i vecchi segnalibri (#controllo, #gate, #report…)
- * aprono la loro sezione nell'archivio. Il tema chiaro resta quello di sempre (21 set 2026); lo scuro si accende dal pulsante in
- * alto e si ricorda su questo dispositivo.
+ * Gli indirizzi sono `#<area>/<pagina>/<resto…>` (#crypto/strategie, #crypto/dettagli/g1demo, #crypto/archivio/gate,
+ * #azioni/strategie). I vecchi segnalibri (#strategie, #dettagli, #dettagli-paper_g1, #archivio-gate, #gate, #controllo, #report,
+ * #azioni…) aprono la pagina giusta e l'indirizzo si riscrive. Il tema chiaro resta quello di sempre (21 set 2026); lo scuro si accende
+ * dal pulsante in alto e si ricorda su questo dispositivo.
  */
-type Scheda = 'strategie' | 'dettagli' | 'azioni' | 'archivio';
 
-/** Le schede in alto. «Azioni» è della sessione «trading stock» (components/stock/, dashboard/GUIDA_SCHEDA_AZIONI.md). */
-const SCHEDE: { id: Scheda; nome: string }[] = [
-  { id: 'strategie', nome: 'Strategie' },
-  { id: 'dettagli', nome: 'Dettagli' },
-  { id: 'azioni', nome: 'Azioni' },
-  { id: 'archivio', nome: 'Archivio' },
-];
-
-/** I vecchi hash (segnalibri, link nelle issue) → la sezione dell'archivio. */
-const VECCHI_HASH: Record<string, SezioneArchivio> = {
+/** I vecchi hash del vecchio sistema → la sezione dell'archivio. */
+const VECCHI_ARCHIVIO: Record<string, string> = {
   report: 'report',
   controllo: 'controllo',
   operativita: 'operativita',
@@ -50,20 +36,32 @@ const VECCHI_HASH: Record<string, SezioneArchivio> = {
   apprendimento: 'learning',
 };
 
-function leggiHash(h: string): { scheda: Scheda; sezione: SezioneArchivio | null; ramo?: string } {
-  if (h === 'dettagli') return { scheda: 'dettagli', sezione: null };
+/** Un vecchio indirizzo (prima delle aree) → il percorso nuovo; null se non è un vecchio indirizzo. */
+function daVecchio(h: string): string[] | null {
+  if (!h || h === 'strategie') return ['crypto', 'strategie'];
+  if (h === 'dettagli') return ['crypto', 'dettagli'];
   if (h.startsWith('dettagli-')) {
-    const r = h.slice('dettagli-'.length);
-    if (SCELTE.some((x) => x.ramo === r)) return { scheda: 'dettagli', sezione: null, ramo: r };
+    const def = STRATEGIE.find((s) => s.ramo === h.slice('dettagli-'.length));
+    return ['crypto', 'dettagli', ...(def ? [def.pagina] : [])];
   }
-  if (h === 'archivio') return { scheda: 'archivio', sezione: null };
-  if (h === 'azioni') return { scheda: 'azioni', sezione: null };
-  if (h.startsWith('archivio-')) {
-    const s = h.slice('archivio-'.length);
-    if (SEZIONI_ARCHIVIO.some((x) => x.id === s)) return { scheda: 'archivio', sezione: s as SezioneArchivio };
+  if (h === 'archivio') return ['crypto', 'archivio'];
+  if (h.startsWith('archivio-') && SEZIONI_ARCHIVIO.some((s) => s.id === h.slice('archivio-'.length))) {
+    return ['crypto', 'archivio', h.slice('archivio-'.length)];
   }
-  if (h in VECCHI_HASH) return { scheda: 'archivio', sezione: VECCHI_HASH[h] };
-  return { scheda: 'strategie', sezione: null };
+  if (h in VECCHI_ARCHIVIO) return ['crypto', 'archivio', VECCHI_ARCHIVIO[h]];
+  return null;
+}
+
+/** L'indirizzo → area, pagina e resto (con l'area e la pagina di partenza se mancano o non esistono). */
+function leggi(hash: string): { area: Area; pagina: string; resto: string[]; riscrivi: boolean } {
+  const h = decodeURIComponent(hash.replace(/^#\/?/, ''));
+  const vecchio = h.includes('/') ? null : AREE.some((a) => a.id === h) ? null : daVecchio(h);
+  const parti = (vecchio ?? h.split('/')).filter(Boolean);
+  const area = AREE.find((a) => a.id === parti[0]) ?? AREE[0];
+  const pagina = area.pagine.find((p) => p.id === parti[1]) ?? area.pagine[0];
+  const resto = pagina.id === parti[1] ? parti.slice(2) : [];
+  const giusto = [area.id, pagina.id, ...resto].join('/');
+  return { area, pagina: pagina.id, resto, riscrivi: giusto !== h };
 }
 
 function useTema(): [string, () => void] {
@@ -85,23 +83,26 @@ function useTema(): [string, () => void] {
   return [tema, cambia];
 }
 
+function IconaMenu({ aperto }: { aperto: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"
+      aria-hidden="true">
+      {aperto ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+    </svg>
+  );
+}
+
 export default function DashboardShell() {
-  const [scheda, setScheda] = useState<Scheda>('strategie');
-  const [sezione, setSezione] = useState<SezioneArchivio>('controllo');
-  const [ramo, setRamo] = useState<string>('demo_binance');
+  const [percorso, setPercorso] = useState(() => leggi(''));
+  const [menuAperto, setMenuAperto] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [tema, cambiaTema] = useTema();
 
   useEffect(() => {
     const sync = () => {
-      const h = window.location.hash.replace('#', '');
-      const letto = leggiHash(h);
-      setScheda(letto.scheda);
-      if (letto.sezione) setSezione(letto.sezione);
-      if (letto.ramo) setRamo(letto.ramo);
-      if (letto.ramo || letto.scheda !== 'strategie') window.scrollTo({ top: 0 });
-      // un vecchio segnalibro si riscrive con il nome nuovo
-      if (h in VECCHI_HASH) window.history.replaceState(null, '', `#archivio-${VECCHI_HASH[h]}`);
+      const p = leggi(window.location.hash);
+      setPercorso(p);
+      if (p.riscrivi) window.history.replaceState(null, '', `#${[p.area.id, p.pagina, ...p.resto].join('/')}`);
     };
     sync();
     window.addEventListener('hashchange', sync);
@@ -117,18 +118,32 @@ export default function DashboardShell() {
     }
   }, []);
 
-  const vai = (s: Scheda) => {
-    setScheda(s);
-    window.location.hash = s === 'archivio' ? `archivio-${sezione}` : s === 'dettagli' ? `dettagli-${ramo}` : s;
+  // il menu del telefono si chiude con Esc
+  useEffect(() => {
+    if (!menuAperto) return undefined;
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuAperto(false); };
+    window.addEventListener('keydown', esc);
+    return () => window.removeEventListener('keydown', esc);
+  }, [menuAperto]);
+
+  const { area, pagina, resto } = percorso;
+  const corrente = area.pagine.find((p) => p.id === pagina) ?? area.pagine[0];
+  const Contenuto = corrente.Contenuto;
+  const Testata = area.Testata;
+
+  const apri = (parti: string[]) => {
+    setMenuAperto(false);
+    window.location.hash = parti.join('/');
     window.scrollTo({ top: 0 });
   };
-  const vaiRamo = (r: string) => {
-    setRamo(r);
-    window.history.replaceState(null, '', `#dettagli-${r}`);
-  };
-  const vaiSezione = (s: SezioneArchivio) => {
-    setSezione(s);
-    window.location.hash = `archivio-${s}`;
+  const vai = (nuovoResto: string[], opzioni?: { sostituisci?: boolean }) => {
+    const parti = [area.id, corrente.id, ...nuovoResto.filter(Boolean)];
+    if (opzioni?.sostituisci) {
+      window.history.replaceState(null, '', `#${parti.join('/')}`);
+      setPercorso(leggi(`#${parti.join('/')}`));
+    } else {
+      window.location.hash = parti.join('/');
+    }
   };
 
   return (
@@ -142,15 +157,21 @@ export default function DashboardShell() {
             </svg>
           </span>
           <div>
-            Trading bot
-            <small>crypto · Binance futures · niente soldi veri</small>
+            Plancia
+            <small>crypto e azioni · niente soldi veri</small>
           </div>
         </div>
 
-        <nav className="cr-schede" role="tablist" aria-label="schede">
-          {SCHEDE.map((s) => (
-            <button key={s.id} role="tab" aria-selected={scheda === s.id} onClick={() => vai(s.id)}>
-              {s.nome}
+        <button type="button" className="cr-menu-pulsante" aria-expanded={menuAperto} aria-controls="menu-pagine"
+          onClick={() => setMenuAperto((a) => !a)}>
+          <IconaMenu aperto={menuAperto} />
+          <span>{corrente.nome}</span>
+        </button>
+
+        <nav className="cr-schede cr-aree" role="tablist" aria-label="aree">
+          {AREE.map((a) => (
+            <button key={a.id} role="tab" aria-selected={a.id === area.id} onClick={() => apri([a.id, a.pagine[0].id])}>
+              {a.nome}
             </button>
           ))}
         </nav>
@@ -168,12 +189,29 @@ export default function DashboardShell() {
         </div>
       </header>
 
-      <main className="cr-corpo" key={scheda}>
-        {scheda === 'strategie' && <Strategie />}
-        {scheda === 'dettagli' && <Dettagli ramo={ramo} onRamo={vaiRamo} />}
-        {scheda === 'azioni' && <Azioni />}
-        {scheda === 'archivio' && <Archivio sezione={sezione} onSezione={vaiSezione} />}
-      </main>
+      <div className="cr-telaio">
+        {menuAperto && <div className="cr-velo" onClick={() => setMenuAperto(false)} aria-hidden="true" />}
+        <nav id="menu-pagine" className={`cr-menu${menuAperto ? ' aperto' : ''}`} aria-label={`pagine di ${area.nome}`}>
+          <div className="cr-menu-titolo">
+            {area.nome}
+            <button type="button" className="cr-menu-chiudi" onClick={() => setMenuAperto(false)} aria-label="chiudi il menu">
+              <IconaMenu aperto />
+            </button>
+          </div>
+          {area.pagine.map((p) => (
+            <a key={p.id} href={`#${area.id}/${p.id}`} className="cr-menu-voce" aria-current={p.id === corrente.id ? 'page' : undefined}
+              onClick={(e) => { e.preventDefault(); apri([area.id, p.id]); }}>
+              {p.icona}
+              <span>{p.nome}</span>
+            </a>
+          ))}
+        </nav>
+
+        <main className="cr-corpo" key={`${area.id}/${corrente.id}`}>
+          {Testata && <Testata />}
+          <Contenuto resto={resto} vai={vai} />
+        </main>
+      </div>
     </div>
   );
 }

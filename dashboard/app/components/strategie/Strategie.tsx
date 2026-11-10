@@ -4,11 +4,10 @@ import { useMemo } from 'react';
 import { STRATEGIE, giornoUtc, useAdesso, useSerie, useStrategie } from '../../lib/strategie';
 import CurveA100, { type SerieCurva } from '../comuni/CurveA100';
 import ConfrontoBreve from './ConfrontoBreve';
-import RigaStato from './RigaStato';
 import SchedaStrategia from './SchedaStrategia';
 
 /**
- * La prima schermata (10 nov 2026): in cima il bot vivo e gli allarmi del demo; poi le strategie con ordini veri (G1 sul conto demo,
+ * La prima schermata (10 nov 2026; il bot vivo e gli allarmi del demo stanno sopra, in cima a ogni pagina Crypto): le strategie con ordini veri (G1 sul conto demo,
  * con i pulsanti «chiudi tutto» e «riparti», e il conto vero, spento) ben separate da quelle simulate nel paper (G1, G1 neutra, G11,
  * F5, Eventi); poi le curve messe a 100 alla stessa data e G1 demo contro G1 paper dalla partenza del demo, in breve (il giorno per
  * giorno sta in Dettagli). Tutto in diretta da Firebase.
@@ -27,8 +26,6 @@ export default function Strategie() {
 
   return (
     <>
-      <RigaStato dati={dati} adesso={adesso} />
-
       <h2 className="cr-gruppo-titolo">Ordini veri <span>sul conto demo di Binance (soldi finti) e sul conto vero</span></h2>
       <div className="cr-griglia-veri">
         {veri.map((s) => (

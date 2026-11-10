@@ -42,7 +42,7 @@ export default function SchedaStrategia({ def, dati, adesso, demo }: {
   demo?: DatiDemo;
 }) {
   const d: DatiRamo = dati ?? { stato: null, giorni: null, ultimoRibilancio: null, arrivato: false };
-  const link = def.tipo !== 'vero' ? `#dettagli-${def.ramo}` : null;
+  const link = def.tipo !== 'vero' ? `#crypto/dettagli/${def.pagina}` : null;
 
   // il conto vero: spento finché il proprietario non lo chiede (bot/portafoglio/conto_vero.py)
   if (def.tipo === 'vero' && eSpento(d)) {

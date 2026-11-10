@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Trading bot · strategie',
-  description: 'Come stanno andando le strategie del bot di trading crypto: paper, conto demo di Binance e conto vero (spento).',
+  title: 'Plancia',
+  description: 'Come stanno andando le strategie, crypto e azioni: paper, conti demo, conto vero (spento). Niente soldi veri.',
 };
 
 export const viewport: Viewport = {

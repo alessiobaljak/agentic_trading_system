@@ -514,3 +514,6 @@ barre del giorno per giorno, pesi a barre, ultimo ribilancio, conto demo, il con
 Scheda «Azioni» vuota per la sessione delle azioni, con i mattoni comuni (`dashboard/app/components/comuni/`) e la guida
 `dashboard/GUIDA_SCHEDA_AZIONI.md` (scelta del proprietario: «la prima, prepara la scheda e la guida»). tsc e build riusciti, provata
 con dati finti.
+**Dashboard, terza versione (10 novembre)**: si chiama «Plancia»; in alto solo le aree (Crypto, Azioni), a sinistra il menu delle
+pagine dell'area (sul telefono un pulsante che apre il menu); colonne giorno per giorno verdi in guadagno e arancioni in perdita; la
+guida delle azioni dice come dichiarare le loro pagine. tsc e build riusciti, provata con dati finti.

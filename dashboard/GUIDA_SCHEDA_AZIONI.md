@@ -1,10 +1,14 @@
-# La scheda «Azioni»: guida per la sessione «trading stock»
+# L'area «Azioni» della Plancia: guida per la sessione «trading stock»
 
-La dashboard ha già la scheda **Azioni** (fra Dettagli e Archivio, indirizzo `#azioni`). Oggi è un segnaposto:
-`app/components/stock/Azioni.tsx` legge `/azioni` da Firebase con la forma qui sotto e la mostra con i mattoni comuni. Senza dati
-scrive una riga sola: «La scheda delle azioni la riempie la sessione “trading stock”: nessun dato ancora su Firebase».
+La dashboard si chiama **Plancia**. In alto ci sono le aree (**Crypto**, **Azioni**; la lista è in `app/components/aree.ts`). Toccando
+un'area si apre la sua prima pagina, e a sinistra c'è il menu delle sue pagine; sul telefono il menu è il pulsante ☰.
 
-La cartella `app/components/stock/` è vostra: cambiate `Azioni.tsx` come volete e aggiungete lì i vostri componenti.
+L'area Azioni oggi ha una pagina sola, un segnaposto: `app/components/stock/Azioni.tsx` (indirizzo `#azioni/strategie`). Legge
+`/azioni` da Firebase con la forma qui sotto e la mostra con i mattoni comuni. Senza dati scrive una riga sola: «La scheda delle azioni
+la riempie la sessione “trading stock”: nessun dato ancora su Firebase».
+
+La cartella `app/components/stock/` è vostra: cambiate `Azioni.tsx` come volete e aggiungete lì i vostri componenti e le vostre
+pagine (sezione 2).
 
 ## 1. Cosa scrivere su Firebase (Realtime Database, sotto `/azioni`)
 
@@ -42,7 +46,33 @@ Regole pratiche:
 * **Numeri veri, non testi**: valori e date in secondi come numeri; percentuali come frazioni (0,021 = 2,1%).
 * Un esempio completo è in `prova/dati.ts`, funzione `creaAzioni`.
 
-## 2. I mattoni comuni
+## 2. Le pagine del menu a sinistra
+
+Le pagine dell'area le dichiarate voi, in `app/components/stock/area.tsx` (`AREA_AZIONI.pagine`), senza toccare il guscio. Una pagina
+è una riga:
+
+```tsx
+{ id: 'posizioni', nome: 'Posizioni', icona: <svg …/>, Contenuto: PaginaPosizioni },
+```
+
+* **`id`**: il nome nell'indirizzo, minuscolo e senza spazi. La pagina sarà `#azioni/posizioni`.
+* **`nome`**: la voce del menu.
+* **`icona`**: facoltativa, un svg 24×24 con `stroke="currentColor"`.
+* **`Contenuto`**: il componente della pagina.
+* **L'ordine**: la prima pagina dell'elenco è la schermata principale dell'area.
+
+`Contenuto` riceve due proprietà:
+
+* `resto`: quello che nell'indirizzo viene dopo la pagina (in `#azioni/posizioni/nesn` è `['nesn']`);
+* `vai(resto, { sostituisci })`: cambia quel resto restando nella pagina. `sostituisci: true` non lascia un passo nella cronologia;
+  è il modo giusto per una scelta dentro la pagina, come i pulsanti delle strategie in Crypto → Dettagli.
+
+**Testata facoltativa.** `Testata` è un componente mostrato in cima a tutte le pagine dell'area. Crypto la usa per «bot vivo» e gli
+allarmi del demo. Per le azioni si potrebbe spostare lì la `RigaStatoBase` che oggi sta dentro `Azioni.tsx`.
+
+Un'area nuova in futuro (per esempio «Forex»): una cartella sua con il suo `area.tsx` e una riga in `app/components/aree.ts`.
+
+## 3. I mattoni comuni
 
 Importateli da un punto solo, `app/components/comuni` (`index.ts` li elenca). Non leggono Firebase: i dati arrivano come proprietà.
 
@@ -51,6 +81,7 @@ Importateli da un punto solo, `app/components/comuni` (`index.ts` li elenca). No
 | `SchedaBase` | La scheda di una strategia: valore, dall'inizio, oggi, 7 giorni, giorni in guadagno, posizioni, ultimo ribilancio, etichetta. Con `RigaPosizioni` (es. `cosa="azioni"`) e `SchedaSenzaNumeri` (in attesa o spenta). |
 | `metricheDaSerie` | Calcola i numeri della scheda dai `giorni`, dal `valore`, dal `capitale` e da `giornoDiOggi` (per le azioni `giornoNelFuso(aggiornato, 'Europe/Zurich')`). |
 | `CurveA100` | Le curve di più strategie messe a 100 alla stessa data: `curve=[{ chiave, nome, colore, giorni }]`. |
+| Colonne giorno per giorno | Verde in guadagno, arancione in perdita: `var(--giorno-su)` e `var(--giorno-giu)`, validati in chiaro e in scuro. Esempio: `app/components/dettagli/RisultatoGiorni.tsx` con `Colonna`. |
 | `RigaStatoBase` | Vivo o fermo (dal `battito`), ultimo aggiornamento, avvisi in rosso. |
 | `Pesi` | Comprate e vendute come barre orizzontali; `nomeDi` decide come mostrare i simboli. |
 | `Info`, `Suggerimento`, `Colonna` | La «i» che si apre al tocco, il riquadro al tocco dei grafici, la colonna arrotondata dei grafici a barre. |
@@ -61,7 +92,7 @@ Per un grafico nuovo seguite la skill `dataviz`: una sola scala, leggenda, valor
 
 `app/components/stock/Azioni.tsx` mostra come si usano tutti questi mattoni insieme.
 
-## 3. Provarla in locale, senza Firebase
+## 4. Provarla in locale, senza Firebase
 
 ```bash
 cd dashboard
@@ -69,24 +100,25 @@ DASHBOARD_PROVA=1 NEXT_PUBLIC_FIREBASE_API_KEY=prova NEXT_PUBLIC_FIREBASE_PROJEC
   NEXT_PUBLIC_FIREBASE_APP_ID=prova NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://prova.invalid npx next dev -p 3999
 ```
 
-* Con i dati finti: <http://localhost:3999/#azioni>.
-* Scheda vuota: <http://localhost:3999/?prova=azioni_vuote#azioni>.
+* Con i dati finti: <http://localhost:3999/#azioni/strategie>.
+* Scheda vuota: <http://localhost:3999/?prova=azioni_vuote#azioni/strategie>.
 
 I dati finti stanno in `prova/dati.ts` (`creaAzioni`): cambiate lì l'esempio se cambiate la forma. Senza `DASHBOARD_PROVA` (cioè su
 Vercel) la dashboard legge il Firebase vero e `prova/` non entra nel sito.
 
 Prima di consegnare: `npx tsc --noEmit -p .` e `npm run build` senza errori.
 
-## 4. Cosa non toccare
+## 5. Cosa non toccare
 
-* Le schede crypto: `app/components/strategie/`, `app/components/dettagli/`, `app/components/Archivio.tsx` e i componenti del vecchio
-  sistema, `app/lib/strategie.ts`, `app/lib/dettagli.ts`.
+* L'area Crypto: `app/components/crypto/`, `app/components/strategie/`, `app/components/dettagli/`, `app/components/Archivio.tsx` e i
+  componenti del vecchio sistema, `app/lib/strategie.ts`, `app/lib/dettagli.ts`.
 * I mattoni comuni (`app/components/comuni/`, `app/lib/conti.ts`) si possono ampliare con proprietà nuove facoltative. Non si cambia il
   loro aspetto né il significato di quelle che ci sono: le usano anche le schede crypto.
-* In `DashboardShell.tsx` la scheda c'è già: non serve toccarlo.
+* Il guscio (`DashboardShell.tsx`) e la lista delle aree (`aree.ts`): l'area Azioni c'è già, le sue pagine si cambiano in
+  `stock/area.tsx`.
 * Mai credenziali del conto demo in un commit (il repo è pubblico).
 
-## 5. Le regole di Firebase
+## 6. Le regole di Firebase
 
 * **Lettura.** Oggi `firebase/database.rules.json` dà la lettura di tutto, `/azioni` compreso, all'utente del proprietario; la
   scrittura è chiusa (`".write": false`).

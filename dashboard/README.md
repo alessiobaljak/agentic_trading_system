@@ -1,4 +1,4 @@
-# Trading Bot Dashboard
+# Plancia (la dashboard)
 
 Next.js 14 (App Router, TypeScript) dashboard for the agentic crypto futures trading bot.
 It reads live state from Firebase (Firestore + Realtime Database) using the modular Firebase
@@ -9,25 +9,40 @@ The Python bot writes state to Firebase; this dashboard is read-mostly, with two
 - **Risk settings** → `user_risk_settings/current` (Firestore)
 - **Kill switch** → `/commands/kill_switch` (Realtime Database)
 
-## Cosa mostra (dal 10 nov 2026)
+## Cosa mostra (dal 10 nov 2026): la Plancia
 
-Quattro schede in alto, pensate prima per il telefono (`app/components/DashboardShell.tsx`):
+La dashboard si chiama **Plancia** («crypto e azioni · niente soldi veri»), pensata prima per il telefono:
 
-- **Strategie** (la prima): il bot è vivo (`/bot_status/heartbeat`) e gli allarmi del demo ben visibili
-  (`/demo_binance/allarme`, `/demo_binance/allarmi/<tipo>`, `/demo_binance/fermo`); una scheda per strategia, con quelle a
-  ordini veri (G1 sul conto demo, con «Chiudi tutto» e «Riparti»; il conto vero, spento) separate da quelle del paper (G1,
-  G1 neutra, G11, F5, Eventi): valore, dall'inizio, oggi, ultimi 7 giorni, giorni in guadagno, posizioni, ultimo ribilancio;
-  le curve di tutte messe a 100 alla stessa data e G1 demo contro G1 paper dalla partenza del demo. Dati in
-  `app/lib/strategie.ts`, componenti in `app/components/strategie/`.
-- **Dettagli**: una strategia alla volta (pulsanti in cima): riquadri (valore, oggi, 7 giorni, dall'inizio, discesa massima,
-  spese, funding, ordini limite), giorno per giorno, pesi delle monete, ultimo ribilancio, il conto demo, le operazioni degli
-  eventi, G1 demo contro paper giorno per giorno con le fasi (chiuso). `app/lib/dettagli.ts`, `app/components/dettagli/`.
-- **Azioni**: della sessione «trading stock» (`app/components/stock/`, guida in `GUIDA_SCHEDA_AZIONI.md`).
-- **Archivio**: il vecchio sistema, fermo dal 13 ottobre 2026 (report, controllo, operatività, gate, learning,
-  impostazioni con il kill switch del vecchio bot). I vecchi segnalibri (`#gate`, `#controllo`…) aprono la loro sezione.
+* **In alto le aree**: la lista è in `app/components/aree.ts`. Oggi Crypto e Azioni; un'area nuova è una riga.
+* **A sinistra il menu**: le pagine dell'area scelta. Sul telefono è il pulsante ☰.
+* **Gli indirizzi** sono `#<area>/<pagina>/<resto>`, per esempio `#crypto/strategie`, `#crypto/dettagli/g1demo`,
+  `#crypto/archivio/gate`, `#azioni/strategie`.
+* **I vecchi segnalibri** (`#gate`, `#controllo`, `#dettagli`, `#azioni`…) aprono la pagina giusta. Guscio in
+  `app/components/DashboardShell.tsx`.
 
-Il tema resta chiaro; lo scuro si accende dal pulsante in alto e si ricorda sul dispositivo. I mattoni comuni a crypto e azioni
-(scheda, curve a 100, riga di stato, pesi) stanno in `app/components/comuni/`, i conti in `app/lib/conti.ts`.
+**Crypto** (`app/components/crypto/area.tsx`), con in cima a ogni pagina il bot vivo e gli allarmi del demo:
+
+- **Strategie** (la principale):
+  - una scheda per strategia, con quelle a ordini veri (G1 sul conto demo, con «Chiudi tutto» e «Riparti»; il conto vero, spento)
+    separate dal paper (G1, G1 neutra, G11, F5, Eventi);
+  - le curve di tutte messe a 100 alla stessa data;
+  - G1 demo contro G1 paper dalla partenza del demo.
+  
+  Dati in `app/lib/strategie.ts`, componenti in `app/components/strategie/`.
+- **Dettagli**: una strategia alla volta.
+  - riquadri: valore, oggi, 7 giorni, dall'inizio, discesa massima, spese, funding, ordini limite;
+  - giorno per giorno (verde in guadagno, arancione in perdita), pesi delle monete, ultimo ribilancio;
+  - il conto demo, le operazioni degli eventi, G1 demo contro paper giorno per giorno con le fasi (chiuso).
+  
+  Dati in `app/lib/dettagli.ts`, componenti in `app/components/dettagli/`.
+- **Archivio**: il vecchio sistema, fermo dal 13 ottobre 2026 (report, controllo, operatività, gate, learning, impostazioni con il
+  kill switch del vecchio bot).
+
+**Azioni** (`app/components/stock/`): della sessione «trading stock», che ne dichiara le pagine in `stock/area.tsx`. La guida è
+`GUIDA_SCHEDA_AZIONI.md`.
+
+**Tema e mattoni comuni.** Il tema resta chiaro; lo scuro si accende dal pulsante in alto e si ricorda sul dispositivo. I mattoni
+comuni (scheda, curve a 100, riga di stato, pesi) stanno in `app/components/comuni/`, i conti in `app/lib/conti.ts`.
 
 ## Hard limits
 
@@ -78,7 +93,7 @@ DASHBOARD_PROVA=1 NEXT_PUBLIC_FIREBASE_API_KEY=prova NEXT_PUBLIC_FIREBASE_PROJEC
   NEXT_PUBLIC_FIREBASE_APP_ID=prova NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://prova.invalid npx next dev -p 3999
 ```
 
-Scenari: `/?prova=calmo` (nessun allarme), `/?prova=fermo` (demo fermo), `/?prova=azioni_vuote#azioni` (scheda Azioni vuota). Senza la variabile la configurazione è quella di sempre.
+Scenari: `/?prova=calmo` (nessun allarme), `/?prova=fermo` (demo fermo), `/?prova=azioni_vuote#azioni/strategie` (Azioni vuota). Senza la variabile la configurazione è quella di sempre.
 
 ## Deploy to Vercel
 

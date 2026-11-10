@@ -1825,7 +1825,7 @@ input[type='range'] {
 .cr-griglia {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 .cr-griglia-veri {
   display: grid;
@@ -2192,4 +2192,112 @@ input[type='range'] {
   .cr-riquadri-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cr-riquadri-3 .cr-riquadro > b { font-size: 15px; }
   .cr-pesi { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}
+
+/* ======================================================= Terza tornata (10 nov 2026): la Plancia
+   Il nome «Plancia»; in alto le aree (components/aree.ts: Crypto, Azioni), a sinistra il menu delle pagine dell'area (sul telefono un
+   pulsante che lo apre come un cassetto). Le colonne del giorno per giorno: verde in guadagno, arancione in perdita, per tutte le
+   strategie; coppia validata con lo strumento della skill dataviz in chiaro (#00661a / #eb6834 su #ffffff) e in scuro (#22b14c /
+   #c2410c su #1a1a19), anche per chi vede male rosso e verde.
+   ========================================================================== */
+:root {
+  --giorno-su: #00661a;
+  --giorno-giu: #eb6834;
+}
+:root[data-theme='dark'] {
+  --giorno-su: #22b14c;
+  --giorno-giu: #c2410c;
+}
+
+.cr-aree { order: 2; }
+.cr-telaio {
+  display: grid;
+  grid-template-columns: 172px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.cr-menu {
+  position: sticky;
+  top: 72px;
+  display: grid;
+  gap: 2px;
+  padding-top: 16px;
+}
+.cr-menu-titolo {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  padding: 0 10px 6px;
+}
+.cr-menu-voce {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 40px;
+}
+.cr-menu-voce:hover { background: var(--velo); color: var(--text); }
+.cr-menu-voce[aria-current='page'] {
+  background: var(--bg-panel);
+  border-color: var(--border-soft);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.cr-menu-pulsante {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--text);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 12px;
+  cursor: pointer;
+  min-height: 38px;
+}
+.cr-velo { display: none; }
+.cr-menu-titolo { display: flex; align-items: center; justify-content: space-between; }
+.cr-menu-chiudi { display: none; border: 0; background: none; color: var(--text-dim); padding: 6px; cursor: pointer; }
+
+@media (max-width: 760px) {
+  .cr-telaio { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .cr-marchio { flex: 1 0 calc(100% - 150px); min-width: 0; }
+  .cr-marchio small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cr-utente { order: 2; }
+  .cr-menu-pulsante { display: inline-flex; order: 3; }
+  .cr-aree { order: 4; flex: 1 1 auto; width: auto; }
+  .cr-aree button { flex: 1; }
+  .cr-menu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    width: min(280px, 82vw);
+    padding: 20px 14px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+    align-content: start;
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform 0.2s var(--ease), visibility 0.2s;
+  }
+  .cr-menu.aperto { transform: none; visibility: visible; }
+  .cr-menu-chiudi { display: inline-flex; }
+  .cr-velo { display: block; position: fixed; inset: 0; z-index: 55; background: rgba(0, 0, 0, 0.35); }
+}
+@media (max-width: 600px) {
+  .cr-schede.cr-aree { order: 4; width: auto; }
 }

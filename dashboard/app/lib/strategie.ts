@@ -33,6 +33,8 @@ export interface DefStrategia {
   nome: string;
   /** il nome corto dei pulsanti (scheda Dettagli) */
   breve: string;
+  /** il nome nell'indirizzo della pagina Dettagli (#crypto/dettagli/<pagina>) */
+  pagina: string;
   descrizione: string;
   tipo: Tipo;
   /** il campo dello stato con il capitale di partenza */
@@ -47,37 +49,37 @@ export interface DefStrategia {
 /** L'ordine dei colori è quello della tavolozza validata (slot 1-6), assegnato alla strategia una volta per tutte. */
 export const STRATEGIE: DefStrategia[] = [
   {
-    ramo: 'demo_binance', breve: 'G1 demo', nome: 'G1 sul conto demo', tipo: 'demo', base: 'capitale_iniziale', colore: 'var(--serie-2)',
+    ramo: 'demo_binance', pagina: 'g1demo', breve: 'G1 demo', nome: 'G1 sul conto demo', tipo: 'demo', base: 'capitale_iniziale', colore: 'var(--serie-2)',
     primoGiornoDallaBase: true, unita: 'USDT',
     descrizione: 'G1 con ordini veri sul conto demo di Binance: soldi finti, ordini e prezzi veri.',
   },
   {
-    ramo: 'conto_vero', breve: 'Conto vero', nome: 'G1 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
+    ramo: 'conto_vero', pagina: 'contovero', breve: 'Conto vero', nome: 'G1 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
     primoGiornoDallaBase: true, unita: 'USDT',
     descrizione: 'G1 con soldi veri sul conto di Binance.',
   },
   {
-    ramo: 'paper_g1', breve: 'G1', nome: 'G1', tipo: 'paper', base: 'capitale', colore: 'var(--serie-1)', primoGiornoDallaBase: false,
+    ramo: 'paper_g1', pagina: 'g1', breve: 'G1', nome: 'G1', tipo: 'paper', base: 'capitale', colore: 'var(--serie-1)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Il funding fra monete: compra quelle che pagano meno funding e vende quelle che pagano di più. Decide ogni giorno.',
   },
   {
-    ramo: 'paper_g1n', breve: 'G1 neutra', nome: 'G1 neutra', tipo: 'paper', base: 'capitale', colore: 'var(--serie-4)', primoGiornoDallaBase: false,
+    ramo: 'paper_g1n', pagina: 'g1neutra', breve: 'G1 neutra', nome: 'G1 neutra', tipo: 'paper', base: 'capitale', colore: 'var(--serie-4)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, con i due lati pesati perché i movimenti del mercato intero contino poco.',
   },
   {
-    ramo: 'paper_g11', breve: 'G11', nome: 'G11', tipo: 'paper', base: 'capitale', colore: 'var(--serie-3)', primoGiornoDallaBase: false,
+    ramo: 'paper_g11', pagina: 'g11', breve: 'G11', nome: 'G11', tipo: 'paper', base: 'capitale', colore: 'var(--serie-3)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, guardando anche il funding dell\'ultimo giorno.',
   },
   {
-    ramo: 'paper_f5', breve: 'F5', nome: 'F5', tipo: 'paper', base: 'capitale', colore: 'var(--serie-5)', primoGiornoDallaBase: false,
+    ramo: 'paper_f5', pagina: 'f5', breve: 'F5', nome: 'F5', tipo: 'paper', base: 'capitale', colore: 'var(--serie-5)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, ma cambia le posizioni solo il lunedì.',
   },
   {
-    ramo: 'paper_eventi', breve: 'Eventi', nome: 'Eventi', tipo: 'paper', base: 'capitale', colore: 'var(--serie-6)', primoGiornoDallaBase: false,
+    ramo: 'paper_eventi', pagina: 'eventi', breve: 'Eventi', nome: 'Eventi', tipo: 'paper', base: 'capitale', colore: 'var(--serie-6)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Monete appena quotate e funding al tetto: vende la moneta e compra Bitcoin per lo stesso valore, per qualche giorno.',
   },
@@ -228,6 +230,43 @@ export function useStrategie(): DatiStrategie {
   return { rami, demo, contoVero, battito, battitoArrivato };
 }
 
+/** Quello che serve alla riga di stato in cima a tutte le pagine Crypto: il battito, l'ultimo aggiornamento delle strategie, gli
+ *  allarmi e il fermo del demo, gli allarmi del conto vero. Più leggero di `useStrategie` (niente giorni né ribilanciamenti). */
+export interface StatoCrypto {
+  battito: number | null;
+  battitoArrivato: boolean;
+  aggiornato: number | null;
+  demo: Pick<DatiDemo, 'allarme' | 'allarmi' | 'fermo'>;
+  contoVero: Pick<DatiContoVero, 'allarmi'>;
+}
+
+export function useStatoCrypto(): StatoCrypto {
+  const [battito, setBattito] = useState<number | null>(null);
+  const [battitoArrivato, setBattitoArrivato] = useState(false);
+  const [aggiornati, setAggiornati] = useState<Record<string, number>>({});
+  const [demo, setDemo] = useState<StatoCrypto['demo']>({ allarme: null, allarmi: null, fermo: null });
+  const [contoVero, setContoVero] = useState<StatoCrypto['contoVero']>({ allarmi: null });
+  useEffect(() => {
+    const db = getRtdb();
+    const stop = STRATEGIE.map((s) => onValue(ref(db, `${s.ramo}/stato/aggiornato`), (x) => {
+      const n = Number(x.val());
+      setAggiornati((p) => ({ ...p, [s.ramo]: Number.isFinite(n) ? n : 0 }));
+    }));
+    stop.push(onValue(ref(db, 'bot_status/heartbeat'), (x) => {
+      const n = Number(x.val());
+      setBattito(Number.isFinite(n) && n > 0 ? (n > 1e12 ? n / 1000 : n) : null);
+      setBattitoArrivato(true);
+    }));
+    stop.push(onValue(ref(db, 'demo_binance/allarme'), (x) => setDemo((p) => ({ ...p, allarme: x.val() }))));
+    stop.push(onValue(ref(db, 'demo_binance/allarmi'), (x) => setDemo((p) => ({ ...p, allarmi: x.val() }))));
+    stop.push(onValue(ref(db, 'demo_binance/fermo'), (x) => setDemo((p) => ({ ...p, fermo: x.val() }))));
+    stop.push(onValue(ref(db, 'conto_vero/allarmi'), (x) => setContoVero({ allarmi: x.val() })));
+    return () => stop.forEach((f) => f());
+  }, []);
+  const valori = Object.values(aggiornati).filter((x) => x > 0);
+  return { battito, battitoArrivato, aggiornato: valori.length ? Math.max(...valori) : null, demo, contoVero };
+}
+
 /* ------------------------------------------------------------------ i conti di una strategia */
 /** I valori di fine giorno con, per il giorno in corso, il valore di adesso dallo stato. */
 export function serieConOggi(d: DatiRamo): Giorni {
@@ -349,7 +388,7 @@ export interface AllarmeVisibile {
   monete: string[];
 }
 
-export function allarmiAccesi(demo: DatiDemo, contoVero: DatiContoVero): AllarmeVisibile[] {
+export function allarmiAccesi(demo: Pick<DatiDemo, 'allarme' | 'allarmi'>, contoVero: Pick<DatiContoVero, 'allarmi'>): AllarmeVisibile[] {
   const out: AllarmeVisibile[] = [];
   if (demo.allarme?.testo) {
     out.push({ dove: 'demo', tipo: 'conto non vuoto da fermo', ora: demo.allarme.ora ?? null, testo: demo.allarme.testo,
