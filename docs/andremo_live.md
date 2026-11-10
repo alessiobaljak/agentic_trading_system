@@ -497,3 +497,5 @@ lunedì 9 uscivano con 70 monete «nuove nell'universo» invece di 22. Corretto 
 quando l'8 novembre era completo: 20 monete nuove. Il bot non è toccato (prende i prezzi da Binance, non dall'archivio). **Capito
 oggi**: l'archivio pubblico pubblica un giorno nuovo moneta per moneta, nel corso di ore; ogni calcolo sul giorno più recente deve
 controllare che sia completo.
+**Giro delle 08:17.** Raccolta e controlli in avanti delle 08:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte.
