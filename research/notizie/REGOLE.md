@@ -87,3 +87,10 @@ cambia: conta gli articoli, non le fonti.
 La pagina di BeInCrypto ha 12 articoli, circa 5 ore; il 6 novembre è stata tutta nuova due volte (alle 04:20 e alle 16:20,
 `archivio/giri.csv`). Da oggi si legge anche la seconda pagina (`beincrypto2` in `raccolta.py`), come per Crypto Briefing: gli articoli
 già visti si riconoscono dal link. Le fonti lette diventano 23. La regola della prova in avanti non cambia.
+
+## Aggiunta del 10 novembre 2026: la terza pagina di Crypto Briefing
+
+Il 10 novembre alle 16:18 erano piene sia la prima sia la seconda pagina di Crypto Briefing (164 articoli nuovi nel giro, il giorno di
+più notizie da quando si raccoglie): qualche articolo può essere sfuggito. Da oggi si legge anche la terza pagina (`cryptobriefing3` in
+`raccolta.py`); gli articoli già visti si riconoscono dal link, quindi non si contano due volte. Le fonti lette diventano 24. La regola
+della prova in avanti non cambia: conta gli articoli, non le fonti.
