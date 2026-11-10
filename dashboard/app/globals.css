@@ -1825,7 +1825,7 @@ input[type='range'] {
 .cr-griglia {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
 }
 .cr-griglia-veri {
   display: grid;
@@ -2266,6 +2266,14 @@ input[type='range'] {
   min-height: 38px;
 }
 .cr-velo { display: none; }
+
+/* il menu a scomparsa sul computer (il proprietario, 10 nov 2026: «fai in modo che la barra di sinistra sia a scomparsa») */
+@media (min-width: 761px) {
+  .cr-menu-pulsante { display: inline-flex; order: -1; padding: 7px 9px; }
+  .cr-menu-pulsante span { display: none; }
+  .cr-telaio.senza-menu { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .cr-telaio.senza-menu .cr-menu { display: none; }
+}
 .cr-menu-titolo { display: flex; align-items: center; justify-content: space-between; }
 .cr-menu-chiudi { display: none; border: 0; background: none; color: var(--text-dim); padding: 6px; cursor: pointer; }
 

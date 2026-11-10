@@ -13,7 +13,8 @@ import { AREE, type Area } from './aree';
  * principale e sulla sinistra hai il menu con i diversi entry point per la singola dashboard»).
  *
  *   in alto    — il nome, le aree (components/aree.ts: Crypto, Azioni), il tema, l'uscita;
- *   a sinistra — il menu delle pagine dell'area scelta (sul telefono un pulsante che lo apre e lo chiude);
+ *   a sinistra — il menu delle pagine dell'area scelta; il pulsante ☰ lo nasconde e lo rimette (sul computer la scelta si ricorda
+ *                in questo browser; sul telefono è un cassetto che si apre sopra la pagina);
  *   al centro  — la testata dell'area (per Crypto: bot vivo e allarmi del demo) e la pagina.
  *
  * Gli indirizzi sono `#<area>/<pagina>/<resto…>` (#crypto/strategie, #crypto/dettagli/g1demo, #crypto/archivio/gate,
@@ -94,7 +95,8 @@ function IconaMenu({ aperto }: { aperto: boolean }) {
 
 export default function DashboardShell() {
   const [percorso, setPercorso] = useState(() => leggi(''));
-  const [menuAperto, setMenuAperto] = useState(false);
+  const [menuAperto, setMenuAperto] = useState(false);       // il cassetto del telefono
+  const [menuNascosto, setMenuNascosto] = useState(false);   // il menu a sinistra del computer (il proprietario: «a scomparsa»)
   const [user, setUser] = useState<User | null>(null);
   const [tema, cambiaTema] = useTema();
 
@@ -117,6 +119,30 @@ export default function DashboardShell() {
       /* auth non inizializzata: ignora, il gate lo gestisce a monte */
     }
   }, []);
+
+  // il menu del computer nascosto o no: si ricorda in questo browser
+  useEffect(() => {
+    try {
+      setMenuNascosto(localStorage.getItem('menu_nascosto') === '1');
+    } catch {
+      /* senza memoria del browser il menu parte aperto */
+    }
+  }, []);
+  const telefono = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches;
+  const cambiaMenu = () => {
+    if (telefono()) {
+      setMenuAperto((a) => !a);
+      return;
+    }
+    setMenuNascosto((n) => {
+      try {
+        localStorage.setItem('menu_nascosto', n ? '0' : '1');
+      } catch {
+        /* vale solo per questa visita */
+      }
+      return !n;
+    });
+  };
 
   // il menu del telefono si chiude con Esc
   useEffect(() => {
@@ -162,8 +188,9 @@ export default function DashboardShell() {
           </div>
         </div>
 
-        <button type="button" className="cr-menu-pulsante" aria-expanded={menuAperto} aria-controls="menu-pagine"
-          onClick={() => setMenuAperto((a) => !a)}>
+        <button type="button" className="cr-menu-pulsante" aria-controls="menu-pagine" onClick={cambiaMenu}
+          aria-label={menuNascosto ? 'mostra il menu delle pagine' : 'nascondi o mostra il menu delle pagine'}
+          title={menuNascosto ? 'Mostra il menu' : 'Nascondi il menu'}>
           <IconaMenu aperto={menuAperto} />
           <span>{corrente.nome}</span>
         </button>
@@ -189,7 +216,7 @@ export default function DashboardShell() {
         </div>
       </header>
 
-      <div className="cr-telaio">
+      <div className={`cr-telaio${menuNascosto ? ' senza-menu' : ''}`}>
         {menuAperto && <div className="cr-velo" onClick={() => setMenuAperto(false)} aria-hidden="true" />}
         <nav id="menu-pagine" className={`cr-menu${menuAperto ? ' aperto' : ''}`} aria-label={`pagine di ${area.nome}`}>
           <div className="cr-menu-titolo">
