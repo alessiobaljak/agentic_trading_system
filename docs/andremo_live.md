@@ -517,3 +517,6 @@ con dati finti.
 **Dashboard, terza versione (10 novembre)**: si chiama «Plancia»; in alto solo le aree (Crypto, Azioni), a sinistra il menu delle
 pagine dell'area (sul telefono un pulsante che apre il menu); colonne giorno per giorno verdi in guadagno e arancioni in perdita; la
 guida delle azioni dice come dichiarare le loro pagine. tsc e build riusciti, provata con dati finti.
+**Giro delle 20:17.** Raccolta e controlli in avanti delle 20:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte. Dashboard: menu di sinistra richiudibile anche sul computer; la sessione delle azioni ha
+riempito la sua area (pubblicazione su Firebase sotto `/azioni`, pagina «Operazioni»).
