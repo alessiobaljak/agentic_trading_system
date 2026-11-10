@@ -133,9 +133,27 @@ def costruisci_pannello(simboli=None, log=print) -> dict:
         # i giorni a volume zero sono di una moneta tolta dal listino (prezzo fermo): nessun funding (controllo_zombi.py)
         F[:, j] = np.where(np.isfinite(P["close"][:, j]) & (np.nan_to_num(P["quote_volume"][:, j]) == 0), 0.0, F[:, j])
         log(f"[pannello] {s}")
+    tolti = giorni_parziali_in_coda(P["close"])
+    if tolti:
+        # l'archivio pubblico di Binance pubblica un giorno nuovo moneta per moneta, nel corso di ore: un ultimo giorno con i prezzi
+        # di una parte delle monete non e' un giorno vero (10 novembre 2026: l'8 novembre c'era per 232 monete su circa 715, e le
+        # decisioni del lunedi' 9 si facevano su quel giorno a meta'); si usa dal giro in cui e' completo
+        log(f"[pannello] tolti {tolti} giorni in coda pubblicati solo in parte")
+        P = {k: v[:-tolti] for k, v in P.items()}
+        F = F[:-tolti]
     pan = {"t0": t0, "simboli": nomi, **P, "funding": F}
     pd.to_pickle(pan, PANNELLO)
     return pan
+
+
+def giorni_parziali_in_coda(close: np.ndarray, quota: float = 0.9) -> int:
+    """Quanti ultimi giorni del pannello hanno i prezzi di meno del ``quota`` delle monete del giorno prima (pubblicati solo in
+    parte dall'archivio di Binance); il primo giorno non si tocca."""
+    n = np.isfinite(close).sum(axis=1)
+    tolti, T = 0, len(n)
+    while T - tolti >= 2 and n[T - tolti - 1] < quota * n[T - tolti - 2]:
+        tolti += 1
+    return tolti
 
 
 def pannello() -> dict:
