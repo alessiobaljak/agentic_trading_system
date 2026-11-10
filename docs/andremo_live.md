@@ -506,3 +506,5 @@ schermata «Strategie» (stato del bot e allarmi del demo in cima; ordini veri, 
 paper: G1, G1 neutra, G11, F5, eventi; le curve a 100 dalla stessa data; G1 demo contro G1 paper giorno per giorno), schede
 «Dettagli» e «Archivio» (il vecchio sistema, niente cancellato). Verificata in locale con dati finti (modulo `dashboard/prova/`, attivo
 solo con `DASHBOARD_PROVA=1`, mai su Vercel): tsc e build riusciti. Mancano nel bot la data e il capitale di partenza di ogni ramo.
+**Giro delle 16:17.** Raccolta e controlli in avanti delle 16:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte.
