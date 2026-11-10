@@ -62,3 +62,5 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   ha cancellato stop e obiettivi ma **non ha chiuso 8 posizioni su 10**. Le ho chiuse a mano, titolo per titolo, alle 15:56:20-29 di
   New York, prima della fine della seduta: nessuna posizione è passata la notte. Il programma ora cancella prima gli ordini, aspetta,
   chiude titolo per titolo e controlla che non resti niente; se resta qualcosa, si ferma con un errore.
+* **10 novembre 2026:** la routine è arrivata di nuovo con 10 minuti di ritardo (partita alle 9:38, arrivata alle 9:48): ordini alle
+  **9:49**. Da qui la routine d'apertura parte alle 9:33.
