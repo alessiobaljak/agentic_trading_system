@@ -508,3 +508,9 @@ paper: G1, G1 neutra, G11, F5, eventi; le curve a 100 dalla stessa data; G1 demo
 solo con `DASHBOARD_PROVA=1`, mai su Vercel): tsc e build riusciti. Mancano nel bot la data e il capitale di partenza di ogni ramo.
 **Giro delle 16:17.** Raccolta e controlli in avanti delle 16:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Dashboard, seconda versione (10 novembre)**, dalle osservazioni del proprietario: in «Strategie» il confronto demo-paper diventa una
+scheda corta (due numeri, la differenza, due piccole curve); «Dettagli» rifatta come «Strategie» (si sceglie la strategia; riquadri,
+barre del giorno per giorno, pesi a barre, ultimo ribilancio, conto demo, il confronto giorno per giorno chiuso); «Archivio» com'era.
+Scheda «Azioni» vuota per la sessione delle azioni, con i mattoni comuni (`dashboard/app/components/comuni/`) e la guida
+`dashboard/GUIDA_SCHEDA_AZIONI.md` (scelta del proprietario: «la prima, prepara la scheda e la guida»). tsc e build riusciti, provata
+con dati finti.

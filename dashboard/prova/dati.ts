@@ -4,7 +4,8 @@
  * generati a caso con un seme fisso: servono a guardare la pagina, non dicono niente delle strategie. In produzione questo file
  * non entra nel bundle: lo importano solo i moduli finti di firebase in questa cartella.
  *
- * Scenari dall'indirizzo: `?prova=calmo` (nessun allarme), `?prova=fermo` (demo fermo), altrimenti un allarme acceso sul demo.
+ * Scenari dall'indirizzo: `?prova=calmo` (nessun allarme), `?prova=fermo` (demo fermo), `?prova=azioni_vuote` (niente in /azioni),
+ * altrimenti un allarme acceso sul demo. Il ramo /azioni è l'esempio della forma proposta in dashboard/GUIDA_SCHEDA_AZIONI.md.
  */
 
 type Albero = Record<string, unknown>;
@@ -21,6 +22,49 @@ function generatore(seme: number) {
 }
 
 const giorno = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+
+/** L'esempio di /azioni (la forma della guida): due strategie, giorni di borsa (niente sabato e domenica), pesi con «_» al posto
+ *  del punto nei simboli. */
+function creaAzioni(adesso: number, oggi0: number, normale: () => number): Albero {
+  const borsa: string[] = [];
+  for (let n = 20; n >= 0; n--) {
+    const ms = oggi0 - n * 86400_000;
+    const gs = new Date(ms).getUTCDay();
+    if (gs !== 0 && gs !== 6) borsa.push(giorno(ms));
+  }
+  const serie = (capitale: number, media: number, vol: number) => {
+    const out: Record<string, number> = {};
+    let v = capitale;
+    for (const g of borsa) {
+      v *= 1 + media + vol * normale();
+      out[g] = Math.round(v * 100) / 100;
+    }
+    return out;
+  };
+  const a = serie(10_000, 0.0012, 0.008);
+  const b = serie(10_000, 0.0006, 0.005);
+  const ultimo = (x: Record<string, number>) => x[borsa[borsa.length - 1]];
+  return {
+    battito: adesso - 300,
+    soglia_battito_s: 6 * 3600,
+    strategie: {
+      momentum_ch: {
+        nome: 'Momentum svizzero', descrizione: 'Compra le azioni dello SMI salite di più negli ultimi 6 mesi; cambia ogni mese.',
+        tipo: 'demo', ordine: 1, valuta: 'CHF', capitale: 10_000, valore: ultimo(a), rendimento: ultimo(a) / 10_000 - 1,
+        comprate: 5, vendute: 0, aggiornato: adesso - 600, giorni: a,
+        pesi: { NESN_SW: 0.21, NOVN_SW: 0.2, ROG_SW: 0.2, UBSG_SW: 0.19, ABBN_SW: 0.18 },
+        ultimo_ribilancio: { ora: adesso - 6 * 86400, entrate: 2, uscite: 2 },
+      },
+      qualita_ch: {
+        nome: 'Qualità svizzera', descrizione: 'Le 8 azioni dello SMI con i conti più solidi, pesi uguali.',
+        tipo: 'paper', ordine: 2, valuta: 'CHF', capitale: 10_000, valore: ultimo(b), rendimento: ultimo(b) / 10_000 - 1,
+        comprate: 8, vendute: 0, aggiornato: adesso - 600, giorni: b, pesi: null,
+        ultimo_ribilancio: { ora: adesso - 9 * 86400, entrate: 1, uscite: 1 },
+      },
+    },
+    allarmi: null,
+  };
+}
 
 export function creaDati(scenario: string | null): Albero {
   const rnd = generatore(20261110);
@@ -77,8 +121,22 @@ export function creaDati(scenario: string | null): Albero {
   const ribGiornalieri = (giorni: number[], ora = 305) =>
     Object.fromEntries(giorni.map((n) => [g(n), {
       lunedi: g(n), universo: 100, long: 24, short: 24, entrate: Math.floor(rnd() * 6), uscite: Math.floor(rnd() * 6),
-      eseguito: (oggi0 - n * 86400_000) / 1000 + ora, costo: 2.1,
+      eseguito: (oggi0 - n * 86400_000) / 1000 + ora, costo: 2.1, ordini_limite: 31,
+      limite: { variazioni: 31, eseguite: 22, costo: 2.6, costo_a_mercato: 4.9, controllato: (oggi0 - n * 86400_000) / 1000 + 3905 },
     }]));
+  const MONETE = ['BTC', 'ETH', 'SOL', 'XRP', 'DOGE', 'ADA', 'LINK', 'AVAX', 'DOT', 'LTC', 'BCH', 'TRX', 'NEAR', 'APT', 'ARB', 'OP',
+    'SUI', 'SEI', 'TIA', 'INJ', 'FIL', 'ATOM', 'ETC', 'UNI', 'AAVE', 'MKR', 'LDO', 'RUNE', 'WLD', 'PEPE', 'WIF', 'BONK', 'JUP', 'PYTH',
+    'ENA', 'ONDO', 'TAO', 'FET', 'RNDR', 'GALA', 'SAND', 'MANA', 'AXS', 'IMX', 'STX', 'ORDI', 'KAS', 'HBAR'];
+  const pesi = (long: number, short: number) => {
+    const out: Record<string, number> = {};
+    const scelte = [...MONETE].sort(() => rnd() - 0.5);
+    scelte.slice(0, long).forEach((m, i) => { out[`${m}USDT`] = Math.round((0.075 - i * 0.0022 + 0.004 * rnd()) * 1e6) / 1e6; });
+    scelte.slice(long, long + short).forEach((m, i) => { out[`${m}USDT`] = -Math.round((0.07 - i * 0.002 + 0.004 * rnd()) * 1e6) / 1e6; });
+    return out;
+  };
+  const diarioPaper = (s: Record<string, number>) =>
+    Object.fromEntries(Object.entries(s).map(([k, v], i) => [k, { equity: v, long: 24, short: 24, costi_totali: 2.2 * (i + 1),
+      funding_totale: -0.7 * (i + 1) }]));
 
   const eDemo = ultimo(demo);
   const allarmi = scenario === 'calmo' || scenario === 'fermo' ? null : {
@@ -94,21 +152,29 @@ export function creaDati(scenario: string | null): Albero {
     paper_g1: {
       stato: statoPaper(g1, 24, 24, g(0), 22 * 60),
       giorni: g1,
+      diario: diarioPaper(g1),
+      posizioni: pesi(24, 24),
       ribilanciamenti: ribGiornalieri([3, 2, 1, 0]),
     },
     paper_g11: {
       stato: statoPaper(g11, 25, 24, g(0), 22 * 60),
       giorni: g11,
+      diario: diarioPaper(g11),
+      posizioni: pesi(25, 24),
       ribilanciamenti: ribGiornalieri([2, 1, 0]),
     },
     paper_g1n: {
       stato: statoPaper(g1n, 23, 26, g(0), 22 * 60),
       giorni: g1n,
+      diario: diarioPaper(g1n),
+      posizioni: pesi(23, 26),
       ribilanciamenti: ribGiornalieri([2, 1, 0]),
     },
     paper_f5: {
       stato: statoPaper(f5, 22, 21, g(1), 23 * 60),
       giorni: f5,
+      diario: diarioPaper(f5),
+      posizioni: pesi(22, 21),
       ribilanciamenti: ribGiornalieri([8, 1]),
     },
     paper_eventi: {
@@ -118,6 +184,16 @@ export function creaDati(scenario: string | null): Albero {
       },
       giorni: eventi,
       ribilanciamenti: null,
+      aperte: {
+        a1: { tipo: 'N3', simbolo: 'NUOVAUSDT', entrata: oggi0 - 5 * 86400_000, rendimento_ora: 0.034, uscita_giorno: g(-25) },
+        a2: { tipo: 'N3', simbolo: 'ALTRAUSDT', entrata: oggi0 - 3 * 86400_000, rendimento_ora: -0.052, uscita_giorno: g(-27) },
+        a3: { tipo: 'N3', simbolo: 'TERZAUSDT', entrata: oggi0 - 86400_000, rendimento_ora: 0.008, uscita_giorno: g(-29) },
+        a4: { tipo: 'E4', simbolo: 'QUARTAUSDT', entrata: oggi0 - 2 * 86400_000, rendimento_ora: 0.011, uscita_giorno: g(-5) },
+      },
+      chiuse: Object.fromEntries([0.12, -0.3, 0.05, 0.021, -0.04, 0.09].map((r, i) => [`c${i}`, {
+        tipo: i % 2 ? 'E4' : 'N3', simbolo: `MONETA${i}USDT`, uscita: oggi0 - (i + 1) * 86400_000, rendimento: r, dollari: 500 * r,
+        motivo: r < -0.25 ? 'uscita a +30%' : i % 2 ? '7 giorni' : '30 giorni',
+      }])),
     },
     demo_binance: {
       stato: fermo
@@ -129,23 +205,31 @@ export function creaDati(scenario: string | null): Albero {
           conto_ridotto: 1_000, capitale_in_attesa: null,
         },
       giorni: demo,
+      diario: Object.fromEntries(Object.entries(demo).map(([k, v]) => [k, { equity: v, long: 24, short: 23,
+        entrate: { funding_incassato: 0.42, commissioni_pagate: 0.61, righe: 80, altre_valute: 0 } }])),
       fasi: {
         'conto_intero_fino_al_x': { giorni: fase5000 },
         [`capitale_280_fino_al_${g(2)}`]: { giorni: fase280 },
       },
       ribilanciamenti: {
-        [g(1)]: { ordini: 46, equity: 1_004, entrate: 4, uscite: 3, rifiutati: [], piazzati: (oggi0 - 86400_000) / 1000 + 312 },
-        [g(0)]: { ordini: 44, equity: eDemo, entrate: 3, uscite: 2, rifiutati: ['龙虾USDT'], piazzati: oggi0 / 1000 + 309 },
+        [g(1)]: { ordini: 46, equity: 1_004, entrate: 4, uscite: 3, rifiutati: [], piazzati: (oggi0 - 86400_000) / 1000 + 312,
+          limite: { ordini: 46, eseguiti_a_limite: 30, a_mercato: 16 } },
+        [g(0)]: { ordini: 44, equity: eDemo, entrate: 3, uscite: 2, piazzati: oggi0 / 1000 + 309,
+          rifiutati: [{ simbolo: '龙虾USDT', errore: 'simbolo non trovato' }], monete_mancanti_sul_demo: ['龙虾USDT'],
+          sotto_il_minimo: { variazioni: 2, valore_in_frazione_del_conto: 0.008 }, solo_eventi: false,
+          limite: { ordini: 44, eseguiti_a_limite: 31, a_mercato: 13 } },
       },
       allarme: null,
       allarmi,
       fermo,
-      confronto: { ora: adesso - 18 * 60, differenze: [{ simbolo: 'BTCUSDT', scarto: 0.031 }], scarto_totale: 0.04, monete: 47 },
+      confronto: { ora: adesso - 18 * 60, differenze: [{ simbolo: 'BTCUSDT', voluto: 0.071, vero: 0.102, scarto: 0.031 }],
+        scarto_totale: 0.04, monete: 47 },
       errore: null,
     },
     conto_vero: {
       stato: { stato: "spento: manca l'interruttore ops/conto_vero_acceso", acceso: false, aggiornato: adesso - 30 },
     },
+    azioni: scenario === 'azioni_vuote' ? null : creaAzioni(adesso, oggi0, normale),
     commands: {},
   };
 }

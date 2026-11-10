@@ -97,7 +97,7 @@ non si mischi con tutto quello che stiamo facendo lato crypto, solo la dashboard
 reale conto live demo di una piattaforma (che mi dovrai consigliare tu per il mercato svizzero)». Le azioni stanno **tutte in
 `stock/`** (leggere `stock/README.md`) e le segue la sessione **«trading stock»**. Questa sessione (le crypto) non tocca `stock/`; la
 sessione delle azioni non tocca le cartelle delle crypto. **In comune c'è solo la dashboard**: le azioni vi entrano con una scheda e
-componenti loro (`dashboard/app/components/stock/`). Le regole qui sotto valgono anche per le azioni (niente soldi veri: solo il conto
+componenti loro (`dashboard/app/components/stock/`); dal 10 novembre la scheda «Azioni» c'è, vuota, e come riempirla (dati su Firebase sotto `/azioni`, mattoni comuni della dashboard) è scritto in `dashboard/GUIDA_SCHEDA_AZIONI.md`. Le regole qui sotto valgono anche per le azioni (niente soldi veri: solo il conto
 demo; mai le credenziali del conto demo in un commit).
 
 ## Regole che non si negoziano

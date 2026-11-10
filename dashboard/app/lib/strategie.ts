@@ -19,8 +19,11 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { limitToLast, onValue, orderByKey, query, ref } from 'firebase/database';
+import { giornoUtc, metricheDaSerie, rendimentiGiornalieri, type Giorni, type Metriche } from './conti';
 import { getRtdb } from './firebase';
-import { durata } from './viz';
+
+// i conti e i formati comuni (anche alle azioni) stanno in lib/conti.ts; qui si riesportano per le schede crypto
+export * from './conti';
 
 export type Tipo = 'paper' | 'demo' | 'vero';
 
@@ -28,6 +31,8 @@ export interface DefStrategia {
   /** il ramo su Firebase, anche chiave stabile della strategia (il colore la segue, non l'ordine) */
   ramo: string;
   nome: string;
+  /** il nome corto dei pulsanti (scheda Dettagli) */
+  breve: string;
   descrizione: string;
   tipo: Tipo;
   /** il campo dello stato con il capitale di partenza */
@@ -42,37 +47,37 @@ export interface DefStrategia {
 /** L'ordine dei colori è quello della tavolozza validata (slot 1-6), assegnato alla strategia una volta per tutte. */
 export const STRATEGIE: DefStrategia[] = [
   {
-    ramo: 'demo_binance', nome: 'G1 sul conto demo', tipo: 'demo', base: 'capitale_iniziale', colore: 'var(--serie-2)',
+    ramo: 'demo_binance', breve: 'G1 demo', nome: 'G1 sul conto demo', tipo: 'demo', base: 'capitale_iniziale', colore: 'var(--serie-2)',
     primoGiornoDallaBase: true, unita: 'USDT',
     descrizione: 'G1 con ordini veri sul conto demo di Binance: soldi finti, ordini e prezzi veri.',
   },
   {
-    ramo: 'conto_vero', nome: 'G1 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
+    ramo: 'conto_vero', breve: 'Conto vero', nome: 'G1 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
     primoGiornoDallaBase: true, unita: 'USDT',
     descrizione: 'G1 con soldi veri sul conto di Binance.',
   },
   {
-    ramo: 'paper_g1', nome: 'G1', tipo: 'paper', base: 'capitale', colore: 'var(--serie-1)', primoGiornoDallaBase: false,
+    ramo: 'paper_g1', breve: 'G1', nome: 'G1', tipo: 'paper', base: 'capitale', colore: 'var(--serie-1)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Il funding fra monete: compra quelle che pagano meno funding e vende quelle che pagano di più. Decide ogni giorno.',
   },
   {
-    ramo: 'paper_g1n', nome: 'G1 neutra', tipo: 'paper', base: 'capitale', colore: 'var(--serie-4)', primoGiornoDallaBase: false,
+    ramo: 'paper_g1n', breve: 'G1 neutra', nome: 'G1 neutra', tipo: 'paper', base: 'capitale', colore: 'var(--serie-4)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, con i due lati pesati perché i movimenti del mercato intero contino poco.',
   },
   {
-    ramo: 'paper_g11', nome: 'G11', tipo: 'paper', base: 'capitale', colore: 'var(--serie-3)', primoGiornoDallaBase: false,
+    ramo: 'paper_g11', breve: 'G11', nome: 'G11', tipo: 'paper', base: 'capitale', colore: 'var(--serie-3)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, guardando anche il funding dell\'ultimo giorno.',
   },
   {
-    ramo: 'paper_f5', nome: 'F5', tipo: 'paper', base: 'capitale', colore: 'var(--serie-5)', primoGiornoDallaBase: false,
+    ramo: 'paper_f5', breve: 'F5', nome: 'F5', tipo: 'paper', base: 'capitale', colore: 'var(--serie-5)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Come G1, ma cambia le posizioni solo il lunedì.',
   },
   {
-    ramo: 'paper_eventi', nome: 'Eventi', tipo: 'paper', base: 'capitale', colore: 'var(--serie-6)', primoGiornoDallaBase: false,
+    ramo: 'paper_eventi', breve: 'Eventi', nome: 'Eventi', tipo: 'paper', base: 'capitale', colore: 'var(--serie-6)', primoGiornoDallaBase: false,
     unita: '$',
     descrizione: 'Monete appena quotate e funding al tetto: vende la moneta e compra Bitcoin per lo stesso valore, per qualche giorno.',
   },
@@ -144,8 +149,6 @@ export interface Errore {
   ora?: number;
   dove?: string;
 }
-
-export type Giorni = Record<string, number>;
 
 export interface DatiRamo {
   stato: StatoRamo | null;
@@ -225,88 +228,7 @@ export function useStrategie(): DatiStrategie {
   return { rami, demo, contoVero, battito, battitoArrivato };
 }
 
-/** Un orologio che batte ogni `ogniMs`: per «3 min fa» che si aggiorna da solo. */
-export function useAdesso(ogniMs = 15000): number {
-  const [adesso, setAdesso] = useState(() => Date.now() / 1000);
-  useEffect(() => {
-    const t = setInterval(() => setAdesso(Date.now() / 1000), ogniMs);
-    return () => clearInterval(t);
-  }, [ogniMs]);
-  return adesso;
-}
-
-/* ------------------------------------------------------------------ date (i giorni del bot sono giorni UTC) */
-export const giornoUtc = (s: number): string => new Date(s * 1000).toISOString().slice(0, 10);
-
-export function spostaGiorno(g: string, n: number): string {
-  const t = Date.parse(`${g}T00:00:00Z`) + n * 86400_000;
-  return new Date(t).toISOString().slice(0, 10);
-}
-
-const MESI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
-/** '2026-11-10' → '10 nov' */
-export function giornoBreve(g: string | null | undefined): string {
-  if (!g || g.length < 10) return g ?? '—';
-  return `${Number(g.slice(8, 10))} ${MESI[Number(g.slice(5, 7)) - 1] ?? ''}`;
-}
-
-/** Ora italiana di un istante in secondi: '10 nov, 01:05'. */
-export function oraItaliana(s: number | null | undefined): string {
-  if (!s) return '—';
-  const d = new Date(s * 1000);
-  const parti = new Intl.DateTimeFormat('it-IT', {
-    timeZone: 'Europe/Rome', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-  }).formatToParts(d);
-  const p = (t: string) => parti.find((x) => x.type === t)?.value ?? '';
-  return `${p('day')} ${p('month').replace('.', '')}, ${p('hour')}:${p('minute')}`;
-}
-
-/** «3 min fa», «2 h 05 fa». */
-export const durataFa = (adesso: number, t: number): string => `${durata(Math.max(0, adesso - t))} fa`;
-
-/* ------------------------------------------------------------------ numeri */
-/** Il segno solo se il numero arrotondato non è zero: «−0,00» non si scrive. */
-function segnoDi(x: number, cifre: number): string {
-  if (Math.abs(x) < 0.5 * 10 ** -cifre) return '';
-  return x > 0 ? '+' : '−';
-}
-
-export function pct(x: number | null | undefined, cifre = 2): string {
-  if (x == null || !Number.isFinite(x)) return '—';
-  const v = Math.abs(100 * x).toFixed(cifre).replace('.', ',');
-  return `${segnoDi(100 * x, cifre)}${v}%`;
-}
-
-/** Punti percentuali (differenza fra due rendimenti): '+0,12 punti'. */
-export function punti(x: number | null | undefined, cifre = 2): string {
-  if (x == null || !Number.isFinite(x)) return '—';
-  const v = Math.abs(100 * x).toFixed(cifre).replace('.', ',');
-  return `${segnoDi(100 * x, cifre)}${v}`;
-}
-
-export function soldi(x: number | null | undefined, unita: '$' | 'USDT', cifre = 2): string {
-  if (x == null || !Number.isFinite(x)) return '—';
-  const n = x.toLocaleString('it-IT', { minimumFractionDigits: cifre, maximumFractionDigits: cifre });
-  return unita === '$' ? `$${n}` : `${n} USDT`;
-}
-
 /* ------------------------------------------------------------------ i conti di una strategia */
-export interface Metriche {
-  valore: number | null;
-  base: number | null;
-  dallInizio: number | null;
-  /** oggi rispetto alla chiusura di ieri (il giorno UTC in corso) */
-  oggi: number | null;
-  sette: number | null;
-  /** '7 giorni' o, se la serie è più corta, 'da N giorni' */
-  setteEtichetta: string;
-  giorniSu: number;
-  giorniTot: number;
-  primoGiorno: string | null;
-  giornoDiOggi: string | null;
-  aggiornato: number | null;
-}
-
 /** I valori di fine giorno con, per il giorno in corso, il valore di adesso dallo stato. */
 export function serieConOggi(d: DatiRamo): Giorni {
   const g: Giorni = {};
@@ -316,81 +238,15 @@ export function serieConOggi(d: DatiRamo): Giorni {
 }
 
 export function metriche(def: DefStrategia, d: DatiRamo, adesso: number): Metriche {
-  const serie = serieConOggi(d);
-  const date = Object.keys(serie).sort();
-  const base = Number(d.stato?.[def.base] ?? 0) > 0 ? Number(d.stato?.[def.base]) : null;
-  const valore = d.stato?.equity != null ? Number(d.stato.equity) : date.length ? serie[date[date.length - 1]] : null;
-  const giornoDiOggi = d.stato?.aggiornato ? giornoUtc(d.stato.aggiornato) : date.length ? date[date.length - 1] : giornoUtc(adesso);
-  const dallInizio = valore != null && base ? valore / base - 1 : null;
-
-  const prima = date.filter((x) => x < giornoDiOggi);
-  const ieri = prima.length ? serie[prima[prima.length - 1]] : null;
-  const oggi = valore == null ? null : ieri ? valore / ieri - 1 : def.primoGiornoDallaBase && base ? valore / base - 1 : null;
-
-  const limite = spostaGiorno(giornoDiOggi, -7);
-  const finoAlLimite = date.filter((x) => x <= limite);
-  let sette: number | null = null;
-  let setteEtichetta = '7 giorni';
-  if (valore != null && finoAlLimite.length) {
-    sette = valore / serie[finoAlLimite[finoAlLimite.length - 1]] - 1;
-  } else if (valore != null && date.length) {
-    const n = Math.round((Date.parse(`${giornoDiOggi}T00:00:00Z`) - Date.parse(`${date[0]}T00:00:00Z`)) / 86400_000) + 1;
-    if (def.primoGiornoDallaBase && base) {
-      sette = valore / base - 1;
-      setteEtichetta = `da ${n} ${n === 1 ? 'giorno' : 'giorni'}`;
-    } else if (date.length > 1) {
-      sette = valore / serie[date[0]] - 1;
-      setteEtichetta = `da ${n - 1} ${n - 1 === 1 ? 'giorno' : 'giorni'}`;
-    }
-  }
-
-  // i giorni chiusi (non quello in corso), giorno su giorno; il primo solo se parte dal capitale di partenza
-  let giorniSu = 0;
-  let giorniTot = 0;
-  prima.forEach((k, i) => {
-    const prec = i > 0 ? serie[prima[i - 1]] : def.primoGiornoDallaBase ? base : null;
-    if (prec == null || !(prec > 0)) return;
-    giorniTot += 1;
-    if (serie[k] > prec) giorniSu += 1;
+  const base = Number(d.stato?.[def.base] ?? 0);
+  return metricheDaSerie({
+    serie: serieConOggi(d),
+    valore: d.stato?.equity != null ? Number(d.stato.equity) : null,
+    base: base > 0 ? base : null,
+    aggiornato: d.stato?.aggiornato ?? null,
+    primoGiornoDallaBase: def.primoGiornoDallaBase,
+    adesso,
   });
-
-  return {
-    valore, base, dallInizio, oggi, sette, setteEtichetta, giorniSu, giorniTot,
-    primoGiorno: date[0] ?? null, giornoDiOggi, aggiornato: d.stato?.aggiornato ?? null,
-  };
-}
-
-/* ------------------------------------------------------------------ le curve a 100 alla stessa data */
-export interface CurveA100 {
-  /** il giorno in cui tutte le curve accese valgono 100 (la chiusura di quel giorno) */
-  base: string | null;
-  righe: Record<string, number | string>[];
-  /** le strategie accese senza dati */
-  senzaDati: string[];
-}
-
-export function curveA100(serie: Record<string, Giorni>, accese: string[]): CurveA100 {
-  const conDati = accese.filter((r) => Object.keys(serie[r] ?? {}).length > 0);
-  const senzaDati = accese.filter((r) => !conDati.includes(r));
-  if (!conDati.length) return { base: null, righe: [], senzaDati };
-  const primi = conDati.map((r) => Object.keys(serie[r]).sort()[0]);
-  const base = primi.sort().pop()!;
-  const valoreBase: Record<string, number> = {};
-  for (const r of conDati) {
-    const finoAllaBase = Object.keys(serie[r]).filter((k) => k <= base).sort();
-    valoreBase[r] = serie[r][finoAllaBase[finoAllaBase.length - 1]];
-  }
-  const tutte = new Set<string>();
-  for (const r of conDati) for (const k of Object.keys(serie[r])) if (k >= base) tutte.add(k);
-  const righe = Array.from(tutte).sort().map((g) => {
-    const riga: Record<string, number | string> = { giorno: g };
-    for (const r of conDati) {
-      const v = serie[r][g];
-      if (v != null && valoreBase[r] > 0) riga[r] = (100 * v) / valoreBase[r];
-    }
-    return riga;
-  });
-  return { base, righe, senzaDati };
 }
 
 /* ------------------------------------------------------------------ G1 sul demo contro G1 nel paper, giorno per giorno */
@@ -411,22 +267,6 @@ export function nomeFase(nome: string): string {
   if (m) return `fase a ${Number(m[1]).toLocaleString('it-IT')}${m[2] ? `,${m[2]}` : ''}`;
   if (nome.includes('conto_intero')) return 'fase a circa 5.000';
   return nome.replace(/_fino_al_.*/, '').replace(/_/g, ' ');
-}
-
-/** I rendimenti di ogni giorno di una serie, solo fra due giorni consecutivi (più il primo dalla base, se data). */
-export function rendimentiGiornalieri(g: Giorni, basePrimoGiorno: number | null): Record<string, number> {
-  const date = Object.keys(g).sort();
-  const out: Record<string, number> = {};
-  date.forEach((k, i) => {
-    const v = Number(g[k]);
-    if (i === 0) {
-      if (basePrimoGiorno && basePrimoGiorno > 0) out[k] = v / basePrimoGiorno - 1;
-      return;
-    }
-    const p = date[i - 1];
-    if (p === spostaGiorno(k, -1) && Number(g[p]) > 0) out[k] = v / Number(g[p]) - 1;
-  });
-  return out;
 }
 
 export function confrontoDemoPaper(

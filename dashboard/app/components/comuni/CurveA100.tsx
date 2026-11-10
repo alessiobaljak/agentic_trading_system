@@ -2,20 +2,35 @@
 
 import { useMemo, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { curveA100, defDi, giornoBreve, STRATEGIE, type Giorni } from '../../lib/strategie';
+import { curveA100, giornoBreve, type Giorni } from '../../lib/conti';
 import { Suggerimento } from './Suggerimento';
 
 /**
- * Le curve di tutte le strategie messe a 100 alla stessa data (il valore di fine giorno, /{ramo}/giorni, più quello di adesso per
- * oggi). La data è il primo giorno in cui ci sono tutte quelle accese: si tocca un nome per toglierlo o rimetterlo, e la partenza
+ * Le curve di tutte le strategie messe a 100 alla stessa data (mattone comune a crypto e azioni: ogni serie è `{giorno: valore di
+ * fine giorno}`, con quello di adesso per oggi; la scheda crypto passa /{ramo}/giorni, quella delle azioni /azioni/strategie/*). La data è il primo giorno in cui ci sono tutte quelle accese: si tocca un nome per toglierlo o rimetterlo, e la partenza
  * si sposta. Una sola scala (nessun doppio asse); colori per strategia, sempre gli stessi (skill dataviz: slot 1-6 validati);
  * leggenda sempre presente con il valore di adesso, che fa anche da tabella; il riquadro al tocco mostra tutte le curve del giorno.
  */
 const num = (v: number, cifre = 1) => v.toLocaleString('it-IT', { minimumFractionDigits: cifre, maximumFractionDigits: cifre });
 
-export default function CurveA100({ serie, oggi }: { serie: Record<string, Giorni>; oggi: string | null }) {
+/** Una curva: la chiave stabile (il colore la segue, non l'ordine), il nome, il colore validato e i valori di fine giorno. */
+export interface SerieCurva {
+  chiave: string;
+  nome: string;
+  colore: string;
+  giorni: Giorni;
+}
+
+export default function CurveA100({ curve, oggi, titolo = 'Le strategie a confronto, tutte a 100' }: {
+  curve: SerieCurva[];
+  /** il giorno in corso, nella convenzione delle chiavi delle serie */
+  oggi: string | null;
+  titolo?: string;
+}) {
   const [spente, setSpente] = useState<string[]>([]);
-  const disponibili = STRATEGIE.filter((s) => s.tipo !== 'vero' && Object.keys(serie[s.ramo] ?? {}).length > 0);
+  const serie = useMemo(() => Object.fromEntries(curve.map((c) => [c.chiave, c.giorni])) as Record<string, Giorni>, [curve]);
+  const defDi = (k: string) => curve.find((c) => c.chiave === k) ?? { chiave: k, nome: k, colore: 'var(--text-faint)', giorni: {} };
+  const disponibili = curve.filter((s) => Object.keys(s.giorni ?? {}).length > 0).map((s) => ({ ...s, ramo: s.chiave }));
   const chiaveAccese = disponibili.filter((s) => !spente.includes(s.ramo)).map((s) => s.ramo).join(',');
   const accese = useMemo(() => (chiaveAccese ? chiaveAccese.split(',') : []), [chiaveAccese]);
   const { base, righe } = useMemo(() => curveA100(serie, accese), [serie, accese]);
@@ -57,7 +72,7 @@ export default function CurveA100({ serie, oggi }: { serie: Record<string, Giorn
   if (disponibili.length === 0) {
     return (
       <section className="cr-pannello">
-        <h2>Le strategie a confronto, tutte a 100</h2>
+        <h2>{titolo}</h2>
         <p className="cr-sotto">Ancora nessun giorno registrato su Firebase.</p>
       </section>
     );
@@ -65,7 +80,7 @@ export default function CurveA100({ serie, oggi }: { serie: Record<string, Giorn
 
   return (
     <section className="cr-pannello">
-      <h2>Le strategie a confronto, tutte a 100</h2>
+      <h2>{titolo}</h2>
       <p className="cr-sotto">
         {base ? (
           <>
@@ -132,7 +147,7 @@ export default function CurveA100({ serie, oggi }: { serie: Record<string, Giorn
                     .map((p) => {
                       const d = defDi(String(p.dataKey));
                       const v = Number(p.value);
-                      return { chiave: d.ramo, nome: d.nome, colore: d.colore, forma: 'linea' as const,
+                      return { chiave: d.chiave, nome: d.nome, colore: d.colore, forma: 'linea' as const,
                         valore: `${num(v)} (${v >= 100 ? '+' : '−'}${num(Math.abs(v - 100))}%)` };
                     });
                   return <Suggerimento titolo={`${giornoBreve(g)}${g === oggi ? ' · oggi, in corso' : ''}`} voci={voci} />;

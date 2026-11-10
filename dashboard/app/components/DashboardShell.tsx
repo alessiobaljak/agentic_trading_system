@@ -5,29 +5,34 @@ import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getAuthInstance } from '../lib/firebase';
 
 import Archivio, { SEZIONI_ARCHIVIO, type SezioneArchivio } from './Archivio';
-import StrategieNuove from './StrategieNuove';
+import Dettagli, { SCELTE } from './dettagli/Dettagli';
+import Azioni from './stock/Azioni';
 import Strategie from './strategie/Strategie';
 
 /**
  * Il guscio della dashboard, rifatto il 10 nov 2026 (il proprietario: «mi serve una Dashboard pulita semplice e veloce da leggere
  * che mi permetta in tempo reale di vedere come stanno andando le diverse strategie paper demo etc»; la legge soprattutto dal
- * telefono). Tre schede in alto, al posto della barra laterale:
+ * telefono). Quattro schede in alto, al posto della barra laterale:
  *
  *   strategie — la prima schermata: bot vivo e allarmi, una scheda per strategia (demo e conto vero separati dal paper), le curve
  *               a 100 e G1 demo contro G1 paper giorno per giorno (components/strategie/);
- *   dettagli  — le strategie nel dettaglio: regole, posizioni e pesi, diario giorno per giorno, il passato, il paper del programma
- *               6 (StrategieNuove, la prima scheda di prima);
+ *   dettagli  — una strategia alla volta, scelta con i pulsanti in cima: riquadri, giorno per giorno, pesi, ultimo ribilancio, il
+ *               conto demo, le operazioni degli eventi, G1 demo contro paper giorno per giorno (components/dettagli/; seconda
+ *               tornata del 10 nov 2026: «troppo testo», ora numeri e grafici);
+ *   azioni    — le azioni, della sessione «trading stock» (components/stock/; la guida è dashboard/GUIDA_SCHEDA_AZIONI.md);
  *   archivio  — il vecchio sistema, fermo dal 13 ottobre 2026: report, controllo, operatività, gate, learning, impostazioni.
  *
- * L'indirizzo ricorda la scheda (#strategie, #dettagli, #archivio-gate…); i vecchi segnalibri (#controllo, #gate, #report…)
+ * L'indirizzo ricorda la scheda (#strategie, #dettagli-paper_g1, #archivio-gate…); i vecchi segnalibri (#controllo, #gate, #report…)
  * aprono la loro sezione nell'archivio. Il tema chiaro resta quello di sempre (21 set 2026); lo scuro si accende dal pulsante in
  * alto e si ricorda su questo dispositivo.
  */
-type Scheda = 'strategie' | 'dettagli' | 'archivio';
+type Scheda = 'strategie' | 'dettagli' | 'azioni' | 'archivio';
 
+/** Le schede in alto. «Azioni» è della sessione «trading stock» (components/stock/, dashboard/GUIDA_SCHEDA_AZIONI.md). */
 const SCHEDE: { id: Scheda; nome: string }[] = [
   { id: 'strategie', nome: 'Strategie' },
   { id: 'dettagli', nome: 'Dettagli' },
+  { id: 'azioni', nome: 'Azioni' },
   { id: 'archivio', nome: 'Archivio' },
 ];
 
@@ -45,9 +50,14 @@ const VECCHI_HASH: Record<string, SezioneArchivio> = {
   apprendimento: 'learning',
 };
 
-function leggiHash(h: string): { scheda: Scheda; sezione: SezioneArchivio | null } {
+function leggiHash(h: string): { scheda: Scheda; sezione: SezioneArchivio | null; ramo?: string } {
   if (h === 'dettagli') return { scheda: 'dettagli', sezione: null };
+  if (h.startsWith('dettagli-')) {
+    const r = h.slice('dettagli-'.length);
+    if (SCELTE.some((x) => x.ramo === r)) return { scheda: 'dettagli', sezione: null, ramo: r };
+  }
   if (h === 'archivio') return { scheda: 'archivio', sezione: null };
+  if (h === 'azioni') return { scheda: 'azioni', sezione: null };
   if (h.startsWith('archivio-')) {
     const s = h.slice('archivio-'.length);
     if (SEZIONI_ARCHIVIO.some((x) => x.id === s)) return { scheda: 'archivio', sezione: s as SezioneArchivio };
@@ -78,6 +88,7 @@ function useTema(): [string, () => void] {
 export default function DashboardShell() {
   const [scheda, setScheda] = useState<Scheda>('strategie');
   const [sezione, setSezione] = useState<SezioneArchivio>('controllo');
+  const [ramo, setRamo] = useState<string>('demo_binance');
   const [user, setUser] = useState<User | null>(null);
   const [tema, cambiaTema] = useTema();
 
@@ -87,6 +98,8 @@ export default function DashboardShell() {
       const letto = leggiHash(h);
       setScheda(letto.scheda);
       if (letto.sezione) setSezione(letto.sezione);
+      if (letto.ramo) setRamo(letto.ramo);
+      if (letto.ramo || letto.scheda !== 'strategie') window.scrollTo({ top: 0 });
       // un vecchio segnalibro si riscrive con il nome nuovo
       if (h in VECCHI_HASH) window.history.replaceState(null, '', `#archivio-${VECCHI_HASH[h]}`);
     };
@@ -106,8 +119,12 @@ export default function DashboardShell() {
 
   const vai = (s: Scheda) => {
     setScheda(s);
-    window.location.hash = s === 'archivio' ? `archivio-${sezione}` : s;
+    window.location.hash = s === 'archivio' ? `archivio-${sezione}` : s === 'dettagli' ? `dettagli-${ramo}` : s;
     window.scrollTo({ top: 0 });
+  };
+  const vaiRamo = (r: string) => {
+    setRamo(r);
+    window.history.replaceState(null, '', `#dettagli-${r}`);
   };
   const vaiSezione = (s: SezioneArchivio) => {
     setSezione(s);
@@ -153,7 +170,8 @@ export default function DashboardShell() {
 
       <main className="cr-corpo" key={scheda}>
         {scheda === 'strategie' && <Strategie />}
-        {scheda === 'dettagli' && <StrategieNuove />}
+        {scheda === 'dettagli' && <Dettagli ramo={ramo} onRamo={vaiRamo} />}
+        {scheda === 'azioni' && <Azioni />}
         {scheda === 'archivio' && <Archivio sezione={sezione} onSezione={vaiSezione} />}
       </main>
     </div>

@@ -1,15 +1,17 @@
 'use client';
 
+import { useMemo } from 'react';
 import { STRATEGIE, giornoUtc, useAdesso, useSerie, useStrategie } from '../../lib/strategie';
-import CurveA100 from './CurveA100';
-import DemoControPaper from './DemoControPaper';
+import CurveA100, { type SerieCurva } from '../comuni/CurveA100';
+import ConfrontoBreve from './ConfrontoBreve';
 import RigaStato from './RigaStato';
 import SchedaStrategia from './SchedaStrategia';
 
 /**
  * La prima schermata (10 nov 2026): in cima il bot vivo e gli allarmi del demo; poi le strategie con ordini veri (G1 sul conto demo,
  * con i pulsanti «chiudi tutto» e «riparti», e il conto vero, spento) ben separate da quelle simulate nel paper (G1, G1 neutra, G11,
- * F5, Eventi); poi le curve messe a 100 alla stessa data e G1 demo contro G1 paper giorno per giorno. Tutto in diretta da Firebase.
+ * F5, Eventi); poi le curve messe a 100 alla stessa data e G1 demo contro G1 paper dalla partenza del demo, in breve (il giorno per
+ * giorno sta in Dettagli). Tutto in diretta da Firebase.
  */
 export default function Strategie() {
   const dati = useStrategie();
@@ -18,6 +20,10 @@ export default function Strategie() {
   const veri = STRATEGIE.filter((s) => s.tipo !== 'paper');
   const paper = STRATEGIE.filter((s) => s.tipo === 'paper');
   const aggiornatoPaper = dati.rami.paper_g1?.stato?.aggiornato;
+  const curve = useMemo<SerieCurva[]>(
+    () => STRATEGIE.filter((s) => s.tipo !== 'vero').map((s) => ({ chiave: s.ramo, nome: s.nome, colore: s.colore, giorni: serie[s.ramo] ?? {} })),
+    [serie],
+  );
 
   return (
     <>
@@ -38,13 +44,12 @@ export default function Strategie() {
         ))}
       </div>
 
-      <CurveA100 serie={serie} oggi={aggiornatoPaper ? giornoUtc(aggiornatoPaper) : giornoUtc(adesso)} />
+      <CurveA100 curve={curve} oggi={aggiornatoPaper ? giornoUtc(aggiornatoPaper) : giornoUtc(adesso)} />
 
-      <DemoControPaper paper={dati.rami.paper_g1} demo={dati.rami.demo_binance} fasi={dati.demo.fasi} />
+      <ConfrontoBreve paper={dati.rami.paper_g1} demo={dati.rami.demo_binance} />
 
       <p className="cr-piede-pagina">
-        «Oggi» è il giorno UTC in corso contro la chiusura di ieri; «giorni in guadagno» conta i giorni chiusi sopra il giorno prima.
-        Posizioni, diario giorno per giorno e risultati sul passato: scheda Dettagli.
+        «Oggi»: il giorno UTC in corso contro la chiusura di ieri · «Giorni in guadagno»: i giorni chiusi sopra il giorno prima
       </p>
     </>
   );
