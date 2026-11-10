@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { onValue, ref } from 'firebase/database';
 import { Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { getRtdb } from '../lib/firebase';
+import { defDi, metriche } from '../lib/strategie';
 
 /**
  * Giorno per giorno, paper e demo insieme (il proprietario, 3 nov 2026: «un grafico che ti fa vedere paper e demo come stanno andando
@@ -101,12 +102,16 @@ export default function DiarioPaper() {
     const d = dati[s.ramo] ?? {};
     const base = Number(d.stato?.[s.base] ?? 0);
     const gg = base > 0 ? giorniDi(d, base) : [];
-    const vinti = gg.filter((x) => x.profitto > 0).length;
+    // i giorni in guadagno contati come nella prima schermata (lib/strategie.ts, `metriche`): solo i giorni chiusi, giorno su giorno
+    const m = metriche(defDi(s.ramo), { stato: d.stato ?? null, giorni: d.giorni ?? null, ultimoRibilancio: null, arrivato: true },
+      Date.now() / 1000);
+    const vinti = m.giorniSu;
+    const contati = m.giorniTot;
     const chiuse = Object.values(d.chiuse ?? {});
     const ultimo = gg[gg.length - 1];
     const aperte = s.ramo === 'paper_eventi' ? `${(d.stato?.aperte_n3 ?? 0) + (d.stato?.aperte_e4 ?? 0)} operazioni`
       : d.stato?.long != null ? `${d.stato.long} comprate, ${d.stato.short ?? 0} vendute` : '—';
-    return { s, base, gg, vinti, ultimo, aperte,
+    return { s, base, gg, vinti, contati, ultimo, aperte,
       migliore: gg.length ? gg.reduce((a, b) => (b.pct > a.pct ? b : a)) : null,
       peggiore: gg.length ? gg.reduce((a, b) => (b.pct < a.pct ? b : a)) : null,
       chiuse: chiuse.length, chiuseVinte: chiuse.filter((c) => (c.rendimento ?? 0) > 0).length,
@@ -124,9 +129,10 @@ export default function DiarioPaper() {
       ) : (
         <>
           <p className="muted" style={{ margin: '2px 0 6px', fontSize: 12 }}>
-            Il paper parte da 10.000 dollari virtuali, il demo dal saldo del conto demo (circa 5.000): per confrontarli contano le
-            percentuali. «Giorni in guadagno» sono i giorni chiusi sopra il giorno prima: queste strategie tengono decine di posizioni
-            insieme, quindi la vincita si conta a giorni; per gli eventi si contano anche le operazioni chiuse.
+            Il paper parte da 10.000 dollari virtuali, il demo dal capitale della sua fase in corso (in USDT): per confrontarli contano le
+            percentuali. «Giorni in guadagno» sono i giorni chiusi (non quello in corso) sopra il giorno prima: queste strategie
+            tengono decine di posizioni insieme, quindi la vincita si conta a giorni; per gli eventi si contano anche le operazioni
+            chiuse.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table className="tabella-report">
@@ -144,7 +150,7 @@ export default function DiarioPaper() {
                     <td>{soldi(r.ultimo?.valore)}</td>
                     <td>{pct(r.ultimo?.dallInizio)}</td>
                     <td>{usd(r.ultimo ? r.ultimo.valore - r.base : null)}</td>
-                    <td>{r.vinti} su {r.gg.length} ({pct(r.gg.length ? r.vinti / r.gg.length : null, 0).replace('+', '')})</td>
+                    <td>{r.vinti} su {r.contati} ({pct(r.contati ? r.vinti / r.contati : null, 0).replace('+', '')})</td>
                     <td>{r.migliore ? `${pct(r.migliore.pct)} (${r.migliore.giorno.slice(5)})` : '—'}</td>
                     <td>{r.peggiore ? `${pct(r.peggiore.pct)} (${r.peggiore.giorno.slice(5)})` : '—'}</td>
                     <td>{r.aperte}</td>

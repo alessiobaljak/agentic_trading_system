@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { onValue, ref, serverTimestamp, set } from 'firebase/database';
+import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
-import AndamentoPaper from './AndamentoPaper';
 import DiarioPaper from './DiarioPaper';
 
 /**
@@ -25,12 +24,7 @@ type StatoEventi = {
 type StatoDemo = {
   stato?: string; equity?: number; capitale_iniziale?: number; rendimento?: number; long?: number; short?: number;
   limite_eseguiti?: number; limite_totali?: number; ordini_in_attesa?: number; aggiornato?: number;
-  massimo?: number; dal_massimo?: number; stop_a?: number;
 };
-type Fermo = { motivo?: string; ora?: number; chiuse?: number };
-// l'allarme del demo (bot/portafoglio/demo_binance.py): conto non vuoto da fermo, ordini che non si annullano
-type Allarme = { ora?: number; testo?: string; posizioni?: string[]; monete?: string[] };
-type Confronto = { ora?: number; differenze?: { simbolo: string; scarto: number }[]; scarto_totale?: number; monete?: number };
 type Aperta = { tipo?: string; simbolo?: string; entrata?: number; rendimento_ora?: number; uscita_giorno?: string };
 type Chiusa = { tipo?: string; simbolo?: string; uscita?: number; rendimento?: number; motivo?: string };
 
@@ -112,93 +106,6 @@ function Portafoglio({ ramo, titolo, inizio }: { ramo: string; titolo: string; i
   );
 }
 
-/**
- * Le protezioni del conto demo (il proprietario, 1° novembre 2026): il pulsante che chiude tutte le posizioni (con la conferma: un
- * click per sbaglio non deve chiudere tutto) e quello che fa ripartire il demo dopo uno stop. Scrivono in /commands; il bot li legge
- * a ogni giro e li rimette a false (bot/portafoglio/demo_binance.py).
- */
-function ProtezioniDemo({ d }: { d: StatoDemo | null }) {
-  const [fermo, setFermo] = useState<Fermo | null>(null);
-  const [cf, setCf] = useState<Confronto | null>(null);
-  const [allarme, setAllarme] = useState<Allarme | null>(null);
-  // gli allarmi per tipo (decisione di G1, limiti di Binance, capitale, filtri, riparti, ordini bloccati...): uno per chiave
-  const [allarmi, setAllarmi] = useState<Record<string, Allarme> | null>(null);
-  const [conferma, setConferma] = useState(false);
-  const [invio, setInvio] = useState<string | null>(null);
-  const [errore, setErrore] = useState<string | null>(null);
-  useEffect(() => {
-    const db = getRtdb();
-    const a = onValue(ref(db, 'demo_binance/fermo'), (s) => setFermo(s.val()));
-    const b = onValue(ref(db, 'demo_binance/confronto'), (s) => setCf(s.val()));
-    const c = onValue(ref(db, 'demo_binance/allarme'), (s) => setAllarme(s.val()));
-    const e = onValue(ref(db, 'demo_binance/allarmi'), (s) => setAllarmi(s.val()));
-    return () => { a(); b(); c(); e(); };
-  }, []);
-  const manda = async (percorso: string, nomeComando: string) => {
-    setErrore(null);
-    try {
-      await set(ref(getRtdb(), percorso), true);
-      await set(ref(getRtdb(), `${percorso}_meta`), { da: 'dashboard', ora: serverTimestamp() }).catch(() => undefined);
-      setInvio(`${nomeComando}: inviato, il bot lo esegue entro un minuto`);
-      setConferma(false);
-    } catch (e) {
-      setErrore(e instanceof Error ? e.message : 'Invio non riuscito.');
-    }
-  };
-  const dif = cf?.differenze ?? [];
-  return (
-    <div style={{ margin: '0 0 10px', fontSize: 12.5 }}>
-      {allarme?.testo && (
-        <div className="warn">
-          <b>Allarme del demo</b> ({quando(allarme.ora)}): {allarme.testo}
-          {allarme.posizioni?.length ? ` (${allarme.posizioni.map(nome).join(', ')})` : ''}
-        </div>
-      )}
-      {Object.entries(allarmi ?? {}).filter(([, x]) => x?.testo).map(([tipo, x]) => (
-        <div className="warn" key={tipo}>
-          <b>Allarme del demo</b> ({quando(x.ora)}): {x.testo}
-          {x.monete?.length ? ` (${x.monete.map(nome).join(', ')})` : ''}
-        </div>
-      ))}
-      {d?.stop_a != null && (
-        <p style={{ margin: '2px 0' }}>
-          Stop sul conto: si chiude tutto sotto <b>${d.stop_a.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</b>
-          {' '}(il più alto fra −35% dal massimo e il 65% del capitale di partenza; ora {pct(d.dal_massimo)} dal massimo).
-        </p>
-      )}
-      {cf && (
-        <p style={{ margin: '2px 0' }}>
-          Posizioni vere contro volute ({quando(cf.ora)}):{' '}
-          {dif.length === 0 ? 'nessuna moneta con uno scarto oltre il 2% del conto'
-            : <b>{dif.map((x) => `${nome(x.simbolo)} ${pct(x.scarto, 1)}`).join(', ')}</b>}.
-        </p>
-      )}
-      {fermo ? (
-        <p style={{ margin: '4px 0' }}>
-          <b>Demo fermo</b> dal {quando(fermo.ora)}: {fermo.motivo} ({fermo.chiuse ?? 0} posizioni chiuse).{' '}
-          <button className="btn" onClick={() => manda('commands/demo_binance_riparti', 'Riparti')}>Riparti</button>
-        </p>
-      ) : (
-        <p style={{ margin: '4px 0' }}>
-          {!conferma ? (
-            <button className="btn btn-danger" onClick={() => setConferma(true)}>Chiudi tutto sul demo</button>
-          ) : (
-            <>
-              Confermi? Chiude <b>tutte le posizioni</b> del conto demo a mercato e lo ferma finché non premi «Riparti».{' '}
-              <button className="btn" onClick={() => setConferma(false)}>Annulla</button>{' '}
-              <button className="btn btn-danger" onClick={() => manda('commands/demo_binance_chiudi_tutto', 'Chiudi tutto')}>
-                Sì, chiudi tutto
-              </button>
-            </>
-          )}
-        </p>
-      )}
-      {invio && <p className="muted" style={{ margin: '2px 0' }}>{invio}</p>}
-      {errore && <div className="warn">{errore}</div>}
-    </div>
-  );
-}
-
 function ContoDemo() {
   const [d, setD] = useState<StatoDemo | null>(null);
   useEffect(() => onValue(ref(getRtdb(), 'demo_binance/stato'), (s) => setD(s.val())), []);
@@ -217,7 +124,9 @@ function ContoDemo() {
           )}
         </p>
       )}
-      <ProtezioniDemo d={d} />
+      <p className="muted" style={{ margin: '2px 0 8px', fontSize: 12.5 }}>
+        Allarmi, stop sul conto e i pulsanti «Chiudi tutto» e «Riparti» stanno nella scheda del demo, nella prima schermata (Strategie).
+      </p>
     </>
   );
 }
@@ -247,8 +156,6 @@ export default function PaperBot() {
         Le strategie nuove eseguite dal bot sulla macchina con i prezzi del momento, ognuna con 10.000 dollari virtuali.
       </p>
 
-      <AndamentoPaper />
-      <div style={{ marginTop: 10 }} />
       <DiarioPaper />
       <div style={{ marginTop: 10 }} />
 
@@ -259,6 +166,9 @@ export default function PaperBot() {
         inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
       <div style={{ marginTop: 10 }} />
       <Portafoglio ramo="paper_g11" titolo="Come G1 con il funding dell'ultimo giorno accanto (G11, a confronto con G1)"
+        inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
+      <div style={{ marginTop: 10 }} />
+      <Portafoglio ramo="paper_g1n" titolo="G1 neutra al mercato: i due lati pesati con i beta (G1N, a confronto con G1)"
         inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
 
       <div style={{ marginTop: 10 }} />

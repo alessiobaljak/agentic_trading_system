@@ -9,29 +9,21 @@ The Python bot writes state to Firebase; this dashboard is read-mostly, with two
 - **Risk settings** → `user_risk_settings/current` (Firestore)
 - **Kill switch** → `/commands/kill_switch` (Realtime Database)
 
-## What it shows (dal 25 set 2026)
+## Cosa mostra (dal 10 nov 2026)
 
-Cinque tab, mobile first. La prima è **Controllo**: il documento che il bot scrive ogni ora
-(`/controllo` su RTDB, `dashboard/controllo` su Firestore, schema in
-`docs/controllo_schema.md`) con due semafori — «è rotto?» (sistema) e «perde?» (paper) —,
-«aggiornato N minuti fa» (rosso oltre 2 ore), le quattro tessere che contano, una frase di
-lettura, le anomalie con codice e soglia, e sotto, chiusi, paper / learning / gate / «cosa
-manca». Poi:
+Tre schede in alto, pensate prima per il telefono (`app/components/DashboardShell.tsx`):
 
-- **Operatività** — posizioni aperte (con rischio %), trade chiusi (con referto e keep usato),
-  grafico esterno chiuso di default.
-- **Gate** — imbuto, maturazione, il cervello dell'ultimo giro (intorno, varianti, keep, scala,
-  candidate) dal documento `/gate` che la discovery scrive a ogni giro, supervisore, e la
-  tabella delle **strategie operate per coppia** (PF promesso contro vissuto).
-- **Learning** — «cambia le decisioni ORA» contro «solo misurato», più «cosa è cambiato nelle
-  ultime 24 ore»; pesi strategia × regime (peso < 0,5 = panchina).
-- **Impostazioni** — rischio (con il rischio effettivo di oggi), kill switch, riconciliatore
-  (solo fuori dal paper).
+- **Strategie** (la prima): il bot è vivo (`/bot_status/heartbeat`) e gli allarmi del demo ben visibili
+  (`/demo_binance/allarme`, `/demo_binance/allarmi/<tipo>`, `/demo_binance/fermo`); una scheda per strategia, con quelle a
+  ordini veri (G1 sul conto demo, con «Chiudi tutto» e «Riparti»; il conto vero, spento) separate da quelle del paper (G1,
+  G1 neutra, G11, F5, Eventi): valore, dall'inizio, oggi, ultimi 7 giorni, giorni in guadagno, posizioni, ultimo ribilancio;
+  le curve di tutte messe a 100 alla stessa data e G1 demo contro G1 paper giorno per giorno. Dati e conti in
+  `app/lib/strategie.ts`, componenti in `app/components/strategie/`.
+- **Dettagli**: regole, posizioni e pesi, diario giorno per giorno, il passato, il paper del programma 6.
+- **Archivio**: il vecchio sistema, fermo dal 13 ottobre 2026 (report, controllo, operatività, gate, learning,
+  impostazioni con il kill switch del vecchio bot). I vecchi segnalibri (`#gate`, `#controllo`…) aprono la loro sezione.
 
-Tolto quel che faceva solo rumore o leggeva dati che nessuno scrive più: sentiment, punteggio
-asset, insight settimanali, heatmap (assorbita dai pesi), trailing adattivo (superato dal keep
-per coppia), costi per coin, snapshot giornaliero, dettaglio posizione in modale, evoluzione del
-learning, strategie aggregate per strategia (ora per coppia).
+Il tema resta chiaro; lo scuro si accende dal pulsante in alto e si ricorda sul dispositivo.
 
 ## Hard limits
 
@@ -72,6 +64,17 @@ npm run dev                        # http://localhost:3000
 ```
 
 Scripts: `dev`, `build`, `start`, `lint`.
+
+**Prova senza Firebase** (solo in locale, mai su Vercel): con `DASHBOARD_PROVA=1` `next.config.mjs` sostituisce i moduli di
+firebase con quelli finti di `prova/` (dati inventati, nessuna rete, utente finto). Servono anche quattro variabili qualsiasi
+perché la pagina si accenda:
+
+```bash
+DASHBOARD_PROVA=1 NEXT_PUBLIC_FIREBASE_API_KEY=prova NEXT_PUBLIC_FIREBASE_PROJECT_ID=prova \
+  NEXT_PUBLIC_FIREBASE_APP_ID=prova NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://prova.invalid npx next dev -p 3999
+```
+
+Scenari: `/?prova=calmo` (nessun allarme), `/?prova=fermo` (demo fermo). Senza la variabile la configurazione è quella di sempre.
 
 ## Deploy to Vercel
 

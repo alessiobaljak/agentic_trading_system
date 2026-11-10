@@ -501,3 +501,8 @@ controllare che sia completo.
 misurare fino al ribilancio di stanotte.
 **Giro delle 12:17.** Raccolta e controlli in avanti delle 12:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte. In corso: la dashboard nuova chiesta dal proprietario («pulita semplice e veloce da leggere»).
+**Dashboard nuova (10 novembre)**, richiesta del proprietario («pulita semplice e veloce da leggere [...] in tempo reale»): prima
+schermata «Strategie» (stato del bot e allarmi del demo in cima; ordini veri, cioè G1 sul demo con i pulsanti e il conto vero spento;
+paper: G1, G1 neutra, G11, F5, eventi; le curve a 100 dalla stessa data; G1 demo contro G1 paper giorno per giorno), schede
+«Dettagli» e «Archivio» (il vecchio sistema, niente cancellato). Verificata in locale con dati finti (modulo `dashboard/prova/`, attivo
+solo con `DASHBOARD_PROVA=1`, mai su Vercel): tsc e build riusciti. Mancano nel bot la data e il capitale di partenza di ogni ramo.

@@ -49,10 +49,10 @@ export default function Page() {
 
       <footer
         className="muted"
-        style={{ fontSize: 11, margin: '4px auto 24px', textAlign: 'center', maxWidth: 1600 }}
+        style={{ fontSize: 11, margin: '4px auto 24px', textAlign: 'center', maxWidth: 1280, padding: '0 16px' }}
       >
-        Paper trading (DRY_RUN). Tetti di sicurezza applicati lato client (leva ≤ 5x, rischio ≤ 3%)
-        e di nuovo dal bot.
+        Nessun soldo vero: il bot lavora con DRY_RUN acceso, il paper con dollari virtuali e il demo di Binance con soldi finti.
+        Il conto vero è spento e parte solo su tua richiesta esplicita.
       </footer>
     </>
   );
