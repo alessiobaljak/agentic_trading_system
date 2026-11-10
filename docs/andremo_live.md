@@ -499,3 +499,5 @@ oggi**: l'archivio pubblico pubblica un giorno nuovo moneta per moneta, nel cors
 controllare che sia completo.
 **Giro delle 08:17.** Raccolta e controlli in avanti delle 08:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Giro delle 12:17.** Raccolta e controlli in avanti delle 12:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte. In corso: la dashboard nuova chiesta dal proprietario («pulita semplice e veloce da leggere»).
