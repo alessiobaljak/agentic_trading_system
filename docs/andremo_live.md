@@ -487,3 +487,5 @@ niente di nuovo. **G1 sul demo a 1.000, secondo ribilancio**: 8 ordini e 46 vari
 il 24%, come la prova 148 prevedeva (23%); lo scarto dalle posizioni volute sale al 13,9% del conto. Demo +0,40% dall'8 novembre,
 paper di G1 −0,97% negli stessi giorni (`ops/results/0730-*`, `0731-*`). **Capito oggi**: la prova sul passato con i minimi veri
 prevede bene quanta parte del giro il conto piccolo riesce a eseguire.
+**Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare dopo il ribilancio di mezzanotte.
