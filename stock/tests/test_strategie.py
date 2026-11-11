@@ -314,3 +314,20 @@ def test_inversione_testa_fuori_orario_non_vale():
     from stock.strategie import inversione as inv
     o, h, l, c, k = _inversione_giorno()
     assert inv.cerca(o, h, l, c, k + 10, [(99.98, 100.05)], inv.PRINCIPALE) is None       # testa alle 10:15
+
+
+def test_affollate_soglia_larga_ritardo_e_controllo_dei_dati():
+    from datetime import date, timedelta
+    from stock.strategie import affollate as af
+    valori = {f"T{i:02d}": float(i) for i in range(10)}          # T09 il più affollato
+    assert af.soglia_larga(valori, set(), piu_alti=True) == {"T09", "T08"}           # entra il 20% più alto
+    assert af.soglia_larga(valori, {"T07", "T05"}, piu_alti=True) == {"T09", "T08", "T07"}   # T07 resta (40%), T05 esce
+    assert af.soglia_larga(valori, set(), piu_alti=False) == {"T00", "T01"}
+    cal = [date(2020, 1, 1) + timedelta(days=i) for i in range(40)]
+    fin = [cal[0], cal[15]]
+    assert af.data_utilizzabile(cal[24], fin, cal) == 0            # la data 15 si usa solo 10 giorni dopo
+    assert af.data_utilizzabile(cal[25], fin, cal) == 1
+    gpr = {cal[0]: {f"T{i:02d}": 1.0 for i in range(10)}, cal[15]: {"T00": 1.0}}
+    assert af.scegli_data(1, fin, gpr, list(valori)) == 0          # la data nuova ha 1 titolo su 10: incompleta
+    p = af.pesi_inversi({"A", "B"}, {"A": 0.01, "B": 0.03}, 0.5)
+    assert p["A"] == pytest.approx(0.375) and p["B"] == pytest.approx(0.125)
