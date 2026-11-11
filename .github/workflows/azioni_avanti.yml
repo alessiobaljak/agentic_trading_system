@@ -9,7 +9,9 @@ name: azioni-misura-in-avanti
 on:
   schedule:
     - cron: "5 13 * * 1-5"    # apertura: 8:05 o 9:05 di New York, il programma aspetta le 9:45
+    - cron: "25 13 * * 1-5"   # apertura, riserva (GitHub a volte non fa partire un orario: 11 nov 2026)
     - cron: "5 19 * * 1-5"    # chiusura: 14:05 o 15:05 di New York, il programma aspetta le 15:55
+    - cron: "25 19 * * 1-5"   # chiusura, riserva
   workflow_dispatch:
     inputs:
       comando:
@@ -39,7 +41,7 @@ jobs:
             echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
           elif [ ! -f stock/avanti/acceso_su_github ]; then
             echo "comando=" >> "$GITHUB_OUTPUT"; echo "spento: manca stock/avanti/acceso_su_github"
-          elif [ "${{ github.event.schedule }}" = "5 13 * * 1-5" ]; then
+          elif [ "${{ github.event.schedule }}" = "5 13 * * 1-5" ] || [ "${{ github.event.schedule }}" = "25 13 * * 1-5" ]; then
             echo "comando=apri" >> "$GITHUB_OUTPUT"
           else
             echo "comando=chiudi" >> "$GITHUB_OUTPUT"
