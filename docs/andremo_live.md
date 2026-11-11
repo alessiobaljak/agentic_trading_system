@@ -533,3 +533,8 @@ misurare dopo il ribilancio di mezzanotte.
 fino al 9 novembre): M-001c 332 su 400 (−0,39% a trade). Conto a tavolino (dati fino al 9 novembre, 20 monete nuove nell'universo, il
 giorno a metà non c'era): DXI per la prima volta sopra G1 sulle stesse monete (+4,45% contro +3,87% in 7 giorni); HLI −2,03% contro
 +2,89%. Sette giorni: informazione, non verdetto.
+**Le aree del repository (11 novembre)**, richiesta del proprietario («una cartella con crypto dove ci scrivi solo tu, una cartella
+con stock dove ci scrive l'altra sessione e altre cartelle che magari creo dopo tipo Forex»): la mappa `AREE.md` e il blocco nel
+codice `.claude/hooks/aree.py` (mappa `AREE.json`, test `tests/test_hook_aree.py`, 37 casi): ogni sessione scrive solo nella sua area e
+nei file in comune; le due sessioni sono registrate (crypto e «trading stock»). Il trasloco delle crypto in `crypto/` è rimandato per
+non fermare il bot sulla macchina. 2.730 test passano (la firma a parte).

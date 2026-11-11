@@ -100,6 +100,13 @@ sessione delle azioni non tocca le cartelle delle crypto. **In comune c'è solo 
 componenti loro (`dashboard/app/components/stock/`); dal 10 novembre la scheda «Azioni» c'è, vuota, e come riempirla (dati su Firebase sotto `/azioni`, mattoni comuni della dashboard) è scritto in `dashboard/GUIDA_SCHEDA_AZIONI.md`. Le regole qui sotto valgono anche per le azioni (niente soldi veri: solo il conto
 demo; mai le credenziali del conto demo in un commit).
 
+## Le aree del repository (dall'11 novembre 2026)
+
+Ogni area ha la sua sessione e scrive solo nelle sue cartelle e nei file in comune: crypto (questa sessione: tutto ciò che non è di
+un'altra area), azioni (`stock/`, sessione «trading stock»), in comune la dashboard, `.claude/`, `.github/` e i file di regole. La mappa
+è `AREE.md` (`AREE.json` per il blocco nel codice, `.claude/hooks/aree.py`); un'area nuova (per esempio Forex) si aggiunge come scritto
+lì.
+
 ## Regole che non si negoziano
 
 * **`DRY_RUN` resta `true`.** Il sistema non ha mai toccato denaro vero e non deve

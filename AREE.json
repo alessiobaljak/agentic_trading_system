@@ -1,0 +1,27 @@
+{
+  "nota": "La mappa delle aree del repo (AREE.md la spiega). Letta dal blocco .claude/hooks/aree.py: ogni sessione scrive solo nella sua area e nei file in comune. Una sessione si registra con: python3 .claude/hooks/aree.py registra <area>",
+  "aree": {
+    "crypto": {
+      "descrizione": "Il bot di trading crypto (Binance Futures), la ricerca, la macchina, la memoria degli agenti: tutto quello che non e' di un'altra area ne' in comune",
+      "cartelle": ["*"]
+    },
+    "stock": {
+      "descrizione": "Le azioni (sessione «trading stock»)",
+      "cartelle": ["stock/", "dashboard/app/components/stock/"]
+    }
+  },
+  "comuni": [
+    "dashboard/",
+    ".claude/",
+    ".github/",
+    "AREE.md",
+    "AREE.json",
+    "CLAUDE.md",
+    "README.md",
+    ".gitignore"
+  ],
+  "sessioni": {
+    "01Cp2h5z2VoCmU6nnMGp1yEh": "crypto",
+    "017Vw3XC56GxQ5Fj3d48vf6H": "stock"
+  }
+}

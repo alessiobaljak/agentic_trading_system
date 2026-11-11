@@ -121,6 +121,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/aree.py\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
