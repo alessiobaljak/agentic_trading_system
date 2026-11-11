@@ -46,6 +46,8 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
 * **11 novembre**: «non fermarti a cercarne di nuove [...] dovremmo continuare a provare cose nuove»: la ricerca nuova va avanti a
   ogni giro accanto al miglioramento di G1 (strategy-scout propone, strategy-researcher esegue, backtest-auditor giudica); le aree del
   repository separate (`AREE.md`).
+  Lo stesso giorno: lo Sharpe corretto si calcola contando le **famiglie di prove simili** (`research/programma6/asticella.py`), non le
+  prove una per una; la miscela F5 + M7 + K2 (prova 28, PASS tecnico al riesame) si misura a tavolino ogni settimana, senza ritocchi.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

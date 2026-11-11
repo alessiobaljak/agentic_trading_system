@@ -56,3 +56,6 @@ Salva il rapporto completo in `research/reports/AAAA-MM-GG-<id_prova>.md` con qu
 ### Varianti non previste che proporrei (non eseguite)
 ### Domande aperte
 Alla sessione principale restituisci al massimo 30 righe: esito secondo l'esame scritto prima (promettente o no), numero di varianti provate, variante migliore, anomalie, domande aperte (testuali, mai compresse), percorso del rapporto. Non scrivi mai «strategia valida»: la credibilità la valuta backtest-auditor, la promozione la decide Alessio.
+
+## Lo Sharpe corretto (11 novembre 2026)
+Lo Sharpe corretto si calcola contando le **famiglie di prove simili** (gruppi per correlazione, `research/programma6/asticella.py`, `gruppi` con `TAGLIO`), non le prove una per una: decisione del proprietario dell'11 novembre 2026 («famiglie»). Esempio di calcolo: `audits/repro/prova28_2026-11-11.py`, voce 11.

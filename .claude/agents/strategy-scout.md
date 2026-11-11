@@ -39,3 +39,6 @@ ragioni economiche (chi paga per una posizione affollata, flussi forzati, eventi
 ## Regole dei token
 Quelle di `CLAUDE.md`. Alla sessione principale al massimo 20 righe: le idee, il perché forte con la fonte, il file delle regole
 scritto, i dati che servono e se mancano.
+
+## Lo Sharpe corretto (11 novembre 2026)
+Lo Sharpe corretto si calcola contando le **famiglie di prove simili** (gruppi per correlazione, `research/programma6/asticella.py`, `gruppi` con `TAGLIO`), non le prove una per una: decisione del proprietario dell'11 novembre 2026 («famiglie»). Esempio di calcolo: `audits/repro/prova28_2026-11-11.py`, voce 11.

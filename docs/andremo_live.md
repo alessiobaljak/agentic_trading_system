@@ -574,3 +574,7 @@ t 4,73, 5 anni su 5, discesa −28,4%; nessuno sguardo nel futuro; con costi dop
 Due Alti sull'esame: lo Sharpe corretto è 0,75 contando le prove del registro (309) e 0,89 contando i gruppi di prove simili (80), con
 la soglia a 0,80; e le regole scritte prima la dichiarano una «costruzione» che non diventa candidata (scelte fatte dopo aver visto i
 risultati). Decisioni chieste al proprietario. A 280 USDT la miscela scende a 1,53; K2 e M7 non esistono nel bot.
+**Decisioni del proprietario (11 novembre, sera)**: «famiglie e misurala a tavolino». Lo Sharpe corretto conta le famiglie di prove
+simili (per la miscela 0,89, sopra la soglia di 0,80); la miscela F5 + M7 + K2 è già nel conto a tavolino del programma 6 (+2,70% nelle
+prime 2 settimane, `research/programma6/paper/PAPER.md`) e andrà nel riepilogo di ogni lunedì. Le prove 149-151 non cambiano verdetto
+con il conto per famiglie (t sotto 3 e rendimenti negativi o quasi nulli).

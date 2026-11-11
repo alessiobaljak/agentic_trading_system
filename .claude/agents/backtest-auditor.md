@@ -62,7 +62,7 @@ Ogni punto ha un esito: OK, PROBLEMA o NON VERIFICABILE, con evidenza `file:riga
 
 ### E. Eccesso di adattamento e conto delle prove
 - Numero di varianti provate per l'idea, contato dal registro (`python3 -m research.src.registro --riepilogo` e `research/trials/`). Registro mancante o incompleto: INCONCLUSIVE.
-- Correzione per il numero di prove: lo Sharpe corretto di `research/programma6/asticella.py` o un metodo equivalente dichiarato.
+- Correzione per il numero di prove: lo Sharpe corretto di `research/programma6/asticella.py`, contando le famiglie di prove simili (decisione del proprietario dell'11 novembre 2026), non le prove una per una.
 - Sensibilità: risultati con i parametri variati del ±10% e del ±20%. Un risultato che crolla con piccole variazioni è un picco isolato.
 - Rapporto fra parametri liberi e numero di operazioni; numero minimo di operazioni come dalle regole.
 - Validazione dentro il periodo (finestre che avanzano), se le regole la prevedono.

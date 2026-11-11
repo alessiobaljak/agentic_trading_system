@@ -125,3 +125,8 @@ con la mappa e il blocco». Cosa ne è venuto: l'agente `strategy-scout` (le ide
 ore con due binari (migliorare G1 e far avanzare la ricerca nuova), la prova 149 (la 1:1:1) partita; la mappa delle aree `AREE.md` con
 il blocco `.claude/hooks/aree.py`. La decisione del 5 novembre («un'idea nuova solo con un perché forte») resta per la qualità delle
 idee, non per la loro frequenza.
+Più tardi, sempre l'11 novembre, dopo il riesame della prova 28 (`audits/reports/2026-11-11-PROVA28_K2_F5M7K2.md`): «ok va bene così,
+famiglie e misurala a tavolino». Lo Sharpe corretto dell'esame si calcola contando le famiglie di prove simili (come per G1 e per
+l'asticella del 22-23 ottobre), non le prove una per una; la miscela F5 + M7 + K2 non entra nel bot: si misura a tavolino ogni
+settimana così com'è (`research/programma6/paper/PAPER.md`, riga «F5 + M7 + K2 a rischio uguale»), e se conferma si costruiscono nel
+bot i due pezzi che mancano (K2 e M7), con le revisioni.
