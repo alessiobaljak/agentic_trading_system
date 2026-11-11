@@ -1,0 +1,31 @@
+{
+ "taglio_M7_seme_1": {
+  "2024-08-05": {
+   "monete": 100,
+   "stesse_mancanti": true,
+   "differenza_massima": 0.0
+  },
+  "2026-10-12": {
+   "monete": 100,
+   "stesse_mancanti": true,
+   "differenza_massima": 0.0
+  }
+ },
+ "entrata_oraria": {
+  "posizioni_con_le_ore": 0.996,
+  "ore_01": {
+   "K2": 1.71,
+   "F5": 1.643,
+   "M7": 1.277,
+   "F5 + M7 + K2": 2.11,
+   "anni_positivi_miscela": "5/5"
+  },
+  "ore_04": {
+   "K2": 1.575,
+   "F5": 1.579,
+   "M7": 1.261,
+   "F5 + M7 + K2": 2.005,
+   "anni_positivi_miscela": "5/5"
+  }
+ }
+}

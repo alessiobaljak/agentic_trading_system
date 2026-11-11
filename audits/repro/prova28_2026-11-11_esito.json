@@ -1,0 +1,674 @@
+{
+ "pannello": {
+  "primo": "2020-01-01",
+  "ultimo": "2026-11-09"
+ },
+ "riproduzione": {
+  "K2": {
+   "sharpe_file_prova": 1.72,
+   "sharpe_file_parita": 1.745,
+   "sharpe_oggi_stesse_250": 1.779,
+   "settimane_diverse_da_parita": 3,
+   "settimane_diverse": [
+    "2026-09-28",
+    "2026-10-05",
+    "2026-10-12"
+   ]
+  },
+  "F5 + M7 + K2": {
+   "sharpe_file_prova": 2.107,
+   "sharpe_file_parita": 2.101,
+   "sharpe_oggi_stesse_250": 2.144,
+   "settimane_diverse_da_parita": 3,
+   "settimane_diverse": [
+    "2026-09-28",
+    "2026-10-05",
+    "2026-10-12"
+   ]
+  }
+ },
+ "misure": {
+  "fino_al_2026-10-12": {
+   "K2": {
+    "settimane": 250.0,
+    "annuo": 0.4441,
+    "volatilita": 0.2497,
+    "sharpe": 1.7787,
+    "discesa_max": -0.2267,
+    "asimmetria": -0.3535,
+    "curtosi": 3.1025,
+    "t": 3.9,
+    "sortino": 2.918,
+    "discesa_durata_settimane": 57,
+    "cumulato": 6.228,
+    "profit_factor_settimane": 1.851,
+    "settimane_positive": 0.588,
+    "per_anno": {
+     "2022": 0.3163,
+     "2023": 0.1054,
+     "2024": 0.3687,
+     "2025": 0.9333,
+     "2026": 0.5128
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.191,
+    "quota_3_mesi_migliori": 0.237,
+    "senza_5_settimane_migliori_sharpe": 1.525,
+    "media_settimana": 0.00854,
+    "spese_medie_settimana": 0.0013
+   },
+   "F5 + M7 + K2": {
+    "settimane": 250.0,
+    "annuo": 0.4342,
+    "volatilita": 0.2025,
+    "sharpe": 2.1435,
+    "discesa_max": -0.2843,
+    "asimmetria": -0.3376,
+    "curtosi": 3.7171,
+    "t": 4.7,
+    "sortino": 3.65,
+    "discesa_durata_settimane": 52,
+    "cumulato": 6.252,
+    "profit_factor_settimane": 2.141,
+    "settimane_positive": 0.644,
+    "per_anno": {
+     "2022": 0.4882,
+     "2023": 0.1592,
+     "2024": 0.4156,
+     "2025": 0.6335,
+     "2026": 0.4855
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.174,
+    "quota_3_mesi_migliori": 0.222,
+    "senza_5_settimane_migliori_sharpe": 1.894
+   },
+   "F5": {
+    "sharpe": 1.648
+   },
+   "M7": {
+    "sharpe": 1.272
+   }
+  },
+  "fino_al_2026-10-19_funding_vero": {
+   "K2": {
+    "settimane": 251.0,
+    "annuo": 0.4438,
+    "volatilita": 0.2492,
+    "sharpe": 1.7809,
+    "discesa_max": -0.2267,
+    "asimmetria": -0.3536,
+    "curtosi": 3.1146,
+    "t": 3.913,
+    "sortino": 2.921,
+    "discesa_durata_settimane": 57,
+    "cumulato": 6.277,
+    "profit_factor_settimane": 1.854,
+    "settimane_positive": 0.59,
+    "per_anno": {
+     "2022": 0.3163,
+     "2023": 0.1054,
+     "2024": 0.3687,
+     "2025": 0.9333,
+     "2026": 0.509
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.19,
+    "quota_3_mesi_migliori": 0.237,
+    "senza_5_settimane_migliori_sharpe": 1.528,
+    "media_settimana": 0.00853,
+    "spese_medie_settimana": 0.0013
+   },
+   "F5 + M7 + K2": {
+    "settimane": 251.0,
+    "annuo": 0.4348,
+    "volatilita": 0.2021,
+    "sharpe": 2.1511,
+    "discesa_max": -0.2843,
+    "asimmetria": -0.3397,
+    "curtosi": 3.7322,
+    "t": 4.726,
+    "sortino": 3.663,
+    "discesa_durata_settimane": 52,
+    "cumulato": 6.336,
+    "profit_factor_settimane": 2.147,
+    "settimane_positive": 0.645,
+    "per_anno": {
+     "2022": 0.4882,
+     "2023": 0.1592,
+     "2024": 0.4156,
+     "2025": 0.6335,
+     "2026": 0.4883
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.173,
+    "quota_3_mesi_migliori": 0.221,
+    "senza_5_settimane_migliori_sharpe": 1.902
+   },
+   "F5": {
+    "sharpe": 1.66
+   },
+   "M7": {
+    "sharpe": 1.275
+   }
+  },
+  "fino_al_2026-11-02_ultima_settimana_stimata": {
+   "K2": {
+    "settimane": 253.0,
+    "annuo": 0.442,
+    "volatilita": 0.2484,
+    "sharpe": 1.7797,
+    "discesa_max": -0.2267,
+    "asimmetria": -0.3518,
+    "curtosi": 3.1285,
+    "t": 3.926,
+    "sortino": 2.92,
+    "discesa_durata_settimane": 57,
+    "cumulato": 6.339,
+    "profit_factor_settimane": 1.854,
+    "settimane_positive": 0.589,
+    "per_anno": {
+     "2022": 0.3163,
+     "2023": 0.1054,
+     "2024": 0.3687,
+     "2025": 0.9333,
+     "2026": 0.4962
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.189,
+    "quota_3_mesi_migliori": 0.236,
+    "senza_5_settimane_migliori_sharpe": 1.529,
+    "media_settimana": 0.0085,
+    "spese_medie_settimana": 0.0013
+   },
+   "F5 + M7 + K2": {
+    "settimane": 253.0,
+    "annuo": 0.4367,
+    "volatilita": 0.2014,
+    "sharpe": 2.1684,
+    "discesa_max": -0.2843,
+    "asimmetria": -0.3444,
+    "curtosi": 3.7593,
+    "t": 4.783,
+    "sortino": 3.693,
+    "discesa_durata_settimane": 52,
+    "cumulato": 6.527,
+    "profit_factor_settimane": 2.162,
+    "settimane_positive": 0.648,
+    "per_anno": {
+     "2022": 0.4882,
+     "2023": 0.1592,
+     "2024": 0.4156,
+     "2025": 0.6335,
+     "2026": 0.4967
+    },
+    "anni_positivi": "5/5",
+    "quota_5_settimane_migliori": 0.171,
+    "quota_3_mesi_migliori": 0.219,
+    "senza_5_settimane_migliori_sharpe": 1.922
+   },
+   "F5": {
+    "sharpe": 1.677
+   },
+   "M7": {
+    "sharpe": 1.303
+   }
+  }
+ },
+ "pesi_medi_della_miscela": {
+  "F5": 0.353,
+  "M7": 0.292,
+  "K2": 0.355
+ },
+ "pesi_primo_trimestre_2022": {
+  "F5": 0.256,
+  "M7": 0.523,
+  "K2": 0.221
+ },
+ "correlazioni": {
+  "F5-K2": 0.458,
+  "F5-M7": 0.3,
+  "K2-M7": 0.153
+ },
+ "miscela_senza_gli_zeri_di_M7": {
+  "sharpe": 2.137,
+  "per_anno": {
+   "2022": 0.4676,
+   "2023": 0.1592,
+   "2024": 0.4156,
+   "2025": 0.6335,
+   "2026": 0.4883
+  },
+  "peso_M7_primo_trimestre_2022": 0.333
+ },
+ "miscela_a_terzi_fissi": {
+  "sharpe": 2.113,
+  "per_anno": {
+   "2022": 0.4812,
+   "2023": 0.1543,
+   "2024": 0.4122,
+   "2025": 0.6102,
+   "2026": 0.5306
+  }
+ },
+ "un_solo_conto": {
+  "sharpe": 2.224,
+  "annuo": 0.4497,
+  "spese_annue": 0.0438,
+  "giro_medio": 1.208,
+  "per_anno": {
+   "2022": 0.5037,
+   "2023": 0.1738,
+   "2024": 0.431,
+   "2025": 0.6507,
+   "2026": 0.4988
+  },
+  "spese_annue_somma_delle_tre": 0.058
+ },
+ "costi": {
+  "taker": 0.0005,
+  "scarto_altre": 0.0002,
+  "costo_per_giro_btc": 0.0006000000000000001,
+  "un_solo_conto_costi_doppi_sharpe": 2.008,
+  "un_solo_conto_scarto_altre_0,10%_sharpe": 1.984
+ },
+ "entrata_un_giorno_dopo": {
+  "K2": 1.483,
+  "F5 + M7 + K2": 1.894
+ },
+ "prova_del_taglio_differenza_massima_dei_pesi": {
+  "2022-03-07": {
+   "F5": 0.0,
+   "K2": 0.0
+  },
+  "2022-11-14": {
+   "F5": 0.0,
+   "K2": 0.0
+  },
+  "2023-06-05": {
+   "F5": 0.0,
+   "K2": 0.0
+  },
+  "2024-08-05": {
+   "F5": 0.0,
+   "K2": 0.0
+  },
+  "2025-04-07": {
+   "F5": 0.0,
+   "K2": 0.0
+  },
+  "2026-10-12": {
+   "F5": 0.0,
+   "K2": 0.0
+  }
+ },
+ "perdita_peggiore_un_solo_conto": {
+  "giorno_peggiore": [
+   [
+    -0.0493,
+    "2025-11-03"
+   ],
+   [
+    -0.0454,
+    "2022-10-31"
+   ],
+   [
+    -0.0447,
+    "2026-08-03"
+   ]
+  ],
+  "giorni_sotto_meno_5%": 0,
+  "settimana_peggiore_tutti_gli_estremi_insieme": [
+   [
+    -0.4872,
+    "2025-10-06"
+   ],
+   [
+    -0.3902,
+    "2022-05-09"
+   ],
+   [
+    -0.3884,
+    "2024-03-04"
+   ]
+  ],
+  "esposizione_lorda_media": 1.604,
+  "esposizione_lorda_massima": 1.853,
+  "peso_massimo_di_una_moneta": 0.2311
+ },
+ "perdita_peggiore_K2": {
+  "giorno_peggiore": [
+   [
+    -0.0737,
+    "2022-10-31"
+   ],
+   [
+    -0.0629,
+    "2023-11-06"
+   ],
+   [
+    -0.056,
+    "2026-08-17"
+   ]
+  ],
+  "giorni_sotto_meno_5%": 3,
+  "settimana_peggiore_tutti_gli_estremi_insieme": [
+   [
+    -0.6464,
+    "2025-10-06"
+   ],
+   [
+    -0.5184,
+    "2026-08-17"
+   ],
+   [
+    -0.5053,
+    "2022-05-09"
+   ]
+  ],
+  "esposizione_lorda_media": 2.0,
+  "esposizione_lorda_massima": 2.0,
+  "peso_massimo_di_una_moneta": 0.2484
+ },
+ "filtri": [
+  {
+   "capitale_usdt": 280,
+   "ordini": 24695,
+   "ordini_sotto_il_minimo": 0.67,
+   "valore_degli_ordini_sotto_il_minimo": 0.418,
+   "ordini_su_monete_senza_filtro_oggi": 0.144,
+   "posizioni_sotto_il_minimo": 0.635,
+   "errore_arrotondamento_mediano": 0.0189,
+   "errore_arrotondamento_95": 1.0
+  },
+  {
+   "capitale_usdt": 1000,
+   "ordini": 24695,
+   "ordini_sotto_il_minimo": 0.307,
+   "valore_degli_ordini_sotto_il_minimo": 0.074,
+   "ordini_su_monete_senza_filtro_oggi": 0.144,
+   "posizioni_sotto_il_minimo": 0.148,
+   "errore_arrotondamento_mediano": 0.0054,
+   "errore_arrotondamento_95": 1.0
+  },
+  {
+   "capitale_usdt": 10000,
+   "ordini": 24695,
+   "ordini_sotto_il_minimo": 0.058,
+   "valore_degli_ordini_sotto_il_minimo": 0.002,
+   "ordini_su_monete_senza_filtro_oggi": 0.144,
+   "posizioni_sotto_il_minimo": 0.015,
+   "errore_arrotondamento_mediano": 0.0005,
+   "errore_arrotondamento_95": 0.0618
+  }
+ ],
+ "climi": {
+  "K2": {
+   "rialzo": {
+    "settimane": 106,
+    "annuo": 0.2291,
+    "sharpe": 0.825
+   },
+   "laterale": {
+    "settimane": 68,
+    "annuo": 0.5906,
+    "sharpe": 2.653
+   },
+   "ribasso": {
+    "settimane": 77,
+    "annuo": 0.6097,
+    "sharpe": 2.674
+   }
+  },
+  "F5 + M7 + K2": {
+   "rialzo": {
+    "settimane": 106,
+    "annuo": 0.1276,
+    "sharpe": 0.578
+   },
+   "laterale": {
+    "settimane": 68,
+    "annuo": 0.6932,
+    "sharpe": 4.224
+   },
+   "ribasso": {
+    "settimane": 77,
+    "annuo": 0.6295,
+    "sharpe": 3.193
+   }
+  }
+ },
+ "K2_monete_che_pesano_di_piu_lordo": {
+  "ZECUSDT": 0.147,
+  "BCHUSDT": 0.128,
+  "TRXUSDT": 0.124,
+  "TRUMPUSDT": -0.112,
+  "HBARUSDT": 0.104,
+  "ZILUSDT": 0.1,
+  "ADAUSDT": 0.097,
+  "BNBUSDT": 0.093
+ },
+ "K2_lordo_totale": 1.707,
+ "sensibilita": {
+  "entrata 0.16": {
+   "K2": 1.744,
+   "F5 + M7 + K2": 2.109,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "entrata 0.18": {
+   "K2": 1.8,
+   "F5 + M7 + K2": 2.166,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "entrata 0.22": {
+   "K2": 1.701,
+   "F5 + M7 + K2": 2.078,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "entrata 0.24": {
+   "K2": 1.604,
+   "F5 + M7 + K2": 1.962,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "uscita 0.32": {
+   "K2": 1.528,
+   "F5 + M7 + K2": 1.92,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "uscita 0.36": {
+   "K2": 1.711,
+   "F5 + M7 + K2": 2.088,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "uscita 0.44": {
+   "K2": 1.896,
+   "F5 + M7 + K2": 2.298,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "uscita 0.48": {
+   "K2": 1.802,
+   "F5 + M7 + K2": 2.128,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "volatilita' 24 giorni": {
+   "K2": 1.92,
+   "F5 + M7 + K2": 2.247,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "volatilita' 27 giorni": {
+   "K2": 1.836,
+   "F5 + M7 + K2": 2.193,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "volatilita' 33 giorni": {
+   "K2": 1.777,
+   "F5 + M7 + K2": 2.114,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "volatilita' 36 giorni": {
+   "K2": 1.714,
+   "F5 + M7 + K2": 2.097,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "5/5"
+  },
+  "segnali 6 giorni (F5 e K2)": {
+   "K2": 1.485,
+   "F5 + M7 + K2": 1.997,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "4/5"
+  },
+  "segnali 8 giorni (F5 e K2)": {
+   "K2": 1.525,
+   "F5 + M7 + K2": 1.977,
+   "anni_positivi_miscela": "5/5",
+   "anni_positivi_K2": "4/5"
+  },
+  "miscela 21 settimane": {
+   "F5 + M7 + K2": 2.171,
+   "anni_positivi_miscela": "5/5"
+  },
+  "miscela 23 settimane": {
+   "F5 + M7 + K2": 2.185,
+   "anni_positivi_miscela": "5/5"
+  },
+  "miscela 29 settimane": {
+   "F5 + M7 + K2": 2.133,
+   "anni_positivi_miscela": "5/5"
+  },
+  "miscela 31 settimane": {
+   "F5 + M7 + K2": 2.143,
+   "anni_positivi_miscela": "5/5"
+  },
+  "universo 80 (M7 resta a 100)": {
+   "K2": 1.646,
+   "F5 + M7 + K2": 1.998
+  },
+  "universo 90 (M7 resta a 100)": {
+   "K2": 1.522,
+   "F5 + M7 + K2": 1.912
+  },
+  "universo 110 (M7 resta a 100)": {
+   "K2": 1.534,
+   "F5 + M7 + K2": 1.994
+  },
+  "universo 120 (M7 resta a 100)": {
+   "K2": 1.811,
+   "F5 + M7 + K2": 2.064
+  }
+ },
+ "sharpe_corretto": {
+  "prove_nella_lista_52": 52,
+  "gruppi": 80,
+  "gruppi_in_V": 69,
+  "deviazione_V": 0.627,
+  "K2": {
+   "gruppo": [
+    "6 F2",
+    "8 F3",
+    "12 K1",
+    "15 F3+M1",
+    "19 P1",
+    "19 P2",
+    "24 F5",
+    "25 F5+M7",
+    "28 K2",
+    "28 F5+M7+K2",
+    "42 F6",
+    "45 I1",
+    "48 R1",
+    "55 C3",
+    "56 F9",
+    "57 G1",
+    "61 F5T",
+    "61 G1T",
+    "63 G6",
+    "63 G1+G6",
+    "69 G11",
+    "86 F5N",
+    "88 G1N",
+    "89 F5C",
+    "92 G1 clima",
+    "92 F5 clima",
+    "93 G1-S",
+    "94 G1N-S"
+   ],
+   "2026-10-12": {
+    "sharpe": 1.779,
+    "t": 3.9,
+    "come_la_prova_52": 0.517,
+    "gruppi_23_ottobre": 0.691,
+    "N_308": 0.465,
+    "N_309": 0.464
+   },
+   "2026-10-19": {
+    "sharpe": 1.781,
+    "t": 3.91,
+    "come_la_prova_52": 0.519,
+    "gruppi_23_ottobre": 0.693,
+    "N_308": 0.466,
+    "N_309": 0.466
+   },
+   "file_della_prova_come_scritto": 0.469
+  },
+  "F5 + M7 + K2": {
+   "gruppo": [
+    "6 F2",
+    "8 F3",
+    "12 K1",
+    "15 F3+M1",
+    "19 P1",
+    "19 P2",
+    "24 F5",
+    "25 F5+M7",
+    "28 K2",
+    "28 F5+M7+K2",
+    "42 F6",
+    "45 I1",
+    "48 R1",
+    "55 C3",
+    "56 F9",
+    "57 G1",
+    "61 F5T",
+    "61 G1T",
+    "63 G6",
+    "63 G1+G6",
+    "69 G11",
+    "86 F5N",
+    "88 G1N",
+    "89 F5C",
+    "92 G1 clima",
+    "92 F5 clima",
+    "93 G1-S",
+    "94 G1N-S"
+   ],
+   "2026-10-12": {
+    "sharpe": 2.144,
+    "t": 4.7,
+    "come_la_prova_52": 0.783,
+    "gruppi_23_ottobre": 0.891,
+    "N_308": 0.743,
+    "N_309": 0.743
+   },
+   "2026-10-19": {
+    "sharpe": 2.151,
+    "t": 4.73,
+    "come_la_prova_52": 0.788,
+    "gruppi_23_ottobre": 0.894,
+    "N_308": 0.749,
+    "N_309": 0.748
+   },
+   "file_della_prova_come_scritto": 0.761
+  }
+ }
+}
