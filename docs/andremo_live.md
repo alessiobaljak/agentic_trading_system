@@ -569,3 +569,8 @@ su azioni americane), e i numeri sono negativi: −9,6% l'anno, le spese 3,6 vol
 Si ricalcola a tavolino una volta al mese. **Riesame** (idea 137): l'elenco delle prove bocciate di poco è in `research/riesame/ELENCO.md`;
 la prima, la miscela F5 + M7 + K2 della prova 28, con l'esame corretto del 22-23 ottobre avrebbe lo Sharpe corretto 0,94 e 5 anni su
 5: è da backtest-auditor. Conto delle prove 309.
+**Riesame, prova 28 (F5 + M7 + K2), backtest-auditor**: **PASS tecnico** (numeri rifatti con i dati di oggi: miscela Sharpe 2,15,
+t 4,73, 5 anni su 5, discesa −28,4%; nessuno sguardo nel futuro; con costi doppi 2,01; `audits/reports/2026-11-11-PROVA28_K2_F5M7K2.md`).
+Due Alti sull'esame: lo Sharpe corretto è 0,75 contando le prove del registro (309) e 0,89 contando i gruppi di prove simili (80), con
+la soglia a 0,80; e le regole scritte prima la dichiarano una «costruzione» che non diventa candidata (scelte fatte dopo aver visto i
+risultati). Decisioni chieste al proprietario. A 280 USDT la miscela scende a 1,53; K2 e M7 non esistono nel bot.
