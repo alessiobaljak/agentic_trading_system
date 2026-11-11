@@ -69,3 +69,8 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   il giorno si salta (un ingresso di mezz'ora dopo non è la regola). Da qui il lavoro lo avvia anche una routine della sessione alle 9:30
   e alle 15:30 di New York (avvio manuale del lavoro di GitHub); l'orario programmato resta come riserva, e la coda dei lavori di GitHub
   impedisce gli ordini doppi.
+* **11 novembre 2026, sera:** l'orario delle 13:05 UTC è partito alle 20:07 UTC (7 ore dopo) e il programma, che non aveva un limite
+  d'orario, ha mandato gli ordini alle **15:08** di New York (8 eseguiti, 2 rifiutati); la chiusura avviata alle 15:47 non è partita
+  (GitHub senza computer libero). Le 7 posizioni rimaste sono state chiuse **fuori orario** alle 16:04 di New York con ordini limite
+  (chiusura d'emergenza): nessuna è passata la notte. Giornata **fuori regola**: resta nel diario (−94,49 dollari) ma non conta nel
+  giudizio. Da qui l'apertura **non entra mai dopo le 10:00** di New York.

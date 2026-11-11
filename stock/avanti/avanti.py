@@ -124,7 +124,12 @@ def operazioni_del_giorno(giorno: str, ordini: list[dict], esecuzioni: list[dict
     return righe
 
 
+# giorni in cui non si è seguita la regola (REGOLE.md, deviazioni): restano nel diario ma non contano nel giudizio
+GIORNI_FUORI_REGOLA = {"2026-11-11"}
+
+
 def riassunto(diario: pd.DataFrame) -> dict:
+    diario = diario[~diario["giorno"].astype(str).isin(GIORNI_FUORI_REGOLA)]
     fatte = diario.dropna(subset=["proporzione"])
     x = fatte["proporzione"].astype(float)
     netta = x - fatte["commissione_ib"].astype(float) / (fatte["ingresso"].astype(float) * fatte["quantita"].astype(float))
