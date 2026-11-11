@@ -1,0 +1,75 @@
+{
+ "scelta": "somma dei volumi in USDT del 2023 / 365 (perpetui, tabella del programma 6); primi 14",
+ "monete": [
+  {
+   "simbolo": "BTCUSDT",
+   "volume_medio_giornaliero": 11505048820.822187,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "ETHUSDT",
+   "volume_medio_giornaliero": 5512655913.298805,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "SOLUSDT",
+   "volume_medio_giornaliero": 1104309418.3222,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "volume_medio_giornaliero": 811396618.5191649,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "DOGEUSDT",
+   "volume_medio_giornaliero": 519135731.35055184,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "APTUSDT",
+   "volume_medio_giornaliero": 410180072.43966734,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "BNBUSDT",
+   "volume_medio_giornaliero": 400787170.82502717,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "volume_medio_giornaliero": 382494032.12539214,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "MATICUSDT",
+   "volume_medio_giornaliero": 374246088.1027228,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "BCHUSDT",
+   "volume_medio_giornaliero": 339158092.8599536,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "OPUSDT",
+   "volume_medio_giornaliero": 330481234.9576828,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "ARBUSDT",
+   "volume_medio_giornaliero": 323792264.4678285,
+   "giorni_con_volume_2023": 284
+  },
+  {
+   "simbolo": "LINKUSDT",
+   "volume_medio_giornaliero": 319144462.7178571,
+   "giorni_con_volume_2023": 365
+  },
+  {
+   "simbolo": "1000PEPEUSDT",
+   "volume_medio_giornaliero": 301391201.24843276,
+   "giorni_con_volume_2023": 241
+  }
+ ]
+}

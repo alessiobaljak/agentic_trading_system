@@ -548,3 +548,9 @@ per un guasto: Binance quota pochissimi perpetui nuovi (dai contratti esistenti 
 quindi escluso). Le monete appena quotate (N3) non hanno materia prima; il funding al tetto (E4) è raro per natura. **Capito oggi**: una
 strategia a eventi dipende dal ritmo delle quotazioni, che nel 2026 è sceso di circa dieci volte. **Ricerca nuova ripartita**: la
 prova 149, la 1:1:1 (regole in `research/programma7/OTTANTASETTESIMA.md`), affidata a strategy-researcher.
+**Prova 149, la 1:1:1 (11 novembre)**: 10 monete (le più scambiate nel 2023: BTC, ETH, SOL, XRP, DOGE, APT, BNB, LTC, MATIC, BCH) × 4
+ore e un giorno × tendenza, rottura e ritorno alla media, con i parametri fissi: **0 combinazioni su 60 passano l'esame** (t più alto
+2,42, Sharpe corretto più alto 0,10 con 306 prove; `research/programma7/RISULTATI_OTTANTASETTESIMA.md`). Le migliori rendono molto ma
+non tutti gli anni (MATIC 1d rottura +123% l'anno, 3 anni su 4). **Capito oggi**: anche a 4 ore e a un giorno le regole classiche sul
+prezzo di una moneta sola non reggono l'esame; conferma la lezione di ottobre (i vantaggi che reggono vengono da ragioni economiche,
+non dagli indicatori). Agente nuovo strategy-scout per le idee; il giro delle 4 ore fa avanzare la ricerca nuova a ogni giro.
