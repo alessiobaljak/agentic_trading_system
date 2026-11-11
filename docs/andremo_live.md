@@ -527,3 +527,5 @@ nuovo. **G1 sul demo a 1.000, terzo ribilancio**: 7 ordini e 47 variazioni sotto
 23%); scarto dalle posizioni volute 15,8% del conto e in crescita; demo +0,27% dall'8 novembre, paper di G1 −0,87% (`ops/results/0732-*`,
 `0733-*`). **Capito oggi**: con il conto piccolo le posizioni vere si allontanano piano dalle volute; finora il demo fa meglio del paper
 (un punto in tre giorni), ma tre giorni non dicono niente.
+**Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare dopo il ribilancio di mezzanotte.
