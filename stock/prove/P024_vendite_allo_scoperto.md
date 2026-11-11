@@ -45,7 +45,8 @@ più giorni. Il resto in contanti a rendimento zero.
 **Variante B — l'indice meno gli affollati:** 100% del conto nello SPY e 30% venduto allo scoperto nei titoli con più giorni per
 ricomprarle (leva lorda 1,3).
 
-* **Periodo:** decisioni da fine luglio 2018 (prima data di FINRA utilizzabile, con il margine) al 31 dicembre 2024. Il periodo chiuso
+* **Periodo:** decisioni dalla prima fine mese con una data di FINRA utilizzabile (con il margine) al 31 dicembre 2024. *(Corretto
+  l'11 novembre prima del calcolo: lo scaricamento mostra che i dati partono da gennaio 2018, non da giugno.)* Il periodo chiuso
   (gennaio 2025 → settembre 2026) non si tocca.
 
 ## I costi
