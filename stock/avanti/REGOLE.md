@@ -64,3 +64,8 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   chiude titolo per titolo e controlla che non resti niente; se resta qualcosa, si ferma con un errore.
 * **10 novembre 2026:** la routine è arrivata di nuovo con 10 minuti di ritardo (partita alle 9:38, arrivata alle 9:48): ordini alle
   **9:49**. Da qui la routine d'apertura parte alle 9:33.
+* **11 novembre 2026:** primo giorno su GitHub, **nessun ordine**: l'orario programmato delle 13:05 UTC non è partito (GitHub fa partire
+  i lavori programmati quando può, e quel giorno non li faceva partire da ore). Alle 10:11 di New York non si è entrati in ritardo:
+  il giorno si salta (un ingresso di mezz'ora dopo non è la regola). Da qui il lavoro lo avvia anche una routine della sessione alle 9:30
+  e alle 15:30 di New York (avvio manuale del lavoro di GitHub); l'orario programmato resta come riserva, e la coda dei lavori di GitHub
+  impedisce gli ordini doppi.
