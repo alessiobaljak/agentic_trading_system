@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 2026.
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 2026 (sera, prova 113).
 
 ## Dati
 
@@ -27,6 +27,21 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     M7 da `risultati_ventiquattresima/` e `risultati_venticinquesima/`; `asticella.le_prove` legge le serie salvate (per la
     prova 28 quelle di prima della correzione delle parità, 1,720 e 2,107 contro 1,78 e 2,15 di oggi). Cercare:
     `pd.read_csv(QUI / "risultati_` negli script delle prove e confrontare con un ricalcolo.
+
+20. **Eventi persi in silenzio dalla lettura oraria di prima del 25 ottobre 2026** (`esecuzione.ore_di`, corretta in `4561064`):
+    per le 100 monete con le barre del programma 5 i file mensili non si leggevano, e dove le barre cominciano dopo l'evento
+    l'evento spariva come «senza candele a 1 ora». Non solo le 14 monete della revisione 105: nella prova 32 19 eventi (ICP, OP,
+    APT, SEI, PENDLE, GALA, SHIB...). La 32 non è stata rifatta (la voce P27 del backlog non la elenca) e il suo file
+    `eventi_N3B.csv` lo leggono 113, 33, `programma7/terza|nona|ventottesima|ventinovesima|conto_unico`. Cercare: un contatore
+    «senza ore» diverso da zero; file di risultati committati prima del 25 ottobre 13:14 con `ore_di` o `trentaduesima.ore`.
+21. **Tenute troncate dal mese non ancora pubblicato**: le prove a eventi scaricano solo i file mensili orari; una tenuta che entra
+    in un mese non pubblicato esce «all'ultimo prezzo» (`trentesima.py:112`) prima del termine (prova 32: TEAM, GPRO, PONS a 18-22
+    giorni invece di 30; PONS +20% → +61%). Cercare: `giorni` minore della durata senza uscita di protezione, entrate negli ultimi
+    45 giorni prima del calcolo.
+22. **Contratti su azioni, fondi e TradFi nati dal 2026 e non in `ESCLUSI`** (aggiornato l'ultima volta il 19 ottobre 2026): la
+    ricerca li tiene come monete, il bot no (`bot/portafoglio/f5.py:196-202`, tipo del sottostante). Confermati PAYP («Equity
+    Perpetual») e QNTX («TradFi»); circa 20 sospetti fra gli eventi della 32; quasi tutti i perpetui nati dopo il 22 ottobre (ABBV,
+    PFE, BAC...). Cercare: simboli nuovi del 2026 non in `ESCLUSI`; titoli «Equity Perpetual», «TradFi», «Pre-IPO» negli annunci.
 
 ## Sguardo nel futuro e tempi
 
@@ -59,6 +74,10 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     saltate); a 1.000 USDT 2,17. La perdita giornaliera del 5% (`hard_limits.DAILY_LOSS_LIMIT`) e il 3% a operazione non sono
     mai simulati nei portafogli (K2: 3 giorni sotto −5%). Modello: `audits/repro/prova28_conto_vero_2026-11-11.py`.
 
+23. **Perdite oltre il 100% nei numeri «senza l'uscita» delle vendite allo scoperto a leva 1**: manca la liquidazione (prova 113:
+    30 eventi su 632 sotto −100%, il peggiore −246%; la differenza «senza uscita» scende da +13,6 a +9,4 punti fermando la perdita
+    a −100%). Cercare: `r_senza < -1` e numeri «per capire» citati a sostegno del perché.
+
 ## Misure
 
 8. **Annualizzazione con 252 giorni** invece di 365 (BTCORA, `strategia.py:49`). Al 7 nov 2026 nessun'altra occorrenza
@@ -73,6 +92,9 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     (80 all'11 nov 2026); le prove 149-151 usano N = conto delle prove (`n_prove=N_PROVE`, 308-309) con la varianza dei
     gruppi. Per F5 + M7 + K2: 0,89 contro 0,75, con la soglia a 0,80 in mezzo. Calcolare sempre tutti e due e dire quale
     vale per le regole della prova. Cercare: `te.sharpe_corretto(` con e senza `n_prove=`.
+
+24. **La p di un mescolamento a strati dipende dagli strati** (metodo, prova 113): trimestre 0,027, mese 0,007, settimana 0,0027.
+    Lo strato si sceglie nelle regole, mai dopo; gli altri si riportano solo «per capire» e non fanno passare una prova.
 
 ## Procedura dell'audit
 
@@ -89,3 +111,7 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     l'apertura del lunedì e sette giorni vuoti, e confrontarli con il calcolo intero; con i modelli, sostituire anche le
     letture dei dati di posizione (`undicesima.pannello_metrics`, `quattordicesima._taker_ls`). Funzioni pronte:
     `audits/repro/prova28_2026-11-11.py` (`tagliato`, `prova_taglio`) e `prova28_tempi_2026-11-11.py` (`taglio_m7`).
+25. **Candele orarie mancanti nella copia locale** (11 nov 2026): `research/data/p6` non c'è e `research/data/p6h` ha 511 simboli.
+    Per rifare una prova su candele orarie si scaricano i file mensili dall'archivio pubblico di Binance in una cartella temporanea
+    della sessione (`audits/repro/prova113_2026-11-11.py scarica <cartella>`, lettore `_lettore`), mai in `research/data/`.
+    L'interfaccia `fapi` di Binance (elenco dei contratti) è bloccata da qui: si chiede alla sessione principale (canale della macchina).

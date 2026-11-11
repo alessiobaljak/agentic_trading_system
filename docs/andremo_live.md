@@ -578,3 +578,7 @@ risultati). Decisioni chieste al proprietario. A 280 USDT la miscela scende a 1,
 simili (per la miscela 0,89, sopra la soglia di 0,80); la miscela F5 + M7 + K2 è già nel conto a tavolino del programma 6 (+2,70% nelle
 prime 2 settimane, `research/programma6/paper/PAPER.md`) e andrà nel riepilogo di ogni lunedì. Le prove 149-151 non cambiano verdetto
 con il conto per famiglie (t sotto 3 e rendimenti negativi o quasi nulli).
+**Riesame, prova 113 (le monete nuove distribuite gratis)**: resta bocciata anche con i dati corretti (p 0,0268 contro 0,01). Il
+riesame ha trovato un errore vecchio: il file degli eventi delle monete nuove (prova 32) era di prima di una correzione e aveva perso 19
+eventi; il verdetto della 32 non cambia (p 0,0020), ma il file va rifatto e con lui le prove che lo leggono (backlog P32). **Capito
+oggi**: il riesame serve anche quando non promuove niente: trova file vecchi che altre prove usano ancora.

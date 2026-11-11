@@ -1,0 +1,30 @@
+{
+ "simboli": [
+  "ANTHROPICUSDT",
+  "CBRSUSDT",
+  "HOODUSDT",
+  "INTCUSDT",
+  "MOONSHOTUSDT",
+  "MUUSDT",
+  "OPENAIUSDT",
+  "OURAUSDT",
+  "PAYPUSDT",
+  "QNTXUSDT",
+  "SNDKUSDT",
+  "SPCXUSDT",
+  "TSLAUSDT",
+  "USDBRLUSDT"
+ ],
+ "eventi": [
+  {
+   "data": "2026-03-30",
+   "simbolo": "PAYPUSDT",
+   "r": 0.3014668001542722
+  },
+  {
+   "data": "2026-06-05",
+   "simbolo": "QNTXUSDT",
+   "r": -0.2951952525747414
+  }
+ ]
+}

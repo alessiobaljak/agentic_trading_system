@@ -1,0 +1,2834 @@
+{
+ "riproduci": {
+  "confronto": {
+   "eventi": [
+    613,
+    613
+   ],
+   "gratis": [
+    87,
+    87
+   ],
+   "altre": [
+    526,
+    526
+   ],
+   "differenza": [
+    0.0786830815194959,
+    0.0786830815194959
+   ],
+   "p_differenza": [
+    0.027197280271972803,
+    0.027197280271972803
+   ],
+   "differenza_senza_uscita": [
+    0.13647147252695366,
+    0.13647147252695366
+   ],
+   "media_gratis": [
+    0.12108794075285478,
+    0.12108794075285478
+   ],
+   "media_altre": [
+    0.029920529039723094,
+    0.029920529039723094
+   ],
+   "gratis_da_sole_p": [
+    0.0005999400059994001,
+    0.0005999400059994001
+   ]
+  },
+  "identico": true,
+  "p_con_altri_semi": {
+   "1": 0.026197380261973803,
+   "7": 0.0268973102689731,
+   "42": 0.028697130286971302,
+   "2027": 0.0263973602639736
+  }
+ },
+ "copertura": {
+  "annunci": 2293,
+  "dal": "2017-07-21T00:06:19",
+  "al": "2026-11-11T05:00:31.295000",
+  "per_anno_annunci_e_gratis": {
+   "2017": [
+    107,
+    0
+   ],
+   "2018": [
+    86,
+    0
+   ],
+   "2019": [
+    103,
+    0
+   ],
+   "2020": [
+    348,
+    6
+   ],
+   "2021": [
+    253,
+    14
+   ],
+   "2022": [
+    170,
+    3
+   ],
+   "2023": [
+    272,
+    11
+   ],
+   "2024": [
+    297,
+    27
+   ],
+   "2025": [
+    401,
+    62
+   ],
+   "2026": [
+    256,
+    8
+   ]
+  },
+  "salti_piu_lunghi_giorni": [
+   [
+    14.2,
+    "2018-02-12"
+   ],
+   [
+    15.0,
+    "2022-11-02"
+   ],
+   [
+    16.1,
+    "2017-08-24"
+   ],
+   [
+    17.0,
+    "2022-12-27"
+   ],
+   [
+    17.3,
+    "2019-12-20"
+   ],
+   [
+    21.0,
+    "2018-08-21"
+   ],
+   [
+    21.2,
+    "2018-07-31"
+   ],
+   [
+    23.0,
+    "2018-10-23"
+   ]
+  ]
+ },
+ "etichette": {
+  "gratis": [
+   {
+    "data": "2025-09-24",
+    "simbolo": "0GUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.4096,
+    "giorni_prima": [
+     2.6
+    ],
+    "titoli": [
+     "Introducing 0G (0G) on Binance HODLer Airdrops! Earn 0G With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-10-09",
+    "simbolo": "2ZUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3894,
+    "giorni_prima": [
+     6.9
+    ],
+    "titoli": [
+     "Introducing DoubleZero (2Z) on Binance HODLer Airdrops! Earn 2Z With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2023-12-25",
+    "simbolo": "ACEUSDT",
+    "tipo": "launchpool",
+    "r": 0.3165,
+    "giorni_prima": [
+     13.5
+    ],
+    "titoli": [
+     "Introducing Fusionist (ACE) on Binance Launchpool! Farm ACE by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2024-03-20",
+    "simbolo": "AEVOUSDT",
+    "tipo": "launchpool",
+    "r": -0.2324,
+    "giorni_prima": [
+     13.6
+    ],
+    "titoli": [
+     "Introducing AEVO (AEVO) on Binance Launchpool! Farm AEVO by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2024-01-15",
+    "simbolo": "AIUSDT",
+    "tipo": "launchpool",
+    "r": -0.1059,
+    "giorni_prima": [
+     19.6
+    ],
+    "titoli": [
+     "Introducing Sleepless AI (AI) on Binance Launchpool! Farm AI by Staking BNB, FDUSD and TUSD"
+    ]
+   },
+   {
+    "data": "2021-03-23",
+    "simbolo": "ALICEUSDT",
+    "tipo": "launchpool",
+    "r": -0.2752,
+    "giorni_prima": [
+     13.6
+    ],
+    "titoli": [
+     "Introducing My Neighbor Alice (ALICE) on Binance Launchpool! Farm ALICE By Staking BNB, BUSD & CHR Tokens"
+    ]
+   },
+   {
+    "data": "2025-11-18",
+    "simbolo": "ALLOUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3938,
+    "giorni_prima": [
+     6.8
+    ],
+    "titoli": [
+     "Introducing Allora (ALLO) on Binance HODLer Airdrops! Earn ALLO With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-02-01",
+    "simbolo": "ALTUSDT",
+    "tipo": "launchpool",
+    "r": -0.092,
+    "giorni_prima": [
+     14.5
+    ],
+    "titoli": [
+     "Introducing AltLayer (ALT) on Binance Launchpool! Farm ALT by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2022-03-15",
+    "simbolo": "ANCUSDT",
+    "tipo": "launchpool",
+    "r": 0.2549,
+    "giorni_prima": [
+     48.5
+    ],
+    "titoli": [
+     "Introducing Anchor Protocol (ANC) on Binance Launchpool! Farm ANC by Staking BNB, LUNA and BUSD Tokens"
+    ]
+   },
+   {
+    "data": "2025-01-30",
+    "simbolo": "ANIMEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2018,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing Animecoin (ANIME) on Binance HODLer Airdrops! Earn ANIME With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-04-12",
+    "simbolo": "BABYUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3441,
+    "giorni_prima": [
+     2.6
+    ],
+    "titoli": [
+     "Introducing Babylon (BABY) on Binance HODLer Airdrops! Earn BABY With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-08-22",
+    "simbolo": "BANANAUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2343,
+    "giorni_prima": [
+     34.3
+    ],
+    "titoli": [
+     "Introducing Banana Gun (BANANA) on Binance HODLer Airdrops! Subscribe your BNB to Simple Earn"
+    ]
+   },
+   {
+    "data": "2025-09-25",
+    "simbolo": "BARDUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.4177,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing Lombard (BARD) on Binance HODLer Airdrops! Earn BARD With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-02-13",
+    "simbolo": "BERAUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3585,
+    "giorni_prima": [
+     7.5
+    ],
+    "titoli": [
+     "Introducing Berachain (BERA) on Binance HODLer Airdrops! Earn BERA With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-01-10",
+    "simbolo": "BIOUSDT",
+    "tipo": "launchpool",
+    "r": 0.7735,
+    "giorni_prima": [
+     17.6
+    ],
+    "titoli": [
+     "Introducing BIO Protocol (BIO) on Binance Launchpool! Farm BIO by Locking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-03-24",
+    "simbolo": "BMTUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.5696,
+    "giorni_prima": [
+     5.6
+    ],
+    "titoli": [
+     "Introducing Bubblemaps (BMT) on Binance HODLer Airdrops! Earn BMT With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2026-01-06",
+    "simbolo": "BREVUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1263,
+    "giorni_prima": [
+     0.6
+    ],
+    "titoli": [
+     "Introducing Brevis (BREV) on Binance HODLer Airdrops! Earn BREV With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-09-27",
+    "simbolo": "CATIUSDT",
+    "tipo": "launchpool",
+    "r": 0.5496,
+    "giorni_prima": [
+     13.5
+    ],
+    "titoli": [
+     "Introducing Catizen (CATI) on Binance Launchpool! Farm CATI by Locking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-07-22",
+    "simbolo": "CUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.2945,
+    "giorni_prima": [
+     3.7
+    ],
+    "titoli": [
+     "Introducing Chainbase (C) on Binance HODLer Airdrops! Earn C With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2023-08-28",
+    "simbolo": "CYBERUSDT",
+    "tipo": "launchpool",
+    "r": -0.2459,
+    "giorni_prima": [
+     26.7
+    ],
+    "titoli": [
+     "Introducing CyberConnect (CYBER) on Binance Launchpool! Farm CYBER by Staking BNB, TUSD and FDUSD"
+    ]
+   },
+   {
+    "data": "2021-02-26",
+    "simbolo": "DODOUSDT",
+    "tipo": "launchpool",
+    "r": 0.2856,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing DODO (DODO) on Binance Launchpool! Farm DODO By Staking BNB, BETH & BUSD Tokens"
+    ]
+   },
+   {
+    "data": "2024-09-02",
+    "simbolo": "DOGSUSDT",
+    "tipo": "launchpool",
+    "r": 0.4847,
+    "giorni_prima": [
+     12.3
+    ],
+    "titoli": [
+     "Introducing Dogs (DOGS) on Binance Launchpool! Farm DOGS by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-10-07",
+    "simbolo": "EDENUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.5241,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing OpenEden (EDEN) on Binance HODLer Airdrops! Earn EDEN With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-04-09",
+    "simbolo": "ENAUSDT",
+    "tipo": "launchpool",
+    "r": 0.1528,
+    "giorni_prima": [
+     10.8
+    ],
+    "titoli": [
+     "Introducing Ethena (ENA) on Binance Launchpool! Farm ENA by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-10-21",
+    "simbolo": "ENSOUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3342,
+    "giorni_prima": [
+     6.9
+    ],
+    "titoli": [
+     "Introducing Enso (ENSO) on Binance HODLer Airdrops! Earn ENSO With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-07-24",
+    "simbolo": "ERAUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2288,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing Caldera (ERA) on Binance HODLer Airdrops! Earn ERA With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-03-25",
+    "simbolo": "ETHFIUSDT",
+    "tipo": "launchpool",
+    "r": -0.276,
+    "giorni_prima": [
+     12.4
+    ],
+    "titoli": [
+     "Introducing ether.fi (ETHFI) on Binance Launchpool! Farm ETHFI by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-10-20",
+    "simbolo": "EULUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2785,
+    "giorni_prima": [
+     6.6
+    ],
+    "titoli": [
+     "Introducing Euler (EUL) on Binance HODLer Airdrops! Earn EUL With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-10-06",
+    "simbolo": "FFUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1587,
+    "giorni_prima": [
+     9.7
+    ],
+    "titoli": [
+     "Introducing Falcon Finance (FF) on Binance HODLer Airdrops! Earn FF With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2022-05-12",
+    "simbolo": "GALUSDT",
+    "tipo": "launchpool",
+    "r": -0.3387,
+    "giorni_prima": [
+     13.7
+    ],
+    "titoli": [
+     "Introducing Project Galaxy (GAL) on Binance Launchpool! Farm GAL By Staking BNB, BUSD and CAKE"
+    ]
+   },
+   {
+    "data": "2025-04-07",
+    "simbolo": "GUNUSDT",
+    "tipo": "launchpool",
+    "r": 0.4008,
+    "giorni_prima": [
+     10.4
+    ],
+    "titoli": [
+     "Introducing GUNZ (GUN) on Binance Launchpool! Farm GUN by Locking BNB, FDUSD and USDC"
+    ]
+   },
+   {
+    "data": "2024-10-03",
+    "simbolo": "HMSTRUSDT",
+    "tipo": "launchpool",
+    "r": 0.5838,
+    "giorni_prima": [
+     20.4
+    ],
+    "titoli": [
+     "Introducing Hamster Kombat (HMSTR) on Binance Launchpool and Super Earn!"
+    ]
+   },
+   {
+    "data": "2025-09-18",
+    "simbolo": "HOLOUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.5665,
+    "giorni_prima": [
+     7.8
+    ],
+    "titoli": [
+     "Introducing Holoworld AI (HOLO) on Binance HODLer Airdrops! Earn HOLO With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-06-17",
+    "simbolo": "HOMEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1022,
+    "giorni_prima": [
+     4.5
+    ],
+    "titoli": [
+     "Introducing Defi App (HOME) on Binance HODLer Airdrops! Earn HOME With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-06-02",
+    "simbolo": "HUMAUSDT",
+    "tipo": "launchpool",
+    "r": -0.3391,
+    "giorni_prima": [
+     10.6
+    ],
+    "titoli": [
+     "Introducing Huma Finance (HUMA) on Binance Launchpool! Farm HUMA by Locking BNB, FDUSD, and USDC"
+    ]
+   },
+   {
+    "data": "2025-04-29",
+    "simbolo": "HYPERUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3086,
+    "giorni_prima": [
+     7.4
+    ],
+    "titoli": [
+     "Introducing Hyperlane (HYPER) on Binance HODLer Airdrops! Earn HYPER With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-04-23",
+    "simbolo": "INITUSDT",
+    "tipo": "launchpool",
+    "r": -0.3102,
+    "giorni_prima": [
+     5.6
+    ],
+    "titoli": [
+     "Introducing Initia (INIT) on Binance Launchpool! Farm INIT by Locking BNB, FDUSD and USDC"
+    ]
+   },
+   {
+    "data": "2024-06-18",
+    "simbolo": "IOUSDT",
+    "tipo": "launchpool",
+    "r": 0.3281,
+    "giorni_prima": [
+     11.8
+    ],
+    "titoli": [
+     "Introducing IO.NET (IO) on Binance Launchpool! Farm IO by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-02-27",
+    "simbolo": "KAITOUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3743,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing KAITO (KAITO) on Binance HODLer Airdrops! Earn KAITO With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-04-21",
+    "simbolo": "KERNELUSDT",
+    "tipo": "megadrop",
+    "r": 0.4932,
+    "giorni_prima": [
+     19.6
+    ],
+    "titoli": [
+     "Introducing KernelDAO (KERNEL) on Binance Megadrop! Lock Your BNB and Complete Web3 Quests for Airdrop"
+    ]
+   },
+   {
+    "data": "2025-11-05",
+    "simbolo": "KITEUSDT",
+    "tipo": "launchpool",
+    "r": -0.3159,
+    "giorni_prima": [
+     4.7
+    ],
+    "titoli": [
+     "Introducing Kite (KITE) on Binance Launchpool! Farm KITE by Locking BNB, FDUSD and USDC"
+    ]
+   },
+   {
+    "data": "2025-02-18",
+    "simbolo": "LAYERUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3435,
+    "giorni_prima": [
+     6.7
+    ],
+    "titoli": [
+     "Introducing Solayer (LAYER) on Binance HODLer Airdrops! Subscribe your BNB to Simple Earn"
+    ]
+   },
+   {
+    "data": "2024-06-27",
+    "simbolo": "LISTAUSDT",
+    "tipo": "megadrop",
+    "r": 0.426,
+    "giorni_prima": [
+     34.8
+    ],
+    "titoli": [
+     "Introducing Lista (LISTA) on Binance Megadrop! Lock Your BNB and Complete Web3 Quests for Airdrop"
+    ]
+   },
+   {
+    "data": "2024-01-25",
+    "simbolo": "MANTAUSDT",
+    "tipo": "launchpool",
+    "r": 0.3621,
+    "giorni_prima": [
+     9.5
+    ],
+    "titoli": [
+     "Introducing Manta (MANTA) on Binance Launchpool! Farm MANTA by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2023-07-06",
+    "simbolo": "MAVUSDT",
+    "tipo": "launchpool",
+    "r": 0.2471,
+    "giorni_prima": [
+     22.5
+    ],
+    "titoli": [
+     "Introducing Maverick Protocol (MAV) on Binance Launchpool! Farm MAV by Staking BNB and TUSD"
+    ]
+   },
+   {
+    "data": "2023-11-10",
+    "simbolo": "MEMEUSDT",
+    "tipo": "launchpool",
+    "r": -0.3032,
+    "giorni_prima": [
+     13.4
+    ],
+    "titoli": [
+     "Introducing Memecoin (MEME) on Binance Launchpool! Farm MEME by Staking BNB, TUSD and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-10-03",
+    "simbolo": "MIRAUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.4336,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing Mira (MIRA) on Binance HODLer Airdrops! Earn MIRA With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-09-04",
+    "simbolo": "MITOUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3417,
+    "giorni_prima": [
+     5.6
+    ],
+    "titoli": [
+     "Introducing Mitosis (MITO) on Binance HODLer Airdrops! Earn MITO With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-11-11",
+    "simbolo": "MMTUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3392,
+    "giorni_prima": [
+     7.7
+    ],
+    "titoli": [
+     "Introducing Momentum (MMT) on Binance HODLer Airdrops! Earn MMT With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-12-16",
+    "simbolo": "MOVEUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.3991,
+    "giorni_prima": [
+     6.6
+    ],
+    "titoli": [
+     "Introducing Movement (MOVE) on Binance HODLer Airdrops! Subscribe your BNB to Simple Earn"
+    ]
+   },
+   {
+    "data": "2025-06-26",
+    "simbolo": "NEWTUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.4484,
+    "giorni_prima": [
+     2.4
+    ],
+    "titoli": [
+     "Introducing Newton Protocol (NEWT) on Binance HODLer Airdrops! Earn NEWT With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-01-03",
+    "simbolo": "NFPUSDT",
+    "tipo": "launchpool",
+    "r": 0.3308,
+    "giorni_prima": [
+     14.6
+    ],
+    "titoli": [
+     "Introducing NFPrompt (NFP) on Binance Launchpool Fair Mode! Farm NFP by Staking BNB, FDUSD and TUSD"
+    ]
+   },
+   {
+    "data": "2025-03-31",
+    "simbolo": "NILUSDT",
+    "tipo": "launchpool",
+    "r": 0.4343,
+    "giorni_prima": [
+     10.6
+    ],
+    "titoli": [
+     "Introducing Nillion (NIL) on Binance Launchpool! Farm NIL by Locking BNB, FDUSD, and USDC"
+    ]
+   },
+   {
+    "data": "2024-05-23",
+    "simbolo": "NOTUSDT",
+    "tipo": "launchpool",
+    "r": -0.3248,
+    "giorni_prima": [
+     13.4
+    ],
+    "titoli": [
+     "Introducing Notcoin (NOT) on Binance Launchpool! Farm NOT by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2023-11-21",
+    "simbolo": "NTRNUSDT",
+    "tipo": "launchpool",
+    "r": -0.2826,
+    "giorni_prima": [
+     41.6
+    ],
+    "titoli": [
+     "Introducing Neutron (NTRN) on Binance Launchpool! Farm NTRN by Staking BNB, TUSD and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-05-22",
+    "simbolo": "NXPCUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3537,
+    "giorni_prima": [
+     6.8
+    ],
+    "titoli": [
+     "Introducing Nexpace (NXPC) on Binance HODLer Airdrops! Earn NXPC With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-04-24",
+    "simbolo": "OMNIUSDT",
+    "tipo": "launchpool",
+    "r": 0.3528,
+    "giorni_prima": [
+     11.8
+    ],
+    "titoli": [
+     "Introducing Omni Network (OMNI) on Binance Launchpool! Farm OMNI by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-09-15",
+    "simbolo": "OPENUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3394,
+    "giorni_prima": [
+     9.7
+    ],
+    "titoli": [
+     "Introducing OpenLedger (OPEN) on Binance HODLer Airdrops! Earn OPEN With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-04-01",
+    "simbolo": "PARTIUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2253,
+    "giorni_prima": [
+     7.3
+    ],
+    "titoli": [
+     "Introducing  Particle Network (PARTI) on Binance HODLer Airdrops! Earn PARTI With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-12-24",
+    "simbolo": "PENGUUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.2846,
+    "giorni_prima": [
+     7.5
+    ],
+    "titoli": [
+     "Introducing Simon's Cat (1000CAT) and Pudgy Penguins (PENGU) on Binance HODLer Airdrops!"
+    ]
+   },
+   {
+    "data": "2024-02-26",
+    "simbolo": "PIXELUSDT",
+    "tipo": "launchpool",
+    "r": 0.0212,
+    "giorni_prima": [
+     17.9
+    ],
+    "titoli": [
+     "Introducing Pixels (PIXEL) on Binance Launchpool! Farm PIXEL by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2024-03-07",
+    "simbolo": "PORTALUSDT",
+    "tipo": "launchpool",
+    "r": -0.2602,
+    "giorni_prima": [
+     14.7
+    ],
+    "titoli": [
+     "Introducing Portal (PORTAL) on Binance Launchpool! Farm PORTAL by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-08-12",
+    "simbolo": "PROVEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3136,
+    "giorni_prima": [
+     6.9
+    ],
+    "titoli": [
+     "Introducing Succinct (PROVE) on Binance HODLer Airdrops! Earn PROVE With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2023-04-12",
+    "simbolo": "RDNTUSDT",
+    "tipo": "launchpool",
+    "r": -0.3076,
+    "giorni_prima": [
+     12.7
+    ],
+    "titoli": [
+     "Introducing Radiant Capital (RDNT) on Binance Launchpool! Farm RDNT by Staking BNB and TUSD"
+    ]
+   },
+   {
+    "data": "2025-03-13",
+    "simbolo": "REDUSDT",
+    "tipo": "launchpool",
+    "r": -0.3799,
+    "giorni_prima": [
+     15.6
+    ],
+    "titoli": [
+     "Introducing RedStone (RED) on Binance Launchpool and Price Cap Mechanism for Binance Pre-Market"
+    ]
+   },
+   {
+    "data": "2025-06-17",
+    "simbolo": "RESOLVUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.453,
+    "giorni_prima": [
+     5.6
+    ],
+    "titoli": [
+     "Introducing Resolv (RESOLV) on Binance HODLer Airdrops! Earn RESOLV With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-05-07",
+    "simbolo": "REZUSDT",
+    "tipo": "launchpool",
+    "r": 0.076,
+    "giorni_prima": [
+     13.6
+    ],
+    "titoli": [
+     "Introducing Renzo (REZ) on Binance Launchpool! Farm REZ by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2024-04-16",
+    "simbolo": "SAGAUSDT",
+    "tipo": "launchpool",
+    "r": 0.479,
+    "giorni_prima": [
+     11.9
+    ],
+    "titoli": [
+     "Introducing Saga (SAGA) on Binance Launchpool! Farm SAGA by Staking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-07-03",
+    "simbolo": "SAHARAUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.2341,
+    "giorni_prima": [
+     8.4
+    ],
+    "titoli": [
+     "Introducing Sahara AI (SAHARA) on Binance HODLer Airdrops! Earn SAHARA With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-10-29",
+    "simbolo": "SCRUSDT",
+    "tipo": "launchpool",
+    "r": 0.2011,
+    "giorni_prima": [
+     20.7
+    ],
+    "titoli": [
+     "Introducing Scroll (SCR) on Binance Launchpool and Pre-Market!"
+    ]
+   },
+   {
+    "data": "2025-05-05",
+    "simbolo": "SIGNUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1611,
+    "giorni_prima": [
+     9.6
+    ],
+    "titoli": [
+     "Introducing Sign (SIGN) on Binance HODLer Airdrops! Earn SIGN With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-01-24",
+    "simbolo": "SOLVUSDT",
+    "tipo": "megadrop",
+    "r": 0.3649,
+    "giorni_prima": [
+     24.6
+    ],
+    "titoli": [
+     "Introducing Solv Protocol (SOLV) on Binance Megadrop! Lock Your BNB and Complete Web3 Quests for Airdrop"
+    ]
+   },
+   {
+    "data": "2025-06-04",
+    "simbolo": "SOPHUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.4591,
+    "giorni_prima": [
+     6.7
+    ],
+    "titoli": [
+     "Introducing Sophon (SOPH) on Binance HODLer Airdrops! Earn SOPH With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-06-24",
+    "simbolo": "SPKUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.2194,
+    "giorni_prima": [
+     7.5
+    ],
+    "titoli": [
+     "Introducing Spark (SPK) on Binance HODLer Airdrops! Earn SPK With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2023-05-10",
+    "simbolo": "SUIUSDT",
+    "tipo": "launchpool",
+    "r": 0.3366,
+    "giorni_prima": [
+     9.3
+    ],
+    "titoli": [
+     "Introducing Sui (SUI) on Binance Launchpool! Farm SUI by Staking BNB and TUSD"
+    ]
+   },
+   {
+    "data": "2025-05-09",
+    "simbolo": "SXTUSDT",
+    "tipo": "launchpool",
+    "r": 0.328,
+    "giorni_prima": [
+     3.4
+    ],
+    "titoli": [
+     "Introducing Space and Time (SXT) on Binance Launchpool! Farm SXT by Locking BNB, FDUSD and USDC"
+    ]
+   },
+   {
+    "data": "2024-12-04",
+    "simbolo": "THEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.332,
+    "giorni_prima": [
+     7.7
+    ],
+    "titoli": [
+     "Introducing Thena (THE) on Binance HODLer Airdrops! Subscribe your BNB to Simple Earn"
+    ]
+   },
+   {
+    "data": "2025-08-12",
+    "simbolo": "TOWNSUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1091,
+    "giorni_prima": [
+     7.6
+    ],
+    "titoli": [
+     "Introducing Towns (TOWNS) on Binance HODLer Airdrops! Earn TOWNS With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-08-05",
+    "simbolo": "TREEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.1296,
+    "giorni_prima": [
+     7.4
+    ],
+    "titoli": [
+     "Introducing Treehouse (TREE) on Binance HODLer Airdrops! Earn TREE With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-10-29",
+    "simbolo": "TURTLEUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.2597,
+    "giorni_prima": [
+     7.7
+    ],
+    "titoli": [
+     "Introducing Turtle (TURTLE) on Binance HODLer Airdrops! Earn TURTLE With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2024-12-25",
+    "simbolo": "USUALUSDT",
+    "tipo": "launchpool",
+    "r": 0.7343,
+    "giorni_prima": [
+     40.7
+    ],
+    "titoli": [
+     "Introducing Usual (USUAL) on Binance Launchpool and Pre-Market!"
+    ]
+   },
+   {
+    "data": "2024-12-23",
+    "simbolo": "VANAUSDT",
+    "tipo": "launchpool",
+    "r": -0.3161,
+    "giorni_prima": [
+     9.6
+    ],
+    "titoli": [
+     "Introducing Vana (VANA) on Binance Launchpool! Farm VANA by Locking BNB and FDUSD"
+    ]
+   },
+   {
+    "data": "2025-04-22",
+    "simbolo": "WCTUSDT",
+    "tipo": "launchpool",
+    "r": -0.1365,
+    "giorni_prima": [
+     11.6
+    ],
+    "titoli": [
+     "Introducing WalletConnect (WCT) on Binance Launchpool! Farm WCT by Locking BNB, FDUSD and USDC"
+    ]
+   },
+   {
+    "data": "2024-01-16",
+    "simbolo": "XAIUSDT",
+    "tipo": "launchpool",
+    "r": 0.2707,
+    "giorni_prima": [
+     12.6
+    ],
+    "titoli": [
+     "Introducing Xai (XAI) on Binance Launchpool! Farm XAI by Staking BNB, FDUSD and TUSD"
+    ]
+   },
+   {
+    "data": "2025-10-17",
+    "simbolo": "YBUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.0969,
+    "giorni_prima": [
+     2.6
+    ],
+    "titoli": [
+     "Introducing Yield Basis (YB) on Binance HODLer Airdrops! Earn YB With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-10-24",
+    "simbolo": "ZBTUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.3137,
+    "giorni_prima": [
+     6.6
+    ],
+    "titoli": [
+     "Introducing ZEROBASE (ZBT) on Binance HODLer Airdrops! Earn ZBT With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   },
+   {
+    "data": "2025-09-22",
+    "simbolo": "ZKCUSDT",
+    "tipo": "hodler airdrops",
+    "r": 0.5746,
+    "giorni_prima": [
+     9.6
+    ],
+    "titoli": [
+     "Introducing Boundless (ZKC) on Binance HODLer Airdrops! Earn ZKC With Retroactive BNB Simple Earn Subscriptions"
+    ]
+   }
+  ],
+  "titoli_con_piu_sigle": [
+   {
+    "data": "2024-12-24",
+    "simbolo": "PENGUUSDT",
+    "tipo": "hodler airdrops",
+    "r": -0.2846,
+    "giorni_prima": [
+     7.5
+    ],
+    "titoli": [
+     "Introducing Simon's Cat (1000CAT) and Pudgy Penguins (PENGU) on Binance HODLer Airdrops!"
+    ]
+   }
+  ],
+  "tipi_misti": [],
+  "mancati": [
+   {
+    "data": "2024-10-28",
+    "simbolo": "1000CATUSDT",
+    "giorni_prima": -49.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Simon's Cat (1000CAT) and Pudgy Penguins (PENGU) on Binance HODLer Airdrops!",
+    "r": 0.029
+   },
+   {
+    "data": "2026-05-06",
+    "simbolo": "AIGENSYNUSDT",
+    "giorni_prima": -15.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Gensyn (AIGENSYN) on Binance HODLer Airdrops! Earn AIGENSYN With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.3271
+   },
+   {
+    "data": "2021-09-07",
+    "simbolo": "ATAUSDT",
+    "giorni_prima": 97.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Automata (ATA) on Binance Launchpool! Farm ATA By Staking BNB, BUSD & DOT Tokens",
+    "r": 0.3274
+   },
+   {
+    "data": "2025-11-05",
+    "simbolo": "ATUSDT",
+    "giorni_prima": -22.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing APRO (AT) on Binance HODLer Airdrops! Earn AT With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.4554
+   },
+   {
+    "data": "2021-03-11",
+    "simbolo": "BTCSTUSDT",
+    "giorni_prima": 62.6,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Bitcoin Standard Hashrate Token (BTCST) on Binance Launchpool! Farm BTCST By Staking BNB, BUSD & BTC Tokens",
+    "r": -0.0082
+   },
+   {
+    "data": "2026-04-23",
+    "simbolo": "CHIPUSDT",
+    "giorni_prima": -5.3,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing USD.AI (CHIP) on Binance HODLer Airdrops! Earn CHIP With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.4066
+   },
+   {
+    "data": "2022-05-06",
+    "simbolo": "DARUSDT",
+    "giorni_prima": 189.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Mines of Dalarnia (DAR) on Binance Launchpool! Farm DAR By Staking BNB and BUSD",
+    "r": 0.4503
+   },
+   {
+    "data": "2025-05-08",
+    "simbolo": "DOLOUSDT",
+    "giorni_prima": -111.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Dolomite (DOLO) on Binance HODLer Airdrops! Earn DOLO With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.2959
+   },
+   {
+    "data": "2026-04-23",
+    "simbolo": "GENIUSUSDT",
+    "giorni_prima": -36.3,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Genius Terminal (GENIUS) on Binance HODLer Airdrops! Earn GENIUS With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.0242
+   },
+   {
+    "data": "2025-02-24",
+    "simbolo": "GPSUSDT",
+    "giorni_prima": -8.2,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing GoPlus Security (GPS) on Binance HODLer Airdrops! Earn GPS With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.4414
+   },
+   {
+    "data": "2025-05-08",
+    "simbolo": "HAEDALUSDT",
+    "giorni_prima": -13.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Haedal Protocol (HAEDAL) on Binance HODLer Airdrops! Earn HAEDAL With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.2646
+   },
+   {
+    "data": "2025-09-05",
+    "simbolo": "HEMIUSDT",
+    "giorni_prima": -18.2,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Hemi (HEMI) on Binance HODLer Airdrops! Earn HEMI With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.2826
+   },
+   {
+    "data": "2023-04-13",
+    "simbolo": "HFTUSDT",
+    "giorni_prima": 163.6,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Hashflow (HFT) on Binance Launchpool! Farm HFT by Staking BNB and BUSD",
+    "r": -0.3137
+   },
+   {
+    "data": "2023-02-14",
+    "simbolo": "HIGHUSDT",
+    "giorni_prima": 423.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Highstreet (HIGH) on Binance Launchpool! Farm HIGH by Staking BNB and BUSD Tokens",
+    "r": -0.1805
+   },
+   {
+    "data": "2021-10-19",
+    "simbolo": "KLAYUSDT",
+    "giorni_prima": 116.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Klaytn (KLAY) on Binance Launchpool! Farm KLAY by Staking BNB & BUSD Tokens",
+    "r": 0.0237
+   },
+   {
+    "data": "2025-06-12",
+    "simbolo": "LAUSDT",
+    "giorni_prima": -27.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Lagrange (LA) on Binance HODLer Airdrops! Earn LA With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.5436
+   },
+   {
+    "data": "2025-09-08",
+    "simbolo": "LINEAUSDT",
+    "giorni_prima": -0.6,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Linea (LINEA) on Binance HODLer Airdrops! Earn LINEA With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.2262
+   },
+   {
+    "data": "2024-09-04",
+    "simbolo": "MBOXUSDT",
+    "giorni_prima": 1111.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Mobox (MBOX) on Binance Launchpool! Farm MBOX by Staking BNB, MBOX and BUSD Tokens",
+    "r": 0.1695
+   },
+   {
+    "data": "2024-12-04",
+    "simbolo": "MORPHOUSDT",
+    "giorni_prima": -303.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Morpho (MORPHO) on Binance HODLer Airdrops! Earn MORPHO With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.244
+   },
+   {
+    "data": "2025-12-17",
+    "simbolo": "NIGHTUSDT",
+    "giorni_prima": -84.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Midnight (NIGHT) on Binance HODLer Airdrops! Earn NIGHT With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.3424
+   },
+   {
+    "data": "2026-04-29",
+    "simbolo": "OPGUSDT",
+    "giorni_prima": -62.2,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing OpenGradient (OPG) on Binance HODLer Airdrops! Earn OPG With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.3523
+   },
+   {
+    "data": "2026-02-28",
+    "simbolo": "OPNUSDT",
+    "giorni_prima": -2.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Opinion (OPN) on Binance Launchpool! Farm OPN by Locking BNB, USDC, U, and USD1",
+    "r": 0.579
+   },
+   {
+    "data": "2025-03-28",
+    "simbolo": "PLUMEUSDT",
+    "giorni_prima": -143.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Plume (PLUME) on Binance HODLer Airdrops! Earn PLUME With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.1359
+   },
+   {
+    "data": "2021-03-01",
+    "simbolo": "REEFUSDT",
+    "giorni_prima": 68.6,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Reef Finance (REEF) on Binance Launchpool! Farm REEF By Staking BNB, BUSD & DOT Tokens",
+    "r": -0.1737
+   },
+   {
+    "data": "2026-03-06",
+    "simbolo": "ROBOUSDT",
+    "giorni_prima": -12.1,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Fabric Protocol (ROBO) on Binance HODLer Airdrops! Earn ROBO With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.3506
+   },
+   {
+    "data": "2024-11-04",
+    "simbolo": "SANTOSUSDT",
+    "giorni_prima": 1073.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Santos FC Fan Token (SANTOS) on Binance Launchpool! Farm SANTOS By Staking BNB and BUSD",
+    "r": -0.1827
+   },
+   {
+    "data": "2025-08-27",
+    "simbolo": "SAPIENUSDT",
+    "giorni_prima": -71.2,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Sapien (SAPIEN) on Binance HODLer Airdrops! Earn SAPIEN With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.3367
+   },
+   {
+    "data": "2025-02-24",
+    "simbolo": "SHELLUSDT",
+    "giorni_prima": -3.2,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing MyShell (SHELL) on Binance HODLer Airdrops! Earn SHELL With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.4245
+   },
+   {
+    "data": "2025-09-01",
+    "simbolo": "SOMIUSDT",
+    "giorni_prima": -0.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Somnia (SOMI) on Binance HODLer Airdrops! Earn SOMI With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.5478
+   },
+   {
+    "data": "2025-04-19",
+    "simbolo": "STOUSDT",
+    "giorni_prima": -13.4,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing StakeStone (STO) on Binance HODLer Airdrops! Earn STO With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.2816
+   },
+   {
+    "data": "2021-07-23",
+    "simbolo": "TLMUSDT",
+    "giorni_prima": 107.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Alien Worlds (TLM) on Binance Launchpool! Farm TLM By Staking BNB & BUSD Tokens",
+    "r": -0.2906
+   },
+   {
+    "data": "2024-03-08",
+    "simbolo": "TONUSDT",
+    "giorni_prima": -158.5,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Toncoin (TON) on Binance Launchpool and Super Earn! Farm TON by Staking BNB, FDUSD, and TON",
+    "r": -0.2423
+   },
+   {
+    "data": "2021-02-26",
+    "simbolo": "UNFIUSDT",
+    "giorni_prima": 104.7,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Unifi Protocol DAO (UNFI) on Binance Launchpool! Farm UNFI By Staking BNB, BUSD & ETH Tokens",
+    "r": -0.3155
+   },
+   {
+    "data": "2025-04-03",
+    "simbolo": "WALUSDT",
+    "giorni_prima": -190.1,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Walrus (WAL) on Binance HODLer Airdrops! Earn WAL With Retroactive BNB Simple Earn Subscriptions",
+    "r": 0.0188
+   },
+   {
+    "data": "2025-08-29",
+    "simbolo": "XPLUSDT",
+    "giorni_prima": -26.3,
+    "file": "quotazioni.json",
+    "launchpad": false,
+    "titolo": "Introducing Plasma (XPL) on Binance HODLer Airdrops! Earn XPL With Retroactive BNB Simple Earn Subscriptions",
+    "r": -0.3265
+   },
+   {
+    "data": "2023-04-20",
+    "simbolo": "XVSUSDT",
+    "giorni_prima": 933.7,
+    "file": "notizie.json",
+    "launchpad": false,
+    "titolo": "Introducing Venus (XVS) on Binance Launchpool! Farm XVS By Staking BNB, BUSD & SXP Tokens",
+    "r": 0.1706
+   }
+  ],
+  "titoli_gratis_senza_sigla": [
+   "Binance Launchpool Supports DeFi BNB Assets in Binance Web3 Wallet",
+   "Introducing Juventus and Paris Saint-Germain Fan Tokens on Binance Launchpool! Farm JUV and PSG tokens By Staking BNB, BUSD & CHZ Tokens",
+   "Introducing OG, Atlético de Madrid and AS Roma Fan Tokens on Binance Launchpool! Farm OG, ATM & ASR By Staking BNB, BUSD & CHZ Tokens"
+  ],
+  "n_titoli_gratis_senza_sigla": 3,
+  "file_annunci": [
+   "notizie.json",
+   "quotazioni.json",
+   "rimozioni.json"
+  ]
+ },
+ "riuso": {
+  "eventi_con_pause": [
+   {
+    "simbolo": "AERGOUSDT",
+    "data": "2024-09-17",
+    "prima_candela": "2024-09-10",
+    "pause": [
+     [
+      "2025-03-28",
+      19
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-06-30"
+   },
+   {
+    "simbolo": "AIAUSDT",
+    "data": "2025-09-25",
+    "prima_candela": "2025-09-18",
+    "pause": [
+     [
+      "2025-12-12",
+      39
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "BNXUSDT",
+    "data": "2022-04-08",
+    "prima_candela": "2022-04-01",
+    "pause": [
+     [
+      "2023-02-01",
+      21
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "CVXUSDT",
+    "data": "2022-09-29",
+    "prima_candela": "2022-09-22",
+    "pause": [
+     [
+      "2024-05-15",
+      434
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "MAVIAUSDT",
+    "data": "2024-02-28",
+    "prima_candela": "2024-02-21",
+    "pause": [
+     [
+      "2024-12-17",
+      99
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "MDTUSDT",
+    "data": "2023-07-07",
+    "prima_candela": "2023-06-30",
+    "pause": [
+     [
+      "2024-05-17",
+      887
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "PUMPUSDT",
+    "data": "2025-04-19",
+    "prima_candela": "2025-04-12",
+    "pause": [
+     [
+      "2025-06-14",
+      26
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "SLPUSDT",
+    "data": "2023-11-07",
+    "prima_candela": "2023-10-31",
+    "pause": [
+     [
+      "2024-05-16",
+      433
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   },
+   {
+    "simbolo": "TLMUSDT",
+    "data": "2021-07-23",
+    "prima_candela": "2021-07-16",
+    "pause": [
+     [
+      "2022-06-10",
+      293
+     ]
+    ],
+    "pausa_prima_della_fine_tenuta": false,
+    "ultima_candela": "2026-11-09"
+   }
+  ],
+  "n": 9,
+  "n_pausa_entro_la_tenuta": 0
+ },
+ "rifai32": {
+  "nota": "solo i dati locali (research/data/p6h, 511 simboli; research/data/p6 assente): 281 eventi ricalcolabili",
+  "candidati": 632,
+  "eventi_oggi": 281,
+  "comuni": 262,
+  "comuni_diversi": 0,
+  "senza_ore_oggi": 351,
+  "solo_oggi": [
+   {
+    "data": "2021-05-17",
+    "simbolo": "1000SHIBUSDT",
+    "r_oggi": 0.23756493125616976,
+    "r_senza_oggi": 0.23756493125616976
+   },
+   {
+    "data": "2022-10-26",
+    "simbolo": "APTUSDT",
+    "r_oggi": 0.3039654774997227,
+    "r_senza_oggi": 0.3039654774997227
+   },
+   {
+    "data": "2021-10-05",
+    "simbolo": "ARUSDT",
+    "r_oggi": -0.2149222048309202,
+    "r_senza_oggi": -0.15752442483998774
+   },
+   {
+    "data": "2021-04-05",
+    "simbolo": "CELRUSDT",
+    "r_oggi": 0.1764761573896967,
+    "r_senza_oggi": 0.1764761573896967
+   },
+   {
+    "data": "2021-03-17",
+    "simbolo": "COTIUSDT",
+    "r_oggi": -0.2917421898543016,
+    "r_senza_oggi": 0.1748776387460813
+   },
+   {
+    "data": "2023-01-24",
+    "simbolo": "FETUSDT",
+    "r_oggi": -0.2916741247108884,
+    "r_senza_oggi": -0.47664720629225704
+   },
+   {
+    "data": "2021-09-25",
+    "simbolo": "GALAUSDT",
+    "r_oggi": 0.5937377547929046,
+    "r_senza_oggi": 0.5937377547929046
+   },
+   {
+    "data": "2021-03-24",
+    "simbolo": "HBARUSDT",
+    "r_oggi": -0.24924071088235283,
+    "r_senza_oggi": 0.19819247231462864
+   },
+   {
+    "data": "2021-05-18",
+    "simbolo": "ICPUSDT",
+    "r_oggi": 0.5872874645168809,
+    "r_senza_oggi": 0.5872874645168809
+   },
+   {
+    "data": "2022-08-24",
+    "simbolo": "INJUSDT",
+    "r_oggi": 0.0532271645476054,
+    "r_senza_oggi": 0.0532271645476054
+   },
+   {
+    "data": "2022-09-29",
+    "simbolo": "LDOUSDT",
+    "r_oggi": 0.01520415670512362,
+    "r_senza_oggi": 0.01520415670512362
+   },
+   {
+    "data": "2021-02-25",
+    "simbolo": "LITUSDT",
+    "r_oggi": -0.09034260477691564,
+    "r_senza_oggi": 0.08983239372592125
+   },
+   {
+    "data": "2023-02-14",
+    "simbolo": "MINAUSDT",
+    "r_oggi": -0.24607068169607774,
+    "r_senza_oggi": 0.28287267640895886
+   },
+   {
+    "data": "2023-06-29",
+    "simbolo": "NMRUSDT",
+    "r_oggi": -0.20725478014395832,
+    "r_senza_oggi": -0.20725478014395832
+   },
+   {
+    "data": "2022-06-08",
+    "simbolo": "OPUSDT",
+    "r_oggi": 0.16571917744003087,
+    "r_senza_oggi": 0.16571917744003087
+   },
+   {
+    "data": "2023-08-04",
+    "simbolo": "PENDLEUSDT",
+    "r_oggi": 0.010276143798545984,
+    "r_senza_oggi": 0.010276143798545984
+   },
+   {
+    "data": "2021-02-01",
+    "simbolo": "SANDUSDT",
+    "r_oggi": -0.17674482868454466,
+    "r_senza_oggi": -1.4983741450475914
+   },
+   {
+    "data": "2023-08-24",
+    "simbolo": "SEIUSDT",
+    "r_oggi": 0.17169641279901424,
+    "r_senza_oggi": 0.17169641279901424
+   },
+   {
+    "data": "2023-02-28",
+    "simbolo": "STXUSDT",
+    "r_oggi": -0.15653932248722308,
+    "r_senza_oggi": 0.10920363854393828
+   }
+  ]
+ },
+ "funding": {
+  "eventi_con_giorni_senza_dato_vero": 2,
+  "giorni_senza_dato_vero": 32,
+  "giorni_stimati": 0,
+  "eventi_con_giorni_stimati": [],
+  "btc_giorni_senza_dato": 0,
+  "giorno_uscita_in_piu_media": -7.147267536704728e-05,
+  "giorno_uscita_in_piu_eventi": 320,
+  "primi_giorni_senza_dato": [
+   {
+    "data": "2022-04-08",
+    "simbolo": "BNXUSDT",
+    "senza_dato_vero": 31,
+    "stimati": 0
+   },
+   {
+    "data": "2021-07-23",
+    "simbolo": "TLMUSDT",
+    "senza_dato_vero": 1,
+    "stimati": 0
+   }
+  ]
+ },
+ "rifai32_tutti": {
+  "eventi": 632,
+  "senza_ore": [],
+  "solo_nel_file": [],
+  "solo_oggi": [
+   {
+    "data": "2021-05-17",
+    "simbolo": "1000SHIBUSDT",
+    "r_oggi": 0.23756493125616976
+   },
+   {
+    "data": "2022-10-26",
+    "simbolo": "APTUSDT",
+    "r_oggi": 0.3039654774997227
+   },
+   {
+    "data": "2021-10-05",
+    "simbolo": "ARUSDT",
+    "r_oggi": -0.2149222048309202
+   },
+   {
+    "data": "2021-04-05",
+    "simbolo": "CELRUSDT",
+    "r_oggi": 0.1764761573896967
+   },
+   {
+    "data": "2021-03-17",
+    "simbolo": "COTIUSDT",
+    "r_oggi": -0.2917421898543016
+   },
+   {
+    "data": "2023-01-24",
+    "simbolo": "FETUSDT",
+    "r_oggi": -0.2916741247108884
+   },
+   {
+    "data": "2021-09-25",
+    "simbolo": "GALAUSDT",
+    "r_oggi": 0.5937377547929046
+   },
+   {
+    "data": "2021-03-24",
+    "simbolo": "HBARUSDT",
+    "r_oggi": -0.24924071088235283
+   },
+   {
+    "data": "2021-05-18",
+    "simbolo": "ICPUSDT",
+    "r_oggi": 0.5872874645168809
+   },
+   {
+    "data": "2022-08-24",
+    "simbolo": "INJUSDT",
+    "r_oggi": 0.0532271645476054
+   },
+   {
+    "data": "2022-09-29",
+    "simbolo": "LDOUSDT",
+    "r_oggi": 0.01520415670512362
+   },
+   {
+    "data": "2021-02-25",
+    "simbolo": "LITUSDT",
+    "r_oggi": -0.09034260477691564
+   },
+   {
+    "data": "2023-02-14",
+    "simbolo": "MINAUSDT",
+    "r_oggi": -0.24607068169607774
+   },
+   {
+    "data": "2023-06-29",
+    "simbolo": "NMRUSDT",
+    "r_oggi": -0.20725478014395832
+   },
+   {
+    "data": "2022-06-08",
+    "simbolo": "OPUSDT",
+    "r_oggi": 0.16571917744003087
+   },
+   {
+    "data": "2023-08-04",
+    "simbolo": "PENDLEUSDT",
+    "r_oggi": 0.010276143798545984
+   },
+   {
+    "data": "2021-02-01",
+    "simbolo": "SANDUSDT",
+    "r_oggi": -0.17674482868454466
+   },
+   {
+    "data": "2023-08-24",
+    "simbolo": "SEIUSDT",
+    "r_oggi": 0.17169641279901424
+   },
+   {
+    "data": "2023-02-28",
+    "simbolo": "STXUSDT",
+    "r_oggi": -0.15653932248722308
+   }
+  ],
+  "comuni": 613,
+  "comuni_diversi": 8,
+  "diversi": [
+   {
+    "data": "2026-09-10",
+    "simbolo": "GPROUSDT",
+    "r_file": 0.1579235293967583,
+    "r_oggi": 0.20634855438132377,
+    "r_senza_file": 0.1579235293967583,
+    "r_senza_oggi": 0.20634855438132377,
+    "giorni_file": 21.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-08",
+    "simbolo": "MARSCOINUSDT",
+    "r_file": 0.4522485672648809,
+    "r_oggi": 0.44908266570932537,
+    "r_senza_file": 0.4522485672648809,
+    "r_senza_oggi": 0.44908266570932537,
+    "giorni_file": 30.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-13",
+    "simbolo": "PONSUSDT",
+    "r_file": 0.2034391993570338,
+    "r_oggi": 0.6055407939474361,
+    "r_senza_file": 0.2034391993570338,
+    "r_senza_oggi": 0.6055407939474361,
+    "giorni_file": 18.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "RAMUSDT",
+    "r_file": -0.0434092828131644,
+    "r_oggi": -0.04362129788602421,
+    "r_senza_file": -0.0434092828131644,
+    "r_senza_oggi": -0.04362129788602421,
+    "giorni_file": 30.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "SKDDUSDT",
+    "r_file": 0.3352750980672689,
+    "r_oggi": 0.33489483967390743,
+    "r_senza_file": 0.3352750980672689,
+    "r_senza_oggi": 0.33489483967390743,
+    "giorni_file": 30.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "SKUUUSDT",
+    "r_file": -0.3164020505155471,
+    "r_oggi": -0.31640205051554715,
+    "r_senza_file": -0.1621305434782723,
+    "r_senza_oggi": -0.1614900273391382,
+    "giorni_file": 7.125,
+    "giorni_oggi": 7.125
+   },
+   {
+    "data": "2026-09-09",
+    "simbolo": "TEAMUSDT",
+    "r_file": 0.0508346702933989,
+    "r_oggi": -0.10693409483639865,
+    "r_senza_file": 0.0508346702933989,
+    "r_senza_oggi": -0.10693409483639865,
+    "giorni_file": 22.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-09",
+    "simbolo": "ZSUSDT",
+    "r_file": -0.2164382432691368,
+    "r_oggi": -0.21643824326913683,
+    "r_senza_file": -0.1707746917956894,
+    "r_senza_oggi": -0.3087994479945351,
+    "giorni_file": 13.75,
+    "giorni_oggi": 13.75
+   }
+  ],
+  "eventi_con_ore_mancanti": 4,
+  "ore_mancanti_totali": 216,
+  "stop_con_apertura_oltre_1_31": []
+ },
+ "corretta": {
+  "a_file": {
+   "eventi": 613,
+   "gratis": 87,
+   "altre": 526,
+   "differenza": 0.0786830815194959,
+   "p_differenza": 0.027197280271972803,
+   "differenza_senza_uscita": 0.13647147252695366,
+   "media_gratis": 0.12108794075285478,
+   "media_altre": 0.029920529039723094,
+   "gratis_da_sole_p": 0.0005999400059994001,
+   "gratis_prima_meta": 0.10066302848142754,
+   "gratis_seconda_meta": 0.1410486504726587,
+   "gratis_senza_5": 0.08900855385753496,
+   "esame_gratis": "VALIDA",
+   "per_anno_gratis": {
+    "2021": [
+     2,
+     0.005222792232571105
+    ],
+    "2022": [
+     2,
+     -0.04186507452311064
+    ],
+    "2023": [
+     7,
+     -0.03415352037038061
+    ],
+    "2024": [
+     26,
+     0.13955146401649132
+    ],
+    "2025": [
+     49,
+     0.1447421301402096
+    ],
+    "2026": [
+     1,
+     0.1263076113730638
+    ]
+   },
+   "per_tipo": {
+    "hodler airdrops": [
+     43,
+     0.1346086234395893
+    ],
+    "launchpool": [
+     41,
+     0.08444958633423245
+    ],
+    "megadrop": [
+     3,
+     0.4280156659641652
+    ]
+   },
+   "trimestri": 15,
+   "passa_regole": false,
+   "differenza_senza_5_gratis_migliori": 0.04656859843750427,
+   "per_trimestre": [
+    [
+     "2021T1",
+     2,
+     18,
+     0.0945
+    ],
+    [
+     "2022T1",
+     1,
+     9,
+     0.1903
+    ],
+    [
+     "2022T2",
+     1,
+     5,
+     -0.4833
+    ],
+    [
+     "2023T2",
+     2,
+     14,
+     -0.0815
+    ],
+    [
+     "2023T3",
+     2,
+     12,
+     -0.1313
+    ],
+    [
+     "2023T4",
+     3,
+     37,
+     -0.1432
+    ],
+    [
+     "2024T1",
+     9,
+     18,
+     -0.1132
+    ],
+    [
+     "2024T2",
+     7,
+     8,
+     0.2217
+    ],
+    [
+     "2024T3",
+     3,
+     28,
+     0.2949
+    ],
+    [
+     "2024T4",
+     7,
+     51,
+     0.1058
+    ],
+    [
+     "2025T1",
+     9,
+     38,
+     0.0404
+    ],
+    [
+     "2025T2",
+     16,
+     48,
+     -0.0497
+    ],
+    [
+     "2025T3",
+     12,
+     52,
+     0.2904
+    ],
+    [
+     "2025T4",
+     12,
+     50,
+     0.2023
+    ],
+    [
+     "2026T1",
+     1,
+     25,
+     0.1661
+    ]
+   ],
+   "trimestri_positivi": 9
+  },
+  "b_file_piu_19": {
+   "eventi": 632,
+   "gratis": 90,
+   "altre": 542,
+   "differenza": 0.07626415593323599,
+   "p_differenza": 0.027697230276972302,
+   "differenza_senza_uscita": 0.13569552374253038,
+   "media_gratis": 0.11806978663687785,
+   "media_altre": 0.029588914604708885,
+   "gratis_da_sole_p": 0.00019998000199980003,
+   "gratis_prima_meta": 0.0899078475740635,
+   "gratis_seconda_meta": 0.1462317256996923,
+   "gratis_senza_5": 0.08694507491927662,
+   "esame_gratis": "VALIDA",
+   "per_anno_gratis": {
+    "2021": [
+     3,
+     -0.02663234010392446
+    ],
+    "2022": [
+     2,
+     -0.04186507452311064
+    ],
+    "2023": [
+     9,
+     -0.006344676221678237
+    ],
+    "2024": [
+     26,
+     0.13955146401649132
+    ],
+    "2025": [
+     49,
+     0.1447421301402096
+    ],
+    "2026": [
+     1,
+     0.1263076113730638
+    ]
+   },
+   "per_tipo": {
+    "hodler airdrops": [
+     43,
+     0.1346086234395893
+    ],
+    "launchpool": [
+     44,
+     0.0807741588982767
+    ],
+    "megadrop": [
+     3,
+     0.4280156659641652
+    ]
+   },
+   "trimestri": 15,
+   "passa_regole": false,
+   "differenza_senza_5_gratis_migliori": 0.045140835454946404,
+   "per_trimestre": [
+    [
+     "2021T1",
+     3,
+     21,
+     0.0841
+    ],
+    [
+     "2022T1",
+     1,
+     9,
+     0.1903
+    ],
+    [
+     "2022T2",
+     1,
+     6,
+     -0.4868
+    ],
+    [
+     "2023T2",
+     2,
+     15,
+     -0.0613
+    ],
+    [
+     "2023T3",
+     4,
+     12,
+     -0.0861
+    ],
+    [
+     "2023T4",
+     3,
+     37,
+     -0.1432
+    ],
+    [
+     "2024T1",
+     9,
+     18,
+     -0.1132
+    ],
+    [
+     "2024T2",
+     7,
+     8,
+     0.2217
+    ],
+    [
+     "2024T3",
+     3,
+     28,
+     0.2949
+    ],
+    [
+     "2024T4",
+     7,
+     51,
+     0.1058
+    ],
+    [
+     "2025T1",
+     9,
+     38,
+     0.0404
+    ],
+    [
+     "2025T2",
+     16,
+     48,
+     -0.0497
+    ],
+    [
+     "2025T3",
+     12,
+     52,
+     0.2904
+    ],
+    [
+     "2025T4",
+     12,
+     50,
+     0.2023
+    ],
+    [
+     "2026T1",
+     1,
+     25,
+     0.1661
+    ]
+   ],
+   "trimestri_positivi": 9
+  },
+  "c_rifatti_oggi": {
+   "eventi": 632,
+   "gratis": 90,
+   "altre": 542,
+   "differenza": 0.07626415593323599,
+   "p_differenza": 0.026797320267973202,
+   "differenza_senza_uscita": 0.13569552374253038,
+   "media_gratis": 0.1180697866368779,
+   "media_altre": 0.030122124345342453,
+   "gratis_da_sole_p": 0.00019998000199980003,
+   "gratis_prima_meta": 0.0899078475740635,
+   "gratis_seconda_meta": 0.1462317256996923,
+   "gratis_senza_5": 0.08694507491927662,
+   "esame_gratis": "VALIDA",
+   "per_anno_gratis": {
+    "2021": [
+     3,
+     -0.02663234010392446
+    ],
+    "2022": [
+     2,
+     -0.04186507452311064
+    ],
+    "2023": [
+     9,
+     -0.006344676221678243
+    ],
+    "2024": [
+     26,
+     0.13955146401649132
+    ],
+    "2025": [
+     49,
+     0.1447421301402096
+    ],
+    "2026": [
+     1,
+     0.1263076113730638
+    ]
+   },
+   "per_tipo": {
+    "hodler airdrops": [
+     43,
+     0.1346086234395893
+    ],
+    "launchpool": [
+     44,
+     0.0807741588982767
+    ],
+    "megadrop": [
+     3,
+     0.4280156659641652
+    ]
+   },
+   "trimestri": 15,
+   "passa_regole": false,
+   "differenza_senza_5_gratis_migliori": 0.045140835454946404,
+   "per_trimestre": [
+    [
+     "2021T1",
+     3,
+     21,
+     0.0841
+    ],
+    [
+     "2022T1",
+     1,
+     9,
+     0.1903
+    ],
+    [
+     "2022T2",
+     1,
+     6,
+     -0.4868
+    ],
+    [
+     "2023T2",
+     2,
+     15,
+     -0.0613
+    ],
+    [
+     "2023T3",
+     4,
+     12,
+     -0.0861
+    ],
+    [
+     "2023T4",
+     3,
+     37,
+     -0.1432
+    ],
+    [
+     "2024T1",
+     9,
+     18,
+     -0.1132
+    ],
+    [
+     "2024T2",
+     7,
+     8,
+     0.2217
+    ],
+    [
+     "2024T3",
+     3,
+     28,
+     0.2949
+    ],
+    [
+     "2024T4",
+     7,
+     51,
+     0.1058
+    ],
+    [
+     "2025T1",
+     9,
+     38,
+     0.0404
+    ],
+    [
+     "2025T2",
+     16,
+     48,
+     -0.0497
+    ],
+    [
+     "2025T3",
+     12,
+     52,
+     0.2904
+    ],
+    [
+     "2025T4",
+     12,
+     50,
+     0.2023
+    ],
+    [
+     "2026T1",
+     1,
+     25,
+     0.1661
+    ]
+   ],
+   "trimestri_positivi": 9
+  },
+  "finestra": {
+   "48": {
+    "gratis": 89,
+    "differenza": 0.07498326086943372,
+    "p_differenza": 0.029697030296970302,
+    "media_gratis": 0.11653195029663925,
+    "media_altre": 0.030536148464261004,
+    "gratis_da_sole_p": 0.0005999400059994001
+   },
+   "54": {
+    "gratis": 90,
+    "differenza": 0.07626415593323599,
+    "p_differenza": 0.026797320267973202,
+    "media_gratis": 0.1180697866368779,
+    "media_altre": 0.030122124345342453,
+    "gratis_da_sole_p": 0.00019998000199980003
+   },
+   "66": {
+    "gratis": 91,
+    "differenza": 0.0767785016145758,
+    "p_differenza": 0.025297470252974703,
+    "media_gratis": 0.11668238053760281,
+    "media_altre": 0.0301929308014284,
+    "gratis_da_sole_p": 9.999000099990002e-05
+   },
+   "72": {
+    "gratis": 92,
+    "differenza": 0.07514950442160703,
+    "p_differenza": 0.026997300269973004,
+    "media_gratis": 0.11352569819670386,
+    "media_altre": 0.030570570293329387,
+    "gratis_da_sole_p": 0.0005999400059994001
+   }
+  }
+ },
+ "dettagli": {
+  "ore_mancanti": [
+   {
+    "data": "2022-04-08",
+    "simbolo": "BNXUSDT",
+    "gratis": false,
+    "ore_mancanti": 24,
+    "fermata": false,
+    "r": -0.2631070744241969
+   },
+   {
+    "data": "2022-02-17",
+    "simbolo": "FLOWUSDT",
+    "gratis": false,
+    "ore_mancanti": 72,
+    "fermata": false,
+    "r": 0.1521597516166276
+   },
+   {
+    "data": "2022-03-22",
+    "simbolo": "GMTUSDT",
+    "gratis": false,
+    "ore_mancanti": 48,
+    "fermata": true,
+    "r": -0.1641305545483383
+   },
+   {
+    "data": "2022-02-18",
+    "simbolo": "IMXUSDT",
+    "gratis": false,
+    "ore_mancanti": 72,
+    "fermata": false,
+    "r": 0.0496102904130185
+   }
+  ],
+  "senza_uscita_sotto_meno_100": {
+   "gratis": 3,
+   "altre": 27
+  },
+  "senza_uscita_differenza": {
+   "come_nel_file": 0.13569552374253038,
+   "perdita_fermata_a_meno_100": 0.0936243631523908,
+   "media_gratis_cap": 0.1754521319319983,
+   "media_altre_cap": 0.08313271687330968
+  },
+  "concentrazione": {
+   "quota_5_migliori_gratis": 0.3045232373303103,
+   "r_min": -0.5866779352657747,
+   "r_max": 0.91381539380341
+  },
+  "clima": {
+   "laterale": {
+    "gratis": [
+     24,
+     0.22103255455993112
+    ],
+    "altre": [
+     133,
+     0.03441709369772633
+    ]
+   },
+   "rialzo": {
+    "gratis": [
+     49,
+     0.07014533563486067
+    ],
+    "altre": [
+     271,
+     0.03608589371630012
+    ]
+   },
+   "ribasso": {
+    "gratis": [
+     17,
+     0.11084576716308761
+    ],
+    "altre": [
+     138,
+     0.014271309683048367
+    ]
+   }
+  },
+  "dentro_il_mese": {
+   "differenza": 0.10024742952682336,
+   "p": 0.006999300069993001,
+   "mesi_con_tutti_e_due": 32,
+   "gratis_nei_mesi_confrontabili": 90
+  },
+  "dentro_la_settimana": {
+   "differenza": 0.1270302059575045,
+   "p": 0.0026997300269973002,
+   "gratis_nelle_settimane_confrontabili": 78
+  },
+  "annunci_nel_giorno_d_entrata_dopo_le_00": [
+   [
+    "LINEAUSDT",
+    "2025-09-08"
+   ],
+   [
+    "SOMIUSDT",
+    "2025-09-01"
+   ]
+  ]
+ },
+ "non_monete": {
+  "senza_i_2_confermati": {
+   "eventi": 630,
+   "gratis": 90,
+   "differenza": 0.07642213144551924,
+   "p_differenza": 0.026697330266973303,
+   "media_altre": 0.030222073791844592
+  },
+  "senza_i_sospetti_per_nome": {
+   "eventi": 608,
+   "gratis": 90,
+   "differenza": 0.07642213144551924,
+   "p_differenza": 0.026697330266973303,
+   "media_altre": 0.03172466572205099
+  },
+  "anno_2026_32": {
+   "tutti": [
+    87,
+    -0.0031211985086014938
+   ],
+   "senza_sospetti": [
+    63,
+    -0.0026088701809766713
+   ],
+   "sospetti": [
+    "BEUSDT",
+    "BNCUSDT",
+    "BSPUSDT",
+    "BXUSDT",
+    "EWTUSDT",
+    "FLEXUSDT",
+    "FWDIUSDT",
+    "GPROUSDT",
+    "GSUSDT",
+    "HDUSDT",
+    "KOUSDT",
+    "MUUUSDT",
+    "PAYPUSDT",
+    "QNTXUSDT",
+    "STRCUSDT",
+    "TBTUSDT",
+    "TEAMUSDT",
+    "USARUSDT",
+    "VRTUSDT",
+    "VSTUSDT",
+    "VUSDT",
+    "ZHONGJIUSDT",
+    "ZMUSDT",
+    "ZSUSDT"
+   ]
+  }
+ },
+ "prova32_rifatta_per_informazione": {
+  "con_uscita": {
+   "eventi": 632,
+   "settimane": 212,
+   "media": 0.0426463167602763,
+   "p": 0.001999800019998,
+   "prima_meta": 0.06233924300463449,
+   "seconda_meta": 0.022953390515918097,
+   "senza_5": 0.03619721760033806,
+   "per_anno": {
+    "2021": [
+     56,
+     -0.0019
+    ],
+    "2022": [
+     26,
+     0.0403
+    ],
+    "2023": [
+     95,
+     0.0553
+    ],
+    "2024": [
+     131,
+     0.0765
+    ],
+    "2025": [
+     237,
+     0.0464
+    ],
+    "2026": [
+     87,
+     -0.0031
+    ]
+   },
+   "esito": "VALIDA"
+  },
+  "senza_uscita": {
+   "eventi": 632,
+   "settimane": 212,
+   "media": 0.04458344962546909,
+   "p": 0.05369463053694631,
+   "prima_meta": 0.06843094119489661,
+   "seconda_meta": 0.02073595805604159,
+   "senza_5": 0.038082934731575216,
+   "per_anno": {
+    "2021": [
+     56,
+     -0.0023
+    ],
+    "2022": [
+     26,
+     -0.0098
+    ],
+    "2023": [
+     95,
+     0.0453
+    ],
+    "2024": [
+     131,
+     0.0952
+    ],
+    "2025": [
+     237,
+     0.0465
+    ],
+    "2026": [
+     87,
+     0.0088
+    ]
+   },
+   "esito": "media non sopra zero con p ≤ 0,01 (p 0.0537)"
+  }
+ },
+ "stop": {
+  "0.24": {
+   "eventi": 632,
+   "gratis": 90,
+   "media_gratis": 0.12166328198005881,
+   "media_altre": 0.022161864564045453,
+   "differenza": 0.08573063491200304,
+   "p_differenza": 0.0117988201179882,
+   "gratis_da_sole_p": 9.999000099990002e-05
+  },
+  "0.27": {
+   "eventi": 632,
+   "gratis": 90,
+   "media_gratis": 0.12223685072411955,
+   "media_altre": 0.02697251746204242,
+   "differenza": 0.076899039919679,
+   "p_differenza": 0.0225977402259774,
+   "gratis_da_sole_p": 9.999000099990002e-05
+  },
+  "0.33": {
+   "eventi": 632,
+   "gratis": 90,
+   "media_gratis": 0.12394037800106074,
+   "media_altre": 0.02589826917037266,
+   "differenza": 0.08636411180729577,
+   "p_differenza": 0.0178982101789821,
+   "gratis_da_sole_p": 0.00039996000399960006
+  },
+  "0.36": {
+   "eventi": 632,
+   "gratis": 90,
+   "media_gratis": 0.11406076767818932,
+   "media_altre": 0.023507054172594872,
+   "differenza": 0.07882801768470382,
+   "p_differenza": 0.030896910308969103,
+   "gratis_da_sole_p": 0.000999900009999
+  }
+ },
+ "rifai32_21ottobre": {
+  "nota": "ore tagliate al 30 settembre 2026; MARSCOIN non riprodotto (il 21 ottobre aveva ore di ottobre)",
+  "eventi": 632,
+  "comuni": 613,
+  "comuni_diversi": 8,
+  "diversi": [
+   {
+    "data": "2026-09-10",
+    "simbolo": "GPROUSDT",
+    "r_file": 0.1579235293967583,
+    "r_oggi": 0.15654276434564923,
+    "r_senza_file": 0.1579235293967583,
+    "r_senza_oggi": 0.15654276434564923,
+    "giorni_file": 21.0,
+    "giorni_oggi": 21.0
+   },
+   {
+    "data": "2026-09-08",
+    "simbolo": "MARSCOINUSDT",
+    "r_file": 0.4522485672648809,
+    "r_oggi": 0.18213229275588333,
+    "r_senza_file": 0.4522485672648809,
+    "r_senza_oggi": 0.18213229275588333,
+    "giorni_file": 30.0,
+    "giorni_oggi": 23.0
+   },
+   {
+    "data": "2026-09-13",
+    "simbolo": "PONSUSDT",
+    "r_file": 0.2034391993570338,
+    "r_oggi": 0.20297831586496798,
+    "r_senza_file": 0.2034391993570338,
+    "r_senza_oggi": 0.20297831586496798,
+    "giorni_file": 18.0,
+    "giorni_oggi": 18.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "RAMUSDT",
+    "r_file": -0.0434092828131644,
+    "r_oggi": -0.043620024805066666,
+    "r_senza_file": -0.0434092828131644,
+    "r_senza_oggi": -0.043620024805066666,
+    "giorni_file": 30.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "SKDDUSDT",
+    "r_file": 0.3352750980672689,
+    "r_oggi": 0.33570582935405524,
+    "r_senza_file": 0.3352750980672689,
+    "r_senza_oggi": 0.33570582935405524,
+    "giorni_file": 30.0,
+    "giorni_oggi": 30.0
+   },
+   {
+    "data": "2026-09-01",
+    "simbolo": "SKUUUSDT",
+    "r_file": -0.3164020505155471,
+    "r_oggi": -0.31640205051554715,
+    "r_senza_file": -0.1621305434782723,
+    "r_senza_oggi": -0.16106140383083023,
+    "giorni_file": 7.125,
+    "giorni_oggi": 7.125
+   },
+   {
+    "data": "2026-09-09",
+    "simbolo": "TEAMUSDT",
+    "r_file": 0.0508346702933989,
+    "r_oggi": 0.052612316276134545,
+    "r_senza_file": 0.0508346702933989,
+    "r_senza_oggi": 0.052612316276134545,
+    "giorni_file": 22.0,
+    "giorni_oggi": 22.0
+   },
+   {
+    "data": "2026-09-09",
+    "simbolo": "ZSUSDT",
+    "r_file": -0.2164382432691368,
+    "r_oggi": -0.21643824326913683,
+    "r_senza_file": -0.1707746917956894,
+    "r_senza_oggi": -0.17113635514628717,
+    "giorni_file": 13.75,
+    "giorni_oggi": 13.75
+   }
+  ]
+ }
+}

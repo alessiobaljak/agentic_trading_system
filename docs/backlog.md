@@ -748,3 +748,16 @@ Con 250 euro niente operazioni a eventi (il 5% del conto è sotto il minimo del 
   giornata, ribilancia subito: è quello che il 6 novembre, nel passaggio da 5.000 a 280, è costato circa 11 USDT.
 
 Prima, il demo con un capitale di 280 USDT: **fatto il 6 novembre** (il proprietario: «le chiavi di binance future reali le hai già, si posso usare future binance da svizzera, spegni eventi»): `ops/demo_binance_capitale` con 280, eventi spenti sul demo (`ops/demo_binance_eventi_acceso` tolto; il paper degli eventi resta acceso), filtri severi come quelli veri. Le chiavi del conto vero sono sulla macchina (dice il proprietario): non si leggono e non si usano finché non chiede i soldi veri in modo esplicito.
+
+### P32. Gli eventi delle monete nuove (prova 32) da rifare con il codice corretto — trovata l'11 novembre 2026 (riesame della prova 113)
+**Perché:** il riesame della prova 113 (backtest-auditor, `audits/reports/2026-11-11-PROVA113_N3G.md`) ha trovato che il file degli
+eventi della prova 32 (`eventi_N3B.csv`, 21 ottobre) è di prima della correzione della lettura oraria del 25 ottobre: 605 dei 613
+eventi sono giusti, ma **19 eventi sono spariti senza dirlo** (fra cui ICP, OP, APT, FET, AR, MINA, STX, NMR, PENDLE, SEI; 3 sono
+monete distribuite gratis). La voce P27, che ha chiuso le prove toccate da quella correzione, non elencava la 32. Rifatta per
+informazione: 632 eventi, +4,26% per evento, p 0,0020 (prima +4,29%, p 0,0017): il verdetto della 32 non cambia; la 113 resta bocciata
+(p 0,0268 contro 0,01). **Cosa:** rifare `eventi_N3B.csv` con il codice di oggi; aggiornare le righe 32 e 113 del registro; rifare la 33
+e gli script del programma 7 che leggono quel file (`terza.py`, `nona.py`, `ventottesima.py`, `ventinovesima.py`, `conto_unico.py`);
+togliere dagli eventi i contratti che non sono monete (due confermati, PAYP e QNTX, circa 20 sospetti: serve l'elenco ufficiale dei
+tipi di contratto, chiedibile alla macchina). Insieme: controllare la parità fra N3 nel bot (giorno di quotazione da `onboardDate`,
+filtro sul tipo del sottostante) e nella ricerca (prima candela, elenco degli esclusi), e registrare la misura in avanti delle monete
+distribuite gratis promessa il 27 ottobre e mai registrata. **Metro:** il numero di eventi e il rendimento per evento prima e dopo.
