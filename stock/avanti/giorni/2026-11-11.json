@@ -1,0 +1,104 @@
+{
+ "giorno": "2026-11-11",
+ "valore_conto": 100534.19,
+ "ordini": [
+  {
+   "simbolo": "MU",
+   "lato": "buy",
+   "quantita": 12,
+   "stop": 763.25,
+   "obiettivo": 925.89,
+   "riferimento": 778.04,
+   "id": "4989f1ff-a04f-4bd6-b53b-c9fbdb5a2110",
+   "inviato": "2026-11-11T15:08:24.281605-05:00"
+  },
+  {
+   "simbolo": "NVDA",
+   "lato": "sell",
+   "quantita": 57,
+   "stop": 175.12,
+   "obiettivo": 138.93,
+   "riferimento": 171.83,
+   "id": "b2025c06-7bdc-4455-be19-b2a74a9e1393",
+   "inviato": "2026-11-11T15:08:24.533605-05:00"
+  },
+  {
+   "simbolo": "SNDK",
+   "lato": "buy",
+   "quantita": 10,
+   "stop": 920.54,
+   "obiettivo": 1299.06,
+   "riferimento": 954.955,
+   "id": "4ce2078e-934c-4f36-a5c2-5a95e60c0f4e",
+   "inviato": "2026-11-11T15:08:24.922857-05:00"
+  },
+  {
+   "simbolo": "AAPL",
+   "lato": "buy",
+   "quantita": 27,
+   "stop": 349.32,
+   "obiettivo": 393.82,
+   "riferimento": 353.37,
+   "id": "45d9464d-97cc-473a-b36c-4e967377817d",
+   "inviato": "2026-11-11T15:08:25.158924-05:00"
+  },
+  {
+   "simbolo": "META",
+   "lato": "sell",
+   "quantita": 15,
+   "stop": 648.38,
+   "obiettivo": 583.15,
+   "riferimento": 642.45,
+   "id": "ad6e4572-123f-401f-a53f-ade5ac852301",
+   "inviato": "2026-11-11T15:08:25.409503-05:00"
+  },
+  {
+   "simbolo": "TSLA",
+   "lato": "buy",
+   "quantita": 25,
+   "stop": 386.46,
+   "obiettivo": 408.08,
+   "riferimento": 388.43,
+   "id": "f747b3c7-97e6-4c92-a215-993d65ac6717",
+   "inviato": "2026-11-11T15:08:25.897340-05:00"
+  },
+  {
+   "simbolo": "MSFT",
+   "lato": "sell",
+   "quantita": 18,
+   "stop": 534.5,
+   "obiettivo": 515.14,
+   "riferimento": 532.74,
+   "id": "f36c8eda-e9cb-4bce-aafe-5a81f4bcf72f",
+   "inviato": "2026-11-11T15:08:26.125213-05:00"
+  },
+  {
+   "simbolo": "AMD",
+   "lato": "sell",
+   "quantita": 18,
+   "stop": 543.13,
+   "obiettivo": 341.78,
+   "riferimento": 524.825,
+   "nota": "saltato: rifiutato (422 su /v2/orders: {\"base_price\":\"556.06\",\"code\":42210000,\"message\":\"stop_loss.stop_price must be \\u003e= base_price + 0)"
+  },
+  {
+   "simbolo": "INTC",
+   "lato": "sell",
+   "quantita": 161,
+   "stop": 62.22,
+   "obiettivo": 50.94,
+   "riferimento": 61.19,
+   "nota": "saltato: rifiutato (422 su /v2/orders: {\"base_price\":\"62.5607\",\"code\":42210000,\"message\":\"stop_loss.stop_price must be \\u003e= base_price + )"
+  },
+  {
+   "simbolo": "AMZN",
+   "lato": "sell",
+   "quantita": 36,
+   "stop": 274.86,
+   "obiettivo": 213.7,
+   "riferimento": 269.3,
+   "id": "58b909e5-7124-409b-82c8-f8b1b9f551cc",
+   "inviato": "2026-11-11T15:08:27.153852-05:00"
+  }
+ ]
+}
