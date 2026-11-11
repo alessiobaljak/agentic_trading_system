@@ -87,6 +87,11 @@ def componi(conto: dict, posizioni: list[dict], storia: dict, diario: pd.DataFra
         mv = _numero(p.get("market_value"))
         if mv and valore:
             pesi[chiave(p["symbol"])] = round(mv / valore, 4)       # Alpaca dà il valore negativo per le vendute
+    giorni = giorni_dal_conto(storia)
+    # lo storico di Alpaca arriva con un giorno di ritardo: a posizioni chiuse, il valore di adesso è quello di fine dell'ultimo giorno
+    if not diario.empty and not posizioni and valore:
+        ultimo = str(diario["giorno"].max())
+        giorni.setdefault(ultimo, round(valore, 2))
     a = av.riassunto(diario) if not diario.empty else None
     descrizione = ("La direzione dei primi 15 minuti sulle 10 azioni americane più scambiate del mese; stop e obiettivo fissi, "
                    "tutto chiuso a fine giornata.")
@@ -98,7 +103,7 @@ def componi(conto: dict, posizioni: list[dict], storia: dict, diario: pd.DataFra
         "capitale": CAPITALE, "valore": round(valore, 2), "rendimento": round(valore / CAPITALE - 1, 6),
         "comprate": sum(1 for p in posizioni if (_numero(p.get("qty")) or 0) > 0),
         "vendute": sum(1 for p in posizioni if (_numero(p.get("qty")) or 0) < 0),
-        "pesi": pesi or None, "aggiornato": int(adesso), "giorni": giorni_dal_conto(storia) or None,
+        "pesi": pesi or None, "aggiornato": int(adesso), "giorni": giorni or None,
         "primo_giorno_dal_capitale": True, "operazioni": operazioni_recenti(diario) or None,
     }
     if ordini_oggi:
