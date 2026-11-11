@@ -1,30 +1,30 @@
 # Programma 6 — il paper delle candidate
 
-Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-11-08**; funding stimato dall'indice del premio dal 2026-10-01 (si ricalcola quando l'archivio pubblica il file del mese).
+Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-11-09**; funding stimato dall'indice del premio dal 2026-10-01 (si ricalcola quando l'archivio pubblica il file del mese).
 Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C1). Verdetto a 52 e 104 settimane, mai prima.
 
 | Candidata | Periodi nel periodo P | Rendimento totale | Sharpe da quando è partita |
 |---|---|---|---|
 | F3 | 2 | +4.18% | 4.24 |
-| F5 | 2 | +3.77% | 7.22 |
-| K1 | 2 | -1.45% | -4.34 |
-| K2 | 2 | -0.06% | -0.11 |
-| M1 | 2 | +1.86% | 3.71 |
-| M6 | 2 | +10.75% | 15.56 |
-| M7 | 2 | +7.32% | 16.98 |
-| F2 | 2 | -1.88% | -46.78 |
+| F5 | 2 | +3.77% | 7.23 |
+| K1 | 2 | -1.45% | -4.35 |
+| K2 | 2 | -0.06% | -0.12 |
+| M1 | 2 | +1.87% | 3.71 |
+| M6 | 2 | +10.77% | 15.52 |
+| M7 | 2 | +7.34% | 17.11 |
+| F2 | 2 | -1.88% | -46.40 |
 | C1 | 2 | +6.47% | 6.31 |
 | metà F3 + metà K1 (derivata) | 2 | +1.35% | 2.08 |
 | F3 + M1 a rischio uguale | 2 | +3.28% | 4.11 |
-| F5 + M7 a rischio uguale (informazione) | 2 | +5.19% | 34.94 |
-| M7 + M8 a rischio uguale (informazione) | 2 | +6.42% | 89.76 |
+| F5 + M7 a rischio uguale (informazione) | 2 | +5.19% | 34.81 |
+| M7 + M8 a rischio uguale (informazione) | 2 | +6.43% | 92.99 |
 | F5 + M7 + K2 a rischio uguale (informazione) | 2 | +2.70% | 10.21 |
 | EWIL (informazione, dal 2 novembre) | 1 | -0.21% | — |
-| HLI (informazione, dal 2 novembre) | 6 | -1.59% | -4.61 |
-| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 6 | +3.90% | 10.38 |
-| DXI (informazione, dal 2 novembre) | 6 | +3.93% | 5.87 |
-| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 6 | +4.50% | 11.63 |
-| A1 | 20 | -1.26% | -4.28 |
+| HLI (informazione, dal 2 novembre) | 7 | -2.03% | -5.54 |
+| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 7 | +2.89% | 6.35 |
+| DXI (informazione, dal 2 novembre) | 7 | +4.45% | 6.20 |
+| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 7 | +3.87% | 8.57 |
+| A1 | 21 | -1.23% | -4.06 |
 
 ## Le posizioni di adesso
 
@@ -34,7 +34,7 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 * **M1**, ultima settimana calcolata (dal 2026-11-02; quella in corso si calcola a settimana chiusa): long 1000SHIBUSDT 4.9%, ADAUSDT 3.6%, ASTERUSDT 7.2%, ATOMUSDT 2.9%, BNBUSDT 6.1%, BTCUSDT 8.7%, DASHUSDT 3.8%, DOGEUSDT 5.3%, ETCUSDT 5.1%, ETHUSDT 6.8%, LINKUSDT 3.8%, LTCUSDT 5.0%, POLUSDT 4.2%, SOLUSDT 6.0%, TAOUSDT 3.6%, TRXUSDT 5.2%, XLMUSDT 4.5%, XMRUSDT 4.9%, XRPUSDT 5.6%, ZECUSDT 2.7%; short AGTUSDT -1.9%, AKEUSDT -3.8%, APRUSDT -3.3%, AVAUSDT -4.9%, BATUSDT -5.2%, BOMEUSDT -8.7%, ERAUSDT -7.7%, GRASSUSDT -6.8%, GTCUSDT -3.0%, JCTUSDT -1.3%, LSKUSDT -7.2%, MAGMAUSDT -3.6%, MOVRUSDT -9.7%, NILUSDT -6.0%, OGNUSDT -2.9%, QUSDT -1.0%, RAYSOLUSDT -10.5%, RLCUSDT -2.8%, TIAUSDT -7.5%, USUSDT -2.2%.
 * **F2**, settimana dal 2026-11-09: long 1000BONKUSDT, AEROUSDT, AKEUSDT, BCHUSDT, BIRBUSDT, BMTUSDT, ERAUSDT, GTCUSDT, HUMAUSDT, ICNTUSDT, IRYSUSDT, LSKUSDT, NILUSDT, QUSDT, RAYSOLUSDT, SANDUSDT, STXUSDT, TRUMPUSDT, WLDUSDT, WUSDT; short 1000PEPEUSDT, AGTUSDT, AINUSDT, APRUSDT, ARIAUSDT, ASTERUSDT, BNBUSDT, BRUSDT, EIGENUSDT, FARTCOINUSDT, GRASSUSDT, HYPEUSDT, JCTUSDT, MAGMAUSDT, MUBARAKUSDT, PENDLEUSDT, USELESSUSDT, USUSDT, WLFIUSDT, XMRUSDT.
 * **C1**, ultima settimana calcolata (dal 2026-11-02): long 1000BONKUSDT, 1000PEPEUSDT, APRUSDT, ASTERUSDT, BCHUSDT, BOMEUSDT, DASHUSDT, HYPEUSDT, LINKUSDT, MAGMAUSDT, ONDOUSDT, POLUSDT, QNTUSDT, TRUMPUSDT, UNIUSDT, WIFUSDT, XLMUSDT, XMRUSDT, ZECUSDT, ZROUSDT; short AEROUSDT, AGTUSDT, AKEUSDT, APTUSDT, ATOMUSDT, CRVUSDT, FETUSDT, INJUSDT, MUBARAKUSDT, NILUSDT, PHAUSDT, QUSDT, RLCUSDT, SEIUSDT, STRKUSDT, SUSDT, TIAUSDT, USELESSUSDT, WLDUSDT, ZKUSDT.
-* **A1**, pesi decisi alla chiusura del 2026-11-08 (frazione del capitale): 1000PEPEUSDT 0.8%, BTCUSDT 0.7%, ZECUSDT 0.4%, HYPEUSDT 0.4%, UNIUSDT 0.4%, BNBUSDT 0.3%, NEARUSDT 0.2%.
+* **A1**, pesi decisi alla chiusura del 2026-11-09 (frazione del capitale): 1000PEPEUSDT 1.0%, BTCUSDT 0.7%, ZECUSDT 0.4%, UNIUSDT 0.4%, HYPEUSDT 0.4%, BNBUSDT 0.3%, NEARUSDT 0.2%.
 
 **E4** (a eventi, dal 21 ottobre; si vedono quando esce il file mensile del funding): 1 eventi, media a 7 giorni +58.10%.
 

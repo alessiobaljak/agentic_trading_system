@@ -529,3 +529,7 @@ nuovo. **G1 sul demo a 1.000, terzo ribilancio**: 7 ordini e 47 variazioni sotto
 (un punto in tre giorni), ma tre giorni non dicono niente.
 **Giro delle 04:17.** Raccolta e controlli in avanti delle 04:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare dopo il ribilancio di mezzanotte.
+**Mattino delle 06:13 (mercoledì).** Notizie: 22 articoli nuovi da 23 fonti su 24; copia dei trader aggiornata. Prova in avanti (dati
+fino al 9 novembre): M-001c 332 su 400 (−0,39% a trade). Conto a tavolino (dati fino al 9 novembre, 20 monete nuove nell'universo, il
+giorno a metà non c'era): DXI per la prima volta sopra G1 sulle stesse monete (+4,45% contro +3,87% in 7 giorni); HLI −2,03% contro
++2,89%. Sette giorni: informazione, non verdetto.

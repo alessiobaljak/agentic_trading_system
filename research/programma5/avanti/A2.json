@@ -1,5 +1,5 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-11-08.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-11-09.zip",
  "procedure": {
   "N-001": {
    "trade": 68,
@@ -12,7 +12,7 @@
     "p": 0.8586141385861414
    },
    "netto_doppio": -0.022532382234568084,
-   "caso_netto": -0.00426641820120132,
+   "caso_netto": -0.0039485586051948235,
    "senza_migliore": -0.03347426782087947,
    "per_moneta": {
     "1000PEPEUSDT": {
@@ -165,7 +165,7 @@
     "p": 0.1257874212578742
    },
    "netto_doppio": 0.007648418265083866,
-   "caso_netto": -0.0006577369176497122,
+   "caso_netto": -0.0006150315585379735,
    "senza_migliore": 0.002992857114500756,
    "per_moneta": {
     "AAVEUSDT": {
@@ -344,18 +344,18 @@
    "esito": "in corso (54 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 31,
+   "trade": 32,
    "netto": {
-    "n": 31,
-    "giorni": 12,
-    "media": -0.03448395771639039,
-    "basso": -0.06987608001525092,
-    "alto": 0.007104464786841879,
-    "p": 0.9575042495750425
+    "n": 32,
+    "giorni": 13,
+    "media": -0.03477332990577088,
+    "basso": -0.06907936730483816,
+    "alto": 0.0030343553139123612,
+    "p": 0.9672032796720328
    },
-   "netto_doppio": -0.03856705251748458,
-   "caso_netto": 0.003165545845156199,
-   "senza_migliore": -0.04115167144046479,
+   "netto_doppio": -0.03888407695541791,
+   "caso_netto": 0.006756684361780868,
+   "senza_migliore": -0.04123529067711323,
    "per_moneta": {
     "1000BONKUSDT": {
      "trade": 1,
@@ -468,9 +468,13 @@
     "XRPUSDT": {
      "trade": 1,
      "netto": -0.006216234678749809
+    },
+    "ZECUSDT": {
+     "trade": 1,
+     "netto": -0.043743867776566595
     }
    },
-   "esito": "in corso (31 trade chiusi su 400)"
+   "esito": "in corso (32 trade chiusi su 400)"
   }
  }
 }
