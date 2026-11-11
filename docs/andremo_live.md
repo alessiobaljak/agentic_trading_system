@@ -554,3 +554,11 @@ ore e un giorno × tendenza, rottura e ritorno alla media, con i parametri fissi
 non tutti gli anni (MATIC 1d rottura +123% l'anno, 3 anni su 4). **Capito oggi**: anche a 4 ore e a un giorno le regole classiche sul
 prezzo di una moneta sola non reggono l'esame; conferma la lezione di ottobre (i vantaggi che reggono vengono da ragioni economiche,
 non dagli indicatori). Agente nuovo strategy-scout per le idee; il giro delle 4 ore fa avanzare la ricerca nuova a ogni giro.
+**Prova 150, l'asimmetria dei minuti (11 novembre, proposta da strategy-scout)**: **no**. Finestra di 7 giorni −1,4% l'anno (Sharpe
+−0,04, 3 anni su 6: +35,9% nel 2021, −50,1% nel 2026), finestra di 30 giorni −10,8% l'anno; correlazione con G1 circa zero, la miscela
+50/50 con G1 peggiora G1 (`research/programma7/RISULTATI_OTTANTOTTESIMA.md`; 450 monete, minuti dal 2021 scaricati dall'archivio). Il
+conto delle prove è 308. **Da sistemare**: sul disco nuovo le candele a 1 ora della ricerca (`research/data/p6h`) ci sono solo per
+pochi giorni e 10 monete, quindi i ricalcoli di G1 nella ricerca trattano quasi tutti gli ordini limite come ordini a mercato;
+vanno riscaricate (`python3 -m research.programma6.scarico_ore`) prima del prossimo confronto settimanale. **Capito oggi**: due idee
+nuove provate e scartate in un giorno, con le regole scritte prima; il fattore «lotteria» pubblicato sulle azioni sulle crypto
+funzionava nel 2021-2023 e poi si è rovesciato.

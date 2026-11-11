@@ -1,0 +1,248 @@
+{
+ "letture": [
+  "rendimento r = logaritmo del rapporto fra la chiusura dell'ultimo minuto di un blocco da 5 (allineato alle 00:00 UTC) e quella del blocco prima; il primo blocco del giorno usa l'ultimo del giorno prima; un blocco con un minuto di chiusura mancante non da' rendimento",
+  "giorno 'completo' = tutti i 1.440 minuti presenti; nella finestra contano solo i giorni completi, n = numero dei rendimenti validi; con meno di 5 giorni completi la moneta e' fuori dall'universo del giorno (il 28 ottobre 2026 manca nell'archivio per tutte: non rattoppato con l'interfaccia pubblica, per trattare tutte le monete allo stesso modo)",
+  "finestra dei 7 (o 30) giorni = i giorni di calendario prima della mezzanotte, mezzanotte esclusa",
+  "universo del giorno = le 100 della settimana (lunedi') come G1, intersecato con le monete che hanno il segnale; pesi e banda come G1 (volatilita' dei 30 giorni dal pannello, `ventiquattresima.pesi_banda`)",
+  "ordine: segnale piu' basso = acquisto (RS basso), segnale piu' alto = vendita: `pesi_banda` compra il rango alto, quindi il segnale passato e' -RS",
+  "spese a limite come G1 (`cinquantaseiesima.spese_a_limite`, candele a 1 ora); accanto, tutto a mercato"
+ ],
+ "N_prove": 308,
+ "G1_riferimento": {
+  "annuo": 0.5180110622782841,
+  "sharpe": 1.894080311005654,
+  "discesa_max": -0.29067690487061626
+ },
+ "v7": {
+  "intero": {
+   "settimane": 304,
+   "annuo": -0.013785949024348293,
+   "volatilita": 0.3272425924994197,
+   "sharpe": -0.04212761217619535,
+   "discesa_max": -0.6586932669269732,
+   "asimmetria": 0.2995869581692302,
+   "curtosi": 10.656313058375371
+  },
+  "boot": {
+   "media": -0.00026511440431439023,
+   "basso": -0.005359780175634915,
+   "alto": 0.004995902911176765,
+   "p": 0.5447455254474552
+  },
+  "costi_doppi": -0.0031505926062163803,
+  "giro_medio": 4.517419741431432,
+  "spese_annue": 0.15004486649890345,
+  "funding_annuo": 0.030114474690255976,
+  "long_annuo": 0.21469051242628442,
+  "short_annuo": -0.1897577084014166,
+  "settimane_ferme": 0,
+  "per_anno": {
+   "2021": 0.35888916037540186,
+   "2022": 0.05627851901016605,
+   "2023": 0.1497093619432856,
+   "2024": -0.07850648251815653,
+   "2025": -0.1514218423371833,
+   "2026": -0.5006919831978243
+  },
+  "ultimo_anno": -0.393508273765196,
+  "per_trimestre": {
+   "2021T1": 0.9943330777547862,
+   "2021T2": 0.41358580214309504,
+   "2021T3": -0.5805121341219253,
+   "2021T4": 0.6081498957256518,
+   "2022T1": 0.27223095703592143,
+   "2022T2": -0.08814958447876863,
+   "2022T3": 0.05590181824217358,
+   "2022T4": -0.014869114758662275,
+   "2023T1": 0.4340718719031847,
+   "2023T2": 0.2565497689606977,
+   "2023T3": -0.09546045829152836,
+   "2023T4": 0.0036762652007883145,
+   "2024T1": -0.6197167150344952,
+   "2024T2": 0.21059818545596573,
+   "2024T3": -0.4114174096173988,
+   "2024T4": 0.5321185419770902,
+   "2025T1": 0.4622222987938106,
+   "2025T2": -0.4232941857852823,
+   "2025T3": -0.6056379397922971,
+   "2025T4": -0.038977542564964246
+  },
+  "dopo_aprile_2025": {
+   "settimane": 81,
+   "annuo": -0.3802558515885542,
+   "volatilita": 0.23816071336104283,
+   "sharpe": -1.5966355081079235,
+   "discesa_max": -0.585408099307791,
+   "asimmetria": 0.020417575288014918,
+   "curtosi": 3.302401847906834
+  },
+  "dal_primo_segnale": {
+   "da": "2021-01-04",
+   "settimane": 304,
+   "annuo": -0.013785949024348293,
+   "volatilita": 0.3272425924994197,
+   "sharpe": -0.04212761217619535,
+   "discesa_max": -0.6586932669269732,
+   "asimmetria": 0.2995869581692302,
+   "curtosi": 10.656313058375371
+  },
+  "extra_btc_annuo": -0.038396607737112225,
+  "beta_btc": 0.08271183394323804,
+  "a_mercato": {
+   "sharpe": -0.08221478305255898,
+   "annuo": -0.026905582057868038,
+   "discesa_max": -0.6729514066397864,
+   "spese_annue": 0.16316449953242315
+  },
+  "ordini": {
+   "variazioni": 121892,
+   "eseguite_con_il_limite": 12790,
+   "senza_candele_a_1_ora": 108969
+  },
+  "movimenti": {
+   "entrate": 11372,
+   "uscite": 11316,
+   "giorni": 2127,
+   "entrate_al_giorno": 5.346497414198401,
+   "uscite_al_giorno": 5.320169252468265,
+   "durata_media_giorni": 9.72353148083011,
+   "giorni_con_operazioni": 2104
+  },
+  "monete_con_segnale_mediana": 100.0,
+  "giorni_con_posizioni": 2127,
+  "giorni": 2127,
+  "correlazione_G1_giornaliera": -0.00902316690572423,
+  "correlazione_G1_settimanale": -0.004929851780334626,
+  "correlazione_segnali_rango": -0.07574828179714801,
+  "miscela_50_50_G1": {
+   "annuo": 0.25211255662696797,
+   "sharpe": 1.185176487069355,
+   "discesa_max": -0.2852334939868728
+  },
+  "solo_G1_stesse_settimane": {
+   "annuo": 0.5180110622782841,
+   "sharpe": 1.894080311005654,
+   "discesa_max": -0.29067690487061626
+  },
+  "t": -0.1018595993674106,
+  "sharpe_corretto": 4.356383114098898e-06,
+  "sharpe_corretto_solo_gruppi": 3.4760830976104e-06,
+  "esito": "non passa: netto non positivo; anni positivi 3/6; t -0.10 sotto 3; Sharpe corretto 0.00 sotto 0,80"
+ },
+ "v30": {
+  "intero": {
+   "settimane": 304,
+   "annuo": -0.10754311897764217,
+   "volatilita": 0.3045519206630187,
+   "sharpe": -0.3531191618937012,
+   "discesa_max": -0.7070944962231449,
+   "asimmetria": -0.2904942216358983,
+   "curtosi": 7.282871173628526
+  },
+  "boot": {
+   "media": -0.0020681369034161955,
+   "basso": -0.006241793108328709,
+   "alto": 0.002037270141738321,
+   "p": 0.8398160183981602
+  },
+  "costi_doppi": -0.0032926333624840568,
+  "giro_medio": 1.8714363955895639,
+  "spese_annue": 0.0636738158715288,
+  "funding_annuo": 0.047350732111140825,
+  "long_annuo": 0.18178659425015814,
+  "short_annuo": -0.27710266417171725,
+  "settimane_ferme": 0,
+  "per_anno": {
+   "2021": -0.18890746543035314,
+   "2022": -0.02808093274135652,
+   "2023": 0.0945322331260148,
+   "2024": -0.35026676888143893,
+   "2025": -0.22962588005173956,
+   "2026": 0.09719295178092176
+  },
+  "ultimo_anno": -0.05520537886838698,
+  "per_trimestre": {
+   "2021T1": 0.19072024853210653,
+   "2021T2": -0.5094537541363857,
+   "2021T3": -0.5360917384308559,
+   "2021T4": 0.09919538231372255,
+   "2022T1": 0.5621577893709101,
+   "2022T2": -0.08508721374683492,
+   "2022T3": 0.15715258158075965,
+   "2022T4": -0.7465468881702609,
+   "2023T1": 0.8319674889819283,
+   "2023T2": -0.0843173004242366,
+   "2023T3": -0.46638484441324457,
+   "2023T4": 0.09686358835961217,
+   "2024T1": -0.8801319272605298,
+   "2024T2": 0.1718818400813766,
+   "2024T3": -0.4138759915273489,
+   "2024T4": -0.2740479796926452,
+   "2025T1": -0.035622167927187726,
+   "2025T2": -0.12460596533560199,
+   "2025T3": -0.19898322208191455,
+   "2025T4": -0.5592921648622543
+  },
+  "dopo_aprile_2025": {
+   "settimane": 81,
+   "annuo": -0.050263744458066015,
+   "volatilita": 0.2563705753761231,
+   "sharpe": -0.1960589446909955,
+   "discesa_max": -0.3201785455851297,
+   "asimmetria": 0.00639456139982247,
+   "curtosi": 3.408550760654111
+  },
+  "dal_primo_segnale": {
+   "da": "2021-01-04",
+   "settimane": 304,
+   "annuo": -0.10754311897764217,
+   "volatilita": 0.3045519206630187,
+   "sharpe": -0.3531191618937012,
+   "discesa_max": -0.7070944962231449,
+   "asimmetria": -0.2904942216358983,
+   "curtosi": 7.282871173628526
+  },
+  "extra_btc_annuo": -0.12324438075042612,
+  "beta_btc": 0.05276901246760554,
+  "a_mercato": {
+   "sharpe": -0.3660163975315551,
+   "annuo": -0.11152102406683245,
+   "discesa_max": -0.7143237409205823,
+   "spese_annue": 0.06765172096071906
+  },
+  "ordini": {
+   "variazioni": 115151,
+   "eseguite_con_il_limite": 11443,
+   "senza_candele_a_1_ora": 103568
+  },
+  "movimenti": {
+   "entrate": 3619,
+   "uscite": 3565,
+   "giorni": 2127,
+   "entrate_al_giorno": 1.7014574518100611,
+   "uscite_al_giorno": 1.6760695815702868,
+   "durata_media_giorni": 30.833379386570876,
+   "giorni_con_operazioni": 1737
+  },
+  "monete_con_segnale_mediana": 100.0,
+  "giorni_con_posizioni": 2127,
+  "giorni": 2127,
+  "correlazione_G1_giornaliera": -0.010024309448184074,
+  "correlazione_G1_settimanale": -0.06440998759497431,
+  "correlazione_segnali_rango": -0.09038866766057733,
+  "miscela_50_50_G1": {
+   "annuo": 0.20523397165032098,
+   "sharpe": 1.0365261764377747,
+   "discesa_max": -0.2566744126586975
+  },
+  "solo_G1_stesse_settimane": {
+   "annuo": 0.5180110622782841,
+   "sharpe": 1.894080311005654,
+   "discesa_max": -0.29067690487061626
+  },
+  "t": -0.8538005004654079,
+  "sharpe_corretto": 8.518269736516702e-08,
+  "sharpe_corretto_solo_gruppi": 6.542948942052222e-08,
+  "esito": "non passa: netto non positivo; anni positivi 2/6; t -0.85 sotto 3; Sharpe corretto 0.00 sotto 0,80"
+ }
+}
