@@ -540,3 +540,5 @@ nei file in comune; le due sessioni sono registrate (crypto e «trading stock»)
 non fermare il bot sulla macchina. 2.730 test passano (la firma a parte).
 **Giro delle 08:17.** Raccolta e controlli in avanti delle 08:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Giro delle 12:17.** Raccolta e controlli in avanti delle 12:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
+misurare fino al ribilancio di stanotte.
