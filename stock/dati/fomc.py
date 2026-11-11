@@ -25,3 +25,11 @@ COMUNICATI_CHIUSO = [date(*x) for x in [
     (2025, 1, 29), (2025, 3, 19), (2025, 5, 7), (2025, 6, 18), (2025, 7, 30), (2025, 9, 17), (2025, 10, 29), (2025, 12, 10),
     (2026, 1, 28), (2026, 3, 18), (2026, 4, 29), (2026, 6, 17), (2026, 7, 29), (2026, 9, 16),
 ]]
+
+
+# Dopo il periodo chiuso, per la misura in avanti della miscela (stock/avanti/MISCELA.md): secondo giorno di ogni riunione programmata,
+# dalla pagina https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm letta l'11 novembre 2026.
+COMUNICATI_AVANTI = [date(*x) for x in [
+    (2026, 10, 28), (2026, 12, 9),
+    (2027, 1, 27), (2027, 3, 17), (2027, 4, 28), (2027, 6, 9), (2027, 7, 28), (2027, 9, 15), (2027, 10, 27), (2027, 12, 8),
+]]

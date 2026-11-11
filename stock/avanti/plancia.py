@@ -134,22 +134,33 @@ def _credenziali() -> dict | None:
     return valori if all(valori.values()) else None
 
 
-def pubblica(allarmi: dict | None = None) -> str:
+def scrivi(aggiornamenti: dict) -> str | None:
+    """Scrive più rami sotto /azioni in un colpo solo (PATCH: i rami non nominati restano come sono, così la prima candela e la
+    miscela non si cancellano a vicenda). Restituisce un messaggio d'errore, o None se è andata bene."""
     cred = _credenziali()
     if cred is None:
         return "Plancia: credenziali di Firebase mancanti nell'ambiente, niente pubblicato (stock/avanti/FIREBASE.md)"
-    dati = raccogli(allarmi)
     r = requests.post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
                       params={"key": cred["AZIONI_FIREBASE_API_KEY"]},
                       json={"email": cred["AZIONI_FIREBASE_EMAIL"], "password": cred["AZIONI_FIREBASE_PASSWORD"],
                             "returnSecureToken": True}, timeout=30)
     if r.status_code != 200:
         return f"Plancia: accesso a Firebase rifiutato ({r.status_code}), niente pubblicato"
-    token = r.json()["idToken"]
     url = cred["AZIONI_FIREBASE_URL"].rstrip("/")
-    w = requests.put(f"{url}/azioni.json", params={"auth": token}, json=dati, timeout=30)
+    w = requests.patch(f"{url}/azioni.json", params={"auth": r.json()["idToken"]}, json=aggiornamenti, timeout=30)
     if w.status_code != 200:
         return f"Plancia: scrittura su /azioni rifiutata ({w.status_code}: {w.text[:120]})"
+    return None
+
+
+def pubblica(allarmi: dict | None = None) -> str:
+    if _credenziali() is None:
+        return "Plancia: credenziali di Firebase mancanti nell'ambiente, niente pubblicato (stock/avanti/FIREBASE.md)"
+    dati = raccogli(allarmi)
+    errore = scrivi({"battito": dati["battito"], "soglia_battito_s": dati["soglia_battito_s"], f"strategie/{ID}": dati["strategie"][ID],
+                     "allarmi/posizioni_aperte": (allarmi or {}).get("posizioni_aperte")})
+    if errore:
+        return errore
     s = dati["strategie"][ID]
     return f"Plancia: pubblicato /azioni (valore {s['valore']:,.2f} dollari, {len(s.get('giorni') or {})} giorni)"
 

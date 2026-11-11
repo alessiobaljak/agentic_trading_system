@@ -73,3 +73,23 @@ def test_plancia_componi_forma_della_guida():
     assert s["ultimo_ribilancio"]["entrate"] == 1 and d["allarmi"] is None
     json_ok = __import__("json").dumps(d)                             # niente NaN o tipi che Firebase non accetta
     assert "NaN" not in json_ok
+
+
+def test_miscela_regole():
+    from datetime import date
+    import numpy as np
+    from stock.avanti import miscela as mi
+    c = pd.Series(100 * np.cumprod(1 + np.r_[0, [0.01, -0.01] * 15]))
+    v = float(c.iloc[-22:].pct_change().dropna().std(ddof=1) * np.sqrt(252))
+    assert mi.quota_calma(c) == pytest.approx(min(0.16 / v, 1.5))
+    sale = pd.Series(np.arange(1, 251, dtype=float))
+    scende = pd.Series(np.arange(250, 0, -1, dtype=float))
+    assert mi.ampiezza({"A": sale, "B": scende, "C": sale.iloc[:100]}) == pytest.approx(0.5)
+    cal = [date(2026, 12, 7), date(2026, 12, 8), date(2026, 12, 9), date(2026, 12, 10)]
+    assert mi.giorni_fed(date(2026, 12, 8), cal[1:]) == "vigilia" and mi.giorni_fed(date(2026, 12, 9), cal[2:]) == "giorno"
+    assert mi.giorni_fed(date(2026, 12, 7), cal) is None
+    stato = {"fed": 1.0, "calma": {"SPY": 1.5, "QQQ": 0.0}, "ampiezza": 0.49}
+    e = mi.esposizione(stato)
+    assert e["SPY"] == pytest.approx((0.98 + 1.47 + 0.49) / 6) and e["QQQ"] == pytest.approx((0.98 + 0.49) / 6)
+    d = mi.ordini(60_000, {"SPY": 0.5, "QQQ": 0.0}, {"SPY": 500.0, "QQQ": 400.0}, {"SPY": 59, "QQQ": 10})
+    assert d == {"QQQ": -10}                        # SPY: 60 voluti contro 59, sotto la soglia; QQQ a zero si chiude sempre

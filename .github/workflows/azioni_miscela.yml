@@ -1,0 +1,75 @@
+name: azioni-miscela
+
+# La miscela sul conto demo (stock/avanti/MISCELA.md), con le chiavi del suo conto demo nei segreti del repository
+# (ALPACA_MISCELA_KEY_ID, ALPACA_MISCELA_SECRET_KEY) e quelle della Plancia. Gli orari programmati girano solo se esiste
+# stock/avanti/miscela_accesa. La sera: dopo le 19:00 di New York (Alpaca accetta gli ordini all'apertura solo da allora); la banca
+# centrale: partenza alle 13:30-13:40 di New York, il programma aspetta le 14:00 o le 13:59 (ed esce se oggi non c'è niente da fare).
+on:
+  schedule:
+    - cron: "20 0 * * 2-6"    # sera: 19:20 o 20:20 di New York del giorno prima
+    - cron: "50 1 * * 2-6"    # sera, riserva
+    - cron: "30 17 * * 1-5"   # banca centrale: 12:30 o 13:30 di New York
+    - cron: "35 18 * * 1-5"   # banca centrale, riserva: 13:35 o 14:35 di New York
+  workflow_dispatch:
+    inputs:
+      comando:
+        description: "controlla | plancia | sera | fed"
+        required: true
+        default: controlla
+
+permissions:
+  contents: write
+
+concurrency:
+  group: azioni-miscela
+  cancel-in-progress: false
+
+jobs:
+  miscela:
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/brave-albattani-1b12fv
+      - name: Acceso?
+        id: acceso
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
+          elif [ ! -f stock/avanti/miscela_accesa ]; then
+            echo "comando=" >> "$GITHUB_OUTPUT"; echo "spenta: manca stock/avanti/miscela_accesa"
+          elif [ "${{ github.event.schedule }}" = "20 0 * * 2-6" ] || [ "${{ github.event.schedule }}" = "50 1 * * 2-6" ]; then
+            echo "comando=sera" >> "$GITHUB_OUTPUT"
+          else
+            echo "comando=fed" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.acceso.outputs.comando != ''
+        with:
+          python-version: "3.12"
+      - run: pip install pandas numpy requests
+        if: steps.acceso.outputs.comando != ''
+      - name: Miscela
+        if: steps.acceso.outputs.comando != ''
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_MISCELA_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_MISCELA_SECRET_KEY }}
+          AZIONI_FIREBASE_URL: ${{ secrets.AZIONI_FIREBASE_URL }}
+          AZIONI_FIREBASE_API_KEY: ${{ secrets.AZIONI_FIREBASE_API_KEY }}
+          AZIONI_FIREBASE_EMAIL: ${{ secrets.AZIONI_FIREBASE_EMAIL }}
+          AZIONI_FIREBASE_PASSWORD: ${{ secrets.AZIONI_FIREBASE_PASSWORD }}
+        run: python -m stock.avanti.miscela "${{ steps.acceso.outputs.comando }}"
+      - name: Salva lo stato nel repository
+        if: always() && steps.acceso.outputs.comando != ''
+        run: |
+          git config user.name "azioni-miscela"
+          git config user.email "noreply@anthropic.com"
+          git add stock/avanti/miscela_stato.json stock/avanti/miscela_diario.csv 2>/dev/null || true
+          if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
+          git commit -m "stock: miscela, ${{ steps.acceso.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase origin claude/brave-albattani-1b12fv && git push origin HEAD:claude/brave-albattani-1b12fv && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
