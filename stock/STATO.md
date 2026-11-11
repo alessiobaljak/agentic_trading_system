@@ -168,7 +168,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 * **La misura in avanti sul conto demo di Alpaca** (richiesta del proprietario del 7 nov 2026: «non in back testing [...] real time,
   forward testing»): la prima candela da 15 minuti sulle 10 azioni più scambiate del mese, regole in `stock/avanti/REGOLE.md`, due
   routine nei giorni di borsa (9:46 e 15:55 di New York) dentro la sessione «trading stock», diario in `stock/avanti/diario.csv`,
-  riepilogo ogni lunedì. **Ferma finché le chiavi di Alpaca non tornano nell'ambiente** (mancano dal 30 ottobre).
+  riepilogo ogni lunedì. Dall'11 novembre 2026 gira su **GitHub** con le chiavi nei segreti del repository (`.github/workflows/azioni_avanti.yml`, acceso da `stock/avanti/acceso_su_github`); le routine della sessione sono spente; pubblica sulla Plancia sotto `/azioni`.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
