@@ -9,7 +9,7 @@ from datetime import UTC, date, datetime
 
 import pandas as pd
 
-from stock.dati import alpaca, finra
+from stock.dati import controlli, finra
 from stock.prove.p001 import CAPITALE, QUI, annuo, carica_serie, comprare_e_tenere, salva_serie
 from stock.prove.p003 import RADICE, prepara_titolo, rendimenti, scarti_misurati
 from stock.prove.p011 import carica_tutti, costi_per, membri_dell_indice
@@ -34,9 +34,10 @@ def costi_con_prestito(simboli, scarti, f):
 def main():
     membri, simboli = membri_dell_indice()
     fino = date(2024, 12, 31)
-    cal = list(alpaca.calendario("2016-01-01", "2024-12-31").index)
     barre, rett, senza = carica_tutti(simboli, fino)
     barre["SPY"], rett["SPY"], _ = prepara_titolo("SPY", fino)
+    # il calendario dai giorni con la barra dello SPY (le chiavi di Alpaca non sono più nell'ambiente delle sessioni dall'11 nov 2026)
+    cal = sorted(controlli.date_ny(barre["SPY"].index))
     scarti = scarti_misurati(RADICE / "dati" / "ESITO_CONTROLLI_UNIVERSO.md")
     dati = finra.carica()
     dati = dati[dati["settlementDate"] <= fino]
