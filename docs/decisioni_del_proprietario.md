@@ -115,3 +115,13 @@ le monete nate dopo ottobre, le idee in coda; il revisore delle prove sulle cinq
 Cosa ne è venuto: `strategy-improver` e `portfolio-allocator` in `.claude/agents/` (memorie in `research/miglioramenti/` e
 `allocazione/`); la regola in `CLAUDE.md`; il test `tests/test_strategie_restano_accese.py`, che fallisce se si toglie l'interruttore
 di una delle sei strategie (G1 sul demo, G1, G1 neutra, G11, F5, eventi) o se il bot smette di crearla o di farla girare.
+
+## 11 novembre 2026: la ricerca nuova non si ferma, le aree separate
+
+Le parole del proprietario: «ok ma non fermarti a cercarne di nuove, non dico che queste non sono abbastanza ma dovremmo continuare a
+provare cose nuove, dovremmo avere un sub agent per questo corretto?». Prima, lo stesso giorno: «una cartella con crypto dove ci
+scrivi solo tu, una cartella con stock dove ci scrive l'altra sessione e altre cartelle che magari creo dopo tipo Forex» e «ok procedi
+con la mappa e il blocco». Cosa ne è venuto: l'agente `strategy-scout` (le idee nuove con le regole scritte prima), il giro delle 4
+ore con due binari (migliorare G1 e far avanzare la ricerca nuova), la prova 149 (la 1:1:1) partita; la mappa delle aree `AREE.md` con
+il blocco `.claude/hooks/aree.py`. La decisione del 5 novembre («un'idea nuova solo con un perché forte») resta per la qualità delle
+idee, non per la loro frequenza.

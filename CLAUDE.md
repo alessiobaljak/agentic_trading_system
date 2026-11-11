@@ -43,6 +43,9 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   `tests/test_strategie_restano_accese.py`). Il vault non si pulisce. Due agenti nuovi: chi migliora le strategie in corso e chi
   sceglie quale usare in produzione. La ricerca nuova la fanno gli agenti: la 1:1:1 (una moneta, un intervallo, una strategia) su 4
   ore e un giorno, il riesame delle prove bocciate di poco, le monete nate dopo ottobre, le idee in coda.
+* **11 novembre**: «non fermarti a cercarne di nuove [...] dovremmo continuare a provare cose nuove»: la ricerca nuova va avanti a
+  ogni giro accanto al miglioramento di G1 (strategy-scout propone, strategy-researcher esegue, backtest-auditor giudica); le aree del
+  repository separate (`AREE.md`).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
@@ -179,12 +182,15 @@ Principio del proprietario: chi scrive una strategia non la valuta, chi la valut
 * **strategy-improver** (modello medio; dall'8 novembre): migliora le strategie in corso secondo i piani (per G1
   `research/programma7/MIGLIORARE_G1.md`); una variante entra accanto all'originale, mai al suo posto. La sessione principale lo chiama
   nel giro delle 4 ore quando c'è un passo vero da fare, non per scrivere «niente di nuovo».
+* **strategy-scout** (modello medio; dall'11 novembre): cerca idee nuove con un perché forte (dato mai usato, studio serio, fatto
+  visto in avanti, idea del proprietario), controlla che non siano già provate e scrive le regole prima di ogni calcolo; una o due idee
+  al giorno (giro delle 08:17) o quando la coda resta senza prove pronte. Non calcola e non giudica.
 * **portfolio-allocator** (modello medio; prima dei soldi veri il più potente; dall'8 novembre): ogni lunedì dopo gate2-reconciler,
   e prima di ogni proposta di demo combinato o di soldi veri, dice quale strategia o miscela usare in produzione e con quale
   capitale, con regole scritte prima (`allocazione/REGOLE.md`, da far approvare al proprietario). Propone, non esegue.
 * Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
 
-Flusso: idea con un perché forte → regole scritte prima (sessione principale, riga nel registro) → strategy-researcher → se
+Flusso: idea con un perché forte (strategy-scout o sessione principale) → regole scritte prima (committate dalla sessione principale, riga nel registro) → strategy-researcher → se
 promettente, backtest-auditor → se PASS, paper (lo decide la sessione principale) → ok del proprietario → demo → gate2-reconciler
 ogni settimana → portfolio-allocator → ok del proprietario → soldi veri. Le strategie in corso: strategy-improver → (se una variante
 passa il suo esame) backtest-auditor → paper accanto all'originale. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale
