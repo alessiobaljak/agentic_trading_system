@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       comando:
-        description: "controlla | plancia | elenco | apri | chiudi"
+        description: "controlla | plancia | elenco | apri | chiudi | chiudi_fuori_orario"
         required: true
         default: controlla
 

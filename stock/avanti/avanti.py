@@ -175,6 +175,9 @@ def apri() -> str:
         return "oggi la seduta è corta: niente ordini (regola 0)"
     adesso = ny_adesso()
     pronto = s["apertura"] + pd.Timedelta(minutes=MINUTI_CANDELA)
+    # 11 nov 2026: un orario di GitHub è partito con 7 ore di ritardo e ha mandato gli ordini alle 15:08. Dopo le 10:00 non si entra mai.
+    if adesso > s["apertura"] + pd.Timedelta(minutes=30):
+        return f"troppo tardi ({adesso:%H:%M} di New York): dopo le 10:00 non si entra, il giorno si salta"
     if adesso < pronto:
         time.sleep((pronto - adesso).total_seconds() + 5)
     oggi = adesso.date().isoformat()
@@ -248,6 +251,30 @@ def chiudi() -> str:
     return esito
 
 
+def chiudi_fuori_orario() -> str:
+    """Emergenza: chiude le posizioni rimaste dopo la seduta con ordini limite validi fuori orario (fino alle 20:00 di New York),
+    al prezzo dell'ultimo scambio peggiorato dello 0,5% perché si eseguano."""
+    _richiesta("DELETE", "/v2/orders")
+    time.sleep(5)
+    fatti = []
+    for p in _richiesta("GET", "/v2/positions"):
+        q = float(p["qty"])
+        ultimo = float(alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/{p['symbol']}/trades/latest", {"feed": "iex"})["trade"]["p"])
+        limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
+        corpo = {"symbol": p["symbol"], "qty": str(abs(int(q))), "side": "sell" if q > 0 else "buy", "type": "limit",
+                 "limit_price": f"{limite:.2f}", "time_in_force": "day", "extended_hours": True}
+        o = _richiesta("POST", "/v2/orders", json=corpo)
+        fatti.append(f"{p['symbol']} {-q:+g} a {limite} ({o.get('status')})")
+    time.sleep(60)
+    rimaste = [p["symbol"] for p in _richiesta("GET", "/v2/positions")]
+    oggi = ny_adesso().date().isoformat()
+    esito = scrivi_diario(oggi)
+    print(_plancia({"posizioni_aperte": {"ora": int(time.time()), "testo": f"ancora aperte: {', '.join(rimaste)}"}} if rimaste else None))
+    if rimaste:
+        raise alpaca.ErroreAlpaca(f"POSIZIONI ANCORA APERTE dopo la chiusura fuori orario: {', '.join(rimaste)} ({'; '.join(fatti)})")
+    return f"chiuse fuori orario: {'; '.join(fatti)}; {esito}"
+
+
 def scrivi_diario(oggi: str) -> str:
     f_oggi = QUI / "giorni" / f"{oggi}.json"
     if not f_oggi.exists():
@@ -315,5 +342,5 @@ def controlla() -> str:
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
     funzioni = {"controlla": controlla, "elenco": lambda: ", ".join(elenco()), "apri": apri, "chiudi": chiudi,
-                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia}
+                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia, "chiudi_fuori_orario": chiudi_fuori_orario}
     print(funzioni[comando]())
