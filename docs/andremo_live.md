@@ -562,3 +562,5 @@ pochi giorni e 10 monete, quindi i ricalcoli di G1 nella ricerca trattano quasi 
 vanno riscaricate (`python3 -m research.programma6.scarico_ore`) prima del prossimo confronto settimanale. **Capito oggi**: due idee
 nuove provate e scartate in un giorno, con le regole scritte prima; il fattore «lotteria» pubblicato sulle azioni sulle crypto
 funzionava nel 2021-2023 e poi si è rovesciato.
+Le candele a 1 ora della ricerca sono di nuovo complete: riscaricate dall'archivio di Binance per le 360 monete passate nell'universo di
+G1 dal 2021, senza errori; impronte unite in `research/programma6/scarico_ore.json`.
