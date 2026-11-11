@@ -165,6 +165,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (circa 40'000 ordini in 9 anni) e i costi, anche con lo scarto di metà giornata che è più stretto di quello vero dell'apertura, le
   portano sotto zero. Stima (non calcolata): anche dimezzando i costi lo Sharpe resterebbe sotto quello del tenere. L'inversione perde
   anche senza costi, come sugli indici. Da qui: il vantaggio in giornata esiste ma è più piccolo di quanto costa prenderlo.
+* **La prova 24** (le azioni più vendute allo scoperto, idea delle crypto): **bocciata.** Nell'S&P 500 2018-2024 le azioni con più
+  giorni per ricomprarle sono salite **più** dell'indice: vendute allo scoperto hanno perso il 3,35% l'anno. L'effetto degli studi vive
+  nelle aziende piccole e care da prendere a prestito, non nelle 500 grandi.
+* **La prova 25** (la miscela delle prove 7, 15 e 16): Sharpe 1,08 contro 0,89 dello SPY, perdita massima −14,6% contro −33,8%, ma lo
+  Sharpe corretto per le prove è 0,05: non si distingue dal caso. Proposta al proprietario per il demo come misura in avanti.
 * **La misura in avanti sul conto demo di Alpaca** (richiesta del proprietario del 7 nov 2026: «non in back testing [...] real time,
   forward testing»): la prima candela da 15 minuti sulle 10 azioni più scambiate del mese, regole in `stock/avanti/REGOLE.md`, due
   routine nei giorni di borsa (9:46 e 15:55 di New York) dentro la sessione «trading stock», diario in `stock/avanti/diario.csv`,
