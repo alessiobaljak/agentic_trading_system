@@ -1,0 +1,81 @@
+{
+ "letture": [
+  "prezzo 'alle 00:00 del lunedi'' = apertura della candela di 1 ora delle 00:00 UTC; base = apertura della candela delle 22:00 UTC del venerdi' (50 ore prima)",
+  "universo del lunedi': contratti con almeno 40 giorni di storia (prima candela almeno 960 ore prima di lunedi' 00:00) e con tutte le candele che servono (venerdi' 22, lunedi' 00, 01, 02, 13 e 22); fra questi i 30 con piu' volume in dollari (somma del volume in dollari delle candele a 1 ora) delle 672 ore prima",
+  "con 20-29 contratti il quinto = parte intera di n/5 (pesi uguali, ogni lato al 100%)",
+  "ordine d'entrata: limite a 0,02% sull'apertura delle 01:00 per un'ora: preso se il minimo dell'ora e' sotto l'apertura (acquisto) o il massimo sopra (vendita), costo 0,02%; altrimenti mercato 0,05% + scarto piu' lo spostamento del prezzo nell'ora (stessa regola di `cinquantaseiesima.costo_limite`); uscita a mercato 0,05% + scarto",
+  "rendimento di un contratto = apertura 22:00 / apertura 01:00 - 1; funding = tassi dei regolamenti con tempo da 01:00 (incluso) a 22:00 (escluso), long paga, short incassa",
+  "scarto 0,02% (0,01% BTC/ETH/SOL, che qui non ci sono); controllo informativo con 0,05% per tutti",
+  "quarto trimestre = ottobre e primo lunedi' di novembre; trimestre negativo = somma dei rendimenti settimanali sotto zero"
+ ],
+ "N_prove": 309,
+ "settimane": 23,
+ "annuo": -0.09570245731595432,
+ "volatilita": 0.3123021559717779,
+ "sharpe": -0.30644187203306644,
+ "discesa_max": -0.16561008741429695,
+ "asimmetria": 0.22917813748823368,
+ "curtosi": 3.1357386364763555,
+ "t": -0.20380289693287162,
+ "sharpe_corretto": 0.08506567942509968,
+ "sharpe_corretto_solo_gruppi": 0.08420282160533221,
+ "cumulato": -0.06106045662615789,
+ "prima_data": "2026-06-01",
+ "ultima_data": "2026-11-02",
+ "settimane_positive": 10,
+ "settimane_saltate_per_pochi_contratti": 21,
+ "per_trimestre": {
+  "2026Q2": -0.07452827247165157,
+  "2026Q3": -0.04245169294905692,
+  "2026Q4": 0.07465003237711329
+ },
+ "trimestri_negativi": 2,
+ "senza_3_migliori": {
+  "netto_media": -0.01288990800175079,
+  "long_media": -0.0025764227038069707,
+  "short_media": -0.007626488670059805
+ },
+ "lati": {
+  "long_media": -0.0025556619001924756,
+  "short_media": 0.0032937544153323673,
+  "long_annuo": -0.13289441881000874,
+  "short_annuo": 0.1712752295972831
+ },
+ "divisione": {
+  "prima_borsa_media": 0.0015540829562790174,
+  "dentro_borsa_media": -0.000926849276025732,
+  "prima_borsa_t": 0.31267415202843035,
+  "dentro_borsa_t": -0.13623285144386782
+ },
+ "costi": {
+  "spese_settimana": 0.0026475064518179446,
+  "spese_annue": 0.1376703354945331,
+  "funding_settimana": -6.898206521739129e-05,
+  "limite_eseguiti": 0.9510869565217391,
+  "giro_per_settimana": 4.0,
+  "lordo_annuo": 0.03838081078727433
+ },
+ "scarto_005": {
+  "settimane": 23,
+  "annuo": -0.12842854427247613,
+  "volatilita": 0.3123536085697121,
+  "sharpe": -0.4111639524850023,
+  "discesa_max": -0.16937254292892612,
+  "asimmetria": 0.23036790654021944,
+  "curtosi": 3.1340347967322955,
+  "t": -0.27344959118958473
+ },
+ "contratti_per_settimana": {
+  "min": 20,
+  "mediana": 30.0,
+  "max": 30
+ },
+ "festivi": {
+  "2026-09-07": [
+   "Labor Day",
+   0.01254
+  ]
+ },
+ "esito": "dati troppo corti (netto non positivo; 2 trimestri negativi; t -0.20 sotto 3; Sharpe corretto 0.09 sotto 0,80; un lato da solo sotto zero senza i 3 lunedi' migliori)",
+ "dati_troppo_corti": true
+}

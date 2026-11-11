@@ -564,3 +564,8 @@ nuove provate e scartate in un giorno, con le regole scritte prima; il fattore �
 funzionava nel 2021-2023 e poi si è rovesciato.
 Le candele a 1 ora della ricerca sono di nuovo complete: riscaricate dall'archivio di Binance per le 360 monete passate nell'universo di
 G1 dal 2021, senza errori; impronte unite in `research/programma6/scarico_ore.json`.
+**Prova 151, il weekend dei perpetui su azioni (11 novembre, strategy-scout)**: «dati troppo corti» (23 lunedì da giugno, 123 contratti
+su azioni americane), e i numeri sono negativi: −9,6% l'anno, le spese 3,6 volte il guadagno lordo (`research/programma7/RISULTATI_OTTANTANOVESIMA.md`).
+Si ricalcola a tavolino una volta al mese. **Riesame** (idea 137): l'elenco delle prove bocciate di poco è in `research/riesame/ELENCO.md`;
+la prima, la miscela F5 + M7 + K2 della prova 28, con l'esame corretto del 22-23 ottobre avrebbe lo Sharpe corretto 0,94 e 5 anni su
+5: è da backtest-auditor. Conto delle prove 309.
