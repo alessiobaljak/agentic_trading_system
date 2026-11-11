@@ -520,3 +520,10 @@ guida delle azioni dice come dichiarare le loro pagine. tsc e build riusciti, pr
 **Giro delle 20:17.** Raccolta e controlli in avanti delle 20:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte. Dashboard: menu di sinistra richiudibile anche sul computer; la sessione delle azioni ha
 riempito la sua area (pubblicazione su Firebase sotto `/azioni`, pagina «Operazioni»).
+
+### 11 novembre 2026 (00:25 UTC)
+**Giro delle 00:17.** Notizie: 57 articoli nuovi da 24 fonti su 24; controlli in avanti: niente di nuovo; idee nuove: niente di
+nuovo. **G1 sul demo a 1.000, terzo ribilancio**: 7 ordini e 47 variazioni sotto il minimo; sui tre giorni eseguibile il 20% (atteso
+23%); scarto dalle posizioni volute 15,8% del conto e in crescita; demo +0,27% dall'8 novembre, paper di G1 −0,87% (`ops/results/0732-*`,
+`0733-*`). **Capito oggi**: con il conto piccolo le posizioni vere si allontanano piano dalle volute; finora il demo fa meglio del paper
+(un punto in tre giorni), ma tre giorni non dicono niente.

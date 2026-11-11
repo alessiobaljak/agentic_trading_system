@@ -203,3 +203,10 @@ separato prima del paper).
   posizioni vere e volute sale al 13,9% del conto (8,9% il giorno prima; ICPUSDT 4,7%, 龙虾USDT 2,0%): le variazioni piccole saltate si
   accumulano finché una variazione grande le riassorbe. Equity del demo 1.003,99 (+0,40% dall'8 novembre); G1 nel paper nello stesso
   tempo −0,97% (10.619,33 → 10.516,37).
+* **11 novembre 2026, 00:25 UTC, voce 8, il terzo ribilancio a 1.000 USDT** (`ops/results/0732-11nov-log-ribilancio-1000.md`,
+  `0733-11nov-stato-ribilancio-1000.md`): 7 ordini, 47 variazioni sotto il minimo (10,0% del conto), 1 rifiutato: eseguibile il 13%.
+  Sui tre giorni 34 ordini su 167 variazioni, il **20%** (atteso dalla prova 148: 23%). Lo scarto fra posizioni vere e volute sale
+  ancora: 8,9% → 13,9% → 15,8% del conto (ICPUSDT 4,8%, che sul demo non c'è; il resto in tante variazioni piccole). La prova 148
+  simulava già i minimi (Sharpe 1,90 a 280 USDT contro 1,98 senza): lo scarto che cresce è quello previsto, ma va guardato se arriva
+  oltre il 20% del conto. Equity del demo 1.002,66 (+0,27% dall'8 novembre); G1 nel paper nello stesso tempo −0,87% (10.619,33 →
+  10.526,45).
