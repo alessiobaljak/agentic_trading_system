@@ -542,3 +542,9 @@ non fermare il bot sulla macchina. 2.730 test passano (la firma a parte).
 misurare fino al ribilancio di stanotte.
 **Giro delle 12:17.** Raccolta e controlli in avanti delle 12:20: niente di nuovo; idee nuove: niente di nuovo; G1: niente di nuovo da
 misurare fino al ribilancio di stanotte.
+**Gli eventi fermi (11 novembre, domanda del proprietario).** Il paper degli eventi non apre da giorni perché mancano gli eventi, non
+per un guasto: Binance quota pochissimi perpetui nuovi (dai contratti esistenti oggi, `exchangeInfo`: 31 a settembre 2025, 29 a ottobre
+2025, poi 2-3 al mese da luglio 2026; negli ultimi 30 giorni uno solo, PREDICTUSDT, che è un contratto «pre-market» e non una moneta,
+quindi escluso). Le monete appena quotate (N3) non hanno materia prima; il funding al tetto (E4) è raro per natura. **Capito oggi**: una
+strategia a eventi dipende dal ritmo delle quotazioni, che nel 2026 è sceso di circa dieci volte. **Ricerca nuova ripartita**: la
+prova 149, la 1:1:1 (regole in `research/programma7/OTTANTASETTESIMA.md`), affidata a strategy-researcher.
