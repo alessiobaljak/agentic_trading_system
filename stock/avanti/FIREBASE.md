@@ -30,3 +30,11 @@ preparano insieme a quelle delle crypto.
 3. Mettere le quattro variabili nell'ambiente della sessione (impostazioni dell'ambiente → variabili), poi riaprire la sessione.
 
 Senza questi passi `plancia.py` non scrive e lo dice; gli ordini sul conto demo vanno avanti lo stesso.
+
+## Dove stanno le chiavi (dall'11 novembre 2026)
+
+Come per le crypto, nei **segreti del repository su GitHub** (Settings → Secrets and variables → Actions), letti dal lavoro automatico
+`.github/workflows/azioni_avanti.yml`: `ALPACA_API_KEY_ID`, `ALPACA_API_SECRET_KEY` (conto demo), `AZIONI_FIREBASE_URL`,
+`AZIONI_FIREBASE_API_KEY`, `AZIONI_FIREBASE_EMAIL`, `AZIONI_FIREBASE_PASSWORD`. Il lavoro apre gli ordini, chiude, scrive il diario e
+pubblica sulla Plancia nei giorni di borsa; gli orari programmati partono solo se esiste `stock/avanti/acceso_su_github`. Quando è
+acceso, le routine della sessione «trading stock» si spengono e le chiavi si tolgono dall'ambiente «Default» delle sessioni.

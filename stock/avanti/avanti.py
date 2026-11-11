@@ -141,13 +141,14 @@ def riassunto(diario: pd.DataFrame) -> dict:
 # ---- i comandi -----------------------------------------------------------------------------------------------------
 
 def elenco(mese: str | None = None) -> list[str]:
-    from stock.dati import archivio
     from stock.universo.costruisci import GIORNI, QUANTI, STESSA_AZIENDA
     mese = mese or ny_adesso().strftime("%Y-%m")
     f = QUI / f"elenco_{mese}.csv"
     if f.exists():
         return pd.read_csv(f)["simbolo"].tolist()
-    membri = pd.read_csv(archivio.cartella_dati() / "sp500_attuale.csv")["Symbol"].tolist()   # Alpaca scrive BRK.B con il punto
+    # i membri dell'S&P 500 (solo i simboli, informazione pubblica): copiati nel repository il 11 nov 2026 da sp500_attuale.csv, così
+    # l'elenco si calcola anche su GitHub; Alpaca scrive BRK.B con il punto
+    membri = pd.read_csv(QUI / "sp500_membri.csv")["simbolo"].tolist()
     primo = pd.Timestamp(f"{mese}-01", tz=NY)
     dollari = {}
     for i in range(0, len(membri), 100):

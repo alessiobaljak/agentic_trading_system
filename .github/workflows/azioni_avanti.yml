@@ -1,0 +1,75 @@
+name: azioni-misura-in-avanti
+
+# La misura in avanti delle azioni sul conto demo di Alpaca (stock/avanti/REGOLE.md), con le chiavi nei segreti del repository
+# (richiesta del proprietario, 11 nov 2026: «voglio avere quelle chiavi su github secret [...] come per l'agente delle crypto»).
+# Segreti: ALPACA_API_KEY_ID, ALPACA_API_SECRET_KEY (conto DEMO), AZIONI_FIREBASE_URL, AZIONI_FIREBASE_API_KEY, AZIONI_FIREBASE_EMAIL,
+# AZIONI_FIREBASE_PASSWORD (stock/avanti/FIREBASE.md). Le ore di cron sono UTC e GitHub le fa partire anche con ritardo: si parte
+# presto e il programma aspetta da solo le 9:45 e le 15:55 di New York (ora legale o no). Gli orari programmati girano solo se esiste
+# stock/avanti/acceso_su_github (così non si sovrappongono alle routine della sessione «trading stock»).
+on:
+  schedule:
+    - cron: "5 13 * * 1-5"    # apertura: 8:05 o 9:05 di New York, il programma aspetta le 9:45
+    - cron: "5 19 * * 1-5"    # chiusura: 14:05 o 15:05 di New York, il programma aspetta le 15:55
+  workflow_dispatch:
+    inputs:
+      comando:
+        description: "controlla | plancia | elenco | apri | chiudi"
+        required: true
+        default: controlla
+
+permissions:
+  contents: write
+
+concurrency:
+  group: azioni-avanti
+  cancel-in-progress: false
+
+jobs:
+  avanti:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/brave-albattani-1b12fv
+      - name: Acceso?
+        id: acceso
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
+          elif [ ! -f stock/avanti/acceso_su_github ]; then
+            echo "comando=" >> "$GITHUB_OUTPUT"; echo "spento: manca stock/avanti/acceso_su_github"
+          elif [ "${{ github.event.schedule }}" = "5 13 * * 1-5" ]; then
+            echo "comando=apri" >> "$GITHUB_OUTPUT"
+          else
+            echo "comando=chiudi" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.acceso.outputs.comando != ''
+        with:
+          python-version: "3.12"
+      - run: pip install pandas numpy requests
+        if: steps.acceso.outputs.comando != ''
+      - name: Misura in avanti
+        if: steps.acceso.outputs.comando != ''
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          AZIONI_FIREBASE_URL: ${{ secrets.AZIONI_FIREBASE_URL }}
+          AZIONI_FIREBASE_API_KEY: ${{ secrets.AZIONI_FIREBASE_API_KEY }}
+          AZIONI_FIREBASE_EMAIL: ${{ secrets.AZIONI_FIREBASE_EMAIL }}
+          AZIONI_FIREBASE_PASSWORD: ${{ secrets.AZIONI_FIREBASE_PASSWORD }}
+        run: python -m stock.avanti.avanti "${{ steps.acceso.outputs.comando }}"
+      - name: Salva il diario nel repository
+        if: always() && steps.acceso.outputs.comando != ''
+        run: |
+          git config user.name "azioni-avanti"
+          git config user.email "noreply@anthropic.com"
+          git add stock/avanti/giorni stock/avanti/diario.csv stock/avanti/riepilogo.md stock/avanti/elenco_*.csv 2>/dev/null || true
+          if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
+          git commit -m "stock: misura in avanti, ${{ steps.acceso.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase origin claude/brave-albattani-1b12fv && git push origin HEAD:claude/brave-albattani-1b12fv && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
