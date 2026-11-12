@@ -26,10 +26,13 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
    approvazione del punto 2.
 2. **Chi approva la versione del codice per i soldi veri** (obbligatoria prima dell'accensione). **Una regola di GitHub con il
    proprietario fra le eccezioni non basta**: il 12 novembre gli strumenti GitHub di questa sessione rispondono come l'utente del
-   proprietario (`get_me`: il suo login), quindi una regola che lui può scavalcare la scavalcano anche le sessioni. Due strade, nessuna
-   ancora costruita: (a) tag firmato con una sua chiave e verificato dal bot (raccomandata dal revisore; a ogni approvazione serve un
-   computer con git); (b) approvazione dalla dashboard con il suo accesso a Firebase, come i comandi del demo (comoda dal telefono;
-   richiede le regole del punto 1). Tutte e due passano da live-path-reviewer.
+   proprietario (`get_me`: il suo login), quindi una regola che lui può scavalcare la scavalcano anche le sessioni. **Scelta del
+   proprietario (12 novembre): il pulsante in dashboard**, costruito e committato spento (a267c40): «Approva questa versione» nella
+   scheda del conto vero scrive il commit in `/commands/conto_vero_versione_approvata`; il bot confronta ogni minuto il codice che
+   esegue con quel commit. **Resta aperto (problema 54, parte ii, Alto)**: la chiave di amministratore di Firebase, che ignora le
+   regole, la hanno anche l'agente della macchina e quattro flussi di GitHub che girano il codice del branch, quindi una sessione
+   potrebbe scrivere l'approvazione al posto del proprietario. Raccomandazione del revisore per i soldi veri: un'installazione del
+   bot che non esegue da sola il codice del branch (la aggiorna solo il proprietario) e la chiave di amministratore fuori da GitHub.
 3. **Binance.** Sulla chiave del conto vero: togliere il permesso di prelievo (restano lettura e future) e limitarla all'indirizzo
    della macchina (console di Hetzner, il server, «Networking», «Public IP»). Nel conto dei future: future USDⓈ-M attivi, una
    posizione per moneta (modalità unidirezionale), margine solo in USDT (niente «multi-assets»), niente «portfolio margin», niente BNB
@@ -47,8 +50,9 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
       senza limite di tempo, protette solo dallo stop: va bene, o dopo un certo numero di giorni si chiude? Il conto vero dipende
       anche dal paper di G1 acceso;
    g. prima della prima accensione, lo stop chiude le posizioni che trova nel conto (oggi no; il revisore raccomanda sì, problema 70);
-   h. «riparti» dopo uno stop: oggi solo da un file del repo, che può scrivere qualunque sessione; i «due passi» non sono ancora
-      progettati: la conferma deve passare da un canale che solo il proprietario può scrivere (la dashboard, punto 1);
+   h. «riparti» dopo uno stop: dal 12 novembre solo dalla dashboard, in due passi (la richiesta, poi la conferma con l'ora del fermo,
+      che vale una volta sola); il file del repo non fa più ripartire niente. Vale la stessa riserva del punto 2 sulla chiave di
+      amministratore;
    i. niente stop per singola moneta su Binance: proteggono lo stop sul conto e il pulsante; se Binance blocca l'indirizzo della
       macchina, per tutto il blocco il bot non protegge e resta solo la liquidazione;
    j. «almeno 10 monete per lato» (revisione con le skill) e gli avvisi sul telefono: non applicati al conto vero;
@@ -97,4 +101,12 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
   rialzo del 100% costerebbe il 44% del conto prima dello stop), 67 giorni con meno di 10 monete vendute, e i limiti fissi del vecchio
   bot (perdita giornaliera 5%, 3% a posizione) non valgono per G1; (4) il funding del demo è circa il 40% sotto quello del paper il 10
   e l'11 novembre. In corso: gate2-reconciler su (1) e (4), le regole della prova 152 su (3).
+* 12 novembre 2026, **il pulsante di approvazione** (punto 2) committato spento (a267c40): la versione si approva dalla dashboard
+  (Firebase), il bot la controlla ogni minuto (Firebase muto = non approvata); il tag di GitHub e il suo trasporto sono tolti; «riparti»
+  del conto vero in due passi dalla dashboard; chiusi i problemi 66, 72 e 73. live-path-reviewer
+  (`reviews/reports/2026-11-12-conto-vero-versione-firebase.md`): **APPROVE per il commit del codice spento, REQUEST CHANGES per
+  l'accensione**: 54 parte ii (Alto, la chiave di amministratore, vedi punto 2) e 74 (Medio: un buco di Firebase di pochi secondi fa
+  saltare o dimezza il ribilancio del giorno), più i Bassi 75-77 e il Medio 70. Correzioni del 74 e della parte «subito» del 54 in
+  corso. Al proprietario: pubblicare i quattro blocchi nuovi delle regole (`conto_vero_*`, testo dato in conversazione). Il bot non
+  carica questo codice fino al riavvio, che approva lui.
 
