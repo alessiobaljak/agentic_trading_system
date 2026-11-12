@@ -197,3 +197,48 @@ def barre_di_piu(simboli: list[str], timeframe: str, inizio: datetime, fine: dat
             break
         parametri["page_token"] = token
     return {s: barre_da_righe(r) for s, r in righe.items()}
+
+
+def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetime, a_gruppi_di: int = 50) -> dict[str, pd.DataFrame]:
+    """Come `azioni_societarie`, per molti titoli con poche richieste (più simboli per richiesta, un anno alla volta)."""
+    righe: dict[str, list[dict]] = {s: [] for s in simboli}
+    da0 = inizio.date() if isinstance(inizio, datetime) else inizio
+    a = fine.date() if isinstance(fine, datetime) else fine
+    for i in range(0, len(simboli), a_gruppi_di):
+        gruppo = simboli[i:i + a_gruppi_di]
+        da = da0
+        while da <= a:
+            fino = min(a, da + timedelta(days=360))
+            parametri = {"symbols": ",".join(gruppo), "types": "forward_split,reverse_split,cash_dividend,spin_off",
+                         "start": da.isoformat(), "end": fino.isoformat(), "limit": 1000}
+            while True:
+                j = _get(f"{DATI_URL}/v1/corporate-actions", parametri)
+                ca = j.get("corporate_actions") or {}
+                for chiave in ("forward_splits", "reverse_splits"):
+                    for x in ca.get(chiave, []):
+                        if x.get("symbol") in righe:
+                            righe[x["symbol"]].append({"data": x["ex_date"], "tipo": "frazionamento",
+                                                       "rapporto": float(x["new_rate"]) / float(x["old_rate"]), "importo": 0.0})
+                for x in ca.get("cash_dividends", []):
+                    if x.get("symbol") in righe:
+                        righe[x["symbol"]].append({"data": x["ex_date"], "tipo": "dividendo", "rapporto": 1.0,
+                                                   "importo": float(x["rate"])})
+                for x in ca.get("spin_offs", []):
+                    if x.get("source_symbol") in righe:
+                        righe[x["source_symbol"]].append({"data": x["ex_date"], "tipo": "scissione",
+                                                          "rapporto": float(x["new_rate"]) / float(x["source_rate"]),
+                                                          "importo": 0.0, "nuovo": x["new_symbol"]})
+                token = j.get("next_page_token")
+                if not token:
+                    break
+                parametri["page_token"] = token
+            da = fino + timedelta(days=1)
+    out = {}
+    for s, r in righe.items():
+        df = pd.DataFrame(r, columns=["data", "tipo", "rapporto", "importo", "nuovo"])
+        df["nuovo"] = df["nuovo"].fillna("")
+        if not df.empty:
+            df["data"] = pd.to_datetime(df["data"]).dt.date
+            df = df.drop_duplicates().sort_values(["data", "tipo"]).reset_index(drop=True)
+        out[s] = df
+    return out

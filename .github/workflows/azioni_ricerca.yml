@@ -1,0 +1,66 @@
+name: azioni-ricerca
+
+# Le prove di ricerca delle azioni che hanno bisogno dei prezzi di Alpaca (le chiavi stanno nei segreti del repository, non nella
+# sessione). Si avvia solo a mano, con il nome del programma della prova (per esempio p027 → python -m stock.prove.p027). I prezzi
+# scaricati restano nella memoria del lavoro (mai nel repository, che è pubblico); nel repository vanno solo i risultati.
+# Non manda ordini: usa solo le chiavi per leggere i prezzi.
+on:
+  workflow_dispatch:
+    inputs:
+      prova:
+        description: "il programma della prova, per esempio p027"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: azioni-ricerca
+  cancel-in-progress: false
+
+jobs:
+  ricerca:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/brave-albattani-1b12fv
+      - name: Il nome della prova
+        env:
+          PROVA: ${{ inputs.prova }}
+        run: |
+          echo "$PROVA" | grep -Eq '^p[0-9]{3}[a-z]?$' || { echo "nome non valido"; exit 1; }
+          test -f "stock/prove/$PROVA.py" || { echo "manca stock/prove/$PROVA.py"; exit 1; }
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas numpy requests scipy
+      - name: I prezzi già scaricati
+        uses: actions/cache@v4
+        with:
+          path: ~/stock_dati
+          key: azioni-dati-${{ inputs.prova }}-${{ github.run_id }}
+          restore-keys: |
+            azioni-dati-${{ inputs.prova }}-
+            azioni-dati-
+      - name: La prova
+        env:
+          PROVA: ${{ inputs.prova }}
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+        run: python -m "stock.prove.$PROVA"
+      - name: Salva i risultati nel repository
+        env:
+          PROVA: ${{ inputs.prova }}
+        run: |
+          git config user.name "azioni-ricerca"
+          git config user.email "noreply@anthropic.com"
+          git add stock/prove/*_risultati.md stock/prove/serie/*.csv 2>/dev/null || true
+          if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
+          git commit -m "stock: risultati della prova $PROVA (GitHub) [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase origin claude/brave-albattani-1b12fv && git push origin HEAD:claude/brave-albattani-1b12fv && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
