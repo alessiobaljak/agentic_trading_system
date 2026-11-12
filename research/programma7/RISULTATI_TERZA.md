@@ -13,4 +13,4 @@ L'uscita di protezione scatta nel 47% degli eventi.
 
 **Per anno (con l'uscita)**: 2021 +1.02% (48), 2022 +4.37% (21), 2023 +5.11% (91), 2024 +5.40% (131), 2025 +4.45% (236), 2026 -1.21% (86)
 
-**Sulle stesse monete di N3** (613): dal 1° giorno +3.68% a evento, dal 7° giorno (N3) +4.29%; correlazione 0.38.
+**Sulle stesse monete di N3** (613): dal 1° giorno +3.68% a evento, dal 7° giorno (N3) +4.33%; correlazione 0.38.

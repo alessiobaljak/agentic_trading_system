@@ -761,3 +761,9 @@ togliere dagli eventi i contratti che non sono monete (due confermati, PAYP e QN
 tipi di contratto, chiedibile alla macchina). Insieme: controllare la parità fra N3 nel bot (giorno di quotazione da `onboardDate`,
 filtro sul tipo del sottostante) e nella ricerca (prima candela, elenco degli esclusi), e registrare la misura in avanti delle monete
 distribuite gratis promessa il 27 ottobre e mai registrata. **Metro:** il numero di eventi e il rendimento per evento prima e dopo.
+**Fatta in gran parte il 12 novembre 2026**: `eventi_N3B.csv` rifatto (632 eventi, uguale al riesame), prova 32 +4,26% per evento con
+p 0,0020 (resta valida), 113 p 0,0268 (resta bocciata), 33 N3 a portafoglio Sharpe 0,64 (era 0,62), F5 + N3 1,49 (era 1,45), nona p
+0,0258, ventottesima e ventinovesima con esiti invariati, conto unico (G1 più eventi) Sharpe 2,83 (era 2,82). **Restano**: l'elenco
+ufficiale dei tipi di contratto (24 eventi del 2026 su 87 sono contratti su azioni confermati o sospetti), `programma9/quarta.py` e
+`programma6/quarantacinquesima.py` da rifare, `CONTO_UNICO.md` e `RISULTATI_CINQUANTUNESIMA.md` con testo scritto a mano da aggiornare,
+la parità N3 bot-ricerca, la misura in avanti delle monete gratis.

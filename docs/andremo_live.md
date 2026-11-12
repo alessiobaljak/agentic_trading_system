@@ -588,3 +588,6 @@ oggi**: il riesame serve anche quando non promuove niente: trova file vecchi che
 ribilancio**: 10 ordini, 43 variazioni sotto il minimo; sui quattro giorni eseguibile il 20% (atteso 23%); scarto dalle volute 12,2%;
 demo −0,99% dall'8 novembre contro −2,08% del paper di G1 (`ops/results/0734-*`, `0735-*`). Ricerca: in corso il rifacimento del file
 degli eventi delle monete nuove (backlog P32).
+**Il file degli eventi delle monete nuove rifatto (backlog P32)**: 632 eventi (19 recuperati); nessun verdetto cambia (prova 32 +4,26%
+per evento, p 0,0020; 113 resta bocciata; N3 a portafoglio Sharpe 0,64; G1 più eventi 2,83). Restano l'elenco ufficiale dei contratti
+che non sono monete (24 eventi del 2026 su 87 sospetti) e due script vecchi da rifare.
