@@ -172,6 +172,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   Sharpe corretto per le prove è 0,05: non si distingue dal caso. Proposta al proprietario per il demo come misura in avanti.
 * **La prova 26** (la tendenza su obbligazioni, oro, materie prime e azioni estere come parte nuova della miscela): **bocciata**, non
   entra. Da sola fa Sharpe 0,34; è legata alla miscela più del previsto (correlazione 0,41) e la miscela con lei fa 1,05 contro 1,08.
+* **La prova 27** (gli acquisti dei dirigenti nelle aziende fuori dall'S&P 500, 1'795 operazioni in 9 anni): **bocciata**. Per evento
+  fa −0,16% rispetto al fondo delle aziende piccole (t −0,58): il vantaggio degli studi non c'è più neanche qui. Da sola Sharpe 0,42
+  contro 0,56 del fondo; nella miscela peggiora (0,84 contro 1,08). Capito: Alpaca ha i prezzi del 92% delle aziende piccole, anche
+  di quelle sparite, quindi le prossime prove sulle piccole si possono fare (lavoro `azioni-ricerca` su GitHub). Nel conto: 69.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
