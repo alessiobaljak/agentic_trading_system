@@ -176,6 +176,18 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   fa −0,16% rispetto al fondo delle aziende piccole (t −0,58): il vantaggio degli studi non c'è più neanche qui. Da sola Sharpe 0,42
   contro 0,56 del fondo; nella miscela peggiora (0,84 contro 1,08). Capito: Alpaca ha i prezzi del 92% delle aziende piccole, anche
   di quelle sparite, quindi le prossime prove sulle piccole si possono fare (lavoro `azioni-ricerca` su GitHub). Nel conto: 69.
+* **Difetto dei prezzi trovato il 12 novembre 2026 (aperto).** Alpaca, senza l'opzione `asof`, dà a ogni simbolo la storia
+  dell'azienda che lo porta oggi: nell'archivio locale il simbolo PARA del 2022-2024 non è Paramount, e 16 membri dell'S&P 500 di
+  allora mancano in tutto o in parte (SunTrust, Twitter, Citrix, Andeavor...). Tocca le prove sull'intero S&P 500 (11, 12, 13, 16,
+  18, 24: tutte bocciate, e 17 simboli su 708 non bastano a cambiarne l'esito, ma non è stato ricalcolato) e la prova 27 (lì ogni
+  acquisto è controllato contro la chiusura del giorno, entro il 50%: i prezzi di un'altra azienda quasi sempre si scartano; non
+  ricalcolata). Dalla prova 28 i prezzi si scaricano con il simbolo di allora (`asof` «-») e i titoli spariti dal listino si chiudono
+  all'ultimo prezzo (`simula_conto`, `liquida_dopo`). **Da fare:** rifare la prova 27 con i prezzi giusti (11 minuti su GitHub) e
+  scrivere il confronto; non conta come prova nuova, è una correzione dei dati.
+* **La prova 28** (il tono delle notizie, idea del proprietario del 30 ottobre; due varianti coperte con il fondo dell'indice):
+  regole scritte e committate (`prove/P028_tono_delle_notizie.md`), controllo dei dati fatto (`prove/P028a_risultati.md`: archivio dal
+  2015, 2-9 notizie al mese per titolo), scarico delle notizie in corso su GitHub (`p028b`, si ferma nei minuti degli ordini e va
+  rilanciato finché non è completo), poi il calcolo (`p028`). Conteranno 4 prove (73).
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
