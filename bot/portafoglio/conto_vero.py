@@ -16,8 +16,15 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
   (a) il file `ops/conto_vero_acceso`;
   (b) `DRY_RUN` falso (letto con `bot.config._get_bool_sicuro`: solo «false» scritto così);
   (c) i file del repository caricati nel processo (`file_caricati`) e quelli del percorso degli ordini (`PERCORSI_DEGLI_ORDINI`)
-      identici a quelli del tag git `conto-vero-approvato`: all'avvio (con i file cambiati dopo l'avvio del processo: serve un
-      riavvio) e ogni minuto (la macchina scarica il branch ogni minuto; il tag si sposta solo con l'ok del proprietario);
+      identici a quelli della **versione approvata dal proprietario**: un commit che scrive lui dalla dashboard, con il suo
+      accesso a Firebase, in `/commands/conto_vero_versione_approvata` (`{commit, ora}`; decisione del 12 novembre 2026: «ok
+      pulsante in dashboard»). Non più un tag di git: un tag lo sposta qualunque sessione (su GitHub le sessioni agiscono come il
+      suo utente, revisione dell'8 novembre, problema 54); su quel percorso di Firebase scrive solo lui (`firebase/database.rules.json`)
+      e il bot legge soltanto. All'avvio il processo deve avere in memoria un commit riconoscibile (HEAD del repository, file
+      uguali, nessun file cambiato dopo l'avvio: altrimenti serve un riavvio); ogni minuto si rilegge il commit approvato e si
+      confrontano con quello il commit in memoria e i file di adesso (la macchina scarica il branch ogni minuto). Commit assente,
+      non valido, non presente nel repository della macchina o diverso: niente ordini nuovi. **Se Firebase non risponde non è
+      mai «approvato»**: niente ordini nuovi finché non risponde (`leggi_rtdb_davvero`: l'ultimo valore noto non vale);
   (d) un capitale in `ops/conto_vero_capitale`: un numero positivo non oltre `CAPITALE_MASSIMO` e non oltre il saldo vero.
   Senza una delle quattro niente ordini nuovi, con l'allarme `ordini_vietati`, e il cliente rifiuta ogni ordine che non sia «solo
   riduzione». Le protezioni (stop sul conto, pulsante, chiusure da fermo, margine unico) restano attive. **Senza (a) o (b)** (problema
@@ -33,17 +40,24 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
   prelievi e ogni altro movimento non cambiano il valore (si scrivono in `/conto_vero/movimenti_non_contati`); un saldo vero sotto il
   valore del bot (un prelievo) ferma gli ordini nuovi.
 * **Lo stato perso** (problema 57): senza `data/conto_vero.json` (o con il file illeggibile) dopo un'accensione già avvenuta (Firebase
-  `/conto_vero/acceso_dal` o `/conto_vero/fermo`) il conto parte fermo: chiusure fino al conto vuoto, poi serve «riparti» dal file.
+  `/conto_vero/acceso_dal` o `/conto_vero/fermo`) il conto parte fermo: chiusure fino al conto vuoto, poi serve «riparti». Se lo
+  stato locale non dice niente e Firebase non risponde, niente prima accensione finché non risponde (problema 66).
 * **Filtri veri**: dal vero `exchangeInfo` di `fapi.binance.com`, riletti a ogni ribilancio e a ogni resto a mercato.
 * **Stato e comandi suoi**: `data/conto_vero.json`, RTDB `/conto_vero`, il pulsante `/commands/conto_vero_chiudi_tutto` (o un testo
-  nuovo in `ops/conto_vero_chiudi_tutto`); «riparti» **solo** dal file `ops/conto_vero_riparti` (problema 60: niente comando su Firebase
-  finché le regole non sono pubblicate).
+  nuovo in `ops/conto_vero_chiudi_tutto`). **«Riparti» in due passi, solo dalla dashboard** (12 novembre 2026): la richiesta in
+  `/commands/conto_vero_riparti` (vero) e poi la conferma in `/commands/conto_vero_riparti_conferma`, che deve essere il testo
+  esatto di questo fermo (`codice_riparti`: l'ora del fermo pubblicata dal bot, in secondi interi); nessun file del repository fa
+  ripartire il conto vero (lo potrebbe scrivere una sessione).
+* **La versione in dashboard**: `/conto_vero/versione` dice il commit in esecuzione (HEAD all'avvio del processo: hash, data,
+  titolo), se i file caricati sono uguali a quel commit, il commit approvato letto e se coincidono; si scrive anche da spento.
 * **I limiti** sono le costanti qui sotto, ognuna fissata da un test di guardia (`tests/test_conto_vero.py`); i limiti fissi del
   vecchio sistema (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) non c'entrano e non si toccano.
 """
 from __future__ import annotations
 
+import math
 import os
+import re
 import subprocess
 import sys
 import time
@@ -64,14 +78,22 @@ INTERRUTTORE = RADICE / "ops" / "conto_vero_acceso"
 FILE_CAPITALE = RADICE / "ops" / "conto_vero_capitale"
 FILE_STATO = RADICE / "data" / "conto_vero.json"
 FILE_CHIUDI = RADICE / "ops" / "conto_vero_chiudi_tutto"
-FILE_RIPARTI = RADICE / "ops" / "conto_vero_riparti"
+NESSUN_FILE = Path(os.devnull)         # il «riparti» del conto vero non ha un file: alla classe del demo si passa questo, sempre vuoto
 COMANDO_CHIUDI = "/commands/conto_vero_chiudi_tutto"
-COMANDO_RIPARTI = None                 # problema 60: «riparti» solo dal file finché le regole di Firebase non sono pubblicate
+# i comandi che scrive solo il proprietario dalla dashboard, con il suo accesso a Firebase (decisione del 12 novembre 2026; le
+# regole: firebase/database.rules.json). Il bot li legge; scrive solo il falso che consuma «chiudi tutto» e «riparti» e toglie la
+# conferma. Sulla versione approvata il bot non scrive mai (lo controlla un test)
+COMANDO_RIPARTI = "/commands/conto_vero_riparti"                       # primo passo: vero
+COMANDO_RIPARTI_CONFERMA = "/commands/conto_vero_riparti_conferma"     # secondo passo: il testo esatto di `codice_riparti`
+COMANDO_VERSIONE = "/commands/conto_vero_versione_approvata"           # {commit: 40 caratteri esadecimali, ora}
 CHIAVE_ENV, SEGRETO_ENV = "BINANCE_API_KEY", "BINANCE_API_SECRET"     # gli stessi nomi di bot/config.py
-TAG_APPROVATO = "conto-vero-approvato"
+RE_COMMIT = re.compile(r"[0-9a-f]{40}")
 PERCORSI_DEGLI_ORDINI = ("bot/portafoglio", "bot/execution", "bot/risk", "bot/config.py", "bot/main.py")
 FUORI_DAL_CODICE = (".venv", "venv", "site-packages", "dist-packages", "__pycache__")   # l'ambiente Python sta dentro la cartella
-OGNI_CONTROLLO_CODICE_S = 60           # il codice contro il tag: ogni minuto (il git pull della macchina)
+OGNI_CONTROLLO_CODICE_S = 60           # il codice contro la versione approvata: ogni minuto (il git pull della macchina), anche da spento
+TEMPO_GIT_S = 15                       # ogni comando git del controllo; al primo che non risponde il controllo vale «non approvato»
+LETTURE_VERSIONE_PRIMA_DELL_ALLARME = 3   # controlli di fila senza risposta di Firebase prima dell'allarme «versione_approvata»
+TITOLO_MASSIMO = 140                   # caratteri del titolo del commit scritti in /conto_vero/versione
 PERCORSI_ORDINE = ("/fapi/v1/order", "/fapi/v1/batchOrders")
 # i redditi che fanno il valore del conto (problema 58): tutto il resto (versamenti, prelievi, premi, rimborsi, tipi nuovi) non conta
 REDDITI_DEL_CONTO = ("REALIZED_PNL", "FUNDING_FEE", "COMMISSION", "INSURANCE_CLEAR", "DELIVERED_SETTELMENT",
@@ -138,41 +160,122 @@ def avvio_del_processo() -> Optional[float]:
         return None
 
 
-def codice_approvato(radice: Path = RADICE, tag: str = TAG_APPROVATO, percorsi: tuple = PERCORSI_DEGLI_ORDINI,
-                     caricati=(), cambiati_dopo: Optional[float] = None) -> Optional[str]:
-    """None se il codice è quello del tag; altrimenti il motivo. Si confrontano i percorsi degli ordini e i file ``caricati``
-    (problema 54): identici al tag (`git diff --quiet`), nessun file nuovo non ignorato nei percorsi, ogni file caricato presente nel
-    tag; con ``cambiati_dopo`` (l'avvio del processo, problema 61) anche nessun file cambiato dopo quell'ora, perché il processo
-    potrebbe avere in memoria la versione di prima. Non solleva mai: un errore di git vale «non approvato»."""
+def _git(radice, *argomenti):
+    return subprocess.run(["git", "--literal-pathspecs", "-C", str(radice), *argomenti], capture_output=True, text=True,
+                          timeout=TEMPO_GIT_S)
+
+
+def commit_in_esecuzione(radice: Path = RADICE) -> dict:
+    """HEAD del repository adesso: ``{"commit", "data", "titolo"}`` (hash intero, data ISO del commit, titolo accorciato); se git
+    non risponde ``{"errore": motivo}``. Chiamato all'avvio del processo dice quale commit il processo sta eseguendo, se
+    `codice_approvato` con ``cambiati_dopo`` conferma che i file caricati sono i suoi. Non solleva mai."""
+    try:
+        r = _git(radice, "log", "-1", "--format=%H%n%cI%n%s", "HEAD")
+        righe = r.stdout.split("\n")
+        if r.returncode != 0 or len(righe) < 3 or not RE_COMMIT.fullmatch(righe[0]):
+            return {"errore": f"HEAD del repository non letto ({r.stderr.strip()[:120] or 'risposta di git non attesa'})"}
+        return {"commit": righe[0], "data": righe[1], "titolo": righe[2][:TITOLO_MASSIMO]}
+    except Exception as exc:  # noqa: BLE001
+        return {"errore": f"HEAD del repository non letto ({type(exc).__name__})"}
+
+
+def _letto_davvero(fb, percorso: str) -> tuple:
+    """(vero solo se Firebase ha risposto davvero a QUESTA lettura, valore). Lo dice il client (`leggi_rtdb_davvero` di
+    `bot/core/firebase_client.py`); senza Firebase, con un client che non lo sa dire o con un errore vale falso (con l'ultimo
+    valore noto, se c'è): chi decide sui soldi veri non prende mai per risposta un valore vecchio."""
+    try:
+        davvero = getattr(fb, "leggi_rtdb_davvero", None)
+        if callable(davvero):
+            risposto, valore = davvero(percorso)
+            return risposto is True, valore
+        return False, (fb.get_rtdb(percorso) if fb is not None else None)
+    except Exception:  # noqa: BLE001
+        return False, None
+
+
+def versione_approvata(fb) -> tuple:
+    """Il commit che il proprietario ha approvato dalla dashboard, da `/commands/conto_vero_versione_approvata` (`{commit, ora}`):
+    ``(commit, None, True)``; altrimenti ``(None, motivo, ha_risposto)``. Senza risposta di Firebase non c'è mai un commit, nemmeno
+    quello letto un minuto prima. Non solleva mai."""
+    risposto, v = _letto_davvero(fb, COMANDO_VERSIONE)
+    if not risposto:
+        return None, "Firebase non risponde: la versione approvata dal proprietario non si legge (non vale l'ultima letta)", False
+    if v is None or v == "" or v == {}:
+        return None, "nessuna versione approvata dal proprietario (dashboard, scheda del conto vero, «Approva questa versione»)", True
+    commit = v.get("commit") if isinstance(v, dict) else None
+    if not isinstance(commit, str) or not RE_COMMIT.fullmatch(commit):
+        return None, "la versione approvata scritta su Firebase non è valida (serve un commit di 40 caratteri esadecimali)", True
+    return commit, None, True
+
+
+def codice_riparti(fermo) -> Optional[str]:
+    """Il testo esatto che conferma il «riparti» di QUESTO fermo: l'ora del fermo che il bot pubblica in `/conto_vero/fermo/ora`,
+    in secondi interi (la dashboard scrive `String(Math.floor(ora))`). None se il fermo non ha un'ora leggibile: senza, il
+    «riparti» non si può confermare."""
+    try:
+        ora = float((fermo or {}).get("ora"))
+    except (TypeError, ValueError, AttributeError):
+        return None
+    return str(int(ora)) if math.isfinite(ora) and ora > 0 else None
+
+
+def codice_approvato(radice: Path = RADICE, commit: Optional[str] = None, percorsi: tuple = PERCORSI_DEGLI_ORDINI,
+                     caricati=(), cambiati_dopo: Optional[float] = None, in_memoria: Optional[str] = None,
+                     nome: str = "la versione approvata") -> Optional[str]:
+    """None se il codice è quello del commit ``commit`` (la versione approvata dal proprietario su Firebase, `versione_approvata`;
+    all'avvio, con ``nome`` diverso, il commit in esecuzione); altrimenti il motivo. Il commit deve essere di 40 caratteri
+    esadecimali e presente nel repository della macchina. Si confrontano i percorsi degli ordini e i file ``caricati`` (problema
+    54): identici al commit (`git diff --quiet <commit> -- ...`), nessun file nuovo non ignorato nei percorsi, ogni file caricato
+    presente nel commit; con ``in_memoria`` (il commit che il processo ha caricato all'avvio) anche quel commit uguale a questo
+    negli stessi file, perché i file di adesso possono essere già quelli nuovi mentre il processo esegue ancora i vecchi; con
+    ``cambiati_dopo`` (l'avvio del processo, problema 61) anche nessun file cambiato dopo quell'ora, perché il processo potrebbe
+    avere in memoria la versione di prima. Non solleva mai: un errore di git vale «non approvato»."""
+    if not isinstance(commit, str) or not RE_COMMIT.fullmatch(commit):
+        return f"{nome} non c'è o non è un commit valido (40 caratteri esadecimali)"
+    corto = commit[:8]
+    da_nome = {"la versione approvata": "dalla versione approvata", "il commit in esecuzione": "dal commit in esecuzione"}.get(
+        nome, f"da {nome}")
+
     def git(*argomenti):
-        return subprocess.run(["git", "--literal-pathspecs", "-C", str(radice), *argomenti], capture_output=True, text=True,
-                              timeout=30)
+        return _git(radice, *argomenti)
 
     caricati = [f for f in caricati if f]
     tutti = list(percorsi) + [f for f in caricati if f not in percorsi]
     try:
-        r = git("rev-parse", "-q", "--verify", f"refs/tags/{tag}^{{commit}}")
+        r = git("rev-parse", "-q", "--verify", f"{commit}^{{commit}}")
         if r.returncode != 0:
-            return f"manca il tag {tag}" + (f" ({r.stderr.strip()[:120]})" if r.stderr.strip() else "")
-        d = git("diff", "--quiet", f"refs/tags/{tag}", "--", *tutti)
+            return (f"{nome} ({corto}) non è un commit del repository della macchina"
+                    + (f" ({r.stderr.strip()[:120]})" if r.stderr.strip() else ""))
+        if in_memoria and in_memoria != commit:
+            if not RE_COMMIT.fullmatch(str(in_memoria)):
+                return "il commit in esecuzione non si conosce: serve un riavvio"
+            m = git("diff", "--quiet", in_memoria, commit, "--", *tutti)
+            if m.returncode == 1:
+                nomi = git("diff", "--name-only", in_memoria, commit, "--", *tutti).stdout.split()
+                return (f"il processo esegue il commit {in_memoria[:8]}, diverso {da_nome} ({corto}) in: "
+                        f"{', '.join(nomi[:5]) or '?'}" + (f" e altri {len(nomi) - 5}" if len(nomi) > 5 else "")
+                        + ": serve un riavvio su quella versione, o l'approvazione di quella in esecuzione")
+            if m.returncode != 0:
+                return f"confronto fra il commit in esecuzione e {nome} ({corto}) non riuscito: {m.stderr.strip()[:120]}"
+        d = git("diff", "--quiet", commit, "--", *tutti)
         if d.returncode == 1:
-            nomi = git("diff", "--name-only", f"refs/tags/{tag}", "--", *tutti).stdout.split()
-            return (f"file del codice diversi dal tag {tag}: {', '.join(nomi[:5]) or '?'}"
+            nomi = git("diff", "--name-only", commit, "--", *tutti).stdout.split()
+            return (f"file del codice diversi {da_nome} ({corto}): {', '.join(nomi[:5]) or '?'}"
                     + (f" e altri {len(nomi) - 5}" if len(nomi) > 5 else ""))
         if d.returncode != 0:
-            return f"confronto con il tag {tag} non riuscito: {d.stderr.strip()[:120]}"
+            return f"confronto con {nome} ({corto}) non riuscito: {d.stderr.strip()[:120]}"
         n = git("ls-files", "--others", "--exclude-standard", "--", *percorsi)
         if n.returncode != 0:
             return f"file nuovi non controllati: {n.stderr.strip()[:120]}"
         if n.stdout.split():
-            return f"file nuovi nel percorso degli ordini, fuori dal tag {tag}: {', '.join(n.stdout.split()[:5])}"
+            return f"file nuovi nel percorso degli ordini, fuori {da_nome} ({corto}): {', '.join(n.stdout.split()[:5])}"
         if caricati:
-            t = git("ls-tree", "-r", "--name-only", f"refs/tags/{tag}", "--", *caricati)
+            t = git("ls-tree", "-r", "--name-only", commit, "--", *caricati)
             if t.returncode != 0:
                 return f"file caricati non controllati: {t.stderr.strip()[:120]}"
             fuori = sorted(set(caricati) - set(t.stdout.split()))
             if fuori:
-                return f"file caricati nel processo che il tag {tag} non ha: {', '.join(fuori[:5])}"
+                return f"file caricati nel processo che {nome} ({corto}) non ha: {', '.join(fuori[:5])}"
         if cambiati_dopo is not None:
             nel_percorso = git("ls-files", "--", *percorsi).stdout.split()
             dopo = sorted(f for f in set(nel_percorso) | set(caricati)
@@ -210,7 +313,7 @@ class ContoVeroG1(demo.DemoG1):
     HOST = HOST_VERO
     COMANDO_CHIUDI, COMANDO_RIPARTI = COMANDO_CHIUDI, COMANDO_RIPARTI
     INTERRUTTORE_DI_SERIE, FILE_CAPITALE_DI_SERIE = INTERRUTTORE, FILE_CAPITALE
-    FILE_COMANDI_DI_SERIE = (FILE_CHIUDI, FILE_RIPARTI)
+    FILE_COMANDI_DI_SERIE = (FILE_CHIUDI,)
     LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO = LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO
     SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA = SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA
     ETA_MASSIMA_DECISIONE_S = ETA_MASSIMA_DECISIONE_S
@@ -221,18 +324,31 @@ class ContoVeroG1(demo.DemoG1):
     CHIAVE_VALORE_VERO = "valore_vero_del_conto"
 
     def __init__(self, fb, cliente: Optional[ClienteVero] = None, file_stato: Path = FILE_STATO, file_g1: Path = demo.FILE_G1,
-                 interruttore: Path = INTERRUTTORE, file_chiudi: Path = FILE_CHIUDI, file_riparti: Path = FILE_RIPARTI,
-                 file_capitale: Path = FILE_CAPITALE, verifica_codice: Optional[Callable[[], Optional[str]]] = None) -> None:
+                 interruttore: Path = INTERRUTTORE, file_chiudi: Path = FILE_CHIUDI,
+                 file_capitale: Path = FILE_CAPITALE, verifica_codice: Optional[Callable[[], Optional[str]]] = None,
+                 radice: Path = RADICE) -> None:
         if cliente is not None and not isinstance(cliente, ClienteVero):
             raise TypeError("il conto vero parla solo con ClienteVero (fapi.binance.com)")
+        # nessun file per il «riparti» (12 novembre 2026): alla classe del demo va un file sempre vuoto, e `_comando_file` qui sotto
+        # non lo guarda nemmeno
         super().__init__(fb, cliente=cliente, file_stato=file_stato, file_g1=file_g1, interruttore=interruttore,
-                         file_chiudi=file_chiudi, file_riparti=file_riparti, file_capitale=file_capitale)
-        # il codice che questo processo ha in memoria: un avvio da un codice non approvato (o con file cambiati dopo l'avvio) non
-        # manda ordini, anche se dopo i file tornano quelli del tag: serve un riavvio (problemi 54 e 61)
+                         file_chiudi=file_chiudi, file_riparti=NESSUN_FILE, file_capitale=file_capitale)
+        self.radice = Path(radice)
+        self._versione: dict = {}                         # HEAD del repository all'avvio del processo (`commit_in_esecuzione`)
+        self._approvata: Optional[str] = None             # il commit approvato letto da Firebase all'ultimo controllo
+        self._versione_muta = 0                           # controlli di fila senza risposta di Firebase
+        self._versione_scritta: Optional[dict] = None     # l'ultima `/conto_vero/versione` arrivata davvero su Firebase
+        self._conferma_attesa: Optional[str] = None       # la conferma del «riparti» del fermo in corso (`_da_fermo`)
+        self._verifica_finta = verifica_codice is not None   # solo nei test: nessuna versione da leggere o da pubblicare
+        # il codice che questo processo ha in memoria deve essere un commit riconoscibile: HEAD del repository all'avvio, con i file
+        # caricati uguali e nessuno cambiato dopo l'avvio. Altrimenti niente ordini finché non si riavvia, anche se dopo i file
+        # tornano uguali (problemi 54 e 61): quello che gira non è una versione che il proprietario possa approvare
         if verifica_codice is None:
-            self._verifica_codice = lambda: codice_approvato(caricati=file_caricati())
-            self._codice_all_avvio = codice_approvato(caricati=file_caricati(),
-                                                      cambiati_dopo=avvio_del_processo() or _IMPORTATO_ALLE)
+            self._versione = commit_in_esecuzione(self.radice)
+            self._verifica_codice = self._verifica_versione
+            self._codice_all_avvio = self._versione.get("errore") or codice_approvato(
+                radice=self.radice, commit=self._versione.get("commit"), caricati=file_caricati(self.radice),
+                cambiati_dopo=avvio_del_processo() or _IMPORTATO_ALLE, nome="il commit in esecuzione")
         else:
             self._verifica_codice = verifica_codice
             self._codice_all_avvio = verifica_codice()
@@ -286,6 +402,7 @@ class ContoVeroG1(demo.DemoG1):
         return self._cliente
 
     def tick(self, now: float) -> None:
+        self._controlla_versione(now)                  # anche da spento: la dashboard mostra la versione prima dell'accensione
         motivo = self.motivo_spento()
         self._motivo_spento_ora = motivo
         if motivo and not self._protezioni_da_spento(now, motivo):
@@ -301,6 +418,60 @@ class ContoVeroG1(demo.DemoG1):
                 st["spento_vuoto"] = now
                 self.salva(st)
                 print(f"[{self.NOME}] spento ({motivo}) e conto vuoto: da adesso nessuna richiesta a Binance")
+
+    # ---- (c): la versione approvata dal proprietario su Firebase ----
+    def _verifica_versione(self) -> Optional[str]:
+        """Il controllo del minuto: None se il commit approvato dal proprietario c'è, Firebase ha risposto adesso, e sia il commit
+        che il processo ha in memoria sia i file di adesso sono quelli di quel commit; altrimenti il motivo. Una lettura persa
+        capita: si riprova una volta, subito; senza risposta non è mai approvato."""
+        for _ in range(2):
+            commit, motivo, risposto = versione_approvata(self.fb)
+            if risposto:
+                break
+        self._versione_muta = 0 if risposto else self._versione_muta + 1
+        self._approvata = commit
+        if motivo:
+            return motivo
+        return codice_approvato(radice=self.radice, commit=commit, caricati=file_caricati(self.radice),
+                                in_memoria=self._versione.get("commit"))
+
+    def _controlla_versione(self, now: float) -> None:
+        """Ogni ``OGNI_CONTROLLO_CODICE_S``, acceso o spento: rilegge la versione approvata, rifà il confronto e scrive
+        `/conto_vero/versione` se è cambiata. Non solleva mai: le protezioni del giro non si fermano per questo."""
+        if 0 <= now - self._codice_controllato < OGNI_CONTROLLO_CODICE_S:
+            return
+        self._codice_controllato = now
+        try:
+            self._codice_ora = self._verifica_codice()
+        except Exception as exc:  # noqa: BLE001
+            self._codice_ora = f"controllo della versione non riuscito ({type(exc).__name__})"
+        self._pubblica_versione(now)
+
+    def _blocco_del_codice(self) -> Optional[str]:
+        """Perché il codice ferma gli ordini nuovi, in una frase; None se è quello approvato."""
+        if self._codice_all_avvio:
+            return (f"il codice caricato all'avvio non è una versione che si possa approvare ({self._codice_all_avvio}): serve un "
+                    f"riavvio")
+        return self._codice_ora
+
+    def _pubblica_versione(self, now: float) -> None:
+        """`/conto_vero/versione` per la dashboard: il commit in esecuzione (HEAD all'avvio del processo: hash, data, titolo), se i
+        file caricati sono uguali a quel commit (``pulito``), il commit approvato letto e se coincidono (altrimenti ``blocco``).
+        Si scrive quando cambia e si riprova finché la scrittura non è confermata."""
+        if self._verifica_finta or self.fb is None:
+            return
+        blocco = self._blocco_del_codice()
+        v = {"commit": self._versione.get("commit"), "data": self._versione.get("data"), "titolo": self._versione.get("titolo"),
+             "pulito": self._codice_all_avvio is None, "motivo": self._codice_all_avvio, "approvata": self._approvata,
+             "coincidono": blocco is None, "blocco": blocco}
+        v = {k: x for k, x in v.items() if x is not None}
+        if v == self._versione_scritta:
+            return
+        try:
+            if self.fb.set_rtdb(f"/{self.NOME}/versione", {**v, "aggiornato": now}) is not False:
+                self._versione_scritta = v
+        except Exception:  # noqa: BLE001
+            pass
 
     def _protezioni_da_spento(self, now: float, motivo: str) -> bool:
         """Problema 53: senza interruttore o con `DRY_RUN` vero niente ordini nuovi. Se il conto vero è stato acceso almeno una volta
@@ -338,19 +509,25 @@ class ContoVeroG1(demo.DemoG1):
         if self._firebase_letto is None:
             if self.fb is None:
                 return None
-            try:
-                a, f = self.fb.get_rtdb(f"/{self.NOME}/acceso_dal"), self.fb.get_rtdb(f"/{self.NOME}/fermo")
-                muto = callable(getattr(self.fb, "degraded_for", None)) and self.fb.degraded_for() > 0
-            except Exception:  # noqa: BLE001
-                return None
+            (risposto_a, a), (risposto_f, f) = (_letto_davvero(self.fb, f"/{self.NOME}/acceso_dal"),
+                                                _letto_davvero(self.fb, f"/{self.NOME}/fermo"))
             trovato = (a if isinstance(a, dict) and a else None) or (f if isinstance(f, dict) and f else None)
-            if trovato or not muto:                    # problema 66: con Firebase muto il «mai acceso» non si tiene, si rilegge
+            # problema 66: il «mai acceso» si tiene solo se Firebase ha risposto davvero a tutte e due le letture; altrimenti si
+            # rilegge al giro dopo (un segno trovato vale anche dall'ultimo valore noto: è il lato prudente)
+            if trovato or (risposto_a and risposto_f):
                 self._firebase_letto = trovato or {}
             return trovato
         return self._firebase_letto or None
 
     def _acceso_una_volta(self, st: dict) -> bool:
         return bool(st.get("acceso_dal") or st.get("fermo") or self._acceso_su_firebase())
+
+    def _mai_acceso_detto_da_firebase(self) -> bool:
+        """Problema 66 (prova r1 della revisione dell'8 novembre 2026): vero solo quando Firebase ha risposto davvero sulla traccia
+        dell'accensione. Con lo stato locale che non dice niente e Firebase muto non si sa se il conto era già acceso (e magari
+        fermo): la prima accensione aspetta la risposta."""
+        self._acceso_su_firebase()
+        return self._firebase_letto is not None
 
     def _scrivi(self, ramo: str, valore) -> None:
         if ramo in ("acceso_dal", "fermo") and isinstance(valore, dict) and valore:
@@ -368,7 +545,8 @@ class ContoVeroG1(demo.DemoG1):
 
     def _stato_perso(self, c: ClienteVero, st: dict, now: float) -> dict:
         """Problema 57: il file di stato manca (o non si legge) ma il conto vero era già stato acceso (Firebase): il conto parte fermo
-        (chiusure fino al conto vuoto), il testo vecchio del file «riparti» non vale, serve un «riparti» nuovo dal file."""
+        (chiusure fino al conto vuoto), la richiesta di «riparti» che c'era non vale, serve un «riparti» nuovo in due passi dalla
+        dashboard."""
         if st.get("acceso_dal") or st.get("fermo"):
             return st
         illeggibile = self.file_stato.exists() and not st
@@ -376,12 +554,12 @@ class ContoVeroG1(demo.DemoG1):
         if not (illeggibile or prima):
             return st
         motivo = (f"stato del conto vero perso ({self.file_stato.name} {'illeggibile' if illeggibile else 'mancante'}) dopo "
-                  f"un'accensione: fermo, chiusure fino al conto vuoto, poi «riparti» dal file ops/{self.file_riparti.name}")
+                  f"un'accensione: fermo, chiusure fino al conto vuoto, poi «Riparti» in due passi dalla dashboard")
         st = {"fermo": {"motivo": motivo, "ora": now, "equity": None, "chiuse": 0, "errori": [], "tentativi": 0,
-                        "ultimo_controllo": 0.0, "riparti_pulito": True}, "stato_perso": now}
+                        "ultimo_controllo": 0.0, "riparti_pulito": False}, "stato_perso": now}
         if prima and prima.get("ora") and "compra_alla_decisione_di_g1_dopo_il" in prima:
             st["acceso_dal"] = float(prima["ora"])
-        self._pulisci_riparti(st)                      # il testo che c'era nel file «riparti» non conta
+        st["fermo"]["riparti_pulito"] = self._pulisci_riparti(st)   # la richiesta e la conferma che c'erano non contano
         try:
             st["eseguito_chiudi"] = self.file_chiudi.read_text(encoding="utf-8").strip() if self.file_chiudi.exists() else ""
         except Exception:  # noqa: BLE001
@@ -464,11 +642,63 @@ class ContoVeroG1(demo.DemoG1):
         return super()._livello_di_stop(st)
 
     def _da_fermo(self, c: ClienteVero, st: dict, now: float) -> dict:
-        st = super()._da_fermo(c, st, now)
+        self._conferma_attesa = codice_riparti(st.get("fermo"))   # la conferma che vale per QUESTO fermo, e solo in questo giro
+        try:
+            st = super()._da_fermo(c, st, now)
+        finally:
+            self._conferma_attesa = None
         if not st.get("fermo"):                        # problema 68: il «riparti» accettato spegne l'allarme dello stato perso
             st.pop("stato_perso", None)
             self._allarme(st, now, "stato_perso", None)
         return st
+
+    # ---- «riparti» in due passi, solo dalla dashboard (decisione del proprietario del 12 novembre 2026) ----
+    def _comando_file(self, f: Path, st: dict, chiave: str) -> bool:
+        if chiave == "eseguito_riparti":               # nessun file fa ripartire il conto vero: lo potrebbe scrivere una sessione
+            return False
+        return super()._comando_file(f, st, chiave)
+
+    def _comando(self, percorso: Optional[str]) -> bool:
+        if percorso == self.COMANDO_RIPARTI:
+            return self._riparti_confermato()
+        return super()._comando(percorso)
+
+    def _riparti_confermato(self) -> bool:
+        """Vero solo con la richiesta (`/commands/conto_vero_riparti` vero) E la conferma (`/commands/conto_vero_riparti_conferma`
+        uguale al testo esatto di questo fermo, `codice_riparti`). Li scrive solo il proprietario dalla dashboard, e le regole di
+        Firebase accettano la conferma solo con la richiesta già scritta. La richiesta senza conferma, o con la conferma di un
+        altro fermo, non fa niente e resta dov'è (la dashboard mostra il secondo passo)."""
+        atteso = self._conferma_attesa
+        if self.fb is None or not atteso:
+            return False
+        try:
+            chiesto, conferma = self.fb.get_rtdb(self.COMANDO_RIPARTI), self.fb.get_rtdb(COMANDO_RIPARTI_CONFERMA)
+        except Exception:  # noqa: BLE001
+            return False
+        return chiesto is True and isinstance(conferma, str) and conferma == atteso
+
+    def _riparti(self, st: dict) -> bool:
+        """Come il demo (la richiesta si consuma con la scrittura del falso confermata, altrimenti niente «riparti»); in più si
+        toglie la conferma: vale una volta sola."""
+        consumato = super()._riparti(st)
+        if consumato:
+            try:
+                self.fb.set_rtdb(COMANDO_RIPARTI_CONFERMA, None)
+            except Exception:  # noqa: BLE001
+                pass
+        return consumato
+
+    def _pulisci_riparti(self, st: dict, solo_firebase: bool = False) -> bool:
+        """All'entrata nel fermo la richiesta e la conferma che c'erano non valgono: si tolgono da Firebase. Vero solo se le due
+        scritture sono confermate; finché non lo sono il «riparti» non si accetta e si riprova a ogni giro (`_da_fermo` del demo).
+        Nessun file."""
+        if self.fb is None:
+            return True
+        try:
+            return (self.fb.set_rtdb(self.COMANDO_RIPARTI, False) is not False
+                    and self.fb.set_rtdb(COMANDO_RIPARTI_CONFERMA, None) is not False)
+        except Exception:  # noqa: BLE001
+            return False
 
     def _valori(self, margine: float, saldo: float) -> tuple:
         """Problema 58: con una fase in corso il valore è il capitale più i redditi più gli utili non realizzati (margine − saldo),
@@ -497,13 +727,18 @@ class ContoVeroG1(demo.DemoG1):
     # ---- (c) e (d): niente ordini nuovi, le protezioni restano ----
     def motivo_niente_ordini(self, c: ClienteVero, st: dict, now: float) -> Optional[str]:
         ragioni = []
+        self._controlla_versione(now)                  # già fatto in cima al giro: qui solo se è passato un minuto
         if self._codice_all_avvio:
-            ragioni.append(f"il codice caricato all'avvio non è quello approvato ({self._codice_all_avvio}): serve un riavvio dal "
-                           f"tag {TAG_APPROVATO}")
-        if now - self._codice_controllato >= OGNI_CONTROLLO_CODICE_S or now < self._codice_controllato:
-            self._codice_ora, self._codice_controllato = self._verifica_codice(), now
+            ragioni.append(self._blocco_del_codice())
         if self._codice_ora and self._codice_ora != self._codice_all_avvio:
             ragioni.append(self._codice_ora)
+        self._allarme(st, now, "versione_approvata", None if self._versione_muta < LETTURE_VERSIONE_PRIMA_DELL_ALLARME else (
+            f"Firebase non risponde da almeno {LETTURE_VERSIONE_PRIMA_DELL_ALLARME} controlli di fila: la versione approvata dal "
+            f"proprietario non si legge, niente ordini nuovi finché non risponde; stop sul conto, pulsante a file e chiusure "
+            f"restano attivi"))
+        if not st.get("acceso_dal") and not self._mai_acceso_detto_da_firebase():
+            ragioni.append("Firebase non risponde e lo stato locale non dice se il conto vero è già stato acceso: niente prima "
+                           "accensione finché non risponde")
         voluto = self.capitale_voluto()
         cr = st.get("conto_ridotto")
         if self._valore_vero is None:
@@ -630,27 +865,49 @@ class ContoVeroG1(demo.DemoG1):
     def _ambiente(self, now: float) -> dict:
         amb = super()._ambiente(now)
         amb.pop("filtri_del_conto_vero_del", None)
-        amb.update({"filtri": f"exchangeInfo di {HOST_VERO} a ogni ribilancio", "tag_approvato": TAG_APPROVATO,
-                    "codice_all_avvio": self._codice_all_avvio or "uguale al tag",
+        amb.update({"filtri": f"exchangeInfo di {HOST_VERO} a ogni ribilancio",
+                    "versione_approvata": f"il commit scritto dal proprietario in {COMANDO_VERSIONE}",
+                    "commit_in_esecuzione": self._versione.get("commit"),
+                    "codice_all_avvio": self._codice_all_avvio or "uguale al commit in esecuzione",
                     "valore_massimo_per_ordini": self.VALORE_MASSIMO_PER_ORDINI,
-                    "valore": "capitale più redditi del conto (versamenti e prelievi esclusi)", "riparti": "solo dal file"})
+                    "valore": "capitale più redditi del conto (versamenti e prelievi esclusi)",
+                    "riparti": "in due passi dalla dashboard (richiesta e conferma), nessun file"})
         return amb
 
 
-_ULTIMO_ERRORE_DI_CREAZIONE = [None]
+_ULTIMO_ERRORE_DI_CREAZIONE = [None]                # l'ultimo errore scritto nel log
+_ERRORE_DI_CREAZIONE_SCRITTO = [None]               # l'ultimo errore arrivato davvero su Firebase
+ALLARME_DI_CREAZIONE = f"/{ContoVeroG1.NOME}/allarmi/creazione"
+
+
+def _allarme_di_creazione(fb, valore) -> bool:
+    """Scrive (o toglie, con None) l'allarme della creazione su Firebase; vero solo se la scrittura è confermata. Non solleva mai."""
+    try:
+        return fb is not None and fb.set_rtdb(ALLARME_DI_CREAZIONE, valore) is not False
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def crea_conto_vero(fb, classe=None) -> Optional["ContoVeroG1"]:
     """Crea il conto vero senza poter fermare il bot (revisione dell'8 novembre 2026, problema 71): un errore nel costruttore non
     deve impedire l'avvio del demo e dei paper (la regola del proprietario dell'8 novembre: nessuna strategia in corso si perde).
-    Torna None e lo scrive (una volta per errore diverso); il bot riprova a ogni giro."""
+    Torna None e lo scrive nel log (una volta per errore diverso) e su Firebase, in `/conto_vero/allarmi/creazione` (problema 73:
+    la dashboard e lo stato lo mostrano fra gli allarmi del conto vero; si riscrive finché la scrittura non è confermata e si
+    toglie alla prima creazione riuscita); il bot riprova a ogni giro."""
     try:
         conto = (classe or ContoVeroG1)(fb)
-        _ULTIMO_ERRORE_DI_CREAZIONE[0] = None
-        return conto
     except Exception as exc:  # noqa: BLE001
-        testo = f"{type(exc).__name__}: {exc}"[:300]
+        testo = demo.senza_firma(f"{type(exc).__name__}: {exc}")[:300]
         if testo != _ULTIMO_ERRORE_DI_CREAZIONE[0]:
             _ULTIMO_ERRORE_DI_CREAZIONE[0] = testo
+            _ERRORE_DI_CREAZIONE_SCRITTO[0] = None
             print(f"[conto_vero] ERRORE nella creazione, il conto vero non gira (si riprova a ogni giro): {testo}")
+        if _ERRORE_DI_CREAZIONE_SCRITTO[0] != testo and _allarme_di_creazione(fb, {
+                "ora": time.time(), "testo": f"il conto vero non è stato creato e non gira (demo e paper continuano; si riprova a "
+                                             f"ogni giro): {testo}"}):
+            _ERRORE_DI_CREAZIONE_SCRITTO[0] = testo
         return None
+    _ULTIMO_ERRORE_DI_CREAZIONE[0] = None
+    _ERRORE_DI_CREAZIONE_SCRITTO[0] = None
+    _allarme_di_creazione(fb, None)                    # anche quello lasciato da un processo di prima
+    return conto

@@ -23,10 +23,40 @@
         ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
         ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
       },
+      "conto_vero_chiudi_tutto": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
+      },
+      "conto_vero_riparti": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
+      },
+      "conto_vero_riparti_conferma": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && (!newData.exists() || (newData.isString() && newData.val().length <= 12 && newData.val().matches(/^[0-9]+$/) && root.child('commands').child('conto_vero_riparti').val() === true))"
+      },
+      "conto_vero_versione_approvata": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".validate": "newData.hasChildren(['commit', 'ora'])",
+        "commit": {
+          ".validate": "newData.isString() && newData.val().length === 40 && newData.val().matches(/^[0-9a-f]+$/)"
+        },
+        "ora": {
+          ".validate": "newData.isNumber()"
+        },
+        "$altro": {
+          ".validate": false
+        }
+      },
       "close_position_meta": {
         ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
         ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'"
       }
+    },
+
+    "azioni": {
+      ".write": "auth != null && auth.uid === 'REPLACE_WITH_STOCK_FIREBASE_UID'"
     }
   }
 }

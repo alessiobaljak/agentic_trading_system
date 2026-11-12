@@ -701,6 +701,25 @@ class FirebaseClient:
             self._note_rtdb(False, exc)
             return self._memory.get_rtdb(path)
 
+    def leggi_rtdb_davvero(self, path: str) -> tuple[bool, Any]:
+        """Come `get_rtdb`, ma dice anche se il valore arriva DAVVERO da Firebase in questa chiamata: (True, valore) solo se il
+        database ha risposto adesso; (False, ultimo valore noto) se e' muto o non configurato. NON solleva mai.
+
+        Serve a chi non deve mai fidarsi di un valore vecchio (12 nov 2026: la versione del codice approvata dal proprietario per
+        il conto vero, `bot/portafoglio/conto_vero.py`). `degraded_for()` dopo una `get_rtdb` non basta: fra le due chiamate un
+        altro thread puo' avere una lettura riuscita, e il valore dello specchio passerebbe per fresco.
+        """
+        if not (self._live and self._db is not None):
+            return False, self._memory.get_rtdb(path)
+        try:
+            val = self._db.reference(path).get()
+            self._note_rtdb(True)
+            self._memory.set_rtdb(path, val)
+            return True, val
+        except Exception as exc:  # noqa: BLE001
+            self._note_rtdb(False, exc)
+            return False, self._memory.get_rtdb(path)
+
 
 _client: Optional[FirebaseClient] = None
 

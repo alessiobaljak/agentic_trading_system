@@ -809,5 +809,6 @@ def controlla_avvio(s=None, interruttore_conto_vero: str | None = None) -> None:
               "nuovo")
     elif not s.DRY_RUN:
         print("[config] DRY_RUN falso con l'interruttore del conto vero: gli ordini veri li manda solo G1 sul conto vero "
-              "(bot/portafoglio/conto_vero.py, se il codice e' quello del tag approvato e il capitale e' nei limiti); il vecchio "
+              "(bot/portafoglio/conto_vero.py, se il codice e' la versione approvata dal proprietario e il capitale e' nei limiti); "
+              "il vecchio "
               "esecutore resta in prova a secco")

@@ -1902,6 +1902,30 @@ input[type='range'] {
 .cr-fermo, .cr-conferma { display: grid; gap: 8px; justify-items: start; }
 .cr-conferma { padding: 10px; border-radius: 10px; border: 1px solid var(--allarme-bordo); background: var(--allarme-sfondo); }
 .cr-pulsanti { display: flex; gap: 8px; flex-wrap: wrap; }
+/* la scheda del conto vero: la versione del codice e i comandi del proprietario (12 nov 2026) */
+.cr-versione, .cr-comandi-vero { display: grid; gap: 6px; justify-items: start; min-width: 0; }
+.cr-comandi-vero { padding-top: 8px; border-top: 1px dashed var(--border-soft); width: 100%; }
+.cr-versione-titolo { display: flex; align-items: center; gap: 4px; margin: 0; font-size: 12.5px; }
+.cr-versione-righe { display: grid; gap: 4px; margin: 0; width: 100%; font-size: 12.5px; }
+.cr-versione-righe > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.cr-versione-righe dt { color: var(--text-dim); }
+.cr-versione-righe dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.cr-versione-nome { display: block; color: var(--text-dim); }
+.cr-hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 650;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--bg-elev);
+  color: var(--text);
+}
+.cr-esito { font-weight: 650; overflow-wrap: anywhere; }
+.cr-esito.si { color: var(--su-testo); }
+.cr-esito.no { color: var(--giu-testo); }
+.cr-esito.attesa { color: var(--text-dim); font-weight: 500; }
+.cr-spento-nota { color: var(--text-dim); }
+.cr-spento-nota .cr-etichetta { margin: 0 4px 0 0; }
 
 /* ---------------------------------------------------------------- grafici */
 .cr-pannello {

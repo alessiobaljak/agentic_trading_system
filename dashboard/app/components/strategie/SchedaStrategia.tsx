@@ -2,14 +2,16 @@
 
 import {
   durataFa, giornoBreve, metriche, oraItaliana, pct, soldi,
-  type DatiDemo, type DatiRamo, type DefStrategia, type Ribilancio,
+  type DatiContoVero, type DatiDemo, type DatiRamo, type DefStrategia, type Ribilancio,
 } from '../../lib/strategie';
 import SchedaBase, { RigaPosizioni, SchedaSenzaNumeri, TestaScheda } from '../comuni/SchedaBase';
+import ComandiContoVero from './ComandiContoVero';
 import ComandiDemo from './ComandiDemo';
 
 /**
  * La scheda di una strategia crypto nella prima schermata: legge i rami del bot (lib/strategie.ts) e li passa alla scheda comune
- * (components/comuni/SchedaBase.tsx), con in più il conto vero spento e, per il demo, i comandi «chiudi tutto» e «riparti».
+ * (components/comuni/SchedaBase.tsx), con in più il conto vero spento e, per il demo, i comandi «chiudi tutto» e «riparti»; per
+ * il conto vero la versione del codice da approvare e i suoi comandi (ComandiContoVero.tsx), visibili anche da spento.
  * «Aggiornato» diventa vecchio oltre due ore: il bot scrive ogni ora (bot/portafoglio/f5.py, OGNI_VALUTAZIONE_S).
  */
 function testoRibilancio(def: DefStrategia, r: Ribilancio | null, ultimoLunedi?: string): string | null {
@@ -34,15 +36,19 @@ export function eSpento(d: DatiRamo | undefined): boolean {
   return !s || s.acceso === false || /^spento/i.test(s.stato ?? '');
 }
 
-export default function SchedaStrategia({ def, dati, adesso, demo }: {
+export default function SchedaStrategia({ def, dati, adesso, demo, contoVero }: {
   def: DefStrategia;
   dati: DatiRamo | undefined;
   adesso: number;
   /** solo per la scheda del demo: allarmi, fermo, confronto, errore */
   demo?: DatiDemo;
+  /** solo per la scheda del conto vero: la versione del codice, l'approvazione, il fermo e i due passi del «riparti» */
+  contoVero?: DatiContoVero;
 }) {
   const d: DatiRamo = dati ?? { stato: null, giorni: null, ultimoRibilancio: null, arrivato: false };
   const link = def.tipo !== 'vero' ? `#crypto/dettagli/${def.pagina}` : null;
+  const comandiVero = def.tipo === 'vero' && contoVero
+    ? <ComandiContoVero stato={d.stato} spento={eSpento(d)} dati={contoVero} /> : null;
 
   // il conto vero: spento finché il proprietario non lo chiede (bot/portafoglio/conto_vero.py)
   if (def.tipo === 'vero' && eSpento(d)) {
@@ -62,12 +68,14 @@ export default function SchedaStrategia({ def, dati, adesso, demo }: {
           </span>
           {d.stato?.aggiornato && <span>Ultimo controllo {durataFa(adesso, d.stato.aggiornato)}.</span>}
         </div>
+        {comandiVero}
       </article>
     );
   }
 
   const s = d.stato;
-  const comandi = def.tipo === 'demo' && demo ? <ComandiDemo stato={s} fermo={demo.fermo} confronto={demo.confronto} /> : null;
+  const comandi = def.tipo === 'demo' && demo ? <ComandiDemo stato={s} fermo={demo.fermo} confronto={demo.confronto} />
+    : comandiVero;
   if (!s || s.equity == null) {
     return (
       <SchedaSenzaNumeri nome={def.nome} colore={def.colore} tipo={def.tipo} descrizione={def.descrizione}

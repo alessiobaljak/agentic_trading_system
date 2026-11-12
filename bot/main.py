@@ -501,7 +501,8 @@ class TradingBot:
         # conto demo nel .env; parla solo con demo-fapi.binance.com
         self.demo_g1 = DemoG1(self.fb)
         # G1 sul conto vero di Binance (fase 2 del piano, docs/conto_vero.md): NASCE SPENTO. Ordini veri solo con l'interruttore
-        # ops/conto_vero_acceso, DRY_RUN falso, il codice del tag conto-vero-approvato e un capitale fino a 300 USDT; parla solo
+        # ops/conto_vero_acceso, DRY_RUN falso, il codice della versione approvata dal proprietario su Firebase (dalla dashboard)
+        # e un capitale fino a 300 USDT; parla solo
         # con fapi.binance.com. Creato senza poter fermare il bot (problema 71): se la creazione fallisce, demo e paper partono lo
         # stesso e si riprova a ogni giro
         self.conto_vero = crea_conto_vero(self.fb)

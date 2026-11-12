@@ -1,17 +1,18 @@
 # Mappa del percorso degli ordini
 
 Prima versione: 7 nov 2026 (`b29f5713`), completata col primo avvio (`reviews/reports/2026-11-07-primo-avvio.md`). **Riscritta l'8 nov
-2026 sul codice committato `1a8522f`** (fase 1 del conto vero, approvata al quarto giro, in funzione dal riavvio delle 19:02 UTC;
-identica alla copia rivista `fase1/giro4/`; HEAD `8ec65db` ha lo stesso codice del percorso). I numeri di riga di `demo_binance.py`
-nelle sezioni 1-13 valgono per `1a8522f`. `bot/config.py`, `bot/main.py`, `bot/execution/` come il `5d5d26ad`/`013f9426`. Le modifiche
-non committate della fase 2 (il conto vero, REQUEST CHANGES) sono nella sezione 14, con le righe del working tree.
+2026 sul codice committato `1a8522f`** (fase 1 del conto vero, approvata al quarto giro, in funzione dal riavvio delle 19:02 UTC).
+I numeri di riga di `demo_binance.py` nelle sezioni 7-8 valgono per `1a8522f` (nel `ff89531` il file è cresciuto: `_da_fermo` è a
+`:974`, `protezioni` a `:951`). **12 nov 2026**: la fase 2 è committata come `ff89531` (verificato uguale alle copie riviste), il bot
+sulla macchina non l'ha ancora caricata (riavvio con l'ok di Alessio); le modifiche non committate del 12 nov (versione approvata su
+Firebase) sono nella sezione 14.
 
 ## 1. Chi manda ordini (grep del 7 nov; ricontrollato l'8 nov sulla fase 2: nessun altro client firmato, python-binance solo in `scripts/verify_keys.py`)
 
 | Parte | Dove | Verso dove | Acceso da |
 |---|---|---|---|
 | G1 sul conto demo | `bot/portafoglio/demo_binance.py` (`DemoG1`, `ClienteDemo`) | solo `demo-fapi.binance.com` | file `ops/demo_binance_acceso` + chiavi `BINANCE_DEMO_*` |
-| G1 sul conto vero (**fase 2, non committata**) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + tag + capitale (sezione 14) |
+| G1 sul conto vero (**fase 2, `ff89531`, spento**) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + codice approvato (tag; dal 12 nov, non committato: Firebase) + capitale + chiavi (sezione 14) |
 | Vecchio esecutore, ramo reale | `bot/execution/executor.py` | **nessuno: bloccato dal `9f47972c`** | `_init_binance` non crea il client e rimette `dry_run` vero (`executor.py:244-254`) |
 
 Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) e `eventi.py` (dati pubblici da `fapi.binance.com`,
@@ -33,8 +34,9 @@ scaricamenti dei paper (alla mezzanotte minuti); ogni chiamata a Firebase può d
   dichiarava `DRY_RUN: True` il 5 nov (`ops/results/0702-5nov-stato-entrate-demo-bis.md:17`).
 - Tarature (`carica_tuning`, `config.py:34-52`): tutto **tranne** `DRY_RUN`, `BINANCE_TESTNET`, `BACKTEST_PARITY` (`:30`) e i nomi con
   KEY, SECRET, TOKEN, PASSWORD, CREDENTIAL, FIREBASE (`:31`). Elenco di vietate, non di ammesse.
-- Avvio (codice committato): `controlla_avvio` stampa l'ambiente e **rifiuta l'avvio con `DRY_RUN` falso** (`:795-800`, problema 29). Il rifiuto
-  ferma anche il demo (stesso processo): Problema 35. La fase 2 lo cambia (sezione 14).
+- Avvio: in `1a8522f` (in funzione) `controlla_avvio` **rifiuta l'avvio con `DRY_RUN` falso** (problema 29; ferma anche il demo: 35).
+  Da `ff89531` (`config.py:791-813`) con `DRY_RUN` falso il bot parte sempre (senza interruttore il conto vero fa solo le protezioni),
+  salvo `BACKTEST_PARITY` vero: 35 chiuso al riavvio che carica `ff89531`.
 - Con `DRY_RUN` falso nel vecchio sistema (verificato l'8 nov): esecutore sempre in prova (`executor.py:244-254`); riconciliatore acceso
   (`reconciler.py:230-239`, `main.py:2515`) ma senza client «irraggiungibile» (`main.py:1204-1205`) → solo `exchange_down`/`wait`, nessuna azione
   (`reconciler.py:93-100`, `main.py:1235-1255`); Telegram «🔴 LIVE» sulle operazioni del vecchio paper (`main.py:1442`, `:1488`, `:1548`,
@@ -132,7 +134,7 @@ Binance riletta una volta (`:470`), errori senza firma (`senza_firma` `:123-127`
 | Demo | file `ops/demo_binance_chiudi_tutto`, testo nuovo | sì (con il `git pull` dell'agente, ogni minuto) | 1 min + un giro; come sopra |
 | Demo | stop sul conto −35% dal massimo o sotto il 65% del capitale della fase | sì | 1 minuto + un giro; come sopra |
 | Demo, da fermo | conto rimasto aperto, ordini rimasti | sì | richiuso ogni minuto, allarme al terzo tentativo, anche con la lettura degli ordini in errore |
-| Conto vero (fase 2) | RTDB `/commands/conto_vero_chiudi_tutto`, file `ops/conto_vero_chiudi_tutto`, stop | file sì | come il demo; dal secondo giro anche spento, se acceso una volta e non vuoto (53 chiuso); nessun pulsante in dashboard né regola (60) |
+| Conto vero (fase 2) | RTDB `/commands/conto_vero_chiudi_tutto`, file `ops/conto_vero_chiudi_tutto`, stop | file sì | come il demo; anche spento, se acceso una volta e non vuoto (53); pulsante in dashboard e regola nel repository dal 12 nov (non committati; regole non pubblicate) |
 | Vecchio bot | RTDB `/commands/kill_switch` e `/commands/bot_state` (`kill_switch.py:40-59`) | **no** | valutato dopo tre uscite anticipate del giro; chiude solo posizioni di prova |
 
 Con `DRY_RUN` falso il bot committato non parte: nessun pulsante del demo funziona (Problema 35).
@@ -149,17 +151,19 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
 
 - `set_rtdb` non solleva mai, restituisce vero o falso e aggiorna sempre lo specchio in memoria (`firebase_client.py:652-679`);
   `get_rtdb` su errore restituisce lo specchio (`:681-702`). Il demo guarda il valore restituito solo per il «riparti».
-- Regole nel repo: `firebase/firestore.rules` (solo `user_risk_settings` scrivibile), `firebase/database.rules.json` (solo
-  `kill_switch`, `close_position`, `demo_binance_chiudi_tutto`, `demo_binance_riparti`, `close_position_meta`; **nessuna per il conto
-  vero**), utente `REPLACE_WITH_YOUR_FIREBASE_UID`. **Mai pubblicate dal proprietario** (7 nov): se il database accetta scritture da
-  chiunque, chiunque comanda demo (e conto vero).
+- Regole nel repo: `firebase/firestore.rules` (solo `user_risk_settings` scrivibile), `firebase/database.rules.json` (`kill_switch`,
+  `close_position`, i due comandi del demo, `close_position_meta`; dal 12 nov, non committati, i quattro del conto vero e `/azioni`),
+  utenti segnaposto. **Pubblicate** (foto di Alessio, 12 nov, `docs/conto_vero.md:85-90`): chiuse e con il suo identificativo, ma senza
+  i blocchi del demo e del conto vero (i loro pulsanti in dashboard sono rifiutati).
+- **La chiave di amministratore ignora le regole**: ce l'hanno il bot, `scripts/ops_agent.py:349-353` (riletto dal branch ogni minuto)
+  e i flussi di GitHub `connectivity.yml:24`, `monitoring.yml:24`, `learning.yml:25`, `snapshot.yml:33,43` (anche a ogni push).
 
 ## 11. Il canale `ops/`
 
 - `scripts/ops_agent.py` ogni minuto: `git fetch origin <branch>` e avanti veloce (`:473-477`; altrimenti rebase con annullo,
   `:271-303`), richieste contro la lista bianca della macchina, oscuramento dei segreti, battito in `ops/heartbeat.md`. Committato: non
-  scarica i tag (provato l'8 nov, git 2.43: 55); la fase 2 aggiunge il tag del conto vero forzato (sezione 14). Lo script si rilegge a
-  ogni giro: un suo cambio vale dal primo `git pull`, senza riavvio. La macchina segue
+  scarica i tag (provato l'8 nov, git 2.43: 55); `ff89531` porta il tag del conto vero forzato, il cambio del 12 nov lo toglie. Lo script
+  si rilegge a ogni giro: un suo cambio vale dal primo `git pull`, senza riavvio, e può fare qualunque cosa sulla macchina. La macchina segue
   `claude/brave-albattani-1b12fv`: ciò che si spinge lì entra in funzione al riavvio, anche dopo un crash.
 - File letti dal demo nel repo: `ops/demo_binance_acceso`, `ops/demo_binance_capitale` (`1000`), `ops/demo_binance_chiudi_tutto` e
   `ops/demo_binance_riparti` (assenti), `ops/demo_binance_eventi_acceso` (assente). Chi può scrivere sul branch comanda il demo.
@@ -178,44 +182,43 @@ della firma: libreria `cryptography` del contenitore rotta; passa con `PYTHONPAT
 
 Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52 (tentativi che non crescono con un «riparti» in attesa);
 dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24 (vecchio bot), 34 (identificativi degli eventi), 35
-(`DRY_RUN` falso ferma anche il demo). Fuori dal codice: chiavi vere non limitate all'indirizzo, prelievo non detto; regole di Firebase
-mai pubblicate; servizio che riparte da solo con l'ultimo codice spinto. Conto vero (fase 2, non committata): 54 ii, 60, 66, 70-72 (sezione 14).
+(`DRY_RUN` falso ferma anche il demo; chiuso al riavvio con `ff89531`). Fuori dal codice: chiavi vere non limitate all'indirizzo,
+prelievo non detto; regole pubblicate senza i comandi del demo e del conto vero; servizio che riparte da solo con l'ultimo codice
+spinto. Conto vero: 54 ii Alto, 70 e 74 Medi, 75-77 Bassi (sezione 14).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
-## 14. Modifiche non committate in revisione: fase 2, il conto vero (8 nov 2026; terzo giro: APPROVE per il commit spento)
+## 14. Il conto vero: fase 2 committata (`ff89531`) e modifiche non committate del 12 nov 2026
 
-Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del working tree del secondo giro (copia in `fase2/giro2/`).
-- `bot/portafoglio/conto_vero.py` (564 righe): `ContoVeroG1(DemoG1)`, `ClienteVero(ClienteDemo)`; solo `https://fapi.binance.com`
-  (`_url` `:92-97`); chiavi `BINANCE_API_KEY`/`SECRET` (`:267-272`); stato `data/conto_vero.json`, ramo `/conto_vero`, pulsante
-  `/commands/conto_vero_chiudi_tutto` o file `ops/conto_vero_chiudi_tutto`; **«riparti» solo dal file** (`COMANDO_RIPARTI = None` `:69`).
-- **Limiti** (`:82-89`, test `tests/test_conto_vero.py:89-110`): leva 5, capitale 300, valore 600, stop 35%, pavimento 65%, pesi 200%,
-  peso per moneta 60%, età 26 h; niente eventi (`:238-242`, `:536-538`).
-- **Spento** (interruttore tolto o `DRY_RUN` vero, `motivo_spento` `:260-265`, `tick` `:274-289`): mai acceso (stato o Firebase
-  `/conto_vero/acceso_dal`, `/conto_vero/fermo`, `_acceso_una_volta` `:321-335`) o già vuoto → nessuna richiesta né chiave; acceso una
-  volta e non vuoto → protezioni con soli ordini «solo riduzione» (`_protezioni_da_spento` `:291-306`), vuoto controllato ogni minuto
-  (`_vuoto_da_spento` `:509-520`). **Con `DRY_RUN` vero ordini «solo riduzione» al conto vero: invariante D cambiato.**
-- **Codice approvato** (`codice_approvato` `:129-172`): 5 percorsi (`:72`) + i file del repository caricati nel processo
-  (`file_caricati` `:100-116`, senza ambiente Python e cartelle nascoste), all'avvio anche niente file cambiati dopo l'ora d'avvio del
-  processo (`avvio_del_processo` `:119-126`; `:219-225`), poi ogni minuto (`:444-447`). Tag portato sulla macchina forzato
-  (`scripts/ops_agent.py:448-466`, chiamato a `:499`): **chi spinge il tag approva (54 ii, aperto)**.
-- **Valore** (58): capitale + redditi (`REDDITI_DEL_CONTO` `:77-78`, `_aggiorna_redditi` `:377-415`, da `/fapi/v1/income` ogni minuto) +
-  non realizzato (`_valori` `:417-424`); redditi da dopo le chiusure (`parti_da_zero` `:426-436`, ma con l'ora d'inizio del giro: 65);
-  saldo vero sotto il valore → niente ordini (`:462-464`; fragile: 64).
-- **Condizioni degli ordini** (`motivo_niente_ordini` `:439-477`): codice, capitale nel file fino a 300 e non oltre il saldo, capitale in
-  corso nel tetto, saldo non sotto il valore, valore fino a 600, alla prima accensione conto vuoto (59, allarme `conto_non_vuoto`).
-  Con un motivo: allarme `ordini_vietati`, freno del cliente, ordini limite in corso vivono la loro ora e poi si annullano senza resto
-  (`:495-496`, `:522-533`). Partenza e riaccensione alla decisione di G1 dopo (`:498-506`).
-- **Stato perso** dopo un'accensione o file illeggibile → fermo, chiusure, «riparti» nuovo (`_stato_perso` `:351-375`; 66, 68).
-- `bot/config.py:791-813`: con `DRY_RUN` falso il bot parte sempre (senza interruttore: conto vero nelle sole protezioni), salvo parità.
-- `bot/main.py`: conto vero creato a `:506`, giro a `:2653-2656`; etichette Telegram e riconciliatore legati a `executor.dry_run`
-  (`:1447`, `:1493`, `:1553`, `:1981`, `:2522`).
-- `demo_binance.py`: attributi di classe, `_ordini_nuovi_ammessi`, `_ordini_del_giro`, `_filtri_degli_ordini`, `_ambiente`, `_valori`
-  (`:1204`); unico cambio di comportamento del demo: stato salvato dopo `parti_da_zero` (`:677`, problema 62).
-- Terzo giro (righe di `conto_vero.py` del terzo giro, copia in `fase2/giro3/`): redditi fino a 60 s fa con 15 minuti riletti e
-  doppioni tolti con tipo e `tranId` (`:80-84`, `:396-457`), allarme `redditi`; saldo sotto il valore solo oltre lo 0,5% (almeno
-  1 USDT) in 3 letture (`:95-101`, `_saldo_sotto` `:540-550`); redditi della fase nuova dall'ora vera (`:490`); stop spento prima della
-  prima accensione (`:459-464`); Firebase muto riletto (`:335-352`); `ops_agent.py:460` con `ls-remote --exit-code`.
-- Problemi aperti: 54 (ii) Alto; 60 resto e 70 Medi; 66 resto, 71, 72 Bassi. Chiusi: 53, 55, 57, 59, 61-65, 67, 68; 56, 58, 69 come scelto.
+Rapporti della fase 2: `reports/2026-11-08-fase2-conto-vero*.md`. Del 12 nov: `reports/2026-11-12-conto-vero-versione-firebase.md`.
+Righe del working tree del 12 nov (`conto_vero.py` 913 righe).
+- Indirizzo solo `https://fapi.binance.com` (`_url` `:126-131`); chiavi `BINANCE_API_KEY`/`SECRET` lette solo da acceso (`:397-402`);
+  stato `data/conto_vero.json`, ramo `/conto_vero`; pulsante `/commands/conto_vero_chiudi_tutto` o file `ops/conto_vero_chiudi_tutto`.
+- **Limiti** (`:108-123`, test `tests/test_conto_vero.py:161-194`): leva 5, capitale 300, valore 600, stop 35%, pavimento 65%, pesi 200%,
+  peso per moneta 60%, età 26 h; tolleranza del saldo 0,5% (almeno 1) in 3 letture; redditi fino a 60 s fa con 15 minuti riletti.
+- **Spento** (senza interruttore o con `DRY_RUN` vero, `motivo_spento` `:390-395`): mai acceso o già vuoto → nessuna richiesta né chiave
+  (`_protezioni_da_spento` `:476-491`); acceso una volta e non vuoto → protezioni con soli ordini «solo riduzione».
+- **Codice approvato, dal 12 nov (non committato)**: all'avvio HEAD, data e titolo (`commit_in_esecuzione` `:168-179`) e file caricati
+  uguali a HEAD, nessuno cambiato dopo l'avvio (`:346-351`), altrimenti blocco fino al riavvio; ogni minuto, anche da spento
+  (`_controlla_versione` `:438-448`), il commit di `/commands/conto_vero_versione_approvata` letto **davvero** da Firebase
+  (`leggi_rtdb_davvero`, `firebase_client.py:704-721`; `_letto_davvero` `:182-193`; seconda lettura subito `:427-430`) deve essere
+  uguale al commit in memoria e ai file di adesso (`codice_approvato` `:222-287`). Firebase muto = non approvato; allarme
+  `versione_approvata` dopo 3 controlli. `/conto_vero/versione` per la dashboard (`:457-474`). In `ff89531`: il tag forzato.
+  **Chi scrive l'approvazione**: Alessio dalla dashboard, ma anche la chiave di amministratore (sezione 10): 54 ii aperto.
+- **Condizioni degli ordini** (`motivo_niente_ordini` `:728-773`): codice, Firebase che ha risposto sullo stato dell'accensione (66),
+  capitale nel file fino a 300 e non oltre il saldo, saldo non sotto il valore, valore fino a 600, conto vuoto alla prima accensione.
+  Con un motivo (`_ordini_nuovi_ammessi` `:787-815`): `blocco`, freno del cliente, ordini limite annullati allo scadere senza resto;
+  alla fine del blocco si riparte dalla decisione di G1 dopo. **Un buco di Firebase vale come un blocco: 74.**
+- **«Riparti», dal 12 nov**: solo dalla dashboard, richiesta `/commands/conto_vero_riparti` vera e conferma
+  `/commands/conto_vero_riparti_conferma` uguale all'ora del fermo in secondi interi (`codice_riparti` `:211-219`, `_riparti_confermato`
+  `:666-678`); pulite all'entrata nel fermo (`:691-701`), la conferma tolta dopo l'uso (`:680-689`); nessun file (`:656-659`, `:316`).
+  In `ff89531`: solo dal file `ops/conto_vero_riparti`.
+- **Stato perso** → fermo, chiusure, «riparti» nuovo (`_stato_perso` `:546-571`). Stop spento prima della prima accensione (`:637-642`):
+  70 aperto.
+- Creazione protetta (`crea_conto_vero` `:891-913`, allarme `/conto_vero/allarmi/creazione`), giro subito dopo il demo
+  (`main.py:2655-2661`).
+- Dashboard (non committata): `ComandiContoVero.tsx` (approva `:132-154`, chiudi tutto `:205-223`, riparti in due passi `:170-204`;
+  disattivati da spento), dati da `lib/strategie.ts:259-268`.
+- Problemi aperti: 54 (ii) Alto; 70, 74 Medi; 75, 76, 77 Bassi. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-73; 56, 58, 69 come scelto.
 
 ## Storia degli invarianti
 
@@ -238,3 +241,6 @@ Rapporti `reviews/reports/2026-11-08-fase2-conto-vero.md` e `-2.md`. Righe del w
   del conto vero solo da file; demo: stato salvato dopo `parti_da_zero`. Limiti fissi invariati.
 - 8 nov, fase 2 terzo giro (APPROVE per il commit spento): stop spento prima della prima accensione; blocco per prelievo con
   tolleranza e tre letture; redditi con ritardo e sovrapposizione. Limiti fissi invariati.
+- 12 nov (non committato; APPROVE per il commit spento, REQUEST CHANGES per l'accensione): codice approvato dal tag a un commit su
+  Firebase scritto dalla dashboard, letto davvero ogni minuto (Firebase muto = non approvato), valido senza riavvio; «riparti» del
+  conto vero solo dalla dashboard in due passi, nessun file; l'agente non porta più il tag. Limiti fissi invariati.

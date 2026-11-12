@@ -6,6 +6,9 @@
  *
  * Scenari dall'indirizzo: `?prova=calmo` (nessun allarme), `?prova=fermo` (demo fermo), `?prova=azioni_vuote` (niente in /azioni),
  * altrimenti un allarme acceso sul demo. Il ramo /azioni è l'esempio della forma proposta in dashboard/GUIDA_SCHEDA_AZIONI.md.
+ * Il conto vero (12 nov 2026) è spento con la versione in esecuzione ancora da approvare; `?prova=vero_approvata` (spento, versione
+ * approvata), `?prova=vero_acceso`, `?prova=vero_fermo` (per provare il «riparti» in due passi), `?prova=vero_diversa` (acceso, ma
+ * la versione approvata non è quella in esecuzione: niente ordini nuovi).
  */
 
 type Albero = Record<string, unknown>;
@@ -71,6 +74,47 @@ function creaAzioni(adesso: number, oggi0: number, normale: () => number): Alber
       },
     },
     allarmi: null,
+  };
+}
+
+/** Il ramo /conto_vero e i suoi comandi, con la forma di bot/portafoglio/conto_vero.py (hash e titoli inventati). */
+function creaContoVero(scenario: string | null, adesso: number): { ramo: Albero; comandi: Albero } {
+  const COMMIT = '3f9c2a7e1b4d5c6f8a0b1c2d3e4f5a6b7c8d9e0f';
+  const COMMIT_PRIMA = '9a1b2c3d4e5f60718293a4b5c6d7e8f901234567';
+  const acceso = scenario === 'vero_acceso' || scenario === 'vero_fermo' || scenario === 'vero_diversa';
+  const approvata = scenario === 'vero_diversa' ? COMMIT_PRIMA : scenario?.startsWith('vero_') ? COMMIT : null;
+  const blocco = approvata === COMMIT ? null : approvata
+    ? `il processo esegue il commit ${COMMIT.slice(0, 8)}, diverso dalla versione approvata (${COMMIT_PRIMA.slice(0, 8)}) in: `
+      + 'bot/portafoglio/conto_vero.py: serve un riavvio su quella versione, o l\'approvazione di quella in esecuzione'
+    : 'nessuna versione approvata dal proprietario (dashboard, scheda del conto vero, «Approva questa versione»)';
+  const versione = {
+    commit: COMMIT, data: new Date((adesso - 5 * 3600) * 1000).toISOString(),
+    titolo: 'Conto vero: la versione si approva dalla dashboard, riparti in due passi', pulito: true,
+    ...(approvata ? { approvata } : {}), coincidono: blocco === null, ...(blocco ? { blocco } : {}), aggiornato: adesso - 40,
+  };
+  const fermo = scenario === 'vero_fermo'
+    ? { motivo: 'stop sul conto: 181,40 USDT, sotto il 65% del capitale di partenza (182,00)', ora: adesso - 55 * 60, chiuse: 38,
+      vuoto: adesso - 54 * 60 }
+    : null;
+  const equity = fermo ? 181.4 : 287.35;
+  const stato = !acceso
+    ? { stato: "spento: manca l'interruttore ops/conto_vero_acceso", acceso: false, aggiornato: adesso - 30 }
+    : fermo
+      ? { stato: `fermo: ${fermo.motivo}`, equity, capitale_iniziale: 280, aggiornato: adesso - 54 * 60 }
+      : {
+        stato: blocco ? `solo protezioni, niente ordini nuovi: ${blocco}` : 'acceso', equity, saldo: equity - 1.2,
+        capitale_iniziale: 280, rendimento: equity / 280 - 1, long: 20, short: 19, limite_eseguiti: 27, limite_totali: 39,
+        ordini_in_attesa: 0, aggiornato: adesso - 12 * 60, massimo: 289.1, dal_massimo: equity / 289.1 - 1, stop_a: 187.92,
+        conto_ridotto: 280,
+      };
+  return {
+    ramo: {
+      stato, versione, fermo,
+      allarmi: acceso && blocco && !fermo
+        ? { ordini_vietati: { ora: adesso - 9 * 60, testo: `niente ordini nuovi: ${blocco}; stop sul conto, pulsante e chiusure restano attivi` } }
+        : null,
+    },
+    comandi: approvata ? { conto_vero_versione_approvata: { commit: approvata, ora: (adesso - 3 * 3600) * 1000 } } : {},
   };
 }
 
@@ -154,6 +198,7 @@ export function creaDati(scenario: string | null): Albero {
     },
   };
   const fermo = scenario === 'fermo' ? { motivo: 'chiudi tutto dalla dashboard', ora: adesso - 40 * 60, chiuse: 47 } : null;
+  const contoVero = creaContoVero(scenario, adesso);
 
   return {
     bot_status: { heartbeat: adesso - 35, state: 'running', updated_at: adesso - 35 },
@@ -234,10 +279,8 @@ export function creaDati(scenario: string | null): Albero {
         scarto_totale: 0.04, monete: 47 },
       errore: null,
     },
-    conto_vero: {
-      stato: { stato: "spento: manca l'interruttore ops/conto_vero_acceso", acceso: false, aggiornato: adesso - 30 },
-    },
+    conto_vero: contoVero.ramo,
     azioni: scenario === 'azioni_vuote' ? null : creaAzioni(adesso, oggi0, normale),
-    commands: {},
+    commands: contoVero.comandi,
   };
 }

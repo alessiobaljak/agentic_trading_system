@@ -12,10 +12,14 @@
  *   - bot/portafoglio/demo_binance.py → /demo_binance: `stato`, `giorni` della fase in corso (a 1.000 USDT dall'8 novembre),
  *                                  `fasi/{nome}/giorni` le fasi di prima, `ribilanciamenti`, `allarme`, `allarmi/{tipo}`, `fermo`,
  *                                  `confronto`, `errore`;
- *   - bot/portafoglio/conto_vero.py → /conto_vero: `stato` (spento: «spento: <motivo>», `acceso: false`), `allarmi`, `fermo`.
+ *   - bot/portafoglio/conto_vero.py → /conto_vero: `stato` (spento: «spento: <motivo>», `acceso: false`), `allarmi`, `fermo`,
+ *                                  `versione` (il commit in esecuzione, quello approvato letto, se coincidono);
  *   - bot/main.py                → /bot_status/heartbeat (secondi), a ogni giro del ciclo.
+ *   - il proprietario, da qui    → /commands/conto_vero_versione_approvata, /commands/conto_vero_riparti e
+ *                                  /commands/conto_vero_riparti_conferma (12 nov 2026): si rileggono per mostrare a che punto sono.
  *
- * Qui solo lettura: i comandi del demo («chiudi tutto», «riparti») stanno in components/strategie/ComandiDemo.tsx.
+ * Qui solo lettura: i comandi del demo («chiudi tutto», «riparti») stanno in components/strategie/ComandiDemo.tsx, quelli del conto
+ * vero (approva la versione, chiudi tutto, riparti in due passi) in components/strategie/ComandiContoVero.tsx.
  */
 import { useEffect, useMemo, useState } from 'react';
 import { limitToLast, onValue, orderByKey, query, ref } from 'firebase/database';
@@ -169,10 +173,46 @@ export interface DatiDemo {
   errore: Errore | null;
 }
 
+/** /conto_vero/versione, scritta dal bot (bot/portafoglio/conto_vero.py, `_pubblica_versione`), anche da spento. */
+export interface VersioneContoVero {
+  /** il commit che il bot sta eseguendo (HEAD del repository all'avvio del processo), 40 caratteri */
+  commit?: string;
+  /** la data del commit, ISO */
+  data?: string;
+  titolo?: string;
+  /** vero se i file caricati dal bot sono uguali a quel commit; altrimenti `motivo` dice perché */
+  pulito?: boolean;
+  motivo?: string;
+  /** il commit approvato che il bot ha letto all'ultimo controllo (ogni minuto) */
+  approvata?: string;
+  /** vero se per il bot il codice in esecuzione è quello approvato; altrimenti `blocco` dice perché */
+  coincidono?: boolean;
+  blocco?: string;
+  aggiornato?: number;
+}
+
+/** /commands/conto_vero_versione_approvata: la scrive solo il proprietario, da «Approva questa versione». */
+export interface VersioneApprovata {
+  commit?: string;
+  /** millisecondi (l'ora del server di Firebase) */
+  ora?: number;
+}
+
 export interface DatiContoVero {
   allarmi: Record<string, Allarme | null> | null;
   fermo: Fermo | null;
+  versione: VersioneContoVero | null;
+  /** vero quando /conto_vero/versione è arrivata (anche vuota) */
+  versioneArrivata: boolean;
+  approvata: VersioneApprovata | null;
+  /** i due passi del «riparti» come sono adesso su Firebase: la richiesta (vero) e la conferma (l'ora del fermo, in testo) */
+  riparti: boolean | null;
+  ripartiConferma: string | null;
 }
+
+export const CONTO_VERO_VUOTO: DatiContoVero = {
+  allarmi: null, fermo: null, versione: null, versioneArrivata: false, approvata: null, riparti: null, ripartiConferma: null,
+};
 
 export interface DatiStrategie {
   rami: Record<string, DatiRamo>;
@@ -189,7 +229,7 @@ const VUOTO_RAMO: DatiRamo = { stato: null, giorni: null, ultimoRibilancio: null
 export function useStrategie(): DatiStrategie {
   const [rami, setRami] = useState<Record<string, DatiRamo>>({});
   const [demo, setDemo] = useState<DatiDemo>({ fasi: null, allarme: null, allarmi: null, fermo: null, confronto: null, errore: null });
-  const [contoVero, setContoVero] = useState<DatiContoVero>({ allarmi: null, fermo: null });
+  const [contoVero, setContoVero] = useState<DatiContoVero>(CONTO_VERO_VUOTO);
   const [battito, setBattito] = useState<number | null>(null);
   const [battitoArrivato, setBattitoArrivato] = useState(false);
 
@@ -219,6 +259,13 @@ export function useStrategie(): DatiStrategie {
       setContoVero((p) => ({ ...p, [campo]: x.val() as never }));
     stop.push(onValue(ref(db, 'conto_vero/allarmi'), v('allarmi')));
     stop.push(onValue(ref(db, 'conto_vero/fermo'), v('fermo')));
+    stop.push(onValue(ref(db, 'conto_vero/versione'), (x) =>
+      setContoVero((p) => ({ ...p, versione: x.val() as VersioneContoVero | null, versioneArrivata: true }))));
+    stop.push(onValue(ref(db, 'commands/conto_vero_versione_approvata'), v('approvata')));
+    stop.push(onValue(ref(db, 'commands/conto_vero_riparti'), (x) =>
+      setContoVero((p) => ({ ...p, riparti: x.val() === true }))));
+    stop.push(onValue(ref(db, 'commands/conto_vero_riparti_conferma'), (x) =>
+      setContoVero((p) => ({ ...p, ripartiConferma: typeof x.val() === 'string' ? (x.val() as string) : null }))));
     stop.push(onValue(ref(db, 'bot_status/heartbeat'), (x) => {
       const n = Number(x.val());
       setBattito(Number.isFinite(n) && n > 0 ? (n > 1e12 ? n / 1000 : n) : null);
@@ -237,7 +284,7 @@ export interface StatoCrypto {
   battitoArrivato: boolean;
   aggiornato: number | null;
   demo: Pick<DatiDemo, 'allarme' | 'allarmi' | 'fermo'>;
-  contoVero: Pick<DatiContoVero, 'allarmi'>;
+  contoVero: Pick<DatiContoVero, 'allarmi' | 'fermo'>;
 }
 
 export function useStatoCrypto(): StatoCrypto {
@@ -245,7 +292,7 @@ export function useStatoCrypto(): StatoCrypto {
   const [battitoArrivato, setBattitoArrivato] = useState(false);
   const [aggiornati, setAggiornati] = useState<Record<string, number>>({});
   const [demo, setDemo] = useState<StatoCrypto['demo']>({ allarme: null, allarmi: null, fermo: null });
-  const [contoVero, setContoVero] = useState<StatoCrypto['contoVero']>({ allarmi: null });
+  const [contoVero, setContoVero] = useState<StatoCrypto['contoVero']>({ allarmi: null, fermo: null });
   useEffect(() => {
     const db = getRtdb();
     const stop = STRATEGIE.map((s) => onValue(ref(db, `${s.ramo}/stato/aggiornato`), (x) => {
@@ -260,7 +307,8 @@ export function useStatoCrypto(): StatoCrypto {
     stop.push(onValue(ref(db, 'demo_binance/allarme'), (x) => setDemo((p) => ({ ...p, allarme: x.val() }))));
     stop.push(onValue(ref(db, 'demo_binance/allarmi'), (x) => setDemo((p) => ({ ...p, allarmi: x.val() }))));
     stop.push(onValue(ref(db, 'demo_binance/fermo'), (x) => setDemo((p) => ({ ...p, fermo: x.val() }))));
-    stop.push(onValue(ref(db, 'conto_vero/allarmi'), (x) => setContoVero({ allarmi: x.val() })));
+    stop.push(onValue(ref(db, 'conto_vero/allarmi'), (x) => setContoVero((p) => ({ ...p, allarmi: x.val() }))));
+    stop.push(onValue(ref(db, 'conto_vero/fermo'), (x) => setContoVero((p) => ({ ...p, fermo: x.val() }))));
     return () => stop.forEach((f) => f());
   }, []);
   const valori = Object.values(aggiornati).filter((x) => x > 0);

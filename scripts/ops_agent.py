@@ -445,27 +445,6 @@ def _git_hint() -> str:
     return f" (HOME={home})"
 
 
-#: il tag del codice approvato per il conto vero (lo stesso di `bot/portafoglio/conto_vero.py`, `TAG_APPROVATO`: lo controlla un test)
-TAG_CONTO_VERO = "conto-vero-approvato"
-
-
-def porta_il_tag() -> bool:
-    """Il tag del codice approvato per il conto vero sulla macchina (revisione dell'8 novembre 2026, problema 55): il fetch del branch
-    non lo porta, e un `git fetch` normale non sposta un tag gia' presente. Qui solo quel tag, forzato: se il proprietario lo
-    sposta si sposta anche qui, se lo toglie si toglie (il conto vero torna senza ordini nuovi). Un errore non ferma il giro."""
-    rif = f"refs/tags/{TAG_CONTO_VERO}"
-    code, out = _git("fetch", "--no-tags", "origin", f"+{rif}:{rif}")
-    if code == 0:
-        return True
-    if _git("ls-remote", "--exit-code", "origin", rif)[0] == 2:   # problema 67: 2 = il tag non c'è (non dipende dalla lingua)
-        if _git("rev-parse", "-q", "--verify", rif)[0] == 0:
-            _git("tag", "-d", TAG_CONTO_VERO)
-            print(f"[ops] il tag {TAG_CONTO_VERO} non c'e' piu' sul repository: tolto anche qui")
-        return True
-    print(f"[ops] tag {TAG_CONTO_VERO} non scaricato ({out.strip()[:120]}): si riprova al giro dopo")
-    return False
-
-
 def main() -> int:
     # 1) prendi le richieste nuove. Senza questo l'agente lavorerebbe su una copia
     # vecchia del repo e non vedrebbe mai nulla.
@@ -496,7 +475,6 @@ def main() -> int:
     if code != 0:
         print(f"[ops] niente avanzamento veloce ({out.strip()[:120]}){_git_hint()}")
         riconcilia(branch)
-    porta_il_tag()
 
     todo = pending()
     # il battito PRIMA di qualunque uscita anticipata: e' proprio nei giri senza

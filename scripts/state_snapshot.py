@@ -676,10 +676,16 @@ def sezione_conto_vero(fb) -> list:
     """Le righe di G1 sul conto vero di Binance (RTDB /conto_vero, `bot/portafoglio/conto_vero.py`, nasce spento): spento e perché,
     oppure acceso con equity, stop sul conto, fermo e allarmi."""
     titolo = "## G1 sul conto vero di Binance (soldi veri; nasce spento, si accende solo con il gesto del proprietario)"
+    def allarmi_per_tipo() -> list:
+        allarmi = fb.get_rtdb("/conto_vero/allarmi")
+        return [f"- **ALLARME** {tipo.replace('_', ' ')} ({_ts(a.get('ora'))}): {a.get('testo')}"
+                for tipo, a in (sorted(allarmi.items()) if isinstance(allarmi, dict) else []) if isinstance(a, dict) and a.get("testo")]
+
     st = fb.get_rtdb("/conto_vero/stato") or {}
     st = st if isinstance(st, dict) else {}
     if not st:
-        return [titolo, "- spento: nessuno stato scritto (il bot non lo ha ancora fatto girare)", ""]
+        # problema 73 (revisione dell'8 novembre 2026): gli allarmi si vedono anche senza stato (la creazione non riuscita)
+        return [titolo, "- spento: nessuno stato scritto (il bot non lo ha ancora fatto girare)"] + allarmi_per_tipo() + [""]
     righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
     if st.get("equity") is not None:
         righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
@@ -693,10 +699,7 @@ def sezione_conto_vero(fb) -> list:
     allarme = fb.get_rtdb("/conto_vero/allarme")
     if isinstance(allarme, dict) and allarme.get("testo"):
         righe.append(f"- **ALLARME** ({_ts(allarme.get('ora'))}): {allarme.get('testo')}")
-    allarmi = fb.get_rtdb("/conto_vero/allarmi")
-    for tipo, a in sorted(allarmi.items()) if isinstance(allarmi, dict) else []:
-        if isinstance(a, dict) and a.get("testo"):
-            righe.append(f"- **ALLARME** {tipo.replace('_', ' ')} ({_ts(a.get('ora'))}): {a.get('testo')}")
+    righe += allarmi_per_tipo()
     err = fb.get_rtdb("/conto_vero/errore")
     if isinstance(err, dict) and err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
