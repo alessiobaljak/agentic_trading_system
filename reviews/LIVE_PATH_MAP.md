@@ -184,13 +184,13 @@ Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52
 dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24 (vecchio bot), 34 (identificativi degli eventi), 35
 (`DRY_RUN` falso ferma anche il demo; chiuso al riavvio con `ff89531`). Fuori dal codice: chiavi vere non limitate all'indirizzo,
 prelievo non detto; regole pubblicate senza i comandi del demo e del conto vero; servizio che riparte da solo con l'ultimo codice
-spinto. Conto vero: 54 ii Alto, 70 e 74 Medi, 75-77 Bassi (sezione 14).
+spinto. Conto vero: 54 ii Alto, 70 Medio, 78 Basso (sezione 14).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
-## 14. Il conto vero: fase 2 committata (`ff89531`) e modifiche non committate del 12 nov 2026
+## 14. Il conto vero: fase 2 (`ff89531`), versione approvata su Firebase (`a267c40`), secondo giro del 12 nov non committato
 
-Rapporti della fase 2: `reports/2026-11-08-fase2-conto-vero*.md`. Del 12 nov: `reports/2026-11-12-conto-vero-versione-firebase.md`.
-Righe del working tree del 12 nov (`conto_vero.py` 913 righe).
+Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-vero-versione-firebase.md` (committato come `a267c40`),
+`-2.md` (secondo giro). Righe del primo giro (`a267c40`); il secondo giro sposta di circa +30 righe da `:90` in poi.
 - Indirizzo solo `https://fapi.binance.com` (`_url` `:126-131`); chiavi `BINANCE_API_KEY`/`SECRET` lette solo da acceso (`:397-402`);
   stato `data/conto_vero.json`, ramo `/conto_vero`; pulsante `/commands/conto_vero_chiudi_tutto` o file `ops/conto_vero_chiudi_tutto`.
 - **Limiti** (`:108-123`, test `tests/test_conto_vero.py:161-194`): leva 5, capitale 300, valore 600, stop 35%, pavimento 65%, pesi 200%,
@@ -203,11 +203,14 @@ Righe del working tree del 12 nov (`conto_vero.py` 913 righe).
   (`leggi_rtdb_davvero`, `firebase_client.py:704-721`; `_letto_davvero` `:182-193`; seconda lettura subito `:427-430`) deve essere
   uguale al commit in memoria e ai file di adesso (`codice_approvato` `:222-287`). Firebase muto = non approvato; allarme
   `versione_approvata` dopo 3 controlli. `/conto_vero/versione` per la dashboard (`:457-474`). In `ff89531`: il tag forzato.
+  **Secondo giro (non committato)**: con Firebase muto vale il commit dell'ultima lettura vera fino a 10 minuti, sempre con git; una
+  lettura vera senza approvazione (revoca) vale subito, una revoca non letta fino a 10 minuti (`_verifica_versione` `:441-466`); da
+  spento controllo ogni 10 minuti, all'accensione subito; fermo riscritto finché arriva; «non ancora letta» prima del primo controllo.
   **Chi scrive l'approvazione**: Alessio dalla dashboard, ma anche la chiave di amministratore (sezione 10): 54 ii aperto.
 - **Condizioni degli ordini** (`motivo_niente_ordini` `:728-773`): codice, Firebase che ha risposto sullo stato dell'accensione (66),
   capitale nel file fino a 300 e non oltre il saldo, saldo non sotto il valore, valore fino a 600, conto vuoto alla prima accensione.
   Con un motivo (`_ordini_nuovi_ammessi` `:787-815`): `blocco`, freno del cliente, ordini limite annullati allo scadere senza resto;
-  alla fine del blocco si riparte dalla decisione di G1 dopo. **Un buco di Firebase vale come un blocco: 74.**
+  alla fine del blocco si riparte dalla decisione di G1 dopo. Un buco di Firebase valeva come un blocco (74, chiuso nel secondo giro).
 - **«Riparti», dal 12 nov**: solo dalla dashboard, richiesta `/commands/conto_vero_riparti` vera e conferma
   `/commands/conto_vero_riparti_conferma` uguale all'ora del fermo in secondi interi (`codice_riparti` `:211-219`, `_riparti_confermato`
   `:666-678`); pulite all'entrata nel fermo (`:691-701`), la conferma tolta dopo l'uso (`:680-689`); nessun file (`:656-659`, `:316`).
@@ -218,7 +221,9 @@ Righe del working tree del 12 nov (`conto_vero.py` 913 righe).
   (`main.py:2655-2661`).
 - Dashboard (non committata): `ComandiContoVero.tsx` (approva `:132-154`, chiudi tutto `:205-223`, riparti in due passi `:170-204`;
   disattivati da spento), dati da `lib/strategie.ts:259-268`.
-- Problemi aperti: 54 (ii) Alto; 70, 74 Medi; 75, 76, 77 Bassi. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-73; 56, 58, 69 come scelto.
+- Test di guardia del 54 (secondo giro): nessun file fuori da conto vero, test e dashboard nomina i quattro comandi; non vede la
+  costante importata (78).
+- Problemi aperti: 54 (ii) Alto; 70 Medio; 78 Basso. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-77; 56, 58, 69 come scelto.
 
 ## Storia degli invarianti
 
@@ -244,3 +249,5 @@ Righe del working tree del 12 nov (`conto_vero.py` 913 righe).
 - 12 nov (non committato; APPROVE per il commit spento, REQUEST CHANGES per l'accensione): codice approvato dal tag a un commit su
   Firebase scritto dalla dashboard, letto davvero ogni minuto (Firebase muto = non approvato), valido senza riavvio; «riparti» del
   conto vero solo dalla dashboard in due passi, nessun file; l'agente non porta più il tag. Limiti fissi invariati.
+- 12 nov, `a267c40` (il cambio sopra, committato); secondo giro non committato (APPROVE per il commit): con Firebase muto vale
+  l'approvazione letta davvero negli ultimi 10 minuti (con git); da spento controllo ogni 10 minuti. Limiti fissi invariati.

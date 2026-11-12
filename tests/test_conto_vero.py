@@ -1429,6 +1429,8 @@ def test_la_versione_si_pubblica_anche_da_spento_senza_richieste_a_binance(tmp_p
     assert fb.scritti.count("/conto_vero/versione") == scritture             # niente di nuovo: non si riscrive
     _approva(fb, primo)
     d.tick(MEZZOGIORNO + 400)
+    assert "approvata" not in fb.get_rtdb("/conto_vero/versione")             # da spento si rilegge ogni 10 minuti (problema 75)
+    d.tick(MEZZOGIORNO + 660)
     versione = fb.get_rtdb("/conto_vero/versione")
     assert versione["approvata"] == primo and versione["coincidono"] is True and "blocco" not in versione
     assert finto.chiamate == [] and cv.COMANDO_VERSIONE not in fb.scritti
@@ -1469,23 +1471,207 @@ def test_firebase_muto_niente_ordini_nuovi_anche_con_l_approvazione_nello_specch
 
 
 def test_una_sola_lettura_persa_della_versione_si_riprova_subito(tmp_path, monkeypatch):
-    """Una lettura persa capita: il controllo riprova una volta, subito, e non ferma gli ordini per quella."""
+    """Una lettura persa capita: il controllo riprova una volta, subito, e non ferma gli ordini per quella. Problema 75: se la
+    prima lettura ha aspettato oltre ``SECONDA_LETTURA_ENTRO_S`` la seconda non si fa (Firebase che non risponde allunga il giro)."""
     repo = tmp_path / "repo"
     primo = _repo(repo)
     d, fb, finto = _conto(tmp_path, monkeypatch, radice=repo)
+    d.orologio = lambda: 1.0e9                         # l'ultima risposta vera è appena letta, ma qui conta la seconda lettura:
+    vera, perse, letture = fb.leggi_rtdb_davvero, [1], []
     _approva(fb, primo)
-    vera, perse = fb.leggi_rtdb_davvero, [1]
 
-    def con_una_persa(percorso):
+    def con_perse(percorso):
+        letture.append(percorso)
         if percorso == cv.COMANDO_VERSIONE and perse:
             perse.pop()
             return False, None
         return vera(percorso)
-    fb.leggi_rtdb_davvero = con_una_persa
-    assert d._verifica_codice() is None and perse == [] and d._versione_muta == 0
-    perse += [1, 1]                                    # due di fila: per questo controllo non c'è risposta
-    assert "Firebase non risponde" in d._verifica_codice() and d._versione_muta == 1
-    assert d._verifica_codice() is None and d._versione_muta == 0
+    fb.leggi_rtdb_davvero = con_perse
+    assert d._verifica_codice() is None and perse == [] and d._versione_muta == 0 and len(letture) == 2
+    secondi = iter([0.0, 30.0])                        # la prima lettura persa dura 30 s: niente seconda
+    d.cronometro = lambda: next(secondi)
+    perse.append(1)
+    letture.clear()
+    assert d._verifica_codice() is None and len(letture) == 1 and d._versione_muta == 1     # vale l'approvazione appena letta
+    assert perse == []
+
+
+def test_74_un_buco_di_firebase_nel_minuto_della_decisione_non_salta_il_giorno(tmp_path, monkeypatch):
+    """Problema 74, prova S1 della revisione del 12 novembre 2026: conto acceso e approvato, Firebase muto proprio nel minuto della
+    decisione di G1 (due letture perse), poi di nuovo vivo: gli ordini partono lo stesso giorno, perché vale l'approvazione letta
+    davvero un minuto prima (con il confronto di git). Prima: zero ordini quel giorno e si ricomprava il giorno dopo."""
+    repo = tmp_path / "repo"
+    primo = _repo(repo)
+    finto = _Vero()
+    finto.equity = "280"
+    d, fb, finto = _conto(tmp_path, monkeypatch, finto, radice=repo)
+    _approva(fb, primo)
+    d.tick(MEZZOGIORNO)
+    d.tick(MEZZOGIORNO + 3700)
+    d.tick(DOPO - 60)                                  # il giro del minuto prima: Firebase risponde
+    _decisione(tmp_path, GIORNO + 1)
+    fb.muto = True
+    d.tick(DOPO)
+    assert d._versione_muta == 1 and {q["symbol"] for q in _aperture(finto)} == {"AUSDT", "BUSDT"}
+    assert "ordini_vietati" not in d.carica().get("allarmi", {})
+    assert fb.get_rtdb("/conto_vero/ribilanciamenti/2026-10-25")["ordini"] == 2
+
+
+def test_74_un_buco_di_firebase_allo_scadere_dell_ora_non_lascia_il_ribilancio_a_meta(tmp_path, monkeypatch):
+    """Problema 74, prova S2: Firebase muto nel minuto in cui scade l'ora degli ordini limite: il resto va a mercato come sempre
+    (prima: ordini limite annullati e niente resto a mercato, un lato eseguito e l'altro no fino al giorno dopo)."""
+    repo = tmp_path / "repo"
+    primo = _repo(repo)
+    finto = _Vero()
+    finto.equity, finto.posizioni_vive = "280", True
+    d, fb, finto = _conto(tmp_path, monkeypatch, finto, radice=repo)
+    _approva(fb, primo)
+    _fino_alla_decisione_dopo(d, tmp_path)             # AUSDT eseguito a limite, BUSDT sul libro
+    piazzati = d.carica()["ordini"]["piazzati"]
+    for k in range(1, 60):                             # un giro al minuto per l'ora degli ordini limite, Firebase vivo
+        d.tick(piazzati + 60 * k)
+    assert d.carica().get("ordini")
+    fb.muto = True                                     # muto proprio nel minuto in cui l'ora scade
+    n = len(finto.chiamate)
+    d.tick(piazzati + dm.VALIDITA_LIMITE_S)
+    mercato = [q for m, p, q in finto.chiamate[n:] if m == "POST" and q.get("type") == "MARKET"]
+    assert [(q["symbol"], q.get("reduceOnly")) for q in mercato] == [("BUSDT", None)]
+    assert "ordini" not in d.carica() and not [p for p in fb.scritti if p.endswith("scaduti_senza_mercato")]
+
+
+def test_74_oltre_dieci_minuti_senza_risposta_o_con_la_revoca_niente_ordini(tmp_path, monkeypatch):
+    """L'approvazione letta vale senza risposta solo fino a ``APPROVAZIONE_SENZA_RISPOSTA_S``; una risposta vera senza
+    approvazione (revocata dal proprietario) vale subito, e dopo la revoca il buco di Firebase non riporta la vecchia; il
+    confronto di git si fa anche con l'approvazione ricordata."""
+    assert cv.APPROVAZIONE_SENZA_RISPOSTA_S == 600 and cv.SECONDA_LETTURA_ENTRO_S == 5.0
+    repo = tmp_path / "repo"
+    primo = _repo(repo)
+    d, fb, finto = _conto(tmp_path, monkeypatch, radice=repo)
+    ora = [1.0e9]
+    d.orologio = lambda: ora[0]
+    _approva(fb, primo)
+    assert d._verifica_codice() is None
+    fb.muto = True
+    ora[0] += 600
+    assert d._verifica_codice() is None and d._approvata == primo
+    (repo / "bot" / "risk" / "c.py").write_text("x = 2\n")      # i file cambiano durante il buco: git lo vede lo stesso
+    assert "bot/risk/c.py" in d._verifica_codice()
+    (repo / "bot" / "risk" / "c.py").write_text("x = 1\n")
+    ora[0] += 1
+    motivo = d._verifica_codice()
+    assert "Firebase non risponde" in motivo and "oltre 10 minuti" in motivo and d._approvata is None
+    fb.muto = False
+    assert d._verifica_codice() is None
+    fb.proprietario(cv.COMANDO_VERSIONE, None)          # revocata
+    assert "nessuna versione approvata" in d._verifica_codice()
+    fb.muto = True
+    ora[0] += 1
+    assert "Firebase non risponde" in d._verifica_codice()     # il buco non riporta l'approvazione revocata
+
+
+def test_75_da_spento_la_versione_si_controlla_ogni_dieci_minuti_e_all_accensione_subito(tmp_path, monkeypatch):
+    """Problema 75: da spento niente ordini sono possibili, la versione serve solo alla dashboard: un controllo ogni 10 minuti; tolto
+    lo spento, il controllo si fa al giro dopo, senza aspettare. Con Firebase muto `/conto_vero/versione` non si riscrive."""
+    repo = tmp_path / "repo"
+    primo = _repo(repo)
+    d, fb, finto = _conto(tmp_path, monkeypatch, acceso=False, radice=repo)
+    letture = []
+    vera = fb.leggi_rtdb_davvero
+    fb.leggi_rtdb_davvero = lambda p: (letture.append(p), vera(p))[1]
+    for k in range(10):
+        d.tick(MEZZOGIORNO + 60 * k)
+    assert letture.count(cv.COMANDO_VERSIONE) == 1
+    d.tick(MEZZOGIORNO + 600)
+    assert letture.count(cv.COMANDO_VERSIONE) == 2
+    (tmp_path / "conto_vero_acceso").write_text("si")
+    d.tick(MEZZOGIORNO + 630)                          # acceso: subito, anche se sono passati 30 secondi
+    assert letture.count(cv.COMANDO_VERSIONE) == 3
+    d.tick(MEZZOGIORNO + 660)
+    assert letture.count(cv.COMANDO_VERSIONE) == 3
+    d.tick(MEZZOGIORNO + 690)
+    assert letture.count(cv.COMANDO_VERSIONE) == 4     # acceso: ogni minuto
+    _approva(fb, primo)
+    fb.muto = True
+    scritte = fb.scritti.count("/conto_vero/versione")
+    d.tick(MEZZOGIORNO + 750)
+    assert fb.scritti.count("/conto_vero/versione") == scritte
+
+
+def test_76_il_fermo_si_riscrive_finche_non_arriva_e_il_riparti_si_puo_fare(tmp_path, monkeypatch):
+    """Problema 76, prova S3: le scritture si perdono mentre il conto entra nel fermo e si svuota; tornato Firebase, il fermo arriva
+    al primo giro (prima restava solo nel file: la dashboard non mostrava né il fermo né il «Riparti», senza uscita) e il «riparti»
+    in due passi funziona. Anche la cancellazione del fermo si riscrive finché non arriva."""
+    finto = _Vero()
+    finto.equity, finto.posizioni_vive = "280", True
+    d, fb, finto = _conto(tmp_path, monkeypatch, finto)
+    _fino_alla_decisione_dopo(d, tmp_path)
+    fb.scritture_ferme = True
+    (tmp_path / "chiudi").write_text("chiudi 1")
+    for k in range(2, 6):
+        d.tick(DOPO + 60 * k)
+    assert d.carica()["fermo"].get("vuoto") and fb.get_rtdb("/conto_vero/fermo") is None
+    fb.scritture_ferme = False
+    d.tick(DOPO + 360)
+    sul_db = fb.get_rtdb("/conto_vero/fermo")
+    assert sul_db and sul_db["ora"] == d.carica()["fermo"]["ora"] and sul_db.get("vuoto")
+    _riparti_in_due_passi(fb)
+    fb.scritture_ferme = True                          # la cancellazione del fermo dopo il «riparti» si perde...
+    d.tick(DOPO + 420)
+    assert d.carica().get("fermo")                     # (il «riparti» non si consuma senza scrittura: si riprova)
+    fb.scritture_ferme = False
+    d.tick(DOPO + 480)
+    assert "fermo" not in d.carica() and fb.get_rtdb("/conto_vero/fermo") is None
+    fb.scritture_ferme = True
+    d._scrivi("fermo", {"ora": 1.0})                   # una scrittura persa...
+    fb.scritture_ferme = False
+    d.tick(DOPO + 540)
+    assert fb.get_rtdb("/conto_vero/fermo") is None    # ...si corregge con lo stato del file (nessun fermo)
+
+
+def test_77_prima_del_primo_controllo_il_codice_non_vale_approvato(tmp_path, monkeypatch):
+    monkeypatch.setattr(cv, "commit_in_esecuzione", lambda radice: {"commit": "a" * 40, "data": "2026-11-12T06:00:00+00:00", "titolo": "t"})
+    monkeypatch.setattr(cv, "codice_approvato", lambda **k: None)          # avvio pulito
+    d = cv.ContoVeroG1(_Fb(), file_stato=tmp_path / "st.json", interruttore=tmp_path / "acceso")
+    assert d._codice_all_avvio is None and d._blocco_del_codice() == "versione approvata non ancora letta"
+
+
+def test_54_nessun_codice_del_repository_scrive_i_comandi_del_conto_vero():
+    """Revisione del 12 novembre 2026, 54 parte ii: la chiave di amministratore di Firebase ignora le regole, e ce l'hanno il bot,
+    l'agente della macchina e i flussi di GitHub. Nessun file Python o di shell del repository (fuori dalla dashboard e dai test) e
+    nessun flusso di GitHub nomina i quattro comandi del conto vero, salvo il conto vero stesso; lì (e nel demo, da cui eredita) ogni
+    scrittura di un comando è il falso o il None che lo consuma, e la versione approvata non si scrive mai. È una guardia contro gli
+    errori: chi volesse aggirarla costruendo il percorso a pezzi non lo troverebbe qui (decisione del proprietario, 54)."""
+    import ast
+    nomi = ("conto_vero_versione_approvata", "conto_vero_riparti", "conto_vero_riparti_conferma", "conto_vero_chiudi_tutto")
+    file_ = subprocess.run(["git", "-C", str(RADICE), "ls-files", "--cached", "--others", "--exclude-standard", "--", "*.py", "*.sh",
+                            "*.yml", "*.yaml", "*.js", "*.mjs", "*.ts"], capture_output=True, text=True, check=True).stdout.split()
+    assert any(f.startswith(".github/workflows/") for f in file_) and "scripts/ops_agent.py" in file_
+    trovati = []
+    for f in file_:
+        if f.startswith(("tests/", "dashboard/")) or f == "bot/portafoglio/conto_vero.py":
+            continue
+        try:
+            testo = (RADICE / f).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        trovati += [f"{f}: {n}" for n in nomi if n in testo]
+    assert trovati == []
+    # nel conto vero il nome compare solo nelle costanti (e nel file a mano del pulsante)
+    testo = (RADICE / "bot" / "portafoglio" / "conto_vero.py").read_text(encoding="utf-8")
+    righe = [r.strip() for r in testo.splitlines() if any(n in r for n in nomi) and not r.lstrip().startswith("#")]
+    codice = [r for r in righe if not r.startswith(("COMANDO_", "FILE_CHIUDI = ")) and "`" not in r and "«" not in r]
+    assert codice == [], codice
+    # ogni set_rtdb su un comando, nel conto vero e nel demo: solo False o None, mai la versione approvata
+    for f in ("bot/portafoglio/conto_vero.py", "bot/portafoglio/demo_binance.py"):
+        albero = ast.parse((RADICE / f).read_text(encoding="utf-8"))
+        for nodo in ast.walk(albero):
+            if not (isinstance(nodo, ast.Call) and getattr(nodo.func, "attr", None) == "set_rtdb" and nodo.args):
+                continue
+            dove = ast.unparse(nodo.args[0])
+            if "COMANDO" not in dove:
+                continue
+            assert "VERSIONE" not in dove, (f, dove)
+            assert len(nodo.args) == 2 and isinstance(nodo.args[1], ast.Constant) and nodo.args[1].value in (False, None), (f, dove)
 
 
 def test_72_i_redditi_si_leggono_fino_a_un_minuto_fa(tmp_path, monkeypatch):

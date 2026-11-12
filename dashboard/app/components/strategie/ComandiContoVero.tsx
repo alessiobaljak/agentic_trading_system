@@ -8,7 +8,9 @@ import { Info } from '../comuni/Info';
 
 /**
  * La scheda «G1 sul conto vero», la parte del proprietario (12 novembre 2026, «ok pulsante in dashboard»): la versione del codice
- * in esecuzione, quella approvata, se coincidono, e tre comandi che scrive solo lui, con il suo accesso a Firebase (le regole:
+ * in esecuzione, quella approvata, se coincidono, e tre comandi che fra gli utenti può scrivere solo lui, con il suo accesso a
+ * Firebase (la chiave di amministratore di Firebase ignora le regole: nessun codice del repository scrive questi comandi, lo
+ * controlla un test di tests/test_conto_vero.py; revisione del 12 novembre 2026, 54 parte ii) (le regole:
  * firebase/database.rules.json; il bot li legge soltanto, bot/portafoglio/conto_vero.py):
  *
  *   - «Approva questa versione»: scrive `{commit, ora}` in /commands/conto_vero_versione_approvata; il commit è quello che il bot
@@ -64,6 +66,8 @@ export default function ComandiContoVero({ stato, spento, dati }: {
   const coincidono = lettaDalBot ? versione?.coincidono === true : null;
   const dataCommit = versione?.data ? Date.parse(versione.data) / 1000 : null;
   const puoApprovare = !!inEsecuzione && versione?.pulito !== false && !giaApprovata;
+  // da spento il bot rilegge la versione ogni 10 minuti (bot/portafoglio/conto_vero.py, OGNI_CONTROLLO_CODICE_DA_SPENTO_S)
+  const attesa = spento ? '10 minuti (il conto vero è spento)' : 'un minuto';
 
   // ---- «riparti» in due passi ----
   const codice = codiceRiparti(fermo?.ora);
@@ -124,8 +128,8 @@ export default function ComandiContoVero({ stato, spento, dati }: {
             </p>
           ) : (
             <p className="cr-riga cr-esito attesa">
-              <span aria-hidden="true">…</span> {giaApprovata ? 'Approvata: il bot la rilegge entro un minuto.'
-                : 'Il bot rilegge l\'approvazione entro un minuto.'}
+              <span aria-hidden="true">…</span> {giaApprovata ? `Approvata: il bot la rilegge entro ${attesa}.`
+                : `Il bot rilegge l'approvazione entro ${attesa}.`}
             </p>
           )
         )}
@@ -145,7 +149,7 @@ export default function ComandiContoVero({ stato, spento, dati }: {
               <button className="btn" onClick={() => setAperto(null)}>Annulla</button>
               <button className="btn btn-primary" onClick={() => scrivi(
                 [['commands/conto_vero_versione_approvata', { commit: inEsecuzione, ora: serverTimestamp() }]],
-                `Versione ${corto(inEsecuzione)} approvata: il bot la legge entro un minuto`,
+                `Versione ${corto(inEsecuzione)} approvata: il bot la legge entro ${attesa}`,
               )}>
                 Sì, approva {corto(inEsecuzione)}
               </button>

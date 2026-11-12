@@ -191,7 +191,8 @@ export interface VersioneContoVero {
   aggiornato?: number;
 }
 
-/** /commands/conto_vero_versione_approvata: la scrive solo il proprietario, da «Approva questa versione». */
+/** /commands/conto_vero_versione_approvata: fra gli utenti la scrive solo il proprietario, da «Approva questa versione» (la chiave
+ *  di amministratore di Firebase ignora le regole: nessun codice del repository la scrive, lo controlla un test). */
 export interface VersioneApprovata {
   commit?: string;
   /** millisecondi (l'ora del server di Firebase) */

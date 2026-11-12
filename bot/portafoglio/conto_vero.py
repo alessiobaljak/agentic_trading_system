@@ -19,12 +19,19 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
       identici a quelli della **versione approvata dal proprietario**: un commit che scrive lui dalla dashboard, con il suo
       accesso a Firebase, in `/commands/conto_vero_versione_approvata` (`{commit, ora}`; decisione del 12 novembre 2026: «ok
       pulsante in dashboard»). Non più un tag di git: un tag lo sposta qualunque sessione (su GitHub le sessioni agiscono come il
-      suo utente, revisione dell'8 novembre, problema 54); su quel percorso di Firebase scrive solo lui (`firebase/database.rules.json`)
-      e il bot legge soltanto. All'avvio il processo deve avere in memoria un commit riconoscibile (HEAD del repository, file
-      uguali, nessun file cambiato dopo l'avvio: altrimenti serve un riavvio); ogni minuto si rilegge il commit approvato e si
-      confrontano con quello il commit in memoria e i file di adesso (la macchina scarica il branch ogni minuto). Commit assente,
-      non valido, non presente nel repository della macchina o diverso: niente ordini nuovi. **Se Firebase non risponde non è
-      mai «approvato»**: niente ordini nuovi finché non risponde (`leggi_rtdb_davvero`: l'ultimo valore noto non vale);
+      suo utente, revisione dell'8 novembre, problema 54). **Chi può scrivere quel percorso**: dalla dashboard solo lui (le regole,
+      `firebase/database.rules.json`, valgono per chi entra con un utente); ma la chiave di amministratore di Firebase ignora le
+      regole, e ce l'hanno il bot, `scripts/ops_agent.py` (sulla macchina, riletto dal branch a ogni minuto) e i flussi di GitHub
+      che usano Firebase. Il codice del repository non scrive mai i quattro comandi del conto vero (lo controlla un test,
+      `tests/test_conto_vero.py`): l'approvazione protegge dagli errori, non da chi cambiasse il codice per aggirarla (revisione
+      del 12 novembre 2026, 54 parte ii: la protezione vera è una decisione del proprietario). Il bot legge soltanto. All'avvio il
+      processo deve avere in memoria un commit riconoscibile (HEAD del repository, file uguali, nessun file cambiato dopo l'avvio:
+      altrimenti serve un riavvio); ogni minuto (ogni 10 da spento) si rilegge il commit approvato e si confrontano con quello il
+      commit in memoria e i file di adesso (la macchina scarica il branch ogni minuto). Commit assente, non valido, non presente
+      nel repository della macchina o diverso: niente ordini nuovi. **Se Firebase non risponde** vale solo un'approvazione letta
+      davvero da Firebase negli ultimi ``APPROVAZIONE_SENZA_RISPOSTA_S`` (10 minuti; problema 74: un buco di pochi secondi non fa
+      saltare il ribilancio né lo lascia a metà), sempre con il confronto di git; oltre, niente ordini nuovi finché non risponde
+      (`leggi_rtdb_davvero`: l'ultimo valore noto del client non vale mai);
   (d) un capitale in `ops/conto_vero_capitale`: un numero positivo non oltre `CAPITALE_MASSIMO` e non oltre il saldo vero.
   Senza una delle quattro niente ordini nuovi, con l'allarme `ordini_vietati`, e il cliente rifiuta ogni ordine che non sia «solo
   riduzione». Le protezioni (stop sul conto, pulsante, chiusure da fermo, margine unico) restano attive. **Senza (a) o (b)** (problema
@@ -80,9 +87,10 @@ FILE_STATO = RADICE / "data" / "conto_vero.json"
 FILE_CHIUDI = RADICE / "ops" / "conto_vero_chiudi_tutto"
 NESSUN_FILE = Path(os.devnull)         # il «riparti» del conto vero non ha un file: alla classe del demo si passa questo, sempre vuoto
 COMANDO_CHIUDI = "/commands/conto_vero_chiudi_tutto"
-# i comandi che scrive solo il proprietario dalla dashboard, con il suo accesso a Firebase (decisione del 12 novembre 2026; le
-# regole: firebase/database.rules.json). Il bot li legge; scrive solo il falso che consuma «chiudi tutto» e «riparti» e toglie la
-# conferma. Sulla versione approvata il bot non scrive mai (lo controlla un test)
+# i comandi del proprietario dalla dashboard (decisione del 12 novembre 2026). Le regole (firebase/database.rules.json) li lasciano
+# scrivere, fra gli utenti, solo a lui; la chiave di amministratore di Firebase le ignora (il bot, scripts/ops_agent.py, i flussi di
+# GitHub): nessun codice del repository li scrive, salvo il falso con cui il bot consuma «chiudi tutto» e «riparti» e la conferma
+# che toglie; sulla versione approvata il bot non scrive mai (lo controllano due test in tests/test_conto_vero.py)
 COMANDO_RIPARTI = "/commands/conto_vero_riparti"                       # primo passo: vero
 COMANDO_RIPARTI_CONFERMA = "/commands/conto_vero_riparti_conferma"     # secondo passo: il testo esatto di `codice_riparti`
 COMANDO_VERSIONE = "/commands/conto_vero_versione_approvata"           # {commit: 40 caratteri esadecimali, ora}
@@ -90,7 +98,10 @@ CHIAVE_ENV, SEGRETO_ENV = "BINANCE_API_KEY", "BINANCE_API_SECRET"     # gli stes
 RE_COMMIT = re.compile(r"[0-9a-f]{40}")
 PERCORSI_DEGLI_ORDINI = ("bot/portafoglio", "bot/execution", "bot/risk", "bot/config.py", "bot/main.py")
 FUORI_DAL_CODICE = (".venv", "venv", "site-packages", "dist-packages", "__pycache__")   # l'ambiente Python sta dentro la cartella
-OGNI_CONTROLLO_CODICE_S = 60           # il codice contro la versione approvata: ogni minuto (il git pull della macchina), anche da spento
+OGNI_CONTROLLO_CODICE_S = 60           # il codice contro la versione approvata: ogni minuto (il git pull della macchina)
+OGNI_CONTROLLO_CODICE_DA_SPENTO_S = 600   # da spento ogni 10 minuti (problema 75: niente ordini possibili, solo la dashboard)
+APPROVAZIONE_SENZA_RISPOSTA_S = 600    # problema 74: senza risposta di Firebase vale l'approvazione letta davvero fino a 10 minuti fa
+SECONDA_LETTURA_ENTRO_S = 5.0          # problema 75: la seconda lettura subito solo se la prima non ha aspettato più di così
 TEMPO_GIT_S = 15                       # ogni comando git del controllo; al primo che non risponde il controllo vale «non approvato»
 LETTURE_VERSIONE_PRIMA_DELL_ALLARME = 3   # controlli di fila senza risposta di Firebase prima dell'allarme «versione_approvata»
 TITOLO_MASSIMO = 140                   # caratteri del titolo del commit scritti in /conto_vero/versione
@@ -199,7 +210,7 @@ def versione_approvata(fb) -> tuple:
     quello letto un minuto prima. Non solleva mai."""
     risposto, v = _letto_davvero(fb, COMANDO_VERSIONE)
     if not risposto:
-        return None, "Firebase non risponde: la versione approvata dal proprietario non si legge (non vale l'ultima letta)", False
+        return None, "Firebase non risponde: la versione approvata dal proprietario non si legge", False
     if v is None or v == "" or v == {}:
         return None, "nessuna versione approvata dal proprietario (dashboard, scheda del conto vero, «Approva questa versione»)", True
     commit = v.get("commit") if isinstance(v, dict) else None
@@ -352,8 +363,13 @@ class ContoVeroG1(demo.DemoG1):
         else:
             self._verifica_codice = verifica_codice
             self._codice_all_avvio = verifica_codice()
-        self._codice_ora: Optional[str] = self._codice_all_avvio
+        # problema 77: prima del primo controllo il codice non vale «approvato»
+        self._codice_ora: Optional[str] = self._codice_all_avvio or "versione approvata non ancora letta"
         self._codice_controllato = 0.0
+        self._controllato_da_spento = False               # l'ultimo controllo era da spento: all'accensione se ne fa uno subito
+        self._letta_davvero: Optional[tuple] = None        # (commit approvato o None, ora) dall'ultima risposta vera di Firebase
+        self._fermo_da_riscrivere = False                  # problema 76: l'ultima scrittura di /conto_vero/fermo non è arrivata
+        self.cronometro: Callable[[], float] = time.monotonic   # quanto dura una lettura (problema 75); nei test uno finto
         self._spento_scritto: Optional[str] = None
         self._motivo_spento_ora: Optional[str] = None
         self._blocco_ora: Optional[str] = None
@@ -412,6 +428,8 @@ class ContoVeroG1(demo.DemoG1):
         if self._cliente is not None:                  # il freno del cliente si riapre solo dopo il controllo di questo giro
             self._cliente.blocco = "condizioni di questo giro non ancora controllate"
         super().tick(now)
+        if self._fermo_da_riscrivere:                  # problema 76: senza il fermo su Firebase la dashboard non può far ripartire
+            self._scrivi("fermo", self.carica().get("fermo") or None)
         if motivo:                                     # da fermo il conto vuoto lo dice `_da_fermo`; lo stato lo scrive il giro dopo
             st = self.carica()
             if (st.get("fermo") or {}).get("vuoto") and not st.get("spento_vuoto"):
@@ -423,12 +441,24 @@ class ContoVeroG1(demo.DemoG1):
     def _verifica_versione(self) -> Optional[str]:
         """Il controllo del minuto: None se il commit approvato dal proprietario c'è, Firebase ha risposto adesso, e sia il commit
         che il processo ha in memoria sia i file di adesso sono quelli di quel commit; altrimenti il motivo. Una lettura persa
-        capita: si riprova una volta, subito; senza risposta non è mai approvato."""
+        capita: si riprova una volta, subito, se la prima non ha aspettato oltre ``SECONDA_LETTURA_ENTRO_S`` (problema 75). Senza
+        risposta vale solo il commit dell'ultima risposta vera, se è di non oltre ``APPROVAZIONE_SENZA_RISPOSTA_S`` fa (problema
+        74), sempre con il confronto di git qui sotto; una risposta vera senza approvazione (revocata) vale subito."""
+        ora = self.orologio()
         for _ in range(2):
+            inizio = self.cronometro()
             commit, motivo, risposto = versione_approvata(self.fb)
-            if risposto:
+            if risposto or self.cronometro() - inizio > SECONDA_LETTURA_ENTRO_S:
                 break
         self._versione_muta = 0 if risposto else self._versione_muta + 1
+        if risposto:
+            self._letta_davvero = (commit, ora)
+        elif self._letta_davvero and self._letta_davvero[0]:
+            if 0 <= ora - self._letta_davvero[1] <= APPROVAZIONE_SENZA_RISPOSTA_S:
+                commit, motivo = self._letta_davvero[0], None
+            else:
+                motivo = (f"Firebase non risponde e l'approvazione letta l'ultima volta è di oltre "
+                          f"{APPROVAZIONE_SENZA_RISPOSTA_S // 60} minuti fa: la versione approvata dal proprietario non si legge")
         self._approvata = commit
         if motivo:
             return motivo
@@ -436,15 +466,17 @@ class ContoVeroG1(demo.DemoG1):
                                 in_memoria=self._versione.get("commit"))
 
     def _controlla_versione(self, now: float) -> None:
-        """Ogni ``OGNI_CONTROLLO_CODICE_S``, acceso o spento: rilegge la versione approvata, rifà il confronto e scrive
-        `/conto_vero/versione` se è cambiata. Non solleva mai: le protezioni del giro non si fermano per questo."""
-        if 0 <= now - self._codice_controllato < OGNI_CONTROLLO_CODICE_S:
-            return
-        self._codice_controllato = now
-        try:
-            self._codice_ora = self._verifica_codice()
-        except Exception as exc:  # noqa: BLE001
-            self._codice_ora = f"controllo della versione non riuscito ({type(exc).__name__})"
+        """Ogni ``OGNI_CONTROLLO_CODICE_S`` (da spento ogni ``OGNI_CONTROLLO_CODICE_DA_SPENTO_S``, problema 75; all'accensione subito):
+        rilegge la versione approvata e rifà il confronto; a ogni giro scrive `/conto_vero/versione` se è cambiata o se la
+        scrittura di prima non è arrivata. Non solleva mai: le protezioni del giro non si fermano per questo."""
+        spento = self.motivo_spento() is not None
+        intervallo = OGNI_CONTROLLO_CODICE_DA_SPENTO_S if spento else OGNI_CONTROLLO_CODICE_S
+        if not (0 <= now - self._codice_controllato < intervallo) or (self._controllato_da_spento and not spento):
+            self._codice_controllato, self._controllato_da_spento = now, spento
+            try:
+                self._codice_ora = self._verifica_codice()
+            except Exception as exc:  # noqa: BLE001
+                self._codice_ora = f"controllo della versione non riuscito ({type(exc).__name__})"
         self._pubblica_versione(now)
 
     def _blocco_del_codice(self) -> Optional[str]:
@@ -457,8 +489,8 @@ class ContoVeroG1(demo.DemoG1):
     def _pubblica_versione(self, now: float) -> None:
         """`/conto_vero/versione` per la dashboard: il commit in esecuzione (HEAD all'avvio del processo: hash, data, titolo), se i
         file caricati sono uguali a quel commit (``pulito``), il commit approvato letto e se coincidono (altrimenti ``blocco``).
-        Si scrive quando cambia e si riprova finché la scrittura non è confermata."""
-        if self._verifica_finta or self.fb is None:
+        Si scrive quando cambia e si riprova finché la scrittura non è confermata; non mentre Firebase non risponde (problema 75)."""
+        if self._verifica_finta or self.fb is None or self._versione_muta:
             return
         blocco = self._blocco_del_codice()
         v = {"commit": self._versione.get("commit"), "data": self._versione.get("data"), "titolo": self._versione.get("titolo"),
@@ -534,7 +566,11 @@ class ContoVeroG1(demo.DemoG1):
             self._firebase_letto = valore
         if ramo == "stato" and isinstance(valore, dict) and valore.get("stato") == "acceso" and self._blocco_ora:
             valore = {**valore, "stato": f"solo protezioni, niente ordini nuovi: {self._blocco_ora}"}
-        super()._scrivi(ramo, valore)
+        if self.fb is None:                            # come il demo (`DemoG1._scrivi`), più l'esito del fermo
+            return
+        arrivata = self.fb.set_rtdb(f"/{self.NOME}/{ramo}", valore) is not False
+        if ramo == "fermo":                            # problema 76: si riscrive a ogni giro finché non arriva
+            self._fermo_da_riscrivere = not arrivata
 
     # ---- lo stato perso (57) e il valore del conto (58), a ogni giro prima delle protezioni ----
     def conto_ridotto(self, c: ClienteVero, st: dict, now: float) -> dict:
@@ -734,8 +770,8 @@ class ContoVeroG1(demo.DemoG1):
             ragioni.append(self._codice_ora)
         self._allarme(st, now, "versione_approvata", None if self._versione_muta < LETTURE_VERSIONE_PRIMA_DELL_ALLARME else (
             f"Firebase non risponde da almeno {LETTURE_VERSIONE_PRIMA_DELL_ALLARME} controlli di fila: la versione approvata dal "
-            f"proprietario non si legge, niente ordini nuovi finché non risponde; stop sul conto, pulsante a file e chiusure "
-            f"restano attivi"))
+            f"proprietario non si legge; vale l'ultima letta fino a {APPROVAZIONE_SENZA_RISPOSTA_S // 60} minuti dalla lettura, poi "
+            f"niente ordini nuovi finché non risponde; stop sul conto, pulsante a file e chiusure restano attivi"))
         if not st.get("acceso_dal") and not self._mai_acceso_detto_da_firebase():
             ragioni.append("Firebase non risponde e lo stato locale non dice se il conto vero è già stato acceso: niente prima "
                            "accensione finché non risponde")
