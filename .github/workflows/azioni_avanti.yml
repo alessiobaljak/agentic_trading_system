@@ -3,21 +3,25 @@ name: azioni-misura-in-avanti
 # La misura in avanti delle azioni sul conto demo di Alpaca (stock/avanti/REGOLE.md), con le chiavi nei segreti del repository
 # (richiesta del proprietario, 11 nov 2026: «voglio avere quelle chiavi su github secret [...] come per l'agente delle crypto»).
 # Segreti: ALPACA_API_KEY_ID, ALPACA_API_SECRET_KEY (conto DEMO), AZIONI_FIREBASE_URL, AZIONI_FIREBASE_API_KEY, AZIONI_FIREBASE_EMAIL,
-# AZIONI_FIREBASE_PASSWORD (stock/avanti/FIREBASE.md). Le ore di cron sono UTC e GitHub le fa partire anche con ritardo: si parte
-# presto e il programma aspetta da solo le 9:45 e le 15:55 di New York (ora legale o no). Gli orari programmati girano solo se esiste
-# stock/avanti/acceso_su_github (così non si sovrappongono alle routine della sessione «trading stock»).
+# AZIONI_FIREBASE_PASSWORD (stock/avanti/FIREBASE.md).
+#
+# CHI AVVIA NON DEVE ESSERE PUNTUALE (12 nov 2026). L'11 novembre gli orari programmati di GitHub sono partiti 6-7 ore dopo, e uno ha
+# mandato ordini alle 15:08. Da qui: ogni avvio lancia il comando «auto», che guarda l'orologio di New York e il conto e fa la cosa
+# giusta per quell'ora: prima delle 9:45 ASPETTA le 9:45 (fino a 5 ore e 20 minuti prima), dopo le 10:00 non entra mai, dalle 10:35
+# aspetta le 15:55 e chiude, a seduta finita chiude fuori orario quello che resta. Gli avvii sono tanti e indipendenti: ogni mezz'ora
+# da GitHub, più le routine della sessione «trading stock» (avvio a mano del lavoro, che parte in pochi secondi). I lavori stanno in
+# fila (uno alla volta) e gli ordini hanno un nome unico per giorno e titolo: niente doppioni. Gli orari programmati girano solo se
+# esiste stock/avanti/acceso_su_github.
 on:
   schedule:
-    - cron: "5 13 * * 1-5"    # apertura: 8:05 o 9:05 di New York, il programma aspetta le 9:45
-    - cron: "25 13 * * 1-5"   # apertura, riserva (GitHub a volte non fa partire un orario: 11 nov 2026)
-    - cron: "5 19 * * 1-5"    # chiusura: 14:05 o 15:05 di New York, il programma aspetta le 15:55
-    - cron: "25 19 * * 1-5"   # chiusura, riserva
+    - cron: "15,45 * * * 1-5"
+    - cron: "15,45 0 * * 6"     # venerdì sera a New York (chiusura fuori orario fino alle 20:00)
   workflow_dispatch:
     inputs:
       comando:
-        description: "controlla | plancia | elenco | apri | chiudi | chiudi_fuori_orario"
+        description: "auto | controlla | plancia | elenco | apri | chiudi | chiudi_fuori_orario"
         required: true
-        default: controlla
+        default: auto
 
 permissions:
   contents: write
@@ -29,7 +33,7 @@ concurrency:
 jobs:
   avanti:
     runs-on: ubuntu-latest
-    timeout-minutes: 170
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,10 +45,8 @@ jobs:
             echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
           elif [ ! -f stock/avanti/acceso_su_github ]; then
             echo "comando=" >> "$GITHUB_OUTPUT"; echo "spento: manca stock/avanti/acceso_su_github"
-          elif [ "${{ github.event.schedule }}" = "5 13 * * 1-5" ] || [ "${{ github.event.schedule }}" = "25 13 * * 1-5" ]; then
-            echo "comando=apri" >> "$GITHUB_OUTPUT"
           else
-            echo "comando=chiudi" >> "$GITHUB_OUTPUT"
+            echo "comando=auto" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/setup-python@v5
         if: steps.acceso.outputs.comando != ''

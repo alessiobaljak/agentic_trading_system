@@ -93,3 +93,22 @@ def test_miscela_regole():
     assert e["SPY"] == pytest.approx((0.98 + 1.47 + 0.49) / 6) and e["QQQ"] == pytest.approx((0.98 + 0.49) / 6)
     d = mi.ordini(60_000, {"SPY": 0.5, "QQQ": 0.0}, {"SPY": 500.0, "QQQ": 400.0}, {"SPY": 59, "QQQ": 10})
     assert d == {"QQQ": -10}                        # SPY: 60 voluti contro 59, sotto la soglia; QQQ a zero si chiude sempre
+
+
+def test_cosa_fare_a_ogni_ora():
+    t = lambda h: pd.Timestamp(f"2026-11-12 {h}", tz=NY)  # noqa: E731
+    sed = {"apertura": t("09:30"), "chiusura": t("16:00")}
+    f = av.cosa_fare
+    assert f(t("03:00"), sed, False, False, False).startswith("niente: troppo presto")
+    assert f(t("04:30"), sed, False, False, False) == "apri"            # avvio in anticipo: aspetta le 9:45
+    assert f(t("09:58"), sed, False, False, False) == "apri"
+    assert f(t("10:01"), sed, False, False, False).startswith("niente: oggi nessun ordine")   # in ritardo: mai entrare
+    assert f(t("15:08"), sed, False, False, False).startswith("niente")                        # l'errore dell'11 novembre
+    assert f(t("09:47"), sed, True, True, False).startswith("niente: troppo presto per la chiusura")
+    assert f(t("10:40"), sed, True, True, False) == "chiudi"            # aspetta le 15:55
+    assert f(t("15:58"), sed, True, False, False) == "chiudi"
+    assert f(t("12:00"), sed, False, True, False) == "chiudi_subito"    # posizioni rimaste da un altro giorno: via subito
+    assert f(t("07:40"), sed, False, True, False) == "fuori_orario"     # prima dell'apertura: ordini fuori orario
+    assert f(t("16:03"), sed, True, True, False) == "fuori_orario"      # mai un ordine a mercato a seduta finita
+    assert f(t("20:27"), sed, True, False, False) == "diario" and f(t("20:27"), sed, True, False, True).startswith("niente")
+    assert f(t("11:00"), None, False, False, False).startswith("niente: oggi la borsa è chiusa")

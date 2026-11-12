@@ -205,9 +205,10 @@ def apri() -> str:
         if p is None:
             ordini.append({"simbolo": sim, "nota": "saltato: candela mancante o piatta"})
             continue
+        # il nome unico per giorno e titolo: Alpaca rifiuta un secondo ordine con lo stesso nome, anche se due lavori partono insieme
         corpo = {"symbol": sim, "qty": str(p["quantita"]), "side": p["lato"], "type": "market", "time_in_force": "day",
                  "order_class": "bracket", "take_profit": {"limit_price": f"{p['obiettivo']:.2f}"},
-                 "stop_loss": {"stop_price": f"{p['stop']:.2f}"}}
+                 "stop_loss": {"stop_price": f"{p['stop']:.2f}"}, "client_order_id": f"candela15-{oggi}-{sim}"}
         try:
             o = _richiesta("POST", "/v2/orders", json=corpo)
             ordini.append({"simbolo": sim, **p, "id": o["id"], "inviato": ny_adesso().isoformat()})
@@ -220,9 +221,12 @@ def apri() -> str:
     return f"{oggi}: {n} ordini inviati su {len(simboli)} titoli ({', '.join(o['simbolo'] for o in ordini if o.get('id'))})"
 
 
-def chiudi() -> str:
+def chiudi(aspetta: bool = True) -> str:
     oggi = ny_adesso().date().isoformat()
-    s = seduta_di_oggi()
+    s = seduta_di_oggi() if aspetta else None
+    if s is not None and ny_adesso() >= s["chiusura"] - pd.Timedelta(seconds=45):
+        # un ordine a mercato mandato a seduta finita resterebbe in coda fino all'apertura di domani: si chiude fuori orario
+        return chiudi_fuori_orario() if _richiesta("GET", "/v2/positions") else scrivi_diario(oggi)
     if s is not None:
         # la routine parte prima (le routine arrivano anche con 10 minuti di ritardo): si aspetta 5 minuti prima della chiusura
         ora = s["chiusura"] - pd.Timedelta(minutes=5)
@@ -254,6 +258,59 @@ def chiudi() -> str:
     if rimaste:
         raise alpaca.ErroreAlpaca(f"POSIZIONI ANCORA APERTE dopo la chiusura: {', '.join(rimaste)} ({esito})")
     return esito
+
+
+ATTESA_MASSIMA = pd.Timedelta(hours=5, minutes=20)     # un lavoro di GitHub dura al massimo 6 ore
+
+
+def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, ordini_di_oggi: bool, posizioni: bool, diario_scritto: bool) -> str:
+    """Cosa fare a quest'ora (funzione pura): «apri», «chiudi», «fuori_orario», «diario» o «niente: perché». Chi avvia il programma
+    non deve essere puntuale: un avvio in anticipo aspetta l'ora giusta, un avvio in ritardo non entra mai fuori regola."""
+    if seduta is None:
+        return "niente: oggi la borsa è chiusa"
+    apertura, chiusura = seduta["apertura"], seduta["chiusura"]
+    pronto = apertura + pd.Timedelta(minutes=MINUTI_CANDELA)
+    if posizioni and not ordini_di_oggi and adesso < chiusura - pd.Timedelta(seconds=45):
+        # posizioni rimaste da un altro giorno: si chiudono subito (prima dell'apertura con gli ordini fuori orario, dalle 4:00)
+        if adesso >= apertura + pd.Timedelta(minutes=1):
+            return "chiudi_subito"
+        return "fuori_orario" if adesso >= apertura - pd.Timedelta(hours=5, minutes=30) else "niente: posizioni di ieri, troppo presto"
+    if not ordini_di_oggi and not posizioni and adesso <= apertura + pd.Timedelta(minutes=30):
+        return "apri" if pronto - adesso <= ATTESA_MASSIMA else "niente: troppo presto per l'apertura"
+    if adesso < chiusura - pd.Timedelta(seconds=45):
+        if not ordini_di_oggi and not posizioni:
+            return "niente: oggi nessun ordine, niente da chiudere"
+        fine = chiusura - pd.Timedelta(minutes=5)
+        return "chiudi" if fine - adesso <= ATTESA_MASSIMA else "niente: troppo presto per la chiusura"
+    if posizioni:
+        return "fuori_orario"
+    return "diario" if ordini_di_oggi and not diario_scritto else "niente: giornata chiusa"
+
+
+def auto() -> str:
+    """Il comando di tutti gli avvii automatici: guarda l'orologio e il conto, e fa la cosa giusta per quest'ora."""
+    adesso = ny_adesso()
+    oggi = adesso.date().isoformat()
+    f_diario = QUI / "diario.csv"
+    scritto = f_diario.exists() and oggi in set(pd.read_csv(f_diario)["giorno"].astype(str))
+    azione = cosa_fare(adesso, seduta_di_oggi(), (QUI / "giorni" / f"{oggi}.json").exists(),
+                       bool(_richiesta("GET", "/v2/positions")), scritto)
+    print(f"{adesso:%Y-%m-%d %H:%M:%S} di New York: {azione}", flush=True)
+    if azione == "apri":
+        return apri()
+    if azione == "chiudi":
+        return chiudi()
+    if azione in ("chiudi_subito", "fuori_orario"):
+        esito = chiudi(aspetta=False) if azione == "chiudi_subito" else chiudi_fuori_orario()
+        # chiuse le posizioni rimaste: se è ancora in tempo per l'apertura di oggi, si prosegue con quella
+        if cosa_fare(ny_adesso(), seduta_di_oggi(), (QUI / "giorni" / f"{oggi}.json").exists(), False, True) == "apri":
+            return esito + "; " + apri()
+        return esito
+    if azione == "diario":
+        esito = scrivi_diario(oggi)
+        print(_plancia())
+        return esito
+    return azione
 
 
 def chiudi_fuori_orario() -> str:
@@ -347,5 +404,5 @@ def controlla() -> str:
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
     funzioni = {"controlla": controlla, "elenco": lambda: ", ".join(elenco()), "apri": apri, "chiudi": chiudi,
-                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia, "chiudi_fuori_orario": chiudi_fuori_orario}
+                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia, "chiudi_fuori_orario": chiudi_fuori_orario, "auto": auto}
     print(funzioni[comando]())

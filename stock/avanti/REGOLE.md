@@ -74,3 +74,12 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   (GitHub senza computer libero). Le 7 posizioni rimaste sono state chiuse **fuori orario** alle 16:04 di New York con ordini limite
   (chiusura d'emergenza): nessuna è passata la notte. Giornata **fuori regola**: resta nel diario (−94,49 dollari) ma non conta nel
   giudizio. Da qui l'apertura **non entra mai dopo le 10:00** di New York.
+* **12 novembre 2026 — chi avvia non deve essere puntuale** (il proprietario: «il lavoro non deve partire tardi, risolvi
+  immediatamente»). Guardando i registri: l'11 novembre i due orari programmati di GitHub sono partiti 7 ore e 6 ore e 22 minuti dopo
+  (13:05 → 20:07 UTC, 19:05 → 01:27 UTC). Un orario che può arrivare con ore di ritardo non si può «far partire puntuale»: si è
+  cambiato il disegno. Tutti gli avvii lanciano il comando `auto` (`stock/avanti/avanti.py`, funzione `cosa_fare`), che guarda
+  l'orologio di New York e il conto: fino a 5 ore e 20 minuti prima delle 9:45 **aspetta acceso** le 9:45; dopo le 10:00 non entra
+  mai; dalle 10:35 aspetta acceso le 15:55 e chiude; a seduta finita chiude fuori orario ciò che resta (mai un ordine a mercato a
+  borsa chiusa); posizioni rimaste da un altro giorno si chiudono subito. Gli avvii: GitHub ogni mezz'ora, più quattro routine della
+  sessione (8:15, 9:10, 13:30 e 15:20 di New York) che avviano il lavoro a mano. Ordini con un nome unico per giorno e titolo: niente
+  doppioni. Le regole della strategia non cambiano.
