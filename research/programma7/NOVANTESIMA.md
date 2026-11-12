@@ -68,8 +68,10 @@ Una variante passa se, **sul conto 1**, sono tutte vere:
 E sul **conto 2** (A e A2, 280 USDT): ogni anno positivo, Sharpe che scende al massimo di 0,15 dal riferimento omonimo, ordini saltati non più
 numerosi di quelli di G1 con lo stesso conto.
 Si riportano, senza decidere: giorni con n sotto 10 per lato, Sortino, rendimento, spese, giro, il confronto con la prova 61. **Giorni-moneta
-oltre il 3%**: giorni in cui una moneta venduta costa al conto più del 3% del capitale in quel giorno; **prima si riproduce il 65 di G1** con
-questa definizione, poi si calcolano le varianti. Se non torna, si scrive e ci si ferma.
+oltre il 3%**: per ogni giorno e ogni moneta in posizione (comprata o venduta), il peso voluto all'apertura per l'escursione peggiore
+della giornata (massimo/apertura − 1 per le vendute, minimo/apertura − 1 per le comprate); si contano i casi in cui la perdita supera il
+3% del capitale. È la misura della revisione di G1 (`audits/repro/g1_parte2_2026-11-12.py`, `giorni_moneta_oltre_3pc_di_perdita`), da cui
+viene il 65; **prima si riproduce il 65 di G1** con questa definizione, poi si calcolano le varianti. Se non torna, si scrive e ci si ferma.
 I numeri 20%, 0,15 e 3 punti sono fissati qui e non si cambiano dopo aver visto i risultati: 20% è circa metà del caso peggiore di G1; 0,15
 è il margine oltre il costo di Sharpe della prova 61 (0,09).
 
@@ -91,3 +93,10 @@ rango insufficiente: lato com'è e giorno scritto; (4) un solo criterio sul peso
 e per ogni variante se passa per costruzione; (5) Sharpe e t settimanali con `numeri(per_anno=52)`; (6) definizione unica dei giorni-moneta oltre
 il 3% e riproduzione del 65 prima; (7) conti A e A2 a 280 USDT, contatore `ordini_saltati`, monete senza filtri non aggiunte; (8) universo e
 periodo del codice di G1, lati fissi a 1 e 1.
+
+## Seconda correzione del 12 novembre 2026, dopo il controllo preliminare e prima di ogni variante
+La definizione dei giorni-moneta oltre il 3% scritta alla prima correzione (il costo realizzato delle sole monete vendute) non era quella
+da cui viene il 65: applicata a G1 dà 9 (`risultati_novantesima/controllo65.json`), e la prova si è fermata come scritto. La definizione è
+ora quella della revisione di G1 (escursione peggiore della giornata, comprate e vendute). È una misura che si riporta, non entra nel
+criterio; nessuna variante era stata calcolata.
+
