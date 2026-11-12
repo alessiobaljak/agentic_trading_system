@@ -794,4 +794,10 @@ arrotondandoli cambia il 17,6% delle previsioni, e M7 è dentro la miscela F5 + 
 **Cosa:** una funzione unica per l'esame (famiglie) con il mazzo completo e aggiornato a ogni prova; poi rifare il numero corretto di
 G1, della miscela e delle prove recenti con il mazzo completo. M7 con le parità corrette come prova nuova, nel conto, prima di toccare
 la misura a tavolino. **Metro:** quante serie nel mazzo; quanto cambia lo Sharpe corretto di G1 (oggi 0,86) e della miscela (0,89).
+**Stato al 12 novembre, sera**: mazzo completato (`research/programma6/MAZZO_ASTICELLA.md`, test `tests/test_asticella_mazzo.py`):
+63 prove in più, da 137 a 267 serie, da 80 a 165 famiglie; soglie e formule invariate. Sharpe corretto per famiglie prima → dopo: G1
+0,867 → 0,769 (a 280 USDT 0,814 → 0,698); F5 + M7 + K2 0,890 → 0,822; C3 0,752 → 0,646; prova 152 calcolata come G1 0,744 / 0,685 /
+0,732 (i numeri 0,88 / 0,84 / 0,87 scritti nella prova usavano `corretto_rivisto`, che conta solo le prove fino alla 48). Restano: la
+verifica indipendente del mazzo (backtest-auditor), la domanda di metodo per il proprietario (le prove fatte **dopo** che G1 è stata
+trovata, alla prova 57, devono abbassarne il numero?), il residuo delle parità dentro M7, e `corretto_rivisto` da allineare.
 

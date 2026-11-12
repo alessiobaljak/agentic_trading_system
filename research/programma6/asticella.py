@@ -198,7 +198,8 @@ def serie_nuove() -> dict:
     for n, f in (("49 X1", "risultati_quarantanovesima/settimane_X1.csv.gz"), ("49 X2", "risultati_quarantanovesima/settimane_X2.csv.gz"),
                  ("51 F7", "risultati_cinquantunesima/settimane_F7.csv.gz"), ("52 B1", "risultati_cinquantaduesima/settimane_B1.csv.gz"),
                  ("53 F8", "risultati_cinquantatreesima/settimane_F8.csv.gz"), ("55 C3", "risultati_cinquantacinquesima/settimane_C3.csv.gz"),
-                 ("56 F9", "risultati_cinquantaseiesima/settimane_F9.csv.gz")):
+                 ("56 F9", "risultati_cinquantaseiesima/settimane_F9.csv.gz"),
+                 ("50 F5 101-150", "risultati_cinquantesima/settimane_F5_101_150.csv.gz")):     # 12 novembre (P34): mancava
         if (QUI / f).exists():
             d = pd.read_csv(QUI / f, index_col=0)
             out[n] = d["netto"] if "netto" in d else d.iloc[:, 0]
@@ -232,7 +233,32 @@ def serie_programma7() -> dict:
                  ("95 CF", "risultati_trentatreesima/settimane_CF.csv.gz"), ("97 CC", "risultati_trentacinquesima/settimane_CC.csv.gz"),
                  ("100 SC", "risultati_trentottesima/settimane_SC.csv.gz"),
                  ("101 VS", "risultati_trentanovesima/settimane_VS.csv.gz"),
-                 ("102 G25", "risultati_quarantesima/settimane_G25.csv.gz")):
+                 ("102 G25", "risultati_quarantesima/settimane_G25.csv.gz"),
+                 # 12 novembre (backlog P34): le prove a portafoglio dalla 103 alla 152 e quelle prima della 103 che mancavano;
+                 # l'elenco intero, con le escluse e il perche', e' in MAZZO_ASTICELLA.md
+                 ("77 G18", "risultati_ventesima/settimane_G18.csv.gz"),
+                 ("79 P9A", "../programma9/risultati_prima/settimane_79_P9A.csv.gz"),
+                 ("80 P9B", "../programma9/risultati_prima/settimane_80_P9B.csv.gz"),
+                 ("85 G21", "risultati_ventitreesima/settimane_G21.csv.gz"), ("87 PC", "risultati_venticinquesima/settimane_PC.csv.gz"),
+                 ("109 GR-L", "risultati_quarantasettesima/settimane_GR-L.csv.gz"),
+                 ("109 GR-N", "risultati_quarantasettesima/settimane_GR-N.csv.gz"),
+                 ("110 SS", "risultati_quarantottesima/settimane_SS.csv.gz"), ("112 LQ", "risultati_cinquantesima/settimane_LQ.csv.gz"),
+                 ("114 KP", "risultati_cinquantaduesima/settimane_KP.csv.gz"), ("116 VU", "risultati_cinquantaquattresima/settimane_VU.csv.gz"),
+                 ("117 EMI", "risultati_cinquantacinquesima/settimane_EMI.csv.gz"),
+                 ("117 EWIL", "risultati_cinquantacinquesima/settimane_EWIL.csv.gz"),
+                 ("118 MV", "risultati_cinquantaseiesima/settimane_MV.csv.gz"), ("119 CU", "risultati_cinquantasettesima/settimane_CU.csv.gz"),
+                 ("121 RR", "risultati_cinquantanovesima/settimane_RR.csv.gz"), ("122 RRE", "risultati_sessantesima/settimane_RRE.csv.gz"),
+                 ("123 RRB", "risultati_sessantunesima/settimane_RRB.csv.gz"), ("124 G1M", "risultati_sessantaduesima/settimane_G1M.csv.gz"),
+                 ("125 PA", "risultati_sessantatreesima/settimane_PA.csv.gz"), ("125 AV", "risultati_sessantatreesima/settimane_AV.csv.gz"),
+                 ("127 RA", "risultati_sessantacinquesima/settimane_RA.csv.gz"),
+                 ("131 DA", "risultati_sessantanovesima/settimane_DA.csv.gz"), ("131 DB", "risultati_sessantanovesima/settimane_DB.csv.gz"),
+                 ("132 FM", "risultati_settantesima/settimane_FM.csv.gz"), ("135 HL", "risultati_settantatreesima/settimane_HL.csv.gz"),
+                 ("137 HLI", "risultati_settantacinquesima/settimane_HLI_101-200.csv.gz"),
+                 ("138 GA1", "risultati_settantaseiesima/settimane_GA1.csv.gz"), ("138 GA2", "risultati_settantaseiesima/settimane_GA2.csv.gz"),
+                 ("139 CF", "risultati_settantasettesima/settimane_CF.csv"), ("142 G1S", "risultati_ottantesima/settimane_G1S.csv.gz"),
+                 ("143 SM", "risultati_ottantunesima/settimane_SM.csv.gz"), ("144 FP", "risultati_ottantaduesima/settimane_FP.csv.gz"),
+                 ("145 NV", "risultati_ottantatreesima/settimane_NV.csv.gz"), ("147 GA2C", "risultati_ottantacinquesima/settimane_GA2C.csv.gz"),
+                 ("150 v7", "risultati_ottantottesima/settimane_v7.csv.gz"), ("150 v30", "risultati_ottantottesima/settimane_v30.csv.gz")):
         if (p7 / f).exists():
             out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
     for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
@@ -262,6 +288,127 @@ def serie_programma7() -> dict:
         d = pd.read_csv(f)
         g = d["venerdi"].map(lambda x: sc.giorno(*map(int, x.split("-")))).to_numpy() + 3      # il lunedi' dopo il venerdi'
         out["68 G10"] = pd.Series(0.01 * d["R"].to_numpy(), index=g).groupby(level=0).sum()
+    out.update(_eventi_mancanti(p7))
+    f = p7 / "risultati_ottantaseiesima" / "giorni.csv.gz"            # 148: la sola regola nuova (B), dai giorni alle settimane
+    if f.exists():
+        d = pd.read_csv(f, index_col=0)
+        out["148 B"] = d["B, 280 USDT"].groupby(_lunedi(d.index)).sum()
+    f = p7 / "risultati_ottantasettesima" / "settimane.csv.gz"        # 149: le 60 varianti 1:1:1
+    if f.exists():
+        d = pd.read_csv(f, index_col=0)
+        out.update({f"149 {c}": d[c] for c in d.columns})
+    f = p7 / "risultati_novantesima" / "settimane_conto1.csv.gz"     # 152: le tre varianti (G1 accanto e' la copia della 57)
+    if f.exists():
+        d = pd.read_csv(f, index_col=0)
+        out.update({f"152 {v}": d[v] for v in ("V1", "V2", "V3")})
+    return out
+
+
+# Le prove (o le cartelle) con un file di serie o di eventi che restano fuori dal mazzo, e perche' (12 novembre, backlog P34;
+# l'elenco intero in MAZZO_ASTICELLA.md). Il test `tests/test_asticella_mazzo.py` fallisce se una cartella di risultati dalla
+# prova 49 in poi ha una serie o degli eventi ma non e' ne' nel mazzo ne' qui.
+FUORI_DAL_MAZZO = {
+    "programma7/risultati_ottantanovesima": "prova 151: fermata dalle sue regole per dati troppo corti (23 settimane), nessun esame",
+}
+
+
+def _eventi_mancanti(p7: Path) -> dict:
+    """Le prove a eventi dalla 75 alla 146 che mancavano (12 novembre, backlog P34), con il portafoglio della prova 41 come le altre
+    a eventi: entrata e uscita all'ora (quando il file da' solo il giorno, la mezzanotte del giorno), solo le operazioni con ``r``."""
+    def gg(x: pd.Series) -> np.ndarray:
+        return x.map(lambda s: sc.giorno(*map(int, str(s)[:10].split("-")))).to_numpy().astype(np.int64)
+
+    def port(d: pd.DataFrame, ora, uscita, simbolo="BTCUSDT", r="r") -> pd.Series:
+        ev = pd.DataFrame({"simbolo": d[simbolo].to_numpy() if simbolo in d else simbolo,
+                           "ora": np.asarray(ora, dtype=np.int64), "uscita_h": np.asarray(uscita, dtype=np.int64), "r": d[r].to_numpy()})
+        return qu.portafoglio(ev[np.isfinite(ev["r"])])["netto"]
+
+    def leggi(f: str) -> pd.DataFrame | None:
+        return pd.read_csv(p7 / f) if (p7 / f).exists() else None
+
+    def minuti(d):                                                    # entrata_min / uscita_min (minuti dal 1970)
+        return d["entrata_min"].to_numpy() // 60, -(-d["uscita_min"].to_numpy() // 60)
+
+    def ore(d):                                                       # dal giorno della colonna data per le ore della colonna ore
+        o = gg(d["data"]) * 24
+        return o, o + d["ore"].to_numpy()
+
+    def giorni(d):                                                    # come G4: dal giorno per i giorni della colonna giorni
+        o = gg(d["data"]) * 24
+        return o, o + np.round(d["giorni"].to_numpy() * 24).astype(np.int64)
+
+    out = {}
+    for n, f in (("75 G16", "risultati_diciottesima/eventi_G16.csv"), ("76 G17", "risultati_diciannovesima/eventi_G17.csv"),
+                 ("78 G19", "risultati_ventunesima/eventi_G19.csv"), ("81 P9C", "../programma9/risultati_seconda/eventi_P9C.csv"),
+                 ("82 P9C lunga", "../programma9/risultati_terza/eventi_P9C_lunga.csv")):
+        d = leggi(f)
+        if d is not None:
+            out[n] = port(d, *minuti(d), simbolo="simbolo")
+    parti = [leggi(f"risultati_quarantaduesima/eventi_G26_{p}.csv") for p in ("2021-2022", "2023-2024", "2025-2026")]
+    if all(p is not None for p in parti):
+        d = pd.concat(parti, ignore_index=True)
+        out["104 G26"] = port(d, *minuti(d), simbolo="simbolo")
+    for n, f in (("105 CB", "risultati_quarantatreesima/eventi_CB.csv"), ("106 CBO", "risultati_quarantaquattresima/eventi_CBO.csv"),
+                 ("107 G13C", "risultati_quarantacinquesima/eventi_G13C.csv"), ("126 GT", "risultati_sessantaquattresima/eventi_GT.csv"),
+                 ("140 QH", "risultati_settantottesima/eventi_QH.csv"), ("146 AT", "risultati_ottantaquattresima/eventi_AT.csv")):
+        d = leggi(f)
+        if d is not None:
+            out[n] = port(d, *ore(d), simbolo="simbolo")
+    d = leggi("risultati_settantaduesima/picchi_PM.csv")                          # 134: solo i picchi con la bandiera
+    if d is not None:
+        d = d[d["bandiera"].astype(bool)].reset_index(drop=True)
+        out["134 PM"] = port(d, *ore(d), simbolo="simbolo")
+    d = leggi("../programma9/risultati_quarta/eventi_N3B_funding.csv")             # 83: solo con i long affollati (SOGLIA_8H)
+    if d is not None:
+        d = d[d["funding_8h"] >= 0.0001].reset_index(drop=True)
+        out["83 P9D"] = port(d, *giorni(d), simbolo="simbolo")
+    d = leggi("risultati_ventottesima/eventi_N3V.csv")                             # 90: il gruppo A, «davvero nuove»
+    if d is not None:
+        d = d[d["gruppo"] == "A davvero nuove"].reset_index(drop=True)
+        out["90 N3V"] = port(d, *giorni(d), simbolo="simbolo")
+    d = leggi("risultati_ventinovesima/eventi_N3B2.csv")
+    if d is not None:
+        out["91 N3B2"] = port(d, *giorni(d), simbolo="simbolo")
+    d, d32 = leggi("risultati_cinquantunesima/eventi_N3G.csv"), QUI / "risultati_trentaduesima" / "eventi_N3B.csv"
+    if d is not None and d32.exists():                                           # 113: le monete gratis, durate dalla prova 32
+        d = d[d["gratis"].astype(bool)].merge(pd.read_csv(d32)[["data", "simbolo", "giorni"]], on=["data", "simbolo"], how="left")
+        out["113 N3G"] = port(d, *giorni(d), simbolo="simbolo")
+    d = leggi("risultati_settantanovesima/eventi_FS.csv")                          # 141: 7 giorni (l'uscita a -30% non ha l'ora)
+    if d is not None:
+        o = gg(d["data"]) * 24
+        out["141 FS"] = port(d, o, o + 7 * 24, simbolo="simbolo")
+    for n, f in (("96 G22", "risultati_trentaquattresima/eventi_G22.csv"), ("98 G23", "risultati_trentaseiesima/eventi_G23.csv")):
+        d = leggi(f)                                                              # dall'ora dopo il comunicato, per 6 ore
+        if d is not None:
+            o = gg(d["data"]) * 24 + d["ora_utc"].to_numpy() + 1
+            out[n] = port(d, o, o + 6)
+    d = leggi("risultati_trentasettesima/operazioni_G24.csv")                      # 99: dalle 02:00 UTC del giorno, per 24 ore
+    if d is not None:
+        o = gg(d["giorno"]) * 24 + 2
+        out["99 G24"] = port(d, o, o + 24)
+    d = leggi("risultati_quarantunesima/eventi_LV.csv")                            # 103: solo i tagli della leva
+    if d is not None:
+        d = d[d["tipo"] == "taglio"].reset_index(drop=True)
+        out["103 LV"] = port(d, d["h0"], d["h1"], simbolo="simbolo")
+    d = leggi("risultati_cinquantatreesima/eventi_BL.csv")                         # 115: BNB contro Bitcoin, 24 ore
+    if d is not None:
+        o = d["entrata_min"].to_numpy() // 60
+        out["115 BL"] = port(d, o, o + 24, simbolo="BNBUSDT")
+    for n, f, k in (("128 BP", "risultati_sessantaseiesima/eventi_BP.csv", 4), ("130 TE", "risultati_sessantottesima/eventi_TE.csv", 24)):
+        d = leggi(f)                                                              # dall'ora dopo il segnale, per k ore
+        if d is not None:
+            o = d["ora"].to_numpy() + 1
+            out[n] = port(d, o, o + k, simbolo="simbolo")
+    d = leggi("risultati_sessantasettesima/eventi_IM.csv")                         # 129: dall'ultimo giorno del mese, 4 giorni
+    if d is not None:
+        o = gg(d["data"]) * 24
+        out["129 IM"] = port(d, o, o + 4 * 24)
+    d = leggi("risultati_settantunesima/operazioni_primo.csv.gz")                  # 133: ogni 4 ore sui 6 perpetui
+    if d is not None:
+        out["133 QO"] = port(d, d["ora"], d["ora"] + 4, simbolo="moneta", r="netto")
+    d = leggi("risultati_settantaquattresima/eventi_tondi.csv.gz")                 # 136: 60 minuti dal passaggio
+    if d is not None:
+        out["136 NT"] = port(d, d["minuto"].to_numpy() // 60, -(-(d["minuto"].to_numpy() + 61) // 60), simbolo="moneta")
     return out
 
 
