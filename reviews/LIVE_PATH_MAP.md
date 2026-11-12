@@ -16,7 +16,9 @@ Firebase) sono nella sezione 14.
 | Vecchio esecutore, ramo reale | `bot/execution/executor.py` | **nessuno: bloccato dal `9f47972c`** | `_init_binance` non crea il client e rimette `dry_run` vero (`executor.py:244-254`) |
 
 Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) e `eventi.py` (dati pubblici da `fapi.binance.com`,
-`f5.py:47`, `:163-168`), `scripts/verify_keys.py` (legge il conto, `:33-38`). `bot/risk/portafoglio.py` è una simulazione.
+`f5.py:47`, `:163-168`), `scripts/verify_keys.py` (legge il conto, `:33-38`), dal 12 nov (non committato) la fotografia
+dello stato (`scripts/state_snapshot.py:818-842` `SoloLettura`: GET su `userTrades`, `commissionRate`, `income` del conto demo, con la
+chiave del demo, con la richiesta «stato»; nessuna finestra vietata: 79). `bot/risk/portafoglio.py` è una simulazione.
 
 ## 2. Il giro del bot (un solo filo)
 

@@ -116,6 +116,7 @@ def build() -> str:
     lines += sezione_demo_binance(fb)
     lines += sezione_demo_contro_paper(fb)
     lines += sezione_conto_vero(fb)
+    lines += sezione_demo_esecuzioni(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -798,6 +799,378 @@ def sezione_demo_contro_paper(fb) -> list:
                     f"funding incassato {sum(fu):+,.2f} USDT, commissioni pagate {sum(sp):,.2f} USDT"]
         out.append("")
     return out
+
+
+# ---- G1 sul demo: esecuzioni, commissioni e funding letti da Binance (backlog P33; gate2/reports/2026-11-12-G1-funding-commissioni.md) --
+# SOLA LETTURA: tre indirizzi GET firmati del conto demo, nessun ordine, nessuna scrittura su Binance né su Firebase. Il peso di ogni
+# richiesta è quello della documentazione di Binance (future USDⓈ-M); l'indirizzo della macchina ne ha 2.400 al minuto, condivisi con il bot.
+PESO_LETTURE = {"/fapi/v1/userTrades": 5, "/fapi/v1/commissionRate": 20, "/fapi/v1/income": 30}
+GIORNI_CHIUSI = 5                      # i 5 giorni UTC chiusi più quello in corso
+PAUSA_TRA_RICHIESTE_S = 0.2
+PESO_MASSIMO_SEZIONE = 1000            # meno della metà del minuto dell'indirizzo: il bot deve poter continuare a lavorare
+PESO_USATO_MASSIMO = 600               # se Binance dice che nel minuto l'indirizzo ha già usato di più, la sezione smette di chiedere
+                                       # (600 finché il limite del demo non è misurato: revisione del 12 novembre 2026, problema 80)
+TEMPO_MASSIMO_S = 180.0                # la richiesta «stato» della macchina deve restare breve
+PAGINE_MASSIME = 10
+ERRORI_DI_FILA_MASSIMI = 3
+ORA_DOPO_LA_DECISIONE_S = 2 * 3600     # G1 decide alle 00:05 UTC e il demo esegue entro l'ora dopo: dalle 02:00 le posizioni sono quelle nuove
+# la finestra del ribilancio del demo (revisione del 12 novembre 2026, problema 79): la decisione delle 00:05, l'ora degli ordini limite e
+# il tentativo dopo un errore (30 minuti); dentro, nessuna richiesta, perché un blocco dell'indirizzo fermerebbe anche il bot del demo
+FINESTRA_VIETATA = ((23 * 60 + 50) * 60, (1 * 60 + 45) * 60)   # dalle 23:50 alle 01:45 UTC, in secondi dalla mezzanotte
+MONETE_ASSENTI_MASSIME = 10
+
+
+class LimiteInLettura(Exception):
+    """Binance risponde 429 o 418 a una lettura della sezione: ci si ferma al primo segnale, senza che il cliente del demo riprovi
+    (revisione del 12 novembre 2026, problema 80). Non è un ``RuntimeError``: ferma tutte le richieste dopo."""
+
+
+def nella_finestra_vietata(now: float) -> bool:
+    s = int(now) % 86400
+    return s >= FINESTRA_VIETATA[0] or s < FINESTRA_VIETATA[1]
+
+
+class SoloLettura:
+    """La funzione HTTP del cliente del demo per questa sezione: solo GET e solo gli indirizzi della lettura (più l'ora di Binance, che il
+    cliente rilegge da solo dopo un errore d'orario); qualunque altra richiesta si rifiuta prima di partire. Tiene il peso usato
+    nel minuto dall'indirizzo (intestazione ``X-MBX-USED-WEIGHT-1M`` di Binance)."""
+
+    AMMESSI = frozenset(PESO_LETTURE) | {"/fapi/v1/time"}
+
+    def __init__(self, http=None) -> None:
+        if http is None:
+            import requests
+            http = requests.request
+        self.http, self.peso_usato = http, None
+
+    def __call__(self, metodo, url, **kw):
+        from urllib.parse import urlparse
+        percorso = urlparse(url).path
+        if metodo != "GET" or percorso not in self.AMMESSI:
+            raise ValueError(f"sola lettura: {metodo} {percorso} non ammesso")
+        r = self.http(metodo, url, **kw)
+        if getattr(r, "status_code", None) in (418, 429):
+            attesa = (getattr(r, "headers", None) or {}).get("Retry-After")
+            raise LimiteInLettura(f"Binance {r.status_code} su GET {percorso}: la sezione si ferma"
+                                  + (f" (Retry-After {attesa} s)" if attesa is not None else ""))
+        try:
+            self.peso_usato = int((getattr(r, "headers", None) or {}).get("X-MBX-USED-WEIGHT-1M"))
+        except (TypeError, ValueError):
+            pass
+        return r
+
+
+class _Basta(Exception):
+    """La sezione smette di chiedere (tetto di peso o di tempo, limite di Binance, rete): il motivo va nella riga «non letto»."""
+
+
+def _motivo(exc) -> str:
+    from bot.portafoglio.demo_binance import senza_firma
+    testo = senza_firma(str(exc))[:160]
+    return testo if isinstance(exc, _Basta) else f"{type(exc).__name__}: {testo[:120]}"
+
+
+class _Lettore:
+    """Le richieste della sezione, una per volta con una pausa, dentro il tetto di peso e di tempo. Un errore di Binance su una
+    richiesta (``RuntimeError`` del cliente) si passa a chi chiede; un limite di Binance, un errore di rete o un rifiuto della
+    sola lettura fermano tutte le richieste dopo."""
+
+    def __init__(self, cliente, dormi=time.sleep, peso_massimo: int = PESO_MASSIMO_SEZIONE, tempo_massimo_s: float = TEMPO_MASSIMO_S,
+                 orologio=time.monotonic) -> None:
+        self.c, self.dormi, self.peso_massimo, self.tempo_massimo_s = cliente, dormi, peso_massimo, tempo_massimo_s
+        self.orologio, self.inizio = orologio, orologio()
+        self.richieste, self.peso, self.fermo = 0, 0, None
+
+    def peso_usato(self):
+        return getattr(getattr(self.c, "http", None), "peso_usato", None)
+
+    def chiedi(self, percorso: str, parametri: dict):
+        if self.fermo:
+            raise _Basta(self.fermo)
+        peso, usato = PESO_LETTURE[percorso], self.peso_usato()
+        if self.peso + peso > self.peso_massimo:
+            self.fermo = f"tetto di peso della sezione ({self.peso_massimo})"
+        elif usato is not None and usato > PESO_USATO_MASSIMO:
+            self.fermo = f"l'indirizzo ha già usato {usato} di peso nel minuto (oltre {PESO_USATO_MASSIMO})"
+        elif self.orologio() - self.inizio > self.tempo_massimo_s:
+            self.fermo = f"tempo della sezione oltre {self.tempo_massimo_s:g} s"
+        if self.fermo:
+            raise _Basta(self.fermo)
+        if self.richieste:
+            self.dormi(PAUSA_TRA_RICHIESTE_S)
+        self.richieste += 1
+        self.peso += peso
+        try:
+            return self.c.chiedi("GET", percorso, parametri, firmata=True)
+        except RuntimeError:
+            raise
+        except Exception as exc:  # noqa: BLE001
+            self.fermo = _motivo(exc)
+            raise _Basta(self.fermo) from None
+
+
+def _pagine(lettore: _Lettore, percorso: str, parametri: dict, chiave, limite: int = 1000) -> tuple:
+    """Tutte le righe fra ``startTime`` e ``endTime``, a pagine di ``limite``: la pagina dopo riparte dall'ora più alta letta (non
+    +1: le righe con la stessa ora, come i regolamenti di molte monete, non si perdono) e le righe già viste si scartano. Se una pagina
+    intera ha la stessa ora si va avanti di 1 ms e la lettura si dice forse incompleta. Restituisce le righe e se è completa."""
+    righe, viste, inizio, completo, fine = [], set(), int(parametri["startTime"]), True, int(parametri["endTime"])
+    for _ in range(PAGINE_MASSIME):
+        pagina = lettore.chiedi(percorso, {**parametri, "startTime": inizio, "limit": limite}) or []
+        nuove = [r for r in pagina if chiave(r) not in viste]
+        viste.update(chiave(r) for r in nuove)
+        righe += nuove
+        if len(pagina) < limite:
+            return righe, completo
+        alta = max(int(r.get("time") or 0) for r in pagina)
+        if alta <= inizio:
+            alta, completo = inizio + 1, False
+        if alta > fine:
+            return righe, completo
+        inizio = alta
+    return righe, False
+
+
+def _giorno(t_s: float) -> str:
+    return time.strftime("%Y-%m-%d", time.gmtime(t_s))
+
+
+def _regolamento(t_ms) -> str:
+    """Il regolamento del funding: «00», «08», «16», o «altre» (le monete con il funding ogni 1 o 4 ore)."""
+    h = time.gmtime(int(t_ms) / 1000).tm_hour
+    return f"{h:02d}" if h in (0, 8, 16) else "altre"
+
+
+def esecuzioni_per_giorno(righe: list) -> dict:
+    """Le esecuzioni del demo (``/fapi/v1/userTrades``) giorno per giorno: valore scambiato, commissione pagata (in USDT; quelle in
+    un'altra valuta si contano a parte), valore eseguito «maker» (ordine nel libro) e numero di esecuzioni."""
+    out: dict = {}
+    for r in righe:
+        if not r.get("time"):
+            continue
+        x = out.setdefault(_giorno(int(r["time"]) / 1000), {"valore": 0.0, "commissione": 0.0, "maker": 0.0, "n": 0, "altre_valute": 0})
+        v = abs(float(r.get("quoteQty") or 0))
+        x["valore"] += v
+        x["n"] += 1
+        if r.get("maker") in (True, "true"):
+            x["maker"] += v
+        if (r.get("commissionAsset") or "USDT") == "USDT":
+            x["commissione"] += abs(float(r.get("commission") or 0))
+        else:
+            x["altre_valute"] += 1
+    return out
+
+
+def funding_per_giorno(righe: list, giorni_chiusi: set) -> tuple:
+    """Gli incassi di funding (``FUNDING_FEE``, + incassato) per giorno e regolamento, con le monete pagate alle 08 e alle 16; e per
+    moneta nei giorni chiusi."""
+    giorni: dict = {}
+    monete: dict = {}
+    for r in righe:
+        if (r.get("asset") or "USDT") != "USDT" or not r.get("time"):
+            continue
+        g, reg, v, s = _giorno(int(r["time"]) / 1000), _regolamento(r["time"]), float(r.get("income") or 0), r.get("symbol") or "?"
+        x = giorni.setdefault(g, {"totale": 0.0, "00": 0.0, "08": 0.0, "16": 0.0, "altre": 0.0, "monete_08": set(), "monete_16": set()})
+        x["totale"] += v
+        x[reg] += v
+        if reg in ("08", "16"):
+            x[f"monete_{reg}"].add(s)
+        if g in giorni_chiusi:
+            m = monete.setdefault(s, {"totale": 0.0, "00": 0.0, "08": 0.0, "16": 0.0, "altre": 0.0})
+            m["totale"] += v
+            m[reg] += v
+    return giorni, monete
+
+
+def cliente_di_sola_lettura():
+    """Il cliente del conto demo (``ClienteDemo``: solo ``demo-fapi.binance.com``) con la funzione HTTP di sola lettura; None senza
+    le chiavi del conto demo (su GitHub non ci sono)."""
+    from bot.portafoglio.demo_binance import ClienteDemo, segreto_dall_ambiente
+    k, s = os.environ.get("BINANCE_DEMO_API_KEY", ""), segreto_dall_ambiente()
+    return ClienteDemo(k, s, http=SoloLettura()) if k and s else None
+
+
+def sezione_demo_esecuzioni(fb, cliente=None, now: float | None = None, dormi=time.sleep,
+                            peso_massimo: int = PESO_MASSIMO_SEZIONE) -> list:
+    """Quanto costano davvero gli ordini di G1 sul demo e quanto funding incassa, moneta per moneta (backlog P33), per i 5 giorni UTC
+    chiusi più quello in corso: esecuzioni (valore, commissione, quota maker e taker), commissione del conto, funding per giorno e
+    regolamento, le 10 monete con il funding più grande, le monete del paper di G1 che il demo non ha. Sola lettura; un endpoint che
+    non risponde diventa una riga «non letto», e lo stato non fallisce mai per questa sezione."""
+    titolo = "## G1 sul demo: esecuzioni, commissioni e funding letti da Binance (sola lettura)"
+    try:
+        return _demo_esecuzioni(fb, cliente, time.time() if now is None else float(now), dormi, peso_massimo, titolo)
+    except Exception as exc:  # noqa: BLE001
+        return [titolo, f"- non letto: {_motivo(exc)}", ""]
+
+
+def _demo_esecuzioni(fb, cliente, now: float, dormi, peso_massimo: int, titolo: str) -> list:
+    if nella_finestra_vietata(now):
+        return [titolo, "- non letto: finestra del ribilancio del demo (23:50-01:45 UTC), richiedere dopo", ""]
+    oggi = int(now // 86400)
+    giorni = [_giorno(d * 86400) for d in range(oggi - GIORNI_CHIUSI, oggi + 1)]
+    chiusi = set(giorni[:-1])
+    da_ms, a_ms = (oggi - GIORNI_CHIUSI) * 86400_000, int(now * 1000)
+    if cliente is None:
+        try:
+            cliente = cliente_di_sola_lettura()
+        except Exception as exc:  # noqa: BLE001  (il testo dell'errore di una chiave non si stampa)
+            return [titolo, f"- non letto: chiave del conto demo non leggibile ({type(exc).__name__})", ""]
+        if cliente is None:
+            return [titolo, "- non letto: manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env; c'è solo sulla macchina)", ""]
+    lt = _Lettore(cliente, dormi=dormi, peso_massimo=peso_massimo)
+    out = [titolo, f"Dal {giorni[0]} 00:00 a {_ts(now)}; USDT; funding: + incassato; maker = ordine rimasto nel libro (commissione bassa)."]
+
+    def rtdb(ramo):
+        try:
+            v = fb.get_rtdb(ramo) if fb is not None else None
+        except Exception:  # noqa: BLE001
+            return {}
+        return v if isinstance(v, dict) else {}
+
+    # 1. la commissione del conto
+    try:
+        cr = lt.chiedi("/fapi/v1/commissionRate", {"symbol": "BTCUSDT"}) or {}
+        out.append(f"- commissione del conto (BTCUSDT): maker {100 * float(cr['makerCommissionRate']):.4f}%, "
+                   f"taker {100 * float(cr['takerCommissionRate']):.4f}%")
+    except Exception as exc:  # noqa: BLE001
+        out.append(f"- commissione del conto: non letta: {_motivo(exc)}")
+
+    # 2. gli incassi: funding e commissioni (le commissioni dicono anche quali monete hanno avuto esecuzioni)
+    def incassi(tipo):
+        try:
+            righe, completo = _pagine(lt, "/fapi/v1/income", {"incomeType": tipo, "startTime": da_ms, "endTime": a_ms},
+                                      lambda r: (r.get("tranId"), r.get("symbol"), r.get("time"), r.get("income")))
+            return righe, ("" if completo else f"oltre {PAGINE_MASSIME} pagine: forse incompleto")
+        except Exception as exc:  # noqa: BLE001
+            return None, _motivo(exc)
+    funding, nota_funding = incassi("FUNDING_FEE")
+    commissioni, nota_commissioni = incassi("COMMISSION")
+
+    # 3. le esecuzioni, moneta per moneta: prima quelle con più commissioni (senza le commissioni, le monete con funding)
+    peso_moneta: dict = {}
+    for r in commissioni if commissioni is not None else (funding or []):
+        if r.get("symbol"):
+            peso_moneta[r["symbol"]] = peso_moneta.get(r["symbol"], 0.0) + abs(float(r.get("income") or 0))
+    simboli = sorted(peso_moneta, key=lambda s: (-peso_moneta[s], s))
+    esecuzioni, lette, errori, di_fila, nota_esec = [], 0, 0, 0, ""
+    for s in simboli:
+        try:
+            righe, completo = _pagine(lt, "/fapi/v1/userTrades", {"symbol": s, "startTime": da_ms, "endTime": a_ms}, lambda r: r.get("id"))
+            esecuzioni += righe
+            lette, di_fila = lette + 1, 0
+            if not completo:
+                nota_esec = f"{s}: oltre {PAGINE_MASSIME} pagine, forse incompleto"
+        except RuntimeError as exc:
+            errori, di_fila = errori + 1, di_fila + 1
+            nota_esec = _motivo(exc)
+            if di_fila >= ERRORI_DI_FILA_MASSIMI:
+                nota_esec = f"{ERRORI_DI_FILA_MASSIMI} errori di fila, l'ultimo {nota_esec}"
+                break
+        except Exception as exc:  # noqa: BLE001
+            nota_esec = _motivo(exc)
+            break
+    if not simboli:
+        out.append("- esecuzioni: non lette: " + (f"servono gli incassi per sapere le monete ({nota_commissioni or nota_funding})"
+                                                  if commissioni is None and funding is None else "nessuna esecuzione nei giorni (nessuna commissione negli incassi)"))
+    else:
+        per_g = esecuzioni_per_giorno(esecuzioni)
+        out += [f"Esecuzioni (`userTrades`) lette per {lette} monete su {len(simboli)}"
+                + (f"; non lette {len(simboli) - lette}: {nota_esec}" if lette < len(simboli) else (f"; {nota_esec}" if nota_esec else "")),
+                "", "| giorno | valore scambiato | commissione | in % del valore | maker | taker | esecuzioni |", "|---|---|---|---|---|---|---|"]
+        tot = {"valore": 0.0, "commissione": 0.0, "maker": 0.0, "n": 0, "altre_valute": 0}
+        for g in giorni:
+            x = per_g.get(g)
+            if not x:
+                out.append(f"| {g} | 0 | 0 | — | — | — | 0 |")
+                continue
+            for k in tot:
+                tot[k] += x[k]
+            out.append(_riga_esecuzioni(g, x))
+        out.append(_riga_esecuzioni(f"{len(giorni)} giorni", tot))
+        if tot["altre_valute"]:
+            out.append(f"- commissioni in un'altra valuta (non sommate): {tot['altre_valute']} esecuzioni")
+        if commissioni is not None:
+            da_incassi = sum(-float(r.get("income") or 0) for r in commissioni if (r.get("asset") or "USDT") == "USDT")
+            out.append(f"- controllo: commissioni dagli incassi {da_incassi:,.4f} USDT, dalle esecuzioni {tot['commissione']:,.4f} USDT")
+    if commissioni is None:
+        out.append(f"- incassi delle commissioni: non letti: {nota_commissioni}")
+
+    # 4. il funding per giorno e regolamento, e le 10 monete più grandi nei giorni chiusi
+    pesi_paper = {s: float(w) for s, w in rtdb("/paper_g1/posizioni").items() if _numero(w)}
+    diario_paper = rtdb("/paper_g1/diario")
+    per_monete = {}
+    if funding is None:
+        out.append(f"- funding: non letto: {nota_funding}")
+    else:
+        per_g, per_monete = funding_per_giorno(funding, chiusi)
+        out += ["", "Funding (`income`, FUNDING_FEE) per regolamento UTC; monete: pagate alle 16 (o alle 08) sul demo / nel paper G1."
+                + (f" {nota_funding}" if nota_funding else ""),
+                "", "| giorno | totale | 00 | 08 | 16 | altre ore | monete demo/paper |", "|---|---|---|---|---|---|---|"]
+        for g in giorni:
+            x = per_g.get(g) or {"totale": 0.0, "00": 0.0, "08": 0.0, "16": 0.0, "altre": 0.0, "monete_08": set(), "monete_16": set()}
+            d = x["monete_16"] or x["monete_08"]
+            p = diario_paper.get(g) if isinstance(diario_paper.get(g), dict) else {}
+            np_ = int(p.get("long") or 0) + int(p.get("short") or 0) if p else None
+            out.append(f"| {g}{' (in corso)' if g not in chiusi else ''} | {x['totale']:+.4f} | {x['00']:+.4f} | {x['08']:+.4f} | "
+                       f"{x['16']:+.4f} | {x['altre']:+.4f} | {len(d) if d else '—'}/{np_ if np_ is not None else '—'} |")
+        grandi = sorted(per_monete, key=lambda s: (-abs(per_monete[s]["totale"]), s))[:10]
+        if grandi:
+            out += ["", f"Le 10 monete con il funding più grande nei {GIORNI_CHIUSI} giorni chiusi (peso nel paper G1 di oggi).", "",
+                    "| moneta | 5 giorni | 00 | 08 | 16 | altre ore | peso paper |", "|---|---|---|---|---|---|---|"]
+            for s in grandi:
+                m = per_monete[s]
+                out.append(f"| {s} | {m['totale']:+.4f} | {m['00']:+.4f} | {m['08']:+.4f} | {m['16']:+.4f} | {m['altre']:+.4f} | "
+                           + (f"{100 * pesi_paper[s]:+.2f}% |" if s in pesi_paper else "— |"))
+
+    # 5. le monete del paper di G1 che il demo non ha avuto
+    out.append("")
+    assenti: dict = {}
+    for k, x in sorted(rtdb("/demo_binance/ribilanciamenti").items()):
+        if str(k)[:10] not in giorni or not isinstance(x, dict) or x.get("solo_eventi"):
+            continue
+        for s in x.get("monete_mancanti_sul_demo") or []:
+            assenti.setdefault((s, "mancante sul demo"), set()).add(str(k)[:10])
+        for r in x.get("rifiutati") or []:
+            if isinstance(r, dict) and r.get("simbolo"):
+                assenti.setdefault((r["simbolo"], "rifiutata"), set()).add(str(k)[:10])
+    elenco = sorted(assenti.items(), key=lambda t: (-len(t[1]), t[0]))
+    out.append("- monete del paper G1 che il demo non ha avuto (ribilanciamenti del demo): " + (", ".join(
+        f"{s} {come} {len(gg)} giorni dal {min(gg)}" for (s, come), gg in elenco[:MONETE_ASSENTI_MASSIME]) or "nessuna")
+        + (f" e altre {len(elenco) - MONETE_ASSENTI_MASSIME}" if len(elenco) > MONETE_ASSENTI_MASSIME else ""))
+    if funding is not None and pesi_paper:
+        dalle_ms = oggi * 86400_000 + ORA_DOPO_LA_DECISIONE_S * 1000
+        dopo = [r for r in funding if int(r.get("time") or 0) >= dalle_ms]
+        if not any(time.gmtime(int(r["time"]) / 1000).tm_hour >= 8 for r in dopo):
+            out.append("- il paper G1 di oggi contro il funding del demo, per nome: dopo il regolamento delle 08 UTC "
+                       "(i pesi dei giorni passati del paper non sono su Firebase)")
+        else:
+            pagate = {r.get("symbol") for r in dopo}
+            senza = {s: w for s, w in pesi_paper.items() if w and s not in pagate}
+            out.append(f"- nel paper G1 di oggi ma senza funding sul demo dalle 02 UTC: {len(senza)} monete su "
+                       f"{sum(1 for w in pesi_paper.values() if w)}, peso lordo {100 * sum(abs(w) for w in senza.values()):.2f}%"
+                       + (": " + ", ".join(f"{s} {100 * w:+.2f}%" for s, w in sorted(senza.items(), key=lambda t: -abs(t[1]))[:8])
+                          if senza else ""))
+    # la riga delle richieste subito sotto il titolo: con il taglio dei 20.000 caratteri dell'agente resta visibile (problema 81)
+    usato = lt.peso_usato()
+    out.insert(1, f"- richieste a Binance di questa sezione: {lt.richieste}, peso {lt.peso} (userTrades 5, income 30, commissionRate 20)"
+               + (f"; peso usato dall'indirizzo nel minuto {usato}" if usato is not None else "")
+               + (f"; fermata: {lt.fermo}" if lt.fermo else ""))
+    return out + [""]
+
+
+def _numero(x) -> bool:
+    try:
+        float(x)
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def _riga_esecuzioni(g: str, x: dict) -> str:
+    v = x["valore"]
+    if v <= 0:
+        return f"| {g} | 0 | {x['commissione']:.4f} | — | — | — | {x['n']} |"
+    return (f"| {g} | {v:,.2f} | {x['commissione']:.4f} | {100 * x['commissione'] / v:.4f}% | {100 * x['maker'] / v:.0f}% | "
+            f"{100 * (v - x['maker']) / v:.0f}% | {x['n']} |")
 
 
 def main() -> int:
