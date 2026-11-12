@@ -15,37 +15,50 @@ mezzanotte UTC, eventi spenti.
 | 3 | I controlli finali: backtest-auditor su G1 nella configurazione finale; gate2-reconciler su paper e demo; portfolio-allocator con le regole approvate | agenti | da fare (primo giro lunedì 9 novembre) |
 | 4 | L'accensione: la richiesta esplicita del proprietario, i 280 USDT nel portafoglio dei future, un riavvio approvato; il primo ingresso alla mezzanotte dopo | proprietario | dopo le fasi 1-3 |
 
-## Cosa deve fare il proprietario (la sessione non può: niente accesso a Binance, Firebase e alla macchina)
+## Cosa deve fare il proprietario (riletta il 12 novembre 2026 sui tre rapporti della fase 2, sezione «Decisioni per Alessio»)
 
-1. **Le chiavi del conto vero di Binance** (Binance, Gestione API, la chiave già usata):
-   * togliere il permesso di prelievo (deve restare solo «lettura» e «future»);
-   * limitarla all'indirizzo della macchina («Limita l'accesso agli IP affidabili»): l'indirizzo IPv4 della macchina sta nella console
-     di Hetzner (il server, «Networking», «Public IP»);
-   * controllare che il conto abbia i future USDⓈ-M attivi.
-2. **Le regole di Firebase**: mandare alla sessione l'identificativo utente (Firebase, «Authentication», «Users», la colonna «User
-   UID») oppure una foto delle due pagine «Regole» (Firestore e Realtime Database); la sessione prepara le regole da incollare e
-   pubblicare. L'identificativo non va nel repo.
-3. **Le decisioni sui soldi veri** (sì o no; la sessione nel frattempo prepara la scelta più prudente):
-   * niente stop per singola moneta (proteggono lo stop sul conto e il pulsante);
-   * un pavimento: sotto i 650 USDT su 1.000 (il 65% del capitale di partenza) il conto non riparte più da solo;
-   * i limiti di G1 come costanti protette con test (leva 5, tetto del capitale, stop sul conto);
-   * «riparti» in due passi (una richiesta e una conferma).
-   * lo Sharpe corretto di G1 è 0,86, sotto lo 0,90 della regola del 24 ottobre (revisione del 29 ottobre): va accettato da lui.
-4. **Le decisioni nate dalla revisione della fase 2** (`reviews/reports/2026-11-08-fase2-conto-vero-2.md`, «Decisioni per
-   Alessio»):
-   * **chi approva il codice per i soldi veri** (obbligatoria prima dell'accensione): un tag firmato da lui e verificato dal bot,
-     oppure una regola di GitHub che solo lui possa spostare il tag `conto-vero-approvato`; oggi lo può spostare chiunque spinga sul
-     repository, sessioni comprese;
-   * l'eccezione: con il conto vero già acceso e posizioni aperte, ordini di sola chiusura anche con `DRY_RUN` vero (per non
-     lasciarle scoperte quando lo si spegne);
-   * i limiti: 300 USDT di capitale, 600 di valore massimo, posizioni al massimo il doppio del conto, 60% per moneta, leva 5, stop a
-     −35% con il pavimento al 65%;
-   * un prelievo ferma gli ordini nuovi finché non si mette un capitale nuovo (che chiude tutto e riapre alla mezzanotte);
-   * ogni commit che tocca un file caricato dal bot ferma gli ordini nuovi finché il tag non si sposta;
-   * se lo stato si perde dopo un'accensione, il bot chiude tutto e aspetta un «riparti»;
-   * il conto dei future solo del bot: una posizione per moneta, margine solo in USDT, niente «portfolio margin», niente BNB per le
-     commissioni.
-5. **Alla fine, l'accensione**: la richiesta esplicita, i 280 USDT nel portafoglio dei future, l'ok al riavvio.
+La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
+
+1. **Firebase, per primo.** Mandare una foto delle due pagine «Regole» (Firestore e Realtime Database) oppure l'identificativo utente
+   (Firebase, «Authentication», «Users», colonna «User UID»); la sessione prepara le regole da incollare e pubblicare
+   (l'identificativo non va nel repo). Perché per primo: nel repo le regole hanno ancora il segnaposto e nessuno sa quali sono
+   pubblicate; il pulsante «chiudi tutto» del demo passa da Firebase; servono alle azioni (`stock/avanti/FIREBASE.md`) e al canale di
+   approvazione del punto 2.
+2. **Chi approva la versione del codice per i soldi veri** (obbligatoria prima dell'accensione). **Una regola di GitHub con il
+   proprietario fra le eccezioni non basta**: il 12 novembre gli strumenti GitHub di questa sessione rispondono come l'utente del
+   proprietario (`get_me`: il suo login), quindi una regola che lui può scavalcare la scavalcano anche le sessioni. Due strade, nessuna
+   ancora costruita: (a) tag firmato con una sua chiave e verificato dal bot (raccomandata dal revisore; a ogni approvazione serve un
+   computer con git); (b) approvazione dalla dashboard con il suo accesso a Firebase, come i comandi del demo (comoda dal telefono;
+   richiede le regole del punto 1). Tutte e due passano da live-path-reviewer.
+3. **Binance.** Sulla chiave del conto vero: togliere il permesso di prelievo (restano lettura e future) e limitarla all'indirizzo
+   della macchina (console di Hetzner, il server, «Networking», «Public IP»). Nel conto dei future: future USDⓈ-M attivi, una
+   posizione per moneta (modalità unidirezionale), margine solo in USDT (niente «multi-assets»), niente «portfolio margin», niente BNB
+   per le commissioni, nessuna posizione aperta: il conto dei future serve solo al bot.
+4. **Le decisioni sì o no** (tutte quelle chieste dal revisore; fra parentesi cosa fa oggi il codice):
+   a. spento con posizioni aperte, il bot manda solo ordini di chiusura anche con `DRY_RUN` vero (sì nel codice; è un'eccezione alla
+      regola «in paper nessun ordine al conto vero» e serve il suo sì);
+   b. i limiti: capitale 300 USDT, valore massimo 600 prima di fermare gli ordini nuovi, posizioni al massimo il 200% del conto, 60%
+      per moneta, leva 5, stop a −35% dal massimo con il pavimento al 65% del capitale, decisione di G1 non più vecchia di 26 ore;
+   c. un prelievo ferma gli ordini nuovi finché non si scrive un capitale nuovo (che chiude tutto e riapre alla mezzanotte);
+   d. ogni commit che tocca un file caricato dal bot ferma gli ordini nuovi finché la versione non è riapprovata, e un ribilancio in
+      corso resta a metà; l'alternativa è tenere il codice dei soldi veri separato dalle varianti del paper (non fatto);
+   e. se lo stato si perde dopo un'accensione, il bot chiude tutto a mercato e aspetta un «riparti» (costa le spese di chiusura);
+   f. quando G1 non decide (decisione vecchia, pesi vuoti o fuori dai limiti, codice bloccato) il conto tiene le posizioni di ieri
+      senza limite di tempo, protette solo dallo stop: va bene, o dopo un certo numero di giorni si chiude? Il conto vero dipende
+      anche dal paper di G1 acceso;
+   g. prima della prima accensione, lo stop chiude le posizioni che trova nel conto (oggi no; il revisore raccomanda sì, problema 70);
+   h. «riparti» dopo uno stop: oggi solo da un file del repo, che può scrivere qualunque sessione; i «due passi» non sono ancora
+      progettati: la conferma deve passare da un canale che solo il proprietario può scrivere (la dashboard, punto 1);
+   i. niente stop per singola moneta su Binance: proteggono lo stop sul conto e il pulsante; se Binance blocca l'indirizzo della
+      macchina, per tutto il blocco il bot non protegge e resta solo la liquidazione;
+   j. «almeno 10 monete per lato» (revisione con le skill) e gli avvisi sul telefono: non applicati al conto vero;
+   k. le scelte della fase 1 già in funzione sul demo e mai confermate una per una: stop anche al 65% del capitale, «riparti» solo a
+      conto vuoto con la riapertura alla mezzanotte, una moneta oltre il 60% fa saltare la decisione del giorno, il blocco di Binance
+      rispettato per intero.
+   Chiusa: lo Sharpe corretto 0,86 di G1 (il proprietario ha approvato la soglia di 0,80 il 9 novembre, contata per famiglie l'11).
+5. **Il riavvio che carica la fase 2** sulla macchina (il bot gira ancora il codice della fase 1; il conto vero resta spento): con il
+   suo ok, in un'ora tranquilla. Finché non c'è, un riavvio per un guasto caricherebbe comunque l'ultimo codice del branch.
+6. **Alla fine, l'accensione**: la richiesta esplicita, i 280 USDT nel portafoglio dei future, l'ok al riavvio.
 
 ## Diario
 * 8 novembre 2026: piano scritto; fase 1 iniziata.
@@ -66,3 +79,6 @@ mezzanotte UTC, eventi spenti.
   Firebase persi: le posizioni restano senza stop) con la decisione se lo stop chiude le posizioni trovate prima della prima
   accensione; pulsante, stato e regole di Firebase del conto vero in dashboard (60); 66, 72, 73 (bassi); le decisioni del proprietario
   qui sopra; la verifica con una lettura vera dei redditi di Binance; poi una revisione nuova prima dell'accensione.
+* 12 novembre 2026: lista del proprietario riletta sui rapporti del revisore: la regola di GitHub non basta (la sessione agisce su
+  GitHub come il proprietario), mancavano quattro decisioni (stato perso, G1 che non decide, codice separato, monete per lato) e il
+  riavvio che carica la fase 2; Firebase passa al primo posto. Lanciata la revisione di G1 con backtest-auditor (fase 3).

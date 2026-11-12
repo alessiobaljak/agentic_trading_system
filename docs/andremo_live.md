@@ -596,3 +596,12 @@ che non sono monete (24 eventi del 2026 su 87 sospetti) e due script vecchi da r
 contratti è mai entrato fra le 100 monete di G1, quindi G1 non è toccato. Le monete nuove vere del 2026 rendono −0,80% a evento (backlog
 P32). **Capito oggi**: nel 2026 Binance quota più contratti su azioni che monete nuove; la ricerca deve riconoscerli dal tipo, non dal
 nome.
+**Controllo degli agenti e dei punti in sospeso (12 novembre, richiesta del proprietario).** Trovato: la revisione di G1 con
+backtest-auditor promessa l'8 novembre non era stata fatta (lanciata ora); la modalità verifica del ricercatore non era mai stata usata
+(le prove 149-151 hanno avuto 5-7 letture delle regole scelte da chi calcolava: da oggi si fa prima del calcolo); il piano di G1 non
+aveva passi aperti per strategy-improver (aggiunte le voci 9-13); indice della ricerca e stato della sessione fermi al 7-8 novembre
+(aggiornati). Sui punti per il proprietario: **la regola di GitHub consigliata l'8 e l'11 novembre non basta**, perché la sessione
+agisce su GitHub come l'utente del proprietario (`get_me`); nella lista delle sue decisioni ne mancavano quattro chieste dal revisore;
+le soglie proposte del confronto settimanale sono già superate per le monete che il demo non ha (ICPUSDT oltre il 2% per quattro
+giorni; monete mancanti circa 7% contro 3%). Lista corretta in `docs/conto_vero.md`. **Capito oggi**: rileggere i rapporti invece di
+andare a memoria ha trovato un consiglio sbagliato sui soldi veri prima che servisse.

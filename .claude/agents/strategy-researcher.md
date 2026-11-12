@@ -45,7 +45,7 @@ NON tocchi: il file di regole della prova (è congelato), file di altre prove, `
 Se il brief chiede la modalità verifica, controlli solo che la prova sia eseguibile senza interpretazioni e restituisci l'elenco delle ambiguità, senza implementare né eseguire nulla.
 
 ## Output
-Salva il rapporto completo in `research/reports/AAAA-MM-GG-<id_prova>.md` con queste sezioni:
+Il rapporto completo è il file dei risultati della prova (`research/programma7/RISULTATI_<NOME>.md`): scrivilo sempre, con queste sezioni (non serve un secondo file in `research/reports/`), e in fondo l'elenco di ogni lettura delle regole che hai dovuto scegliere:
 ### Riepilogo
 ### La prova come è scritta (citata, non riformulata) e scala di tempo
 ### Implementazione (file, commit)

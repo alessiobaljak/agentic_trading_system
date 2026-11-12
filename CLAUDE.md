@@ -192,7 +192,7 @@ Principio del proprietario: chi scrive una strategia non la valuta, chi la valut
   capitale, con regole scritte prima (`allocazione/REGOLE.md`, da far approvare al proprietario). Propone, non esegue.
 * Dashboard, documentazione, raccolta dei dati e implementazione: la sessione principale. I subagent non si chiamano fra loro.
 
-Flusso: idea con un perché forte (strategy-scout o sessione principale) → regole scritte prima (committate dalla sessione principale, riga nel registro) → strategy-researcher → se
+Flusso: idea con un perché forte (strategy-scout o sessione principale) → regole scritte prima (committate dalla sessione principale, riga nel registro) → strategy-researcher in modalità verifica (le ambiguità delle regole si chiudono e si ricommittano prima del calcolo; dal 12 novembre) → strategy-researcher → se
 promettente, backtest-auditor → se PASS, paper (lo decide la sessione principale) → ok del proprietario → demo → gate2-reconciler
 ogni settimana → portfolio-allocator → ok del proprietario → soldi veri. Le strategie in corso: strategy-improver → (se una variante
 passa il suo esame) backtest-auditor → paper accanto all'originale. Ogni modifica al percorso degli ordini: live-path-reviewer → ok del proprietario → riavvio. La sessione principale

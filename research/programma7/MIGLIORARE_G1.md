@@ -44,6 +44,22 @@ separato prima del paper).
    solo le monete con il peso più grande: è una prova sul passato, nel conto delle prove, con le regole scritte prima; si fa solo
    quando il proprietario dice con che cifra vuole partire. *Fatta il 6 novembre, prova 148: G1 regge con 280 USDT così com'è (diario).*
 
+9. **Lo scarto con il conto piccolo** (aggiunta del 12 novembre, dal controllo degli agenti): sul demo a 1.000 USDT lo scarto fra
+   posizioni vere e volute è stato 8,9% → 13,9% → 15,8% → 12,2% del conto in quattro giorni. Misura: da dove viene (variazioni sotto
+   il minimo, monete che il demo non ha, ordini non eseguiti) e quanto costa in rendimento, confrontando il demo con G1 ricalcolato
+   con i minimi a 1.000 USDT (motore della prova 148). Una regola nuova, se serve, è una prova nel conto con le regole scritte prima.
+10. **Il giorno non spiegato del 30 ottobre** (dal primo confronto settimanale, `gate2/reports/2026-11-09-G1.md`): paper +3,41% contro
+   ricerca +1,46% e demo +1,87%: trovare le monete e i prezzi che fanno la differenza.
+11. **Perché il demo fa meglio del paper dall'8 novembre** (−0,99% contro −2,08% al 12 novembre): monete mancanti sul demo, ora
+   d'ingresso, minimi. Serve a sapere se il paper sopravvaluta o sottovaluta il conto vero.
+12. **Il lato venduto che perde nel 2026** (dalla voce 7): è il mercato del 2026 o un difetto del segnale sul lato venduto (monete
+   piccole, fiammate)? Prima la misura; una variante è una prova nel conto.
+13. **Il numero minimo di monete per lato** (idea 97 della coda; «almeno 10 monete per lato» della revisione con le skill, mai
+   applicato): nei giorni di funding uguale lo short è sceso a 5 monete e una ha pesato il 47,8% (5 febbraio 2024). Prova con le
+   regole scritte prima; da decidere prima dei soldi veri.
+
+*Dal 12 novembre le voci 9-13 le porta avanti strategy-improver, una per giro, quando c'è un passo vero da fare.*
+
 ## Già fatte (dalla revisione con le skill del 1° novembre, `REVISIONE_SKILL_G1.md`)
 
 * Margine unico impostato e controllato dal codice; stop sulla perdita del conto a −35% dal massimo; il pulsante che chiude tutto;

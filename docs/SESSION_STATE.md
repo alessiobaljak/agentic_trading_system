@@ -3,45 +3,34 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (8 novembre 2026, mattina)
-- Subagent (`.claude/agents/`): i quattro creati e adattati al sistema di oggi; collaudo fatto (`docs/collaudo_agenti.md`: auditor
-  FAIL con i tre errori voluti, segreti bloccati, revisore REQUEST CHANGES). Primo avvio del revisore degli ordini fatto
-  (`reviews/reports/2026-11-07-primo-avvio.md`): niente di bloccante per il demo, 9 problemi Alti da chiudere prima del conto vero
-  (backlog P26).
-- Gli agenti si possono chiamare per nome solo dalle sessioni avviate dopo il 7 novembre (Claude Code li carica all'avvio); in questa
-  sessione si usano con un agente generico che segue il loro file.
-- Demo: partito da zero a 1.000 l'8 novembre alle 00:18 UTC (52 posizioni chiuse, 0 errori; 48 ordini di G1; sotto il minimo 2
-  variazioni invece di 50). La misura vera dei minimi a 1.000 è il ribilancio del 9 novembre.
-- Correzioni dei 9 problemi Alti del percorso degli ordini e dei problemi nuovi 25-33: approvate dal revisore (commit 013f9426,
-  `reviews/reports/2026-11-07-correzione-32.md`); allarmi del demo visibili in dashboard e nel rapporto. **Riavviato il 7 novembre alle
-  18:54 UTC** con l'ok del proprietario (commit 78bb70e3). Bassi rimasti (36-38) e Medi del primo avvio nel backlog, prima del codice del conto vero.
-
-- 8 nov: contenitore nuovo (disco sano, cartella dei dati vuota). La prova in avanti del programma 5 scaricava solo da ottobre 2026:
-  ora scarica dal giugno 2025 (inizio del periodo su cui sceglie le candidate); i numeri del mattino non sono stati committati
-  (M-002 600 trade invece di 1.916). Da rifare con lo scarico intero, poi il paper delle candidate del programma 6.
-- 8 nov: due agenti nuovi (strategy-improver, portfolio-allocator), la regola «nessuna strategia del paper o del demo si perde» con il
-  suo test, le idee 136 (la 1:1:1) e 137 (il riesame delle bocciate di poco) in coda.
-
-- 8 nov: conto vero, fase 1 (problemi rimasti del demo) approvata dal revisore al quarto giro e committata; riavviato l'8 nov alle
-  19:02 UTC con l'ok del proprietario (nessun errore). Piano e lista di chi fa cosa in `docs/conto_vero.md`. Il proprietario: lo 0,90 non è un muro, conta
-  il profitto; G1 o G1 neutra per i soldi veri
-  la decide portfolio-allocator lunedì (decisione del proprietario). Fase 2 (codice del conto vero, spento) committata la sera dell'8
-  nov (ff89531); prima dell'accensione: protezione del tag (decisione del proprietario), problemi 66, 70, 72, 73, dashboard,
-  decisioni in `docs/conto_vero.md`. Il bot carica la fase 2 al prossimo riavvio (ok del proprietario).
+## Compito in corso (12 novembre 2026, mattina)
+- **Bot**: gira il codice della fase 1 del conto vero (commit 83ddb809, riavvio dell'8 novembre 19:02 UTC); `DRY_RUN` vero. Demo di G1
+  a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
+  (codice del conto vero, spento) committata (ff89531), non ancora caricata dal bot.
+- **Conto vero**: lista del proprietario e decisioni in `docs/conto_vero.md` (riletta il 12 novembre). Punti aperti prima
+  dell'accensione: canale di approvazione della versione (firma o dashboard: la regola di GitHub non basta), Firebase, Binance, le
+  decisioni a-k, i problemi 66, 70, 72, 73, pulsante e stato in dashboard, revisione finale.
+- **Ricerca**: due binari a ogni giro (migliorare G1, ricerca nuova). Agenti: strategy-scout, strategy-researcher (prima in modalità
+  verifica), backtest-auditor, strategy-improver (voci 9-13 del piano di G1), gate2-reconciler e portfolio-allocator il lunedì.
+  Prove 149, 150 e 151 chiuse senza candidate (conto 309); riesame: fatte la 28 (miscela F5 + M7 + K2: PASS tecnico, misurata a
+  tavolino) e la 113 (resta bocciata); restano la 55 e la 96. In corso: revisione di G1 con backtest-auditor.
+- **Dashboard**: «Plancia» (aree Crypto e Azioni, menu a sinistra richiudibile); la scheda Azioni la riempie la sessione «trading
+  stock». Aree del repository separate (`AREE.md`, blocco `.claude/hooks/aree.py`).
 
 ## Decisioni del proprietario di questi giorni
-- 5 nov: si migliora G1, un'idea nuova solo con un perché forte. 6 nov: 250 euro, eventi spenti sul demo. 7 nov: demo a 1.000 dalla
-  mezzanotte; i subagent servono a strutturare il sistema («procedi con i tuoi suggerimenti e la gestione migliore dei token»); il
-  passaggio di gate lo approva lui.
+- 8 nov: nessuna strategia del paper o del demo si perde; lo 0,90 non è un muro. 9 nov: Sharpe corretto minimo 0,80; sotto i 500 USDT
+  una strategia sola. 11 nov: la ricerca nuova non si ferma; aree separate; Sharpe corretto per famiglie di prove simili; la miscela
+  F5 + M7 + K2 si misura a tavolino.
 
 ## Decisioni aperte per il proprietario
-- Commissioni e scarto di prezzo da usare nelle prove (auditor); minimo di anni e operazioni per giudicare una prova.
-- Leva di G1, limiti di G1 dentro `hard_limits.py`, divieto della parità col backtest fuori dal paper (revisore; backlog P26).
-- Regole di Firebase davvero pubblicate; chiavi di Binance senza prelievo e limitate all'indirizzo della macchina.
-- Token: ricercatore e confronto settimanale sul modello medio dall'8 novembre (i due revisori restano sul più potente). Giri meno
-  frequenti: proposti, aspettano il proprietario (la decisione del 5 novembre dice «ogni giro delle 4 ore migliora G1»).
+- Conto vero: `docs/conto_vero.md`, punti 1-5 (Firebase per primo).
+- Confronto settimanale: le soglie di `gate2/THRESHOLDS.md` non vanno approvate così (due sono già superate solo per le monete che il
+  demo di Binance non ha): prima decidere come trattare le monete mancanti.
+- Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
-- Lunedì 9 novembre: riepilogo settimanale, primo avvio di gate2-reconciler su G1 (paper e demo) e di portfolio-allocator (proposta
-  delle regole di scelta, da far approvare).
-- Prima dei soldi veri: audit di G1 con backtest-auditor sulla configurazione finale.
+- Da costruire nella ricerca: una funzione unica per l'esame (famiglie), un controllo dei dati a inizio giro (giorni a metà, candele
+  mancanti, file vecchi), le voci rimaste del backlog P32.
+- Idee mai provate da passare a strategy-scout: differenze di funding fra borse, base dei future trimestrali, dominanza del Bitcoin.
+- Lunedì 16 novembre: riepilogo settimanale con la miscela a tavolino, gate2-reconciler, portfolio-allocator.
+- Il contesto di questa conversazione è molto lungo: conviene compattarla.
