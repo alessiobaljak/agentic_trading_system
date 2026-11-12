@@ -249,3 +249,13 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   (`userTrades` con chi ha tolto liquidità), gli incassi di funding per moneta e la commissione del conto (backlog P33).
 
 * **12 novembre 2026, voce 12, il lato venduto nel 2026 diviso** (`misure_g1/voce12_venduto_2026.py`, `voce12_rapporto.md`; 1 gen-4 ott di ogni anno, somme non composte): lato venduto 2026 **-13,4** = prezzo -20,4 + funding +9,4 - spese 2,5 (funding normale; 2024 +13,6, 2025 +5,9). Per grandezza: piccole **-14,5**, medie +1,8, grandi -0,7; per età: meno di 1 anno -10,0, 1-2 anni -4,6, oltre 2 anni +1,2; 176 giornate con oltre +20% (altri anni 22-85); le 10 giornate-moneta peggiori -19,7 (senza: +6,3); mesi peggiori agosto -21,4 e aprile -14,1. **Capito**: difetto concentrato (piccole, giovani, fiammate), non il mercato intero; ma anche 2021 e 2023 furono negativi, quindi non solo del 2026. Nessuna variante provata; idea (tetto o uscita sulle fiammate) da scrivere come prova insieme alla voce 13.
+* **12 novembre 2026, sera, voci 2 e 3 con i dati veri del demo** (`ops/results/0736-12nov-stato-esecuzioni-demo.md`, letti da
+  Binance; analisi `gate2/reports/2026-11-12-G1-funding-commissioni.md`, aggiornamento della sera): commissione del conto demo 0,02%
+  maker e 0,04% taker. Ribilancio da vuoto dell'8 novembre: 2.289 USDT scambiati, 0,032% medio, circa metà del valore a commissione da
+  mercato (l'ordine limite al prezzo mark attraversa il libro). A regime (9-12 novembre): 684 USDT, 0,0254%, 73% del valore maker:
+  uguale al paper (circa 0,024%). Lettura del revisore (interpolazione): l'esame a 280 USDT a regime vale circa 0,80, sulla soglia;
+  servono circa 13 giorni di regime per conoscere la quota a mercato a ±5 punti. Funding: il demo incassa il 70% del paper l'8-11
+  novembre; le monete mancanti ne spiegano al più un terzo; alle 00:00 il demo incassa più del paper, negli altri regolamenti meno.
+  Da capire nel conto del funding del paper (`bot/portafoglio/f5.py`, `_funding_regolati` e il ribilancio che rimette
+  `funding_fino_ms` all'ora del ribilancio).
+

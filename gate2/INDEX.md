@@ -5,7 +5,8 @@
   - ultimo confronto: 2026-11-09, rapporto `reports/2026-11-09-G1.md`
   - verdetto: nessuno (soglie solo PROPOSTE, non approvate da Alessio); sul minimo giorni sarebbe INCONCLUSIVE
   - regole e codice: parità del bot con la ricerca confermata il 30 ott (60 giorni, scarto max 6e-17); da allora le funzioni dei pesi non sono cambiate (git)
-  - 12 nov: misure funding e commissioni del demo 8-11 nov, rapporto `reports/2026-11-12-G1-funding-commissioni.md`: funding demo 0,828% contro paper 1,181% (differenza 0,019/0,033/0,146/0,155 punti); causa non dimostrata (9 nov: tutta alla 00:00; 10-11 nov no); commissioni 0,89 USDT, quota a mercato non stimabile (8 nov: 0,038% medio)
+  - 12 nov: misure funding e commissioni del demo 8-11 nov, rapporto `reports/2026-11-12-G1-funding-commissioni.md`: funding demo 0,828% contro paper 1,181% (differenza 0,019/0,033/0,146/0,155 punti); causa non dimostrata (9 nov: tutta alla 00:00; 10-11 nov no); commissioni 0,89 USDT
+  - 12 nov sera (0736, letture vere): commissione demo maker 0,02% taker 0,04%; 6 giorni 0,0303% del valore, regime 0,0254% con 27% a mercato, partenza da vuoto 0,032% (60%); funding 10-11 nov: gap nei regolamenti 08/16/altre ore, non alle 00:00 (anomalia della 00:00 del paper da confermare); monete mancanti al più un terzo
   - aperto: giorno 30 ott (paper +3,41% contro ricerca +1,46%), demo da zero dell'8 nov, 龙虾USDT rifiutata, ICPUSDT mancante sul demo
 
 ## File

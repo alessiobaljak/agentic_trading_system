@@ -54,3 +54,44 @@ Nessuna su soglie in questo giro. Resta: approvare le soglie proposte in `gate2/
 4. Commissioni, estratto D: le esecuzioni del demo (`/fapi/v1/userTrades`, 8-12 novembre) con moneta, lato, prezzo, quantità, valore, commissione, valuta della commissione e `maker` (vero/falso: chi ha tolto liquidità); più `/fapi/v1/commissionRate` per due monete. Dà valore scambiato, quota a mercato e commissione reale esatti.
 5. Il 7 novembre il demo risulta con commissioni ~0,00 USDT nonostante il primo ribilancio a 280 (0712): c'è un buco nelle entrate del 7 novembre?
 6. Quanto vale il conto vero con ICPUSDT assente: il conto vero la ha? (La risposta cambia la causa D5 per i soldi veri.)
+
+---
+# Aggiornamento del 12 novembre (sera): letture vere di Binance (`ops/results/0736-12nov-stato-esecuzioni-demo.md`, righe 98-140)
+Sostituisce, dove li contraddice, i numeri stimati sopra. Soglie ancora non approvate: solo misure. Tutto vale per il demo (commissione del conto demo: maker 0,02%, taker 0,04%; il conto vero può avere taker 0,05%, la tariffa standard dei perpetui, non verificata qui).
+
+## A. Commissione vera (esecuzioni `userTrades` lette per 63 monete; commissioni dagli incassi e dalle esecuzioni combaciano: 0,9163 USDT)
+| periodo | valore scambiato | commissione | in % del valore | a commissione bassa (maker) | esecuzioni |
+|---|---|---|---|---|---|
+| 7 nov (conto a 280, prima) | 53,13 | 0,0106 | 0,0200% | 100% | 11 |
+| 8 nov (da vuoto) | 2.288,77 | 0,7320 | 0,0320% | 47% (per valore ~40%: 0,0320 = 0,02+0,02×q dà q=60% a mercato) | 195 |
+| 9-12 nov (regime, dopo la partenza) | 684,07 | 0,1737 | 0,0254% | ~73% (0,77/0,43/0,83/0,80 per giorno) | 95 |
+| 6 giorni | 3.025,97 | 0,9163 | 0,0303% | 54% | 301 |
+Fonte dei giorni: tabella 0736; la riga «9-12» è la mia somma (quota maker pesata sul valore: 497,8/684,1; coerente con 0,0254% = 0,02 + 0,02×27%).
+- **Contro il paper e la ricerca** (0,02% a limite, 0,05% a mercato per il resto): il paper spende in media circa 0,024% del valore (stima mia: costi 25,27 su un valore ~105.000 ricavato dal «tutto a mercato 65,44», con scarto di prezzo incluso). Il demo a regime è a 0,0254%: praticamente uguale; la partenza da vuoto è stata più cara (0,032%, quota a mercato circa 60%). La ricerca assume ordini quasi tutti a limite (nessun ordine non eseguito su 99,6%): nel demo a regime il 27% del valore è a commissione da mercato, nella partenza il 60%.
+- **Cosa cambia con taker 0,04%**: un'esecuzione a mercato costa 0,04% e non 0,05%: a regime 0,0254% (contro 0,0281% con 0,05%); partenza 0,032% (contro 0,038%, che è esattamente la mia stima di prima con 0,05%: quella stima era giusta nel tasso, sbagliata nel valore scambiato, 1.935 contro 2.289 vero). Sul conto vero con 0,05% la commissione a regime sale di circa 0,003 punti sul valore, cioè ~0,0005% del conto al giorno (circa 0,2% l'anno, con il valore scambiato di regime di ~170 USDT al giorno): piccolo. Il «tutto a mercato» della ricerca (0,05%) resta cautelativo per il demo e giusto per il conto vero se la tariffa è 0,05%.
+- La quota «a limite» del rapporto di stato (607 su 642) NON era la quota a commissione bassa: il 46% del valore (27% a regime) paga la commissione da mercato anche se l'ordine è «eseguito a limite»: conferma che il limite GTC al mark attraversa il libro (`demo_binance.py:1332`).
+- Chiusa la domanda 5 del primo rapporto: il 7 novembre il valore scambiato fu solo 53 USDT (commissione 0,0106): nessun buco.
+
+## B. Funding: demo contro paper giorno per giorno (0736, tabelle e rapporto)
+| giorno | demo | paper | paper meno demo | regolamenti del demo (USDT): 00 / 08 / 16 / altre ore |
+|---|---|---|---|---|
+| 8 nov | 0,155 | 0,174 | 0,019 | 0,113 / 0,597 / 0,532 / 0,301 |
+| 9 nov | 0,198 | 0,231 | 0,033 | 0,400 / 0,796 / 0,624 / 0,174 |
+| 10 nov | 0,272 | 0,418 | 0,146 | 1,054 / 0,835 / 0,708 / 0,133 |
+| 11 nov | 0,203 | 0,358 | 0,155 | 0,661 / 0,613 / 0,461 / 0,278 |
+| 12 nov (parziale) | 0,127 | 0,099 | -0,028 (demo sopra) | 0,553 / 0,567 / 0,602 / 0,152 (alle 16:48) |
+Il demo tiene 48-51 monete contro 52-56 del paper. Il 7 novembre: 0,358 USDT, come stimato.
+- **Correzione a quanto scrissi in D4**: al regolamento delle 00:00 il demo incassa PIÙ del paper il 10 (0,105% contro 0,055%), l'11 (0,066% contro 0,044%) e il 12 (0,056% contro 0,020%); solo il 9 incassa meno (0,049 contro 0,081, ore diverse incluse). Quindi la differenza dei giorni 10 e 11 sta tutta negli altri regolamenti: circa 0,20 e 0,18 punti sulle 08:00, 16:00 e altre ore (paper ~0,36 e ~0,31, demo ~0,17 e ~0,14). È un fatto misurato, non una causa. Resta da spiegare perché il paper, alle 00:00, incassi meno del demo e poi molto di più: **da confermare** (candidato da controllare nel codice: `f5.py:449` rimette `funding_fino_ms` all'ora del ribilancio, quindi un regolamento delle 00:00 non ancora pubblicato da Binance alle 00:09 andrebbe perso; spiegherebbe il paper basso alle 00:00, NON il paper alto dopo).
+- **Monete mancanti**: nel paper di oggi senza funding sul demo: 龙虾USDT -1,86%, IRYSUSDT +0,42%, QUSDT -0,34%, JCTUSDT -0,26% (peso lordo 2,88%); ICPUSDT mancante 3 giorni dall'8 novembre (fino al 10; peso circa -4,5%). Per moneta, il paper non è nell'estratto: posso solo stimare. Tassi giornalieri per unità di peso delle monete forti del demo (funding 5 giorni diviso peso di oggi, stima grossolana): ERA, HUMA, LSK circa 0,65-0,75% al giorno, AERO 0,36%, INIT 2,8%. Con 0,7% al giorno su 6,7% di esposizione mancante il 10 novembre: ~0,05 punti, cioè circa un terzo di 0,146; l'11 novembre (2,4% mancante, più ICP solo alla 00:00): ~0,02 punti, cioè circa un decimo di 0,155. Il 12 il demo supera il paper anche con le stesse monete assenti. **Le monete mancanti spiegano al più un terzo, probabilmente meno; il resto non è spiegato.** Per essere precisi servono i tassi di 龙虾, ICP, IRYS, Q e JCT e il funding del paper moneta per moneta (non presenti in 0736).
+- Divergenze, per categoria: **segnale**: nessuna prova. **Tempo**: nessuno scarto di giorno (D1); resta l'anomalia delle 00:00 del paper (sopra). **Prezzo/tassi**: la differenza 10-11 novembre resta non spiegata; contro «tassi del demo diversi»: 9 novembre 08-16 combaciano e il 12 il demo è sopra (non ancora una prova). **Dimensione**: ≤0,023 punti/giorno (D6). **Monete mancanti**: ≤ un terzo (stima). **Dati**: paper per moneta mancante.
+
+## C. L'ipotesi della revisione di G1 (`audits/reports/2026-11-12-G1_CONTO_VERO.md`): a 280 USDT passa solo con l'ordine limite come la ricerca
+Dalla revisione: Sharpe corretto 0,81 con limite come la ricerca, 0,77 tutto a mercato, 0,73 con limite solo oltre lo 0,05%; soglia 0,80.
+- I dati veri **non sono né l'ipotesi della ricerca né il caso peggiore**: a regime il 27% del valore paga da mercato (46% con la partenza). Interpolando in modo lineare fra 0,81 (0% a mercato) e 0,77 (100%): a regime ~0,80, sull'intero periodo ~0,79. Cioè esattamente sulla soglia: **l'ipotesi è sostenuta nel senso che l'esito dipende da quanto valore va a mercato e il conto vero ne manda una parte non piccola; non è né confermata né smentita nel risultato** (la linearità è una mia ipotesi; la scala 0,04 per 100 punti non permette di decidere un margine di 0,01).
+- Differenze che spostano il risultato: il taker del demo è 0,04% (la ricerca assume 0,05%: leggermente meglio); le esecuzioni a mercato del demo avvengono subito a 00:18, non alle 01:00 come nel caso «tutto a mercato» della ricerca; la partenza da vuoto (60% a mercato) non si ripete.
+- **Quanti giorni servono**: dipende dalla precisione voluta. La quota a mercato varia molto da un giorno all'altro (17%, 20%, 23%, 57% per valore; scarto tipico ~18 punti, con 8 esecuzioni il 10 novembre). Per conoscerla a ±5 punti (un errore standard) servono circa 13 giorni di regime; per ±5 punti con il 95% circa 50 giorni. Oggi ci sono 4 giorni di regime e 95 esecuzioni (±9 punti al 95%, se indipendenti: non lo sono, perché dentro lo stesso ordine). Conclusione onesta: in 2-3 settimane si saprà se sta sotto o sopra circa il 25%, ma una differenza di 0,01 sullo Sharpe corretto non si vedrà con questi volumi. Con il conto vero (0,05%) e la soglia scesa da 0,95 a 0,80 dopo il risultato, la decisione è comunque di Alessio.
+
+## Estratti ancora utili
+1. Funding veri 8-12 novembre di 龙虾USDT, ICPUSDT, IRYSUSDT, QUSDT, JCTUSDT (pubblico, leggero).
+2. Funding del paper G1 per moneta e regolamento (quantità del paper e tassi usati), almeno per 10-11 novembre.
+3. L'ora in cui il paper ha scritto il funding della 00:00 (`/paper_g1/diario`, scritture del 10 e 11 novembre) per chiudere l'anomalia della 00:00.
