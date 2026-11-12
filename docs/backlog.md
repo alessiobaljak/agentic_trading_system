@@ -800,4 +800,10 @@ la misura a tavolino. **Metro:** quante serie nel mazzo; quanto cambia lo Sharpe
 0,732 (i numeri 0,88 / 0,84 / 0,87 scritti nella prova usavano `corretto_rivisto`, che conta solo le prove fino alla 48). Restano: la
 verifica indipendente del mazzo (backtest-auditor), la domanda di metodo per il proprietario (le prove fatte **dopo** che G1 è stata
 trovata, alla prova 57, devono abbassarne il numero?), il residuo delle parità dentro M7, e `corretto_rivisto` da allineare.
+**Dopo la revisione del mazzo** (`audits/reports/2026-11-12-MAZZO_ASTICELLA.md`, FAIL con tre punti) e le correzioni: varianti senza
+serie come gruppi a sé (`ASTICELLA.md:31-32`), prove 81 e 82 con il loro filtro, conferme 50 e 106 fuori, nuova funzione dell'esame
+`asticella.corretto_famiglie` (mazzo completo; `corretto_rivisto` resta per i riesami «fino alla prova N»). Al taglio 0,5, 191
+famiglie: G1 **0,755** (280 USDT 0,682), miscela F5 + M7 + K2 **0,812** (0,797 senza lo spostamento della settimana della 110, 0,731
+al taglio 0,7: è sulla soglia), C3 0,632, prova 152 0,729 / 0,669 / 0,717. G1 contando le prove fino alla 57: 0,945; più le sue
+varianti: 0,947. Decisione di metodo al proprietario.
 

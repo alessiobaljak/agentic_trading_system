@@ -172,7 +172,11 @@ def per_v(gr: list, soli: list, escludi_perdenti: bool) -> list:
 
 def corretto_rivisto(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
     """Lo Sharpe corretto rivisto per prove nuove: ``nuove`` = {nome: serie settimanale netta} (gia' nel conto),
-    ``candidate`` = {nome: esame["intero"]}. Gruppi ricalcolati con le prove nuove dentro."""
+    ``candidate`` = {nome: esame["intero"]}. Gruppi ricalcolati con le prove nuove dentro.
+
+    **Non e' l'esame di oggi.** Il mazzo e' quello delle prove fino alla 48 piu' le sole serie passate in ``nuove``: serve ai
+    riesami che rifanno il conto «fino alla prova N» com'era allora (per esempio la 55). Per le prove nuove si usa
+    ``corretto_famiglie`` (mazzo completo, decisione dell'11 novembre; la 152 con questa funzione ha scritto 0,88 invece di 0,74)."""
     prove = le_prove()
     serie = {n: periodo(s) for n, s, _ in prove if s is not None}
     serie.update({n: periodo(s) for n, s in nuove.items()})
@@ -198,8 +202,7 @@ def serie_nuove() -> dict:
     for n, f in (("49 X1", "risultati_quarantanovesima/settimane_X1.csv.gz"), ("49 X2", "risultati_quarantanovesima/settimane_X2.csv.gz"),
                  ("51 F7", "risultati_cinquantunesima/settimane_F7.csv.gz"), ("52 B1", "risultati_cinquantaduesima/settimane_B1.csv.gz"),
                  ("53 F8", "risultati_cinquantatreesima/settimane_F8.csv.gz"), ("55 C3", "risultati_cinquantacinquesima/settimane_C3.csv.gz"),
-                 ("56 F9", "risultati_cinquantaseiesima/settimane_F9.csv.gz"),
-                 ("50 F5 101-150", "risultati_cinquantesima/settimane_F5_101_150.csv.gz")):     # 12 novembre (P34): mancava
+                 ("56 F9", "risultati_cinquantaseiesima/settimane_F9.csv.gz")):
         if (QUI / f).exists():
             d = pd.read_csv(QUI / f, index_col=0)
             out[n] = d["netto"] if "netto" in d else d.iloc[:, 0]
@@ -242,7 +245,7 @@ def serie_programma7() -> dict:
                  ("85 G21", "risultati_ventitreesima/settimane_G21.csv.gz"), ("87 PC", "risultati_venticinquesima/settimane_PC.csv.gz"),
                  ("109 GR-L", "risultati_quarantasettesima/settimane_GR-L.csv.gz"),
                  ("109 GR-N", "risultati_quarantasettesima/settimane_GR-N.csv.gz"),
-                 ("110 SS", "risultati_quarantottesima/settimane_SS.csv.gz"), ("112 LQ", "risultati_cinquantesima/settimane_LQ.csv.gz"),
+                 ("112 LQ", "risultati_cinquantesima/settimane_LQ.csv.gz"),
                  ("114 KP", "risultati_cinquantaduesima/settimane_KP.csv.gz"), ("116 VU", "risultati_cinquantaquattresima/settimane_VU.csv.gz"),
                  ("117 EMI", "risultati_cinquantacinquesima/settimane_EMI.csv.gz"),
                  ("117 EWIL", "risultati_cinquantacinquesima/settimane_EWIL.csv.gz"),
@@ -255,7 +258,7 @@ def serie_programma7() -> dict:
                  ("132 FM", "risultati_settantesima/settimane_FM.csv.gz"), ("135 HL", "risultati_settantatreesima/settimane_HL.csv.gz"),
                  ("137 HLI", "risultati_settantacinquesima/settimane_HLI_101-200.csv.gz"),
                  ("138 GA1", "risultati_settantaseiesima/settimane_GA1.csv.gz"), ("138 GA2", "risultati_settantaseiesima/settimane_GA2.csv.gz"),
-                 ("139 CF", "risultati_settantasettesima/settimane_CF.csv"), ("142 G1S", "risultati_ottantesima/settimane_G1S.csv.gz"),
+                 ("142 G1S", "risultati_ottantesima/settimane_G1S.csv.gz"),
                  ("143 SM", "risultati_ottantunesima/settimane_SM.csv.gz"), ("144 FP", "risultati_ottantaduesima/settimane_FP.csv.gz"),
                  ("145 NV", "risultati_ottantatreesima/settimane_NV.csv.gz"), ("147 GA2C", "risultati_ottantacinquesima/settimane_GA2C.csv.gz"),
                  ("150 v7", "risultati_ottantottesima/settimane_v7.csv.gz"), ("150 v30", "risultati_ottantottesima/settimane_v30.csv.gz")):
@@ -301,27 +304,104 @@ def serie_programma7() -> dict:
     if f.exists():
         d = pd.read_csv(f, index_col=0)
         out.update({f"152 {v}": d[v] for v in ("V1", "V2", "V3")})
+    f = p7 / "risultati_quarantottesima" / "settimane_SS.csv.gz"     # 110: il file mette la vendita del venerdi' g0 al lunedi'
+    if f.exists():                                                    # g0 - 4; si chiude il venerdi' g0 + 7: settimana del lunedi' g0 + 3
+        s = pd.read_csv(f, index_col=0)["netto"]
+        out["110 SS"] = pd.Series(s.to_numpy(), index=s.index.to_numpy() + 7)
+    f = p7 / "risultati_settantasettesima" / "settimane_CF.csv"      # 139: 3 settimane etichettate di domenica (rapporto del lunedi'
+    if f.exists():                                                    # + 6): vanno al lunedi' dopo, che nel file manca
+        s = pd.read_csv(f, index_col=0)["netto"]
+        i = s.index.to_numpy()
+        out["139 CF"] = pd.Series(s.to_numpy(), index=i + (7 - (i + 3) % 7) % 7)
     return out
 
 
-# Le prove (o le cartelle) con un file di serie o di eventi che restano fuori dal mazzo, e perche' (12 novembre, backlog P34;
+# Le cartelle di risultati con un file di serie o di eventi che restano fuori dal mazzo, e perche' (12 novembre, backlog P34;
 # l'elenco intero in MAZZO_ASTICELLA.md). Il test `tests/test_asticella_mazzo.py` fallisce se una cartella di risultati dalla
 # prova 49 in poi ha una serie o degli eventi ma non e' ne' nel mazzo ne' qui.
 FUORI_DAL_MAZZO = {
-    "programma7/risultati_ottantanovesima": "prova 151: fermata dalle sue regole per dati troppo corti (23 settimane), nessun esame",
+    "programma6/risultati_cinquantesima": "prova 50: conferma, il registro non la conta (fuori come le conferme 7, 22, 27, 38)",
+    "programma7/risultati_quarantaquattresima": "prova 106: conferma, il registro non la conta",
 }
+
+# Le varianti che il registro conta e che non sono nel mazzo delle serie, con il perche' (il test confronta il registro con il
+# mazzo prova per prova).
+DIFFERENZE_DAL_REGISTRO = {
+    89: "il registro conta 2 (F5C e il controllo col fattore mescolato, VENTISETTESIMA.md); nel mazzo solo F5C: un controllo non e' "
+        "una strategia provata",
+    153: "in calcolo il 12 novembre: entra quando salva la serie (il controllo delle cartelle se ne accorge)",
+}
+
+
+def senza_serie() -> list:
+    """(nome, Sharpe) delle varianti dalla 49 in poi che il registro conta senza una serie salvata nel mazzo: contano ognuna come
+    un gruppo a se' (ASTICELLA.md, sezione 3: «scelta prudente: N piu' alto»), come le prove 1 e 2B. Il t si calcola sulle 300
+    settimane del programma (``per_v``).
+
+    * 108 (18 varianti) e 111 (8): lo Sharpe non e' salvato; ogni variante perde lo 0,11% a operazione dopo i costi con p 1,00
+      (``esame.json``): t molto sotto -3, quindi entrano in N e non in V qualunque sia il valore. Il -10 e' convenzionale.
+    * 110, la chiamata coperta: lo Sharpe di ``esame.json`` (``CC_opzioni``, mensile).
+    * 151: lo Sharpe della sua serie nel periodo (la prova si e' fermata per dati troppo corti, senza esame)."""
+    p7 = QUI.parent / "programma7"
+    out = []
+    for n, cartella in ((108, "risultati_quarantaseiesima"), (111, "risultati_quarantanovesima")):
+        f = p7 / cartella / "esame.json"
+        if f.exists():
+            out += [(f"{n} {k}", -10.0) for k in json.loads(f.read_text())]
+    f = p7 / "risultati_quarantottesima" / "esame.json"
+    if f.exists():
+        out.append(("110 CC", float(json.loads(f.read_text())["CC_opzioni"]["sharpe"])))
+    f = p7 / "risultati_ottantanovesima" / "settimane.csv"
+    if f.exists():
+        d = pd.read_csv(f, index_col=0)
+        d = d[d["fatta"].astype(bool)]
+        s = pd.Series(d["netto"].to_numpy(), index=[sc.giorno(*map(int, x.split("-"))) for x in d.index])
+        out.append(("151 WE", sharpe(periodo(s))))
+    return out
+
+
+def mazzo(nuove: dict | None = None) -> tuple:
+    """Il mazzo completo dell'esame: (serie settimanali nel periodo, Sharpe delle prove senza serie). ``nuove`` = serie da
+    aggiungere (una prova appena calcolata); a parita' di nome sostituiscono quelle del mazzo."""
+    prove = le_prove()
+    serie = {n: periodo(s) for n, s, _ in prove if s is not None}
+    serie.update({n: periodo(s) for n, s in serie_nuove().items()})
+    serie.update({n: periodo(s) for n, s in (nuove or {}).items()})
+    soli = [sr for _, s, sr in prove if s is None] + [sr for _, sr in senza_serie()]
+    return serie, soli
+
+
+def corretto_famiglie(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
+    """**L'esame di oggi** (decisione dell'11 novembre): lo Sharpe corretto con N = famiglie di prove simili e V con l'aggiunta
+    del 23 ottobre, sul mazzo completo (``mazzo``) piu' le serie ``nuove`` = {nome: serie settimanale netta}. ``candidate`` =
+    {nome: {"sharpe", "settimane", "asimmetria", "curtosi"}}. Da usare per ogni prova nuova al posto di ``corretto_rivisto``."""
+    serie, soli = mazzo(nuove)
+    gr = gruppi(serie, taglio)
+    sr_g, sr_v = per_v(gr, soli, False), per_v(gr, soli, True)
+    out = {"serie": len(serie), "senza_serie": len(soli), "famiglie": len(sr_g), "in_v": len(sr_v),
+           "deviazione_v": float(np.std(sr_v, ddof=1)), "taglio": taglio, "candidate": {}}
+    for nome, i in candidate.items():
+        out["candidate"][nome] = {
+            "corretto": te.sharpe_corretto(i["sharpe"], i["settimane"], i["asimmetria"], i["curtosi"], sr_v, 52, n_prove=len(sr_g)),
+            "t": i["sharpe"] * math.sqrt(i["settimane"] / 52),
+            "gruppo": next((g["membri"] for g in gr if nome in g["membri"]), [nome])}
+    return out
 
 
 def _eventi_mancanti(p7: Path) -> dict:
     """Le prove a eventi dalla 75 alla 146 che mancavano (12 novembre, backlog P34), con il portafoglio della prova 41 come le altre
-    a eventi: entrata e uscita all'ora (quando il file da' solo il giorno, la mezzanotte del giorno), solo le operazioni con ``r``."""
+    a eventi: entrata e uscita all'ora (quando il file da' solo il giorno, la mezzanotte del giorno), solo le operazioni con ``r``.
+    Ogni serie porta in ``attrs["eventi"]`` quante operazioni ha usato (il test le confronta con il registro)."""
     def gg(x: pd.Series) -> np.ndarray:
         return x.map(lambda s: sc.giorno(*map(int, str(s)[:10].split("-")))).to_numpy().astype(np.int64)
 
     def port(d: pd.DataFrame, ora, uscita, simbolo="BTCUSDT", r="r") -> pd.Series:
         ev = pd.DataFrame({"simbolo": d[simbolo].to_numpy() if simbolo in d else simbolo,
                            "ora": np.asarray(ora, dtype=np.int64), "uscita_h": np.asarray(uscita, dtype=np.int64), "r": d[r].to_numpy()})
-        return qu.portafoglio(ev[np.isfinite(ev["r"])])["netto"]
+        ev = ev[np.isfinite(ev["r"])]
+        s = qu.portafoglio(ev)["netto"]
+        s.attrs["eventi"] = int(len(ev))
+        return s
 
     def leggi(f: str) -> pd.DataFrame | None:
         return pd.read_csv(p7 / f) if (p7 / f).exists() else None
@@ -339,16 +419,21 @@ def _eventi_mancanti(p7: Path) -> dict:
 
     out = {}
     for n, f in (("75 G16", "risultati_diciottesima/eventi_G16.csv"), ("76 G17", "risultati_diciannovesima/eventi_G17.csv"),
-                 ("78 G19", "risultati_ventunesima/eventi_G19.csv"), ("81 P9C", "../programma9/risultati_seconda/eventi_P9C.csv"),
-                 ("82 P9C lunga", "../programma9/risultati_terza/eventi_P9C_lunga.csv")):
+                 ("78 G19", "risultati_ventunesima/eventi_G19.csv")):
         d = leggi(f)
         if d is not None:
+            out[n] = port(d, *minuti(d), simbolo="simbolo")
+    for n, f in (("81 P9C", "../programma9/risultati_seconda/eventi_P9C.csv"),          # 81 e 82: solo con i long affollati,
+                 ("82 P9C lunga", "../programma9/risultati_terza/eventi_P9C_lunga.csv")):  # come le regole (seconda.py:93-94,
+        d = leggi(f)                                                                     # terza.py:31-32; SOGLIA_8H 0,0001)
+        if d is not None:
+            d = d[d["funding_8h"].notna() & (d["funding_8h"] >= 0.0001)].reset_index(drop=True)
             out[n] = port(d, *minuti(d), simbolo="simbolo")
     parti = [leggi(f"risultati_quarantaduesima/eventi_G26_{p}.csv") for p in ("2021-2022", "2023-2024", "2025-2026")]
     if all(p is not None for p in parti):
         d = pd.concat(parti, ignore_index=True)
         out["104 G26"] = port(d, *minuti(d), simbolo="simbolo")
-    for n, f in (("105 CB", "risultati_quarantatreesima/eventi_CB.csv"), ("106 CBO", "risultati_quarantaquattresima/eventi_CBO.csv"),
+    for n, f in (("105 CB", "risultati_quarantatreesima/eventi_CB.csv"),
                  ("107 G13C", "risultati_quarantacinquesima/eventi_G13C.csv"), ("126 GT", "risultati_sessantaquattresima/eventi_GT.csv"),
                  ("140 QH", "risultati_settantottesima/eventi_QH.csv"), ("146 AT", "risultati_ottantaquattresima/eventi_AT.csv")):
         d = leggi(f)
