@@ -80,3 +80,18 @@ costi, esame), non la colonna «perché» né giudizi sul risultato (regole dei 
 * 146, AT (gli attacchi informatici): p 0,071 e negativa senza le 5 migliori, cioè due criteri; 28 eventi.
 * 149, 1:1:1: il t più alto (2,42) è il migliore di 60 combinazioni, corretto 0,10 con 306 prove; è quello che ci si aspetta dal caso.
 * Tutte le altre: corretto sotto 0,40, t sotto 2, p sopra 0,05 o verso opposto all'ipotesi.
+
+## Esiti del riesame (backtest-auditor)
+* **28, K2 e F5 + M7 + K2** (11 novembre, `audits/reports/2026-11-11-PROVA28_K2_F5M7K2.md`): PASS tecnico; con lo Sharpe corretto per
+  famiglie la miscela vale 0,89; il proprietario ha deciso di misurarla a tavolino ogni settimana, senza ritocchi.
+* **113, N3G** (11 novembre, `audits/reports/2026-11-11-PROVA113_N3G.md`): resta bocciata.
+* **96, G22, la Fed** (12 novembre, `audits/reports/2026-11-12-RIESAME_PROVA96.md`): PASS tecnico sul calcolo, nessun errore cambia il
+  verdetto, **il «no» resta**. Riprodotta identica su due fonti di candele; le 46 riunioni coincidono con il calendario della Fed e i 46
+  comunicati sono usciti tutti alle 14:00 di New York; il bootstrap è quello scritto; la p in otto modi va da 0,016 a 0,036, mai 0,01.
+  Tutti i problemi trovati abbassano il risultato: il controllo dei giorni a caso esagera (i giorni senza riunione sono più calmi: a
+  pari dispersione la quota è circa 0,95%, non 0); entrando 1-15 minuti dopo il comunicato la p sale fino a 0,042; nelle 2 ore vietate
+  dai limiti fissi attorno agli eventi macro (`bot/risk/hard_limits.py`) entrando alla prima ora permessa la media scende a +0,20% (p
+  0,18). Niente varianti su questi 46 eventi: l'idea si riprende solo sulle riunioni nuove, dal 28 ottobre 2026, con le regole scritte
+  prima.
+* Resta la **55** (C3).
+

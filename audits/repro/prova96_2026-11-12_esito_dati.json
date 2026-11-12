@@ -1,0 +1,46 @@
+{
+ "grezzo": {
+  "righe": 51864,
+  "duplicati_open_time": 0,
+  "fuori_ordine": 0,
+  "open_time_non_su_ora_intera": 0,
+  "chiusura_non_a_59m59s": 0,
+  "ore_mancanti": 0,
+  "prima": "2020-12-01 00:00:00",
+  "ultima": "2026-10-31 23:00:00"
+ },
+ "finestre": {
+  "nan_totali": 0,
+  "salto_max_assoluto": 0.0003527088036117121,
+  "ora_piu_ampia": {
+   "data": "2023-03-22",
+   "ora_peggiore_abs": 0.04870997790776954
+  },
+  "candele_incoerenti": 0
+ },
+ "minuti_contro_ore": {
+  "giorni": 46,
+  "mancanti": 0,
+  "ore_con_meno_di_60_minuti": 0,
+  "diff_max": 0.0
+ },
+ "ore_oltre_8_per_cento": [
+  [
+   "2021-01-29 08:00:00",
+   0.1266
+  ],
+  [
+   "2021-02-08 12:00:00",
+   0.1015
+  ],
+  [
+   "2021-05-19 12:00:00",
+   -0.0943
+  ],
+  [
+   "2021-05-21 14:00:00",
+   -0.0801
+  ]
+ ],
+ "ore_nan_nel_periodo": 0
+}

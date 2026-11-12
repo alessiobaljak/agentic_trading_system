@@ -1,0 +1,13 @@
+{
+ "giorni": 1454,
+ "nan": 0,
+ "media": -0.0011272784953415124,
+ "dev_std": 0.014800492703499982,
+ "quota": 0.0,
+ "medie_caso_p99": 0.0040567995014336704,
+ "medie_caso_max": 0.005933102498730385,
+ "dev_std_riunioni": 0.02052969882957765,
+ "welch_una_coda_riunioni_maggiori": 0.011211562460048737,
+ "controllo_con_la_dispersione_delle_riunioni": "vedi dev_std: con la dispersione delle riunioni la quota non e' 0",
+ "quota_con_dispersione_riunioni": 0.0095
+}

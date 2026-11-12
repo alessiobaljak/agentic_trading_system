@@ -1,0 +1,71 @@
+{
+ "costo_per_lato": 0.0006000000000000001,
+ "controlli_grezzo_archivio": {
+  "righe": 51864,
+  "duplicati_open_time": 0,
+  "fuori_ordine": 0,
+  "open_time_non_su_ora_intera": 0,
+  "chiusura_non_a_59m59s": 0,
+  "ore_mancanti": 0,
+  "prima": "2020-12-01 00:00:00",
+  "ultima": "2026-10-31 23:00:00"
+ },
+ "ore_di_locale": {
+  "eventi": 46,
+  "uguali_al_csv_committato": 46,
+  "segni_diversi": 0,
+  "diff_r_max": 9.8879238130678e-17,
+  "ore_utc_diverse": 0,
+  "esame": {
+   "eventi": 46,
+   "media": 0.006080595327929505,
+   "basso": 0.00028676545432221973,
+   "alto": 0.011977108081473295,
+   "p": 0.0205,
+   "vinte": 0.6521739130434783,
+   "prima_meta": 0.008507853462323947,
+   "seconda_meta": 0.003432677363135565,
+   "per_anno": {
+    "2021": -0.000673,
+    "2022": 0.016465,
+    "2023": 0.009732,
+    "2024": 0.016892,
+    "2025": -0.005906,
+    "2026": -0.002061
+   },
+   "passa_scritto": false
+  }
+ },
+ "archivio_scaricato": {
+  "eventi": 46,
+  "uguali_al_csv_committato": 46,
+  "segni_diversi": 0,
+  "diff_r_max": 9.8879238130678e-17,
+  "ore_utc_diverse": 0,
+  "esame": {
+   "eventi": 46,
+   "media": 0.006080595327929505,
+   "basso": 0.00028676545432221973,
+   "alto": 0.011977108081473295,
+   "p": 0.0205,
+   "vinte": 0.6521739130434783,
+   "prima_meta": 0.008507853462323947,
+   "seconda_meta": 0.003432677363135565,
+   "per_anno": {
+    "2021": -0.000673,
+    "2022": 0.016465,
+    "2023": 0.009732,
+    "2024": 0.016892,
+    "2025": -0.005906,
+    "2026": -0.002061
+   },
+   "passa_scritto": false
+  }
+ },
+ "ora_utc_contro_fed": {
+  "diverse": [],
+  "inverno_19": 12,
+  "estate_18": 34
+ },
+ "taglio_segni_diversi": 0
+}

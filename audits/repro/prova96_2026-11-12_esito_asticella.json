@@ -1,0 +1,20 @@
+{
+ "intero": {
+  "settimane": 298,
+  "annuo": 0.04880800008190394,
+  "volatilita": 0.059770192827752866,
+  "sharpe": 0.8165943218982071,
+  "discesa_max": -0.07725332949167052,
+  "asimmetria": 2.9974331971816928,
+  "curtosi": 22.86743285244241
+ },
+ "t": 1.9548471974211903,
+ "gruppi": 81,
+ "corretto_N_gruppi": 9.97441406387518e-45,
+ "corretto_N_gruppi_con_aggiunta": 0.020678795591766965,
+ "corretto_N_conto_312": 5.952905649150322e-65,
+ "gruppo": [
+  "96 G22"
+ ],
+ "g22_nel_mazzo_di_asticella": false
+}

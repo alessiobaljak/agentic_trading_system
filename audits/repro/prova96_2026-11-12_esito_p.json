@@ -1,0 +1,23 @@
+{
+ "eventi": 46,
+ "media": 0.006080595327929505,
+ "dev_std": 0.02052969882957765,
+ "p_come_la_prova_seme_2026": 0.0205,
+ "p_bootstrap_50_semi": {
+  "min": 0.0164,
+  "max": 0.022,
+  "media": 0.019074
+ },
+ "p_bootstrap_2000_estrazioni": 0.017,
+ "p_bootstrap_centrato": 0.0219,
+ "p_t_una_coda": 0.025288988084360926,
+ "t": 2.0088265468586095,
+ "p_segni_mescolati": 0.02536,
+ "p_wilcoxon_una_coda": 0.036485447168317364,
+ "p_segno_binomiale": 0.027038015929434778,
+ "vinte": 30,
+ "media_senza_la_migliore": 0.004827138454550528,
+ "p_senza_la_migliore": 0.0416,
+ "media_senza_le_3_migliori": 0.0028469632086414332,
+ "aumento_media_per_p_0_01": 0.0009000000000000001
+}

@@ -1,0 +1,51 @@
+{
+ "operazioni": 46,
+ "giorni": 2104,
+ "esposizione_ore_quota": 0.005465779467680608,
+ "rendimento_composto": 0.3093789762599952,
+ "rendimento_annuo": 0.04787237790425891,
+ "sharpe_365": 0.8109198802013238,
+ "sortino_365": 1.744663409951913,
+ "discesa_max": -0.07725332949167052,
+ "discesa_dal": "2025-05-07",
+ "discesa_al_fondo": "2026-09-16",
+ "discesa_recupero": "non recuperata al 5 ottobre 2026",
+ "profit_factor": 2.217858760106142,
+ "vinte": 0.6521739130434783,
+ "media_operazione": 0.006080595327929505,
+ "media_lorda": 0.0072805953279295055,
+ "costo_operazione": 0.0012000000000000001,
+ "operazione_migliore": 0.062486154629983394,
+ "operazione_peggiore": -0.02866023514439111,
+ "quota_somma_5_migliori": 0.7872688076562978,
+ "quota_somma_3_mesi_migliori": 0.5623304049176749,
+ "tre_mesi_migliori": {
+  "2022-09": 0.0625,
+  "2022-06": 0.0513,
+  "2022-01": 0.0435
+ },
+ "per_clima": {
+  "laterale": {
+   "n": 21,
+   "media": 0.0010045662563040686
+  },
+  "rialzo": {
+   "n": 14,
+   "media": 0.00868432725837728
+  },
+  "ribasso": {
+   "n": 11,
+   "media": 0.012457355644099067
+  }
+ },
+ "per_segno": {
+  "-1": {
+   "n": 23,
+   "media": 0.007611295208676516
+  },
+  "1": {
+   "n": 23,
+   "media": 0.004549895447182487
+  }
+ }
+}

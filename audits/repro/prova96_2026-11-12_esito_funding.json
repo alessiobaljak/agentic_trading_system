@@ -1,0 +1,32 @@
+{
+ "regolamenti_per_operazione": {
+  "1": "46"
+ },
+ "orari_regolamento": {
+  "00:00": "46"
+ },
+ "intervalli_ore_nel_periodo": {
+  "8": "6483"
+ },
+ "effetto_medio_a_operazione": -2.429978260869561e-05,
+ "effetto_max_assoluto": 0.00045987000000000024,
+ "esame_con_funding": {
+  "eventi": 46,
+  "media": 0.0060562955453208065,
+  "basso": 0.0002619518164511557,
+  "alto": 0.01194586163631539,
+  "p": 0.0208,
+  "vinte": 0.6521739130434783,
+  "prima_meta": 0.008448222628990613,
+  "seconda_meta": 0.003446920544953748,
+  "per_anno": {
+   "2021": -0.000802,
+   "2022": 0.016447,
+   "2023": 0.0097,
+   "2024": 0.016927,
+   "2025": -0.005909,
+   "2026": -0.002052
+  },
+  "passa_scritto": false
+ }
+}

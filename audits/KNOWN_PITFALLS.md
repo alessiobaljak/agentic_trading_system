@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesame della prova 96).
 
 ## Dati
 
@@ -68,6 +68,8 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     istante della chiusura della domenica e del regolamento delle 00:00 usato nel segnale. Controllo: entrata all'01:00 e alle
     04:00 con le candele orarie (`esecuzione.ore_di`) e un giorno dopo (`audits/repro/prova28_tempi_2026-11-11.py`). Prova
     28: miscela 2,15 → 2,11 (01:00) → 1,89 (un giorno dopo).
+    Anche nelle prove a eventi orari (prova 96, 12 nov): entrata all'apertura dell'ora dopo il segnale; con 1-5 minuti di ritardo
+    (minuti dell'archivio giornaliero) +0,61% → +0,57-0,58%, con 15 minuti +0,47%. `audits/repro/prova96_2026-11-12.py entrata`.
 
 ## Costi
 
@@ -94,6 +96,10 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
 28. **Conto a capitale fisso con i minimi: non neutrale e rumoroso** (prova 148): gli ordini saltati fanno derivare l'esposizione
     netta fra −20% e +25% (fino a +47%); la differenza con G1 e' rumore (+30 punti nel 2021, −15 nel 2025), il capitale non e'
     monotono (250 USDT 1,83, 225 USDT 1,89). Leggere ogni «x% di G1» con ±0,1 di Sharpe.
+33. **Strategia sugli eventi macro dentro la finestra vietata dai limiti fissi** (prova 96, 12 nov 2026): `hard_limits.py:29`
+    `MACRO_FLAT_HOURS` = 2 ore fuori dal mercato prima e dopo un evento macro; la prova entra un'ora dopo il comunicato della Fed e
+    il guadagno sta in quell'ora (alla prima ora permessa p da 0,02 a 0,18). Cercare: prove su riunioni, dati macro, comunicati con
+    entrata entro 2 ore dall'evento; rifarle con l'entrata dopo la finestra.
 
 ## Misure
 
@@ -117,6 +123,12 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     0,80 (brief del 12 nov). Dirlo sempre accanto all'esito, con la soglia scritta prima e quella del brief.
 30. **L'esito dello Sharpe corretto dipende dall'«aggiunta» del 23 ottobre** (V senza i gruppi con t sotto −3): senza, G1 ha 0,0000
     invece di 0,87. Riportare tutti e due.
+31. **Controllo su «giorni a caso» più calmi degli eventi** (prova 96, 12 nov 2026): le medie di 46 giorni senza riunione hanno la
+    dispersione dei giorni calmi (1,48% contro 2,05% per operazione), e «nessuna delle 2.000 estrazioni arriva alla media» sembra una p
+    di zero; a pari dispersione la quota è 0,95%. Cercare: `quota_caso`, `estrazioni` di giorni senza evento citate a sostegno;
+    confrontare le deviazioni e riportare la quota a pari dispersione (`audits/repro/prova96_2026-11-12.py controllo`).
+32. **Prove non nel mazzo dello Sharpe corretto**: `asticella.serie_programma7` (`asticella.py:211-265`) ha le prove a eventi del
+    programma 7 fino alla 74; la 96 manca (e forse altre dopo la 74). Cercare: il numero della prova nelle liste di `serie_programma7`.
 
 ## Procedura dell'audit
 
