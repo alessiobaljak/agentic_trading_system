@@ -624,3 +624,10 @@ definizione). **Confronto del demo**: funding al 70% del paper in 4 giorni, comm
 le esecuzioni dalla macchina (backlog P33). Conto delle prove 312. **Capito oggi**: limitare il peso di una moneta costa poco sul
 passato; quello che non sappiamo è quanto costano davvero gli ordini sul conto.
 
+**Voce 12 di G1, il lato venduto nel 2026 (12 novembre, misura di strategy-improver, `research/programma7/misure_g1/voce12_rapporto.md`)**:
+la perdita del lato venduto nel 2026 (−13,4 punti al 4 ottobre: prezzo −20,4, funding +9,4, spese −2,5) è concentrata, non è il
+mercato intero: monete piccole −14,5 contro medie +1,8 e grandi −0,7; monete con meno di un anno sul perpetuo −10,0; 176 giornate di
+rialzo oltre il 20% su monete vendute (altri anni 22-85) valgono −119,3 sul prezzo; le 10 giornate peggiori valgono −19,7 da sole.
+Non è un caso unico (2021 −150,1, 2023 −17,0). Il funding resta normale. **Capito oggi**: G1 perde quando vende monete piccole e
+nuove che fanno fiammate; la prova 152 (tetto al peso) tocca proprio questo. Un'uscita dopo un rialzo forte sarebbe una prova nuova,
+con le regole scritte prima.

@@ -9,3 +9,4 @@ principale e stanno nel diario di `research/programma7/MIGLIORARE_G1.md`.
 ## Ultime voci
 - 8 novembre 2026: agente creato (richiesta del proprietario dell'8 novembre).
 - 12 novembre 2026: voce 13, scritte le regole della prova 152 (research/programma7/NOVANTESIMA.md), 3 varianti, da committare; nessun calcolo.
+- 12 novembre 2026: voce 12 misurata (lato venduto 2026 -13,4: prezzo -20,4, funding +9,4; piccole -14,5, 10 giornate peggiori -19,7): difetto concentrato; `research/programma7/misure_g1/voce12_rapporto.md`; nessuna variante.
