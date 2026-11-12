@@ -24,41 +24,54 @@ In `tetto_lato` con meno monete del necessario per rispettare il tetto i pesi di
 una moneta sul capitale se il lato è piccolo, perciò il minimo di monete e la riduzione dell'esposizione sono la parte nuova.
 
 ## 3. Le tre varianti (fissate qui, nessuna ricerca dei valori)
-Per ogni lato, «n» = monete scelte da G1 quel giorno.
+Per ogni lato, «n» = monete scelte da G1 quel giorno. Universo e periodo sono quelli del codice di G1: universo fissato per settimana come
+`nucleo.universo_giorni`; periodo da `INIZIO` a `FINE` della prova 148 (`an.INIZIO`, `an.FINE`, fine esclusa); esposizione di G1 con i lati
+fissi a 1 e 1.
 
-* **V1, tetto 20%**: nessuna moneta pesa più del 20% del suo lato (`nucleo.tetto_lato(w, 0.20)`, l'eccesso va alle altre in proporzione).
-  Se n è minore di 5 il lato resta com'è (nessuna correzione). Perché 20% e non 10%: morde solo nelle code (con n=20 il peso medio è 5%).
-* **V2, almeno 10 monete per lato, completando dal rango**: se n è minore di 10, si aggiungono le monete successive nel rango del segnale
-  (subito fuori dalla banda) fino ad arrivare a 10; pesi con l'inverso della volatilità, lato al 100%. **Pari merito nel rango**: chi ha
-  lo stesso funding a 7 giorni (a 1e-12) si ordina per volume medio in USDT dei 30 giorni prima, più alto prima; se ancora pari, per simbolo
-  in ordine alfabetico. La regola vale anche per chi sta già nella banda (taglio fra monete uguali: scelte con lo stesso ordine).
-  L'ordine si decide col dato fino a ieri compreso, mai col futuro.
-* **V3, minimo 10 con esposizione ridotta, più tetto**: se n è minore di 10 il lato non si completa: i suoi pesi si moltiplicano per n/10
-  (esposizione del lato n/10 invece di 100%); poi tetto 20% come V1. Perché: tiene fuori dal conto le monete peggiori invece di prenderle
-  per riempire; costa il funding di un lato ridotto nei giorni rari.
+* **V1, tetto 20%**: con n di almeno 5, nessuna moneta pesa più del 20% del suo lato (`nucleo.tetto_lato(w, 0.20)`). Con n sotto 5 **`tetto_lato`
+  non si chiama** (con n per 20% sotto 1 metterebbe pesi uguali e cambierebbe l'esposizione): il lato resta com'è.
+* **V2, almeno 10 monete per lato, solo nei giorni rari**: la banda di G1 resta **identica** (rango con le medie nei pari merito, come
+  `passo_banda`); i giorni normali non cambiano. Solo quando un lato ha n sotto 10 lo si completa con le monete successive nel rango del
+  segnale, fino a 10. **Solo lì** i pari merito si rompono con il volume medio in USDT dei 30 giorni prima (`quote_volume` del pannello di
+  `research.programma6.seconda`, più alto prima, dato fino a ieri), poi con il simbolo in ordine alfabetico. Pesi con l'inverso della
+  volatilità, lato al 100%. **Le monete aggiunte valgono solo per quel giorno**: non entrano negli insiemi che portano la banda al giorno
+  dopo. Con l'universo sotto le 20 monete o con il rango che non basta, il lato resta com'è e il giorno si scrive nei risultati. Nel conto
+  a 280 USDT, una moneta aggiunta senza filtri di Binance non si aggiunge, e si scrive.
+* **V3, minimo 10 con esposizione ridotta, più tetto**: con n sotto 10 i pesi del lato si moltiplicano per n/10 (nessun completamento). Il
+  tetto del 20% vale **sul lato già ridotto** (con n di almeno 5, `tetto_lato` applicato al lato ridotto, tetto = 20% del lato ridotto); con
+  n sotto 5 vale solo il fattore n/10 e `tetto_lato` non si chiama.
 
 ## 4. Il conto
-Ogni variante gira con lo stesso codice di G1 (`nucleo.pesi` con la regola in più). Si fanno **due conti**:
+Ogni variante gira con lo stesso codice di G1 (`nucleo.pesi` con la regola in più). Due conti:
 1. **Periodo di G1, spese confermate, senza minimi** (come il paper).
-2. **A 280 USDT con i minimi di Binance** (motore della prova 148, `ottantaseiesima.py`: filtri `filtri_binance_2026-11-06.json`, capitale fisso, il
-   conto A come lo fa il bot oggi e A2 con le chiusure permesse). Il riferimento è G1 su 280 USDT con lo stesso motore (A: Sharpe 1,90).
+2. **A 280 USDT con i minimi di Binance** (motore della prova 148, `ottantaseiesima.py`, filtri `filtri_binance_2026-11-06.json`, capitale
+   fisso). Devono rispettare «ogni anno positivo» e il criterio sullo Sharpe **il conto A** (come lo fa il bot oggi) **e il conto A2** (con le
+   chiusure permesse); il riferimento è lo stesso conto (A o A2) di G1 con lo stesso motore. Gli ordini saltati per i minimi si contano con
+   il contatore `ordini_saltati` del motore.
+Sharpe e t: serie **settimanale**, `nucleo.numeri` con `per_anno=52`; t = media / (deviazione standard / radice del numero di settimane).
 
-## 5. Il criterio (di rischio, non «Sharpe più alto»)
-Una variante passa se, **sul conto 1**, tutte queste sono vere:
-* il **peso massimo di una moneta** in qualunque giorno è al massimo il **20% del capitale** (G1: 43,7%);
-* la **perdita di un rialzo improvviso del 100%** sulla moneta venduta più pesante del giorno è al massimo il **15% del capitale** in ogni
-  giorno (il peso massimo venduto, in frazione del capitale, al massimo 15%);
-* lo **Sharpe** scende **al massimo di 0,15** rispetto al ricalcolo di G1 e la **discesa settimanale più grande** peggiora al massimo di 3
-  punti;
-* **ogni anno positivo** (2021, 2022, 2023, 2024, 2025, 2026) e t almeno 3.
+## 5. Il criterio (di rischio, uno solo e coerente sul peso)
+**Misura**: il peso della moneta venduta più pesante, in % del capitale, preso sui **pesi voluti all'apertura** di ogni giorno (le posizioni con
+la deriva dei prezzi si riportano a parte, senza decidere). Un rialzo del 100% su una moneta venduta costa esattamente quel peso: la perdita da
++100% e il peso sono la stessa misura, quindi **un solo limite: al massimo il 20% del capitale in ogni giorno** (G1: 43,7%, e anche per le
+comprate si riporta il massimo, senza decidere). In V3 il tetto vale sul lato già ridotto.
+Per costruzione: **V1** può passare il limite con n di almeno 5 ma **non** con n sotto 5 (lato intatto, fino al 100% di una sola moneta): il
+passaggio dipende dai giorni rari. **V2** **non** passa per costruzione (nessun tetto: la moneta con la volatilità più piccola può pesare di
+più del 20%). **V3** passa per costruzione con n di almeno 5 (al massimo 20% del lato ridotto, cioè al massimo il 20% del capitale); con n
+sotto 5 il peso può arrivare a n/10 del capitale, cioè fino al 40%, e va misurato.
 
-E sul **conto 2** (280 USDT): ogni anno positivo, Sharpe che scende al massimo di 0,15 dal riferimento A, e gli ordini saltati per i minimi
-non più numerosi di quelli di G1.
-Si riportano anche (senza decidere): giorni con n minore di 10 per lato, giorni-moneta oltre il 3% del capitale (G1: 65), Sortino,
-rendimento, spese, giro, e il confronto con la prova 61.
-I numeri 20%, 15%, 0,15 e 3 punti sono fissati qui perché: 20% = metà del caso peggiore di G1, 15% = mezzo punto sopra il tetto che il
-bot usa per un rischio per operazione (3% del capitale con stop di +20% circa), 0,15 = circa il costo di Sharpe che la prova 61 ha già
-accettato di rischiare (0,09) più un margine. Non si cambiano dopo aver visto i risultati.
+Una variante passa se, **sul conto 1**, sono tutte vere:
+* peso massimo della venduta più pesante al massimo **20% del capitale** in ogni giorno;
+* **Sharpe** settimanale che scende al massimo di **0,15** rispetto al ricalcolo di G1, **discesa settimanale più grande** peggiore al massimo
+  di **3 punti**;
+* **ogni anno positivo** (2021-2026) e **t almeno 3**.
+E sul **conto 2** (A e A2, 280 USDT): ogni anno positivo, Sharpe che scende al massimo di 0,15 dal riferimento omonimo, ordini saltati non più
+numerosi di quelli di G1 con lo stesso conto.
+Si riportano, senza decidere: giorni con n sotto 10 per lato, Sortino, rendimento, spese, giro, il confronto con la prova 61. **Giorni-moneta
+oltre il 3%**: giorni in cui una moneta venduta costa al conto più del 3% del capitale in quel giorno; **prima si riproduce il 65 di G1** con
+questa definizione, poi si calcolano le varianti. Se non torna, si scrive e ci si ferma.
+I numeri 20%, 0,15 e 3 punti sono fissati qui e non si cambiano dopo aver visto i risultati: 20% è circa metà del caso peggiore di G1; 0,15
+è il margine oltre il costo di Sharpe della prova 61 (0,09).
 
 ## 6. Il conto delle prove
 Entrano **3 varianti** nel conto delle prove: oggi **309 → 312**. Lo Sharpe corretto si calcola con il metodo dell'11 novembre, contando le
@@ -70,3 +83,11 @@ l'asticella dello Sharpe corretto: la variante che passa va a backtest-auditor, 
 `RISULTATI_NOVANTESIMA.md` (tabella: G1, V1, V2, V3 sul conto 1 e sul conto 2, con ogni voce del criterio e l'esito), il codice in
 `novantesima.py` (mai nel bot), ogni variante registrata in `research/trials/` **anche se fallisce**. Eventuali giorni senza abbastanza
 monete nel rango: si scrivono, non si inventa. Se la regola chiede di spegnere o cambiare G1 nel paper o nel demo: ci si ferma.
+
+## Regole corrette il 12 novembre 2026 dopo la verifica, prima di ogni calcolo
+Corretto: (1) sotto 5 monete V1 e V3 non chiamano `tetto_lato`, V3 usa solo n/10; (2) V2 lascia identici i giorni normali, completa solo sotto
+10 monete e i pari merito (volume 30 giorni, poi alfabeto) valgono solo lì; (3) le monete aggiunte da V2 valgono un giorno, universo sotto 20 o
+rango insufficiente: lato com'è e giorno scritto; (4) un solo criterio sul peso (20% del capitale, pesi voluti all'apertura, V3 sul lato ridotto)
+e per ogni variante se passa per costruzione; (5) Sharpe e t settimanali con `numeri(per_anno=52)`; (6) definizione unica dei giorni-moneta oltre
+il 3% e riproduzione del 65 prima; (7) conti A e A2 a 280 USDT, contatore `ordini_saltati`, monete senza filtri non aggiunte; (8) universo e
+periodo del codice di G1, lati fissi a 1 e 1.
