@@ -20,3 +20,12 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   dal 16 novembre). (2) il ritardo delle monete piccole sul Bitcoin (Hou, RFS 2007, diffusione lenta dell'informazione): solo idea,
   indicatore sul prezzo, probabilità bassa, non scritta. Scartate dopo il controllo: sblocchi, opzioni, stablecoin, posizioni dei grandi
   conti, liquidazioni, notizie, trader di Hyperliquid, rimozioni, funding a intervalli: già in registro.
+
+- 12 novembre 2026 (terzo giro): proposte 2 idee. (1) il libro degli ordini fra le monete, ogni giorno come G1 (long il quinto con più
+  ordini fermi dal lato dei compratori entro il 5% o l'1%; Cao, Hansch e Wang, JFM 2009; Cont, Kukanov e Stoikov, JFEC 2014): dati
+  `bookDepth` di Binance dal 2 gennaio 2023, gratis, mai provato su 100 monete (solo 24 monete a ore nel programma 5): regole in
+  `programma7/NOVANTUNESIMA.md` (prova 153, 2 varianti). (2) la base dei future trimestrali di Binance su Bitcoin ed Ether (file
+  `futures/um/daily/klines/BTCUSDT_<scadenza>` esistono, verificato): solo idea, non scritta (due soli contratti, serie nel tempo, pochi
+  casi, parente del premio e del funding già provati). Scartate dopo il controllo: (a) il funding di Hyperliquid è già in registro
+  (prove 135 e 137); Bybit non è raggiungibile da qui e OKX dà il funding solo per gli ultimi mesi (non verificato a fondo); (c) la quota
+  del Bitcoin sul mercato è un indicatore sul prezzo (nessuna prova dirette in registro, ma vicina a «rotazione» prova 127).
