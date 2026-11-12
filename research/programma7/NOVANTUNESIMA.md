@@ -62,3 +62,26 @@ Se passa: backtest-auditor, poi la sessione principale decide il paper; demo e s
 `RISULTATI_NOVANTUNESIMA.md` (giorni e monete usati, file scaricati e mancanti, rendimento netto l'anno, Sharpe, t, Sharpe corretto,
 lato long e short, correlazione con G1 e F5, controllo al contrario, giro e spese), codice `novantunesima.py`, le varianti in
 `research/trials/`, le impronte dei file. Se mancano i dati per un periodo lungo: lo si scrive e non si inventa.
+
+## Regole corrette il 12 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher ha trovato 9 punti da chiudere; nessun segnale è stato calcolato. Le letture che valgono:
+1. **Strumenti**: si riusano solo `aggrega_giorno` e la verifica del CHECKSUM di `programma5/strumenti/libro.py`, chiamati da
+   `novantunesima.py`; lo scarico, i riassunti giornalieri e le impronte stanno in `programma7/risultati_novantunesima/` (i file grezzi
+   si cancellano dopo il riassunto); `libro.py` non si modifica e il suo guardiano dei periodi non si usa.
+2. **Il segnale S** è la media sulle rilevazioni del giorno D−1 (non la media delle medie orarie): per ogni rilevazione
+   (acquisti − vendite) / (acquisti + vendite) al livello della variante (A: ±5%, B: ±1%; livelli cumulati; percentage negativo =
+   acquisti, positivo = vendite), poi la media; si salvano somma e numero per giorno.
+3. Il rapporto si fa **per rilevazione**; una rilevazione senza uno dei due lati si scarta.
+4. **Rilevazione** = istante con tutti e due i lati al livello della variante; con meno di 2.000 rilevazioni la moneta quel giorno non
+   ha segnale ed esce dalla classifica del giorno (come una moneta senza funding in G1).
+5. **Pesi**: `nucleo.passo_banda` con S al posto del funding (long S alto, short S basso), inverso della volatilità a 30 giorni e banda
+   come G1, senza il fattore beta (G1, non G1N).
+6. **Costi**: `nucleo.spese_limite` (ordine limite per un'ora, poi a mercato) con le candele orarie di `analisi.candele_ore`.
+7. **Anni**: il 2023 parte il 2 gennaio e conta come anno (364 giorni); il 2026 è parziale fino al 4 ottobre compreso (`an.FINE`
+   escluso). Ogni anno positivo vale per tutti e quattro.
+8. **Conto delle prove** 312 → 314; lo Sharpe corretto si calcola per famiglie come in `audits/repro/prova28_2026-11-11.py`, voce 11;
+   il controllo al contrario non conta come prova.
+9. **Le monete (decisa prima di scaricare)**: si scaricano le prime 500 coppie moneta-giorno dell'universo di G1 e si misura il tempo;
+   se il tempo stimato per tutte le 137.200 coppie (100 monete, 1.372 giorni) supera le 10 ore, la prova si fa per intero con le
+   **prime 60 monete di ogni lunedì per mediana del volume** (`universo_lunedi`, già ordinato), con `MIN_MONETE` 20; altrimenti con
+   100. La scelta e il tempo misurato si scrivono nei risultati prima di calcolare il segnale; il tempo non dipende dai risultati.
