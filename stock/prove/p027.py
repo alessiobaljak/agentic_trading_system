@@ -10,12 +10,13 @@ from __future__ import annotations
 
 import math
 import sys
+import time
 from datetime import UTC, date, datetime
 
 import numpy as np
 import pandas as pd
 
-from stock.dati import alpaca, archivio, controlli
+from stock.dati import alpaca, archivio, controlli, notizie
 from stock.prove.p001 import CAPITALE, IB_FISSO, PB, QUI, annuo, carica_serie, comprare_e_tenere, salva_serie
 from stock.prove.p003 import prepara_titolo, rendimenti
 from stock.simulatore import asticella
@@ -30,12 +31,20 @@ COSTI = Costi(mezzo_scarto=15 * PB, slittamento=5 * PB, **IB_FISSO)
 PREZZO_MINIMO, DOLLARI_MINIMI, SEDUTE_DOLLARI, VALORE_MINIMO, SCARTO_MASSIMO = 5.0, 2_000_000.0, 20, 100_000.0, 0.5
 
 
+def aspetta_fuori_dagli_ordini() -> None:
+    """Nei minuti in cui la misura in avanti manda gli ordini non si scarica (il limite di richieste di Alpaca serve a loro)."""
+    while notizie.ordini_in_corso(datetime.now(UTC)):
+        print("minuti degli ordini: aspetto", flush=True)
+        time.sleep(120)
+
+
 def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azioni", asof: str | None = None) -> None:
     """Barre al giorno non rettificate e azioni societarie dei titoli che mancano in archivio. `asof="-"`: i prezzi di ciò che
     si scambiava con quel simbolo allora (`alpaca.barre_di_piu`), da tenere in un archivio con un altro nome (`tipo_raw`)."""
     mancano = [s for s in simboli if archivio.carica(s, tipo_raw) is None]
     for i in range(0, len(mancano), 40):
         gruppo = mancano[i:i + 40]
+        aspetta_fuori_dagli_ordini()
         try:
             barre = alpaca.barre_di_piu(gruppo, "1Day", DAL, AL, asof=asof)
         except alpaca.ErroreAlpaca as e:                 # un simbolo che Alpaca non conosce fa fallire il gruppo: uno alla volta
@@ -53,6 +62,7 @@ def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azio
     senza_azioni = [s for s in simboli if archivio.carica(s, tipo_az) is None]
     con_barre = [s for s in senza_azioni if len(archivio.carica(s, tipo_raw))]
     for i in range(0, len(con_barre), 500):
+        aspetta_fuori_dagli_ordini()
         az = alpaca.azioni_societarie_di_piu(con_barre[i:i + 500], DAL, AL)
         for s, df in az.items():
             archivio.salva(df, s, tipo_az)
@@ -86,15 +96,23 @@ def eventi_puliti(tr: pd.DataFrame, barre: dict[str, pd.DataFrame]) -> tuple[pd.
     return g.reset_index(drop=True), conta
 
 
-def main(solo_locali: bool = False):
-    tr = pd.read_csv(QUI / "dati" / "P027_acquisti.csv.gz", parse_dates=["deposito", "giorno_op"])
+def main(solo_locali: bool = False, allora: bool = False):
+    """`allora`: la correzione dei dati del 12 novembre 2026 (`P027b_risultati.md`): prezzi e composizione dell'indice con il
+    simbolo di allora, titoli spariti dal listino chiusi all'ultimo prezzo dopo 5 sedute senza barra. Le regole non cambiano."""
+    tipo_raw, tipo_az, asof = ("1Day_allora", "azioni_allora", "-") if allora else ("1Day_raw", "azioni", None)
+    sigla = "P027b" if allora else "P027"
+    tr = pd.read_csv(QUI / "dati" / f"{sigla}_acquisti.csv.gz", parse_dates=["deposito", "giorno_op"])
     tr["deposito"], tr["giorno_op"] = tr["deposito"].dt.date, tr["giorno_op"].dt.date
     simboli = sorted(tr["simbolo"].unique())
     if not solo_locali:
-        scarica(simboli + ["SPY", "IWM"])
+        scarica(["SPY", "IWM"])
+        if allora:
+            scarica(simboli + ["SPY", "IWM"], tipo_raw, tipo_az, asof)
+        else:
+            scarica(simboli)
     grezze = {}
     for s in simboli:
-        df = archivio.carica(s, "1Day_raw")
+        df = archivio.carica(s, tipo_raw)
         if df is not None and len(df) > SEDUTE_DOLLARI:
             grezze[s] = df
     print(f"titoli con i prezzi: {len(grezze)} su {len(simboli)}", flush=True)
@@ -102,7 +120,7 @@ def main(solo_locali: bool = False):
     barre, rett, rotti = {}, {}, []
     for s in sorted(ev["simbolo"].unique()):
         try:
-            barre[s], rett[s], _ = prepara_titolo(s, FINO)
+            barre[s], rett[s], _ = prepara_titolo(s, FINO, tipo_raw, tipo_az)
         except Exception as e:  # noqa: BLE001 — un titolo con i dati rotti si conta e si lascia fuori
             rotti.append(f"{s} ({type(e).__name__})")
     ev = ev[ev["simbolo"].isin(barre)]
@@ -112,7 +130,7 @@ def main(solo_locali: bool = False):
     print(f"eventi {len(eventi)} su {len(barre)} titoli", flush=True)
     out = {}
     for nome, c in (("costi", COSTI), ("costi doppi", COSTI.raddoppiati()), ("senza costi", Costi())):
-        out[nome] = simula_conto(barre, dirigenti.strategia(eventi, cal), c, capitale=CAPITALE)
+        out[nome] = simula_conto(barre, dirigenti.strategia(eventi, cal), c, capitale=CAPITALE, liquida_dopo=5 if allora else None)
         print(nome, f"{out[nome].valore.iloc[-1]:.0f}", flush=True)
     r = out["costi"]
     primo = r.esecuzioni["giorno"].min()
@@ -128,7 +146,7 @@ def main(solo_locali: bool = False):
     e = r.esecuzioni
     su_iwm, su_spy = [], []
     for s, x in e.groupby("simbolo"):
-        ing, usc = x[x.etichetta == "ingresso"], x[x.etichetta == "uscita"]
+        ing, usc = x[x.etichetta == "ingresso"], x[x.etichetta.isin(["uscita", "uscito dal listino"])]
         for (_, i), (_, u) in zip(ing.iterrows(), usc.iterrows()):
             mio = u["prezzo"] / i["prezzo"] - 1
             su_iwm.append(mio - (iwm[u["giorno"]] / iwm[i["giorno"]] - 1))
@@ -160,7 +178,8 @@ def main(solo_locali: bool = False):
     entra = sr(gc.loc[comuni]) > 0 and sr(g["costi doppi"].reindex(comuni).dropna()) > 0 and corr < 0.3 \
         and sr(nuova) > sr(m.loc[comuni]) and sr(nuova) > sr(spy_c)
     anni = (1 + gc).groupby(pd.Index([d.year for d in gc.index])).prod() - 1
-    righe = ["# Prova 27 — risultati", "",
+    righe = ["# Prova 27 — risultati" + (" con i prezzi corretti (il simbolo di allora): correzione dei dati, non una prova nuova"
+                                         if allora else ""), "",
              f"Calcolato da `python -m stock.prove.p027` il {datetime.now(UTC):%Y-%m-%d %H:%M} UTC con le regole di "
              f"`P027_dirigenti_aziende_piccole.md` (committate prima). Dal {a} al {b}. Nel conto dell'asticella: {len(tutte)} serie.", "",
              f"* Titoli con acquisti: {len(simboli)}; con i prezzi su Alpaca: {len(grezze)} (**senza prezzi: {len(simboli) - len(grezze)}**, "
@@ -168,6 +187,9 @@ def main(solo_locali: bool = False):
              "* Eventi dopo ogni filtro: " + "; ".join(f"{k} {v}" for k, v in conta.items()) + f"; titoli con i dati rotti {len(rotti)}.",
              f"* Ingressi eseguiti {(e.etichetta == 'ingresso').sum()}; senza barra {r.senza_barra}; rifiutati {r.rifiutati}; **rimasti in "
              f"mano dopo l'uscita dal listino: {len(r.bloccati)}** ({', '.join(r.bloccati[:15]) or 'nessuno'}).",
+             *([f"* Chiusi all'ultimo prezzo perché spariti dal listino o con il simbolo cambiato (5 sedute senza prezzi): "
+                f"**{len(r.liquidati)}**. Le serie in `prove/serie/` sono sostituite con queste (stesso conto delle prove)."]
+               if allora else []),
              f"* Costi pagati: commissioni {r.commissioni:,.0f}, scarto e slittamento {r.costo_scarto:,.0f} dollari.", "",
              "| | Acquisti dei dirigenti, aziende piccole | Tenere l'IWM | Tenere lo SPY |", "|---|---|---|---|",
              f"| Guadagno medio per evento, con i costi (t) | rispetto all'IWM {su_iwm.mean():+.2%} ({t(su_iwm):.2f}); rispetto allo SPY "
@@ -185,9 +207,9 @@ def main(solo_locali: bool = False):
              f"{sr(gc.loc[comuni]):.2f}; correlazione con la miscela {corr:.2f} (soglia 0,3); miscela nuova {sr(nuova):.2f} contro "
              f"{sr(m.loc[comuni]):.2f} della miscela e {sr(spy_c):.2f} del tenere lo SPY; perdita massima {dd(nuova):.1%} contro "
              f"{dd(m.loc[comuni]):.1%}. **Esito: {'entra nella miscela (prima il revisore, poi in avanti)' if entra else 'non entra'}**"]
-    (QUI / "P027_risultati.md").write_text("\n".join(righe) + "\n")
+    (QUI / f"{sigla}_risultati.md").write_text("\n".join(righe) + "\n")
     print("\n".join(righe))
 
 
 if __name__ == "__main__":
-    main("--solo-locali" in sys.argv)
+    main("--solo-locali" in sys.argv, "--allora" in sys.argv)
