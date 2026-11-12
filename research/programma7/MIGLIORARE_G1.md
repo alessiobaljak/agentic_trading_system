@@ -210,3 +210,8 @@ separato prima del paper).
   simulava già i minimi (Sharpe 1,90 a 280 USDT contro 1,98 senza): lo scarto che cresce è quello previsto, ma va guardato se arriva
   oltre il 20% del conto. Equity del demo 1.002,66 (+0,27% dall'8 novembre); G1 nel paper nello stesso tempo −0,87% (10.619,33 →
   10.526,45).
+* **12 novembre 2026, 00:25 UTC, voce 8, il quarto ribilancio a 1.000 USDT** (`ops/results/0734-12nov-log-ribilancio-1000.md`,
+  `0735-12nov-stato-ribilancio-1000.md`): 10 ordini, 43 variazioni sotto il minimo (10,4% del conto), 1 rifiutato: eseguibile il 19%.
+  Sui quattro giorni 44 ordini su 221 variazioni, il **20%** (atteso 23%). Lo scarto dalle posizioni volute scende al 12,2% (ICPUSDT
+  non è più fra le volute oltre il 2%). Equity del demo 990,11 (−0,99% dall'8 novembre); G1 nel paper −2,08% nello stesso tempo
+  (10.619,33 → 10.398,55): il demo resta circa un punto sopra.

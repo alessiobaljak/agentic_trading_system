@@ -582,3 +582,9 @@ con il conto per famiglie (t sotto 3 e rendimenti negativi o quasi nulli).
 riesame ha trovato un errore vecchio: il file degli eventi delle monete nuove (prova 32) era di prima di una correzione e aveva perso 19
 eventi; il verdetto della 32 non cambia (p 0,0020), ma il file va rifatto e con lui le prove che lo leggono (backlog P32). **Capito
 oggi**: il riesame serve anche quando non promuove niente: trova file vecchi che altre prove usano ancora.
+
+### 12 novembre 2026 (00:25 UTC)
+**Giro delle 00:17.** Notizie: 88 articoli nuovi da 24 fonti su 24; controlli in avanti: niente di nuovo. **G1 sul demo a 1.000, quarto
+ribilancio**: 10 ordini, 43 variazioni sotto il minimo; sui quattro giorni eseguibile il 20% (atteso 23%); scarto dalle volute 12,2%;
+demo −0,99% dall'8 novembre contro −2,08% del paper di G1 (`ops/results/0734-*`, `0735-*`). Ricerca: in corso il rifacimento del file
+degli eventi delle monete nuove (backlog P32).
