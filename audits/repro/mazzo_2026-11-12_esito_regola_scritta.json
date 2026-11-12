@@ -1,0 +1,34 @@
+{
+ "solo_regola_scritta": {
+  "serie": 267,
+  "famiglie": 192,
+  "in_V": 147,
+  "dev_V": 0.6235,
+  "corretto": {
+   "G1": 0.7481,
+   "G1 a 280 USDT (A)": 0.675,
+   "F5 + M7 + K2 al 12 ottobre": 0.8075,
+   "F5 + M7 + K2 al 19 ottobre": 0.812,
+   "C3 corretta al 5 ottobre": 0.6258,
+   "152 V1": 0.7223,
+   "152 V2": 0.6616,
+   "152 V3": 0.7098
+  }
+ },
+ "tutte_le_correzioni_senza_151": {
+  "serie": 265,
+  "famiglie": 191,
+  "in_V": 147,
+  "dev_V": 0.6306,
+  "corretto": {
+   "G1": 0.7331,
+   "G1 a 280 USDT (A)": 0.6584,
+   "F5 + M7 + K2 al 12 ottobre": 0.7971,
+   "F5 + M7 + K2 al 19 ottobre": 0.8017,
+   "C3 corretta al 5 ottobre": 0.6116,
+   "152 V1": 0.7066,
+   "152 V2": 0.6448,
+   "152 V3": 0.6938
+  }
+ }
+}

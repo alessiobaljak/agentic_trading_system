@@ -1,0 +1,40 @@
+{
+ "sharpe_nel_periodo": {
+  "151 WE": -1.271,
+  "147 GA2C": 0.323
+ },
+ "settimane_nel_periodo": {
+  "151 WE": 19,
+  "147 GA2C": 8
+ },
+ "scenari": {
+  "errori corretti, CC sola, 108 e 111 come 13 famiglie (come la prova 1)": {
+   "serie": 265,
+   "famiglie": 178,
+   "in_V": 147,
+   "dev_V": 0.6306,
+   "corretto": {
+    "G1": 0.7451,
+    "G1 a 280 USDT (A)": 0.6716,
+    "F5 + M7 + K2 al 12 ottobre": 0.8054,
+    "F5 + M7 + K2 al 19 ottobre": 0.8099,
+    "C3 corretta al 5 ottobre": 0.6229,
+    "152 V1": 0.7191
+   }
+  },
+  "errori corretti, CC sola, 108 e 111 come 26 famiglie (una per variante contata, come 1 e 2B)": {
+   "serie": 265,
+   "famiglie": 191,
+   "in_V": 147,
+   "dev_V": 0.6306,
+   "corretto": {
+    "G1": 0.7331,
+    "G1 a 280 USDT (A)": 0.6584,
+    "F5 + M7 + K2 al 12 ottobre": 0.7971,
+    "F5 + M7 + K2 al 19 ottobre": 0.8017,
+    "C3 corretta al 5 ottobre": 0.6116,
+    "152 V1": 0.7066
+   }
+  }
+ }
+}

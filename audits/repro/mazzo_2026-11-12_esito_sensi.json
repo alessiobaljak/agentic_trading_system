@@ -1,0 +1,126 @@
+{
+ "righe_81_82_filtrate": [
+  409,
+  2389
+ ],
+ "sharpe_CC_opzioni": -0.2541952728730423,
+ "scenari": {
+  "A pubblicato": {
+   "serie": 267,
+   "famiglie": 165,
+   "in_V": 146,
+   "dev_V": 0.6253,
+   "corretto": {
+    "G1": 0.7688,
+    "G1 a 280 USDT (A)": 0.6982,
+    "F5 + M7 + K2 al 12 ottobre": 0.8218,
+    "C3 corretta al 5 ottobre": 0.646,
+    "152 V1": 0.7441
+   }
+  },
+  "B 81 e 82 filtrate": {
+   "serie": 267,
+   "famiglie": 165,
+   "in_V": 147,
+   "dev_V": 0.6297,
+   "corretto": {
+    "G1": 0.7595,
+    "G1 a 280 USDT (A)": 0.6877,
+    "F5 + M7 + K2 al 12 ottobre": 0.8154,
+    "C3 corretta al 5 ottobre": 0.6368,
+    "152 V1": 0.7343
+   }
+  },
+  "C B senza le conferme 50 e 106": {
+   "serie": 265,
+   "famiglie": 164,
+   "in_V": 146,
+   "dev_V": 0.6324,
+   "corretto": {
+    "G1": 0.7549,
+    "G1 a 280 USDT (A)": 0.6826,
+    "F5 + M7 + K2 al 12 ottobre": 0.8122,
+    "C3 corretta al 5 ottobre": 0.6323,
+    "152 V1": 0.7294
+   }
+  },
+  "D C con la 151": {
+   "serie": 266,
+   "famiglie": 165,
+   "in_V": 147,
+   "dev_V": 0.6389,
+   "corretto": {
+    "G1": 0.7397,
+    "G1 a 280 USDT (A)": 0.6656,
+    "F5 + M7 + K2 al 12 ottobre": 0.8016,
+    "C3 corretta al 5 ottobre": 0.6178,
+    "152 V1": 0.7135
+   }
+  },
+  "E D con CC sola": {
+   "serie": 266,
+   "famiglie": 166,
+   "in_V": 148,
+   "dev_V": 0.637,
+   "corretto": {
+    "G1": 0.7427,
+    "G1 a 280 USDT (A)": 0.669,
+    "F5 + M7 + K2 al 12 ottobre": 0.8037,
+    "C3 corretta al 5 ottobre": 0.6207,
+    "152 V1": 0.7166
+   }
+  },
+  "F E con 108 e 111 come 2 famiglie fuori da V": {
+   "serie": 266,
+   "famiglie": 168,
+   "in_V": 148,
+   "dev_V": 0.637,
+   "corretto": {
+    "G1": 0.7406,
+    "G1 a 280 USDT (A)": 0.6667,
+    "F5 + M7 + K2 al 12 ottobre": 0.8023,
+    "C3 corretta al 5 ottobre": 0.6187,
+    "152 V1": 0.7145
+   }
+  },
+  "G E con 108 e 111 come 26 famiglie fuori da V": {
+   "serie": 266,
+   "famiglie": 192,
+   "in_V": 148,
+   "dev_V": 0.637,
+   "corretto": {
+    "G1": 0.7172,
+    "G1 a 280 USDT (A)": 0.641,
+    "F5 + M7 + K2 al 12 ottobre": 0.786,
+    "C3 corretta al 5 ottobre": 0.5967,
+    "152 V1": 0.69
+   }
+  },
+  "A con taglio 0.3": {
+   "serie": 267,
+   "famiglie": 115,
+   "in_V": 99,
+   "dev_V": 0.6422,
+   "corretto": {
+    "G1": 0.7933,
+    "G1 a 280 USDT (A)": 0.7262,
+    "F5 + M7 + K2 al 12 ottobre": 0.8388,
+    "C3 corretta al 5 ottobre": 0.6706,
+    "152 V1": 0.7701
+   }
+  },
+  "A con taglio 0.7": {
+   "serie": 267,
+   "famiglie": 200,
+   "in_V": 181,
+   "dev_V": 0.6522,
+   "corretto": {
+    "G1": 0.6728,
+    "G1 a 280 USDT (A)": 0.5933,
+    "F5 + M7 + K2 al 12 ottobre": 0.755,
+    "C3 corretta al 5 ottobre": 0.5567,
+    "152 V1": 0.644
+   }
+  }
+ }
+}

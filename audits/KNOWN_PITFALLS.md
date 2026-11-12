@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesami delle prove 96 e 55).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesami delle prove 96 e 55; mazzo dello Sharpe corretto).
 
 ## Dati
 
@@ -124,6 +124,7 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     (80 all'11 nov 2026); le prove 149-151 usano N = conto delle prove (`n_prove=N_PROVE`, 308-309) con la varianza dei
     gruppi. Per F5 + M7 + K2: 0,89 contro 0,75, con la soglia a 0,80 in mezzo. Calcolare sempre tutti e due e dire quale
     vale per le regole della prova. Cercare: `te.sharpe_corretto(` con e senza `n_prove=`.
+    Metodo (12 nov): i tagli 0,3 e 0,7 vanno sempre riportati (`ASTICELLA.md:35,46-48`); la miscela F5 + M7 + K2 fa 0,839 / 0,755.
 
 24. **La p di un mescolamento a strati dipende dagli strati** (metodo, prova 113): trimestre 0,027, mese 0,007, settimana 0,0027.
     Lo strato si sceglie nelle regole, mai dopo; gli altri si riportano solo «per capire» e non fanno passare una prova.
@@ -139,6 +140,19 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
 32. **Prove non nel mazzo dello Sharpe corretto**: `asticella.serie_programma7` (`asticella.py:211-265`) ha le prove a eventi del
     programma 7 fino alla 74 e quelle a portafoglio fino alla 102; la 96 manca, e le prove a portafoglio dopo la 102 (12 nov, prova 55).
     Lo Sharpe corretto calcolato con questo mazzo e' un massimo. Cercare: il numero della prova nelle liste di `serie_programma7`.
+    **12 nov (commit `78235da`)**: completato fino alla 152, ma restano fuori 27 varianti contate senza serie (108, 111, CC della 110)
+    contro `ASTICELLA.md:31-32` (le prove senza serie contano ognuna come un gruppo a se'), e la 151; dentro le conferme 50 e 106 che il
+    registro non conta. Confronto prova per prova: `audits/repro/mazzo_2026-11-12.py copertura` (somma della riga «Totale nel conto»).
+37. **Variante sbagliata da un file di eventi con la colonna del filtro** (mazzo, 12 nov 2026): `asticella.py:341-346` legge interi
+    `eventi_P9C.csv` e `eventi_P9C_lunga.csv`, la regola delle prove 81 e 82 e' il funding >= 0,0001 (`programma9/terza.py:31-32`);
+    la 82 diventa identica alla 75. Cercare: file con colonne `funding_8h`, `gruppo`, `gratis`, `bandiera`, `tipo` letti senza il filtro
+    della regola; doppioni esatti nel mazzo (`mazzo_2026-11-12.py copertura`, `gemelle`); media di `r` contro la riga del registro.
+38. **`asticella.corretto_rivisto` con le sole serie della prova** conta il mazzo fino alla 48 (56 famiglie): prova 152 0,88 invece di
+    0,744; la 153 (`novantunesima.py:253`) lo chiama cosi'. Cercare: `corretto_rivisto(` senza `serie_nuove()` nel primo argomento.
+39. **Etichetta della settimana spostata**: 110 SS vende il venerdi' g0 e chiude il venerdi' dopo, etichetta `g0 - 4` (il lunedi' prima:
+    una settimana in anticipo; `quarantottesima.py:131`); 139 CF tre settimane di domenica (`settantasettesima.py:69`, rapporto del
+    lunedi' + 6). Cercare: indice `% 7 != 4`; correlazione con serie vicine piu' alta a una settimana che alla stessa
+    (`mazzo_2026-11-12.py allinea`).
 34. **Confronto fra strategie su periodi diversi nel verdetto** (prova 55, 12 nov 2026): «C3 non migliora F5, 1,88 contro 1,93» mette
     C3 dal 2022 (250 settimane) contro F5 dal 2021 (302); sulle stesse settimane F5 fa 1,69 (1,61 dopo le parita') e C3 e' sopra.
     Cercare: Sharpe di un'altra prova citati nel verdetto e presi da un altro `RISULTATI_*.md` o `esame.json` con un `inizio` diverso;

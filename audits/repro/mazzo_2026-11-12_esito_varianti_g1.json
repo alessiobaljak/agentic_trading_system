@@ -1,0 +1,42 @@
+{
+ "G1_oltre_0.0": {
+  "prima": 0.8673,
+  "dopo": 0.7688,
+  "registrato_prima": 0.8673
+ },
+ "A280_oltre_0.0": {
+  "prima": 0.8141,
+  "dopo": 0.6982,
+  "registrato_prima": 0.8141
+ },
+ "G1_tutto_a_mercato": {
+  "prima": 0.7942,
+  "dopo": 0.671,
+  "registrato_prima": 0.7946
+ },
+ "A280_tutto_a_mercato": {
+  "prima": 0.7688,
+  "dopo": 0.6409,
+  "registrato_prima": 0.7692
+ },
+ "G1_oltre_0.0005": {
+  "prima": 0.7262,
+  "dopo": 0.5883,
+  "registrato_prima": 0.7245
+ },
+ "A280_oltre_0.0005": {
+  "prima": 0.7356,
+  "dopo": 0.601,
+  "registrato_prima": 0.7341
+ },
+ "G1_oltre_0.001": {
+  "prima": 0.5459,
+  "dopo": 0.3967,
+  "registrato_prima": 0.5455
+ },
+ "A280_oltre_0.001": {
+  "prima": 0.6494,
+  "dopo": 0.5039,
+  "registrato_prima": 0.6483
+ }
+}

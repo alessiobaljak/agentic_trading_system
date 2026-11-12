@@ -1,0 +1,84 @@
+{
+ "famiglia_di_G1_dopo_la_57": [
+  "61 F5T",
+  "61 G1T",
+  "63 G6",
+  "63 G1+G6",
+  "69 G11",
+  "86 F5N",
+  "88 G1N",
+  "89 F5C",
+  "92 G1 clima",
+  "92 F5 clima",
+  "93 G1-S",
+  "94 G1N-S",
+  "124 G1M",
+  "142 G1S",
+  "148 B",
+  "152 V1",
+  "152 V2",
+  "152 V3"
+ ],
+ "scenari": {
+  "prove 1-57": {
+   "serie": 103,
+   "famiglie": 65,
+   "in_V": 58,
+   "dev_V": 0.5655,
+   "corretto": {
+    "G1": 0.946,
+    "G1 a 280 USDT (A)": 0.9161
+   }
+  },
+  "prove 1-57 senza la conferma 50": {
+   "serie": 102,
+   "famiglie": 65,
+   "in_V": 58,
+   "dev_V": 0.5667,
+   "corretto": {
+    "G1": 0.9451,
+    "G1 a 280 USDT (A)": 0.915
+   }
+  },
+  "prove 1-56 (senza G1 nel mazzo)": {
+   "serie": 102,
+   "famiglie": 65,
+   "in_V": 58,
+   "dev_V": 0.5634,
+   "corretto": {
+    "G1": 0.9473,
+    "G1 a 280 USDT (A)": 0.918
+   }
+  },
+  "prove 1-57 piu' le varianti di G1 provate dopo": {
+   "serie": 121,
+   "famiglie": 64,
+   "in_V": 57,
+   "dev_V": 0.5646,
+   "corretto": {
+    "G1": 0.9474,
+    "G1 a 280 USDT (A)": 0.9182
+   }
+  },
+  "prove 1-148 (prima della scelta del demo dell 8 novembre)": {
+   "serie": 202,
+   "famiglie": 133,
+   "in_V": 114,
+   "dev_V": 0.6607,
+   "corretto": {
+    "G1": 0.7308,
+    "G1 a 280 USDT (A)": 0.6558
+   }
+  },
+  "tutte (mazzo del 12 novembre)": {
+   "serie": 267,
+   "famiglie": 165,
+   "in_V": 146,
+   "dev_V": 0.6253,
+   "corretto": {
+    "G1": 0.7688,
+    "G1 a 280 USDT (A)": 0.6982
+   }
+  }
+ }
+}
