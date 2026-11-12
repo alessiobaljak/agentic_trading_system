@@ -93,5 +93,10 @@ costi, esame), non la colonna «perché» né giudizi sul risultato (regole dei 
   dai limiti fissi attorno agli eventi macro (`bot/risk/hard_limits.py`) entrando alla prima ora permessa la media scende a +0,20% (p
   0,18). Niente varianti su questi 46 eventi: l'idea si riprende solo sulle riunioni nuove, dal 28 ottobre 2026, con le regole scritte
   prima.
-* Resta la **55** (C3).
+* **55, C3** (12 novembre, `audits/reports/2026-11-12-RIESAME_PROVA55.md`): FAIL del calcolo pubblicato (il codice usava la settimana
+  del 12 ottobre, oltre il periodo scritto, +10,5% a favore di C3; 3 settimane con il funding stimato non dichiarato), ma **nessun
+  errore cambia il «no»**: rifatta con il codice e il funding di oggi Sharpe 1,87, t 4,10, ogni anno positivo, Sharpe corretto **0,75**
+  con le regole di oggi (massimo 0,796). Il motivo «rende meno di F5» era falso (periodi diversi: sulle stesse settimane C3 è sopra F5
+  di 0,17-0,28, differenza non certa); resta vero che rende meno dei tre portafogli separati. Raccomandazione: non ritoccarla.
+* Il riesame delle candidate dell'elenco è finito: nessuna cambia verdetto.
 

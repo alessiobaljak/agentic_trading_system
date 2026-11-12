@@ -1,0 +1,41 @@
+{
+ "previsioni_diverse": 4441,
+ "previsioni": 25270,
+ "differenza_massima_del_rango": 0.10101010101010102,
+ "al_2026-10-05": {
+  "C3": {
+   "con_M7_arrotondato": 1.851,
+   "con_M7_come_la_prova": 1.874
+  },
+  "M7": {
+   "con_M7_arrotondato": 1.243,
+   "con_M7_come_la_prova": 1.214
+  },
+  "F5+M7+K2": {
+   "con_M7_arrotondato": 2.109,
+   "con_M7_come_la_prova": 2.096
+  },
+  "F5": {
+   "con_M7_arrotondato": 1.612,
+   "con_M7_come_la_prova": 1.612
+  }
+ },
+ "al_2026-10-12": {
+  "C3": {
+   "con_M7_arrotondato": 1.905,
+   "con_M7_come_la_prova": 1.927
+  },
+  "M7": {
+   "con_M7_arrotondato": 1.301,
+   "con_M7_come_la_prova": 1.272
+  },
+  "F5+M7+K2": {
+   "con_M7_arrotondato": 2.156,
+   "con_M7_come_la_prova": 2.144
+  },
+  "F5": {
+   "con_M7_arrotondato": 1.648,
+   "con_M7_come_la_prova": 1.648
+  }
+ }
+}

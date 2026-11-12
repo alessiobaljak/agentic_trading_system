@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesame della prova 96).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesami delle prove 96 e 55).
 
 ## Dati
 
@@ -49,6 +49,15 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     numero di monete per lato e peso massimo per giorno (`audits/repro/g1_esposizione_2026-11-12.py`). Verificato: il 5 febbraio 2024
     63 monete su 100 al funding 0,0021; nel gennaio 2021 la causa e' l'universo piccolo (27 monete: 200 giorni di vita dai dati
     che partono dal 1° gennaio 2020).
+35. **Fine del periodo scritta nelle regole e non nel codice** (prova 55, 12 nov 2026): `CINQUANTACINQUESIMA.md:23` «al 5 ottobre
+    2026», `cinquantacinquesima.py:56-61` passa a `te.esame` tutte le settimane del pannello (fino al 12 ottobre): una settimana in
+    piu', +10,5%, Sharpe 1,83 → 1,88. Convenzione del repository: «al <lunedi'>» = ultimo lunedi' (`asticella.periodo`). Cercare:
+    «al <data>» nelle regole e `te.esame(df, ...)` o `numeri_settimana(...)` senza `df.index <= FINE`; per la checklist e' Bloccante.
+36. **Residuo delle parita' del funding** (`CONTROLLO_PARITA.md`, 23 ott): la differenza di somme cumulate o mobili lascia circa 1e-17,
+    che decide l'ordine delle monete con lo stesso funding (circa il 6% per settimana) e non a caso. Corretto solo in `sesta.funding_7`
+    (dalla prova 57); **non** negli ingredienti di M7 (`quattordicesima.py:69,132`: arrotondandoli cambia il 17,6% delle previsioni,
+    C3 −0,02, M7 +0,03) ne' nelle prove fino alla 56. Effetto per strategia molto diverso: F5 −0,09, C3 −0,003. Cercare: `cumsum`,
+    `rolling(...).sum()` del funding usati in un rango senza `np.round(..., 12)`; misura: `audits/repro/prova55_2026-11-12.py m7r`.
 
 ## Sguardo nel futuro e tempi
 
@@ -128,7 +137,12 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     di zero; a pari dispersione la quota è 0,95%. Cercare: `quota_caso`, `estrazioni` di giorni senza evento citate a sostegno;
     confrontare le deviazioni e riportare la quota a pari dispersione (`audits/repro/prova96_2026-11-12.py controllo`).
 32. **Prove non nel mazzo dello Sharpe corretto**: `asticella.serie_programma7` (`asticella.py:211-265`) ha le prove a eventi del
-    programma 7 fino alla 74; la 96 manca (e forse altre dopo la 74). Cercare: il numero della prova nelle liste di `serie_programma7`.
+    programma 7 fino alla 74 e quelle a portafoglio fino alla 102; la 96 manca, e le prove a portafoglio dopo la 102 (12 nov, prova 55).
+    Lo Sharpe corretto calcolato con questo mazzo e' un massimo. Cercare: il numero della prova nelle liste di `serie_programma7`.
+34. **Confronto fra strategie su periodi diversi nel verdetto** (prova 55, 12 nov 2026): «C3 non migliora F5, 1,88 contro 1,93» mette
+    C3 dal 2022 (250 settimane) contro F5 dal 2021 (302); sulle stesse settimane F5 fa 1,69 (1,61 dopo le parita') e C3 e' sopra.
+    Cercare: Sharpe di un'altra prova citati nel verdetto e presi da un altro `RISULTATI_*.md` o `esame.json` con un `inizio` diverso;
+    rifare sempre sulle stesse settimane (`audits/repro/prova55_2026-11-12.py base`, `F5_come_nel_verdetto`).
 
 ## Procedura dell'audit
 

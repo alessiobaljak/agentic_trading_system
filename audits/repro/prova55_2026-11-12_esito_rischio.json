@@ -1,0 +1,162 @@
+{
+ "perdita_peggiore_C3": {
+  "giorno_peggiore": [
+   [
+    -0.0779,
+    "2022-10-31"
+   ],
+   [
+    -0.0734,
+    "2025-11-03"
+   ],
+   [
+    -0.0653,
+    "2024-02-26"
+   ]
+  ],
+  "giorni_sotto_meno_5%": 7,
+  "settimana_peggiore_tutti_gli_estremi_insieme": [
+   [
+    -0.6253,
+    "2025-10-06"
+   ],
+   [
+    -0.5181,
+    "2025-11-03"
+   ],
+   [
+    -0.5087,
+    "2024-02-26"
+   ]
+  ],
+  "esposizione_lorda_media": 2.0,
+  "esposizione_lorda_massima": 2.0,
+  "peso_massimo_di_una_moneta": 0.2176
+ },
+ "perdita_peggiore_F5": {
+  "giorno_peggiore": [
+   [
+    -0.0727,
+    "2024-02-26"
+   ],
+   [
+    -0.0576,
+    "2025-04-07"
+   ],
+   [
+    -0.0535,
+    "2026-08-03"
+   ]
+  ],
+  "giorni_sotto_meno_5%": 3,
+  "settimana_peggiore_tutti_gli_estremi_insieme": [
+   [
+    -0.6949,
+    "2025-10-06"
+   ],
+   [
+    -0.5493,
+    "2022-05-09"
+   ],
+   [
+    -0.4728,
+    "2025-05-05"
+   ]
+  ],
+  "esposizione_lorda_media": 2.0,
+  "esposizione_lorda_massima": 2.0,
+  "peso_massimo_di_una_moneta": 0.4373
+ },
+ "peso_massimo_di_una_moneta": {
+  "massimo": 0.2176,
+  "mediana_settimanale": 0.0827,
+  "settimane_sopra_10%": 68,
+  "settimane_sopra_20%": 3,
+  "dove": [
+   "ASTERUSDT",
+   "2026-07-20"
+  ]
+ },
+ "filtri": [
+  {
+   "capitale_usdt": 280,
+   "ordini": 17171,
+   "ordini_sotto_il_minimo": 0.511,
+   "valore_degli_ordini_sotto_il_minimo": 0.189,
+   "ordini_su_monete_senza_filtro_oggi": 0.146,
+   "posizioni_sotto_il_minimo": 0.137,
+   "errore_arrotondamento_mediano": 0.0147,
+   "errore_arrotondamento_95": 1.0
+  },
+  {
+   "capitale_usdt": 1000,
+   "ordini": 17171,
+   "ordini_sotto_il_minimo": 0.28,
+   "valore_degli_ordini_sotto_il_minimo": 0.042,
+   "ordini_su_monete_senza_filtro_oggi": 0.146,
+   "posizioni_sotto_il_minimo": 0.006,
+   "errore_arrotondamento_mediano": 0.004,
+   "errore_arrotondamento_95": 1.0
+  },
+  {
+   "capitale_usdt": 10000,
+   "ordini": 17171,
+   "ordini_sotto_il_minimo": 0.038,
+   "valore_degli_ordini_sotto_il_minimo": 0.001,
+   "ordini_su_monete_senza_filtro_oggi": 0.146,
+   "posizioni_sotto_il_minimo": 0.0,
+   "errore_arrotondamento_mediano": 0.0004,
+   "errore_arrotondamento_95": 0.0506
+  }
+ ],
+ "conto_vero_C3": {
+  "280_composto": {
+   "sharpe": 1.814,
+   "ordini_saltati": 0.349,
+   "per_anno": {
+    "2022": 0.729,
+    "2023": 0.171,
+    "2024": 0.3297,
+    "2025": 0.7986,
+    "2026": 0.8049
+   },
+   "positivi": "5/5"
+  },
+  "280_fisso": {
+   "sharpe": 1.53,
+   "ordini_saltati": 0.546,
+   "per_anno": {
+    "2022": 0.6961,
+    "2023": 0.0999,
+    "2024": 0.2412,
+    "2025": 0.832,
+    "2026": 0.6019
+   },
+   "positivi": "5/5"
+  },
+  "1000_composto": {
+   "sharpe": 1.858,
+   "ordini_saltati": 0.156,
+   "per_anno": {
+    "2022": 0.6424,
+    "2023": 0.201,
+    "2024": 0.3129,
+    "2025": 0.7915,
+    "2026": 0.8125
+   },
+   "positivi": "5/5"
+  },
+  "1000_fisso": {
+   "sharpe": 1.914,
+   "ordini_saltati": 0.313,
+   "per_anno": {
+    "2022": 0.6407,
+    "2023": 0.2071,
+    "2024": 0.3363,
+    "2025": 0.8174,
+    "2026": 0.7827
+   },
+   "positivi": "5/5"
+  }
+ }
+}

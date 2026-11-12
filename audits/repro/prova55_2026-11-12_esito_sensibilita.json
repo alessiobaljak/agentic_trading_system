@@ -1,0 +1,172 @@
+{
+ "sensibilita_periodo_dichiarato": {
+  "base": {
+   "C3": 1.874,
+   "F5_stesso_cambio": 1.612,
+   "C3_meno_F5": 0.262,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5421,
+   "discesa_C3": -0.4267
+  },
+  "entrata 0.16": {
+   "C3": 1.759,
+   "F5_stesso_cambio": 1.526,
+   "C3_meno_F5": 0.233,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5407,
+   "discesa_C3": -0.3998
+  },
+  "entrata 0.18": {
+   "C3": 1.868,
+   "F5_stesso_cambio": 1.551,
+   "C3_meno_F5": 0.317,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5445,
+   "discesa_C3": -0.3699
+  },
+  "entrata 0.22": {
+   "C3": 1.859,
+   "F5_stesso_cambio": 1.557,
+   "C3_meno_F5": 0.302,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5268,
+   "discesa_C3": -0.4231
+  },
+  "entrata 0.24": {
+   "C3": 1.889,
+   "F5_stesso_cambio": 1.562,
+   "C3_meno_F5": 0.327,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5135,
+   "discesa_C3": -0.3975
+  },
+  "uscita 0.32": {
+   "C3": 1.97,
+   "F5_stesso_cambio": 1.445,
+   "C3_meno_F5": 0.525,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.6122,
+   "discesa_C3": -0.4558
+  },
+  "uscita 0.36": {
+   "C3": 1.984,
+   "F5_stesso_cambio": 1.587,
+   "C3_meno_F5": 0.397,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5856,
+   "discesa_C3": -0.4163
+  },
+  "uscita 0.44": {
+   "C3": 2.058,
+   "F5_stesso_cambio": 1.653,
+   "C3_meno_F5": 0.405,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5652,
+   "discesa_C3": -0.3799
+  },
+  "uscita 0.48": {
+   "C3": 2.079,
+   "F5_stesso_cambio": 1.537,
+   "C3_meno_F5": 0.542,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5456,
+   "discesa_C3": -0.3748
+  },
+  "volatilita' 24 giorni": {
+   "C3": 1.932,
+   "F5_stesso_cambio": 1.624,
+   "C3_meno_F5": 0.308,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5532,
+   "discesa_C3": -0.4068
+  },
+  "volatilita' 27 giorni": {
+   "C3": 1.888,
+   "F5_stesso_cambio": 1.604,
+   "C3_meno_F5": 0.284,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.544,
+   "discesa_C3": -0.4211
+  },
+  "volatilita' 33 giorni": {
+   "C3": 1.833,
+   "F5_stesso_cambio": 1.546,
+   "C3_meno_F5": 0.287,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5376,
+   "discesa_C3": -0.4383
+  },
+  "volatilita' 36 giorni": {
+   "C3": 1.796,
+   "F5_stesso_cambio": 1.545,
+   "C3_meno_F5": 0.251,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5285,
+   "discesa_C3": -0.4479
+  },
+  "segnali 6 giorni (funding e K1; M7 resta)": {
+   "C3": 1.905,
+   "F5_stesso_cambio": 1.477,
+   "C3_meno_F5": 0.428,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5594,
+   "discesa_C3": -0.4617
+  },
+  "segnali 8 giorni (funding e K1; M7 resta)": {
+   "C3": 1.987,
+   "F5_stesso_cambio": 1.437,
+   "C3_meno_F5": 0.55,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.554,
+   "discesa_C3": -0.3354
+  },
+  "tutti e tre i ranghi presenti": {
+   "C3": 1.883,
+   "F5_stesso_cambio": 1.612,
+   "C3_meno_F5": 0.271,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5451,
+   "discesa_C3": -0.4267
+  },
+  "universo 80 (M7 resta a 100)": {
+   "C3": 2.089,
+   "F5_stesso_cambio": 1.412,
+   "C3_meno_F5": 0.677,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.6263,
+   "discesa_C3": -0.3436
+  },
+  "universo 90 (M7 resta a 100)": {
+   "C3": 1.777,
+   "F5_stesso_cambio": 1.295,
+   "C3_meno_F5": 0.482,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5056,
+   "discesa_C3": -0.3095
+  },
+  "universo 110 (M7 resta a 100)": {
+   "C3": 1.915,
+   "F5_stesso_cambio": 1.56,
+   "C3_meno_F5": 0.355,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.5154,
+   "discesa_C3": -0.2768
+  },
+  "universo 120 (M7 resta a 100)": {
+   "C3": 1.807,
+   "F5_stesso_cambio": 1.448,
+   "C3_meno_F5": 0.359,
+   "anni_C3": "5/5",
+   "annuo_C3": 0.4718,
+   "discesa_C3": -0.3009
+  }
+ },
+ "riassunto": {
+  "C3_min": 1.759,
+  "C3_max": 2.089,
+  "C3_meno_F5_min": 0.233,
+  "C3_meno_F5_max": 0.677,
+  "casi_C3_sopra_F5": 19,
+  "casi": 19
+ }
+}

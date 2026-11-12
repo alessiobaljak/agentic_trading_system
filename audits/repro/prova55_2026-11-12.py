@@ -13,6 +13,9 @@ Parti:
   tempi        prova del taglio (C3 e M7 seme 1), entrata un giorno dopo, entrata all'01:00 e alle 04:00
   dati         buchi, anomalie, monete ferme, funding stimato, candele grezze, interesse aperto, perdita nei buchi del 2022
   rischio      perdita peggiore nel giorno e nella settimana, peso massimo, filtri del conto vero, conto a 280 e 1.000 USDT
+  m7r_dsr      Sharpe corretto di C3 con M7 arrotondato (dopo ``m7r``)
+  zombi        posizioni tenute nei giorni a volume zero (moneta tolta dal listino a meta' settimana)
+  senza        solo per capire: il punteggio senza K1 (funding e M7) e senza M7 (funding e K1)
 
 Uso: PYTHONPATH=<radice> python3 audits/repro/prova55_2026-11-12.py <parte> <cartella_m7>
 """
@@ -300,7 +303,7 @@ def parte_base(cartella: Path) -> dict:
                     "extra_btc": round(e["extra_btc_annuo"], 4), "giro": round(e["giro_medio"], 3), "spese": round(e["spese_annue"], 4),
                     "trimestri_positivi": {a_: sum(1 for qq in range(1, 5) if e["per_trimestre"][f"{a_}T{qq}"] > 0) for a_ in q.ANNI_PIENI}}
             if etich == "corretta" or nome_p.startswith("della_prova"):
-                d = dsr_tutti(C["C3"], e["intero"], nuove55)
+                d = dsr_tutti(C["C3"]["netto"], e["intero"], nuove55)
                 riga["sharpe_corretto"] = d
                 riga["esito_come_scritto_0_95_senza_aggiunta"] = te.esito(e, d["come_scritto_mazzo_fino_alla_55"]["corretto_senza_aggiunta"])
                 riga["esito_come_scritto_0_95_con_aggiunta"] = te.esito(e, d["come_scritto_mazzo_fino_alla_55"]["corretto_con_aggiunta"])
@@ -656,10 +659,74 @@ def parte_rischio(cartella: Path) -> dict:
     return out
 
 
+# ---------------------------------------------------------------------------
+# parti piccole: Sharpe corretto con M7 arrotondato (dopo ``m7r``) e posizioni tenute nei giorni fermi
+# ---------------------------------------------------------------------------
+
+def parte_m7r_dsr(cartella: Path) -> dict:
+    pan, ps, pm, costo, Pm = base_comune(cartella)
+    W, _ = pesi(pan, ps, pm, np.load(cartella / "Pm_r.npy"))
+    c3 = a28.conto(W["C3"], ps, costo)
+    btc = pd.Series(ps["R"][:, ps["simboli"].index("BTCUSDT")], index=ps["lunedi"])
+    out = {}
+    for fine in (FINE_DICHIARATA, FINE_PROVA):
+        e = te.esame(taglia(c3, fine, inizio=-10**9), btc, inizio=INIZIO, anni_pieni=q.ANNI_PIENI)
+        d = dsr_tutti(c3["netto"], e["intero"], nuove_fino_alla_55())
+        out[sc.data(fine)] = {"sharpe": round(e["intero"]["sharpe"], 3), "per_anno": {k: round(v, 3) for k, v in e["per_anno"].items()},
+                              "come_scritto": d["come_scritto_mazzo_fino_alla_55"]["corretto_senza_aggiunta"],
+                              "con_aggiunta_mazzo_55": d["come_scritto_mazzo_fino_alla_55"]["corretto_con_aggiunta"],
+                              "oggi_gruppi": d[f"oggi_taglio_{ast.TAGLIO}"]["N_gruppi_V_con_aggiunta"],
+                              "oggi_N312": d[f"oggi_taglio_{ast.TAGLIO}"][f"N_conto_{N_CONTO}_V_con_aggiunta"],
+                              "t": round(e["intero"]["sharpe"] * (e["intero"]["settimane"] / 52) ** 0.5, 3)}
+    esito_file("m7r_dsr").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
+def parte_zombi(cartella: Path) -> dict:
+    pan, ps, pm, costo, Pm = base_comune(cartella)
+    W, _ = pesi(pan, ps, pm, Pm)
+    Wc = W["C3"]
+    lun = ps["lunedi"] - pan["t0"]
+    C, V = pan["close"], pan["quote_volume"]
+    sett = np.flatnonzero((ps["lunedi"] >= INIZIO) & (ps["lunedi"] <= FINE_DICHIARATA))
+    righe = []
+    for w in sett:
+        m = lun[w]
+        for j in np.flatnonzero(Wc[w] != 0):
+            g = [d for d in range(m, m + 7) if np.isfinite(C[d, j]) and np.nan_to_num(V[d, j]) == 0]
+            if g:
+                righe.append([ps["simboli"][j], sc.data(int(ps["lunedi"][w])), len(g), round(float(Wc[w, j]), 4),
+                              round(float(ps["R"][w, j]), 4), round(float(Wc[w, j] * ps["R"][w, j]), 5)])
+    out = {"posizioni": len(righe), "giorni": sum(r[2] for r in righe), "contributo_totale": round(sum(r[5] for r in righe), 4),
+           "righe_simbolo_lunedi_giorni_peso_R_contributo": sorted(righe, key=lambda r: -abs(r[5]))}
+    esito_file("zombi").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
+def parte_senza(cartella: Path) -> dict:
+    """Solo per capire quanto pesa K1 (costruzione sul 2022-2026, DODICESIMA.md, sezione 1): C3 con il funding e M7 soli, e con il
+    funding e K1 soli (il punteggio con i due ranghi presenti; stessa banda, stessi pesi)."""
+    pan, ps, pm, costo, Pm = base_comune(cartella)
+    lun = ps["lunedi"] - pan["t0"]
+    sig = ot.sigma_30(pan, lun)
+    f = -f7(pan, lun)
+    kk = k1(pan, ps, pm)
+    nan = np.full_like(f, np.nan)
+    out = {}
+    for nome, (kx, mx) in {"funding_e_M7": (nan, Pm), "funding_e_K1": (kk, nan), "tutti_e_tre": (kk, Pm)}.items():
+        c = cq.punteggio(f, kx, mx, ps["U"])
+        W = a28.banda(np.where(np.isfinite(sig), c, np.nan), ps["U"], sig)
+        x = taglia(a28.conto(W, ps, costo), FINE_DICHIARATA)["netto"]
+        out[nome] = {"sharpe": sharpe(x), **anni(x)}
+    esito_file("senza").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
 if __name__ == "__main__":
     parte, cart = sys.argv[1], Path(sys.argv[2])
     funz = {"base": parte_base, "m7r": parte_m7r, "sensibilita": parte_sensibilita, "tempi": parte_tempi,
-            "dati": parte_dati, "rischio": parte_rischio}[parte]
+            "dati": parte_dati, "rischio": parte_rischio, "m7r_dsr": parte_m7r_dsr, "zombi": parte_zombi,
+            "senza": parte_senza}[parte]
     o = funz(cart)
     testo = json.dumps(o, ensure_ascii=False, default=str)
     print(testo[:3000])

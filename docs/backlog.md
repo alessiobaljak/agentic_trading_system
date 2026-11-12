@@ -785,3 +785,13 @@ libro» (non eseguibile subito a commissione piena) con la misura di quanti ordi
 degli ordini: live-path-reviewer, poi l'ok del proprietario per il riavvio. **Metro:** la quota del valore scambiato a commissione
 bassa, prima e dopo; il funding del demo contro il paper, moneta per moneta.
 
+### P34. Il mazzo dello Sharpe corretto si ferma alla prova 102, e il residuo delle parità dentro M7 — trovata il 12 novembre 2026 (riesami 55 e 96)
+**Perché:** i riesami del 12 novembre (`audits/reports/2026-11-12-RIESAME_PROVA55.md`, `2026-11-12-RIESAME_PROVA96.md`) dicono che
+il mazzo delle serie usato dallo Sharpe corretto (`research/programma6/asticella.py`, `serie_programma7` e dintorni, righe 211-235)
+si ferma alla prova 102: le prove dopo, compresa la 96 a eventi, non ci sono, quindi i numeri corretti di oggi sono un po' troppo alti.
+E il residuo delle parità del funding (corretto dalla prova 57) è ancora dentro gli ingredienti di M7 (`quattordicesima.py:69,132`):
+arrotondandoli cambia il 17,6% delle previsioni, e M7 è dentro la miscela F5 + M7 + K2 misurata a tavolino.
+**Cosa:** una funzione unica per l'esame (famiglie) con il mazzo completo e aggiornato a ogni prova; poi rifare il numero corretto di
+G1, della miscela e delle prove recenti con il mazzo completo. M7 con le parità corrette come prova nuova, nel conto, prima di toccare
+la misura a tavolino. **Metro:** quante serie nel mazzo; quanto cambia lo Sharpe corretto di G1 (oggi 0,86) e della miscela (0,89).
+
