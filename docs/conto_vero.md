@@ -110,3 +110,12 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
   corso. Al proprietario: pubblicare i quattro blocchi nuovi delle regole (`conto_vero_*`, testo dato in conversazione). Il bot non
   carica questo codice fino al riavvio, che approva lui.
 
+* 12 novembre 2026, pomeriggio, **secondo giro** committato spento (da91124), APPROVE di live-path-reviewer per il commit
+  (`reviews/reports/2026-11-12-conto-vero-versione-firebase-2.md`): chiusi 74 (con Firebase muto vale l'approvazione letta davvero
+  negli ultimi 10 minuti, sempre confrontata con il codice in esecuzione; una revoca letta vale subito; una revoca **non** letta per un
+  buco di Firebase lascia gli ordini ammessi fino al decimo minuto), 75, 76 e 77; corretti i commenti sulla chiave di amministratore e
+  aggiunto un test di guardia. **Per l'accensione restano**: 54 parte ii (Alto, decisione del proprietario: installazione per i soldi
+  veri aggiornata solo da lui e chiave di amministratore fuori da GitHub), 78 (Basso: il test di guardia va allargato a import,
+  costanti e nomi a pezzi), 70 (Medio, decisione del proprietario), il pulsante «Revoca» e il verdetto del revisore accanto ad
+  «Approva», le regole pubblicate con i pulsanti provati fino in fondo, una revisione nuova. Il bot carica questo codice al riavvio,
+  con l'ok del proprietario.
