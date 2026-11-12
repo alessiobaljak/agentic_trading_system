@@ -591,3 +591,8 @@ degli eventi delle monete nuove (backlog P32).
 **Il file degli eventi delle monete nuove rifatto (backlog P32)**: 632 eventi (19 recuperati); nessun verdetto cambia (prova 32 +4,26%
 per evento, p 0,0020; 113 resta bocciata; N3 a portafoglio Sharpe 0,64; G1 più eventi 2,83). Restano l'elenco ufficiale dei contratti
 che non sono monete (24 eventi del 2026 su 87 sospetti) e due script vecchi da rifare.
+**Giro delle 04:17.** Raccolta (27 articoli da 23 fonti su 24) e controlli in avanti: niente di nuovo. Con l'elenco ufficiale di Binance:
+38 degli 87 eventi delle monete nuove del 2026 nella ricerca sono contratti su azioni o fondi (il bot li esclude già); nessuno di questi
+contratti è mai entrato fra le 100 monete di G1, quindi G1 non è toccato. Le monete nuove vere del 2026 rendono −0,80% a evento (backlog
+P32). **Capito oggi**: nel 2026 Binance quota più contratti su azioni che monete nuove; la ricerca deve riconoscerli dal tipo, non dal
+nome.

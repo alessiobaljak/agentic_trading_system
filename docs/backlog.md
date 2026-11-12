@@ -767,3 +767,8 @@ p 0,0020 (resta valida), 113 p 0,0268 (resta bocciata), 33 N3 a portafoglio Shar
 ufficiale dei tipi di contratto (24 eventi del 2026 su 87 sono contratti su azioni confermati o sospetti), `programma9/quarta.py` e
 `programma6/quarantacinquesima.py` da rifare, `CONTO_UNICO.md` e `RISULTATI_CINQUANTUNESIMA.md` con testo scritto a mano da aggiornare,
 la parità N3 bot-ricerca, la misura in avanti delle monete gratis.
+**12 novembre, i tipi ufficiali** (`exchangeInfo` di Binance, `underlyingType` e `underlyingSubType`): fra gli 87 eventi delle monete
+nuove del 2026, **38 sono contratti su azioni o fondi** (non 24 come stimato dai nomi), nessuno nell'elenco degli esclusi; nel pannello
+ci sono 72 contratti che non sono monete, ma **nessuno è mai entrato fra le 100 di G1** (la ricerca di G1 non è toccata). Gli eventi
+del 2026 rendono −0,31% a evento con tutti e −0,80% con le sole monete. Il bot filtra già con il tipo del sottostante; la ricerca deve
+fare lo stesso (non toccando `research/programma6/esclusi.py`, che il bot importa: sarebbe una modifica del percorso degli ordini).
