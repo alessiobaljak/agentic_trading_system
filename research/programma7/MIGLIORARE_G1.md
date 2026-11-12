@@ -60,6 +60,12 @@ separato prima del paper).
 
 *Dal 12 novembre le voci 9-13 le porta avanti strategy-improver, una per giro, quando c'è un passo vero da fare.*
 
+*12 novembre, dopo la revisione di G1 con backtest-auditor (`audits/reports/2026-11-12-G1_CONTO_VERO.md`: PASS tecnico con 4 problemi
+Alti) diventano urgenti: la **voce 2** (la commissione vera degli ordini limite: l'ordine al prezzo mark può eseguirsi subito come
+ordine a mercato; a 280 USDT lo Sharpe corretto è 0,81 con l'ipotesi della ricerca e 0,77 tutto a mercato), la **voce 3** (il funding
+incassato dal demo è circa il 40% sotto quello del paper il 10 e l'11 novembre) e la **voce 13** (la concentrazione: una moneta
+venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; regole della prova 152 in scrittura).*
+
 ## Già fatte (dalla revisione con le skill del 1° novembre, `REVISIONE_SKILL_G1.md`)
 
 * Margine unico impostato e controllato dal codice; stop sulla perdita del conto a −35% dal massimo; il pulsante che chiude tutto;

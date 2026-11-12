@@ -1,0 +1,23 @@
+audit G1 12 nov 2026: buchi del 2022 nell'archivio giornaliero
+2022-02-21 universo 100 monete G1 56 G1 netto 0.0010 A -0.0064 giro G1 0.352
+2022-02-27 universo 100 monete G1 59 G1 netto 0.0087 A 0.0033 giro G1 0.228
+2022-02-28 universo 70 monete G1 43 G1 netto 0.0088 A 0.0373 giro G1 1.503
+2022-03-06 universo 70 monete G1 41 G1 netto 0.0035 A -0.0110 giro G1 0.239
+2022-03-07 universo 100 monete G1 51 G1 netto 0.0088 A 0.0032 giro G1 1.469
+2022-04-04 universo 100 monete G1 46 G1 netto 0.0175 A 0.0210 giro G1 0.833
+ETHUSDT 2022-02-26 ore presenti: 24
+ETHUSDT 2022-02-27 ore presenti: 24
+ETHUSDT 2022-02-28 ore presenti: 24
+ETHUSDT 2022-04-01 ore presenti: 24
+LUNAUSDT 2022-02-26 ore presenti: 24
+LUNAUSDT 2022-02-27 ore presenti: 24
+LUNAUSDT 2022-02-28 ore presenti: 24
+LUNAUSDT 2022-04-01 ore presenti: 24
+WAVESUSDT 2022-02-26 ore presenti: 24
+WAVESUSDT 2022-02-27 ore presenti: 24
+WAVESUSDT 2022-02-28 ore presenti: 24
+WAVESUSDT 2022-04-01 ore presenti: 24
+KNCUSDT 2022-02-26 ore presenti: 24
+KNCUSDT 2022-02-27 ore presenti: 24
+KNCUSDT 2022-02-28 ore presenti: 24
+KNCUSDT 2022-04-01 ore presenti: 24

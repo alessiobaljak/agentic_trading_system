@@ -43,6 +43,10 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   `tests/test_strategie_restano_accese.py`). Il vault non si pulisce. Due agenti nuovi: chi migliora le strategie in corso e chi
   sceglie quale usare in produzione. La ricerca nuova la fanno gli agenti: la 1:1:1 (una moneta, un intervallo, una strategia) su 4
   ore e un giorno, il riesame delle prove bocciate di poco, le monete nate dopo ottobre, le idee in coda.
+* **9 novembre**: «va bene sharpe»: la soglia dello Sharpe corretto per l'esame è **0,80** (proposta dell'allocatore,
+  `allocazione/REGOLE.md`), con ogni anno positivo e t da 3; sotto i 500 USDT una strategia sola. La revisione di G1 del 12 novembre
+  (`audits/reports/2026-11-12-G1_CONTO_VERO.md`) ricorda che le regole di G1 scritte prima dicevano 0,95: la soglia è scesa dopo il
+  risultato, per decisione del proprietario.
 * **11 novembre**: «non fermarti a cercarne di nuove [...] dovremmo continuare a provare cose nuove»: la ricerca nuova va avanti a
   ogni giro accanto al miglioramento di G1 (strategy-scout propone, strategy-researcher esegue, backtest-auditor giudica); le aree del
   repository separate (`AREE.md`).

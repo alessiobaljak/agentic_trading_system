@@ -15,7 +15,7 @@ NON POSSIEDI: il codice delle strategie e dei motori (sessione principale), l'es
 
 ## Il metodo di questo repo (leggilo, non riassumerlo dal nome)
 - Ogni prova ha una riga in `research/REGISTRO.md` e un file di regole (per esempio `research/programma7/OTTANTASEIESIMA.md`) **committato prima dei risultati**: verificalo con `git log --format='%h %ci %s' -- <regole> <risultati>`.
-- Il conto delle prove (oggi 246) e lo Sharpe corretto per il numero di prove si calcolano con `research/programma6/asticella.py`; la regola di Alessio: Sharpe corretto da 0,90 in su, ogni anno positivo, t dello Sharpe sopra 3 (sezione 1 di `research/REGISTRO.md`).
+- Il conto delle prove (`python3 -m research.src.registro --riepilogo`) e lo Sharpe corretto si calcolano con `research/programma6/asticella.py` contando le famiglie di prove simili (decisione dell'11 novembre 2026); la regola di Alessio (9 novembre 2026, `allocazione/REGOLE.md`): Sharpe corretto da 0,80 in su, ogni anno positivo, t dello Sharpe sopra 3 (sezione 1 di `research/REGISTRO.md`).
 - I motori: `research/programma6/seconda.py` e `terza.py` (pannello giornaliero, funding storico), `research/programma5/strumenti/motore5.py` (candele da 1 minuto), `research/programma7/revisione_g1n/nucleo.py` (G1 riscritta da zero), `backtesting/` (vecchio sistema, fermo).
 - Il vault di BTC dal 1° gennaio 2024 è già stato aperto (17 ottobre 2026, `research/vault/APERTURA_3.md`): da allora la ricerca usa tutta la storia, e la difesa sono le regole scritte prima, il conto delle prove e la prova in avanti (paper e demo). Non c'è un divieto per data: controlli che i periodi usati siano quelli **dichiarati prima** nel file di regole.
 

@@ -1,0 +1,46 @@
+{
+ "taglio": [
+  {
+   "giorno": "2022-02-08",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 56
+  },
+  {
+   "giorno": "2022-08-21",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 59
+  },
+  {
+   "giorno": "2023-10-06",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 54
+  },
+  {
+   "giorno": "2024-05-10",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 59
+  },
+  {
+   "giorno": "2024-08-10",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 53
+  },
+  {
+   "giorno": "2025-10-16",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 57
+  },
+  {
+   "giorno": "2026-10-04",
+   "diff_max": 0.0,
+   "universo_uguale": true,
+   "monete": 49
+  }
+ ]
+}

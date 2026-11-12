@@ -1,0 +1,101 @@
+{
+ "misure": {
+  "G1": {
+   "sharpe": 1.9815328145615034,
+   "sortino": 3.8659706754938012,
+   "asimmetria": 0.5446190246495367,
+   "curtosi": 4.0440874732458525,
+   "settimane": 300,
+   "guadagno_totale_somma": 3.138489078272972,
+   "quota_5_giorni_migliori": 0.1538178585491594,
+   "quota_3_mesi_migliori": 0.292720818564457,
+   "mesi_positivi": "48/70",
+   "3_mesi_migliori": {
+    "2021-04": 0.4219813318140744,
+    "2024-12": 0.2696475405615873,
+    "2024-11": 0.22707221967201072
+   },
+   "per_clima": {
+    "rialzo": {
+     "mesi": 21,
+     "annuo": 0.20287790326077362,
+     "sharpe_giornaliero_annuo": 0.7380153181721354
+    },
+    "laterale": {
+     "mesi": 34,
+     "annuo": 0.6921310228344298,
+     "sharpe_giornaliero_annuo": 2.5474373949005344
+    },
+    "ribasso": {
+     "mesi": 15,
+     "annuo": 0.7025197844787969,
+     "sharpe_giornaliero_annuo": 2.5241770448991185
+    }
+   }
+  },
+  "A280": {
+   "sharpe": 1.8986527262457789,
+   "sortino": 3.5715865911320708,
+   "asimmetria": 0.5275088753533644,
+   "curtosi": 5.128704415522755,
+   "settimane": 300,
+   "guadagno_totale_somma": 3.332114036581014,
+   "quota_5_giorni_migliori": 0.16039044452487902,
+   "quota_3_mesi_migliori": 0.2921789500127953,
+   "mesi_positivi": "46/70",
+   "3_mesi_migliori": {
+    "2021-04": 0.4939082251245419,
+    "2021-07": 0.24176729618181286,
+    "2024-12": 0.2378980592247828
+   },
+   "per_clima": {
+    "rialzo": {
+     "mesi": 21,
+     "annuo": 0.22836165974117098,
+     "sharpe_giornaliero_annuo": 0.7780817957184666
+    },
+    "laterale": {
+     "mesi": 34,
+     "annuo": 0.6821297990264821,
+     "sharpe_giornaliero_annuo": 2.353198739459639
+    },
+    "ribasso": {
+     "mesi": 15,
+     "annuo": 0.8448381575248733,
+     "sharpe_giornaliero_annuo": 2.7811472517728086
+    }
+   }
+  },
+  "A280_esposizione_lorda_media": 1.9440139309952111,
+  "A280_lordo_su_spese": {
+   "lordo_annuo": 0.3855898504698342,
+   "funding_incassato_annuo": 0.2341929335133543,
+   "spese_annue": 0.040629630006027054
+  },
+  "A280_per_ordine": {
+   "ordini": 13891,
+   "netto_medio_per_ordine_in_frazione": 0.00023987574951990598,
+   "spesa_media_per_ordine": 1.6828127212091954e-05
+  },
+  "asticella": {
+   "gruppi": 80,
+   "in_v_con_aggiunta": 69,
+   "serie": 137,
+   "soli": 18
+  },
+  "corretto_G1": {
+   "N_gruppi_V_con_aggiunta": 0.8673460153943817,
+   "N_gruppi_V_tutti_i_gruppi": 1.6883026196039506e-22,
+   "N_conto_309_V_con_aggiunta": 0.6543160504684584,
+   "N_conto_309_V_tutti_i_gruppi": 1.2279337250179533e-35,
+   "t": 4.759487869498974
+  },
+  "corretto_A280": {
+   "N_gruppi_V_con_aggiunta": 0.8141251546106569,
+   "N_gruppi_V_tutti_i_gruppi": 8.014449111672822e-23,
+   "N_conto_309_V_con_aggiunta": 0.573732511743551,
+   "N_conto_309_V_tutti_i_gruppi": 7.505029835038473e-36,
+   "t": 4.560416336560981
+  }
+ }
+}

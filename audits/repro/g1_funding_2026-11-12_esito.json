@@ -1,0 +1,53 @@
+{
+ "per_causa": {
+  "senza dato, stimato": 1,
+  "senza dato, zero": 281,
+  "volume zero, azzerato": 50
+ },
+ "per_anno": {
+  "senza dato, stimato": {
+   "2021": 0,
+   "2022": 1,
+   "2023": 0,
+   "2024": 0,
+   "2025": 0,
+   "2026": 0
+  },
+  "senza dato, zero": {
+   "2021": 33,
+   "2022": 191,
+   "2023": 19,
+   "2024": 0,
+   "2025": 18,
+   "2026": 20
+  },
+  "volume zero, azzerato": {
+   "2021": 0,
+   "2022": 13,
+   "2023": 2,
+   "2024": 17,
+   "2025": 18,
+   "2026": 0
+  }
+ },
+ "monete_senza_dato": {
+  "ICPUSDT": 131,
+  "TLMUSDT": 74,
+  "BNXUSDT": 28,
+  "IPUSDT": 7,
+  "OMNIUSDT": 6,
+  "KEEPUSDT": 6,
+  "OMUSDT": 6,
+  "TONUSDT": 5,
+  "MKRUSDT": 5,
+  "LUNAUSDT": 3,
+  "AI16ZUSDT": 3,
+  "DODOUSDT": 2,
+  "HIFIUSDT": 2,
+  "BAKEUSDT": 2,
+  "VANRYUSDT": 2
+ },
+ "effetto_su_G1_somma": -7.087951019274317e-05,
+ "diversi_esempi": [],
+ "ultimi_giorni_del_periodo_senza_dato": {}
+}

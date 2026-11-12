@@ -1,0 +1,156 @@
+{
+ "rischio": {
+  "G1": {
+   "peso_massimo_moneta": 0.43733790219596586,
+   "lordo_massimo": 2.000000000000001,
+   "lato_lungo_max": 1.0000000000000004,
+   "lato_corto_max": 0.9999999999999996,
+   "perdita_peggiore_possibile_nel_giorno": -0.5989764159697814,
+   "giorno": "2025-10-10",
+   "quantile_1pc": -0.2563369171709284,
+   "mercato_intero_peggiore": -0.13923044258538816,
+   "giorno_mercato_intero": "2021-01-30",
+   "giorni_perdita_oltre_5pc": 4,
+   "peggior_giorno": -0.0850414534753449,
+   "giorni_moneta_oltre_3pc_di_perdita": 65,
+   "stop_35_toccato_caso_mercato_intero": [],
+   "minimo_rispetto_al_picco_dentro_il_giorno": 0.6888352873247742,
+   "discesa_chiusure_conto_che_si_compone": -0.3013517679645127,
+   "discesa_durata_giorni": {
+    "dal": "2023-11-21",
+    "fondo": "2024-03-31",
+    "recupero": "2024-11-10",
+    "giorni": 355
+   }
+  },
+  "A280": {
+   "peso_massimo_moneta": 0.43733790219596586,
+   "lordo_massimo": 2.474817890156027,
+   "lato_lungo_max": 1.3598671220972278,
+   "lato_corto_max": 0.5994809666805911,
+   "perdita_peggiore_possibile_nel_giorno": -0.5264541390953468,
+   "giorno": "2021-05-19",
+   "quantile_1pc": -0.22905645162433277,
+   "mercato_intero_peggiore": -0.1388375769908419,
+   "giorno_mercato_intero": "2021-01-30",
+   "giorni_perdita_oltre_5pc": 6,
+   "peggior_giorno": -0.0850255533120014,
+   "giorni_moneta_oltre_3pc_di_perdita": 56,
+   "stop_35_toccato_caso_mercato_intero": [],
+   "minimo_rispetto_al_picco_dentro_il_giorno": 0.70775423707882,
+   "discesa_chiusure_conto_che_si_compone": -0.2777804509635803,
+   "discesa_durata_giorni": {
+    "dal": "2023-11-21",
+    "fondo": "2024-03-28",
+    "recupero": "2024-08-03",
+    "giorni": 256
+   }
+  },
+  "A280_corti_rialzo_nel_giorno": {
+   "posizioni_giorno": 60939,
+   "oltre_20pc": 1131,
+   "oltre_50pc": 99,
+   "massimo": 1.4457409568261377
+  },
+  "tolte_dal_listino": {
+   "monete": 20,
+   "guadagno_G1_ultimi_30_giorni": -0.060830711908334945,
+   "guadagno_A280_ultimi_30_giorni": -0.021887714010634624,
+   "tenute_all_ultimo_giorno": [
+    [
+     "BZRXUSDT",
+     "2021-12-19",
+     -0.0006788906714726088,
+     0.0026199599718028824,
+     -0.02240252513164727
+    ],
+    [
+     "DODOUSDT",
+     "2022-05-27",
+     0.00346832984256188,
+     0.0026173459073131756,
+     0.028336785893917152
+    ],
+    [
+     "EOSUSDT",
+     "2025-05-21",
+     -0.012142507523521497,
+     -0.013215659034059,
+     0.042870122922941394
+    ],
+    [
+     "KEEPUSDT",
+     "2022-02-15",
+     0.012034740097525256,
+     0.011090463685105441,
+     0.029749133154413288
+    ],
+    [
+     "LUNAUSDT",
+     "2022-05-13",
+     -0.07129145719754364,
+     -0.03199431690183171,
+     0.010951814038471458
+    ]
+   ],
+   "maggiori": [
+    [
+     "LUNAUSDT",
+     "2022-05-13",
+     -0.07129145719754364,
+     -0.03199431690183171,
+     0.010951814038471458
+    ],
+    [
+     "EOSUSDT",
+     "2025-05-21",
+     -0.012142507523521497,
+     -0.013215659034059,
+     0.042870122922941394
+    ],
+    [
+     "KEEPUSDT",
+     "2022-02-15",
+     0.012034740097525256,
+     0.011090463685105441,
+     0.029749133154413288
+    ],
+    [
+     "BTTUSDT",
+     "2022-01-26",
+     0.004574413670419556,
+     0.003971247829318823,
+     0.0
+    ],
+    [
+     "DODOUSDT",
+     "2022-05-27",
+     0.00346832984256188,
+     0.0026173459073131756,
+     0.028336785893917152
+    ],
+    [
+     "MATICUSDT",
+     "2024-09-11",
+     0.003204659873696115,
+     0.00302324453171576,
+     0.0
+    ],
+    [
+     "BZRXUSDT",
+     "2021-12-19",
+     -0.0006788906714726088,
+     0.0026199599718028824,
+     -0.02240252513164727
+    ],
+    [
+     "AERGOUSDT",
+     "2026-06-30",
+     0.0,
+     0.0,
+     0.0
+    ]
+   ]
+  }
+ }
+}

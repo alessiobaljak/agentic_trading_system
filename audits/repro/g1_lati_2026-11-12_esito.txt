@@ -1,0 +1,6 @@
+audit G1 12 nov 2026: monete per lato di G1 (nucleo)
+giorni lato corto <10: 67 <6: 8 min: 5 | lato lungo <10: 58 min: 6
+per anno, giorni con un lato sotto 10 monete: {2021: 66, 2022: 0, 2023: 0, 2024: 22, 2025: 0, 2026: 0}
+peso massimo di una moneta: mediana 0.087 p95 0.188
+2024-02-05 universo 100 funding 7 giorni piu' frequenti (valore, monete): [(0.0021, 63), (0.00135684, 1), (0.00198796, 1)] vendute 5 comprate 26
+2021-01-05 universo 27 funding 7 giorni piu' frequenti (valore, monete): [(0.00761036, 1), (0.00848959, 1), (0.0170485, 1)] vendute 5 comprate 7

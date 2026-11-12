@@ -610,3 +610,11 @@ comandi del demo: i pulsanti «Chiudi tutto» e «Riparti» del demo in dashboar
 (7 novembre); funzionano lo stop automatico e i comandi da file. Dati al proprietario i due blocchi da aggiungere. Per la versione dei
 soldi veri ha scelto l'approvazione dalla dashboard: lavoro avviato. **Capito oggi**: un pulsante d'emergenza va provato fino in fondo,
 regole pubblicate comprese; averlo nel codice e nei test non basta.
+**La revisione di G1 con backtest-auditor (12 novembre)**: PASS tecnico, i conti rifatti da capo tornano (Sharpe 1,98; a 280 USDT 1,90;
+ogni anno positivo; nessun dato del futuro). Ma quattro problemi Alti: l'esame passa solo se gli ordini limite pagano davvero la
+commissione bassa (a 280 USDT 0,81 contro la soglia 0,80; tutto a mercato 0,77); la soglia scritta prima era 0,95; una moneta venduta
+è arrivata al 43,7% del capitale; il funding del demo è circa il 40% sotto il paper negli ultimi due giorni
+(`audits/reports/2026-11-12-G1_CONTO_VERO.md`). Avviati il confronto su funding e commissioni e le regole della prova 152 sulla
+concentrazione. **Capito oggi**: G1 guadagna davvero sul passato, ma il suo margine sopra l'esame sta tutto nell'ipotesi che gli ordini
+limite si eseguano a basso costo, e quella ipotesi sul conto non l'abbiamo mai misurata.
+

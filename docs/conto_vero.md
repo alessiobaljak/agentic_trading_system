@@ -88,3 +88,13 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
   7 novembre: i pulsanti «Chiudi tutto» e «Riparti» del demo in dashboard oggi sono rifiutati da Firebase (lo stop automatico sul conto e
   i comandi da file funzionano). Il testo dei due blocchi da aggiungere è stato dato al proprietario in conversazione (l'identificativo
   non va nel repo). Punto 2: il proprietario ha scelto «pulsante in dashboard»; lavoro avviato (implementatore, poi live-path-reviewer).
+* 12 novembre 2026, **la revisione di G1 con backtest-auditor** (fase 3; `audits/reports/2026-11-12-G1_CONTO_VERO.md`): **PASS
+  tecnico** (Sharpe 1,98, a 280 USDT con i minimi 1,90, ogni anno positivo, nessun dato del futuro, il bot calcola gli stessi pesi
+  della ricerca in 60 giorni su 60), **con 4 problemi Alti da chiudere prima dell'accensione**: (1) l'esame a 0,80 passa solo se gli
+  ordini limite pagano davvero la commissione bassa (0,81; tutto a mercato 0,77): va misurata sul demo, e l'ordine al prezzo mark può
+  eseguirsi subito come ordine a mercato; (2) la soglia scritta prima era 0,95, scesa a 0,90 e poi a 0,80 per decisione del
+  proprietario: l'esame non è più quello scritto prima; (3) concentrazione: una moneta venduta è arrivata al 43,7% del capitale (un
+  rialzo del 100% costerebbe il 44% del conto prima dello stop), 67 giorni con meno di 10 monete vendute, e i limiti fissi del vecchio
+  bot (perdita giornaliera 5%, 3% a posizione) non valgono per G1; (4) il funding del demo è circa il 40% sotto quello del paper il 10
+  e l'11 novembre. In corso: gate2-reconciler su (1) e (4), le regole della prova 152 su (3).
+

@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 2026 (sera, prova 113).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero).
 
 ## Dati
 
@@ -43,6 +43,13 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     Perpetual») e QNTX («TradFi»); circa 20 sospetti fra gli eventi della 32; quasi tutti i perpetui nati dopo il 22 ottobre (ABBV,
     PFE, BAC...). Cercare: simboli nuovi del 2026 non in `ESCLUSI`; titoli «Equity Perpetual», «TradFi», «Pre-IPO» negli annunci.
 
+27. **Pari merito nel rango che svuotano un lato** (G1, 12 nov 2026): quando molte monete hanno lo stesso funding dei 7 giorni (il tasso
+    di base), `rankdata(method="average")` le mette tutte al centro e un lato resta con 5-9 monete; con l'inverso della volatilita' una
+    sola moneta arriva al 43,7% del capitale (BLZ venduta, 5 febbraio 2024; 67 giorni con meno di 10 vendute, 2021 e 2024). Cercare:
+    numero di monete per lato e peso massimo per giorno (`audits/repro/g1_esposizione_2026-11-12.py`). Verificato: il 5 febbraio 2024
+    63 monete su 100 al funding 0,0021; nel gennaio 2021 la causa e' l'universo piccolo (27 monete: 200 giorni di vita dai dati
+    che partono dal 1° gennaio 2020).
+
 ## Sguardo nel futuro e tempi
 
 4. **Segnale giornaliero applicato alle ore dello stesso giorno** (trovato il 7 nov 2026 in BTCORA,
@@ -78,6 +85,16 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
     30 eventi su 632 sotto −100%, il peggiore −246%; la differenza «senza uscita» scende da +13,6 a +9,4 punti fermando la perdita
     a −100%). Cercare: `r_senza < -1` e numeri «per capire» citati a sostegno del perché.
 
+26. **Ordine limite della ricerca contro ordine limite del conto vero** (G1, 12 nov 2026): la ricerca paga lo 0,02% su ogni limite il
+    cui prezzo passa l'apertura delle 00:00 (98% degli ordini); il bot manda `LIMIT` `GTC` al prezzo mark verso le 00:05
+    (`bot/portafoglio/demo_binance.py:1332`), che si esegue subito, a commissione da ordine a mercato, quando il mark e' oltre il
+    prezzo migliore opposto; il demo li conta tutti «a limite». A 280 USDT lo Sharpe corretto passa da 0,81 a 0,77 (tutto a mercato)
+    e 0,73 (limite solo oltre lo 0,05%). Cercare: `spese_limite(` con `oltre=0` nei numeri d'esame; rifare sempre con `oltre` 0,0005 e
+    0,001 e tutto a mercato (`audits/repro/g1_corretto_varianti_2026-11-12.py`).
+28. **Conto a capitale fisso con i minimi: non neutrale e rumoroso** (prova 148): gli ordini saltati fanno derivare l'esposizione
+    netta fra −20% e +25% (fino a +47%); la differenza con G1 e' rumore (+30 punti nel 2021, −15 nel 2025), il capitale non e'
+    monotono (250 USDT 1,83, 225 USDT 1,89). Leggere ogni «x% di G1» con ±0,1 di Sharpe.
+
 ## Misure
 
 8. **Annualizzazione con 252 giorni** invece di 365 (BTCORA, `strategia.py:49`). Al 7 nov 2026 nessun'altra occorrenza
@@ -95,6 +112,11 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato l'11 novembre 
 
 24. **La p di un mescolamento a strati dipende dagli strati** (metodo, prova 113): trimestre 0,027, mese 0,007, settimana 0,0027.
     Lo strato si sceglie nelle regole, mai dopo; gli altri si riportano solo «per capire» e non fanno passare una prova.
+
+29. **Soglia dell'esame cambiata dopo il risultato** (G1): `PRIMA.md:27` diceva 0,95; dopo lo 0,86 la soglia e' passata a 0,90 e poi a
+    0,80 (brief del 12 nov). Dirlo sempre accanto all'esito, con la soglia scritta prima e quella del brief.
+30. **L'esito dello Sharpe corretto dipende dall'«aggiunta» del 23 ottobre** (V senza i gruppi con t sotto −3): senza, G1 ha 0,0000
+    invece di 0,87. Riportare tutti e due.
 
 ## Procedura dell'audit
 
