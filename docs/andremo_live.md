@@ -605,3 +605,8 @@ agisce su GitHub come l'utente del proprietario (`get_me`); nella lista delle su
 le soglie proposte del confronto settimanale sono già superate per le monete che il demo non ha (ICPUSDT oltre il 2% per quattro
 giorni; monete mancanti circa 7% contro 3%). Lista corretta in `docs/conto_vero.md`. **Capito oggi**: rileggere i rapporti invece di
 andare a memoria ha trovato un consiglio sbagliato sui soldi veri prima che servisse.
+**Le regole di Firebase pubblicate (12 novembre, foto del proprietario)**: chiuse e con il suo identificativo, ma senza i due blocchi dei
+comandi del demo: i pulsanti «Chiudi tutto» e «Riparti» del demo in dashboard sono rifiutati da Firebase dal giorno in cui sono nati
+(7 novembre); funzionano lo stop automatico e i comandi da file. Dati al proprietario i due blocchi da aggiungere. Per la versione dei
+soldi veri ha scelto l'approvazione dalla dashboard: lavoro avviato. **Capito oggi**: un pulsante d'emergenza va provato fino in fondo,
+regole pubblicate comprese; averlo nel codice e nei test non basta.

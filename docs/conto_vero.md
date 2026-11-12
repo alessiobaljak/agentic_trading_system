@@ -82,3 +82,9 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
 * 12 novembre 2026: lista del proprietario riletta sui rapporti del revisore: la regola di GitHub non basta (la sessione agisce su
   GitHub come il proprietario), mancavano quattro decisioni (stato perso, G1 che non decide, codice separato, monete per lato) e il
   riavvio che carica la fase 2; Firebase passa al primo posto. Lanciata la revisione di G1 con backtest-auditor (fase 3).
+* 12 novembre 2026, le regole di Firebase pubblicate (foto del proprietario): Firestore e Realtime Database sono **chiusi e con il suo
+  identificativo** (lettura solo sua; scrittura solo dei comandi `kill_switch` e `close_position` e, per l'utente dedicato delle azioni,
+  di `/azioni`). **Mancano** i blocchi `commands/demo_binance_chiudi_tutto` e `commands/demo_binance_riparti`, che il file del repo ha dal
+  7 novembre: i pulsanti «Chiudi tutto» e «Riparti» del demo in dashboard oggi sono rifiutati da Firebase (lo stop automatico sul conto e
+  i comandi da file funzionano). Il testo dei due blocchi da aggiungere è stato dato al proprietario in conversazione (l'identificativo
+  non va nel repo). Punto 2: il proprietario ha scelto «pulsante in dashboard»; lavoro avviato (implementatore, poi live-path-reviewer).
