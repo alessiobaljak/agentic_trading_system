@@ -50,6 +50,7 @@ class RisultatoConto:
     costo_scarto: float
     dividendi: float
     bloccati: list = field(default_factory=list)
+    liquidati: list = field(default_factory=list)      # titoli chiusi all'ultimo prezzo perché spariti dal listino
 
 
 class Storia:
@@ -82,10 +83,13 @@ def _giorni(df: pd.DataFrame) -> np.ndarray:
 
 
 def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, costi: Costi | dict[str, Costi],
-                 capitale: float = 100_000.0, leva_massima: float = 1.0, frazionarie: bool = False) -> RisultatoConto:
+                 capitale: float = 100_000.0, leva_massima: float = 1.0, frazionarie: bool = False,
+                 liquida_dopo: int | None = None) -> RisultatoConto:
     """`barre`: per ogni simbolo le barre al giorno (open, high, low, close; facoltative dividendo,
     frazionamento) con indice di tempo. `strategia(giorno, storia, stato)` restituisce una lista di
-    coppie (simbolo, Ordine) per il giorno di borsa dopo."""
+    coppie (simbolo, Ordine) per il giorno di borsa dopo. `liquida_dopo`: se un titolo in mano resta senza barra per quel numero
+    di giorni di borsa di fila (uscito dal listino, comprato, simbolo cambiato), la posizione si chiude all'ultima chiusura, senza
+    costi, e si conta in `liquidati`; senza, resta in mano all'ultimo prezzo (`bloccati`)."""
     giorni_per = {s: _giorni(df) for s, df in barre.items()}
     tutti = sorted(set().union(*[set(g) for g in giorni_per.values()]))
     riga = {s: {d: i for i, d in enumerate(g)} for s, g in giorni_per.items()}
@@ -102,10 +106,26 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
     valori = np.empty(len(tutti))
     esecuzioni: list[dict] = []
     rifiutati = senza_barra = 0
+    assenze: dict[str, int] = {}
+    liquidati: list[str] = []
     tot_comm = tot_scarto = tot_div = 0.0
 
     for k, d in enumerate(tutti):
         oggi = {s: riga[s][d] for s in barre if d in riga[s]}
+        if liquida_dopo is not None:
+            for s in list(stato.azioni):
+                if s in oggi:
+                    assenze.pop(s, None)
+                    continue
+                assenze[s] = assenze.get(s, 0) + 1
+                if assenze[s] >= liquida_dopo:
+                    q = stato.azioni.pop(s)
+                    prezzo = stato.ultimo_prezzo.get(s, 0.0)
+                    stato.contanti += q * prezzo
+                    liquidati.append(s)
+                    in_attesa = [(x, o) for x, o in in_attesa if x != s]
+                    esecuzioni.append({"giorno": d, "simbolo": s, "quantita": -q, "prezzo": prezzo, "tipo": "listino",
+                                       "commissione": 0.0, "scarto": 0.0, "etichetta": "uscito dal listino"})
         # 1. dividendi e frazionamenti
         for s, i in oggi.items():
             q = stato.azioni.get(s, 0.0)
@@ -205,7 +225,7 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
                                               "etichetta"])
     return RisultatoConto(valore=pd.Series(valori, index=pd.Index(tutti, name="giorno"), name="valore"),
                           esecuzioni=es_df, rifiutati=rifiutati, senza_barra=senza_barra, commissioni=tot_comm,
-                          costo_scarto=tot_scarto, dividendi=tot_div, bloccati=bloccati)
+                          costo_scarto=tot_scarto, dividendi=tot_div, bloccati=bloccati, liquidati=liquidati)
 
 
 def verso_pesi(stato: StatoConto, pesi: dict[str, float], prezzi: dict[str, float], quota: float = 0.98,

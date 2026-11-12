@@ -30,6 +30,22 @@ stessa direzione per mesi, quelli senza notizie no (Chan, «Stock price reaction
 * **La composizione dell'S&P 500** giorno per giorno: `stock/prove/dati/P028_membri.csv.gz` (da github.com/fja05680/sp500, con i cambi
   di simbolo, una riga per fine mese).
 
+### Aggiunta sui dati del 12 novembre 2026, prima di qualsiasi calcolo (nessuna notizia vera e nessun risultato visti)
+
+Provando il programma con **notizie inventate** sui prezzi già in archivio è uscito un difetto dei prezzi, non delle regole: Alpaca,
+se non glielo si chiede, dà a ogni simbolo la storia dell'azienda che lo porta **oggi** (nell'archivio locale il simbolo PARA del
+2022-2024 non è Paramount: chiude a 0,085 dollari; mancano del tutto SunTrust, Twitter, Citrix e altri 13 membri dell'indice). Per
+una prova che incrocia notizie del passato e prezzi servono i prezzi **con il simbolo di allora**. Quindi, per le due varianti:
+
+* i prezzi si scaricano con l'opzione di Alpaca che non segue i cambi di nome (`asof` «-»: ciò che si scambiava con quel simbolo
+  in ogni momento), in un archivio a parte; la composizione dell'indice usa i simboli di allora, senza la tabella dei cambi;
+* un titolo in mano che resta **5 giorni di borsa senza prezzi** (uscito dal listino, comprato, simbolo cambiato) si chiude
+  all'ultima chiusura, senza costi, e si conta (`simula_conto`, `liquida_dopo`); così un simbolo che passa a un'altra azienda non
+  inventa guadagni. È ottimista per i fallimenti (dopo l'uscita dal listino il titolo vale meno dell'ultima chiusura): se sono
+  tanti, il risultato va letto con sospetto;
+* nel risultato si contano i salti di prezzo di un giorno oltre il doppio o sotto la metà, senza frazionamento, fra i titoli in mano
+  (un frazionamento che manca nei dati sembra un crollo), e accanto alla media dello scarto fra i quinti si dà la mediana.
+
 ## Il tono (uguale per le due varianti)
 
 * **Notizia dell'azienda:** una notizia che cita da 1 a 3 simboli (i riassunti di mercato che ne citano tanti non contano).

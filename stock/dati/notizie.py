@@ -66,7 +66,7 @@ def carica(dal_anno: int, al_anno: int) -> pd.DataFrame:
     pezzi = []
     for a, m in mesi(dal_anno, al_anno):
         df = pd.read_csv(_file(a, m), dtype=str, keep_default_na=False)
-        pezzi.append(pd.DataFrame({"creata": pd.to_datetime(df["creata"], utc=True),
+        pezzi.append(pd.DataFrame({"creata": pd.to_datetime(df["creata"], utc=True, format="ISO8601"),
                                    "simboli": df["simboli"].str.split(),
                                    "testo": df["titolo"] + " " + df["riassunto"]}))
     return pd.concat(pezzi, ignore_index=True).sort_values("creata", kind="stable").reset_index(drop=True)

@@ -73,7 +73,7 @@ def _iso(t: datetime) -> str:
 
 
 def barre(simbolo: str, timeframe: str, inizio: datetime, fine: datetime,
-          rettifica: str = "raw", feed: str = "sip") -> pd.DataFrame:
+          rettifica: str = "raw", feed: str = "sip", asof: str | None = None) -> pd.DataFrame:
     """Le barre di un titolo, tutte le pagine.
 
     `timeframe`: "1Day" o "1Min" (o un altro valore di Alpaca). `rettifica`: "raw" (prezzi come
@@ -84,6 +84,8 @@ def barre(simbolo: str, timeframe: str, inizio: datetime, fine: datetime,
     fine = _fine_ammessa(fine)
     parametri = {"symbols": simbolo, "timeframe": timeframe, "start": _iso(inizio), "end": _iso(fine),
                  "adjustment": rettifica, "feed": feed, "limit": 10000, "sort": "asc"}
+    if asof:
+        parametri["asof"] = asof
     righe: list[dict] = []
     while True:
         j = _get(f"{DATI_URL}/v2/stocks/bars", parametri)
@@ -182,11 +184,17 @@ def calendario(inizio, fine) -> pd.DataFrame:
 
 
 def barre_di_piu(simboli: list[str], timeframe: str, inizio: datetime, fine: datetime, rettifica: str = "raw",
-                 feed: str = "sip") -> dict[str, pd.DataFrame]:
-    """Come `barre`, per più titoli in una sola richiesta (Alpaca le accetta separate da virgole)."""
+                 feed: str = "sip", asof: str | None = None) -> dict[str, pd.DataFrame]:
+    """Come `barre`, per più titoli in una sola richiesta (Alpaca le accetta separate da virgole).
+
+    `asof`: senza, Alpaca dà a ogni simbolo la storia dell'azienda che lo porta OGGI (META comprende gli anni di FB; un simbolo
+    passato a un'altra azienda dà i prezzi della nuova). Con "-" dà ciò che si scambiava con quel simbolo in ogni momento: il
+    simbolo di allora, quello che serve per incrociare notizie, depositi e composizione dell'indice del passato."""
     fine = _fine_ammessa(fine)
     parametri = {"symbols": ",".join(simboli), "timeframe": timeframe, "start": _iso(inizio), "end": _iso(fine),
                  "adjustment": rettifica, "feed": feed, "limit": 10000, "sort": "asc"}
+    if asof:
+        parametri["asof"] = asof
     righe: dict[str, list] = {s: [] for s in simboli}
     while True:
         j = _get(f"{DATI_URL}/v2/stocks/bars", parametri)
@@ -265,3 +273,12 @@ def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_
             return out, True
         parametri["page_token"] = token
     return out, False
+
+
+def nomi_dei_titoli() -> dict[str, str]:
+    """Simbolo -> nome, dall'elenco dei titoli di Alpaca (quotati oggi e non più quotati)."""
+    out: dict[str, str] = {}
+    for stato in ("active", "inactive"):
+        for x in _get(f"{DEMO_URL}/v2/assets", {"status": stato, "asset_class": "us_equity"}):
+            out.setdefault(x.get("symbol", ""), x.get("name") or "")
+    return out

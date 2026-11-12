@@ -288,3 +288,21 @@ def test_contro_i_dirigenti_tiene_lo_spy_e_vende_allo_scoperto():
     assert list(e["etichetta"]) == ["base", "scoperto", "ricopertura"]
     # scoperto di 50 azioni a 100 il 6 gennaio, ricoperte a 90: +500, meno il prestito (50 × 100 o 90 × 0,0001 a notte)
     assert 100_000 + 450 < r.valore.iloc[-1] < 100_000 + 500
+
+
+def test_titolo_sparito_dal_listino_si_chiude_all_ultimo_prezzo_e_un_simbolo_riusato_non_inventa_guadagni():
+    giorni = ["2020-01-06", "2020-01-07", "2020-01-08", "2020-01-09", "2020-01-10", "2020-01-13"]
+    # A vale 90 il 7 gennaio, poi sparisce; il 13 lo stesso simbolo torna a 500 (un'altra azienda)
+    a = barre([(100, 100, 100, 100), (90, 90, 90, 90), (500, 500, 500, 500)], [giorni[0], giorni[1], giorni[5]])
+    b = barre([(10, 10, 10, 10)] * 6, giorni)
+
+    def s(giorno, storia, stato):
+        return [("A", Ordine(10, "mercato"))] if str(giorno) == "2020-01-06" else []
+    # comprato il 7 a 90; assente l'8 e il 9: al secondo giorno senza barra si chiude a 90
+    r = simula_conto({"A": a, "B": b}, s, Costi(), liquida_dopo=2)
+    assert r.liquidati == ["A"] and r.bloccati == []
+    assert r.valore.iloc[-1] == pytest.approx(100_000)
+    assert list(r.esecuzioni["etichetta"]) == ["", "uscito dal listino"]
+    # senza l'opzione il comportamento di prima: il titolo resta in mano e il simbolo riusato inventa un guadagno
+    r = simula_conto({"A": a, "B": b}, s, Costi())
+    assert r.liquidati == [] and r.valore.iloc[-1] == pytest.approx(100_000 + 10 * (500 - 90))

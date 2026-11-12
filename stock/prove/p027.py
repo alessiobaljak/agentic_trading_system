@@ -30,31 +30,32 @@ COSTI = Costi(mezzo_scarto=15 * PB, slittamento=5 * PB, **IB_FISSO)
 PREZZO_MINIMO, DOLLARI_MINIMI, SEDUTE_DOLLARI, VALORE_MINIMO, SCARTO_MASSIMO = 5.0, 2_000_000.0, 20, 100_000.0, 0.5
 
 
-def scarica(simboli: list[str]) -> None:
-    """Barre al giorno non rettificate e azioni societarie dei titoli che mancano in archivio."""
-    mancano = [s for s in simboli if archivio.carica(s, "1Day_raw") is None]
+def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azioni", asof: str | None = None) -> None:
+    """Barre al giorno non rettificate e azioni societarie dei titoli che mancano in archivio. `asof="-"`: i prezzi di ciò che
+    si scambiava con quel simbolo allora (`alpaca.barre_di_piu`), da tenere in un archivio con un altro nome (`tipo_raw`)."""
+    mancano = [s for s in simboli if archivio.carica(s, tipo_raw) is None]
     for i in range(0, len(mancano), 40):
         gruppo = mancano[i:i + 40]
         try:
-            barre = alpaca.barre_di_piu(gruppo, "1Day", DAL, AL)
+            barre = alpaca.barre_di_piu(gruppo, "1Day", DAL, AL, asof=asof)
         except alpaca.ErroreAlpaca as e:                 # un simbolo che Alpaca non conosce fa fallire il gruppo: uno alla volta
             print(f"gruppo {i}: {str(e)[:100]}; riprovo uno alla volta", flush=True)
             barre = {}
             for s in gruppo:
                 try:
-                    barre[s] = alpaca.barre(s, "1Day", DAL, AL)
+                    barre[s] = alpaca.barre(s, "1Day", DAL, AL, asof=asof)
                 except alpaca.ErroreAlpaca:
                     barre[s] = pd.DataFrame()
         for s in gruppo:
-            archivio.salva(barre.get(s, pd.DataFrame(columns=["open", "high", "low", "close", "volume"])), s, "1Day_raw")
+            archivio.salva(barre.get(s, pd.DataFrame(columns=["open", "high", "low", "close", "volume"])), s, tipo_raw)
         if i % 400 == 0:
             print(f"barre: {i + len(gruppo)} su {len(mancano)}", flush=True)
-    senza_azioni = [s for s in simboli if archivio.carica(s, "azioni") is None]
-    con_barre = [s for s in senza_azioni if len(archivio.carica(s, "1Day_raw"))]
+    senza_azioni = [s for s in simboli if archivio.carica(s, tipo_az) is None]
+    con_barre = [s for s in senza_azioni if len(archivio.carica(s, tipo_raw))]
     for i in range(0, len(con_barre), 500):
         az = alpaca.azioni_societarie_di_piu(con_barre[i:i + 500], DAL, AL)
         for s, df in az.items():
-            archivio.salva(df, s, "azioni")
+            archivio.salva(df, s, tipo_az)
         print(f"azioni societarie: {i + len(az)} su {len(con_barre)}", flush=True)
 
 
