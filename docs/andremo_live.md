@@ -631,3 +631,13 @@ rialzo oltre il 20% su monete vendute (altri anni 22-85) valgono −119,3 sul pr
 Non è un caso unico (2021 −150,1, 2023 −17,0). Il funding resta normale. **Capito oggi**: G1 perde quando vende monete piccole e
 nuove che fanno fiammate; la prova 152 (tetto al peso) tocca proprio questo. Un'uscita dopo un rialzo forte sarebbe una prova nuova,
 con le regole scritte prima.
+**12 novembre, pomeriggio (cosa abbiamo capito)**: (1) **le commissioni vere del demo** (prima lettura da Binance,
+`ops/results/0736-*`): a regime 0,025% del valore scambiato, come il paper; il ribilancio da vuoto costa 0,032% perché metà degli
+ordini limite al prezzo mark si eseguono subito a commissione da mercato; commissione del conto demo 0,02% e 0,04%. (2) **Il funding
+del paper si perdeva** quando Binance pubblicava un regolamento in ritardo (due difetti in `f5.py`, uno in `eventi.py`, corretti e
+approvati, `reviews/reports/2026-11-12-funding-dei-paper.md`; valgono dal prossimo riavvio): il paper incassava un po' meno, quindi lo
+scarto del demo (70% del paper) resta da spiegare. (3) **Lo Sharpe corretto contava solo le prove fino alla 102**: con il mazzo
+completo e corretto (`research/programma6/MAZZO_ASTICELLA.md`, revisione `audits/reports/2026-11-12-MAZZO_ASTICELLA.md`) G1 scende da
+0,867 a 0,755 (0,945 contando le prove fino alla 57, quando è stata trovata), la miscela F5 + M7 + K2 da 0,890 a 0,812: decisione di
+metodo al proprietario. (4) Riesami chiusi (28, 113, 96, 55): nessuna prova bocciata di poco cambia verdetto. (5) Il lato venduto di
+G1 perde nel 2026 sulle monete piccole e nuove con le fiammate (voce 12).
