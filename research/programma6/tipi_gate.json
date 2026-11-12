@@ -1,12 +1,13 @@
 {
- "contratti": 1072,
+ "contratti": 1620,
  "per_tipo": {
-  "": 596,
-  "stocks": 439,
+  "": 1119,
+  "stocks": 458,
   "indices": 18,
   "commodities": 3,
   "forex": 4,
-  "metals": 12
+  "metals": 13,
+  "errore": 5
  },
- "sha256": "fc299d64d5dbc770d89358715b50a14dfcf989c3e888736ba1e8fc4c1bf568c9"
+ "sha256": "8c0bb5b65a6e66c5cf6d170bde4280908433b378b9a7a111fbdff66897a828db"
 }

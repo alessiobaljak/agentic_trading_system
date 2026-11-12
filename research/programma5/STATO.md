@@ -126,6 +126,7 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento dell'8 novembre (dati fino al 7 novembre; scaricati da zero sul disco nuovo dal giugno 2025): M-001c 314 su 400 (in corso, +0,09% a trade: le 276 di ieri identiche, le 38 nuove +7,4% in media); M-002 2.197 (non passa, p 0,09); M-003 880 (non passa, p 0,98); N-001 66, N-002 53, N-003 30.
   Aggiornamento del 10 novembre (dati fino all'8 novembre): M-001c 326 su 400 (in corso, −0,37% a trade); M-002 2.285 (non passa, p 0,09); M-003 919 (non passa, p 0,99); N-001 68, N-002 54, N-003 31.
   Aggiornamento dell'11 novembre (dati fino al 9 novembre): M-001c 332 su 400 (in corso, −0,39% a trade); M-002 2.296 (non passa, p 0,10); M-003 930 (non passa, p 0,99); N-001 68, N-002 54, N-003 32.
+  Aggiornamento del 12 novembre (dati fino al 10 novembre): M-001c 357 su 400 (in corso, −0,28% a trade); M-002 2.383 (non passa, p 0,11); M-003 1.020 (non passa, p 0,98); N-001 72, N-002 80, N-003 39.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
