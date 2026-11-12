@@ -641,3 +641,8 @@ completo e corretto (`research/programma6/MAZZO_ASTICELLA.md`, revisione `audits
 0,867 a 0,755 (0,945 contando le prove fino alla 57, quando è stata trovata), la miscela F5 + M7 + K2 da 0,890 a 0,812: decisione di
 metodo al proprietario. (4) Riesami chiusi (28, 113, 96, 55): nessuna prova bocciata di poco cambia verdetto. (5) Il lato venduto di
 G1 perde nel 2026 sulle monete piccole e nuove con le fiammate (voce 12).
+**Prova 153, il libro degli ordini fra le monete (12 novembre, sera)**: idea di strategy-scout, regole verificate e corrette prima del
+calcolo, 137.200 file di Binance scaricati: **non passa, va al contrario dell'ipotesi** (A −40,9% l'anno, t −3,09; B −26,4%, t −2,45;
+nessun anno positivo). Il verso opposto non regge negli anni (solo il 2025 positivo). Conto delle prove 314. **Capito oggi**: gli ordini
+fermi vicino al prezzo, misurati giorno per giorno, non dicono dove andrà la moneta il giorno dopo nel verso atteso.
+

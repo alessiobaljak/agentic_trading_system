@@ -1,0 +1,182 @@
+{
+ "scelta": {
+  "coppie_misurate": 500,
+  "secondi": 85.1,
+  "stima_ore_per_137200": 6.48,
+  "soglia_ore": 10.0,
+  "monete": 100
+ },
+ "monete": 100,
+ "coppie_presenti": 136736,
+ "coppie_mancanti_404": 468,
+ "varianti": {
+  "A": {
+   "giorni_con_segnale": 1362,
+   "monete_medie_al_giorno": 99.06486880466473,
+   "settimane": 196,
+   "annuo": -0.4086324096812518,
+   "volatilita": 0.25684642165965305,
+   "sharpe": -1.5909601038659988,
+   "discesa_max": -0.8311439427761754,
+   "asimmetria": -0.0818714041209595,
+   "curtosi": 2.9570997933289656,
+   "t": -3.0887705863034314,
+   "per_anno": {
+    "2023": -0.3632872982976723,
+    "2024": -0.2148033675155204,
+    "2025": -0.9553706197089972,
+    "2026": -0.0035169764834861264
+   },
+   "rendimento_netto_annuo_giorni": -0.4097550261913651,
+   "discesa_giornaliera": -0.8383927540984362,
+   "sharpe_giornaliero_365": -1.4647845410960676,
+   "giro_medio_giorno": 0.6071010471440342,
+   "spese_medie_giorno": 0.0002932625312933326,
+   "spese_annue": 0.1070408239220664,
+   "funding_annuo": 0.007692425068579886,
+   "variazioni_e_a_limite": [
+    86415,
+    84459
+   ],
+   "netto_costi_x3_annuo": -0.6238366740354979,
+   "lato_long": {
+    "annuo": 0.03364146863129774,
+    "annuo_senza_10_giorni_migliori": -0.33746986339880447,
+    "per_anno": {
+     "2023": 0.7606268334436871,
+     "2024": 0.3409359123393847,
+     "2025": -1.1949174819895911,
+     "2026": 0.2911561898867302
+    }
+   },
+   "lato_short": {
+    "annuo": -0.4459947890274491,
+    "annuo_senza_10_giorni_migliori": -0.7942246608711888,
+    "per_anno": {
+     "2023": -1.1265783457162244,
+     "2024": -0.5571034314004144,
+     "2025": 0.1677658174508607,
+     "2026": -0.2135920584186539
+    }
+   },
+   "controllo_al_contrario": {
+    "annuo": 0.17655961154159708,
+    "sharpe": 0.6765497675950561,
+    "per_anno": {
+     "2023": 0.025511120256336943,
+     "2024": -0.018983137105227425,
+     "2025": 0.8226413021317331,
+     "2026": -0.21774707270383506
+    }
+   },
+   "sharpe_corretto_famiglie": {
+    "corretto": 9.192347887304658e-11,
+    "t": -3.0887705863034314,
+    "gruppo": [
+     "138 GA2",
+     "153 A"
+    ]
+   },
+   "esame": {
+    "netto_positivo": false,
+    "ogni_anno_positivo": false,
+    "t_almeno_3": false,
+    "sharpe_corretto_almeno_0.80": false,
+    "lati_senza_10_giorni_ok": false
+   }
+  },
+  "B": {
+   "giorni_con_segnale": 1362,
+   "monete_medie_al_giorno": 99.06486880466473,
+   "settimane": 196,
+   "annuo": -0.26384700369747316,
+   "volatilita": 0.20888419422263074,
+   "sharpe": -1.2631257462030017,
+   "discesa_max": -0.7239685216331242,
+   "asimmetria": 0.07748683951469242,
+   "curtosi": 3.9371926695972417,
+   "t": -2.4522963474658037,
+   "per_anno": {
+    "2023": -0.2621752818402304,
+    "2024": -0.2669310462411276,
+    "2025": -0.3955912034288353,
+    "2026": -0.0862258984598348
+   },
+   "rendimento_netto_annuo_giorni": -0.2645718581032355,
+   "discesa_giornaliera": -0.7267573144997579,
+   "sharpe_giornaliero_365": -1.299845242337405,
+   "giro_medio_giorno": 0.7864255305714118,
+   "spese_medie_giorno": 0.0003809178044815084,
+   "spese_annue": 0.13903499863575058,
+   "funding_annuo": 0.05308546831865731,
+   "variazioni_e_a_limite": [
+    87216,
+    85221
+   ],
+   "netto_costi_x3_annuo": -0.5426418553747365,
+   "lato_long": {
+    "annuo": 0.11149835539654769,
+    "annuo_senza_10_giorni_migliori": -0.23206079216473477,
+    "per_anno": {
+     "2023": 0.8211329749669575,
+     "2024": 0.17858170567027057,
+     "2025": -0.8086092116444643,
+     "2026": 0.30276100610469797
+    }
+   },
+   "lato_short": {
+    "annuo": -0.3787174012919235,
+    "annuo_senza_10_giorni_migliori": -0.7797346693421016,
+    "per_anno": {
+     "2023": -1.0866605876451039,
+     "2024": -0.4705681771031107,
+     "2025": 0.35225763551421163,
+     "2026": -0.29025958416119146
+    }
+   },
+   "controllo_al_contrario": {
+    "annuo": -0.008975538540346745,
+    "sharpe": -0.04280460689972402,
+    "per_anno": {
+     "2023": -0.09989684079589092,
+     "2024": -0.00429006095389076,
+     "2025": 0.22347406324932553,
+     "2026": -0.20404738181872722
+    }
+   },
+   "sharpe_corretto_famiglie": {
+    "corretto": 7.72370718218842e-09,
+    "t": -2.4522963474658037,
+    "gruppo": [
+     "153 B"
+    ]
+   },
+   "esame": {
+    "netto_positivo": false,
+    "ogni_anno_positivo": false,
+    "t_almeno_3": false,
+    "sharpe_corretto_almeno_0.80": false,
+    "lati_senza_10_giorni_ok": false
+   }
+  }
+ },
+ "correlazioni": {
+  "A": {
+   "G1_giornaliera": -0.2903270494333953,
+   "G1_settimanale": -0.20644347940145716,
+   "F5_settimanale": -0.2005439406030311,
+   "settimane_comuni_F5": 196
+  },
+  "B": {
+   "G1_giornaliera": -0.07011558209623538,
+   "G1_settimanale": 0.022064962636976045,
+   "F5_settimanale": -0.022852709997700185,
+   "settimane_comuni_F5": 196
+  }
+ },
+ "esito": {
+  "A": "non promettente",
+  "B": "non promettente"
+ },
+ "commit": "ef29581"
+}
