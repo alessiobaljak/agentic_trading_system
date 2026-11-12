@@ -8,3 +8,4 @@ principale e stanno nel diario di `research/programma7/MIGLIORARE_G1.md`.
 
 ## Ultime voci
 - 8 novembre 2026: agente creato (richiesta del proprietario dell'8 novembre).
+- 12 novembre 2026: voce 13, scritte le regole della prova 152 (research/programma7/NOVANTESIMA.md), 3 varianti, da committare; nessun calcolo.
