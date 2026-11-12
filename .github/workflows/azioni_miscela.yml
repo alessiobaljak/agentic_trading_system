@@ -65,7 +65,7 @@ jobs:
         run: |
           git config user.name "azioni-miscela"
           git config user.email "noreply@anthropic.com"
-          git add stock/avanti/miscela_stato.json stock/avanti/miscela_diario.csv stock/avanti/conto_condiviso.json stock/avanti/valori.csv 2>/dev/null || true
+          git add stock/avanti/miscela_stato.json stock/avanti/miscela_diario.csv stock/avanti/conto_condiviso.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
           git commit -m "stock: miscela, ${{ steps.accesa.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
           for i in 1 2 3 4; do

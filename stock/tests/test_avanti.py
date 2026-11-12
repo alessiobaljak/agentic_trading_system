@@ -125,6 +125,13 @@ def test_conto_condiviso_divide_il_guadagno_fra_le_due_strategie():
     assert miscela == pytest.approx(100_000 + 335 - 35)                             # il resto della variazione del conto
     pc, pm = conto.separa(pos)
     assert [p["symbol"] for p in pc] == ["AAPL"] and [p["symbol"] for p in pm] == ["SPY"]
+    # oggi, prima che il diario sia scritto: comprate 10 AAPL a 100, 4 già uscite allo stop a 99, le altre 6 valgono 101
+    es = [{"symbol": "AAPL", "side": "buy", "qty": "10", "price": "100"}, {"symbol": "AAPL", "side": "sell", "qty": "4", "price": "99"},
+          {"symbol": "SPY", "side": "buy", "qty": "5", "price": "600"}]
+    aperte = [{"symbol": "AAPL", "market_value": "606", "unrealized_pl": "6"}, {"symbol": "SPY", "market_value": "3010"}]
+    candela, miscela = conto.valori(100_502.0, aperte, diario, stato, oggi="2026-11-16", esecuzioni_oggi=es)
+    assert candela == pytest.approx(100_500 + 60 + (-1000 + 396 + 606))             # +2: lo stop già preso conta
+    assert miscela == pytest.approx(100_000 + 2 - 62)
 
 
 def test_miscela_cosa_fare_a_ogni_ora():
@@ -137,9 +144,12 @@ def test_miscela_cosa_fare_a_ogni_ora():
     assert f(t(8, "08:30")).startswith("niente")                        # la sera del 7 è fatta, per la banca centrale è presto
     assert f(t(8, "09:00")) == "fed" and f(t(8, "14:10")) == "fed"      # vigilia del 9 dicembre: aspetta le 14:00
     assert f(t(8, "14:30")).startswith("niente: troppo tardi")
-    assert f(t(8, "16:30")) == "sera"                                   # dopo la chiusura dell'8
-    assert f(t(9, "02:00")) == "sera" and f(t(9, "09:27")).startswith("niente: troppo tardi")   # fino a 5 minuti dall'apertura
+    assert f(t(8, "16:30")).startswith("niente: troppo presto per la sera")    # non resta acceso: esce, ci pensa un avvio dopo
+    assert f(t(8, "19:05")) == "sera"                                   # dalle 19:00 Alpaca accetta gli ordini all'apertura
+    assert f(t(9, "02:00")) == "sera" and f(t(9, "09:20")).startswith("niente: troppo tardi")   # fino a 15 minuti dall'apertura
     dentro = dict(st, fed=1.0, ultima_sera="2026-12-08")
     assert f(t(9, "10:00"), dentro) == "fed"                            # giorno del comunicato: vende alle 13:59
+    assert f(t(9, "15:30"), dentro) == "fed"                            # l'uscita non si salta mai: in ritardo si vende subito
+    assert f(t(10, "10:00"), dict(dentro, ultima_sera="2026-12-09")).startswith("niente")   # e se è mancata, la sera ha già venduto
     assert f(t(9, "10:00"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la borsa è aperta")
     assert f(t(8, "16:30"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la sera è già fatta")

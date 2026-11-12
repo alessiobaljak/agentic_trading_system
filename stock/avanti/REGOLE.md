@@ -83,3 +83,8 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   borsa chiusa); posizioni rimaste da un altro giorno si chiudono subito. Gli avvii: GitHub ogni mezz'ora, più quattro routine della
   sessione (8:15, 9:10, 13:30 e 15:20 di New York) che avviano il lavoro a mano. Ordini con un nome unico per giorno e titolo: niente
   doppioni. Le regole della strategia non cambiano.
+* **12 novembre 2026 — conto condiviso con la miscela** (il proprietario: «per la miscela [...] usa quello attuale»). Dalla partenza
+  della miscela la prima candela calcola le quantità sul suo capitale virtuale (il valore che aveva il conto alla partenza più il suo
+  guadagno da allora), non sul valore di tutto il conto, e non tocca mai SPY e QQQ (`stock/avanti/conto.py`). Le regole della strategia
+  non cambiano. Dopo la revisione separata del codice: gli errori di rete non fermano più un giro di ordini a metà, il file del giorno
+  si ricostruisce da Alpaca se manca, la chiusura fuori orario prova tutti i titoli anche se uno è rifiutato.

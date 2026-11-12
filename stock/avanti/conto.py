@@ -36,15 +36,26 @@ def leggi_stato() -> dict | None:
     return json.loads(STATO.read_text()) if STATO.exists() else None
 
 
-def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: dict | None) -> tuple[float, float | None]:
-    """(valore della prima candela, valore della miscela o None se la miscela non è partita). Funzione pura."""
+def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: dict | None, oggi: str | None = None,
+           esecuzioni_oggi: list[dict] | None = None) -> tuple[float, float | None]:
+    """(valore della prima candela, valore della miscela o None se la miscela non è partita). Funzione pura.
+
+    Il guadagno della prima candela dopo la partenza: il suo diario; per oggi, se il diario non è ancora scritto, i soldi usciti ed
+    entrati con le sue esecuzioni di oggi più il valore di mercato delle sue posizioni (parte ogni giorno senza posizioni, quindi è
+    il guadagno di oggi, comprese le uscite a stop già avvenute)."""
     if stato is None:
         return float(equity), None
     candela_pos, _ = separa(posizioni)
-    dopo = diario[diario["giorno"].astype(str) > stato["dal"]] if len(diario) else diario
+    giorni = diario["giorno"].astype(str) if len(diario) else pd.Series(dtype=str)
+    dopo = diario[giorni > stato["dal"]] if len(diario) else diario
     realizzato = float(pd.to_numeric(dopo["guadagno"], errors="coerce").dropna().sum()) if len(dopo) else 0.0
-    non_realizzato = sum(float(p.get("unrealized_pl") or 0.0) for p in candela_pos)
-    candela = stato["candela_alla_partenza"] + realizzato + non_realizzato
+    if oggi is not None and esecuzioni_oggi is not None and oggi > stato["dal"] and oggi not in set(giorni):
+        flusso = sum((1 if str(e["side"]).startswith("sell") else -1) * float(e["qty"]) * float(e["price"])
+                     for e in esecuzioni_oggi if not della_miscela(e["symbol"]))
+        di_oggi = flusso + sum(float(p.get("market_value") or 0.0) for p in candela_pos)
+    else:
+        di_oggi = sum(float(p.get("unrealized_pl") or 0.0) for p in candela_pos)
+    candela = stato["candela_alla_partenza"] + realizzato + di_oggi
     miscela = CAPITALE_MISCELA + (float(equity) - stato["conto_alla_partenza"]) - (candela - stato["candela_alla_partenza"])
     return float(candela), float(miscela)
 
@@ -57,9 +68,13 @@ def adesso() -> dict:
     f = QUI / "diario.csv"
     diario = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=av.COLONNE)
     equity = float(conto["equity"])
-    candela, miscela = valori(equity, posizioni, diario, leggi_stato())
+    stato = leggi_stato()
+    oggi = av.ny_adesso().date().isoformat()
+    esecuzioni = av.esecuzioni_del_giorno(oggi) if stato is not None else None
+    candela, miscela = valori(equity, posizioni, diario, stato, oggi, esecuzioni)
     pc, pm = separa(posizioni)
-    return {"conto": equity, "candela": candela, "miscela": miscela, "posizioni_candela": pc, "posizioni_miscela": pm}
+    return {"conto": equity, "candela": candela, "miscela": miscela, "posizioni_candela": pc, "posizioni_miscela": pm,
+            "moltiplicatore": conto.get("multiplier"), "potere_d_acquisto": conto.get("buying_power")}
 
 
 def parti(giorno: str) -> dict:

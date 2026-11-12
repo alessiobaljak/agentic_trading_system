@@ -89,10 +89,14 @@ def cosa_fare(adesso: pd.Timestamp, sedute: list[dict], stato: dict) -> tuple[st
         fatta = tipo is None or (tipo == "vigilia" and stato["fed"] > 0) or (tipo == "giorno" and stato["fed"] == 0)
         if not fatta:
             ora = pd.Timestamp(f"{oggi} {'14:00' if tipo == 'vigilia' else '13:59'}", tz=av.NY)
-            if ora - av.ATTESA_MASSIMA <= adesso <= ora + TOLLERANZA_FED:
+            fine = di_oggi["chiusura"] - pd.Timedelta(minutes=2)
+            # l'USCITA non si salta mai: in ritardo si vende subito, a borsa aperta (se no resterebbe investita per settimane);
+            # l'ingresso in ritardo di più di 20 minuti invece si salta
+            ultimo = fine if tipo == "giorno" else min(ora + TOLLERANZA_FED, fine)
+            if ora - av.ATTESA_MASSIMA <= adesso <= ultimo and ora < di_oggi["chiusura"]:
                 return "fed", {"tipo": tipo, "ora": ora}
-            if adesso > ora + TOLLERANZA_FED and adesso < di_oggi["chiusura"]:
-                return "niente: troppo tardi per la regola della banca centrale, oggi si salta", {"saltata": tipo}
+            if tipo == "vigilia" and ultimo < adesso < di_oggi["chiusura"]:
+                return "niente: troppo tardi per comprare prima della banca centrale, questo comunicato si salta", {"saltata": tipo}
     if any(s["apertura"] <= adesso < s["chiusura"] for s in sedute):
         return "niente: la borsa è aperta, la sera si decide dopo la chiusura", {}
     chiuse = [s for s in sedute if s["chiusura"] <= adesso]
@@ -102,7 +106,11 @@ def cosa_fare(adesso: pd.Timestamp, sedute: list[dict], stato: dict) -> tuple[st
     ultima, prossima = chiuse[-1], prossime[0]
     if stato.get("ultima_sera") == ultima["giorno"].isoformat():
         return "niente: la sera è già fatta", {}
-    if adesso > prossima["apertura"] - pd.Timedelta(minutes=5):
+    # Alpaca accetta gli ordini «all'apertura» dalle 19:00 alle 9:28 di New York: prima non si resta accesi ad aspettare (un
+    # giro che dorme con una copia vecchia del repository non salverebbe lo stato), si esce e ci pensa un avvio dopo
+    if adesso < pd.Timestamp(f"{ultima['giorno']} 19:01", tz=av.NY):
+        return "niente: troppo presto per la sera (dalle 19:00 di New York)", {}
+    if adesso > prossima["apertura"] - pd.Timedelta(minutes=15):
         return "niente: troppo tardi per gli ordini all'apertura", {}
     return "sera", {"ultima": ultima, "prossima": prossima}
 
@@ -119,8 +127,11 @@ def scrivi_stato(stato: dict) -> None:
     STATO.write_text(json.dumps(stato, indent=1, ensure_ascii=False))
 
 
+COLONNE_DIARIO = ["giorno", "comando", "valore", "fed", "calma_SPY", "calma_QQQ", "ampiezza", "ordini", "note"]
+
+
 def annota(riga: dict) -> None:
-    pd.DataFrame([riga]).to_csv(DIARIO, mode="a", header=not DIARIO.exists(), index=False)
+    pd.DataFrame([riga], columns=COLONNE_DIARIO).to_csv(DIARIO, mode="a", header=not DIARIO.exists(), index=False)
 
 
 def sedute_intorno() -> list[dict]:
@@ -146,38 +157,43 @@ def posizioni() -> dict[str, float]:
     return {p["symbol"]: float(p["qty"]) for p in conto.separa(av._richiesta("GET", "/v2/positions"))[1]}
 
 
+def ordini_aperti() -> list[dict]:
+    return [o for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if conto.della_miscela(o["symbol"])]
+
+
 def cancella_ordini() -> None:
     """Cancella gli ordini aperti della miscela (mai quelli della prima candela)."""
-    for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}):
-        if conto.della_miscela(o["symbol"]):
-            try:
-                av._richiesta("DELETE", f"/v2/orders/{o['id']}")
-            except alpaca.ErroreAlpaca:
-                pass
+    for o in ordini_aperti():
+        try:
+            av._richiesta("DELETE", f"/v2/orders/{o['id']}")
+        except alpaca.ErroreAlpaca:
+            pass
     time.sleep(3)
 
 
-def manda(diff: dict[str, int], tif: str, nome: str) -> list[str]:
-    fatti = []
+def manda(diff: dict[str, int], tif: str, nome: str) -> tuple[list[str], bool]:
+    """Manda gli ordini; (descrizioni, tutti accettati). Un ordine già presente con lo stesso nome conta come accettato."""
+    fatti, bene = [], True
     for s, q in diff.items():
+        unico = f"miscela-{nome}-{s}"               # nome unico: Alpaca rifiuta un doppione
         corpo = {"symbol": s, "qty": str(abs(q)), "side": "buy" if q > 0 else "sell", "type": "market", "time_in_force": tif,
-                 "client_order_id": f"miscela-{nome}-{s}"}      # nome unico: Alpaca rifiuta un doppione
+                 "client_order_id": unico}
         try:
             o = av._richiesta("POST", "/v2/orders", json=corpo)
             fatti.append(f"{s} {q:+d} ({o.get('status')})")
         except alpaca.ErroreAlpaca as e:
-            fatti.append(f"{s} {q:+d} RIFIUTATO ({str(e)[:100]})")
-    return fatti
+            if av._ordine_per_nome(unico) is not None:
+                fatti.append(f"{s} {q:+d} (già mandato)")
+            else:
+                fatti.append(f"{s} {q:+d} RIFIUTATO ({str(e)[:100]})")
+                bene = False
+    return fatti, bene
 
 
 def sera(ultima: dict, prossima: dict) -> str:
     """Dopo la chiusura di `ultima`: a fine settimana la regola della calma, a fine mese quella dell'ampiezza; ordini validi
     all'apertura di `prossima`. Alpaca accetta gli ordini «all'apertura» dalle 19:00 di New York: prima si aspetta."""
     giorno = ultima["giorno"]
-    pronto = pd.Timestamp(f"{giorno} 19:01", tz=av.NY)
-    attesa = (pronto - av.ny_adesso()).total_seconds()
-    if attesa > 0:
-        time.sleep(attesa)
     stato = leggi_stato()
     primo_giro = stato.get("ultima_sera") is None
     conto.parti(giorno.isoformat())                # la fotografia della partenza (una volta sola)
@@ -188,6 +204,9 @@ def sera(ultima: dict, prossima: dict) -> str:
     for s in SIMBOLI:
         if ch[s].index[-1].tz_convert(av.NY).date() != giorno:
             return f"{giorno}: manca la chiusura di oggi di {s} (controllo dei dati), la sera si rifà al prossimo avvio"
+    if stato["fed"] > 0 and prossima["giorno"] not in COMUNICATI:
+        stato["fed"] = 0.0                         # un'uscita della banca centrale non fatta in giornata: si vende all'apertura
+        note.append("banca centrale: uscita in ritardo, all'apertura")
     if fine_settimana or primo_giro:
         for s in SIMBOLI:
             q = quota_calma(ch[s])
@@ -204,15 +223,23 @@ def sera(ultima: dict, prossima: dict) -> str:
         note.append(f"ampiezza {a:.1%}")
     valore = conto.adesso()["miscela"]
     prezzi = {s: float(ch[s].iloc[-1]) for s in SIMBOLI}
-    cancella_ordini()
-    diff = ordini(valore, esposizione(stato), prezzi, posizioni())
-    fatti = manda(diff, "opg", f"sera-{giorno}") if diff else []
+    gia = [o for o in ordini_aperti() if str(o.get("client_order_id", "")).startswith(f"miscela-sera-{giorno}-")]
+    if not gia:
+        cancella_ordini()                          # solo ordini vecchi della miscela, se ce ne sono
+    # se un giro prima (che non ha salvato lo stato) ha già mandato gli ordini di questa sera, quelli non si cancellano e non si
+    # rimandano: si mandano solo i titoli che mancano
+    in_attesa = {o["symbol"] for o in gia}
+    diff = {s: q for s, q in ordini(valore, esposizione(stato), prezzi, posizioni()).items() if s not in in_attesa}
+    fatti, bene = manda(diff, "opg", f"sera-{giorno}") if diff else ([], True)
+    fatti += [f"{o['symbol']} {o['side']} {o['qty']} (già in attesa)" for o in gia]
+    if not bene:
+        # non si segna la sera come fatta: un avvio dopo riprova; l'errore ferma il giro e avvisa
+        raise alpaca.ErroreAlpaca(f"miscela, sera del {giorno}: ordini rifiutati: {'; '.join(fatti)}")
     stato["ultima_sera"] = giorno.isoformat()
     scrivi_stato(stato)
     annota({"giorno": giorno.isoformat(), "comando": "sera", "valore": round(valore, 2), "fed": stato["fed"],
             "calma_SPY": stato["calma"]["SPY"], "calma_QQQ": stato["calma"]["QQQ"], "ampiezza": stato["ampiezza"],
             "ordini": "; ".join(fatti), "note": "; ".join(note)})
-    print(conto.registra(giorno.isoformat()), flush=True)
     print(pubblica())
     return f"{giorno}: sera fatta ({'; '.join(note) or 'nessuna decisione nuova'}); ordini per l'apertura: {', '.join(fatti) or 'nessuno'}"
 
@@ -231,7 +258,9 @@ def fed(tipo: str, ora: pd.Timestamp) -> str:
     ultimo = {s: float(alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/{s}/trades/latest", {"feed": "iex"})["trade"]["p"])
               for s in SIMBOLI}
     diff = ordini(valore, esposizione(stato), ultimo, posizioni())
-    fatti = manda(diff, "day", f"fed-{tipo}-{oggi}") if diff else []
+    fatti, bene = manda(diff, "day", f"fed-{tipo}-{oggi}") if diff else ([], True)
+    if not bene:
+        raise alpaca.ErroreAlpaca(f"miscela, banca centrale ({tipo}) del {oggi}: ordini rifiutati: {'; '.join(fatti)}")
     scrivi_stato(stato)
     annota({"giorno": oggi.isoformat(), "comando": f"fed {tipo}", "valore": round(valore, 2), "fed": stato["fed"],
             "calma_SPY": stato["calma"]["SPY"], "calma_QQQ": stato["calma"]["QQQ"], "ampiezza": stato["ampiezza"],

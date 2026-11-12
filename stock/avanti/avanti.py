@@ -38,7 +38,16 @@ COLONNE = ["giorno", "simbolo", "lato", "quantita", "ingresso", "ora_ingresso", 
 # ---- il collegamento -------------------------------------------------------------------------------------------------
 
 def _richiesta(metodo: str, percorso: str, **kw) -> dict | list:
-    r = requests.request(metodo, f"{CONTO_URL}{percorso}", headers=alpaca._intestazioni(), timeout=30, **kw)
+    """Una richiesta al conto demo. Un errore di rete si ritenta tre volte e poi diventa ErroreAlpaca (mai un'eccezione diversa a
+    metà di un giro di ordini). Ritentare un ordine è sicuro quando ha il suo nome unico (`client_order_id`)."""
+    for n in range(3):
+        try:
+            r = requests.request(metodo, f"{CONTO_URL}{percorso}", headers=alpaca._intestazioni(), timeout=30, **kw)
+            break
+        except requests.RequestException as e:
+            if n == 2:
+                raise alpaca.ErroreAlpaca(f"rete su {percorso.split('?')[0]}: {type(e).__name__}") from None
+            time.sleep(2)
     if r.status_code >= 400:
         raise alpaca.ErroreAlpaca(f"{r.status_code} su {percorso.split('?')[0]}: {r.text[:200]}")
     return r.json() if r.text else {}
@@ -222,28 +231,92 @@ def apri() -> str:
     parametri = {"symbols": ",".join(simboli), "timeframe": "1Min", "start": s["apertura"].tz_convert("UTC").isoformat(),
                  "end": pronto.tz_convert("UTC").isoformat(), "feed": "iex", "limit": 10000}
     j = alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/bars", parametri)
+    # l'ora si ricontrolla qui: lo scarico delle barre può aver ritentato per minuti
+    if ny_adesso() > s["apertura"] + pd.Timedelta(minutes=30):
+        return f"troppo tardi ({ny_adesso():%H:%M} di New York): dopo le 10:00 non si entra, il giorno si salta"
     ordini = []
-    for sim in simboli:
-        df = alpaca.barre_da_righe((j.get("bars") or {}).get(sim, []))
-        c = candela(df, s["apertura"]) if not df.empty else None
-        p = piano(c, valore) if c else None
-        if p is None:
-            ordini.append({"simbolo": sim, "nota": "saltato: candela mancante o piatta"})
-            continue
-        # il nome unico per giorno e titolo: Alpaca rifiuta un secondo ordine con lo stesso nome, anche se due lavori partono insieme
-        corpo = {"symbol": sim, "qty": str(p["quantita"]), "side": p["lato"], "type": "market", "time_in_force": "day",
-                 "order_class": "bracket", "take_profit": {"limit_price": f"{p['obiettivo']:.2f}"},
-                 "stop_loss": {"stop_price": f"{p['stop']:.2f}"}, "client_order_id": f"candela15-{oggi}-{sim}"}
-        try:
-            o = _richiesta("POST", "/v2/orders", json=corpo)
-            ordini.append({"simbolo": sim, **p, "id": o["id"], "inviato": ny_adesso().isoformat()})
-        except alpaca.ErroreAlpaca as e:
-            ordini.append({"simbolo": sim, **p, "nota": f"saltato: rifiutato ({str(e)[:120]})"})
-    f_oggi.parent.mkdir(exist_ok=True)
-    f_oggi.write_text(json.dumps({"giorno": oggi, "valore_conto": valore, "ordini": ordini}, indent=1, ensure_ascii=False))
+    try:
+        for sim in simboli:
+            df = alpaca.barre_da_righe((j.get("bars") or {}).get(sim, []))
+            c = candela(df, s["apertura"]) if not df.empty else None
+            p = piano(c, valore) if c else None
+            if p is None:
+                ordini.append({"simbolo": sim, "nota": "saltato: candela mancante o piatta"})
+                continue
+            # il nome unico per giorno e titolo: Alpaca rifiuta un secondo ordine con lo stesso nome, anche se due lavori partono insieme
+            nome = f"candela15-{oggi}-{sim}"
+            corpo = {"symbol": sim, "qty": str(p["quantita"]), "side": p["lato"], "type": "market", "time_in_force": "day",
+                     "order_class": "bracket", "take_profit": {"limit_price": f"{p['obiettivo']:.2f}"},
+                     "stop_loss": {"stop_price": f"{p['stop']:.2f}"}, "client_order_id": nome}
+            try:
+                o = _richiesta("POST", "/v2/orders", json=corpo)
+            except alpaca.ErroreAlpaca as e:
+                o = _ordine_per_nome(nome)        # già mandato (da un altro avvio, o da un tentativo andato a buon fine)?
+                if o is None:
+                    ordini.append({"simbolo": sim, **p, "nota": f"saltato: rifiutato ({str(e)[:120]})"})
+                    continue
+            ordini.append({"simbolo": sim, **p, "id": o["id"], "inviato": _ora_ny(o.get("submitted_at"))})
+    finally:
+        # il file del giorno si scrive comunque, anche se un errore ferma il giro a metà: senza, il diario perderebbe la giornata
+        if ordini:
+            f_oggi.parent.mkdir(exist_ok=True)
+            f_oggi.write_text(json.dumps({"giorno": oggi, "valore_conto": round(valore, 2), "ordini": ordini}, indent=1,
+                                         ensure_ascii=False))
     n = sum(1 for o in ordini if o.get("id"))
     print(_plancia())
     return f"{oggi}: {n} ordini inviati su {len(simboli)} titoli ({', '.join(o['simbolo'] for o in ordini if o.get('id'))})"
+
+
+def _ordine_per_nome(nome: str) -> dict | None:
+    try:
+        return _richiesta("GET", "/v2/orders:by_client_order_id", params={"client_order_id": nome})
+    except alpaca.ErroreAlpaca:
+        return None
+
+
+def _ora_ny(iso: str | None) -> str:
+    return (pd.Timestamp(iso).tz_convert(NY) if iso else ny_adesso()).isoformat()
+
+
+def _ordini_candela_su_alpaca(oggi: str) -> list[dict]:
+    """Gli ordini d'ingresso della prima candela di oggi, come li ha Alpaca (dal nome unico), con le gambe."""
+    inizio = pd.Timestamp(f"{oggi} 00:00", tz=NY).tz_convert("UTC").isoformat()
+    tutti = _richiesta("GET", "/v2/orders", params={"status": "all", "after": inizio, "limit": 500, "nested": "true"})
+    return [o for o in tutti if str(o.get("client_order_id", "")).startswith(f"candela15-{oggi}-")]
+
+
+def ricostruisci_giorno(oggi: str) -> bool:
+    """Se il file del giorno manca ma Alpaca ha gli ordini di oggi (un giro morto a metà, o un salvataggio fallito), lo riscrive da
+    quelli: così il giro dopo non li prende per posizioni di un altro giorno e il diario non perde la giornata."""
+    f_oggi = QUI / "giorni" / f"{oggi}.json"
+    if f_oggi.exists():
+        return True
+    ordini = []
+    for o in sorted(_ordini_candela_su_alpaca(oggi), key=lambda x: x.get("submitted_at") or ""):
+        gambe = o.get("legs") or []
+        stop = next((float(g["stop_price"]) for g in gambe if g.get("stop_price")), None)
+        obiettivo = next((float(g["limit_price"]) for g in gambe if g.get("limit_price")), None)
+        ordini.append({"simbolo": o["symbol"], "lato": o["side"], "quantita": int(float(o["qty"])), "stop": stop,
+                       "obiettivo": obiettivo, "riferimento": None, "id": o["id"], "inviato": _ora_ny(o.get("submitted_at"))})
+    if not ordini:
+        return False
+    f_oggi.parent.mkdir(exist_ok=True)
+    f_oggi.write_text(json.dumps({"giorno": oggi, "ricostruito_da_alpaca": True, "ordini": ordini}, indent=1, ensure_ascii=False))
+    return True
+
+
+def esecuzioni_del_giorno(oggi: str) -> list[dict]:
+    """Tutte le esecuzioni del giorno (a pagine da 100)."""
+    out, pagina = [], None
+    while True:
+        parametri = {"date": oggi, "page_size": 100, "direction": "asc"}
+        if pagina:
+            parametri["page_token"] = pagina
+        pezzo = _richiesta("GET", "/v2/account/activities/FILL", params=parametri)
+        out += pezzo
+        if len(pezzo) < 100:
+            return out
+        pagina = pezzo[-1]["id"]
 
 
 def chiudi(aspetta: bool = True) -> str:
@@ -327,8 +400,11 @@ def _auto() -> str:
     oggi = adesso.date().isoformat()
     f_diario = QUI / "diario.csv"
     scritto = f_diario.exists() and oggi in set(pd.read_csv(f_diario)["giorno"].astype(str))
-    azione = cosa_fare(adesso, seduta_di_oggi(), (QUI / "giorni" / f"{oggi}.json").exists(),
-                       bool(_posizioni_candela()), scritto)
+    posizioni = bool(_posizioni_candela())
+    ordini_di_oggi = (QUI / "giorni" / f"{oggi}.json").exists()
+    if not ordini_di_oggi and posizioni:
+        ordini_di_oggi = ricostruisci_giorno(oggi)     # il file manca ma gli ordini di oggi ci sono: non sono «di un altro giorno»
+    azione = cosa_fare(adesso, seduta_di_oggi(), ordini_di_oggi, posizioni, scritto)
     print(f"{adesso:%Y-%m-%d %H:%M:%S} di New York: {azione}", flush=True)
     if azione == "apri":
         return apri()
@@ -355,12 +431,15 @@ def chiudi_fuori_orario() -> str:
     fatti = []
     for p in _posizioni_candela():
         q = float(p["qty"])
-        ultimo = float(alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/{p['symbol']}/trades/latest", {"feed": "iex"})["trade"]["p"])
-        limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
-        corpo = {"symbol": p["symbol"], "qty": str(abs(int(q))), "side": "sell" if q > 0 else "buy", "type": "limit",
-                 "limit_price": f"{limite:.2f}", "time_in_force": "day", "extended_hours": True}
-        o = _richiesta("POST", "/v2/orders", json=corpo)
-        fatti.append(f"{p['symbol']} {-q:+g} a {limite} ({o.get('status')})")
+        try:
+            ultimo = float(alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/{p['symbol']}/trades/latest", {"feed": "iex"})["trade"]["p"])
+            limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
+            corpo = {"symbol": p["symbol"], "qty": str(abs(int(q))), "side": "sell" if q > 0 else "buy", "type": "limit",
+                     "limit_price": f"{limite:.2f}", "time_in_force": "day", "extended_hours": True}
+            o = _richiesta("POST", "/v2/orders", json=corpo)
+            fatti.append(f"{p['symbol']} {-q:+g} a {limite} ({o.get('status')})")
+        except Exception as e:  # noqa: BLE001 — un titolo rifiutato non deve lasciare gli altri senza ordine di chiusura
+            fatti.append(f"{p['symbol']} NON CHIUSO ({type(e).__name__}: {str(e)[:100]})")
     time.sleep(60)
     rimaste = [p["symbol"] for p in _posizioni_candela()]
     oggi = ny_adesso().date().isoformat()
@@ -376,7 +455,7 @@ def scrivi_diario(oggi: str) -> str:
     if not f_oggi.exists():
         return f"{oggi}: nessun ordine del giorno, niente diario"
     stato = json.loads(f_oggi.read_text())
-    esecuzioni = _richiesta("GET", "/v2/account/activities/FILL", params={"date": oggi, "page_size": 100})
+    esecuzioni = esecuzioni_del_giorno(oggi)
     gambe = {}
     for o in stato["ordini"]:
         if o.get("id"):
@@ -432,7 +511,9 @@ def _plancia(allarmi: dict | None = None) -> str:
 
 def controlla() -> str:
     c = _richiesta("GET", "/v2/account")
-    return f"conto demo raggiungibile: stato {c.get('status')}, valore {float(c['equity']):,.0f} dollari"
+    return (f"conto demo raggiungibile: stato {c.get('status')}, valore {float(c['equity']):,.0f} dollari, moltiplicatore del margine "
+            f"{c.get('multiplier')}, potere d'acquisto {float(c.get('buying_power') or 0):,.0f}, in giornata "
+            f"{float(c.get('daytrading_buying_power') or 0):,.0f}, giornate di compravendita contate {c.get('daytrade_count')}")
 
 
 if __name__ == "__main__":
