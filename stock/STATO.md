@@ -170,6 +170,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   nelle aziende piccole e care da prendere a prestito, non nelle 500 grandi.
 * **La prova 25** (la miscela delle prove 7, 15 e 16): Sharpe 1,08 contro 0,89 dello SPY, perdita massima −14,6% contro −33,8%, ma lo
   Sharpe corretto per le prove è 0,05: non si distingue dal caso. Proposta al proprietario per il demo come misura in avanti.
+* **La prova 26** (la tendenza su obbligazioni, oro, materie prime e azioni estere come parte nuova della miscela): **bocciata**, non
+  entra. Da sola fa Sharpe 0,34; è legata alla miscela più del previsto (correlazione 0,41) e la miscela con lei fa 1,05 contro 1,08.
+* **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
+  ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
+  comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
+  (`stock/avanti/vps/installa.sh`, da lanciare una volta dal proprietario). Routine della sessione: quattro avvii al giorno, la sera
+  della miscela, e la ricerca continua due volte al giorno.
 * **La misura in avanti sul conto demo di Alpaca** (richiesta del proprietario del 7 nov 2026: «non in back testing [...] real time,
   forward testing»): la prima candela da 15 minuti sulle 10 azioni più scambiate del mese, regole in `stock/avanti/REGOLE.md`, due
   routine nei giorni di borsa (9:46 e 15:55 di New York) dentro la sessione «trading stock», diario in `stock/avanti/diario.csv`,
