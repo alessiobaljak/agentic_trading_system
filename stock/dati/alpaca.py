@@ -242,3 +242,23 @@ def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetim
             df = df.drop_duplicates().sort_values(["data", "tipo"]).reset_index(drop=True)
         out[s] = df
     return out
+
+
+def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_massime: int = 40) -> tuple[list[dict], bool]:
+    """Le notizie (fonte Benzinga) con uno dei simboli, fra due istanti, dalla più vecchia; senza il testo intero.
+
+    Il secondo valore dice se l'elenco è completo (False: ci si è fermati a `pagine_massime` pagine da 50). I titoli delle notizie
+    sono dati con licenza: si usano per calcolare, non si scrivono nel repository."""
+    parametri = {"start": _iso(inizio), "end": _iso(fine), "limit": 50, "sort": "asc", "include_content": "false",
+                 "exclude_contentless": "false"}
+    if simboli:
+        parametri["symbols"] = ",".join(simboli)
+    out: list[dict] = []
+    for _ in range(pagine_massime):
+        j = _get(f"{DATI_URL}/v1beta1/news", parametri)
+        out.extend(j.get("news") or [])
+        token = j.get("next_page_token")
+        if not token:
+            return out, True
+        parametri["page_token"] = token
+    return out, False
