@@ -28,6 +28,7 @@ e qualche moneta al bordo della banda puo' cambiare.
 """
 from __future__ import annotations
 
+import calendar
 import json
 import os
 import time
@@ -55,6 +56,14 @@ ORA_RIBILANCIO_S = 300          # lunedi' 00:05 UTC
 OGNI_VALUTAZIONE_S = 3600
 ATTESA_DOPO_ERRORE_S = 1800     # un ribilancio o una prova non riusciti si riprovano dopo 30 minuti, non a ogni giro
 GIORNO_MS = 86_400_000
+# il funding regolato (12 novembre 2026, confronto con il demo in gate2/reports/2026-11-12-G1-funding-commissioni.md): Binance
+# pubblica il regolamento di ogni moneta anche minuti dopo l'ora, quindi si tiene il punto letto moneta per moneta (prima: il massimo
+# di tutte, e il regolamento di una moneta pubblicato dopo quello di un'altra si perdeva); al ribilancio i regolamenti fino a quell'ora
+# non ancora pubblicati si aspettano per FUNDING_IN_SOSPESO_MS con le quantità di prima (prima: si perdevano)
+FUNDING_IN_SOSPESO_MS = 2 * 3_600_000
+FUNDING_PER_REGOLAMENTO_MS = 26 * 3_600_000   # quanto si tiene nello stato il funding per regolamento e moneta (per Firebase)
+MONETE_DEL_FUNDING = 10                        # le monete più grandi per regolamento in /<ramo>/funding (con il totale)
+CHIAVE_REGOLAMENTO = "%Y-%m-%dT%H:%M"          # nello stato; su Firebase il percorso /<ramo>/funding/{AAAA-MM-GG}/{HH:MM}
 
 
 def scarto(simbolo: str) -> float:
@@ -256,6 +265,7 @@ class PaperF5:
     # dove scrive e da cosa si accende; G1 (sotto) cambia solo questi e il giorno della decisione
     RAMO, ETICHETTA, INTERRUTTORE_DI_SERIE, FILE_DI_SERIE = "/paper_f5", "paper_f5", INTERRUTTORE, FILE_STATO
     MISURA_SCARTI = False          # la misura dello scarto la fa una sola istanza (G1, ogni giorno)
+    PUBBLICA_FUNDING = False       # il funding per regolamento e moneta su Firebase: solo G1 (il confronto con il demo)
 
     def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Optional[Path] = None,
                  interruttore: Optional[Path] = None, pausa_s: float = 0.1) -> None:
@@ -427,9 +437,10 @@ class PaperF5:
             return st
         pesi, lunghi, corti, n_uni = r
         if st:
-            self._funding_regolati(st, prezzi)
+            self._funding_regolati(st, prezzi, now)
         equity = self._equity(st, prezzi) if st else CAPITALE
         vecchie = {s: float(q) for s, q in (st.get("quantita") or {}).items()}
+        base_prima, prezzi_prima = int(st.get("funding_fino_ms", 0)), dict(st.get("prezzi_rif") or {})
         nuove, costo, a_mercato, variazioni = {}, 0.0, 0.0, {}
         for s in set(vecchie) | set(pesi):
             p = prezzi.get(s) or float((st.get("prezzi_rif") or {}).get(s, 0.0))
@@ -451,6 +462,7 @@ class PaperF5:
               "universo": n_uni,
               "ordini": {"da_ms": int(now * 1000), "fino_ms": int(now * 1000) + VALIDITA_LIMITE_MS,
                          "variazioni": variazioni, "costo_provvisorio": costo, "costo_a_mercato": a_mercato}}
+        self._funding_dopo_il_ribilancio(st, vecchie, base_prima, prezzi_prima, now)
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(m * 86400))
         if self.fb is not None:
@@ -543,27 +555,101 @@ class PaperF5:
             "funding_medio_7": getattr(self, "_funding_medio_7", None)})
         print(f"[{self.ETICHETTA}] prova a secco: universo {n}, long {len(lunghi)}, short {len(corti)}")
 
-    def _funding_regolati(self, st: dict, prezzi: dict) -> None:
-        """Il funding dei regolamenti dopo l'ultimo controllo, posizione per posizione (il long paga se e' positivo)."""
-        da = int(st.get("funding_fino_ms", 0)) + 1
-        fino, pagato = da, 0.0
-        for s, q in (st.get("quantita") or {}).items():
-            f = self.chiedi("/fapi/v1/fundingRate", {"symbol": s, "startTime": da, "limit": 1000}) or []
+    def _funding_dopo_il_ribilancio(self, st: dict, vecchie: dict, base_prima: int, prezzi_prima: dict, now: float) -> None:
+        """Al ribilancio le quantità nuove valgono dall'ora del ribilancio (``funding_fino_ms``). I regolamenti fino a quell'ora
+        delle posizioni di prima che Binance non ha ancora pubblicato restano in sospeso con la quantità di prima, per al massimo
+        ``FUNDING_IN_SOSPESO_MS`` (problema (b) del 12 novembre 2026); il punto letto di ogni moneta passa alle posizioni nuove solo
+        se è già oltre l'ora del ribilancio (un regolamento già contato non si riconta)."""
+        ora_ms = int(now * 1000)
+        visti = {s: int(t) for s, t in (st.get("funding_visti") or {}).items()}
+        sospesi = {s: [v for v in vs if ora_ms <= int(v["scade"])] for s, vs in (st.get("funding_sospesi") or {}).items()}
+        ultimo_possibile = ora_ms - ora_ms % 3_600_000     # i regolamenti cadono alle ore piene (ogni 1, 4 o 8 ore)
+        for s, q in vecchie.items():
+            if q and visti.get(s, 0) < ultimo_possibile:   # già letto quello dell'ultima ora piena: niente in sospeso
+                da = max(base_prima, visti.get(s, 0)) + 1
+                sospesi.setdefault(s, []).append({"q": q, "da": da, "fino": ora_ms, "scade": ora_ms + FUNDING_IN_SOSPESO_MS,
+                                                  "prezzo": float(prezzi_prima.get(s) or 0.0)})
+        st["funding_sospesi"] = {s: vs for s, vs in sospesi.items() if vs}
+        st["funding_visti"] = {s: t for s, t in visti.items() if t > ora_ms and s in (st.get("quantita") or {})}
+
+    def _funding_regolati(self, st: dict, prezzi: dict, now: Optional[float] = None) -> None:
+        """Il funding dei regolamenti non ancora contati, posizione per posizione (il long paga se e' positivo). Le quantità di
+        adesso valgono dopo ``funding_fino_ms`` (l'ora del ribilancio); per ogni moneta si legge dal suo ultimo regolamento contato
+        (``funding_visti``), perché Binance pubblica le monete in tempi diversi (problema (a) del 12 novembre 2026); i regolamenti
+        in sospeso del ribilancio di prima (``funding_sospesi``) si contano con la quantità di prima. Con ``PUBBLICA_FUNDING`` il
+        funding di ogni regolamento, per moneta, va su Firebase (`_pubblica_funding`)."""
+        adesso_ms = int((time.time() if now is None else now) * 1000)
+        base = int(st.get("funding_fino_ms", 0))
+        quantita = st.get("quantita") or {}
+        visti = {s: int(t) for s, t in (st.get("funding_visti") or {}).items()}
+        sospesi = st.get("funding_sospesi") or {}
+        regolamenti = st.setdefault("funding_regolamenti", {}) if self.PUBBLICA_FUNDING else {}
+        toccati, pagato = set(), 0.0
+        for s in sorted(set(quantita) | set(sospesi)):
+            da_ora = max(base, visti.get(s, 0)) + 1 if s in quantita else None
+            inizi = [int(v["da"]) for v in sospesi.get(s, [])] + ([da_ora] if da_ora is not None else [])
+            f = self.chiedi("/fapi/v1/fundingRate", {"symbol": s, "startTime": min(inizi), "limit": 1000}) or []
             time.sleep(self.pausa_s)
+            ultimo = 0
             for x in f:
                 t = int(x["fundingTime"])
-                mark = float(x.get("markPrice") or 0) or float(prezzi.get(s) or st["prezzi_rif"][s])
-                pagato += float(q) * mark * float(x["fundingRate"])
-                fino = max(fino, t)
+                ultimo = max(ultimo, t)
+                vecchio = next((v for v in sospesi.get(s, []) if int(v["da"]) <= t <= int(v["fino"])), None)
+                if vecchio is not None:
+                    q, rif = float(vecchio["q"]), float(vecchio.get("prezzo") or 0.0)
+                    vecchio["da"] = t + 1
+                elif da_ora is not None and t >= da_ora:
+                    q, rif = float(quantita[s]), float((st.get("prezzi_rif") or {}).get(s) or 0.0)
+                    visti[s] = max(visti.get(s, 0), t)
+                else:
+                    continue                            # già contato, o di prima delle posizioni
+                mark = float(x.get("markPrice") or 0) or float(prezzi.get(s) or rif)
+                quanto = q * mark * float(x["fundingRate"])
+                pagato += quanto
+                if self.PUBBLICA_FUNDING:
+                    # niente «/» nelle chiavi dello stato: `salva` lo scrive intero su Firebase (revisione del 12 novembre, 82)
+                    chiave = time.strftime(CHIAVE_REGOLAMENTO, time.gmtime(t // 1000))
+                    per_moneta = regolamenti.setdefault(chiave, {})
+                    per_moneta[s] = per_moneta.get(s, 0.0) - quanto      # incassato: + quando il paper riceve
+                    toccati.add(chiave)
+            # un regolamento in sospeso finisce quando Binance ha pubblicato uno dopo (quelli prima ci sono) o quando scade
+            rimasti = [v for v in sospesi.get(s, []) if ultimo <= int(v["fino"]) and adesso_ms <= int(v["scade"])
+                       and int(v["da"]) <= int(v["fino"])]
+            if rimasti:
+                sospesi[s] = rimasti
+            else:
+                sospesi.pop(s, None)
+        st["funding_visti"] = visti
+        if sospesi:
+            st["funding_sospesi"] = sospesi
+        else:
+            st.pop("funding_sospesi", None)
         st["funding_dal_rif"] = float(st.get("funding_dal_rif", 0.0)) + pagato
         st["funding_totale"] = float(st.get("funding_totale", 0.0)) + pagato
-        st["funding_fino_ms"] = fino
+        if self.PUBBLICA_FUNDING:
+            for k in list(regolamenti):
+                if adesso_ms - calendar.timegm(time.strptime(k, CHIAVE_REGOLAMENTO)) * 1000 > FUNDING_PER_REGOLAMENTO_MS:
+                    regolamenti.pop(k)
+            self._pubblica_funding(regolamenti, toccati, adesso_ms / 1000)
+
+    def _pubblica_funding(self, regolamenti: dict, toccati: set, now: float) -> None:
+        """`/<ramo>/funding/{AAAA-MM-GG}/{HH:MM}` (UTC, l'ora del regolamento): il funding incassato (+) o pagato (−) dal paper in
+        quel regolamento, in dollari del paper, il totale, quante monete e le ``MONETE_DEL_FUNDING`` più grandi; per il confronto
+        moneta per moneta con il demo. Si riscrive quando arriva una moneta pubblicata in ritardo."""
+        if self.fb is None:
+            return
+        for k in sorted(toccati):
+            monete = regolamenti.get(k) or {}
+            grandi = sorted(monete.items(), key=lambda x: (-abs(x[1]), x[0]))[:MONETE_DEL_FUNDING]
+            self.fb.set_rtdb(f"{self.RAMO}/funding/{k.replace('T', '/')}", {
+                "incassato": round(sum(monete.values()), 6), "monete": len(monete),
+                "maggiori": {s: round(v, 6) for s, v in grandi}, "aggiornato": now})
 
     def valuta(self, now: float, st: dict) -> dict:
         prezzi = self._prezzi_mark()
         if not prezzi:
             return st
-        self._funding_regolati(st, prezzi)
+        self._funding_regolati(st, prezzi, now)
         st["ultima_valutazione"] = now
         self.salva(st)
         self._pubblica(st, prezzi, now)
@@ -603,6 +689,7 @@ class PaperG1(PaperF5):
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g1.json"
     MISURA_SCARTI = True
+    PUBBLICA_FUNDING = True
 
     def giorno_di_decisione(self, giorno: int) -> int:
         return giorno
@@ -623,7 +710,7 @@ class PaperG1N(PaperG1):
     dell'universo del giorno) sia zero, entro 0,5-1,5. Interruttore `ops/paper_g1n_acceso`, stato in `data/paper_g1n.json` e su RTDB
     in `/paper_g1n`."""
     RAMO, ETICHETTA = "/paper_g1n", "paper_g1n"
-    MISURA_SCARTI = False
+    MISURA_SCARTI = PUBBLICA_FUNDING = False
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1n_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g1n.json"
 
@@ -663,7 +750,7 @@ class PaperG11(PaperG1):
     media dei ranghi di −funding dei 7 giorni e di −funding dell'ultimo giorno. Interruttore `ops/paper_g11_acceso`, stato in
     `data/paper_g11.json` e su RTDB in `/paper_g11`."""
     RAMO, ETICHETTA = "/paper_g11", "paper_g11"
-    MISURA_SCARTI = False
+    MISURA_SCARTI = PUBBLICA_FUNDING = False
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g11_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g11.json"
 

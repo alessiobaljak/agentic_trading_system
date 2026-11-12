@@ -143,18 +143,25 @@ class PaperEventi:
     # ---- operazioni ----
     def _funding(self, st: dict, now: float) -> None:
         """Il funding dei regolamenti dall'ultimo controllo, per le due gambe di ogni operazione aperta (tassi sommati,
-        come la ricerca: lo short incassa quello della moneta, il long paga quello del Bitcoin)."""
+        come la ricerca: lo short incassa quello della moneta, il long paga quello del Bitcoin). Ogni gamba riparte dal suo ultimo
+        regolamento contato (``funding_fino_ms`` la moneta, ``funding_btc_fino_ms`` il Bitcoin), non da «adesso»: Binance pubblica
+        un regolamento anche minuti dopo l'ora, e prima quello pubblicato in ritardo si perdeva (12 novembre 2026, come il paper di
+        G1 in f5.py)."""
         aperte = st.get("aperte") or {}
         if not aperte:
             return
         adesso_ms = int(now * 1000)
-        da = min(int(p["funding_fino_ms"]) for p in aperte.values())
+        da = min(min(int(p["funding_fino_ms"]), int(p.get("funding_btc_fino_ms", p["funding_fino_ms"]))) for p in aperte.values())
         btc = self._regolamenti("BTCUSDT", da + 1)
         for p in aperte.values():
             f0 = int(p["funding_fino_ms"])
-            p["fb"] = float(p["fb"]) + sum(r for t, r in btc if f0 < t <= adesso_ms)
-            p["fc"] = float(p["fc"]) + sum(r for t, r in self._regolamenti(p["simbolo"], f0 + 1) if f0 < t <= adesso_ms)
-            p["funding_fino_ms"] = adesso_ms
+            b0 = int(p.get("funding_btc_fino_ms", f0))
+            nuovi_b = [(t, r) for t, r in btc if b0 < t <= adesso_ms]
+            nuovi_c = [(t, r) for t, r in self._regolamenti(p["simbolo"], f0 + 1) if f0 < t <= adesso_ms]
+            p["fb"] = float(p["fb"]) + sum(r for _, r in nuovi_b)
+            p["fc"] = float(p["fc"]) + sum(r for _, r in nuovi_c)
+            p["funding_btc_fino_ms"] = max([b0] + [t for t, _ in nuovi_b])
+            p["funding_fino_ms"] = max([f0] + [t for t, _ in nuovi_c])
 
     def apri(self, st: dict, tipo: str, simbolo: str, giorno: int, now: float, mark: dict) -> bool:
         aperte = st.setdefault("aperte", {})

@@ -253,3 +253,5 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
   conto vero solo dalla dashboard in due passi, nessun file; l'agente non porta più il tag. Limiti fissi invariati.
 - 12 nov, `a267c40` (il cambio sopra, committato); secondo giro non committato (APPROVE per il commit): con Firebase muto vale
   l'approvazione letta davvero negli ultimi 10 minuti (con git); da spento controllo ogni 10 minuti. Limiti fissi invariati.
+- 12 nov, notte (non committato, REQUEST CHANGES per l'82): funding dei paper per moneta e con i sospesi al ribilancio; il demo legge
+  dal paper di G1 solo `ultimo_lunedi` e `pesi` (`demo_binance.py:870-874`), invariato. Nessun invariante del percorso cambiato.

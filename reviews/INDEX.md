@@ -9,16 +9,17 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato al 12 nov 2026, pomeriggio, secondo giro)
-- **Ultima revisione** (sera): `reports/2026-11-12-stato-demo-esecuzioni.md`, sezione di sola lettura del demo nello «stato»:
+## Stato (aggiornato al 12 nov 2026, notte)
+- **Ultima revisione** (notte): `reports/2026-11-12-funding-dei-paper.md`, funding dei paper: secondo giro **APPROVE** per
+  commit e riavvio (82 chiuso; 83 Basso latente: una chiave di formato vecchio fermerebbe G1, oggi impossibile).
+- Sera: `reports/2026-11-12-stato-demo-esecuzioni.md`, sezione di sola lettura del demo nello «stato»:
   secondo giro **APPROVE** (finestra 23:50-01:45 UTC, stop al primo 429 o 418, soglia 600, riga del peso in cima). Conto vero: `da91124`.
 - Conto vero: `reports/2026-11-12-conto-vero-versione-firebase-2.md` (secondo giro, committato come `da91124`): **APPROVE per
   il commit**; **REQUEST CHANGES per l'accensione**: 54 (ii) Alto (la chiave di amministratore di Firebase scrive l'approvazione:
   decisione di Alessio), 70 Medio, 78 Basso nuovo (il test di guardia del 54 non vede la costante importata, un nome a pezzi, un `.json`).
-  Chiusi nel secondo giro: 74 (approvazione letta davvero negli ultimi 10 minuti, con git; una revoca non letta vale fino a 10 minuti),
-  75, 76, 77. Il primo giro è committato come `a267c40` (verificato uguale alla copia rivista).
+  Chiusi: 74 (approvazione letta negli ultimi 10 minuti, con git; revoca non letta: fino a 10 minuti), 75, 76, 77. Primo giro `a267c40`.
 - Fase 2 `ff89531`; sulla macchina gira ancora `1a8522f` (riavvio con l'ok di Alessio).
-- Voci aperte: 4 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione). Bassi 51, 52.
+- Voci aperte: 4 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione).
 - Alla prossima revisione: se committato, confrontare il commit con `giro12nov/copia2` (copia del secondo giro, senza git); rifare
   S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`, un giro al minuto: S1 e S2 senza giri restano bloccate, giusto) e `mutazioni2.py`.
 - Per l'accensione: decisione sul 54, test di guardia completo (78), 70, regole pubblicate e pulsanti provati, pulsante «Approva» con

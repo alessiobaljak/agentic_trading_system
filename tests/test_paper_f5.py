@@ -349,3 +349,190 @@ def test_g1n_scala_i_pesi_di_g1(tmp_path, monkeypatch):
     assert pesi["CUSDT"] == pytest.approx(-0.5 * p._neutralita["b"], abs=1e-4)
     assert sum(w * betas[s] for s, w in pesi.items()) == pytest.approx(0.0, abs=0.1)
     assert p.RAMO == "/paper_g1n" and p.giorno_di_decisione(m) == m
+
+
+# ---- il conto del funding (12 novembre 2026): le ipotesi del confronto con il demo, gate2/reports/2026-11-12-G1-funding-commissioni.md ----
+ORA_MS = 3_600_000
+G = 20750 * f5.GIORNO_MS                        # 2026-10-24 00:00 UTC
+
+
+class _Funding:
+    """Solo `/fapi/v1/fundingRate`: i regolamenti di ogni moneta, ognuno visibile da quando Binance lo pubblica (``ritardo_ms``)."""
+
+    def __init__(self):
+        self.righe, self.adesso_ms = {}, 0
+
+    def regola(self, s, t, tasso, mark=10.0, ritardo_ms=0):
+        self.righe.setdefault(s, []).append((t, tasso, mark, t + ritardo_ms))
+
+    def __call__(self, percorso, p):
+        assert percorso == "/fapi/v1/fundingRate"
+        return [{"fundingTime": t, "fundingRate": r, "markPrice": str(mk)} for t, r, mk, pub in sorted(self.righe.get(p["symbol"], []))
+                if t >= int(p["startTime"]) and pub <= self.adesso_ms][: int(p["limit"])]
+
+
+def _paper_del_funding(tmp_path, classe=f5.PaperF5, fb=None):
+    finto = _Funding()
+    return classe(fb, chiedi=finto, file_stato=tmp_path / "s.json", interruttore=tmp_path / "x", pausa_s=0.0), finto
+
+
+def _stato_del_funding(quantita, base_ms):
+    return {"quantita": dict(quantita), "prezzi_rif": {s: 10.0 for s in quantita}, "funding_fino_ms": base_ms,
+            "funding_dal_rif": 0.0, "funding_totale": 0.0, "equity_rif": f5.CAPITALE}
+
+
+def _conta(p, finto, st, adesso_ms):
+    finto.adesso_ms = adesso_ms
+    p._funding_regolati(st, {}, adesso_ms / 1000)
+
+
+@pytest.mark.parametrize("ms_di_b", [0, -3])
+def test_funding_a_un_regolamento_pubblicato_dopo_quello_di_un_altra_moneta_non_si_perde(tmp_path, ms_di_b):
+    """Ipotesi (a): alle 08:05 Binance ha pubblicato le 08:00 di A ma non ancora quelle di B (stessa ora in millisecondi, o qualche
+    millisecondo prima). Prima si leggeva dal massimo di tutte le monete e B si perdeva; ora ogni moneta dal suo punto."""
+    p, finto = _paper_del_funding(tmp_path)
+    st = _stato_del_funding({"AUSDT": -100.0, "BUSDT": -100.0}, G + 5 * 60_000)
+    finto.regola("AUSDT", G + 8 * ORA_MS, 0.001)
+    finto.regola("BUSDT", G + 8 * ORA_MS + ms_di_b, 0.001, ritardo_ms=10 * 60_000)
+    _conta(p, finto, st, G + 8 * ORA_MS + 5 * 60_000)
+    assert st["funding_totale"] == pytest.approx(-1.0)          # A: −100 × 10 × 0,001 (lo short incassa)
+    _conta(p, finto, st, G + 9 * ORA_MS + 5 * 60_000)
+    assert st["funding_totale"] == pytest.approx(-2.0)
+
+
+def _ribilancia_con(p, st, pesi, now):
+    """Il ribilancio vero (`PaperF5.ribilancia`) con pesi e prezzi dati (niente universo da Binance)."""
+    p.pesi_del_lunedi = lambda m, s: (pesi, {k for k, w in pesi.items() if w > 0}, {k for k, w in pesi.items() if w < 0}, len(pesi))
+    p._prezzi_mark = lambda: {"AUSDT": 10.0, "BUSDT": 10.0, "CUSDT": 10.0}
+    p.salva(st)
+    return p.ribilancia(int(now // 86400), now, p.carica())
+
+
+def test_funding_b_il_regolamento_delle_00_pubblicato_dopo_il_ribilancio_si_conta_con_le_quantita_di_prima(tmp_path):
+    """Ipotesi (b): al ribilancio delle 00:06 i regolamenti delle 00:00 di A e B non sono ancora pubblicati (D il suo sì). Prima il
+    punto letto diventava l'ora del ribilancio e A e B si perdevano; ora restano in sospeso e si contano quando arrivano, con la
+    quantità che avevano alle 00:00 (A resta con una quantità diversa, B esce dal portafoglio), una volta sola; le posizioni nuove
+    contano dalle 00:06."""
+    p, finto = _paper_del_funding(tmp_path)
+    st = _stato_del_funding({"AUSDT": -100.0, "BUSDT": -100.0, "DUSDT": -100.0}, G - 16 * ORA_MS + 5 * 60_000)
+    finto.regola("AUSDT", G, 0.001, ritardo_ms=7 * 60_000)
+    finto.regola("BUSDT", G, 0.002, ritardo_ms=8 * 60_000)
+    finto.regola("DUSDT", G, 0.001)
+    finto.adesso_ms = G + 6 * 60_000
+    st = _ribilancia_con(p, st, {"AUSDT": -0.05, "CUSDT": 0.03}, (G + 6 * 60_000) / 1000)
+    assert st["funding_totale"] == pytest.approx(-1.0) and set(st["quantita"]) == {"AUSDT", "CUSDT"}
+    assert {s: v[0]["q"] for s, v in st["funding_sospesi"].items()} == {"AUSDT": -100.0, "BUSDT": -100.0}
+    q_a, q_c = st["quantita"]["AUSDT"], st["quantita"]["CUSDT"]
+    assert q_a == pytest.approx(-0.05 * (f5.CAPITALE + 1.0) / 10, rel=1e-3)
+    _conta(p, finto, st, G + ORA_MS + 6 * 60_000)                 # A e B pubblicati alle 00:07 e 00:08, con −100
+    assert st["funding_totale"] == pytest.approx(-1.0 - 1.0 - 2.0)
+    for s, tasso in (("AUSDT", 0.001), ("BUSDT", 0.001), ("CUSDT", -0.001)):
+        finto.regola(s, G + 8 * ORA_MS, tasso)
+    for h in (2, 3, 9, 10):
+        _conta(p, finto, st, G + h * ORA_MS + 6 * 60_000)
+    atteso = -4.0 + q_a * 10 * 0.001 + q_c * 10 * -0.001          # B non c'è più: le sue 08:00 non contano
+    assert st["funding_totale"] == pytest.approx(atteso) and "funding_sospesi" not in st
+
+
+def test_funding_b_il_sospeso_scade_e_non_conta_un_regolamento_dopo_il_ribilancio(tmp_path):
+    """Un regolamento in sospeso che non arriva entro ``FUNDING_IN_SOSPESO_MS`` non si aspetta più; un regolamento dopo l'ora del
+    ribilancio non si conta mai con la quantità di prima."""
+    p, finto = _paper_del_funding(tmp_path)
+    st = _stato_del_funding({"BUSDT": -100.0}, G - 16 * ORA_MS)
+    finto.adesso_ms = G + 6 * 60_000
+    st = _ribilancia_con(p, st, {"AUSDT": -0.05, "CUSDT": 0.03}, (G + 6 * 60_000) / 1000)
+    finto.regola("BUSDT", G + ORA_MS, 0.002)                     # B a un'ora: le 01:00 sono dopo il ribilancio
+    _conta(p, finto, st, G + ORA_MS + 6 * 60_000)
+    assert st["funding_totale"] == 0.0 and "funding_sospesi" not in st    # pubblicato uno dopo: il sospeso finisce
+    st = _stato_del_funding({"BUSDT": -100.0}, G - 16 * ORA_MS)
+    finto.righe.clear()
+    finto.adesso_ms = G + 6 * 60_000
+    st = _ribilancia_con(p, st, {"AUSDT": -0.05}, (G + 6 * 60_000) / 1000)
+    _conta(p, finto, st, G + 6 * 60_000 + f5.FUNDING_IN_SOSPESO_MS + 1)
+    assert "funding_sospesi" not in st
+
+
+def test_funding_c_niente_doppioni_e_monete_a_intervallo_di_un_ora_o_quattro(tmp_path):
+    """Ipotesi (c): ogni regolamento una volta sola, anche con valutazioni ravvicinate e monete a 1 e 4 ore (passava anche prima)."""
+    p, finto = _paper_del_funding(tmp_path)
+    st = _stato_del_funding({"AUSDT": -100.0, "HUSDT": 100.0, "QUSDT": -100.0}, G + 5 * 60_000)
+    for h in range(1, 25):
+        finto.regola("HUSDT", G + h * ORA_MS, -0.0005)            # a un'ora: il long incassa
+    for h in (4, 8, 12, 16, 20, 24):
+        finto.regola("QUSDT", G + h * ORA_MS, 0.001)
+    for h in (8, 16, 24):
+        finto.regola("AUSDT", G + h * ORA_MS, 0.0001)
+    for minuti in range(65, 25 * 60, 37):                         # valutazioni ogni 37 minuti
+        _conta(p, finto, st, G + minuti * 60_000)
+    atteso = -(24 * 100 * 10 * 0.0005) - (6 * 100 * 10 * 0.001) - (3 * 100 * 10 * 0.0001)
+    assert st["funding_totale"] == pytest.approx(atteso)
+
+
+def test_funding_di_g1_su_firebase_per_regolamento_e_moneta(tmp_path):
+    """Il funding del paper di G1 per regolamento (`/paper_g1/funding/{data}/{ora}`): incassato (+) o pagato (−), il numero di
+    monete, le 10 più grandi; riscritto quando arriva una moneta in ritardo. Gli altri paper non lo scrivono."""
+    from bot.core.firebase_client import _InMemoryStore
+    fb = _InMemoryStore()
+    p, finto = _paper_del_funding(tmp_path, f5.PaperG1, fb)
+    monete = {f"M{i:02d}USDT": -100.0 for i in range(12)}
+    st = _stato_del_funding(monete, G + 5 * 60_000)
+    for i, s in enumerate(monete):
+        finto.regola(s, G + 8 * ORA_MS, 0.0001 * (i + 1), ritardo_ms=(20 * 60_000 if i == 11 else 0))
+    _conta(p, finto, st, G + 8 * ORA_MS + 5 * 60_000)
+    r = fb.get_rtdb("/paper_g1/funding/2026-10-24/08:00")
+    assert r["monete"] == 11 and r["incassato"] == pytest.approx(sum(100 * 10 * 0.0001 * (i + 1) for i in range(11)))
+    assert len(r["maggiori"]) == 10 and "M00USDT" not in r["maggiori"] and r["maggiori"]["M10USDT"] == pytest.approx(1.1)
+    _conta(p, finto, st, G + 9 * ORA_MS + 5 * 60_000)             # M11 pubblicata in ritardo: il regolamento si riscrive
+    r = fb.get_rtdb("/paper_g1/funding/2026-10-24/08:00")
+    assert r["monete"] == 12 and r["incassato"] == pytest.approx(-st["funding_totale"]) and "M01USDT" not in r["maggiori"]
+    _conta(p, finto, st, G + 8 * ORA_MS + f5.FUNDING_PER_REGOLAMENTO_MS + 60_000)
+    assert st["funding_regolamenti"] == {}                        # nello stato solo le ultime 26 ore
+    for classe in (f5.PaperF5, f5.PaperG11, f5.PaperG1N):
+        assert classe.PUBBLICA_FUNDING is False
+        altro = _InMemoryStore()
+        q, finto2 = _paper_del_funding(tmp_path, classe, altro)
+        st2 = _stato_del_funding({"AUSDT": -100.0}, G)
+        finto2.regola("AUSDT", G + 8 * ORA_MS, 0.001)
+        _conta(q, finto2, st2, G + 9 * ORA_MS)
+        assert st2["funding_totale"] == pytest.approx(-1.0) and altro.get_rtdb(f"{classe.RAMO}/funding") is None
+        assert "funding_regolamenti" not in st2
+
+
+VIETATI_DA_FIREBASE = set(".$#[]/")
+
+
+def chiavi_vietate(x, dove=""):
+    """Le chiavi (a ogni livello) che Firebase rifiuta: `salva` dei paper scrive lo stato intero in `/<ramo>/stato_interno`."""
+    if isinstance(x, dict):
+        out = [f"{dove}/{k}" for k in x if not isinstance(k, str) or VIETATI_DA_FIREBASE & set(k) or not k]
+        for k, v in x.items():
+            out += chiavi_vietate(v, f"{dove}/{k}")
+        return out
+    if isinstance(x, (list, tuple)):
+        return [y for v in x for y in chiavi_vietate(v, dove)]
+    return []
+
+
+def test_lo_stato_dei_paper_non_ha_chiavi_che_firebase_rifiuta(tmp_path):
+    """Revisione del 12 novembre 2026, problema 82: con il funding per regolamento, i sospesi e i punti letti, lo stato del paper
+    di G1 (quello salvato in `/paper_g1/stato_interno`) non ha chiavi con `. $ # [ ] /`; il percorso pubblicato sì ha la data e l'ora."""
+    from bot.core.firebase_client import _InMemoryStore
+    fb = _InMemoryStore()
+    p, finto = _paper_del_funding(tmp_path, f5.PaperG1, fb)
+    p.MISURA_SCARTI = False
+    st = _stato_del_funding({"AUSDT": -100.0, "BUSDT": -100.0}, G - 16 * ORA_MS + 5 * 60_000)
+    finto.regola("AUSDT", G, 0.001)
+    finto.regola("BUSDT", G, 0.002, ritardo_ms=8 * 60_000)
+    finto.adesso_ms = G + 6 * 60_000
+    st = _ribilancia_con(p, st, {"AUSDT": -0.05, "CUSDT": 0.03}, (G + 6 * 60_000) / 1000)
+    finto.regola("AUSDT", G + 8 * ORA_MS, 0.001)
+    finto.regola("CUSDT", G + 8 * ORA_MS, 0.001, ritardo_ms=30 * 60_000)
+    for h in (1, 8):
+        _conta(p, finto, st, G + h * ORA_MS + 6 * 60_000)
+    p.salva(st)
+    salvato = fb.get_rtdb("/paper_g1/stato_interno")
+    assert salvato["funding_regolamenti"] and salvato["funding_visti"] == {"AUSDT": G + 8 * ORA_MS}
+    assert chiavi_vietate(salvato) == [] and chiavi_vietate(p.carica()) == []
+    assert set(salvato["funding_regolamenti"]) == {"2026-10-24T00:00", "2026-10-24T08:00"}
+    assert fb.get_rtdb("/paper_g1/funding/2026-10-24/00:00")["monete"] == 2
+    assert chiavi_vietate({"a/b": 1}) == ["/a/b"] and chiavi_vietate({"x": [{"y.z": 1}]}) == ["/x/y.z"]

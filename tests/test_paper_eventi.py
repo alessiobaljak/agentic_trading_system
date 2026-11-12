@@ -198,3 +198,49 @@ def test_niente_entrate_su_contratti_in_chiusura(tmp_path):
     b.adesso_ms = int((D * 86400.0 + 400) * 1000)
     p.tick(D * 86400.0 + 400)
     assert p.carica()["aperte"] == {}
+
+
+class _BinancePubblicaTardi(_Binance):
+    """Come `_Binance`, ma il regolamento delle 08:00 del giorno D+1 di una moneta si pubblica ``ritardo_ms`` dopo l'ora."""
+
+    def __init__(self, simbolo, ritardo_ms):
+        super().__init__()
+        self.tardi, self.ritardo_ms = simbolo, ritardo_ms
+
+    def _regolamenti(self, s, da):
+        t_tardi = (D + 1) * GIORNO_MS + 8 * ORA_MS
+        return [x for x in super()._regolamenti(s, da)
+                if not (s == self.tardi and x["fundingTime"] == t_tardi and self.adesso_ms < t_tardi + self.ritardo_ms)]
+
+
+@pytest.mark.parametrize("tardi", ["NUOVAUSDT", "BTCUSDT"])
+def test_funding_pubblicato_in_ritardo_si_conta_lo_stesso(tmp_path, tardi):
+    """12 novembre 2026, lo stesso difetto del paper di G1 (f5.py, ipotesi (b)): alle 08:05 Binance non ha ancora pubblicato il
+    regolamento delle 08:00 di una gamba. Prima il punto letto diventava «adesso» e quel regolamento si perdeva; ora ogni gamba
+    riparte dal suo ultimo regolamento contato, e si conta una volta sola."""
+    b = _BinancePubblicaTardi(tardi, 10 * 60_000)
+    b.moneta("NUOVAUSDT", D - 7, 2.0, tasso=0.0001)
+    p, fb = _paper(tmp_path, b)
+    st = {"aperte": {"N3-NUOVAUSDT": {"tipo": "N3", "simbolo": "NUOVAUSDT", "fc": 0.0, "fb": 0.0,
+                                      "funding_fino_ms": D * GIORNO_MS + 5 * 60_000}}}
+    for ore in (8, 9, 17, 25):                                   # D+1 alle 08:05, 09:05, 17:05, poi D+2 alle 01:05
+        b.adesso_ms = (D + 1) * GIORNO_MS + ore * ORA_MS + 5 * 60_000
+        p._funding(st, b.adesso_ms / 1000)
+    pos = st["aperte"]["N3-NUOVAUSDT"]
+    n = 6                                                        # D 08:00 e 16:00, D+1 00:00, 08:00 e 16:00, D+2 00:00
+    assert pos["fc"] == pytest.approx(0.0001 * n) and pos["fb"] == pytest.approx(0.00005 * n)
+
+
+def test_lo_stato_del_paper_degli_eventi_non_ha_chiavi_che_firebase_rifiuta(tmp_path):
+    """Revisione del 12 novembre 2026, problema 82: lo stato degli eventi (con i punti letti delle due gambe) non ha chiavi con
+    `. $ # [ ] /`."""
+    from tests.test_paper_f5 import chiavi_vietate
+    b = _BinancePubblicaTardi("BTCUSDT", 10 * 60_000)
+    b.moneta("NUOVAUSDT", D - 7, 2.0, tasso=0.0001)
+    p, fb = _paper(tmp_path, b)
+    _tick(p, b, D * 86400.0 - 3600)
+    _tick(p, b, D * 86400.0 + 400)
+    _tick(p, b, (D + 1) * 86400.0 + 8 * 3600 + 300)
+    st = p.carica()
+    assert st["aperte"] and all("funding_btc_fino_ms" in a for a in st["aperte"].values())
+    assert chiavi_vietate(st) == []
