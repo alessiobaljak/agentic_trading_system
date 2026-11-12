@@ -186,10 +186,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P027b_risultati.md`): l'esito non cambia. Con i prezzi giusti entrano 2'089 operazioni invece di 1'795; per evento +0,00%
   rispetto al fondo delle piccole (prima −0,16%), Sharpe 0,45 (prima 0,42) contro 0,56 del fondo; nella miscela 0,82 contro 1,08.
   **Restano da ricalcolare** le prove sull'intero S&P 500 (11, 12, 13, 16, 18, 24), tutte bocciate: non urgente.
-* **La prova 28** (il tono delle notizie, idea del proprietario del 30 ottobre; due varianti coperte con il fondo dell'indice):
-  regole scritte e committate (`prove/P028_tono_delle_notizie.md`), controllo dei dati fatto (`prove/P028a_risultati.md`: archivio dal
-  2015, 2-9 notizie al mese per titolo), scarico delle notizie in corso su GitHub (`p028b`, si ferma nei minuti degli ordini e va
-  rilanciato finché non è completo), poi il calcolo (`p028`). Conteranno 4 prove (73).
+* **La prova 28** (il tono delle notizie, idea del proprietario del 30 ottobre): **bocciate tutte e due le varianti**. Nelle 500
+  grandi il tono non dice niente (quinto alto meno basso −0,16% al mese, t −0,67). Nelle aziende piccole **sì**: +0,94% al mese fra il
+  quinto con le notizie migliori e quello con le peggiori (t 3,04), ma tutto dal lato delle notizie cattive: comprare le buone e vendere
+  l'IWM fa Sharpe 0,00 prima dei costi, −0,97 dopo. Capito: le notizie cattive delle aziende piccole entrano nel prezzo lentamente, le
+  buone no. Da qui l'idea I31 (vendere allo scoperto le piccole con le notizie peggiori), vista dopo il calcolo: si giudica solo sul
+  periodo chiuso, con il costo del prestito. Nel conto: 73.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
