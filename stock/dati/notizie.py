@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import time
 from datetime import UTC, datetime
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -26,15 +27,27 @@ def mancanti(dal_anno: int, al_anno: int) -> list[tuple[int, int]]:
     return [(a, m) for a, m in mesi(dal_anno, al_anno) if not _file(a, m).exists()]
 
 
-def scarica(dal_anno: int, al_anno: int, minuti: float = 240) -> list[tuple[int, int]]:
-    """Scarica i mesi che mancano, uno alla volta (il file si scrive solo a mese completo); restituisce quelli rimasti."""
+def ordini_in_corso(adesso: datetime) -> bool:
+    """Vero nei minuti in cui la misura in avanti manda gli ordini (apertura e chiusura di New York, giorni feriali): lì non si
+    scarica, per non consumare il limite di richieste di Alpaca."""
+    ny = adesso.astimezone(ZoneInfo("America/New_York"))
+    minuti = ny.hour * 60 + ny.minute
+    return ny.weekday() < 5 and (9 * 60 + 5 <= minuti <= 10 * 60 + 10 or 15 * 60 + 30 <= minuti <= 16 * 60 + 20)
+
+
+def scarica(dal_anno: int, al_anno: int, minuti: float = 240, pausa: float = 0.5) -> list[tuple[int, int]]:
+    """Scarica i mesi che mancano, uno alla volta (il file si scrive solo a mese completo); restituisce quelli rimasti.
+    Si ferma dopo `minuti`, e non scarica nei minuti degli ordini (`ordini_in_corso`)."""
     partenza = time.monotonic()
     for a, m in mancanti(dal_anno, al_anno):
         if time.monotonic() - partenza > minuti * 60:
             break
+        if ordini_in_corso(datetime.now(UTC)):
+            print("minuti degli ordini: mi fermo, rilanciare dopo", flush=True)
+            break
         inizio = datetime(a, m, 1, tzinfo=UTC)
         fine = datetime(a + (m == 12), m % 12 + 1, 1, tzinfo=UTC)
-        n, completo = alpaca.notizie(None, inizio, fine, pagine_massime=100_000)
+        n, completo = alpaca.notizie(None, inizio, fine, pagine_massime=100_000, pausa=pausa)
         if not completo:
             raise RuntimeError(f"{a}-{m:02d}: elenco non completo")
         df = pd.DataFrame({"id": [x.get("id") for x in n], "creata": [x.get("created_at") for x in n],

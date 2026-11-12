@@ -244,7 +244,8 @@ def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetim
     return out
 
 
-def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_massime: int = 40) -> tuple[list[dict], bool]:
+def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_massime: int = 40,
+            pausa: float = 0.0) -> tuple[list[dict], bool]:
     """Le notizie (fonte Benzinga) con uno dei simboli, fra due istanti, dalla più vecchia; senza il testo intero.
 
     Il secondo valore dice se l'elenco è completo (False: ci si è fermati a `pagine_massime` pagine da 50). I titoli delle notizie
@@ -256,6 +257,8 @@ def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_
     out: list[dict] = []
     for _ in range(pagine_massime):
         j = _get(f"{DATI_URL}/v1beta1/news", parametri)
+        if pausa:
+            time.sleep(pausa)       # per non consumare il limite di richieste che serve agli ordini
         out.extend(j.get("news") or [])
         token = j.get("next_page_token")
         if not token:
