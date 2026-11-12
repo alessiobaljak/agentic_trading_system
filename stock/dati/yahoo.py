@@ -39,6 +39,36 @@ def eventi(simbolo: str, dal: str, al: str) -> tuple[dict, dict]:
     return div, fr
 
 
+def prezzi(simbolo: str, dal: str, al: str):
+    """Le barre al giorno di Yahoo come scambiate (open, high, low, close, volume), la chiusura rettificata per dividendi e
+    frazionamenti (`rettificata`) e il dividendo sul giorno di stacco. Per i fondi quotati delle prove senza le chiavi di Alpaca
+    (`stock/prove/P026_tendenza_altre_classi.md`). I prezzi restano fuori dal repository."""
+    import pandas as pd
+    p1 = int(datetime.fromisoformat(dal).replace(tzinfo=UTC).timestamp())
+    p2 = int(datetime.fromisoformat(al).replace(tzinfo=UTC).timestamp()) + 86400
+    for n in range(4):
+        r = requests.get(URL.format(s=simbolo.replace(".", "-")), timeout=30, headers={"User-Agent": "Mozilla/5.0"},
+                         params={"period1": p1, "period2": p2, "interval": "1d", "events": "div|split"})
+        if r.status_code == 200:
+            break
+        time.sleep(2 ** (n + 1))
+    r.raise_for_status()
+    ris = r.json()["chart"]["result"][0]
+    q = ris["indicators"]["quote"][0]
+    # l'ora di Yahoo è l'apertura di New York: l'indice è il giorno di New York, a mezzogiorno UTC (come giorno, non come ora)
+    giorni = pd.to_datetime(ris["timestamp"], unit="s", utc=True).tz_convert("America/New_York").normalize()
+    df = pd.DataFrame({c: q[c] for c in ("open", "high", "low", "close", "volume")}, index=giorni)
+    df["rettificata"] = ris["indicators"]["adjclose"][0]["adjclose"]
+    ev = ris.get("events", {})
+    div = {pd.Timestamp(v["date"], unit="s", tz="UTC").tz_convert("America/New_York").normalize(): float(v["amount"])
+           for v in ev.get("dividends", {}).values()}
+    df["dividendo"] = [div.get(g, 0.0) for g in df.index]
+    df["frazionamento"] = 1.0
+    if ev.get("splits"):
+        raise ValueError(f"{simbolo}: frazionamenti nel periodo, i prezzi di Yahoo non sono quelli scambiati")
+    return df.dropna(subset=["open", "close"])
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("simboli", nargs="+")
