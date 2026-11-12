@@ -617,4 +617,10 @@ commissione bassa (a 280 USDT 0,81 contro la soglia 0,80; tutto a mercato 0,77);
 (`audits/reports/2026-11-12-G1_CONTO_VERO.md`). Avviati il confronto su funding e commissioni e le regole della prova 152 sulla
 concentrazione. **Capito oggi**: G1 guadagna davvero sul passato, ma il suo margine sopra l'esame sta tutto nell'ipotesi che gli ordini
 limite si eseguano a basso costo, e quella ipotesi sul conto non l'abbiamo mai misurata.
+**Prova 152, la concentrazione di G1 (12 novembre)**: il tetto del 20% per moneta dimezza il peso peggiore di una moneta venduta (dal
+43,7% al 20,0%) per 0,03 di Sharpe (1,95 contro 1,98) e 2,5 punti di discesa in più; secondo l'esame scritto non passa (ordini saltati a
+280 USDT: 8 in più su circa 123.000). Le regole erano state verificate e corrette due volte prima del calcolo (10 ambiguità, poi una
+definizione). **Confronto del demo**: funding al 70% del paper in 4 giorni, commissione dell'8 novembre circa 0,038% (stima): servono
+le esecuzioni dalla macchina (backlog P33). Conto delle prove 312. **Capito oggi**: limitare il peso di una moneta costa poco sul
+passato; quello che non sappiamo è quanto costano davvero gli ordini sul conto.
 

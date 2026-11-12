@@ -772,3 +772,16 @@ nuove del 2026, **38 sono contratti su azioni o fondi** (non 24 come stimato dai
 ci sono 72 contratti che non sono monete, ma **nessuno è mai entrato fra le 100 di G1** (la ricerca di G1 non è toccata). Gli eventi
 del 2026 rendono −0,31% a evento con tutti e −0,80% con le sole monete. Il bot filtra già con il tipo del sottostante; la ricerca deve
 fare lo stesso (non toccando `research/programma6/esclusi.py`, che il bot importa: sarebbe una modifica del percorso degli ordini).
+
+### P33. L'estratto di sola lettura dal conto demo e l'ordine «solo nel libro» — trovata il 12 novembre 2026 (revisione di G1 e confronto)
+**Perché:** la revisione di G1 (`audits/reports/2026-11-12-G1_CONTO_VERO.md`, problema 1) e il confronto del 12 novembre
+(`gate2/reports/2026-11-12-G1-funding-commissioni.md`) dicono che l'esame di G1 a 280 USDT passa solo se gli ordini limite pagano la
+commissione bassa (Sharpe corretto 0,81; tutto a mercato 0,77), e che sul demo non lo sappiamo: l'8 novembre la commissione media
+stimata è circa 0,038% del valore scambiato. Il funding del demo è il 70% di quello del paper in 4 giorni, senza una causa dimostrata.
+**Cosa:** (1) un comando di sola lettura per la macchina che scrive, per i giorni chiesti, le esecuzioni del demo con valore,
+commissione e chi ha tolto liquidità (`/fapi/v1/userTrades`), gli incassi di funding per moneta e regolamento (`/fapi/v1/income`), la
+commissione del conto (`/fapi/v1/commissionRate`) e i pesi voluti del paper di G1 per giorno; (2) valutare l'ordine limite «solo nel
+libro» (non eseguibile subito a commissione piena) con la misura di quanti ordini restano non eseguiti. Tutte e due toccano il percorso
+degli ordini: live-path-reviewer, poi l'ok del proprietario per il riavvio. **Metro:** la quota del valore scambiato a commissione
+bassa, prima e dopo; il funding del demo contro il paper, moneta per moneta.
+

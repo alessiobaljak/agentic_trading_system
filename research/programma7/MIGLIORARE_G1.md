@@ -237,3 +237,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   Sui quattro giorni 44 ordini su 221 variazioni, il **20%** (atteso 23%). Lo scarto dalle posizioni volute scende al 12,2% (ICPUSDT
   non è più fra le volute oltre il 2%). Equity del demo 990,11 (−0,99% dall'8 novembre); G1 nel paper −2,08% nello stesso tempo
   (10.619,33 → 10.398,55): il demo resta circa un punto sopra.
+* **12 novembre 2026, voce 13, la prova 152 sulla concentrazione** (`RISULTATI_NOVANTESIMA.md`; regole scritte da strategy-improver,
+  verificate e corrette due volte prima del calcolo): il tetto del 20% per moneta (V1) porta il peso massimo della venduta dal 43,7% al
+  20,0% con Sharpe 1,95 contro 1,98 e discesa −31,3% contro −28,8%, ogni anno positivo; a 280 USDT 1,87 contro 1,90. Secondo l'esame
+  scritto non passa nessuna variante: V1 cade solo sul criterio degli ordini saltati (+8 su circa 123.000). Con la deriva dei prezzi il
+  peso arriva al 27,1%. Decisione al proprietario.
+* **12 novembre 2026, voci 2 e 3, funding e commissioni del demo** (`gate2/reports/2026-11-12-G1-funding-commissioni.md`): funding del
+  demo +0,828% in 4 giorni contro +1,181% del paper (70%); giorni e base allineati; le monete mancanti spiegano solo in parte.
+  Commissione dell'8 novembre circa 0,038% del valore scambiato (stima: circa il 60% del valore a commissione piena, contro 3 ordini su
+  48 «a mercato»): l'ordine limite al prezzo mark non è «solo nel libro». Per la misura esatta servono dalla macchina le esecuzioni
+  (`userTrades` con chi ha tolto liquidità), gli incassi di funding per moneta e la commissione del conto (backlog P33).
+
