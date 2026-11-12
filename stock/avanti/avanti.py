@@ -172,6 +172,30 @@ def elenco(mese: str | None = None) -> list[str]:
     return scelti
 
 
+def _posizioni_candela() -> list[dict]:
+    """Le posizioni della prima candela: tutte tranne i titoli della miscela, che sta nello stesso conto (stock/avanti/conto.py)."""
+    from stock.avanti import conto
+    return conto.separa(_richiesta("GET", "/v2/positions"))[0]
+
+
+def _ordini_aperti_candela() -> list[dict]:
+    from stock.avanti import conto
+    return [o for o in _richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if not conto.della_miscela(o["symbol"])]
+
+
+def _cancella_ordini_candela() -> None:
+    """Cancella gli ordini aperti della prima candela (non quelli della miscela) e aspetta che siano spariti."""
+    for o in _ordini_aperti_candela():
+        try:
+            _richiesta("DELETE", f"/v2/orders/{o['id']}")
+        except alpaca.ErroreAlpaca:
+            pass                                  # già cancellato insieme alla sua gamba gemella
+    for _ in range(30):
+        if not _ordini_aperti_candela():
+            return
+        time.sleep(1)
+
+
 def apri() -> str:
     s = seduta_di_oggi()
     if s is None:
@@ -190,9 +214,10 @@ def apri() -> str:
     if f_oggi.exists():
         return f"gli ordini di oggi ci sono già ({f_oggi.name}): non si ripetono"
     simboli = elenco()
-    conto = _richiesta("GET", "/v2/account")
-    valore = float(conto["equity"])
-    if _richiesta("GET", "/v2/positions"):
+    from stock.avanti import conto as conto_mod
+    v = conto_mod.adesso()
+    valore = v["candela"]                         # il capitale virtuale della prima candela (il conto è condiviso con la miscela)
+    if v["posizioni_candela"]:
         return "ci sono posizioni aperte da prima: niente ordini nuovi, va guardato a mano"
     parametri = {"symbols": ",".join(simboli), "timeframe": "1Min", "start": s["apertura"].tz_convert("UTC").isoformat(),
                  "end": pronto.tz_convert("UTC").isoformat(), "feed": "iex", "limit": 10000}
@@ -226,7 +251,7 @@ def chiudi(aspetta: bool = True) -> str:
     s = seduta_di_oggi() if aspetta else None
     if s is not None and ny_adesso() >= s["chiusura"] - pd.Timedelta(seconds=45):
         # un ordine a mercato mandato a seduta finita resterebbe in coda fino all'apertura di domani: si chiude fuori orario
-        return chiudi_fuori_orario() if _richiesta("GET", "/v2/positions") else scrivi_diario(oggi)
+        return chiudi_fuori_orario() if _posizioni_candela() else scrivi_diario(oggi)
     if s is not None:
         # la routine parte prima (le routine arrivano anche con 10 minuti di ritardo): si aspetta 5 minuti prima della chiusura
         ora = s["chiusura"] - pd.Timedelta(minutes=5)
@@ -235,13 +260,9 @@ def chiudi(aspetta: bool = True) -> str:
             time.sleep(attesa)
     # 9 nov 2026: DELETE /v2/positions con cancel_orders cancellava le gambe ma NON chiudeva le posizioni (8 su 10 restavano
     # aperte). Ora: prima si cancellano gli ordini e si aspetta che siano spariti, poi si chiude titolo per titolo e si controlla.
-    _richiesta("DELETE", "/v2/orders")
-    for _ in range(30):
-        if not _richiesta("GET", "/v2/orders", params={"status": "open"}):
-            break
-        time.sleep(1)
+    _cancella_ordini_candela()
     for _ in range(3):
-        aperte = _richiesta("GET", "/v2/positions")
+        aperte = _posizioni_candela()
         if not aperte:
             break
         for p in aperte:
@@ -250,7 +271,7 @@ def chiudi(aspetta: bool = True) -> str:
             except alpaca.ErroreAlpaca as e:
                 print(f"chiusura di {p['symbol']} rifiutata: {str(e)[:120]}")
         time.sleep(10)
-    rimaste = [p["symbol"] for p in _richiesta("GET", "/v2/positions")]
+    rimaste = [p["symbol"] for p in _posizioni_candela()]
     time.sleep(30)
     esito = scrivi_diario(oggi)
     allarme = {"posizioni_aperte": {"ora": int(time.time()), "testo": f"posizioni ancora aperte dopo la chiusura: {', '.join(rimaste)}"}}
@@ -288,13 +309,26 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, ordini_di_oggi: bool, p
 
 
 def auto() -> str:
-    """Il comando di tutti gli avvii automatici: guarda l'orologio e il conto, e fa la cosa giusta per quest'ora."""
+    """Il comando di tutti gli avvii automatici: guarda l'orologio e il conto, e fa la cosa giusta per quest'ora. A seduta finita
+    e senza posizioni scrive anche i valori di fine giornata delle due strategie del conto (stock/avanti/conto.py)."""
+    esito = _auto()
+    try:
+        s = seduta_di_oggi()
+        if s is not None and ny_adesso() >= s["chiusura"] + pd.Timedelta(minutes=1):
+            from stock.avanti import conto
+            print(conto.registra(ny_adesso().date().isoformat()), flush=True)
+    except Exception as e:  # noqa: BLE001 — la contabilità non deve mai far fallire gli ordini
+        print(f"valori di fine giornata non scritti ({type(e).__name__}: {str(e)[:120]})", flush=True)
+    return esito
+
+
+def _auto() -> str:
     adesso = ny_adesso()
     oggi = adesso.date().isoformat()
     f_diario = QUI / "diario.csv"
     scritto = f_diario.exists() and oggi in set(pd.read_csv(f_diario)["giorno"].astype(str))
     azione = cosa_fare(adesso, seduta_di_oggi(), (QUI / "giorni" / f"{oggi}.json").exists(),
-                       bool(_richiesta("GET", "/v2/positions")), scritto)
+                       bool(_posizioni_candela()), scritto)
     print(f"{adesso:%Y-%m-%d %H:%M:%S} di New York: {azione}", flush=True)
     if azione == "apri":
         return apri()
@@ -316,10 +350,10 @@ def auto() -> str:
 def chiudi_fuori_orario() -> str:
     """Emergenza: chiude le posizioni rimaste dopo la seduta con ordini limite validi fuori orario (fino alle 20:00 di New York),
     al prezzo dell'ultimo scambio peggiorato dello 0,5% perché si eseguano."""
-    _richiesta("DELETE", "/v2/orders")
+    _cancella_ordini_candela()
     time.sleep(5)
     fatti = []
-    for p in _richiesta("GET", "/v2/positions"):
+    for p in _posizioni_candela():
         q = float(p["qty"])
         ultimo = float(alpaca._get(f"{alpaca.DATI_URL}/v2/stocks/{p['symbol']}/trades/latest", {"feed": "iex"})["trade"]["p"])
         limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
@@ -328,7 +362,7 @@ def chiudi_fuori_orario() -> str:
         o = _richiesta("POST", "/v2/orders", json=corpo)
         fatti.append(f"{p['symbol']} {-q:+g} a {limite} ({o.get('status')})")
     time.sleep(60)
-    rimaste = [p["symbol"] for p in _richiesta("GET", "/v2/positions")]
+    rimaste = [p["symbol"] for p in _posizioni_candela()]
     oggi = ny_adesso().date().isoformat()
     esito = scrivi_diario(oggi)
     print(_plancia({"posizioni_aperte": {"ora": int(time.time()), "testo": f"ancora aperte: {', '.join(rimaste)}"}} if rimaste else None))

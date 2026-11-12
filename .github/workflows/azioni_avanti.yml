@@ -69,7 +69,7 @@ jobs:
         run: |
           git config user.name "azioni-avanti"
           git config user.email "noreply@anthropic.com"
-          git add stock/avanti/giorni stock/avanti/diario.csv stock/avanti/riepilogo.md stock/avanti/elenco_*.csv 2>/dev/null || true
+          git add stock/avanti/giorni stock/avanti/diario.csv stock/avanti/riepilogo.md stock/avanti/elenco_*.csv stock/avanti/valori.csv 2>/dev/null || true
           if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
           git commit -m "stock: misura in avanti, ${{ steps.acceso.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
           for i in 1 2 3 4; do

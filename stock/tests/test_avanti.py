@@ -112,3 +112,34 @@ def test_cosa_fare_a_ogni_ora():
     assert f(t("16:03"), sed, True, True, False) == "fuori_orario"      # mai un ordine a mercato a seduta finita
     assert f(t("20:27"), sed, True, False, False) == "diario" and f(t("20:27"), sed, True, False, True).startswith("niente")
     assert f(t("11:00"), None, False, False, False).startswith("niente: oggi la borsa è chiusa")
+
+
+def test_conto_condiviso_divide_il_guadagno_fra_le_due_strategie():
+    from stock.avanti import conto
+    diario = pd.DataFrame({"giorno": ["2026-11-12", "2026-11-13", "2026-11-13"], "guadagno": [500.0, 100.0, -40.0]})
+    pos = [{"symbol": "SPY", "unrealized_pl": "300"}, {"symbol": "AAPL", "unrealized_pl": "-25"}]
+    assert conto.valori(100_500.0, pos, diario, None) == (100_500.0, None)         # prima della partenza: tutto della prima candela
+    stato = {"dal": "2026-11-12", "conto_alla_partenza": 100_500.0, "candela_alla_partenza": 100_500.0}
+    candela, miscela = conto.valori(100_835.0, pos, diario, stato)
+    assert candela == pytest.approx(100_500 + 60 - 25)                              # il 12 è già nella fotografia
+    assert miscela == pytest.approx(100_000 + 335 - 35)                             # il resto della variazione del conto
+    pc, pm = conto.separa(pos)
+    assert [p["symbol"] for p in pc] == ["AAPL"] and [p["symbol"] for p in pm] == ["SPY"]
+
+
+def test_miscela_cosa_fare_a_ogni_ora():
+    from datetime import date
+    from stock.avanti import miscela as mi
+    t = lambda g, h: pd.Timestamp(f"2026-12-{g:02d} {h}", tz=NY)  # noqa: E731
+    sed = [{"giorno": date(2026, 12, g), "apertura": t(g, "09:30"), "chiusura": t(g, "16:00")} for g in (7, 8, 9, 10, 11)]
+    st = {"fed": 0.0, "calma": {"SPY": 1.0, "QQQ": 1.0}, "ampiezza": 0.98, "ultima_sera": "2026-12-07"}
+    f = lambda adesso, stato=st: mi.cosa_fare(adesso, sed, stato)[0]  # noqa: E731
+    assert f(t(8, "08:30")).startswith("niente")                        # la sera del 7 è fatta, per la banca centrale è presto
+    assert f(t(8, "09:00")) == "fed" and f(t(8, "14:10")) == "fed"      # vigilia del 9 dicembre: aspetta le 14:00
+    assert f(t(8, "14:30")).startswith("niente: troppo tardi")
+    assert f(t(8, "16:30")) == "sera"                                   # dopo la chiusura dell'8
+    assert f(t(9, "02:00")) == "sera" and f(t(9, "09:27")).startswith("niente: troppo tardi")   # fino a 5 minuti dall'apertura
+    dentro = dict(st, fed=1.0, ultima_sera="2026-12-08")
+    assert f(t(9, "10:00"), dentro) == "fed"                            # giorno del comunicato: vende alle 13:59
+    assert f(t(9, "10:00"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la borsa è aperta")
+    assert f(t(8, "16:30"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la sera è già fatta")

@@ -79,7 +79,7 @@ def operazioni_recenti(diario: pd.DataFrame) -> dict[str, list[dict]]:
 
 
 def componi(conto: dict, posizioni: list[dict], storia: dict, diario: pd.DataFrame, ordini_oggi: dict | None,
-            adesso: float, allarmi: dict | None = None) -> dict:
+            adesso: float, allarmi: dict | None = None, giorni: dict | None = None) -> dict:
     """L'oggetto da scrivere sotto /azioni (funzione pura, provata da stock/tests/test_avanti.py)."""
     valore = _numero(conto.get("equity")) or 0.0
     pesi = {}
@@ -87,7 +87,8 @@ def componi(conto: dict, posizioni: list[dict], storia: dict, diario: pd.DataFra
         mv = _numero(p.get("market_value"))
         if mv and valore:
             pesi[chiave(p["symbol"])] = round(mv / valore, 4)       # Alpaca dà il valore negativo per le vendute
-    giorni = giorni_dal_conto(storia)
+    # `giorni`: i valori di fine giornata della sola prima candela (conto condiviso con la miscela); senza, lo storico del conto
+    giorni = dict(giorni) if giorni is not None else giorni_dal_conto(storia)
     # lo storico di Alpaca arriva con un giorno di ritardo: a posizioni chiuse, il valore di adesso è quello di fine dell'ultimo giorno
     if not diario.empty and not posizioni and valore:
         ultimo = str(diario["giorno"].max())
@@ -117,15 +118,17 @@ def componi(conto: dict, posizioni: list[dict], storia: dict, diario: pd.DataFra
 
 
 def raccogli(allarmi: dict | None = None) -> dict:
-    conto = av._richiesta("GET", "/v2/account")
-    posizioni = av._richiesta("GET", "/v2/positions")
-    storia = av._richiesta("GET", "/v2/account/portfolio/history", params={"period": "3M", "timeframe": "1D"})
+    from stock.avanti import conto as conto_mod
+    v = conto_mod.adesso()
+    conto = {"equity": v["candela"]}              # il valore della sola prima candela
+    posizioni = v["posizioni_candela"]
+    storia = {}
     f = av.QUI / "diario.csv"
     diario = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=av.COLONNE)
     oggi = av.ny_adesso().date().isoformat()
     fo = av.QUI / "giorni" / f"{oggi}.json"
     ordini = json.loads(fo.read_text()) if fo.exists() else None
-    return componi(conto, posizioni, storia, diario, ordini, time.time(), allarmi)
+    return componi(conto, posizioni, storia, diario, ordini, time.time(), allarmi, giorni=conto_mod.giorni("prima_candela"))
 
 
 def _credenziali() -> dict | None:
