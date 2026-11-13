@@ -56,3 +56,13 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   (idea 131 già in registro), offerta delle stablecoin (prove 44 e 100), inclinazione delle opzioni (121-122), premio DVOL (47); attività degli
   sviluppatori su GitHub (mai in registro, ma limite di richieste senza chiave, abbinare repository a 100 monete è lavoro manuale, studio non
   solido: non scritta); flussi verso le borse (storico gratuito lungo non trovato).
+
+- 13 novembre 2026 (settimo giro, 16:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Angolo: gli annunci di Binance
+  (`scarico_annunci.json`: 2.294 quotazioni, 4.500 notizie, 446 rimozioni; caricatore `research/programma6/annunci.py`). Controllo nel registro
+  (`--cerca`) delle quattro categorie: (1) etichetta di sorveglianza: già provata (prove 21 E1, 88 eventi, e 43 Q2; 2026 senza vantaggio dopo i 5
+  minuti); (2) cambio dell'intervallo del funding / funding al tetto: già provato (prova 26 E4, 62 eventi, passa l'esame scritto ed è nel paper;
+  prova 27 conferma su Gate non confermata; prova 70 entrata all'ora, no); (3) tetto del funding e leva massima: la leva è la prova 103 (tagli,
+  2026 −3,31%), il tetto del funding è dentro E4; (4) perpetui nuovi con leva alta: le monete appena quotate sono le prove 18 e 30 (N1-N3), la
+  quotazione a pronti la 43; un'entrata prima del lancio del perpetuo è impossibile (non si scambia fino al debutto) e dopo il debutto è N1-N3.
+  Nessuna categoria libera. Non scritta: l'annuncio del perpetuo nuovo come evento a sé (parente di N1-N3, e ora Binance ne quota 2-3 al mese:
+  pochi casi nuovi, t da 3 fuori portata). Nessuna riga di registro da preparare.
