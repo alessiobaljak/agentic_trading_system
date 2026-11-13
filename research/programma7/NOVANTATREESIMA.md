@@ -96,3 +96,16 @@ ottobre). Lettura che vale:
    scrivono nel rapporto.
 3. **Primo giorno giudicato**: il primo con 180 chiusure intere prima di D−1 (circa il 21 settembre 2021). La regola dei 170 presenti
    vale per i giorni mancanti dentro la finestra, non per una finestra tagliata all'inizio della serie.
+
+## Seconda aggiunta del 13 novembre 2026: le spese diverse (sessione principale; nessuna variante calcolata)
+Il secondo controllo di parità ha dato lordo, funding, giro e numero di monete uguali fino al 29 settembre 2026, ma spese diverse in 956
+giorni (somma 0,3665 oggi contro 0,3774 nel riferimento). La causa è verificata dalla sessione principale con
+`risultati_novantatreesima/controllo_spese_sessione.py` (sola lettura, stesso codice di `prima.py` senza scrivere nei suoi risultati):
+**nel riferimento 6.105 variazioni su 117.045 non avevano le candele a 1 ora e venivano contate a mercato; oggi sono 137 su 117.037**
+(eseguite con il limite 114.550 contro 108.663). I giorni diversi sono del 2021 (337), del 2022 (365), del 2023 (243) e degli ultimi
+giorni del 2026 (11); il 2024 e il 2025 coincidono. Le candele a 1 ora di quegli anni sono state scaricate dopo il riferimento: i dati
+di oggi sono più completi. Lettura che vale:
+1. La parità è **valida** perché i pesi coincidono (lordo, funding, giro e numero di monete entro 1e-12 fino al 29 settembre) e la
+   differenza delle spese ha la causa verificata qui sopra.
+2. **G1 di confronto è quello ricalcolato oggi con m = 1**, spese comprese, sullo stesso pannello e con le stesse candele delle varianti.
+   Il rapporto scrive anche l'esame di G1 di oggi accanto a quello del riferimento.
