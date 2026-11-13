@@ -192,6 +192,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   l'IWM fa Sharpe 0,00 prima dei costi, −0,97 dopo. Capito: le notizie cattive delle aziende piccole entrano nel prezzo lentamente, le
   buone no. Da qui l'idea I31 (vendere allo scoperto le piccole con le notizie peggiori), vista dopo il calcolo: si giudica solo sul
   periodo chiuso, con il costo del prestito. Nel conto: 73.
+* **La prova 29** (vendere allo scoperto le piccole con le notizie peggiori, coperte comprando l'IWM; idea I31): **bocciata nel
+  periodo chiuso** (2025-01 → 2026-09), aperto una volta sola: −20,1% con i costi contro +32,7% dello SPY, Sharpe −0,13 (senza costi
+  −0,00) contro 1,04, perdita massima −37,2% (`prove/P029_risultati.md`). Capito: il vantaggio visto nel 2016-2024 (Sharpe 0,84 senza
+  costi) già lì spariva con scarto e prestito (0,01), e nel 2025-2026 non c'è nemmeno prima dei costi (probabile, non
+  misurato: i salti al rialzo dei titoli venduti allo scoperto, perdita massima −37%). Il periodo chiuso della famiglia «notizie» ora è usato:
+  un'altra prova sulle notizie si potrà giudicare solo in avanti. Nel conto: 75.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
