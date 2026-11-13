@@ -645,4 +645,9 @@ G1 perde nel 2026 sulle monete piccole e nuove con le fiammate (voce 12).
 calcolo, 137.200 file di Binance scaricati: **non passa, va al contrario dell'ipotesi** (A −40,9% l'anno, t −3,09; B −26,4%, t −2,45;
 nessun anno positivo). Il verso opposto non regge negli anni (solo il 2025 positivo). Conto delle prove 314. **Capito oggi**: gli ordini
 fermi vicino al prezzo, misurati giorno per giorno, non dicono dove andrà la moneta il giorno dopo nel verso atteso.
+**Prova 154, la dimensione media dello scambio (13 novembre, notte)**: idea di strategy-scout con un dato mai usato (il numero di scambi
+delle candele), regole verificate e corrette prima del calcolo: **non passa** (A +0,08% l'anno, t 0,01; B −4,7%, t −0,38; 2 anni
+positivi su 5; il contrario non rende). Conto delle prove 316. **Capito oggi**: chi scambia (piccoli o grandi, misurato dalla
+dimensione media) non dice nulla sulla direzione delle monete il giorno dopo; la ricerca fra monete ogni giorno, fuori dal funding, ha
+dato 0 su 6 varianti nelle ultime tre prove (152 a parte).
 

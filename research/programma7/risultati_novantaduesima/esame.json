@@ -1,0 +1,228 @@
+{
+ "controllo_lettore": {
+  "BTCUSDT": {
+   "giorni": 2506,
+   "giorni_seconda": 2506,
+   "uguali_indici": true,
+   "close_max_diff": 0.0,
+   "qv_max_diff": 0.0,
+   "close_pannello_max_diff": 0.0,
+   "count_mancanti_o_zero": 0,
+   "count_sotto_100": 0
+  },
+  "ETHUSDT": {
+   "giorni": 2505,
+   "giorni_seconda": 2505,
+   "uguali_indici": true,
+   "close_max_diff": 0.0,
+   "qv_max_diff": 0.0,
+   "close_pannello_max_diff": 0.0,
+   "count_mancanti_o_zero": 0,
+   "count_sotto_100": 0
+  },
+  "SOLUSDT": {
+   "giorni": 2243,
+   "giorni_seconda": 2243,
+   "uguali_indici": true,
+   "close_max_diff": 0.0,
+   "qv_max_diff": 0.0,
+   "close_pannello_max_diff": 0.0,
+   "count_mancanti_o_zero": 0,
+   "count_sotto_100": 0
+  }
+ },
+ "varianti": {
+  "A": {
+   "giorni_con_segnale": 1738,
+   "monete_medie_al_giorno": 99.79171461449943,
+   "settimane": 249,
+   "annuo": 0.0008207040798427461,
+   "volatilita": 0.23056893814081708,
+   "sharpe": 0.003559473736837489,
+   "discesa_max": -0.5460180926308482,
+   "asimmetria": 0.6789306626666629,
+   "curtosi": 6.245167585524166,
+   "t": 0.007789037497966321,
+   "per_anno": {
+    "2021": -0.8043298805538472,
+    "2022": -0.2724363872498074,
+    "2023": -0.25383789446883637,
+    "2024": -0.057198813734252854,
+    "2025": 0.5415528444470503,
+    "2026": 0.08322402724289621
+   },
+   "giorni_con_posizioni": 1738,
+   "rendimento_netto_annuo_giorni": 0.0008253263067242068,
+   "discesa_giornaliera": -0.5519580005133472,
+   "sharpe_giornaliero_365": 0.0035225229349671373,
+   "giro_medio_giorno": 0.6428787883323525,
+   "spese_annue": 0.11582133518110554,
+   "funding_annuo": -0.02799726871520565,
+   "variazioni_e_a_limite": [
+    107641,
+    105111
+   ],
+   "netto_costi_x3_annuo": -0.23081734405548684,
+   "lato_long": {
+    "annuo": -0.09095086692304437,
+    "annuo_senza_10_giorni_migliori": -0.37402349234744553,
+    "per_anno": {
+     "2022": -1.2087589422678229,
+     "2023": 0.7086098353266741,
+     "2024": 0.33521468041277835,
+     "2025": -0.44689361192113947,
+     "2026": 0.23433000953576613
+    }
+   },
+   "lato_short": {
+    "annuo": 0.08969189348351943,
+    "annuo_senza_10_giorni_migliori": -0.28577781615958936,
+    "per_anno": {
+     "2022": 0.9154861119213095,
+     "2023": -0.9616959762484174,
+     "2024": -0.38287641731517597,
+     "2025": 0.9214243664983949,
+     "2026": -0.08460654758414675
+    }
+   },
+   "controllo_al_contrario": {
+    "annuo": -0.22646071883597785,
+    "sharpe": -0.9886127572538902,
+    "per_anno": {
+     "2021": 0.19232436925057672,
+     "2022": 0.061517041077115885,
+     "2023": 0.06062917949403969,
+     "2024": -0.176804303504824,
+     "2025": -0.752201773013787,
+     "2026": -0.3704493986317062
+    }
+   },
+   "sharpe_corretto_famiglie": {
+    "corretto": 0.00010300679738012845,
+    "t": 0.007789037497966321,
+    "gruppo": [
+     "154 A",
+     "154 B"
+    ]
+   },
+   "esame": {
+    "netto_positivo": true,
+    "ogni_anno_positivo": false,
+    "t_almeno_3": false,
+    "sharpe_corretto_almeno_0.80": false,
+    "lati_senza_10_giorni_ok": false
+   }
+  },
+  "B": {
+   "giorni_con_segnale": 1738,
+   "monete_medie_al_giorno": 99.83947065592635,
+   "settimane": 249,
+   "annuo": -0.047110276124259914,
+   "volatilita": 0.27043442784666977,
+   "sharpe": -0.17420221419060736,
+   "discesa_max": -0.5130083923571103,
+   "asimmetria": 0.7793938933370611,
+   "curtosi": 7.594198716237615,
+   "t": -0.38119892963866825,
+   "per_anno": {
+    "2021": -1.1497557625015409,
+    "2022": -0.2959285300246781,
+    "2023": -0.1554948208459282,
+    "2024": 0.02784023491861185,
+    "2025": 0.45196621371315077,
+    "2026": -0.3098580592548185
+   },
+   "giorni_con_posizioni": 1738,
+   "rendimento_netto_annuo_giorni": -0.047375602433758546,
+   "discesa_giornaliera": -0.516219093571157,
+   "sharpe_giornaliero_365": -0.19553787854423965,
+   "giro_medio_giorno": 0.29871468392546074,
+   "spese_annue": 0.05839785081841823,
+   "funding_annuo": -0.050330787146505566,
+   "variazioni_e_a_limite": [
+    102652,
+    100179
+   ],
+   "netto_costi_x3_annuo": -0.16417130407059502,
+   "lato_long": {
+    "annuo": -0.13750292340010373,
+    "annuo_senza_10_giorni_migliori": -0.4376921480693744,
+    "per_anno": {
+     "2022": -1.3254452810312325,
+     "2023": 0.6920840593761698,
+     "2024": 0.46170269508852657,
+     "2025": -0.5546214242697263,
+     "2026": 0.09260071657316621
+    }
+   },
+   "lato_short": {
+    "annuo": 0.0877306495922994,
+    "annuo_senza_10_giorni_migliori": -0.2847870410888327,
+    "per_anno": {
+     "2022": 1.0153555387262925,
+     "2023": -0.8609720678751722,
+     "2024": -0.4267071279580292,
+     "2025": 0.9249883093201692,
+     "2026": -0.3080145196334496
+    }
+   },
+   "controllo_al_contrario": {
+    "annuo": -0.08065497656230161,
+    "sharpe": -0.29912656396901893,
+    "per_anno": {
+     "2021": 0.7517155648731615,
+     "2022": 0.19165811400315635,
+     "2023": 0.03929892643623696,
+     "2024": -0.19477979385653404,
+     "2025": -0.5554443742540642,
+     "2026": 0.16312476163776762
+    }
+   },
+   "sharpe_corretto_famiglie": {
+    "corretto": 2.4626720144924624e-05,
+    "t": -0.38119892963866825,
+    "gruppo": [
+     "154 A",
+     "154 B"
+    ]
+   },
+   "esame": {
+    "netto_positivo": false,
+    "ogni_anno_positivo": false,
+    "t_almeno_3": false,
+    "sharpe_corretto_almeno_0.80": false,
+    "lati_senza_10_giorni_ok": false
+   }
+  }
+ },
+ "correlazioni": {
+  "serie_mazzo_trovate": [
+   "24 F5"
+  ],
+  "A": {
+   "F5_settimanale": -0.014108202995338584,
+   "settimane_comuni_F5": 249,
+   "G1_ricalcolata_giornaliera": 0.10049002832005284,
+   "G1_ricalcolata_settimanale": 0.11474439429244253
+  },
+  "B": {
+   "F5_settimanale": 0.03313974184351051,
+   "settimane_comuni_F5": 249,
+   "G1_ricalcolata_giornaliera": 0.09002189613064039,
+   "G1_ricalcolata_settimanale": 0.07998701719433417
+  }
+ },
+ "esito": {
+  "A": "non promettente",
+  "B": "non promettente"
+ },
+ "commit": "a7c3e08",
+ "famiglie": {
+  "serie": 267,
+  "senza_serie": 46,
+  "famiglie": 192,
+  "in_v": 147,
+  "deviazione_v": 0.6187167519415065,
+  "taglio": 0.5
+ }
+}
