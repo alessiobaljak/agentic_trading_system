@@ -161,14 +161,28 @@ def ordini_aperti() -> list[dict]:
     return [o for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if conto.della_miscela(o["symbol"])]
 
 
-def cancella_ordini() -> None:
-    """Cancella gli ordini aperti della miscela (mai quelli della prima candela)."""
+def cancella_ordini(tranne: set[str] = frozenset()) -> None:
+    """Cancella gli ordini aperti della miscela (mai quelli della prima candela), salvo quelli con l'id in `tranne`."""
     for o in ordini_aperti():
+        if o["id"] in tranne:
+            continue
         try:
             av._richiesta("DELETE", f"/v2/orders/{o['id']}")
         except alpaca.ErroreAlpaca:
             pass
     time.sleep(3)
+
+
+MORTI = {"canceled", "expired", "rejected", "done_for_day", "replaced", "suspended"}
+# Gli ordini della sera vanno all'apertura come ordini a mercato «day» mandati a borsa chiusa (Alpaca li tiene in coda fino
+# all'apertura). NON «opg»: sul conto demo gli ordini «opg» del 12 novembre 2026 sono scaduti alle 9:31 senza esecuzione.
+TIF_SERA, NOME_SERA = "day", "sera-{giorno}-g"
+
+
+def ordini_della_sera(aperti: list[dict], giorno) -> list[dict]:
+    """Gli ordini aperti già mandati per la sera di `giorno` con il tipo giusto (gli altri, per esempio «opg», si cancellano)."""
+    return [o for o in aperti if str(o.get("client_order_id", "")).startswith(f"miscela-sera-{giorno}-")
+            and o.get("time_in_force") == TIF_SERA]
 
 
 def manda(diff: dict[str, int], tif: str, nome: str) -> tuple[list[str], bool]:
@@ -182,7 +196,8 @@ def manda(diff: dict[str, int], tif: str, nome: str) -> tuple[list[str], bool]:
             o = av._richiesta("POST", "/v2/orders", json=corpo)
             fatti.append(f"{s} {q:+d} ({o.get('status')})")
         except alpaca.ErroreAlpaca as e:
-            if av._ordine_per_nome(unico) is not None:
+            gia = av._ordine_per_nome(unico)
+            if gia is not None and gia.get("status") not in MORTI:
                 fatti.append(f"{s} {q:+d} (già mandato)")
             else:
                 fatti.append(f"{s} {q:+d} RIFIUTATO ({str(e)[:100]})")
@@ -223,14 +238,13 @@ def sera(ultima: dict, prossima: dict) -> str:
         note.append(f"ampiezza {a:.1%}")
     valore = conto.adesso()["miscela"]
     prezzi = {s: float(ch[s].iloc[-1]) for s in SIMBOLI}
-    gia = [o for o in ordini_aperti() if str(o.get("client_order_id", "")).startswith(f"miscela-sera-{giorno}-")]
-    if not gia:
-        cancella_ordini()                          # solo ordini vecchi della miscela, se ce ne sono
+    gia = ordini_della_sera(ordini_aperti(), giorno)
+    cancella_ordini(tranne={o["id"] for o in gia})  # gli ordini vecchi della miscela (anche gli «opg» di questa sera), se ce ne sono
     # se un giro prima (che non ha salvato lo stato) ha già mandato gli ordini di questa sera, quelli non si cancellano e non si
     # rimandano: si mandano solo i titoli che mancano
     in_attesa = {o["symbol"] for o in gia}
     diff = {s: q for s, q in ordini(valore, esposizione(stato), prezzi, posizioni()).items() if s not in in_attesa}
-    fatti, bene = manda(diff, "opg", f"sera-{giorno}") if diff else ([], True)
+    fatti, bene = manda(diff, TIF_SERA, NOME_SERA.format(giorno=giorno)) if diff else ([], True)
     fatti += [f"{o['symbol']} {o['side']} {o['qty']} (già in attesa)" for o in gia]
     if not bene:
         # non si segna la sera come fatta: un avvio dopo riprova; l'errore ferma il giro e avvisa
@@ -267,6 +281,17 @@ def fed(tipo: str, ora: pd.Timestamp) -> str:
             "ordini": "; ".join(fatti), "note": f"alle {av.ny_adesso():%H:%M:%S} di New York"})
     print(pubblica())
     return f"{oggi}: banca centrale ({tipo}) fatta alle {av.ny_adesso():%H:%M:%S}: {', '.join(fatti) or 'nessun ordine'}"
+
+
+def rifai_sera() -> str:
+    """Una volta, a mano: rifà la sera dell'ultima seduta anche se è segnata come fatta (per esempio dopo ordini scaduti senza
+    esecuzione). Solo nelle ore della sera; le regole e le quote non cambiano, gli ordini si confrontano con le posizioni."""
+    stato = leggi_stato()
+    stato.pop("ultima_sera", None)
+    azione, d = cosa_fare(av.ny_adesso(), sedute_intorno(), stato)
+    if azione != "sera":
+        return f"rifai_sera: {azione}"
+    return sera(d["ultima"], d["prossima"])
 
 
 def auto() -> str:
@@ -325,5 +350,5 @@ def ordini_recenti(giorni: int = 5) -> str:
 
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
-    funzioni = {"auto": auto, "controlla": av.controlla, "plancia": pubblica, "ordini": ordini_recenti}
+    funzioni = {"auto": auto, "controlla": av.controlla, "plancia": pubblica, "ordini": ordini_recenti, "rifai_sera": rifai_sera}
     print(funzioni[comando]())

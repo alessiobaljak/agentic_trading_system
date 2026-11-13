@@ -38,3 +38,14 @@ in `miscela_stato.json`.
 
 Ogni decisione in `miscela_diario.csv`, i valori di fine giornata delle due strategie in `valori.csv`, e sulla Plancia (`/azioni/strategie/miscela`); ogni lunedì nel riepilogo al
 proprietario, accanto al tenere lo SPY e alla prova 25 sugli stessi giorni.
+
+## Le deviazioni (scritte quando succedono)
+
+* **12 novembre 2026 — i primi ordini non sono stati eseguiti.** La miscela è partita la mattina del 12 (l'avvio delle 9:10 di New
+  York ha fatto la «sera» dell'11, come previsto dalle regole sui ritardi): SPY +37 e QQQ +34, ordini a mercato «all'apertura»
+  (`opg`) mandati alle 9:11. Sul conto demo sono **scaduti alle 9:31 senza esecuzione** (letto da Alpaca con il comando di sola
+  lettura `ordini`). La miscela quindi il 12 novembre non era investita: valore 100'000, nessuna perdita e nessun guadagno.
+  Da qui gli ordini della sera sono **ordini a mercato «day» mandati a borsa chiusa**, che Alpaca tiene in coda fino all'apertura
+  (nome nuovo `miscela-sera-{giorno}-g-{titolo}`); gli ordini vecchi della miscela si cancellano, e un ordine con lo stesso nome già
+  scaduto o cancellato non conta più come mandato. La sera del 12 si rifà a mano (`rifai_sera`). Le regole della strategia non
+  cambiano: si compra all'apertura come nelle prove.

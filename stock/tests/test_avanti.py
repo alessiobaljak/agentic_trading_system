@@ -153,3 +153,28 @@ def test_miscela_cosa_fare_a_ogni_ora():
     assert f(t(10, "10:00"), dict(dentro, ultima_sera="2026-12-09")).startswith("niente")   # e se è mancata, la sera ha già venduto
     assert f(t(9, "10:00"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la borsa è aperta")
     assert f(t(8, "16:30"), dict(st, ultima_sera="2026-12-08")).startswith("niente: la sera è già fatta")
+
+
+def test_miscela_ordini_della_sera_solo_day_e_nome_nuovo():
+    from stock.avanti import miscela as mi
+    aperti = [{"id": "1", "client_order_id": "miscela-sera-2026-11-12-SPY", "time_in_force": "opg"},
+              {"id": "2", "client_order_id": "miscela-sera-2026-11-12-g-QQQ", "time_in_force": "day"},
+              {"id": "3", "client_order_id": "miscela-sera-2026-11-11-g-SPY", "time_in_force": "day"}]
+    assert [o["id"] for o in mi.ordini_della_sera(aperti, "2026-11-12")] == ["2"]
+    assert mi.TIF_SERA == "day" and mi.NOME_SERA.format(giorno="2026-11-12") == "sera-2026-11-12-g"
+
+
+def test_miscela_un_ordine_scaduto_con_lo_stesso_nome_non_conta_come_mandato(monkeypatch):
+    from stock import dati
+    from stock.avanti import avanti as av
+    from stock.avanti import miscela as mi
+
+    def rifiuta(*a, **k):
+        raise dati.alpaca.ErroreAlpaca("422 client_order_id must be unique")
+    monkeypatch.setattr(av, "_richiesta", rifiuta)
+    monkeypatch.setattr(av, "_ordine_per_nome", lambda nome: {"status": "expired"})
+    fatti, bene = mi.manda({"SPY": 37}, "day", "sera-2026-11-12")
+    assert not bene and "RIFIUTATO" in fatti[0]
+    monkeypatch.setattr(av, "_ordine_per_nome", lambda nome: {"status": "accepted"})
+    fatti, bene = mi.manda({"SPY": 37}, "day", "sera-2026-11-12")
+    assert bene and "già mandato" in fatti[0]
