@@ -3,7 +3,7 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (12 novembre 2026, mezzogiorno)
+## Compito in corso (13 novembre 2026, 09:00 UTC)
 - **Bot**: gira il codice della fase 1 del conto vero (commit 83ddb809, riavvio dell'8 novembre 19:02 UTC); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
   (codice del conto vero, spento) committata (ff89531), non ancora caricata dal bot.
@@ -15,8 +15,11 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   Prove 149-151 chiuse senza candidate; prova 152 (concentrazione di G1) chiusa: il tetto del 20% non passa l'esame scritto solo per
   8 ordini saltati in più su circa 123.000, decisione al proprietario (conto 312). Revisione di G1: PASS tecnico con 4 Alti
   (`audits/reports/2026-11-12-G1_CONTO_VERO.md`). Riesame: fatte la 28 e la 113; in corso la 96 (backtest-auditor); resta la 55.
-  In corso: strategy-scout (giro delle 08:17, prova 153); l'agente del pulsante di approvazione della versione (fermato dal limite
-  d'uso alle 06:50 circa, ripreso alle 11:50); dopo di lui l'estratto di sola lettura dal demo (backlog P33).
+  Prove 153 (libro degli ordini) e 154 (dimensione media dello scambio) chiuse senza candidate (conto 316); riesami finiti (28 PASS
+  tecnico, 113, 96 e 55 restano bocciate). Pulsante di approvazione, estratto dal demo e funding dei paper committati, in attesa del
+  riavvio (ok del proprietario). 13 novembre: lo scout non trova idee forti (idee 138-140 nella coda con il perché no); voce 9 di G1
+  misurata (scarto del demo = minimi + monete mancanti; costo nel funding); trappola del funding di novembre nel pannello annotata in
+  `research/INDEX.md` (per i confronti con paper e demo si usa `applica_stima`).
 - **Dashboard**: «Plancia» (aree Crypto e Azioni, menu a sinistra richiudibile); la scheda Azioni la riempie la sessione «trading
   stock». Aree del repository separate (`AREE.md`, blocco `.claude/hooks/aree.py`).
 
@@ -36,5 +39,6 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   mancanti, file vecchi), le voci rimaste del backlog P32.
 - Idee passate a strategy-scout il 12 novembre: differenze di funding fra borse, base dei future trimestrali, dominanza del Bitcoin.
 - Decisione aperta: la variante di G1 con il tetto del 20% per moneta (prova 152) al revisore e poi nel paper accanto a G1?
-- Lunedì 16 novembre: riepilogo settimanale con la miscela a tavolino, gate2-reconciler, portfolio-allocator.
+- Lunedì 16 novembre: riepilogo settimanale con la miscela a tavolino, gate2-reconciler (funding di novembre: usare la stima, non il
+  pannello; dire del salto del funding dei paper dopo il riavvio), portfolio-allocator.
 - Il contesto di questa conversazione è molto lungo: conviene compattarla.
