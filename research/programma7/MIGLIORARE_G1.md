@@ -258,4 +258,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   novembre; le monete mancanti ne spiegano al più un terzo; alle 00:00 il demo incassa più del paper, negli altri regolamenti meno.
   Da capire nel conto del funding del paper (`bot/portafoglio/f5.py`, `_funding_regolati` e il ribilancio che rimette
   `funding_fino_ms` all'ora del ribilancio).
+* **13 novembre 2026, 04:30 UTC, voce 8, il quinto ribilancio a 1.000 USDT** (`ops/results/0737-13nov-log-ribilancio-1000.md`,
+  `0738-13nov-stato-ribilancio-1000.md`): 16 ordini (12 a limite, 4 a mercato), 38 variazioni sotto il minimo (8,2% del conto), 1
+  rifiutato (龙虾USDT): eseguibile il 29%. Sui cinque giorni 60 ordini su 276 variazioni, il **22%** (atteso 23%). Scarto dalle
+  posizioni volute 10,2% del conto (scende: 15,8% → 12,2% → 10,2%). Valore scambiato del giorno 294,91 USDT, commissione 0,0291%, 63%
+  del valore a commissione bassa. Equity del demo 991,94 (−0,81% dall'8 novembre); G1 nel paper 10.453,86 (−1,56% dall'8 novembre,
+  10.619,33): il demo resta circa 0,75 punti sopra. Funding dal 7 novembre sul demo +11,30 USDT, commissioni 1,00 USDT.
 
