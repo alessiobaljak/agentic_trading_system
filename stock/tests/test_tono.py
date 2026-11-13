@@ -46,3 +46,10 @@ def test_la_scelta():
 def test_i_fondi():
     assert tono.e_un_fondo("iShares Russell 2000 ETF") and tono.e_un_fondo("Some Growth Fund")
     assert not tono.e_un_fondo("Apple Inc. Common Stock") and not tono.e_un_fondo("")
+
+
+def test_la_scelta_dal_basso_e_la_strategia_al_contrario():
+    t = {f"S{i:02d}": (i / 100, 3) for i in range(30)}
+    t["S10"] = (0.0, 9)                            # pari al più basso, più notizie: passa davanti
+    assert tono.scegli(t, set(t), piu_bassi=True) == ["S10", "S00", "S01", "S02", "S03", "S04"]
+    assert tono.scegli(t, set(t)) == ["S29", "S28", "S27", "S26", "S25", "S24"]

@@ -71,3 +71,10 @@ Da leggere accanto: il costo del prestito annuo che porterebbe lo Sharpe a zero;
 costi, e il suo t; quanti titoli scelti ogni mese; i titoli chiusi perché spariti dal listino. **Se passa uno dei due esami:** revisore
 separato, poi la proposta al proprietario di misurarla in avanti sul demo (con il controllo che Alpaca permetta di venderli allo
 scoperto). Nel conto: **1 prova più 1 apertura del periodo chiuso = 2** (75).
+
+## Nota sul calcolo (13 novembre 2026, prima del calcolo; solo una prova del programma su notizie inventate)
+
+Il simulatore esegue le vendite prima degli acquisti: al cambio del mese le vendite allo scoperto nuove passerebbero prima delle
+ricoperture delle vecchie e, con il limite di leva 1 usato nelle altre prove, sarebbero rifiutate (nella prova del programma ne
+rifiutava circa un quarto). Il calcolo usa quindi il limite di un conto con margine, 2 volte il valore (Interactive Brokers e Alpaca lo
+permettono); l'esposizione voluta non cambia: 50% venduto allo scoperto e 50% comprato.

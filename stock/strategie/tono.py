@@ -47,14 +47,15 @@ def toni(notizie: pd.DataFrame, confini: list[datetime]) -> list[dict[str, tuple
     return out
 
 
-def classifica(tono: dict[str, tuple[float, int]], ammessi) -> list[str]:
-    """I titoli ammessi con il tono, dal più alto: a pari tono prima chi ha più notizie, poi in ordine alfabetico."""
-    return sorted((s for s in tono if s in ammessi), key=lambda s: (-tono[s][0], -tono[s][1], s))
+def classifica(tono: dict[str, tuple[float, int]], ammessi, piu_bassi: bool = False) -> list[str]:
+    """I titoli ammessi con il tono, dal più alto (o dal più basso): a pari tono prima chi ha più notizie, poi in ordine alfabetico."""
+    segno = 1 if piu_bassi else -1
+    return sorted((s for s in tono if s in ammessi), key=lambda s: (segno * tono[s][0], -tono[s][1], s))
 
 
-def scegli(tono: dict[str, tuple[float, int]], ammessi) -> list[str]:
-    """Il 20% con il tono più alto, al massimo 50; nessuno se i titoli con il tono sono meno di 25."""
-    ordine = classifica(tono, ammessi)
+def scegli(tono: dict[str, tuple[float, int]], ammessi, piu_bassi: bool = False) -> list[str]:
+    """Il 20% con il tono più alto (o più basso), al massimo 50; nessuno se i titoli con il tono sono meno di 25."""
+    ordine = classifica(tono, ammessi, piu_bassi)
     if len(ordine) < TITOLI_MINIMI:
         return []
     return ordine[:min(TITOLI_MASSIMI, int(QUINTO * len(ordine)))]
@@ -64,16 +65,16 @@ def e_un_fondo(nome: str) -> bool:
     return any(x.lower() in nome.lower() for x in FONDI)
 
 
-def strategia(elenchi: dict[date, list[str]], fondo: str):
+def strategia(elenchi: dict[date, list[str]], fondo: str, lato: int = 1):
     """`elenchi`: giorno della decisione -> titoli scelti. Metà del conto nei titoli a pesi uguali, metà venduta allo scoperto nel
     `fondo`; elenco vuoto: tutto chiuso. Gli ordini partono all'apertura del giorno di borsa dopo."""
     def decidi(giorno: date, storia: Storia, stato: StatoConto) -> list:
         scelti = elenchi.get(giorno)
         if scelti is None:
             return []
-        pesi = {s: 0.5 / len(scelti) for s in scelti}
+        pesi = {s: lato * 0.5 / len(scelti) for s in scelti}
         if scelti:
-            pesi[fondo] = -0.5
+            pesi[fondo] = -lato * 0.5
         prezzi = {}
         for s in set(pesi) | set(stato.azioni):
             h = storia(s)

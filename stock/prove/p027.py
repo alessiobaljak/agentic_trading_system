@@ -38,7 +38,8 @@ def aspetta_fuori_dagli_ordini() -> None:
         time.sleep(120)
 
 
-def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azioni", asof: str | None = None) -> None:
+def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azioni", asof: str | None = None,
+            dal: datetime = DAL, al: datetime = AL) -> None:
     """Barre al giorno non rettificate e azioni societarie dei titoli che mancano in archivio. `asof="-"`: i prezzi di ciò che
     si scambiava con quel simbolo allora (`alpaca.barre_di_piu`), da tenere in un archivio con un altro nome (`tipo_raw`)."""
     mancano = [s for s in simboli if archivio.carica(s, tipo_raw) is None]
@@ -46,13 +47,13 @@ def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azio
         gruppo = mancano[i:i + 40]
         aspetta_fuori_dagli_ordini()
         try:
-            barre = alpaca.barre_di_piu(gruppo, "1Day", DAL, AL, asof=asof)
+            barre = alpaca.barre_di_piu(gruppo, "1Day", dal, al, asof=asof)
         except alpaca.ErroreAlpaca as e:                 # un simbolo che Alpaca non conosce fa fallire il gruppo: uno alla volta
             print(f"gruppo {i}: {str(e)[:100]}; riprovo uno alla volta", flush=True)
             barre = {}
             for s in gruppo:
                 try:
-                    barre[s] = alpaca.barre(s, "1Day", DAL, AL, asof=asof)
+                    barre[s] = alpaca.barre(s, "1Day", dal, al, asof=asof)
                 except alpaca.ErroreAlpaca:
                     barre[s] = pd.DataFrame()
         for s in gruppo:
@@ -63,7 +64,7 @@ def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azio
     con_barre = [s for s in senza_azioni if len(archivio.carica(s, tipo_raw))]
     for i in range(0, len(con_barre), 500):
         aspetta_fuori_dagli_ordini()
-        az = alpaca.azioni_societarie_di_piu(con_barre[i:i + 500], DAL, AL)
+        az = alpaca.azioni_societarie_di_piu(con_barre[i:i + 500], dal, al)
         for s, df in az.items():
             archivio.salva(df, s, tipo_az)
         print(f"azioni societarie: {i + len(az)} su {len(con_barre)}", flush=True)

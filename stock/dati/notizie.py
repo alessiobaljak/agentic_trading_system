@@ -23,8 +23,13 @@ def mesi(dal_anno: int, al_anno: int) -> list[tuple[int, int]]:
     return [(a, m) for a in range(dal_anno, al_anno + 1) for m in range(1, 13)]
 
 
-def mancanti(dal_anno: int, al_anno: int) -> list[tuple[int, int]]:
-    return [(a, m) for a, m in mesi(dal_anno, al_anno) if not _file(a, m).exists()]
+def mesi_fra(dal: tuple[int, int], al: tuple[int, int]) -> list[tuple[int, int]]:
+    """I mesi (anno, mese) da `dal` ad `al` compresi."""
+    return [(a, m) for a in range(dal[0], al[0] + 1) for m in range(1, 13) if dal <= (a, m) <= al]
+
+
+def mancanti(dal_anno: int, al_anno: int, elenco: list[tuple[int, int]] | None = None) -> list[tuple[int, int]]:
+    return [(a, m) for a, m in (elenco or mesi(dal_anno, al_anno)) if not _file(a, m).exists()]
 
 
 def ordini_in_corso(adesso: datetime) -> bool:
@@ -35,11 +40,12 @@ def ordini_in_corso(adesso: datetime) -> bool:
     return ny.weekday() < 5 and (9 * 60 + 5 <= minuti <= 10 * 60 + 10 or 15 * 60 + 30 <= minuti <= 16 * 60 + 20)
 
 
-def scarica(dal_anno: int, al_anno: int, minuti: float = 240, pausa: float = 0.5) -> list[tuple[int, int]]:
+def scarica(dal_anno: int, al_anno: int, minuti: float = 240, pausa: float = 0.5,
+            elenco: list[tuple[int, int]] | None = None) -> list[tuple[int, int]]:
     """Scarica i mesi che mancano, uno alla volta (il file si scrive solo a mese completo); restituisce quelli rimasti.
     Si ferma dopo `minuti`, e non scarica nei minuti degli ordini (`ordini_in_corso`)."""
     partenza = time.monotonic()
-    for a, m in mancanti(dal_anno, al_anno):
+    for a, m in mancanti(dal_anno, al_anno, elenco):
         if time.monotonic() - partenza > minuti * 60:
             break
         if ordini_in_corso(datetime.now(UTC)):
@@ -59,12 +65,12 @@ def scarica(dal_anno: int, al_anno: int, minuti: float = 240, pausa: float = 0.5
         p.parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(p, index=False, compression="gzip")
         print(f"notizie {a}-{m:02d}: {len(df)} ({(time.monotonic() - partenza) / 60:.0f} min)", flush=True)
-    return mancanti(dal_anno, al_anno)
+    return mancanti(dal_anno, al_anno, elenco)
 
 
-def carica(dal_anno: int, al_anno: int) -> pd.DataFrame:
+def carica(dal_anno: int, al_anno: int, elenco: list[tuple[int, int]] | None = None) -> pd.DataFrame:
     pezzi = []
-    for a, m in mesi(dal_anno, al_anno):
+    for a, m in (elenco or mesi(dal_anno, al_anno)):
         df = pd.read_csv(_file(a, m), dtype=str, keep_default_na=False)
         pezzi.append(pd.DataFrame({"creata": pd.to_datetime(df["creata"], utc=True, format="ISO8601"),
                                    "simboli": df["simboli"].str.split(),
