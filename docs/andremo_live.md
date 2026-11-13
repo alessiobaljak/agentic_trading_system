@@ -662,3 +662,11 @@ col paper è nel funding incassato; (2) **una trappola della ricerca**: dopo l'u
 mette la media dei 90 giorni prima, lo stesso numero ogni giorno, e il ricalcolo di G1 sui giorni di novembre usciva sbagliato di 3
 punti; con la stima dall'indice del premio torna sui giorni di controllo (6-7 novembre) ma resta 2,2 punti sotto il paper l'8-11
 novembre, da chiarire quando esce il funding vero di novembre (nota in `research/INDEX.md`).
+**Giro delle 12:17 del 13 novembre**: raccolta (24 fonti su 24) e controlli in avanti (niente di nuovo). **G1, voce 11**
+(`research/programma7/misure_g1/voce11_rapporto.md`, fonti `ops/results/0720-0738`): il demo fa meglio del paper dall'8 novembre
+(+0,62 punti all'ultima lettura) **solo per il primo giorno** (+0,84): il paper vendeva JCTUSDT (peso 0,39%), salita del 303% l'8
+novembre, e il demo non l'aveva aperta perché 3,9 USDT sono sotto il minimo di Binance. A regime (9-13 novembre) il paper
+**sopravvaluta** il conto vero di circa 0,045 punti al giorno, tutti di funding (il demo incassa il 20% in meno). **Ricerca nuova**:
+strategy-scout propone la prova 155, G1 frenata nei giorni in cui l'indice di paura delle opzioni sul Bitcoin è alto (regole committate
+prima di ogni calcolo; verifica in corso). **Capito oggi**: per i soldi veri si conta circa −0,05 punti al giorno rispetto al paper;
+la vendita delle monete piccole e appena nate con le fiammate (voce 12) torna anche nel demo: un caso solo ha fatto 1,17 punti.
