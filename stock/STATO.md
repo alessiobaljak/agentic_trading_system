@@ -198,6 +198,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   costi) già lì spariva con scarto e prestito (0,01), e nel 2025-2026 non c'è nemmeno prima dei costi (probabile, non
   misurato: i salti al rialzo dei titoli venduti allo scoperto, perdita massima −37%). Il periodo chiuso della famiglia «notizie» ora è usato:
   un'altra prova sulle notizie si potrà giudicare solo in avanti. Nel conto: 75.
+* **La prova 30** (il premio del comunicato: le azioni dell'S&P 500 nella settimana in cui pubblicano i risultati, coperte con lo
+  SPY; idea I32): **bocciata.** Nelle 500 grandi, dal 2017 al 2024, il premio degli studi non c'è: tutti i titoli con la data
+  prevista meno lo SPY −0,13% a settimana (t −1,19). Senza costi +7,0% in 8 anni, con i costi −26,2%: cambiare quasi tutto ogni
+  settimana con 100'000 dollari costa circa 3'600 dollari l'anno fra commissioni e scarto (`prove/P030_risultati.md`). Capito: un
+  effetto di calendario sulle singole azioni, con un ricambio settimanale, deve valere più dello 0,15% a settimana solo per pagare i
+  costi; la data prevista dall'anno prima è giusta nel 68% dei casi. Nel conto: 77.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
