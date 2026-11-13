@@ -161,19 +161,28 @@ def ordini_aperti() -> list[dict]:
     return [o for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if conto.della_miscela(o["symbol"])]
 
 
-def cancella_ordini(tranne: set[str] = frozenset()) -> None:
-    """Cancella gli ordini aperti della miscela (mai quelli della prima candela), salvo quelli con l'id in `tranne`."""
-    for o in ordini_aperti():
-        if o["id"] in tranne:
-            continue
+def cancella_ordini(giorno=None) -> None:
+    """Cancella gli ordini aperti della miscela (mai quelli della prima candela), salvo quelli già mandati per la sera di `giorno`
+    con il tipo giusto (riconosciuti dal nome a ogni lettura: un giro che gira insieme non cancella gli ordini dell'altro). Poi
+    ricontrolla fino a 30 secondi: se resta un ordine vecchio, si ferma con un errore PRIMA di mandare ordini nuovi (se no un
+    «opg» rimasto vivo più un «day» nuovo raddoppierebbero la posizione)."""
+    def da_cancellare() -> list[dict]:
+        return [o for o in ordini_aperti() if giorno is None or not ordini_della_sera([o], giorno)]
+    for o in da_cancellare():
         try:
             av._richiesta("DELETE", f"/v2/orders/{o['id']}")
         except alpaca.ErroreAlpaca:
             pass
-    time.sleep(3)
+    for _ in range(10):
+        time.sleep(3)
+        restano = da_cancellare()
+        if not restano:
+            return
+    raise alpaca.ErroreAlpaca("miscela: ordini vecchi non cancellati: " + ", ".join(
+        f"{o.get('client_order_id')} ({o.get('status')})" for o in restano))
 
 
-MORTI = {"canceled", "expired", "rejected", "done_for_day", "replaced", "suspended"}
+MORTI = {"canceled", "pending_cancel", "expired", "rejected", "done_for_day", "replaced", "pending_replace", "suspended"}
 # Gli ordini della sera vanno all'apertura come ordini a mercato «day» mandati a borsa chiusa (Alpaca li tiene in coda fino
 # all'apertura). NON «opg»: sul conto demo gli ordini «opg» del 12 novembre 2026 sono scaduti alle 9:31 senza esecuzione.
 TIF_SERA, NOME_SERA = "day", "sera-{giorno}-g"
@@ -238,8 +247,8 @@ def sera(ultima: dict, prossima: dict) -> str:
         note.append(f"ampiezza {a:.1%}")
     valore = conto.adesso()["miscela"]
     prezzi = {s: float(ch[s].iloc[-1]) for s in SIMBOLI}
+    cancella_ordini(giorno)                        # gli ordini vecchi della miscela (anche gli «opg» di questa sera), se ce ne sono
     gia = ordini_della_sera(ordini_aperti(), giorno)
-    cancella_ordini(tranne={o["id"] for o in gia})  # gli ordini vecchi della miscela (anche gli «opg» di questa sera), se ce ne sono
     # se un giro prima (che non ha salvato lo stato) ha già mandato gli ordini di questa sera, quelli non si cancellano e non si
     # rimandano: si mandano solo i titoli che mancano
     in_attesa = {o["symbol"] for o in gia}

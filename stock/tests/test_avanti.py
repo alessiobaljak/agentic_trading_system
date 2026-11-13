@@ -178,3 +178,22 @@ def test_miscela_un_ordine_scaduto_con_lo_stesso_nome_non_conta_come_mandato(mon
     monkeypatch.setattr(av, "_ordine_per_nome", lambda nome: {"status": "accepted"})
     fatti, bene = mi.manda({"SPY": 37}, "day", "sera-2026-11-12")
     assert bene and "già mandato" in fatti[0]
+
+
+def test_miscela_cancella_non_tocca_gli_ordini_giusti_di_stasera_e_si_ferma_se_un_vecchio_resta(monkeypatch):
+    import pytest as _pt
+    from stock import dati
+    from stock.avanti import avanti as av
+    from stock.avanti import miscela as mi
+    aperti = [{"id": "1", "client_order_id": "miscela-sera-2026-11-12-SPY", "time_in_force": "opg", "status": "accepted"},
+              {"id": "2", "client_order_id": "miscela-sera-2026-11-12-g-QQQ", "time_in_force": "day", "status": "accepted"}]
+    cancellati = []
+    monkeypatch.setattr(mi.time, "sleep", lambda s: None)
+    monkeypatch.setattr(mi, "ordini_aperti", lambda: [o for o in aperti if o["id"] not in cancellati])
+    monkeypatch.setattr(av, "_richiesta", lambda metodo, percorso, **k: cancellati.append(percorso.rsplit("/", 1)[1]))
+    mi.cancella_ordini("2026-11-12")
+    assert cancellati == ["1"]                     # l'«opg» vecchio sì, il «day» di stasera no
+    cancellati.clear()
+    monkeypatch.setattr(av, "_richiesta", lambda *a, **k: (_ for _ in ()).throw(dati.alpaca.ErroreAlpaca("500")))
+    with _pt.raises(dati.alpaca.ErroreAlpaca):     # la cancellazione fallisce: niente ordini nuovi
+        mi.cancella_ordini("2026-11-12")
