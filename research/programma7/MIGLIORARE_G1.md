@@ -281,3 +281,7 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   non verificabile: le candele da 1 minuto del periodo A sono chiuse al guardiano, e i prezzi per moneta del paper e del demo non sono nelle
   risposte della macchina. Difetto o orario: da stabilire. Serve alla macchina una lettura del diario entrate/uscite di `/portafoglio/f5g1`
   per 29-31 ottobre e delle esecuzioni per moneta del demo. Nessuna variante.
+* **13 novembre 2026, 20:20 UTC, voce 6, seconda lettura** (`ops/results/0738-13nov-stato-ribilancio-1000.md`, equity delle 04:05-04:15):
+  nel paper dal 23 ottobre **G1 +4,54%, G11 +5,84%**, G1N +7,19% dal 25 ottobre. Dalla prima lettura del 6 novembre: G1 +0,38%,
+  G11 −0,90%, G1N +0,10%. Il vantaggio di G11 su G1 scende da 2,7 a 1,3 punti in una settimana: in 21 giorni non si distingue
+  dal caso (le due tengono quasi le stesse monete). Nessuna decisione; si riguarda ogni settimana.
