@@ -651,3 +651,14 @@ positivi su 5; il contrario non rende). Conto delle prove 316. **Capito oggi**: 
 dimensione media) non dice nulla sulla direzione delle monete il giorno dopo; la ricerca fra monete ogni giorno, fuori dal funding, ha
 dato 0 su 6 varianti nelle ultime tre prove (152 a parte).
 
+**Giro delle 08:17 del 13 novembre**: raccolta (24 fonti su 24) e controlli in avanti (nessun annuncio di chiusura, nessuna moneta
+nuova su Coinbase). **Ricerca nuova**: strategy-scout non ha trovato idee con un perché forte; le cinque valutate sono nella coda del
+registro (idee 138-140) con il perché no. **G1, voce 9** (`research/programma7/misure_g1/voce9_rapporto.md`, fonti `ops/results/0721-0738`):
+lo scarto fra posizioni vere e volute del demo a 1.000 USDT (8,9-15,8% del conto) si spiega quasi tutto con le variazioni sotto il
+minimo di Binance (6-10% a regime, 22% degli ordini, come il 23% atteso dalla prova 148) più le monete che il demo non ha (ICP fino al
+10 novembre, 龙虾USDT, IRYSUSDT); il demo resta sopra il paper (−0,99% contro −2,08% all'11 novembre) e nei giorni 9-13 il demo ha
+perso 0,23 punti sul paper, tutti di funding. **Capito oggi**: (1) il conto piccolo non costa in prezzo quanto si temeva, la differenza
+col paper è nel funding incassato; (2) **una trappola della ricerca**: dopo l'ultimo file mensile del funding (31 ottobre) il pannello
+mette la media dei 90 giorni prima, lo stesso numero ogni giorno, e il ricalcolo di G1 sui giorni di novembre usciva sbagliato di 3
+punti; con la stima dall'indice del premio torna sui giorni di controllo (6-7 novembre) ma resta 2,2 punti sotto il paper l'8-11
+novembre, da chiarire quando esce il funding vero di novembre (nota in `research/INDEX.md`).
