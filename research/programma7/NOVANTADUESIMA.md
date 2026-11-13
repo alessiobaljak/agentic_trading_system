@@ -53,3 +53,25 @@ giorni migliori. Se passa: backtest-auditor, poi la sessione principale decide i
 ## Cosa si consegna
 `RISULTATI_NOVANTADUESIMA.md` (file scaricati e mancanti, giorni e monete, rendimento netto per anno e lato, Sharpe, t, Sharpe corretto
 per famiglie, correlazione con G1 e F5, controllo al contrario, giro e spese), `novantaduesima.py`, le varianti in `research/trials/`.
+
+## Regole corrette il 13 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher ha trovato 9 punti da chiudere; nessun segnale è stato calcolato. Le letture che valgono:
+1. **`count`**: i caricatori ufficiali lo scartano; il ricercatore scrive un lettore di `count` dentro `novantaduesima.py`, sugli stessi
+   file e con le stesse regole di `seconda.candele` (`research/data/p6g/<SIMBOLO>/giorni/`, l'archivio vince, gli stessi giorni
+   dall'interfaccia pubblica); i caricatori ufficiali non si toccano. Si controlla su 3 monete che volume e chiusura letti dal lettore
+   nuovo coincidano con quelli di `seconda.candele`.
+2. Un giorno con `count` mancante o zero è un giorno senza dato.
+3. **Finestre**: media dei giorni validi nella finestra; la moneta ha segnale solo se almeno metà dei giorni di ciascuna finestra è
+   valida (A: 2 su 3 e 15 su 30; B: 4 su 7 e 45 su 90).
+4. **Periodo**: primo giorno di conto il 1° gennaio 2022, con la storia presa dal 2021; nessun segnale prima che la finestra lunga
+   abbia i suoi giorni validi.
+5. **Universo e quinti**: le monete dell'universo settimanale di G1 che hanno anche il segnale; i quinti si contano su quelle; sotto
+   `MIN_MONETE` (20) il giorno resta senza posizioni.
+6. **Pesi**: il ciclo di `nucleo.pesi` si ricopia nel file della prova cambiando solo il segnale (`ct = S` al posto di `-funding7`);
+   inverso della volatilità a 30 giorni, banda, `W` (non `WN`) ed esposizione come G1.
+7. **Verso**: `ct = S`, cioè long le monete con lo scambio medio cresciuto di più, short quelle con lo scambio medio sceso di più.
+8. **Esecuzione e periodo**: `nucleo.spese_limite` come G1 (`oltre` 0); fine `an.FINE` esclusa (ultimo giorno il 4 ottobre 2026); il
+   2026 parziale conta come anno per «ogni anno positivo».
+9. **Esame**: serie settimanali nette (`asticella.settimanale`), statistiche con `nucleo.numeri(per_anno=52)`; A e B entrano insieme
+   come prove nuove in `asticella.corretto_famiglie`; una variante passa se lei sola rispetta tutte le condizioni; il conto delle prove
+   resta 314 → 316. Correlazioni con G1 e F5 dalle serie del mazzo (`MAZZO_ASTICELLA.md`).
