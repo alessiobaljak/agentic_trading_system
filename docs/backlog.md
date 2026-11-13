@@ -812,4 +812,8 @@ serie come gruppi a sé (`ASTICELLA.md:31-32`), prove 81 e 82 con il loro filtro
 famiglie: G1 **0,755** (280 USDT 0,682), miscela F5 + M7 + K2 **0,812** (0,797 senza lo spostamento della settimana della 110, 0,731
 al taglio 0,7: è sulla soglia), C3 0,632, prova 152 0,729 / 0,669 / 0,717. G1 contando le prove fino alla 57: 0,945; più le sue
 varianti: 0,947. Decisione di metodo al proprietario.
-
+**13 novembre, sera**: il test del mazzo (`tests/test_asticella_mazzo.py`) falliva dal commit dei risultati della prova 154: le
+prove 153-155 non erano nel mazzo. Aggiunte (`asticella.py`: 154 e 155 con le serie settimanali A e B, 153 senza serie con lo
+Sharpe del suo `esame.json`). Al taglio 0,5: 194 famiglie (erano 191); G1 **0,757** (280 USDT 0,685), F5 + M7 + K2 0,813 (al 19
+ottobre 0,818), C3 0,634: i numeri quasi non cambiano. **Regola pratica**: a ogni prova nuova, nello stesso commit dei risultati,
+si aggiungono le sue serie al mazzo e si lancia questo test.

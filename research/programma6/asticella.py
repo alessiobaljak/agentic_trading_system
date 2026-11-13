@@ -304,6 +304,11 @@ def serie_programma7() -> dict:
     if f.exists():
         d = pd.read_csv(f, index_col=0)
         out.update({f"152 {v}": d[v] for v in ("V1", "V2", "V3")})
+    for n, cartella in ((154, "risultati_novantaduesima"), (155, "risultati_novantatreesima")):   # 154 e 155: A e B (non G1 copia,
+        for v in ("A", "B"):                                                                     # non i controlli di ritardo)
+            f = p7 / cartella / f"settimane_{v}.csv.gz"
+            if f.exists():
+                out[f"{n} {v}"] = pd.read_csv(f, index_col=0)["netto"]
     f = p7 / "risultati_quarantottesima" / "settimane_SS.csv.gz"     # 110: il file mette la vendita del venerdi' g0 al lunedi'
     if f.exists():                                                    # g0 - 4; si chiude il venerdi' g0 + 7: settimana del lunedi' g0 + 3
         s = pd.read_csv(f, index_col=0)["netto"]
@@ -329,7 +334,6 @@ FUORI_DAL_MAZZO = {
 DIFFERENZE_DAL_REGISTRO = {
     89: "il registro conta 2 (F5C e il controllo col fattore mescolato, VENTISETTESIMA.md); nel mazzo solo F5C: un controllo non e' "
         "una strategia provata",
-    153: "in calcolo il 12 novembre: entra quando salva la serie (il controllo delle cartelle se ne accorge)",
 }
 
 
@@ -341,7 +345,8 @@ def senza_serie() -> list:
     * 108 (18 varianti) e 111 (8): lo Sharpe non e' salvato; ogni variante perde lo 0,11% a operazione dopo i costi con p 1,00
       (``esame.json``): t molto sotto -3, quindi entrano in N e non in V qualunque sia il valore. Il -10 e' convenzionale.
     * 110, la chiamata coperta: lo Sharpe di ``esame.json`` (``CC_opzioni``, mensile).
-    * 151: lo Sharpe della sua serie nel periodo (la prova si e' fermata per dati troppo corti, senza esame)."""
+    * 151: lo Sharpe della sua serie nel periodo (la prova si e' fermata per dati troppo corti, senza esame).
+    * 153: la prova ha salvato solo i riassunti del segnale, non le serie: lo Sharpe delle varianti A e B da ``esame.json``."""
     p7 = QUI.parent / "programma7"
     out = []
     for n, cartella in ((108, "risultati_quarantaseiesima"), (111, "risultati_quarantanovesima")):
@@ -357,6 +362,10 @@ def senza_serie() -> list:
         d = d[d["fatta"].astype(bool)]
         s = pd.Series(d["netto"].to_numpy(), index=[sc.giorno(*map(int, x.split("-"))) for x in d.index])
         out.append(("151 WE", sharpe(periodo(s))))
+    f = p7 / "risultati_novantunesima" / "esame.json"
+    if f.exists():
+        v = json.loads(f.read_text())["varianti"]
+        out += [(f"153 {k}", float(v[k]["sharpe"])) for k in ("A", "B")]
     return out
 
 
