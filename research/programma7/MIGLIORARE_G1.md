@@ -274,3 +274,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   Il numero serve se il proprietario vorrà meno discesa con il capitale piccolo. Nel controllo di parità: le spese di G1 della prova
   120 contavano a mercato 6.105 ordini senza candele a 1 ora (oggi 137): sul passato G1 costa circa 0,19 punti l'anno meno di quanto
   scritto (2021-2023; 2024 e 2025 identici).
+* **13 novembre 2026, voce 10 (il giorno del 30 ottobre)**: misurato in `research/programma7/misure_g1/voce10_rapporto.md`. Il «30 ott» è
+  un'etichetta della tabella a fine giorno: da ribilancio a ribilancio (equity di `ops/results/0674-0679`) il paper combacia con la ricerca
+  entro 0,14 punti il 26, 27, 28 e 30 ottobre; la finestra del **29** fa paper +4,40% contro ricerca +2,75% (+1,65), con TRX al 34,7% di peso
+  (+2,50 punti della ricerca da sola). Pesi e numero di monete uguali; prezzo d'ingresso (paper al mark delle 00:05, ricerca all'apertura 00:00)
+  non verificabile: le candele da 1 minuto del periodo A sono chiuse al guardiano, e i prezzi per moneta del paper e del demo non sono nelle
+  risposte della macchina. Difetto o orario: da stabilire. Serve alla macchina una lettura del diario entrate/uscite di `/portafoglio/f5g1`
+  per 29-31 ottobre e delle esecuzioni per moneta del demo. Nessuna variante.

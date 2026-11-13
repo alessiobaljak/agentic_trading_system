@@ -678,3 +678,9 @@ l'anno e la differenza con G1 non è distinguibile dal caso (t −0,79); lo Shar
 paga abbastanza; il freno resta un numero utile per il capitale piccolo, non una regola. (2) Le spese di G1 sul passato erano un po'
 sovrastimate: nel calcolo di ottobre 6.105 ordini su 117.045 non avevano le candele a 1 ora e si contavano a mercato, oggi 137
 (spese totali 0,3665 contro 0,3774, circa 0,19 punti l'anno in meno; il 2024 e il 2025 identici).
+**Giro delle 16:17 del 13 novembre**: raccolta (24 fonti su 24) e controlli in avanti (niente di nuovo); lo scout non trova idee negli
+annunci di Binance (tutte le categorie già nel registro). **G1, voce 10** (`research/programma7/misure_g1/voce10_rapporto.md`): il
+«30 ottobre» del confronto settimanale è in realtà la finestra dal ribilancio del 29 a quello del 30 (paper +4,40, ricerca +2,75); nella
+ricerca TRXUSDT pesava il 34,7% e da sola ha fatto +2,5 punti; l'orario d'ingresso del paper (mark delle 00:05 contro apertura delle
+00:00) spiega circa 0,65 punti, il resto aspetta i pesi per moneta del paper. **Capito oggi**: un giorno con una moneta a un terzo del
+lato pesa più di tutto il resto (la concentrazione della voce 13 torna anche qui).
