@@ -25,6 +25,9 @@ Leggi questo file per primo; poi solo i file che servono al tuo compito, mai «t
 
 ## Dati (`data/`, 17 GB, fuori da git: mai con Read, solo con script)
 - Pannello giornaliero con funding di tutti i perpetui in USDT: `programma6.seconda.pannello()`.
+  **Attenzione al funding recente**: dopo l'ultimo file mensile dell'archivio (oggi il 31 ottobre) il pannello mette la media dei 90
+  giorni prima, lo stesso numero ogni giorno (`seconda.riempi_funding`): per confronti con il paper o il demo su quei giorni si usa
+  `programma6/paper/aggiorna.applica_stima(pan)` (la stima dall'indice del premio). Trovato il 13 novembre con la voce 9 di G1.
 - Candele da 1 minuto delle 100 monete: `programma5.strumenti.motore5.minuti()`; a 1 ora: `programma6.esecuzione.ore_di()`.
 - L'ultimo giorno pubblicato a metà dall'archivio non entra nel pannello (`seconda.giorni_parziali_in_coda`). Contratti su azioni:
   la ricerca li deve riconoscere dal tipo ufficiale di Binance, non dal nome (backlog P32).
