@@ -20,6 +20,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   riavvio (ok del proprietario). 13 novembre: lo scout non trova idee forti (idee 138-140 nella coda con il perché no); voce 9 di G1
   misurata (scarto del demo = minimi + monete mancanti; costo nel funding); trappola del funding di novembre nel pannello annotata in
   `research/INDEX.md` (per i confronti con paper e demo si usa `applica_stima`).
+  Pomeriggio: voce 11 di G1 misurata (il demo è sopra il paper solo per il primo giorno; a regime il paper sopravvaluta di 0,045
+  punti al giorno); prova 155 (G1 frenata dall'indice di paura delle opzioni) non passa, conto 318; le spese di G1 della prova 120
+  erano un po' sovrastimate (ordini senza candele a 1 ora).
 - **Dashboard**: «Plancia» (aree Crypto e Azioni, menu a sinistra richiudibile); la scheda Azioni la riempie la sessione «trading
   stock». Aree del repository separate (`AREE.md`, blocco `.claude/hooks/aree.py`).
 
