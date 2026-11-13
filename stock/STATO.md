@@ -202,8 +202,9 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   SPY; idea I32): **bocciata.** Nelle 500 grandi, dal 2017 al 2024, il premio degli studi non c'è: tutti i titoli con la data
   prevista meno lo SPY −0,13% a settimana (t −1,19). Senza costi +7,0% in 8 anni, con i costi −26,2%: cambiare quasi tutto ogni
   settimana con 100'000 dollari costa circa 3'600 dollari l'anno fra commissioni e scarto (`prove/P030_risultati.md`). Capito: un
-  effetto di calendario sulle singole azioni, con un ricambio settimanale, deve valere più dello 0,15% a settimana solo per pagare i
-  costi; la data prevista dall'anno prima è giusta nel 68% dei casi. Nel conto: 77.
+  effetto di calendario sulle singole azioni con un ricambio settimanale deve valere più di circa lo 0,24% a settimana sulla parte
+  investita solo per pagare i costi (28'541 dollari in 242 settimane dentro, su 50'000 investiti); la data prevista dall'anno prima è
+  giusta nel 68% dei casi. Nel conto: 77.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
