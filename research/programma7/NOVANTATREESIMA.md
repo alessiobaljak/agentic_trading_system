@@ -54,3 +54,31 @@ Rapporto su file in `research/programma7/RISULTATI_NOVANTATREESIMA.md`, serie gi
 
 ## Testo della riga del registro
 | 155 | G1 con il freno dell'indice di paura delle opzioni (DVOL di Deribit, rango sulle 180 chiusure precedenti sopra l'80%: esposizione a metà (A) o ferma (B)), dal 23 marzo 2021, dati mai usati come freno di G1 (`programma7/NOVANTATREESIMA.md`); idea 141 (Moreira e Muir JF 2017, Brunnermeier e Pedersen RFS 2009) | 2 | da fare | da fare |
+
+## Regole corrette il 13 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher (`VERIFICA_NOVANTATREESIMA.md`, punti A1-A13) ha trovato ambiguità; nessun segnale e nessun risultato
+è stato calcolato. Le letture che valgono:
+1. **Dati del DVOL**: si scaricano con il caricatore esistente `research/programma6/scarico_dvol.py` (in `research/data/dvol/`, fuori da
+   git; impronta nel suo `scarico_dvol.json`). La riga giornaliera ha il tempo dell'apertura alle 00:00 UTC: la chiusura del giorno D−1 è
+   la riga con il tempo di D−1 ed è nota alle 00:00 UTC di D. La serie comincia **il 24 marzo 2021** (283 giorni nel 2021), non il 23:
+   vale il dato com'è.
+2. **Il rango**: la chiusura di D−1 si confronta con le 180 chiusure prima di lei (D−181 … D−2): rango = (quante sono minori + metà di
+   quelle uguali) / numero di chiusure presenti. «Sopra l'80%» vuol dire rango strettamente maggiore di 0,80. Se fra le 180 ne mancano
+   più di 10 (meno di 170 presenti), quel giorno l'esposizione resta piena.
+3. **I pesi**: si rifà G1 con `programma7/prima.py` (funzione `esegui`), stesse scelte delle monete di G1 pieno; la variante usa
+   `m × W` con m = 1, 0,5 o 0 e i conti di `te.conto` e `cs.spese_a_limite` (`programma6/cinquantaseiesima.py`). **Controllo di parità
+   obbligatorio prima di tutto**: con m = 1 i giorni devono coincidere con `risultati_prima/giorni_G1.csv.gz`; se non coincidono ci si
+   ferma e lo si scrive.
+4. **Variante B**: chiusura e riapertura alle 00:00 UTC con l'esecuzione di G1 (limite per un'ora, poi a mercato); alla riapertura i pesi
+   sono quelli di G1 di quel giorno; da fermi il funding è zero.
+5. **Periodo**: dal primo giorno con il rango calcolabile (circa il 21 settembre 2021) al 4 ottobre 2026 compreso (`FINE` di `prima.py`,
+   il 5 ottobre escluso). Tutti gli indici dell'esame, per G1 e per le varianti, sullo stesso periodo. Il 2021 (dal 21 settembre) e il
+   2026 (fino al 4 ottobre) sono anni parziali e **contano tutti e due** per «ogni anno positivo».
+6. **Sharpe corretto**: `corretto_famiglie` di `programma6/asticella.py` con il mazzo completo (`mazzo()`), taglio 0,5; le due varianti
+   entrano come serie nuove a settimane intere dal lunedì 27 settembre 2021. Il conto del registro passa da 316 a 318 (non entra nella
+   formula, che conta le famiglie).
+7. **La differenza con G1**: t semplice sulle differenze giornaliere (media / (deviazione / √n)), che deve essere almeno 2 con media
+   positiva; come controlli descrittivi anche il t settimanale e quello robusto (Newey-West, 7 ritardi). Il controllo con un giorno di
+   ritardo in più usa la chiusura di D−2; è solo descrittivo, senza soglia: i numeri si scrivono e li giudica backtest-auditor.
+8. **Registri**: le varianti vanno in `research/trials/novantatreesima.csv`; rapporto `RISULTATI_NOVANTATREESIMA.md`, serie in
+   `risultati_novantatreesima/`, script `novantatreesima.py`.
