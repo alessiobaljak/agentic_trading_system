@@ -29,3 +29,9 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   casi, parente del premio e del funding già provati). Scartate dopo il controllo: (a) il funding di Hyperliquid è già in registro
   (prove 135 e 137); Bybit non è raggiungibile da qui e OKX dà il funding solo per gli ultimi mesi (non verificato a fondo); (c) la quota
   del Bitcoin sul mercato è un indicatore sul prezzo (nessuna prova dirette in registro, ma vicina a «rotazione» prova 127).
+
+- 13 novembre 2026 (quarto giro, 00:17): proposta 1 idea. La dimensione media dello scambio (dollari diviso numero di scambi, colonna
+  `count` delle candele, mai usata) fra le monete, come G1: regole in `programma7/NOVANTADUESIMA.md` (prova 154, 2 varianti; Barber, Odean
+  e Zhu RFS 2009; Boehmer e altri JF 2021). Solo idea, non scritta: l'illiquidità di Amihud (JFM 2002; Brauneis e altri, JBF 2021), mai
+  in registro ma universo di 100 monete tutte liquide, probabilità bassa. Scartate: rapporto volume derivati/pronti (prova 101), acquisti
+  aggressivi (prova 9), base dei future trimestrali (resta idea: due soli contratti).
