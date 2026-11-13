@@ -784,6 +784,12 @@ commissione del conto (`/fapi/v1/commissionRate`) e i pesi voluti del paper di G
 libro» (non eseguibile subito a commissione piena) con la misura di quanti ordini restano non eseguiti. Tutte e due toccano il percorso
 degli ordini: live-path-reviewer, poi l'ok del proprietario per il riavvio. **Metro:** la quota del valore scambiato a commissione
 bassa, prima e dopo; il funding del demo contro il paper, moneta per moneta.
+**Stato al 13 novembre:** il punto (1) è fatto per le esecuzioni, il funding e la commissione del demo (`sezione_demo_esecuzioni` di
+`scripts/state_snapshot.py`, commit 3566bd4, attivo senza riavvio). Mancano i **pesi e i prezzi mark per moneta del paper di G1** e le
+esecuzioni per moneta del demo per giorni passati: le voci 10 e 11 del piano di G1 (`research/programma7/misure_g1/voce10_rapporto.md`,
+`voce11_rapporto.md`) si fermano lì (la finestra del 29 ottobre: 1 punto su 1,65 non spiegato; l'8 novembre: il recupero del paper
+dalle 20:09). Serve una lettura di sola lettura del diario di `/portafoglio/f5g1` per i giorni chiesti, da aggiungere alla lista
+bianca della macchina: live-path-reviewer prima del commit.
 
 ### P34. Il mazzo dello Sharpe corretto si ferma alla prova 102, e il residuo delle parità dentro M7 — trovata il 12 novembre 2026 (riesami 55 e 96)
 **Perché:** i riesami del 12 novembre (`audits/reports/2026-11-12-RIESAME_PROVA55.md`, `2026-11-12-RIESAME_PROVA96.md`) dicono che
