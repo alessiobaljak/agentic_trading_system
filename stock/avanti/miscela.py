@@ -308,7 +308,22 @@ def pubblica() -> str:
         return f"Plancia: errore nella pubblicazione della miscela ({type(e).__name__}: {str(e)[:120]})"
 
 
+def ordini_recenti(giorni: int = 5) -> str:
+    """Sola lettura: gli ordini della miscela degli ultimi giorni con il loro stato (per capire se sono stati eseguiti)."""
+    dopo = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=giorni)).isoformat()
+    tutti = av._richiesta("GET", "/v2/orders", params={"status": "all", "limit": 500, "after": dopo, "direction": "asc"})
+    righe = []
+    for o in tutti:
+        if not conto.della_miscela(o["symbol"]):
+            continue
+        righe.append(" | ".join(str(o.get(k)) for k in ("client_order_id", "symbol", "side", "qty", "type", "time_in_force", "status",
+                                                        "submitted_at", "filled_at", "filled_qty", "filled_avg_price", "canceled_at",
+                                                        "expired_at", "failed_at")))
+    pos = posizioni()
+    return "\n".join(righe or ["nessun ordine della miscela"]) + f"\nposizioni della miscela adesso: {pos or 'nessuna'}"
+
+
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
-    funzioni = {"auto": auto, "controlla": av.controlla, "plancia": pubblica}
+    funzioni = {"auto": auto, "controlla": av.controlla, "plancia": pubblica, "ordini": ordini_recenti}
     print(funzioni[comando]())
