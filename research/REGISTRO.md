@@ -446,4 +446,14 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
 137. **Il riesame delle prove bocciate di poco** (approvato dal proprietario l'8 novembre al posto del rifacimento di tutta la
    ricerca): backtest-auditor rilegge le prove del registro bocciate per un margine stretto, cercando un errore che abbia cambiato il
    verdetto (codice, costi, esame); solo dove lo trova, la prova si rifà. Prima la sessione principale fa l'elenco dal registro.
-
+138. **L'effetto del quarto d'ora** (Kim e Hansen, arXiv 2607.09426, luglio 2026, sei perpetui di Binance: lo squilibrio degli ordini
+   all'apertura dei quarti d'ora prevede i rendimenti a 4-12 ore; proposta da strategy-scout il 13 novembre, `research/idee/LOG.md`):
+   **non si fa per ora**: serve il flusso dei singoli scambi (le candele da 1 minuto danno solo il volume dei compratori aggressivi),
+   l'orizzonte è di ore con costi di circa 0,12% a giro, e il segnale per moneta è parente della prova 9 (no). Si riapre se lo studio
+   viene confermato su più monete.
+139. **La base dei future trimestrali** (idea passata a strategy-scout il 12 novembre): **non si fa**: su Binance i trimestrali in USDT
+   ci sono solo per il Bitcoin e l'Ether, troppo pochi casi per arrivare a un t di 3.
+140. **Le visite a Wikipedia per moneta, la dominanza del Bitcoin e l'ora del giorno** (strategy-scout, 13 novembre): **non si fanno**:
+   le visite sono la stessa idea dell'attenzione già bocciata (prova 138, GA), coprono solo una parte delle monete e il servizio limita
+   lo scarico; la dominanza e l'ora del giorno sono indicatori sul prezzo con un perché economico debole (la dominanza è vicina alla
+   prova 127, RA). Il funding fra borse, la terza idea del 12 novembre, è già nelle prove 135 e 137 e nell'idea 129.

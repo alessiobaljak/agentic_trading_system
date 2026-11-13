@@ -35,3 +35,16 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   e Zhu RFS 2009; Boehmer e altri JF 2021). Solo idea, non scritta: l'illiquidità di Amihud (JFM 2002; Brauneis e altri, JBF 2021), mai
   in registro ma universo di 100 monete tutte liquide, probabilità bassa. Scartate: rapporto volume derivati/pronti (prova 101), acquisti
   aggressivi (prova 9), base dei future trimestrali (resta idea: due soli contratti).
+
+- 13 novembre 2026 (quinto giro, 08:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Controllate nel registro
+  (`--cerca`): le tre idee passate il 12 novembre (funding fra borse: Hyperliquid già provato, prove 135 e 137, Bybit non raggiungibile, OKX solo
+  pochi mesi; base dei trimestrali: solo due contratti su Bitcoin ed Ether, resta idea; dominanza del Bitcoin: indicatore sul prezzo, vicino a
+  «rotazione», prova 127). Valutate e scartate: (1) gli hack dei protocolli (DefiLlama `api.llama.fi/hacks`, 1.351 voci, 560 dal 2021 sopra 1 milione
+  di dollari; nota della sessione principale: già provati, idea 128 → prova 146, AT): quasi tutti protocolli senza perpetuo su Binance, stima di pochi decine di eventi abbinabili, t da 3 fuori portata e
+  la data è solo il giorno; (2) le visite a Wikipedia per moneta (mai in registro): stesso concetto dell'attenzione delle notizie, già no (prova 138,
+  Sharpe -0,07 e -1,22), copertura parziale delle monete, il limite di richieste dell'API blocca lo scarico; (3) l'effetto del quarto d'ora (Kim e
+  Hansen, arXiv 2607.09426, luglio 2026, sei perpetui di Binance: lo squilibrio degli ordini all'apertura dei quarti d'ora prevede i rendimenti a 4-12
+  ore): fatto nuovo, ma serve il flusso dei singoli scambi (nelle candele da 1 minuto c'è solo il volume dei compratori aggressivi), l'orizzonte
+  sono ore (costi di circa 0,12% a giro), e il segnale a livello di moneta è parente della prova 9; resta idea, non scritta; (4) la stagionalità per
+  ora del giorno sul Bitcoin: nessuna prova in registro, ma è un indicatore sul prezzo e il perché economico è debole. Lezione delle ultime 5 prove
+  (150-154) tenuta presente: nessun altro segnale giornaliero fra monete dalle sole candele o dal libro.
