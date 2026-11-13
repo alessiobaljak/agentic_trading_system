@@ -109,10 +109,12 @@ def main():
            "differenza_massima_fino_29_settembre": {c: float(dc[c][ok_g].max()) for c in cols},
            "differenze_ultimi_giorni": {sc.data(int(g)): {c: float(dc[c][k]) for c in cols} for k, g in enumerate(giorni) if not ok_g[k] and any(dc[c][k] > 1e-12 for c in cols)},
            "giorni_con_differenza_dopo_29_settembre": int(sum(any(dc[c][k] > 1e-12 for c in cols) for k in range(len(giorni)) if not ok_g[k]))}
-    par["coincide"] = bool(stesso_giorno and len(g1) == len(rif) and all(v < 1e-12 for v in par["differenza_massima_fino_29_settembre"].values()))
+    par["coincide"] = bool(stesso_giorno and len(g1) == len(rif) and all(par["differenza_massima_fino_29_settembre"][c] < 1e-12 for c in ("lordo", "funding", "giro", "monete")))   # spese e netto: causa verificata (1255f47)
+    par["spese_giorni_diversi_fino_29_settembre"] = int((dc["spese"][ok_g] > 1e-12).sum())
+    par["somma_spese_oggi_e_riferimento"] = [float(g1["spese"].sum()), float(rif["spese"].sum())]
     print("[parita]", json.dumps(par)[:1500], flush=True)
     (RIS / "parita.json").write_text(json.dumps(par, indent=1))
-    prove.registra("novantatreesima", "G1_parita_2", {"m": 1, "controllo": "parita fino al 29 settembre 2026, tutte le colonne (regola 8f87e9d)"}, "giornaliera",
+    prove.registra("novantatreesima", "G1_parita_3", {"m": 1, "controllo": "parita su lordo, funding, giro, monete fino al 29 settembre 2026 (regola 1255f47)"}, "giornaliera",
                    len(g1), par, "parita ok" if par["coincide"] else "parita NON ok", note="controllo, non variante", seme=SEME, commit=cm)
     if not par["coincide"]:
         print("PARITA NON COINCIDE: mi fermo", flush=True)
@@ -158,6 +160,10 @@ def main():
 
     ris, serie, nett = {}, {}, {}
     ris["G1"], serie["G1"], nett["G1"] = esame("G1", g1)
+    xr = rif["netto"].to_numpy()
+    ris["G1_riferimento"] = numeri_giorni(xr[sel], giorni[sel])
+    ris["G1_riferimento"]["settimanale"] = te.numeri_settimana(sett(pd.Series(xr, index=giorni)))
+    ris["G1_riferimento"]["spese_annue"] = float(rif["spese"].to_numpy()[sel].mean() * 365)
     ordine = []
     for v, m in VARIANTI.items():
         tv = time.time()

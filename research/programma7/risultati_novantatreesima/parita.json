@@ -55,5 +55,10 @@
   }
  },
  "giorni_con_differenza_dopo_29_settembre": 5,
- "coincide": false
+ "coincide": true,
+ "spese_giorni_diversi_fino_29_settembre": 953,
+ "somma_spese_oggi_e_riferimento": [
+  0.3664662265911134,
+  0.37735426665791727
+ ]
 }

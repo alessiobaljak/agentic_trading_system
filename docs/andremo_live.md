@@ -670,3 +670,11 @@ novembre, e il demo non l'aveva aperta perché 3,9 USDT sono sotto il minimo di 
 strategy-scout propone la prova 155, G1 frenata nei giorni in cui l'indice di paura delle opzioni sul Bitcoin è alto (regole committate
 prima di ogni calcolo; verifica in corso). **Capito oggi**: per i soldi veri si conta circa −0,05 punti al giorno rispetto al paper;
 la vendita delle monete piccole e appena nate con le fiammate (voce 12) torna anche nel demo: un caso solo ha fatto 1,17 punti.
+**Prova 155, G1 frenata dall'indice di paura delle opzioni (13 novembre, pomeriggio)**: idea di strategy-scout, regole verificate e
+corrette prima del calcolo; dati del DVOL di Deribit dal 24 marzo 2021, giudizio dal 21 settembre 2021 al 4 ottobre 2026. **Non passa**:
+mezza esposizione nei giorni di paura alta (A) porta lo Sharpe da 1,70 a 1,77 e la discesa massima da −30,1% a −21,6%, ma costa 2 punti
+l'anno e la differenza con G1 non è distinguibile dal caso (t −0,79); lo Sharpe corretto è 0,51 (B 0,47). Conto delle prove 318.
+**Capito oggi**: (1) G1 guadagna poco nei giorni di paura alta (+14% l'anno contro +46% negli altri), ma toglierla in quei giorni non
+paga abbastanza; il freno resta un numero utile per il capitale piccolo, non una regola. (2) Le spese di G1 sul passato erano un po'
+sovrastimate: nel calcolo di ottobre 6.105 ordini su 117.045 non avevano le candele a 1 ora e si contavano a mercato, oggi 137
+(spese totali 0,3665 contro 0,3774, circa 0,19 punti l'anno in meno; il 2024 e il 2025 identici).
