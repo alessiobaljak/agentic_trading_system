@@ -48,3 +48,11 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   sono ore (costi di circa 0,12% a giro), e il segnale a livello di moneta è parente della prova 9; resta idea, non scritta; (4) la stagionalità per
   ora del giorno sul Bitcoin: nessuna prova in registro, ma è un indicatore sul prezzo e il perché economico è debole. Lezione delle ultime 5 prove
   (150-154) tenuta presente: nessun altro segnale giornaliero fra monete dalle sole candele o dal libro.
+
+- 13 novembre 2026 (sesto giro, 12:17): proposta 1 idea. G1 con il freno dell'indice di paura delle opzioni (DVOL di Deribit, serie giornaliera
+  verificata dal 23 marzo 2021): sopra l'80% del rango a 180 giorni l'esposizione scende a metà (A) o a zero (B); mai usato come freno di G1
+  (prova 47 era direzione del Bitcoin, prova 42 volatilità passata su F5, no). Regole in `programma7/NOVANTATREESIMA.md` (prova 155, 2 varianti;
+  Moreira e Muir JF 2017; Brunnermeier e Pedersen RFS 2009). Probabilità medio-bassa, detto nel file. Scartate dopo il controllo: diluizione
+  (idea 131 già in registro), offerta delle stablecoin (prove 44 e 100), inclinazione delle opzioni (121-122), premio DVOL (47); attività degli
+  sviluppatori su GitHub (mai in registro, ma limite di richieste senza chiave, abbinare repository a 100 monete è lavoro manuale, studio non
+  solido: non scritta); flussi verso le borse (storico gratuito lungo non trovato).
