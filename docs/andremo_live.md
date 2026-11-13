@@ -684,3 +684,10 @@ annunci di Binance (tutte le categorie già nel registro). **G1, voce 10** (`res
 ricerca TRXUSDT pesava il 34,7% e da sola ha fatto +2,5 punti; l'orario d'ingresso del paper (mark delle 00:05 contro apertura delle
 00:00) spiega circa 0,65 punti, il resto aspetta i pesi per moneta del paper. **Capito oggi**: un giorno con una moneta a un terzo del
 lato pesa più di tutto il resto (la concentrazione della voce 13 torna anche qui).
+**Giro delle 20:17 del 13 novembre**: raccolta (24 fonti su 24) e controlli in avanti (niente di nuovo). **G1, voce 6**: nel paper dal
+23 ottobre G1 +4,54%, G11 +5,84% (dal 6 novembre G1 +0,38%, G11 −0,90%): il vantaggio di G11 scende da 2,7 a 1,3 punti, non si
+distingue dal caso. **Ricerca**: nessuno scout nuovo (tre oggi, l'ultimo senza idee); il test del mazzo dello Sharpe corretto falliva
+dal commit della prova 154 perché le prove 153-155 non c'erano: aggiunte, G1 0,757 e la miscela 0,813 (quasi uguali). Test: 2.797
+passati; uno (`test_firma_dei_tre_tipi_di_chiave`) fallisce in questo contenitore per una libreria di crittografia mancante, anche
+senza la modifica. **Capito oggi**: ogni prova nuova deve entrare nel mazzo nello stesso commit dei risultati, se no l'esame delle
+prove dopo conta meno prove di quelle fatte.
