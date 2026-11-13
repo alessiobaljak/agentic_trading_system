@@ -1,15 +1,15 @@
 {
  "BTC": {
-  "giorni": 2039,
+  "giorni": 2061,
   "primo": 18710,
-  "ultimo": 20748,
-  "sha256": "379416cbc4aaa1b84ddec02b0b8c9386b12b81dbfe63920eb1ea9c9d6c6188b7"
+  "ultimo": 20770,
+  "sha256": "844b3e04592dc61d218d9198ba7d157189cba1573e007b575a5ea4d88c9a0e18"
  },
  "ETH": {
-  "giorni": 2039,
+  "giorni": 2061,
   "primo": 18710,
-  "ultimo": 20748,
-  "sha256": "de2500c0c3f39bc0ee42ff32352245422b100986037c57a068cb5056b4b2ae86"
+  "ultimo": 20770,
+  "sha256": "47772bde5a3c334f15580a0a5feeaf5d504d68dc6eadf342002213455cbefd23"
  },
- "scaricato": "2026-10-22"
+ "scaricato": "2026-11-13"
 }

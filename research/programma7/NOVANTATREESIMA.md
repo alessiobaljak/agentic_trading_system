@@ -82,3 +82,17 @@ La verifica di strategy-researcher (`VERIFICA_NOVANTATREESIMA.md`, punti A1-A13)
    ritardo in più usa la chiusura di D−2; è solo descrittivo, senza soglia: i numeri si scrivono e li giudica backtest-auditor.
 8. **Registri**: le varianti vanno in `research/trials/novantatreesima.csv`; rapporto `RISULTATI_NOVANTATREESIMA.md`, serie in
    `risultati_novantatreesima/`, script `novantatreesima.py`.
+
+## Aggiunta del 13 novembre 2026 dopo il controllo di parità (sessione principale; nessuna variante calcolata)
+Il controllo di parità (`risultati_novantatreesima/parita.json`) ha dato 2.100 giorni uguali ma differenze negli ultimi giorni: il lordo
+dal 2 ottobre 2026, il funding dal 30 settembre, il giro dal 1° ottobre; fino al 29 settembre lordo, funding, giro e numero di monete
+coincidono. Il riferimento `giorni_G1.csv.gz` è stato calcolato all'inizio di ottobre, quando la coda del pannello aveva il funding
+riempito e un giorno pubblicato a metà; il pannello di oggi ha i dati veri (commit e4cb480 del 10 novembre e il file del funding di
+ottobre). Lettura che vale:
+1. La parità è **valida se tutte le colonne (lordo, spese, funding, netto, giro, numero di monete) coincidono entro 1e-12 fino al 29
+   settembre 2026 compreso**. Se una colonna, spese comprese, differisce prima del 30 settembre, ci si ferma e lo si scrive.
+2. Se la parità è valida, **G1 di confronto è quello ricalcolato oggi con m = 1** sullo stesso pannello delle varianti, per tutto il
+   periodo fino al 4 ottobre 2026: G1 e varianti usano gli stessi dati. Le differenze degli ultimi 5 giorni con il riferimento si
+   scrivono nel rapporto.
+3. **Primo giorno giudicato**: il primo con 180 chiusure intere prima di D−1 (circa il 21 settembre 2021). La regola dei 170 presenti
+   vale per i giorni mancanti dentro la finestra, non per una finestra tagliata all'inizio della serie.
