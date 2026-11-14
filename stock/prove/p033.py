@@ -46,7 +46,7 @@ def carica() -> tuple[dict, dict]:
             df = pd.read_csv(f, index_col=0)
             df.index = pd.to_datetime(df.index, utc=True).tz_convert("America/New_York")
         else:
-            df = yahoo.prezzi(s, DAL, AL)
+            df = yahoo.prezzi(s, DAL, AL, frazionamenti=True)   # XLF, 19 set 2016: le quote di XLRE date ai detentori
             df.to_csv(f)
         df = df[pd.Index(df.index.date) <= FINO]
         barre[s] = df[["open", "high", "low", "close", "dividendo", "frazionamento"]]

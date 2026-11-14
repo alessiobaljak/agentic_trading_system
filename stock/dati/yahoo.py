@@ -39,7 +39,20 @@ def eventi(simbolo: str, dal: str, al: str) -> tuple[dict, dict]:
     return div, fr
 
 
-def prezzi(simbolo: str, dal: str, al: str):
+def come_scambiati(df, frazionamenti: dict):
+    """Yahoo dà prezzi e dividendi divisi per i frazionamenti successivi: prima di ogni frazionamento li riporta a quelli scambiati
+    (per il rapporto, quote nuove per ogni quota vecchia) e segna il rapporto nel giorno, come fa il simulatore."""
+    df = df.copy()
+    for giorno, rapporto in sorted(frazionamenti.items()):
+        prima = df.index < giorno
+        for c in ("open", "high", "low", "close", "dividendo"):
+            df.loc[prima, c] = df.loc[prima, c] * rapporto
+        if prima.any():
+            df.loc[df.index[~prima][0] if (~prima).any() else df.index[-1], "frazionamento"] = rapporto
+    return df
+
+
+def prezzi(simbolo: str, dal: str, al: str, frazionamenti: bool = False):
     """Le barre al giorno di Yahoo come scambiate (open, high, low, close, volume), la chiusura rettificata per dividendi e
     frazionamenti (`rettificata`) e il dividendo sul giorno di stacco. Per i fondi quotati delle prove senza le chiavi di Alpaca
     (`stock/prove/P026_tendenza_altre_classi.md`). I prezzi restano fuori dal repository."""
@@ -65,7 +78,11 @@ def prezzi(simbolo: str, dal: str, al: str):
     df["dividendo"] = [div.get(g, 0.0) for g in df.index]
     df["frazionamento"] = 1.0
     if ev.get("splits"):
-        raise ValueError(f"{simbolo}: frazionamenti nel periodo, i prezzi di Yahoo non sono quelli scambiati")
+        if not frazionamenti:
+            raise ValueError(f"{simbolo}: frazionamenti nel periodo, i prezzi di Yahoo non sono quelli scambiati")
+        fr = {pd.Timestamp(v["date"], unit="s", tz="UTC").tz_convert("America/New_York").normalize(): v["numerator"] / v["denominator"]
+              for v in ev["splits"].values()}
+        df = come_scambiati(df, fr)
     return df.dropna(subset=["open", "close"])
 
 

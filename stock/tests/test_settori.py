@@ -24,3 +24,14 @@ def test_scegli_tre_alti_e_tre_bassi():
 def test_fine_dei_mesi():
     cal = [date(2024, 1, 30), date(2024, 1, 31), date(2024, 2, 1), date(2024, 2, 29), date(2024, 3, 1)]
     assert p033.fine_dei_mesi(cal) == [date(2024, 1, 31), date(2024, 2, 29), date(2024, 3, 1)]
+
+
+def test_yahoo_prezzi_come_scambiati_prima_del_frazionamento():
+    from stock.dati import yahoo
+    i = pd.to_datetime(["2016-09-15", "2016-09-16", "2016-09-19", "2016-09-20"]).tz_localize("America/New_York")
+    df = pd.DataFrame({"open": [20.0, 20.0, 20.0, 20.0], "high": 20.0, "low": 20.0, "close": [20.0, 20.0, 20.0, 20.0],
+                       "dividendo": [0.0, 0.1, 0.0, 0.0], "frazionamento": 1.0}, index=i)
+    out = yahoo.come_scambiati(df, {i[2]: 1.231})
+    assert list(out["close"].round(3)) == [24.62, 24.62, 20.0, 20.0]
+    assert round(out["dividendo"].iloc[1], 4) == 0.1231
+    assert list(out["frazionamento"]) == [1.0, 1.0, 1.231, 1.0]
