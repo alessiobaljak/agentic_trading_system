@@ -720,3 +720,8 @@ spiegare il funding incassato in meno e il giorno del 13 novembre, con le lettur
 quelli in cui sale (−0,08%, somma −90), ogni anno; il funding entra uguale in tutti e due. **Capito oggi**: G1 è una protezione nei giorni
 di ribasso più che una scommessa al ribasso; il suo rischio è un mercato che sale a lungo con le monete affollate che salgono di più
 (il lato venduto della voce 12).
+**14 novembre, sera, G1 nei rialzi e G1 neutra** (domanda del proprietario; `research/programma7/misure_g1/g1_nei_rialzi.py`): per mese G1
+non segue il mercato e nei mesi di forte rialzo guadagna come in quelli di forte ribasso (+6,2% e +5,7% al mese in media); il suo periodo
+peggiore è stato quello prima dell'halving del 2024, quando salivano le monete piccole e affollate (novembre 2023 - aprile 2024: G1 −21,3%,
+G1 neutra −15,3%). **Capito oggi**: il nemico di G1 non è il rialzo, è il rialzo delle monete affollate; G1 neutra ne attenua solo una
+parte e dal 2025 rende meno (Sharpe corretto 0,70 contro 0,75).

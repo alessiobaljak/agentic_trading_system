@@ -329,3 +329,12 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   sul mercato è piccolo (−0,06, correlazione −0,19): non è una scommessa sul ribasso ma una risposta asimmetrica, perché G1 vende le
   monete dove i compratori a leva pagano di più, e nei giorni di ribasso sono quelle che cadono di più. In avanti (9-14 novembre) i
   giorni con il Bitcoin giù di oltre il 3% sono stati +0,37%, +2,84% e +0,34% (14 in corso) nel paper; 6 giorni non bastano.
+* **14 novembre 2026, sera, G1 nei mercati che salgono e G1 neutra** (domanda del proprietario: «su un mercato che continua a salire,
+  magari vicino all'halving, la strategia è meno favorevole? G1 neutra non può essere candidata alla demo?»; `misure_g1/g1_nei_rialzi.py`,
+  stessi giorni della prova 120). Per mese G1 non segue il mercato (correlazione +0,02): nei 16 mesi con il mercato oltre +20% G1 fa in
+  media +6,2% al mese (12 positivi), nei 29 sotto −5% +5,7%; dopo 90 giorni di forte rialzo +74% l'anno, dopo 90 di forte ribasso +31%
+  (nei rialzi il funding è alto e G1 lo incassa). Il rischio vero è un altro: i mesi in cui salgono soprattutto le monete piccole e
+  affollate, come prima dell'halving del 20 aprile 2024 (dicembre 2023 −13% con il mercato +28%, marzo 2024 −12% con +28%; da
+  novembre 2023 ad aprile 2024 G1 −21,3%, G1 neutra −15,3%). Un solo halving nei dati: non è una regola. G1 neutra: correlazione
+  settimanale con G1 0,91; Sharpe corretto per famiglie con il mazzo completo 0,70 contro 0,75 di G1 (misure dalla serie del mazzo);
+  dal 2025 +74,6% contro +93,9%; la revisione del 29 ottobre (`REVISIONE_G1N.md`) la tiene come confronto, non come sostituta.
