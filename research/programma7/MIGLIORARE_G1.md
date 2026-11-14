@@ -304,3 +304,12 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   mediana le monete tolte non continuano a salire: la perdita delle fiammate sta nel giorno stesso, e nessuna regola che agisce
   dopo la recupera. JCTUSDT sarebbe stata tolta dal 9 novembre. Il conto delle fiammate del 2021 e del 2024 è più alto di quello
   della misura del 12 novembre (114 contro 85, 98 contro 75) perché la misura contava solo dal 1° gennaio al 4 ottobre di ogni anno.
+* **14 novembre 2026, 16:41 UTC, voci 9 e 11, i pesi di oggi moneta per moneta** (sezione nuova dello stato, commit 96c6094, revisione
+  `reviews/reports/2026-11-14-stato-pesi-g1-oggi.md`; prima lettura `ops/results/0742-14nov-stato-pesi-di-oggi.md`): paper 53
+  monete, demo 50; **esposizione lorda paper 200,0%, demo 179,3%**; somma delle differenze 21,7% del conto. Le monete che il demo non
+  ha (龙虾USDT −3,21%, QUSDT −0,36%, JCTUSDT −0,27%) valgono 3,8 punti; il resto è un demo più piccolo quasi su ogni moneta, comprate e
+  vendute (per esempio BCHUSDT +6,51/+5,72, MUBARAKUSDT −4,95/−4,03). Una parte è il movimento dei prezzi dal ribilancio (il paper è ai
+  prezzi di allora), una parte i resti sotto il minimo. **Da verificare con le letture dei prossimi giorni**: se il demo tiene davvero
+  circa un decimo di esposizione in meno, incassa un decimo di funding in meno e prende un decimo in meno di ogni giornata, e questo
+  spiega una parte del funding più basso (−20%) e del giorno del 13 novembre. Da oggi la lettura delle 04:20 dello stato si usa per
+  spiegare lo scarto moneta per moneta con i prezzi pubblici.

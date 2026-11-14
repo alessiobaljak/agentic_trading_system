@@ -705,3 +705,9 @@ Sharpe corretto 0,79. Conto delle prove 320; la prova entra nel mazzo dello Shar
 monete vendute da G1 che salgono di colpo, nella mediana, nei giorni dopo non continuano a salire: il danno è tutto nel giorno della
 fiammata, e una regola che esce dopo non lo evita. Per difendersi servirebbe agire prima (un tetto o uno stop dentro la giornata), e il
 tetto è già stato provato (prova 152).
+**Giro delle 16:17 del 14 novembre**: raccolta (24 fonti su 24) e controlli in avanti (niente di nuovo). **Lo stato della macchina ora
+scrive i pesi di oggi di G1 moneta per moneta, nel paper e sul demo** (sola lettura; revisione con due giri, APPROVE dopo le correzioni,
+senza riavvio; commit 96c6094). Prima lettura alle 16:41: il demo tiene il 179% di esposizione lorda contro il 200% del paper, con 3,8
+punti di monete che il demo non ha e il resto più piccolo quasi su ogni moneta. **Capito oggi**: una parte del ritardo del demo sul paper
+può venire da un'esposizione più bassa di circa un decimo; le letture dei prossimi giorni diranno quanto è movimento dei prezzi e quanto
+resti sotto il minimo.
