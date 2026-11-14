@@ -711,3 +711,7 @@ senza riavvio; commit 96c6094). Prima lettura alle 16:41: il demo tiene il 179% 
 punti di monete che il demo non ha e il resto più piccolo quasi su ogni moneta. **Capito oggi**: una parte del ritardo del demo sul paper
 può venire da un'esposizione più bassa di circa un decimo; le letture dei prossimi giorni diranno quanto è movimento dei prezzi e quanto
 resti sotto il minimo.
+**Giro delle 20:17 del 14 novembre**: raccolta e controlli in avanti (niente di nuovo). **Correzione della lettura delle 16:41**: portando
+il paper ai prezzi della lettura (prezzi pubblici di Binance) la sua esposizione è il 186,8%, non il 200%; il demo (179,3%) ne tiene circa
+il 4% in meno, metà per le monete che non ha. **Capito oggi**: la differenza di esposizione non spiega il ritardo del demo; restano da
+spiegare il funding incassato in meno e il giorno del 13 novembre, con le letture moneta per moneta dei prossimi giorni.

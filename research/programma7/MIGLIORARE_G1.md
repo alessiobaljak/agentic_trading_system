@@ -313,3 +313,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   circa un decimo di esposizione in meno, incassa un decimo di funding in meno e prende un decimo in meno di ogni giornata, e questo
   spiega una parte del funding più basso (−20%) e del giorno del 13 novembre. Da oggi la lettura delle 04:20 dello stato si usa per
   spiegare lo scarto moneta per moneta con i prezzi pubblici.
+* **14 novembre 2026, 20:30 UTC, voce 11, l'esposizione corretta per i prezzi** (`misure_g1/voce11_esposizione_14nov.py`, prezzi mark
+  pubblici di Binance alle 00:05 e alle 16:41): portando i pesi del paper dai prezzi del ribilancio a quelli della lettura, **il paper è
+  al 186,8%, non al 200%**: 13,2 dei 20,7 punti di differenza sono solo movimento dei prezzi, uguale per paper e demo. Restano 7,5
+  punti (il demo al 179,3%): circa 3,5 sono le monete che il demo non ha (龙虾USDT 2,87, QUSDT 0,33, JCTUSDT), il resto resti sotto il
+  minimo sparsi su molte monete (nessuna oltre 0,41). La somma delle differenze per moneta scende da 21,7% a 10,8% del conto. **Correzione
+  della lettura delle 16:41**: il demo non tiene un decimo in meno ma circa il 4% in meno, metà per le monete mancanti; questo non
+  basta a spiegare il 20% di funding in meno né il giorno del 13 novembre.
