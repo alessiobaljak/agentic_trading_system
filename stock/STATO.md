@@ -215,6 +215,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   vecchio di anni (AT&T con il 2014 fino al 2024). Capito, sul metodo: il criterio per entrare nella miscela lasciava passare il caso;
   dalla prova 32 chiede anche il t della parte da 1,3 e la miscela nuova più alta nell'80% dei campionamenti (idea I30). Periodo
   chiuso della famiglia «conti delle aziende» non aperto. Nel conto: 79.
+* **La prova 32** (comprare le aziende piccole meno vendute allo scoperto, coperte con l'IWM; idea I34): **bocciata, e male**:
+  −66,7% con i costi dal 2018 al 2024 (senza costi −58,5%), in perdita ogni anno, correlazione con lo SPY −0,49
+  (`prove/P032_risultati.md`). Il quinto con meno vendite allo scoperto fa peggio dell'IWM (−0,42% al mese, t −1,71): il contrario
+  di Boehmer, Huszar e Jordan. Spiegazione probabile, non verificata: fra le piccole i titoli che nessuno vende allo scoperto sono
+  soprattutto società vuote in attesa di una fusione (SPAC), ferme intorno ai 10 dollari. Capito: il lato comprato delle piccole,
+  coperto con l'IWM, ha perso in tutte e tre le prove (27, 28, 32); prima di un'altra prova sulle piccole serve un filtro scritto
+  prima che tolga le società vuote. Nel conto: 81.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
