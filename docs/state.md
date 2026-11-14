@@ -1,12 +1,12 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-14 06:23 UTC_
+_Generato: 2026-11-14 06:38 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bear_trending
 - DRY_RUN: True
 - equity: **$817.25**
-- ultimo heartbeat: 2026-11-14 06:23 UTC
+- ultimo heartbeat: 2026-11-14 06:38 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
@@ -373,13 +373,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 3 | 0.2% |
+| trades | 6 | 0.5% |
+| recovery | 64 | 4.8% |
 | holdout | 1 | 0.1% |
-| regime | 22 | 1.7% |
 | consistency | 17 | 1.3% |
 | total_return | 1207 | 91.4% |
-| recovery | 64 | 4.8% |
-| trades | 6 | 0.5% |
+| regime | 22 | 1.7% |
+| pf_ex_top | 3 | 0.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -387,13 +387,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 2815 | 8.3% |
-| total_return | 26463 | 78.0% |
+| trades | 936 | 2.8% |
 | recovery | 2737 | 8.1% |
 | consistency | 589 | 1.7% |
 | holdout | 153 | 0.5% |
+| total_return | 26463 | 78.0% |
+| regime | 2815 | 8.3% |
 | pf_ex_top | 242 | 0.7% |
-| trades | 936 | 2.8% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
@@ -457,21 +457,21 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 | MYXUSDT|gen_8931b93c | watch | 4 | 0.34 / 1.583 | PF 0.34 vs 1.58 atteso · mfe mediana 0.76R < primo TP 1.50R |
 | BANKUSDT|gen_7100bb59 | watch | 4 | 0.967 / 1.938 | PF 0.97 vs 1.94 atteso · mfe mediana 0.46R < primo TP 0.75R |
 | HEMIUSDT|gen_acea368d | watch | 3 | 0.517 / 1.784 | PF 0.52 vs 1.78 atteso · mfe mediana 0.80R < primo TP 1.50R |
-| SYRUPUSDT|gen_f3b97917 | watch | 3 | 1.697 / 2.064 | mfe mediana 1.06R < primo TP 2.00R |
-| JTOUSDT|gen_94062d5f | watch | 3 | 0.503 / 1.351 | PF 0.50 vs 1.35 atteso · mfe mediana 0.55R < primo TP 1.00R |
 | BMTUSDT|gen_be64073c | watch | 3 | 0.183 / 2.843 | PF 0.18 vs 2.84 atteso · mfe mediana 0.51R < primo TP 1.50R |
-| HOMEUSDT|gen_467d9ee2 | watch | 3 | 0.449 / 1.617 | PF 0.45 vs 1.62 atteso · mfe mediana 0.58R < primo TP 1.00R |
-| XPINUSDT|gen_f311acf9 | watch | 3 | 0.0 / 3.282 | PF 0.00 vs 3.28 atteso |
+| JTOUSDT|gen_94062d5f | watch | 3 | 0.503 / 1.351 | PF 0.50 vs 1.35 atteso · mfe mediana 0.55R < primo TP 1.00R |
 | STXUSDT|gen_0aa0d29c | watch | 3 | 0.0 / 1.663 | PF 0.00 vs 1.66 atteso · mfe mediana 0.15R < primo TP 1.00R |
-| SCRUSDT|gen_0e030446 | watch | 3 | 0.344 / 1.851 | PF 0.34 vs 1.85 atteso |
+| XPINUSDT|gen_f311acf9 | watch | 3 | 0.0 / 3.282 | PF 0.00 vs 3.28 atteso |
+| HOMEUSDT|gen_467d9ee2 | watch | 3 | 0.449 / 1.617 | PF 0.45 vs 1.62 atteso · mfe mediana 0.58R < primo TP 1.00R |
 | SAHARAUSDT|gen_c934a6f7 | watch | 3 | 99.0 / 1.687 | mfe mediana 0.52R < primo TP 0.75R |
+| SYRUPUSDT|gen_f3b97917 | watch | 3 | 1.697 / 2.064 | mfe mediana 1.06R < primo TP 2.00R |
 | UBUSDT|gen_92b77c39 | watch | 3 | 0.572 / 1.502 | PF 0.57 vs 1.50 atteso · mfe mediana 1.01R < primo TP 2.00R |
-| RENDERUSDT|gen_b028553e | watch | 2 | 0.0 / 1.617 | PF 0.00 vs 1.62 atteso · mfe mediana 0.59R < primo TP 1.50R |
-| GPSUSDT|gen_871647b8 | watch | 2 | 2.364 / 1.555 | mfe mediana 1.20R < primo TP 2.00R |
-| BTRUSDT|gen_5a52c06b | watch | 2 | 0.566 / 1.784 | PF 0.57 vs 1.78 atteso |
-| USELESSUSDT|gen_e09c5203 | watch | 2 | 0.0 / 1.636 | PF 0.00 vs 1.64 atteso · mfe mediana 0.48R < primo TP 2.00R |
+| SCRUSDT|gen_0e030446 | watch | 3 | 0.344 / 1.851 | PF 0.34 vs 1.85 atteso |
+| HEMIUSDT|gen_c1f71d65 | watch | 2 | 0.829 / 1.54 | PF 0.83 vs 1.54 atteso |
+| VELVETUSDT|gen_ff3e4154 | watch | 2 | 0.544 / 2.559 | PF 0.54 vs 2.56 atteso |
 | PARTIUSDT|gen_64263ae7 | watch | 2 | 0.597 / 1.953 | PF 0.60 vs 1.95 atteso · mfe mediana 1.03R < primo TP 2.00R |
-| TAUSDT|gen_6e8a4220 | watch | 2 | 0.282 / 2.152 | PF 0.28 vs 2.15 atteso · mfe mediana 0.61R < primo TP 1.00R |
+| HYPEUSDT|gen_f19b67e8 | watch | 2 | 0.171 / 1.624 | PF 0.17 vs 1.62 atteso · mfe mediana 0.51R < primo TP 1.00R |
+| USELESSUSDT|gen_e09c5203 | watch | 2 | 0.0 / 1.636 | PF 0.00 vs 1.64 atteso · mfe mediana 0.48R < primo TP 2.00R |
+| BTRUSDT|gen_5a52c06b | watch | 2 | 0.566 / 1.784 | PF 0.57 vs 1.78 atteso |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
