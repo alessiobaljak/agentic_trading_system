@@ -304,7 +304,8 @@ def serie_programma7() -> dict:
     if f.exists():
         d = pd.read_csv(f, index_col=0)
         out.update({f"152 {v}": d[v] for v in ("V1", "V2", "V3")})
-    for n, cartella in ((154, "risultati_novantaduesima"), (155, "risultati_novantatreesima")):   # 154 e 155: A e B (non G1 copia,
+    for n, cartella in ((154, "risultati_novantaduesima"), (155, "risultati_novantatreesima"),
+                        (156, "risultati_novantaquattresima")):                          # 154-156: A e B (non G1 copia,
         for v in ("A", "B"):                                                                     # non i controlli di ritardo)
             f = p7 / cartella / f"settimane_{v}.csv.gz"
             if f.exists():

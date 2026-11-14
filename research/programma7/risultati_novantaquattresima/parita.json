@@ -1,0 +1,21 @@
+{
+ "righe": [
+  2100,
+  2100
+ ],
+ "stessi_giorni": true,
+ "differenza_massima_fino_29_settembre": {
+  "lordo": 1.0191500421363742e-16,
+  "spese": 0.005276280376702729,
+  "funding": 9.990923019453923e-17,
+  "netto": 0.005276280376702632,
+  "giro": 4.440892098500626e-16,
+  "monete": 0.0
+ },
+ "spese_giorni_diversi_fino_29_settembre": 953,
+ "somma_spese_oggi_e_riferimento": [
+  0.3664662265911134,
+  0.37735426665791727
+ ],
+ "coincide": true
+}

@@ -297,3 +297,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   punti. Il resto (circa 1 punto) si chiarisce solo con i pesi per moneta del paper (backlog P33, stessa lettura delle voci 10 e
   11). Funding dal 7 novembre sul demo +13,62 USDT, commissioni 1,03 USDT. Da guardare nel confronto settimanale di lunedì.
 * **14 novembre 2026, voce 12, regole scritte, non calcolate** (`research/programma7/NOVANTAQUATTRESIMA.md`, prova 156): una moneta del lato venduto con più di +20% in un giorno (soglia dalla misura `misure_g1/voce12_rapporto.md`: 176 giornate-moneta nel 2026) esce dal lato venduto per 3 (A) o 7 (B) ribilanci, peso in contanti; esame approvato più il paletto «almeno 4 anni su 5 del 2021-2025 meglio di G1» e t della differenza almeno 2. Avviso: la perdita del giorno della fiammata (-119,3) non si recupera, si guadagna solo se la moneta continua a salire. Casi in avanti: JCTUSDT +303% (voce 11), TRXUSDT (voce 10, causa non chiusa). Da committare e far verificare prima del calcolo.
+* **14 novembre 2026, mattina, voce 12, la prova 156: le monete vendute dopo una fiammata** (`RISULTATI_NOVANTAQUATTRESIMA.md`):
+  togliere dal lato venduto per 3 (A) o 7 giorni (B) una moneta salita più del 20% in un giorno: Sharpe 2,03 e 2,07 contro 1,99 di
+  G1, discesa −28,3% e −25,8% contro −30,1%, ma la differenza con G1 non si distingue dal caso (t 0,32 e 0,60), viene quasi tutta dal
+  2021 e negli anni 2021-2025 è positiva solo 2 volte su 5; Sharpe corretto 0,73 e 0,79: **non passa**, G1 resta com'è. Nella
+  mediana le monete tolte non continuano a salire: la perdita delle fiammate sta nel giorno stesso, e nessuna regola che agisce
+  dopo la recupera. JCTUSDT sarebbe stata tolta dal 9 novembre. Il conto delle fiammate del 2021 e del 2024 è più alto di quello
+  della misura del 12 novembre (114 contro 85, 98 contro 75) perché la misura contava solo dal 1° gennaio al 4 ottobre di ogni anno.

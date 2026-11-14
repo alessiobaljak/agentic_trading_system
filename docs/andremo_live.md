@@ -696,3 +696,12 @@ dall'8 novembre), G1 nel paper +1,07%: il demo ora è 0,34 punti sotto. Il 13 no
 giorno; la moneta che il demo non ha (龙虾USDT, −7,3%) ne spiega circa 0,23, il resto aspetta i pesi per moneta del paper. **Capito
 oggi**: la stima di stamattina del costo del conto vero (−0,045 punti al giorno, voce 11) è troppo ottimista se un giorno come il 13
 si ripete; con 6 giorni non si sa ancora, il confronto di lunedì lo misura.
+**Giro delle 08:17 del 14 novembre**: raccolta (24 fonti su 24) e controlli in avanti (niente di nuovo); lo scout non trova idee forti
+(la deriva del Bitcoin prima delle riunioni della Banca centrale americana ha troppi pochi casi: idea 142, non si fa). **Prova 156, G1
+che esce dal lato venduto dopo una fiammata** (voce 12; regole di strategy-improver, verificate e corrette prima del calcolo, eseguite
+da strategy-researcher): **non passa**. La variante a 7 giorni ha Sharpe 2,07 contro 1,99 e discesa −25,8% contro −30,1%, ma la
+differenza con G1 sta dentro il caso (t 0,60), viene quasi tutta dal 2021 ed è positiva solo in 2 anni su 5 fra il 2021 e il 2025;
+Sharpe corretto 0,79. Conto delle prove 320; la prova entra nel mazzo dello Sharpe corretto nello stesso commit. **Capito oggi**: le
+monete vendute da G1 che salgono di colpo, nella mediana, nei giorni dopo non continuano a salire: il danno è tutto nel giorno della
+fiammata, e una regola che esce dopo non lo evita. Per difendersi servirebbe agire prima (un tetto o uno stop dentro la giornata), e il
+tetto è già stato provato (prova 152).
