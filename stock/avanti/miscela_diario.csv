@@ -2,3 +2,4 @@ giorno,comando,valore,fed,calma_SPY,calma_QQQ,ampiezza,ordini,note
 2026-11-11,sera,100000.0,0.0,0.7239,0.4474,0.98,SPY +37 (pending_new); QQQ +34 (pending_new),"calma {'SPY': 0.7239, 'QQQ': 0.4474}; ampiezza 66.5%"
 2026-11-12,sera,100000.0,0.0,0.7239,0.4474,0.98,SPY +37 (accepted); QQQ +34 (accepted),
 2026-11-12,sera,100000.0,0.0,0.7239,0.4474,0.98,SPY +37 (accepted); QQQ +34 (accepted),
+2026-11-13,sera,99263.28,0.0,0.7239,0.4474,0.98,,"calma {'SPY': 0.7239, 'QQQ': 0.4474}"
