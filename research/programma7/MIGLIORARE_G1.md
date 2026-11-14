@@ -285,3 +285,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   nel paper dal 23 ottobre **G1 +4,54%, G11 +5,84%**, G1N +7,19% dal 25 ottobre. Dalla prima lettura del 6 novembre: G1 +0,38%,
   G11 −0,90%, G1N +0,10%. Il vantaggio di G11 su G1 scende da 2,7 a 1,3 punti in una settimana: in 21 giorni non si distingue
   dal caso (le due tengono quasi le stesse monete). Nessuna decisione; si riguarda ogni settimana.
+* **14 novembre 2026, 04:40 UTC, voce 8, il sesto ribilancio a 1.000 USDT** (`ops/results/0739-14nov-log-ribilancio-1000.md`,
+  `0740-14nov-stato-ribilancio-1000.md`): 6 ordini (tutti a limite), 45 variazioni sotto il minimo (8,6% del conto), 1 rifiutato
+  (龙虾USDT): eseguibile il 12%; sui sei giorni 66 ordini su 328 variazioni, il 20% (atteso 23%). Scarto dalle posizioni volute 11,6%
+  del conto. Valore scambiato del giorno 68 USDT, 74% a commissione piena (i 6 ordini limite al prezzo mark hanno attraversato il
+  libro); sui sei giorni 0,0292%, 64% a commissione bassa. Equity del demo 1.007,27 (+0,73% dall'8 novembre); G1 nel paper 10.733,10
+  (+1,07% dall'8 novembre, 10.619,33): **il demo ora è 0,34 punti sotto il paper** (ieri 0,75 sopra). Dal 9 novembre (6 giorni) demo
+  +1,21%, paper +2,56%: −0,23 punti al giorno, cinque volte la stima della voce 11 (−0,045), quasi tutto in un giorno: la riga del 13
+  novembre, demo +1,69% contro paper +2,84% (−1,15). Il funding quel giorno va a favore del demo (+0,255% contro +0,162%); 龙虾USDT,
+  venduto nel paper al 3,2% e assente sul demo, quel giorno −7,3% (candela giornaliera pubblica di Binance): spiega circa 0,23
+  punti. Il resto (circa 1 punto) si chiarisce solo con i pesi per moneta del paper (backlog P33, stessa lettura delle voci 10 e
+  11). Funding dal 7 novembre sul demo +13,62 USDT, commissioni 1,03 USDT. Da guardare nel confronto settimanale di lunedì.

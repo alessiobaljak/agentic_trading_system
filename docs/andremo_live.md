@@ -691,3 +691,8 @@ dal commit della prova 154 perché le prove 153-155 non c'erano: aggiunte, G1 0,
 passati; uno (`test_firma_dei_tre_tipi_di_chiave`) fallisce in questo contenitore per una libreria di crittografia mancante, anche
 senza la modifica. **Capito oggi**: ogni prova nuova deve entrare nel mazzo nello stesso commit dei risultati, se no l'esame delle
 prove dopo conta meno prove di quelle fatte.
+**14 novembre, 04:40 UTC, il sesto ribilancio del demo** (`ops/results/0740-14nov-stato-ribilancio-1000.md`): demo 1.007,27 (+0,73%
+dall'8 novembre), G1 nel paper +1,07%: il demo ora è 0,34 punti sotto. Il 13 novembre il demo ha fatto 1,15 punti meno del paper in un
+giorno; la moneta che il demo non ha (龙虾USDT, −7,3%) ne spiega circa 0,23, il resto aspetta i pesi per moneta del paper. **Capito
+oggi**: la stima di stamattina del costo del conto vero (−0,045 punti al giorno, voce 11) è troppo ottimista se un giorno come il 13
+si ripete; con 6 giorni non si sa ancora, il confronto di lunedì lo misura.
