@@ -9,16 +9,15 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato al 12 nov 2026, notte)
-- **Ultima revisione** (notte): `reports/2026-11-12-funding-dei-paper.md`, funding dei paper: secondo giro **APPROVE** per
-  commit e riavvio (82 chiuso; 83 Basso latente: una chiave di formato vecchio fermerebbe G1, oggi impossibile).
-- Sera: `reports/2026-11-12-stato-demo-esecuzioni.md`, sezione di sola lettura del demo nello «stato»:
-  secondo giro **APPROVE** (finestra 23:50-01:45 UTC, stop al primo 429 o 418, soglia 600, riga del peso in cima). Conto vero: `da91124`.
-- Conto vero: `reports/2026-11-12-conto-vero-versione-firebase-2.md` (secondo giro, committato come `da91124`): **APPROVE per
-  il commit**; **REQUEST CHANGES per l'accensione**: 54 (ii) Alto (la chiave di amministratore di Firebase scrive l'approvazione:
-  decisione di Alessio), 70 Medio, 78 Basso nuovo (il test di guardia del 54 non vede la costante importata, un nome a pezzi, un `.json`).
-  Chiusi: 74 (approvazione letta negli ultimi 10 minuti, con git; revoca non letta: fino a 10 minuti), 75, 76, 77. Primo giro `a267c40`.
-- Fase 2 `ff89531`; sulla macchina gira ancora `1a8522f` (riavvio con l'ok di Alessio).
+## Stato (aggiornato al 14 nov 2026)
+- **Ultima revisione**: `reports/2026-11-14-stato-pesi-g1-oggi.md`, sezione «G1 oggi, moneta per moneta» dello «stato»: primo
+  giro REQUEST CHANGES (84 Medio), **secondo giro APPROVE** (un solo cliente e stop comune al primo 429/418; 89 Basso, un commento).
+  Non committata: se committata, confrontare con `giro14nov/copia2/`. Prove: `giro14nov/test_prove_14nov_b.py` (stato intero),
+  `mutazioni2.py <radice> <cartella>` (carica davvero la copia mutata: il conftest dei test mette la radice in testa).
+- 12 nov: funding dei paper APPROVE (committato `3624baa`; 83 Basso latente); sezione delle esecuzioni del demo APPROVE (`3566bd4`).
+- Conto vero: `reports/2026-11-12-conto-vero-versione-firebase-2.md` (committato `da91124`): **APPROVE per il commit**, **REQUEST
+  CHANGES per l'accensione**: 54 (ii) Alto (la chiave di amministratore di Firebase scrive l'approvazione: decisione di Alessio),
+  70 Medio, 78 Basso (il test di guardia del 54 non vede la costante importata). Chiusi 74-77. Sulla macchina, al 12 nov, `1a8522f`.
 - Voci aperte: 4 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione).
 - Alla prossima revisione: se committato, confrontare il commit con `giro12nov/copia2` (copia del secondo giro, senza git); rifare
   S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`, un giro al minuto: S1 e S2 senza giri restano bloccate, giusto) e `mutazioni2.py`.

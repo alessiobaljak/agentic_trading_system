@@ -11,6 +11,7 @@ Uso: python -m scripts.state_snapshot
 """
 from __future__ import annotations
 
+import math
 import os
 import time
 from datetime import datetime, timezone
@@ -116,7 +117,13 @@ def build() -> str:
     lines += sezione_demo_binance(fb)
     lines += sezione_demo_contro_paper(fb)
     lines += sezione_conto_vero(fb)
-    lines += sezione_demo_esecuzioni(fb)
+    # un solo cliente di sola lettura del demo per le due sezioni che leggono Binance (revisione del 14 novembre 2026, problema 84): il
+    # primo 429 o 418 e il peso usato dall'indirizzo valgono per tutte e due; senza chiave ognuna scrive da sola il suo «non letto»
+    try:
+        cliente_demo = cliente_di_sola_lettura()
+    except Exception:  # noqa: BLE001  (il testo dell'errore di una chiave non si stampa)
+        cliente_demo = None
+    lines += sezione_demo_esecuzioni(fb, cliente=cliente_demo)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -220,6 +227,8 @@ def build() -> str:
     lines += _closed_trades_section(fb, pairs)
     lines += _drift_section(fb)
     lines += _calibration_section(fb)
+    # in fondo: l'agente della macchina taglia le risposte oltre i 20.000 caratteri tenendo testa e coda (ops_agent.truncate)
+    lines += sezione_pesi_g1_oggi(fb, cliente=cliente_demo)
     return "\n".join(lines)
 
 
@@ -804,7 +813,8 @@ def sezione_demo_contro_paper(fb) -> list:
 # ---- G1 sul demo: esecuzioni, commissioni e funding letti da Binance (backlog P33; gate2/reports/2026-11-12-G1-funding-commissioni.md) --
 # SOLA LETTURA: tre indirizzi GET firmati del conto demo, nessun ordine, nessuna scrittura su Binance né su Firebase. Il peso di ogni
 # richiesta è quello della documentazione di Binance (future USDⓈ-M); l'indirizzo della macchina ne ha 2.400 al minuto, condivisi con il bot.
-PESO_LETTURE = {"/fapi/v1/userTrades": 5, "/fapi/v1/commissionRate": 20, "/fapi/v1/income": 30}
+PESO_LETTURE = {"/fapi/v1/userTrades": 5, "/fapi/v1/commissionRate": 20, "/fapi/v1/income": 30,
+                "/fapi/v2/positionRisk": 5}      # le posizioni del demo per i pesi di oggi (sezione_pesi_g1_oggi)
 GIORNI_CHIUSI = 5                      # i 5 giorni UTC chiusi più quello in corso
 PAUSA_TRA_RICHIESTE_S = 0.2
 PESO_MASSIMO_SEZIONE = 1000            # meno della metà del minuto dell'indirizzo: il bot deve poter continuare a lavorare
@@ -841,18 +851,21 @@ class SoloLettura:
         if http is None:
             import requests
             http = requests.request
-        self.http, self.peso_usato = http, None
+        self.http, self.peso_usato, self.bloccato = http, None, None
 
     def __call__(self, metodo, url, **kw):
         from urllib.parse import urlparse
         percorso = urlparse(url).path
         if metodo != "GET" or percorso not in self.AMMESSI:
             raise ValueError(f"sola lettura: {metodo} {percorso} non ammesso")
+        if self.bloccato:      # dopo un 429 o un 418 nessuna richiesta parte più, per nessuna sezione (revisione del 14 novembre, 84)
+            raise LimiteInLettura(self.bloccato)
         r = self.http(metodo, url, **kw)
         if getattr(r, "status_code", None) in (418, 429):
             attesa = (getattr(r, "headers", None) or {}).get("Retry-After")
-            raise LimiteInLettura(f"Binance {r.status_code} su GET {percorso}: la sezione si ferma"
-                                  + (f" (Retry-After {attesa} s)" if attesa is not None else ""))
+            self.bloccato = (f"Binance {r.status_code} su GET {percorso}: le letture si fermano"
+                             + (f" (Retry-After {attesa} s)" if attesa is not None else ""))
+            raise LimiteInLettura(self.bloccato)
         try:
             self.peso_usato = int((getattr(r, "headers", None) or {}).get("X-MBX-USED-WEIGHT-1M"))
         except (TypeError, ValueError):
@@ -1155,6 +1168,86 @@ def _demo_esecuzioni(fb, cliente, now: float, dormi, peso_massimo: int, titolo: 
                + (f"; peso usato dall'indirizzo nel minuto {usato}" if usato is not None else "")
                + (f"; fermata: {lt.fermo}" if lt.fermo else ""))
     return out + [""]
+
+
+def sezione_pesi_g1_oggi(fb, cliente=None, now: float | None = None, dormi=time.sleep) -> list:
+    """I pesi di oggi moneta per moneta, in % del conto: G1 nel paper (`/paper_g1/posizioni`, l'ultimo ribilancio) e G1 sul demo
+    (posizioni vere da Binance, `positionRisk`: valore della posizione sull'equity del conto ridotto). Il paper tiene solo i pesi di
+    oggi: con una lettura al giorno dopo il ribilancio e i prezzi pubblici si spiega lo scarto fra demo e paper moneta per moneta
+    (research/programma7/MIGLIORARE_G1.md, voci 8, 10 e 11; backlog P33). Sola lettura: una GET firmata con la funzione
+    ``SoloLettura``; fuori dalla finestra del ribilancio; un errore diventa la riga «non letto» e lo stato non fallisce mai."""
+    titolo = "## G1 oggi, moneta per moneta: paper e demo (sola lettura)"
+    try:
+        return _pesi_g1_oggi(fb, cliente, time.time() if now is None else float(now), dormi, titolo)
+    except Exception as exc:  # noqa: BLE001
+        return [titolo, f"- non letto: {_motivo(exc)}", ""]
+
+
+MONETE_PER_RIGA = 6
+EQUITY_DEMO_MASSIMA = 1e9         # oltre, l'equity letta da Firebase non è un numero sensato (problema 85)
+EQUITY_VECCHIA_S = 2 * 3600       # il demo riscrive l'equity ogni ora (demo_binance.py): oltre 2 ore si avvisa
+
+
+def _pesi_g1_oggi(fb, cliente, now: float, dormi, titolo: str) -> list:
+    if nella_finestra_vietata(now):
+        return [titolo, "- non letto: finestra del ribilancio del demo (23:50-01:45 UTC), richiedere dopo", ""]
+
+    def rtdb(ramo):
+        try:
+            v = fb.get_rtdb(ramo) if fb is not None else None
+        except Exception:  # noqa: BLE001
+            return {}
+        return v if isinstance(v, dict) else {}
+
+    paper = {s: float(w) for s, w in rtdb("/paper_g1/posizioni").items() if _numero(w) and math.isfinite(float(w)) and float(w)}
+    st = rtdb("/demo_binance/stato")
+    equity = float(st["equity"]) if _numero(st.get("equity")) else 0.0
+    equity = equity if math.isfinite(equity) and 0 < equity < EQUITY_DEMO_MASSIMA else 0.0     # problema 85
+    vecchia = (now - float(st["aggiornato"])) if _numero(st.get("aggiornato")) else None
+    demo, nota = None, ""
+    if equity <= 0:
+        nota = "manca l'equity del demo (`/demo_binance/stato`) o non è un numero sensato"
+    else:
+        if cliente is None:
+            try:
+                cliente = cliente_di_sola_lettura()
+            except Exception as exc:  # noqa: BLE001  (il testo dell'errore di una chiave non si stampa)
+                cliente, nota = None, f"chiave del conto demo non leggibile ({type(exc).__name__})"
+            else:
+                if cliente is None:
+                    nota = "manca la chiave del conto demo (c'è solo sulla macchina)"
+        if cliente is not None:
+            lt = _Lettore(cliente, dormi=dormi)
+            try:
+                pos = lt.chiedi("/fapi/v2/positionRisk", {}) or []
+                demo = {}
+                for x in pos if isinstance(pos, list) else []:
+                    # il segno dalla quantità, come il bot (problema 86); il valore della posizione in valore assoluto
+                    s, q, n = x.get("symbol"), x.get("positionAmt"), x.get("notional")
+                    if s and _numero(q) and _numero(n) and float(q) and math.isfinite(float(n)):
+                        demo[s] = demo.get(s, 0.0) + math.copysign(abs(float(n)), float(q)) / equity
+            except Exception as exc:  # noqa: BLE001
+                demo, nota = None, _motivo(exc)
+    out = [titolo, f"Letto il {_ts(now)}. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` "
+           f"(l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity "
+           f"del conto ridotto" + (f" ({equity:,.2f} USDT)" if equity > 0 else "") + ". La differenza mescola esecuzione e movimento "
+           "dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo."]
+    if vecchia is not None and vecchia > EQUITY_VECCHIA_S:
+        out.append(f"- attenzione: l'equity del demo è di {vecchia / 3600:.1f} ore fa ({_ts(st.get('aggiornato'))})")
+    if demo is None:
+        out.append(f"- demo: non letto: {nota}")
+    d = demo or {}
+    simboli = sorted(set(paper) | set(d), key=lambda s: (-max(abs(paper.get(s, 0.0)), abs(d.get(s, 0.0))), s))
+    if not simboli:
+        return out + ["- nessuna posizione nel paper né sul demo", ""]
+    celle = [f"{s} {100 * paper.get(s, 0.0):+.2f}/" + (f"{100 * d.get(s, 0.0):+.2f}" if demo is not None else "—") for s in simboli]
+    out += ["- " + " · ".join(celle[i:i + MONETE_PER_RIGA]) for i in range(0, len(celle), MONETE_PER_RIGA)]
+    lordo_p = sum(abs(w) for w in paper.values())
+    riga = f"- monete: paper {len(paper)}, demo " + (f"{len(d)}" if demo is not None else "—") + f"; esposizione lorda paper {100 * lordo_p:.1f}%"
+    if demo is not None:
+        riga += (f", demo {100 * sum(abs(w) for w in d.values()):.1f}%; somma delle differenze "
+                 f"{100 * sum(abs(d.get(s, 0.0) - paper.get(s, 0.0)) for s in simboli):.1f}% del conto")
+    return out + [riga, ""]
 
 
 def _numero(x) -> bool:
