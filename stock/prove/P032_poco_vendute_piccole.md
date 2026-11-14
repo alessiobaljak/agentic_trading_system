@@ -72,3 +72,12 @@ Da leggere accanto (non sono prove): quanti titoli ammessi ogni mese; il quinto 
 giorni, e il quinto basso meno l'IWM, mese dopo, senza costi, con il loro t; la correlazione con lo SPY; i titoli chiusi perché spariti
 dal listino; il risultato anno per anno. **Se passa uno dei due esami:** revisore separato, poi il periodo chiuso (la famiglia «vendite
 allo scoperto» non l'ha mai usato), poi la misura in avanti sul demo.
+
+## Aggiunta sui dati del 14 novembre 2026, prima di qualsiasi calcolo (nessun rendimento visto)
+
+Guardando solo la distribuzione del dato di FINRA (2018-2024, simboli di 1-4 lettere): il campo `daysToCoverQuantity` **non scende mai
+sotto 1** (quando le azioni vendute allo scoperto sono meno del volume medio di un giorno FINRA scrive 1: succede sempre, sul 100% di
+quei casi); già il 20% più basso sarebbe tutto a pari valore e la scelta diventerebbe alfabetica. Sopra 1 il campo coincide con il
+rapporto (differenza entro 0,01 nel 99,8% dei casi). Quindi i giorni per ricomprare si calcolano come **azioni vendute allo scoperto
+(`currentShortPositionQuantity`) diviso volume medio giornaliero (`averageDailyVolumeQuantity`)**, la stessa definizione senza il
+pavimento a 1 (mediana 1,59; il 20% più basso sotto 0,19). Nient'altro cambia.
