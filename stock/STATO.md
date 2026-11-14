@@ -205,6 +205,16 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   effetto di calendario sulle singole azioni con un ricambio settimanale deve valere più di circa lo 0,24% a settimana sulla parte
   investita solo per pagare i costi (28'541 dollari in 242 settimane dentro, su 50'000 investiti); la data prevista dall'anno prima è
   giusta nel 68% dei casi. Nel conto: 77.
+* **La prova 31** (la redditività lorda, dai conti della SEC: comprate le aziende dell'S&P 500 più redditizie sui beni, vendute le
+  meno, una volta l'anno; idea I33): **bocciata.** Da sola +3,0% con i costi in 8 anni e mezzo (Sharpe 0,09 contro 0,87 dello SPY);
+  il passaggio al pelo per la miscela (1,09 contro 1,08) **non ha retto al revisore separato** (`prove/REVISIONE_P031.md`, FAIL).
+  Capito, sui dati: (1) le «cornici» della SEC danno i bilanci **rifatti dopo**, non quelli di allora: per i conti serve la versione
+  depositata prima della decisione (i `companyfacts` con la data di deposito); (2) `stock/universo/codici_sec.csv` dà un solo codice
+  per simbolo su tutti gli anni: un simbolo passato a un'altra azienda prende i conti sbagliati; (3) le voci di ripiego accoppiate
+  alla lettera danno valori assurdi (C.H. Robinson 3,2-4,0); (4) il programma prendeva l'ultimo esercizio con un valore anche se
+  vecchio di anni (AT&T con il 2014 fino al 2024). Capito, sul metodo: il criterio per entrare nella miscela lasciava passare il caso;
+  dalla prova 32 chiede anche il t della parte da 1,3 e la miscela nuova più alta nell'80% dei campionamenti (idea I30). Periodo
+  chiuso della famiglia «conti delle aziende» non aperto. Nel conto: 79.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
