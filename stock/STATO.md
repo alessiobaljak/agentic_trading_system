@@ -224,7 +224,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   prima che tolga le società vuote. Nel conto: 81.
 * **La prova 33** (il momento dei settori: comprati i 3 fondi di settore saliti di più in un anno, venduti i 3 saliti di meno; idea
   I35): **bocciata.** Dal 2016 al 2024 i comprati fanno meglio dei venduti di +0,03% al mese (t 0,07): l'effetto degli studi sui
-  settori qui non c'è; con i costi −7,2% in 9 anni (`prove/P033_risultati.md`). Capito: in 4 giorni sono cadute sei idee pubblicate
+  settori qui non c'è; con i costi −7,2% in 9 anni (`prove/P033_risultati.md`). Capito: in tre giorni (12-14 novembre) sono cadute sei idee pubblicate
   (prove 28-33) su notizie, comunicati, conti, vendite allo scoperto e settori; nelle azioni americane dal 2016 gli effetti noti, dopo
   i costi, non ci sono più o sono troppo piccoli per vedersi. Nel conto: 83.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
