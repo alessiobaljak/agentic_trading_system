@@ -462,3 +462,7 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    12:17): le posizioni affollate che G1 sfrutta si sciolgono a cascata nei giorni di panico, e le opzioni sul Bitcoin (DVOL di
    Deribit, gratuito dal 23 marzo 2021) vedono la tensione prima del prezzo. Probabilità medio-bassa (la volatilità passata su F5,
    prova 42, non ha retto), ma è un dato nuovo e un freno utile al capitale piccolo se non costa Sharpe.
+142. **La deriva del Bitcoin prima delle riunioni della Banca centrale americana** (Lucca e Moench, JF 2015, sulle azioni; strategy-scout,
+   14 novembre): **non si fa**: circa 8 riunioni l'anno su una moneta sola, circa 40 casi dal 2022, un t di 3 è fuori portata; lo
+   studio è sulle azioni e la deriva dopo l'inflazione americana non ha retto (prova 98). La scadenza mensile delle opzioni: scartata
+   (una moneta, indicatore, perché economico debole).

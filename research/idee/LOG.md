@@ -66,3 +66,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   quotazione a pronti la 43; un'entrata prima del lancio del perpetuo è impossibile (non si scambia fino al debutto) e dopo il debutto è N1-N3.
   Nessuna categoria libera. Non scritta: l'annuncio del perpetuo nuovo come evento a sé (parente di N1-N3, e ora Binance ne quota 2-3 al mese:
   pochi casi nuovi, t da 3 fuori portata). Nessuna riga di registro da preparare.
+
+- 14 novembre 2026 (ottavo giro, 08:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Controllato: (1) idee del proprietario mai
+  provate: `docs/decisioni_del_proprietario.md` e `docs/backlog.md` non ne contengono di aperte (le strategie 27-28 sulle opzioni sono la prova VO, voce 110);
+  (2) calendario macro: il dato dell'inflazione è già la voce 98 (G23); la riunione della Banca centrale americana (deriva prima della decisione, Lucca e
+  Moench, JF 2015) non è in registro (`--cerca FOMC` = 0), ma sono circa 8 eventi l'anno, un solo asset (Bitcoin): circa 40 casi dal 2022, t da 3 fuori
+  portata, e lo studio vale per le azioni; resta idea, non scritta; (3) scadenza mensile delle opzioni (blocco dei prezzi): un asset, indicatore, perché debole;
+  (4) studi di agosto-novembre 2026 su perpetui: nessuno nuovo trovato oltre al quarto d'ora (Kim e Hansen, già nel giro del 13 novembre). Nessuna riga di registro.
