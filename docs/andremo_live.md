@@ -715,3 +715,8 @@ resti sotto il minimo.
 il paper ai prezzi della lettura (prezzi pubblici di Binance) la sua esposizione è il 186,8%, non il 200%; il demo (179,3%) ne tiene circa
 il 4% in meno, metà per le monete che non ha. **Capito oggi**: la differenza di esposizione non spiega il ritardo del demo; restano da
 spiegare il funding incassato in meno e il giorno del 13 novembre, con le letture moneta per moneta dei prossimi giorni.
+**14 novembre, sera, la domanda del proprietario su G1 e il mercato** (`research/programma7/misure_g1/g1_e_il_mercato.py`): sul passato
+(2021-2026) G1 guadagna quasi tutto nei giorni in cui il mercato scende (+0,41% al giorno in media, somma +402 punti) e perde un poco in
+quelli in cui sale (−0,08%, somma −90), ogni anno; il funding entra uguale in tutti e due. **Capito oggi**: G1 è una protezione nei giorni
+di ribasso più che una scommessa al ribasso; il suo rischio è un mercato che sale a lungo con le monete affollate che salgono di più
+(il lato venduto della voce 12).

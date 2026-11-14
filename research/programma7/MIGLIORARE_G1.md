@@ -320,3 +320,12 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   minimo sparsi su molte monete (nessuna oltre 0,41). La somma delle differenze per moneta scende da 21,7% a 10,8% del conto. **Correzione
   della lettura delle 16:41**: il demo non tiene un decimo in meno ma circa il 4% in meno, metà per le monete mancanti; questo non
   basta a spiegare il 20% di funding in meno né il giorno del 13 novembre.
+* **14 novembre 2026, sera, G1 e il mercato** (domanda del proprietario: «i giorni in cui andiamo meglio sono quelli in cui il mercato
+  scende, coincidenza?»; `misure_g1/g1_e_il_mercato.py`, giorni della prova 120, 4 gennaio 2021 - 4 ottobre 2026, mercato = indice a
+  pesi uguali delle 100 monete dell'universo): **non è una coincidenza**. Nei 975 giorni con il mercato giù G1 fa in media +0,41% al
+  giorno, nei 1.125 con il mercato su −0,08%; nel 20% dei giorni peggiori del mercato +0,65%, nel 20% migliore −0,18%. Somma non
+  composta: +402 punti nei giorni giù, −90 nei giorni su. Il funding si incassa uguale in tutti e due (+0,077% al giorno); la differenza
+  è tutta nel prezzo (+0,35% contro −0,14%). Ogni anno ha lo stesso segno (il 2021 è l'unico anno positivo anche nei giorni su). Il beta
+  sul mercato è piccolo (−0,06, correlazione −0,19): non è una scommessa sul ribasso ma una risposta asimmetrica, perché G1 vende le
+  monete dove i compratori a leva pagano di più, e nei giorni di ribasso sono quelle che cadono di più. In avanti (9-14 novembre) i
+  giorni con il Bitcoin giù di oltre il 3% sono stati +0,37%, +2,84% e +0,34% (14 in corso) nel paper; 6 giorni non bastano.
