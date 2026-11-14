@@ -467,3 +467,7 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    14 novembre): **non si fa**: circa 8 riunioni l'anno su una moneta sola, circa 40 casi dal 2022, un t di 3 è fuori portata; lo
    studio è sulle azioni e la deriva dopo l'inflazione americana non ha retto (prova 98). La scadenza mensile delle opzioni: scartata
    (una moneta, indicatore, perché economico debole).
+143. **I conti grandi di Hyperliquid prima di una fiammata** (strategy-scout, 14 novembre, dai dati raccolti in avanti): se le balene
+   si posizionano su una moneta prima che salga di colpo, le loro posizioni lette moneta per moneta sarebbero un segnale. **Non ancora**:
+   12 giorni di posizioni e una decina di fiammate, niente di serio da scrivere; si riguarda quando le posizioni raccolte superano i 3
+   mesi (circa febbraio 2027). Copiare i conti e il loro contrario sono già le idee 132 e 135, in avanti.

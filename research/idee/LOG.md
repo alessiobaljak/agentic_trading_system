@@ -73,3 +73,12 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   Moench, JF 2015) non è in registro (`--cerca FOMC` = 0), ma sono circa 8 eventi l'anno, un solo asset (Bitcoin): circa 40 casi dal 2022, t da 3 fuori
   portata, e lo studio vale per le azioni; resta idea, non scritta; (3) scadenza mensile delle opzioni (blocco dei prezzi): un asset, indicatore, perché debole;
   (4) studi di agosto-novembre 2026 su perpetui: nessuno nuovo trovato oltre al quarto d'ora (Kim e Hansen, già nel giro del 13 novembre). Nessuna riga di registro.
+
+- 14 novembre 2026 (nono giro, 12:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Angolo: i fatti visti in avanti nei dati
+  raccolti da noi. Controllato: (1) notizie (`research/notizie/archivio`, 15 giorni dal 30 ottobre) e monete di tendenza (15 giorni): già coperte dalle prove
+  138 e 145 e dall'idea 126 (verdetto in avanti non prima del 30 aprile 2027); un tipo di notizia seguito da un movimento è un indicatore su testo con pochi
+  giorni e pochi casi, t da 3 fuori portata; (2) conti di Hyperliquid (`HYPERLIQUID_CONTO.md`, 12 giorni, 3 gruppi): copiare e il contrario sono le idee 132 e
+  135 (in avanti); «le balene prima di una fiammata» sarebbe la stessa misura letta per moneta, con soli 12 giorni di posizioni (4 ore) e una decina di
+  fiammate: nessuna regola seria si può scrivere né provare ora (`--cerca balene` e `--cerca liquidazion` = 0, ma il dato è troppo corto); si riguarda
+  quando le posizioni raccolte superano i 3 mesi (circa febbraio 2027); (3) HLI, DXI e candidate a tavolino: già in registro (135, 137, 140), nessun
+  fatto ripetuto nuovo oltre ai numeri in avanti già seguiti. Nessuna riga di registro.
