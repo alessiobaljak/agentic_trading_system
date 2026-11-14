@@ -95,3 +95,28 @@ Rapporto in `research/programma7/RISULTATI_NOVANTAQUATTRESIMA.md`, serie giornal
 
 ## 10. Testo della riga del registro
 | 156 | G1 che esce dal lato venduto per N ribilanci (A: 3, B: 7) dopo una fiammata di oltre +20% in un giorno (peso in contanti, lato comprato invariato), dal 4 gen 2021, esame con paletto «4 anni su 5 del 2021-2025 meglio di G1»; voce 12 del piano di G1, short squeeze e momento di breve periodo (Brunnermeier-Pedersen RFS 2009, Liu-Tsyvinski-Wu JF 2022) (`programma7/NOVANTAQUATTRESIMA.md`) | 2 | da fare | da fare |
+
+## Regole corrette il 14 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher (`VERIFICA_NOVANTAQUATTRESIMA.md`) ha trovato ambiguità; nessuna variante è stata calcolata (sono
+stati solo contati i giorni-moneta oltre il 20% per le due letture del punto 1). Le letture che valgono:
+1. **La fiammata** è il rendimento tenuto di G1: `sc.rendimenti` (dall'apertura delle 00:00 UTC del giorno F all'apertura del giorno
+   dopo), **strettamente maggiore di 0,20**. Il testo «da chiusura a chiusura» sopra è sostituito da questo: è la lettura della misura
+   di partenza (`misure_g1/voce12_venduto_2026.py`) ed è nota all'apertura del giorno F + 1, quando si decide.
+2. **Conta per ogni moneta**, venduta o no il giorno F; si toglie solo il peso **negativo** di G1 (una moneta comprata non si tocca).
+3. **N giorni di calendario**: dopo una fiammata nel giorno F la moneta non può essere venduta nei giorni F + 1 … F + N. Una fiammata
+   nuova nel giorno F' mentre è fuori sposta la fine a max(fine in corso, F' + N).
+4. **Il peso in contanti**: la banda di G1 resta com'è; dopo la banda si mette a zero il peso negativo delle monete escluse, senza
+   ridistribuirlo; i conti con `te.conto` e `cs.spese_a_limite` sulla matrice nuova; il funding della parte tolta è zero. «Lato comprato
+   identico» vale per prezzo e funding; le spese possono differire di poco.
+5. **Parità con N = 0**: come nella prova 155 (lordo, funding, giro e monete uguali a `risultati_prima/giorni_G1.csv.gz` fino al 29
+   settembre 2026 entro 1e-12; le spese differiscono per le candele a 1 ora, causa verificata il 13 novembre); G1 di confronto è
+   quello ricalcolato oggi con N = 0.
+6. **L'esame**: ogni anno positivo e il paletto «4 anni su 5 fra il 2021 e il 2025 meglio di G1» sulla **somma** dei rendimenti netti
+   giornalieri dell'anno; t della differenza semplice sui giorni (media / (deviazione / √n)), almeno 2 con media positiva; **in più lo
+   Sharpe della variante sopra quello di G1 sullo stesso periodo** (come nella prova 155); Sharpe corretto con `corretto_famiglie` e il
+   mazzo completo, serie «156 A» e «156 B»; conto del registro da 318 a 320.
+7. **Le fonti**: Brunnermeier e Pedersen 2009 restano (spirali di margine). Diamond e Verrecchia 1987 parlano del divieto di vendere
+   allo scoperto che rallenta l'arrivo delle cattive notizie, non della continuazione dopo un balzo: non sostengono la regola. Liu,
+   Tsyvinski e Wu 2022 trovano un momento a 1-4 settimane, non a un giorno; Jegadeesh 1990 è un'inversione a un mese nelle azioni.
+   Quindi **la ragione per una continuazione a pochi giorni è debole**: si scrive, non si cambia la regola.
+8. Il controllo sul caso di JCTUSDT e TRXUSDT (8.4) si fa solo sulla fiammata, con il pannello, senza pesi di G1 dopo il 4 ottobre.
