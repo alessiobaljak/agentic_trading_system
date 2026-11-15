@@ -82,3 +82,12 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   fiammate: nessuna regola seria si può scrivere né provare ora (`--cerca balene` e `--cerca liquidazion` = 0, ma il dato è troppo corto); si riguarda
   quando le posizioni raccolte superano i 3 mesi (circa febbraio 2027); (3) HLI, DXI e candidate a tavolino: già in registro (135, 137, 140), nessun
   fatto ripetuto nuovo oltre ai numeri in avanti già seguiti. Nessuna riga di registro.
+
+- 15 novembre 2026 (richiesta del proprietario «pensa fuori dagli schemi», rendimento regolare con soli prodotti di Binance): **una regola scritta**,
+  `programma7/NOVANTASETTESIMA.md` (prova 159, base dei future trimestrali di Bitcoin ed Ether come rendimento fisso, Schmeling, Schrimpf e Todorov, BIS 2023;
+  dati gratuiti su data.binance.vision: coin-margined dal 2020, USDT dal 2022; netto atteso 3-8% l'anno su capitale con riserva, probabilmente meno nel 2025-2026;
+  diversa dall'idea 139 che era un segnale). Non scritte: (1) Launchpool e HODLer Airdrop con il BNB coperto: negli annunci scaricati ci sono solo i titoli
+  (nessuna quantità, né il totale di BNB bloccato nel pool, da cui dipende la quota per BNB), quindi il rendimento in gettoni non si ricostruisce dal passato;
+  il prova BL (115) ha già misurato il BNB negli annunci; la parte del funding del BNB è la prova 157 su un'altra moneta; si segue in avanti raccogliendo i
+  gettoni ricevuti, non si prova; (2) altre strade guardate: prestito del USDT (Earn/margine): tasso non scaricabile storico gratis, sotto la base; spread tra
+  future trimestrale e perpetuo: stesso dato della 159 e in quella si legge come controllo. Riga del registro nel file.
