@@ -471,3 +471,10 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    si posizionano su una moneta prima che salga di colpo, le loro posizioni lette moneta per moneta sarebbero un segnale. **Non ancora**:
    12 giorni di posizioni e una decina di fiammate, niente di serio da scrivere; si riguarda quando le posizioni raccolte superano i 3
    mesi (circa febbraio 2027). Copiare i conti e il loro contrario sono già le idee 132 e 135, in avanti.
+144. **Il funding coperto solo su Bitcoin ed Ether, senza ricambio** (dalla domanda del proprietario del 15 novembre: «un algoritmo in
+   grado di farmi avere guadagni costanti, giornalieri»): comprare a pronti e vendere il perpetuo della stessa moneta per lo stesso
+   valore, tenere e incassare il funding; si esce solo quando il funding medio diventa negativo. È la fonte di guadagno più regolare
+   delle crypto (Christin, Routledge, Soska e Zetlin-Jones, «The crypto carry trade», 2022; Schmeling, Schrimpf e Todorov, BIS 2023), ma
+   la prova 97 (CC) l'ha bocciata perché il ricambio settimanale sulle monete di F5 costava quanto il funding (8-9% l'anno): qui il ricambio
+   è quasi zero e le monete sono le due più liquide. Da scrivere con le regole prima: l'atteso è un rendimento basso ma molto regolare
+   (la 97 aveva discesa −3,6% e volatilità 2,8%), con il rischio della borsa e del funding negativo negli anni di ribasso.
