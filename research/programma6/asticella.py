@@ -305,7 +305,8 @@ def serie_programma7() -> dict:
         d = pd.read_csv(f, index_col=0)
         out.update({f"152 {v}": d[v] for v in ("V1", "V2", "V3")})
     for n, cartella in ((154, "risultati_novantaduesima"), (155, "risultati_novantatreesima"),
-                        (156, "risultati_novantaquattresima"), (157, "risultati_novantacinquesima")):   # 154-157: A e B
+                        (156, "risultati_novantaquattresima"), (157, "risultati_novantacinquesima"),
+                        (158, "risultati_novantaseiesima")):                            # 154-158: A e B
         for v in ("A", "B"):                                                                     # non i controlli di ritardo)
             f = p7 / cartella / f"settimane_{v}.csv.gz"
             if f.exists():
@@ -335,7 +336,6 @@ FUORI_DAL_MAZZO = {
 DIFFERENZE_DAL_REGISTRO = {
     89: "il registro conta 2 (F5C e il controllo col fattore mescolato, VENTISETTESIMA.md); nel mazzo solo F5C: un controllo non e' "
         "una strategia provata",
-    158: "in calcolo il 15 novembre: entra quando salva le serie (il controllo delle cartelle se ne accorge)",
     159: "in calcolo il 15 novembre: entra quando salva le serie (il controllo delle cartelle se ne accorge)",
 }
 

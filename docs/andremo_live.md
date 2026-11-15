@@ -729,3 +729,9 @@ parte e dal 2025 rende meno (Sharpe corretto 0,70 contro 0,75).
 il 14 novembre demo +2,26% contro paper +3,51%; con i pesi moneta per moneta si spiegano 0,96 dei 1,25 punti: 0,59 da una sola moneta
 che il paper vende e il demo non ha (龙虾USDT, −18,5% quel giorno; sul conto vero esiste), il resto da posizioni vendute un po' più piccole
 sul demo. **Capito oggi**: il ritardo del demo nei giorni forti viene soprattutto da monete che il demo non ha; il conto vero le avrebbe.
+**15 novembre, le prove chieste dal proprietario** (prova 157 funding coperto, prova 158 G1 con più leva, prova 159 base dei trimestrali):
+la **157 passa l'esame scritto** (Bitcoin ed Ether comprati a pronti e venduti sul perpetuo: +10,5% l'anno sul capitale, discesa −0,4%,
+62 mesi positivi su 70, Sharpe corretto 1,00; ma dopo il 2021 rende 1-14% l'anno) ed è da backtest-auditor, che attacca il margine del
+perpetuo nei rialzi lunghi. La **158 non passa**: con la leva al 300-400% lo Sharpe resta quello di G1 (corretto 0,74-0,76), la discesa
+arriva a −42/−47% e lo stop scatta 1-2 volte. **Capito oggi**: la fonte di guadagno più regolare che abbiamo trovato è il funding
+coperto; rende poco ma quasi senza discese, e si muove quasi indipendente da G1 (correlazione 0,15).

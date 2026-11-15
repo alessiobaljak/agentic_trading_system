@@ -358,3 +358,9 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   partenza: discesa −30,1% e giorno peggiore −8,5% (prova 120), limiti del conto vero (`docs/conto_vero.md`, punto 4b). Alzare sopra il
   200% cambia i limiti fissi: lo decide solo il proprietario. Da committare e far verificare prima del calcolo; nessuna strategia
   spenta o sostituita.
+* **15 novembre 2026, la prova 158: G1 con la leva più alta** (richiesta del proprietario; `RISULTATI_NOVANTASEIESIMA.md`): esposizione
+  300% (A) e 400% (B) con lo stop del conto vero e l'equity composta. Sharpe quasi uguale a G1 (1,96 e 1,98 contro 1,97), discesa a
+  fine giorno −42,1% e −46,8% (G1 −30,1%), dentro la giornata nel caso peggiore dell'ora −71% e −91%; lo stop scatta 1 e 2 volte;
+  nessuna liquidazione con il margine unico; peso per moneta oltre il 60% in 5 e 21 giorni. Sharpe corretto 0,741 e 0,762 (G1 0,747):
+  **non passa**, come G1 stessa con il mazzo completo. La leva non migliora la strategia: moltiplica guadagni e discese, e sopra il
+  200% cambia i limiti fissi del conto vero (decisione solo del proprietario).

@@ -1,0 +1,1750 @@
+{
+ "commit": "049a4ae",
+ "parita": {
+  "righe": [
+   2100,
+   2100
+  ],
+  "stessi_giorni": true,
+  "differenza_massima_fino_29_settembre": {
+   "lordo": 1.0191500421363742e-16,
+   "spese": 0.005276280376702729,
+   "funding": 9.990923019453923e-17,
+   "netto": 0.005276280376702632,
+   "giro": 4.440892098500626e-16,
+   "monete": 0.0
+  },
+  "giorni_con_differenza_dopo_29_settembre": 5,
+  "coincide": true,
+  "spese_giorni_diversi_per_anno": {
+   "2021": 337,
+   "2022": 365,
+   "2023": 243,
+   "2024": 0,
+   "2025": 0,
+   "2026": 8
+  },
+  "somma_spese_oggi_e_riferimento": [
+   0.3664662265911134,
+   0.37735426665791727
+  ],
+  "ordini_G1_oggi_[variazioni,limite,senza_candele]": [
+   117037,
+   114550,
+   137
+  ],
+  "ordini_per_m": {
+   "G1": [
+    117037,
+    114550,
+    137
+   ],
+   "A": [
+    117037,
+    114535,
+    137
+   ],
+   "B": [
+    117037,
+    114535,
+    137
+   ]
+  },
+  "coerenza": {
+   "A": {
+    "lordo_meno_m_lordo1": 5.551115123125783e-17,
+    "funding_meno_m_funding1": 3.469446951953614e-18,
+    "spese_rapporto_a_G1": 1.5128442516881038,
+    "stesse_variazioni_col_limite": false
+   },
+   "B": {
+    "lordo_meno_m_lordo1": 0.0,
+    "funding_meno_m_funding1": 0.0,
+    "spese_rapporto_a_G1": 2.0372154353354857,
+    "stesse_variazioni_col_limite": false
+   }
+  },
+  "spese_2024_2025_coincidono": true
+ },
+ "risultati": {
+  "G1": {
+   "rendimento_composto": 17.58116776205604,
+   "annuo_composto": 0.662371385336346,
+   "per_anno_composto": {
+    "2021": 1.7793680876040079,
+    "2022": 0.33033714612339415,
+    "2023": 0.06370696591577762,
+    "2024": 0.9313873920441353,
+    "2025": 0.9215041969454523,
+    "2026": 0.2730119697674638
+   },
+   "settimanale_da_equity": {
+    "settimane": 300,
+    "annuo": 0.5465140460057085,
+    "volatilita": 0.2776913151334268,
+    "sharpe": 1.9680631558214778,
+    "discesa_max": -0.28805392190151224,
+    "asimmetria": 0.6133856953421415,
+    "curtosi": 4.1372459811976015,
+    "t": 4.727134795702601
+   },
+   "settimanale_sommato": {
+    "settimane": 300,
+    "annuo": 0.5439995802824031,
+    "volatilita": 0.2745366321697873,
+    "sharpe": 1.9815190999573649,
+    "discesa_max": -0.2875051932210557,
+    "asimmetria": 0.5445946301263549,
+    "curtosi": 4.043929045552481,
+    "t": 4.759454928085361
+   },
+   "discesa_fine_giorno": -0.30135042138562673,
+   "giorno_peggiore": -0.08504115876200913,
+   "giorno_peggiore_data": "2021-01-30",
+   "discesa_dentro_giorno_chiusure": -0.3057972648687626,
+   "discesa_dentro_giorno_caso_peggiore": -0.49367560902864505,
+   "spese_annue_punti": 0.06369532033607447,
+   "funding_annuo_punti": -0.28056607840150055,
+   "stop_scatti": 0,
+   "stop_eventi": [],
+   "giorni_fuori": 0,
+   "liquidazioni_1pc": 0,
+   "liquidazioni_2_5pc": 0,
+   "liquidazioni_1pc_elenco": [],
+   "equity_finale": 18.58116776205604,
+   "senza_stop": {
+    "rendimento_composto": 17.58116776205604,
+    "annuo_composto": 0.662371385336346,
+    "per_anno_composto": {
+     "2021": 1.7793680876040079,
+     "2022": 0.33033714612339415,
+     "2023": 0.06370696591577762,
+     "2024": 0.9313873920441353,
+     "2025": 0.9215041969454523,
+     "2026": 0.2730119697674638
+    },
+    "settimanale_da_equity": {
+     "settimane": 300,
+     "annuo": 0.5465140460057085,
+     "volatilita": 0.2776913151334268,
+     "sharpe": 1.9680631558214778,
+     "discesa_max": -0.28805392190151224,
+     "asimmetria": 0.6133856953421415,
+     "curtosi": 4.1372459811976015,
+     "t": 4.727134795702601
+    },
+    "settimanale_sommato": {
+     "settimane": 300,
+     "annuo": 0.5439995802824031,
+     "volatilita": 0.2745366321697873,
+     "sharpe": 1.9815190999573649,
+     "discesa_max": -0.2875051932210557,
+     "asimmetria": 0.5445946301263549,
+     "curtosi": 4.043929045552481,
+     "t": 4.759454928085361
+    },
+    "discesa_fine_giorno": -0.30135042138562673,
+    "giorno_peggiore": -0.08504115876200913,
+    "giorno_peggiore_data": "2021-01-30",
+    "discesa_dentro_giorno_chiusure": -0.3057972648687626,
+    "discesa_dentro_giorno_caso_peggiore": -0.49367560902864505,
+    "spese_annue_punti": 0.06369532033607447,
+    "funding_annuo_punti": -0.28056607840150055,
+    "stop_scatti": 0,
+    "stop_eventi": [],
+    "giorni_fuori": 0,
+    "liquidazioni_1pc": 0,
+    "liquidazioni_2_5pc": 0,
+    "liquidazioni_1pc_elenco": [],
+    "equity_finale": 18.58116776205604
+   },
+   "sensibilita": {
+    "1": {
+     "rendimento_composto": 17.58116776205604,
+     "per_anno_composto": {
+      "2021": 1.7793680876040079,
+      "2022": 0.33033714612339415,
+      "2023": 0.06370696591577762,
+      "2024": 0.9313873920441353,
+      "2025": 0.9215041969454523,
+      "2026": 0.2730119697674638
+     },
+     "discesa_fine_giorno": -0.30135042138562673,
+     "stop_scatti": 0,
+     "giorni_fuori": 0
+    },
+    "28": {
+     "rendimento_composto": 17.58116776205604,
+     "per_anno_composto": {
+      "2021": 1.7793680876040079,
+      "2022": 0.33033714612339415,
+      "2023": 0.06370696591577762,
+      "2024": 0.9313873920441353,
+      "2025": 0.9215041969454523,
+      "2026": 0.2730119697674638
+     },
+     "discesa_fine_giorno": -0.30135042138562673,
+     "stop_scatti": 0,
+     "giorni_fuori": 0
+    },
+    "mai": {
+     "rendimento_composto": 17.58116776205604,
+     "per_anno_composto": {
+      "2021": 1.7793680876040079,
+      "2022": 0.33033714612339415,
+      "2023": 0.06370696591577762,
+      "2024": 0.9313873920441353,
+      "2025": 0.9215041969454523,
+      "2026": 0.2730119697674638
+     },
+     "discesa_fine_giorno": -0.30135042138562673,
+     "stop_scatti": 0,
+     "giorni_fuori": 0
+    }
+   },
+   "rendimento_perso_giorni_fuori_senza_stop": 0.0,
+   "ordini": [
+    117037,
+    114550,
+    137
+   ],
+   "esame_1": {
+    "netto_positivo": true,
+    "ogni_anno_positivo": true,
+    "t_almeno_3": true,
+    "sharpe_corretto_almeno_0.80": false
+   },
+   "criteri_conto_vero": {
+    "nessuna_liquidazione_con_stop": true,
+    "stop_al_massimo_2": true
+   },
+   "sharpe_corretto": {
+    "corretto": 0.7470360029023898,
+    "t": 4.727134795702601,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 G1"
+    ]
+   },
+   "rende_piu_di_G1_con_stop": false
+  },
+  "A": {
+   "rendimento_composto": 66.9912150073712,
+   "annuo_composto": 1.0831277200292546,
+   "per_anno_composto": {
+    "2021": 3.3621368751666436,
+    "2022": 0.502554435144259,
+    "2023": 0.07908660625245623,
+    "2024": 1.6105913512637655,
+    "2025": 1.6166177469241885,
+    "2026": 0.4073036661385958
+   },
+   "settimanale_da_equity": {
+    "settimane": 300,
+    "annuo": 0.821014203880758,
+    "volatilita": 0.4189897970352449,
+    "sharpe": 1.959508822625805,
+    "discesa_max": -0.4048848588297691,
+    "asimmetria": 0.6469916389401748,
+    "curtosi": 4.189831177878116,
+    "t": 4.706587951977752
+   },
+   "settimanale_sommato": {
+    "settimane": 300,
+    "annuo": 0.8152259980377321,
+    "volatilita": 0.411854869538548,
+    "sharpe": 1.9794011394138198,
+    "discesa_max": -0.4044533844006061,
+    "asimmetria": 0.5446009049842957,
+    "curtosi": 4.044759309098067,
+    "t": 4.754367751410313
+   },
+   "discesa_fine_giorno": -0.42143633349938237,
+   "giorno_peggiore": -0.12756915218220133,
+   "giorno_peggiore_data": "2021-01-30",
+   "discesa_dentro_giorno_chiusure": -0.42696053164949077,
+   "discesa_dentro_giorno_caso_peggiore": -0.7095811351000468,
+   "spese_annue_punti": 0.09667535630392196,
+   "funding_annuo_punti": -0.4206943459301662,
+   "stop_scatti": 1,
+   "stop_eventi": [
+    {
+     "giorno": "2024-01-16",
+     "ora": 3,
+     "valore_ora_su_capitale_00": 0.9834741526374284,
+     "valore_conto_dopo": 6.065139957603209,
+     "livello": 6.0848704673029745,
+     "sotto_il_livello_di": 0.006878215390194953,
+     "riparte": "2024-01-19",
+     "giorni_fuori": 2
+    }
+   ],
+   "giorni_fuori": 2,
+   "liquidazioni_1pc": 0,
+   "liquidazioni_2_5pc": 0,
+   "liquidazioni_1pc_elenco": [],
+   "equity_finale": 67.9912150073712,
+   "senza_stop": {
+    "rendimento_composto": 66.92601333033936,
+    "annuo_composto": 1.0827801319464863,
+    "per_anno_composto": {
+     "2021": 3.3621368751666436,
+     "2022": 0.502554435144259,
+     "2023": 0.07908660625245623,
+     "2024": 1.6080878670396892,
+     "2025": 1.616617746924188,
+     "2026": 0.4073036661385929
+    },
+    "settimanale_da_equity": {
+     "settimane": 300,
+     "annuo": 0.8208426403762482,
+     "volatilita": 0.41898328360538395,
+     "sharpe": 1.9591298089814777,
+     "discesa_max": -0.4054555576358889,
+     "asimmetria": 0.6471804964589368,
+     "curtosi": 4.190237839043263,
+     "t": 4.7056775906507555
+    },
+    "settimanale_sommato": {
+     "settimane": 300,
+     "annuo": 0.8151834931190209,
+     "volatilita": 0.41185310452230767,
+     "sharpe": 1.9793064181573192,
+     "discesa_max": -0.404594780612318,
+     "asimmetria": 0.5446472677800083,
+     "curtosi": 4.044859206149411,
+     "t": 4.754140238311369
+    },
+    "discesa_fine_giorno": -0.42199115990337355,
+    "giorno_peggiore": -0.12756915218220133,
+    "giorno_peggiore_data": "2021-01-30",
+    "discesa_dentro_giorno_chiusure": -0.42751006050167917,
+    "discesa_dentro_giorno_caso_peggiore": -0.7095811351000468,
+    "spese_annue_punti": 0.09636109922986262,
+    "funding_annuo_punti": -0.42084911760225097,
+    "stop_scatti": 0,
+    "stop_eventi": [],
+    "giorni_fuori": 0,
+    "liquidazioni_1pc": 0,
+    "liquidazioni_2_5pc": 0,
+    "liquidazioni_1pc_elenco": [],
+    "equity_finale": 67.92601333033936
+   },
+   "sensibilita": {
+    "1": {
+     "rendimento_composto": 66.60630757057518,
+     "per_anno_composto": {
+      "2021": 3.3621368751666436,
+      "2022": 0.502554435144259,
+      "2023": 0.07908660625245623,
+      "2024": 1.5958124415851036,
+      "2025": 1.6166177469241885,
+      "2026": 0.40730366613859403
+     },
+     "discesa_fine_giorno": -0.42471166043495556,
+     "stop_scatti": 1,
+     "giorni_fuori": 0
+    },
+    "28": {
+     "rendimento_composto": 58.97445269018729,
+     "per_anno_composto": {
+      "2021": 3.3621368751666436,
+      "2022": 0.502554435144259,
+      "2023": 0.07908660625245623,
+      "2024": 1.3027796675321475,
+      "2025": 1.616617746924188,
+      "2026": 0.4073036661385947
+     },
+     "discesa_fine_giorno": -0.4896540789712206,
+     "stop_scatti": 1,
+     "giorni_fuori": 27
+    },
+    "mai": {
+     "rendimento_composto": 5.065139957603209,
+     "per_anno_composto": {
+      "2021": 3.3621368751666436,
+      "2022": 0.502554435144259,
+      "2023": 0.07908660625245623,
+      "2024": -0.14245874705568073,
+      "2025": 0.0,
+      "2026": 0.0
+     },
+     "discesa_fine_giorno": -0.35210765888505957,
+     "stop_scatti": 1,
+     "giorni_fuori": 992
+    }
+   },
+   "rendimento_perso_giorni_fuori_senza_stop": -0.004185433565822724,
+   "ordini": [
+    117037,
+    114535,
+    137
+   ],
+   "esame_1": {
+    "netto_positivo": true,
+    "ogni_anno_positivo": true,
+    "t_almeno_3": true,
+    "sharpe_corretto_almeno_0.80": false
+   },
+   "criteri_conto_vero": {
+    "nessuna_liquidazione_con_stop": true,
+    "stop_al_massimo_2": true
+   },
+   "sharpe_corretto": {
+    "corretto": 0.7407566790588677,
+    "t": 4.706587951977752,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B"
+    ]
+   },
+   "rende_piu_di_G1_con_stop": true
+  },
+  "B": {
+   "rendimento_composto": 244.4328013816765,
+   "annuo_composto": 1.6042193632572093,
+   "per_anno_composto": {
+    "2021": 5.5799303899580215,
+    "2022": 0.6738953757066892,
+    "2023": 0.08248825911522828,
+    "2024": 2.8670201620838185,
+    "2025": 2.521604466188063,
+    "2026": 0.5116205545233921
+   },
+   "settimanale_da_equity": {
+    "settimane": 300,
+    "annuo": 1.112038079111551,
+    "volatilita": 0.5602448976642903,
+    "sharpe": 1.9849142468726344,
+    "discesa_max": -0.44813827414962004,
+    "asimmetria": 0.6811449715648742,
+    "curtosi": 4.281467960216087,
+    "t": 4.767609807196949
+   },
+   "settimanale_sommato": {
+    "settimane": 300,
+    "annuo": 1.101872884919584,
+    "volatilita": 0.5475288618480856,
+    "sharpe": 2.012447126897401,
+    "discesa_max": -0.4447776450354125,
+    "asimmetria": 0.5438275334568391,
+    "curtosi": 4.081771104897022,
+    "t": 4.833741645906491
+   },
+   "discesa_fine_giorno": -0.4684561165211919,
+   "giorno_peggiore": -0.17010335972259893,
+   "giorno_peggiore_data": "2021-01-30",
+   "discesa_dentro_giorno_chiusure": -0.4752246327500612,
+   "discesa_dentro_giorno_caso_peggiore": -0.9081736072584837,
+   "spese_annue_punti": 0.13151490105250382,
+   "funding_annuo_punti": -0.5567600618192013,
+   "stop_scatti": 2,
+   "stop_eventi": [
+    {
+     "giorno": "2024-01-06",
+     "ora": 14,
+     "valore_ora_su_capitale_00": 0.9825987923398745,
+     "valore_conto_dopo": 11.222204448004241,
+     "livello": 11.295707256732532,
+     "sotto_il_livello_di": 0.047471986739333616,
+     "riparte": "2024-01-12",
+     "giorni_fuori": 5
+    },
+    {
+     "giorno": "2026-08-06",
+     "ora": 17,
+     "valore_ora_su_capitale_00": 0.9222653809115859,
+     "valore_conto_dopo": 159.74686069049608,
+     "livello": 159.98201239907442,
+     "sotto_il_livello_di": 0.06360561956248034,
+     "riparte": "2026-08-14",
+     "giorni_fuori": 7
+    }
+   ],
+   "giorni_fuori": 12,
+   "liquidazioni_1pc": 0,
+   "liquidazioni_2_5pc": 0,
+   "liquidazioni_1pc_elenco": [],
+   "equity_finale": 245.4328013816765,
+   "senza_stop": {
+    "rendimento_composto": 221.5589872438148,
+    "annuo_composto": 1.560281859404232,
+    "per_anno_composto": {
+     "2021": 5.5799303899580215,
+     "2022": 0.6738953757066892,
+     "2023": 0.08248825911522828,
+     "2024": 2.4546867836691257,
+     "2025": 2.5216044661880597,
+     "2026": 0.5343451980806369
+    },
+    "settimanale_da_equity": {
+     "settimane": 300,
+     "annuo": 1.0956977332584568,
+     "volatilita": 0.5619296460668429,
+     "sharpe": 1.9498841908905455,
+     "discesa_max": -0.5069822936530068,
+     "asimmetria": 0.6804992955464461,
+     "curtosi": 4.246612455910876,
+     "t": 4.683470334315437
+    },
+    "settimanale_sommato": {
+     "settimane": 300,
+     "annuo": 1.0856352058706944,
+     "volatilita": 0.5492030197690796,
+     "sharpe": 1.9767466069781725,
+     "discesa_max": -0.5059836665444828,
+     "asimmetria": 0.5445860567841435,
+     "curtosi": 4.045653849208591,
+     "t": 4.747991770738274
+    },
+    "discesa_fine_giorno": -0.5251336811740686,
+    "giorno_peggiore": -0.17010335972259893,
+    "giorno_peggiore_data": "2021-01-30",
+    "discesa_dentro_giorno_chiusure": -0.5311804827372455,
+    "discesa_dentro_giorno_caso_peggiore": -0.9081736072584837,
+    "spese_annue_punti": 0.12976108974728917,
+    "funding_annuo_punti": -0.5611321568030011,
+    "stop_scatti": 0,
+    "stop_eventi": [],
+    "giorni_fuori": 0,
+    "liquidazioni_1pc": 0,
+    "liquidazioni_2_5pc": 0,
+    "liquidazioni_1pc_elenco": [],
+    "equity_finale": 222.5589872438148
+   },
+   "sensibilita": {
+    "1": {
+     "rendimento_composto": 227.04771943545543,
+     "per_anno_composto": {
+      "2021": 5.5799303899580215,
+      "2022": 0.6738953757066892,
+      "2023": 0.08248825911522828,
+      "2024": 2.4751743352907027,
+      "2025": 2.521604466188058,
+      "2026": 0.5629164343214876
+     },
+     "discesa_fine_giorno": -0.522317550847497,
+     "stop_scatti": 2,
+     "giorni_fuori": 0
+    },
+    "28": {
+     "rendimento_composto": 226.70328100448316,
+     "per_anno_composto": {
+      "2021": 5.5799303899580215,
+      "2022": 0.6738953757066892,
+      "2023": 0.08248825911522828,
+      "2024": 2.5841335770410576,
+      "2025": 2.521604466188057,
+      "2026": 0.5131142526671713
+     },
+     "discesa_fine_giorno": -0.5073404842501308,
+     "stop_scatti": 2,
+     "giorni_fuori": 54
+    },
+    "mai": {
+     "rendimento_composto": 10.222204448004241,
+     "per_anno_composto": {
+      "2021": 5.5799303899580215,
+      "2022": 0.6738953757066892,
+      "2023": 0.08248825911522828,
+      "2024": -0.058749167940223335,
+      "2025": 0.0,
+      "2026": 0.0
+     },
+     "discesa_fine_giorno": -0.35422964446470695,
+     "stop_scatti": 1,
+     "giorni_fuori": 1002
+    }
+   },
+   "rendimento_perso_giorni_fuori_senza_stop": -0.07616164902839664,
+   "ordini": [
+    117037,
+    114535,
+    137
+   ],
+   "esame_1": {
+    "netto_positivo": true,
+    "ogni_anno_positivo": true,
+    "t_almeno_3": true,
+    "sharpe_corretto_almeno_0.80": false
+   },
+   "criteri_conto_vero": {
+    "nessuna_liquidazione_con_stop": true,
+    "stop_al_massimo_2": true
+   },
+   "sharpe_corretto": {
+    "corretto": 0.7623600059468525,
+    "t": 4.767609807196949,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B"
+    ]
+   },
+   "rende_piu_di_G1_con_stop": true
+  }
+ },
+ "sharpe_corretto_famiglie": {
+  "A_B": {
+   "serie": 273,
+   "senza_serie": 48,
+   "famiglie": 194,
+   "in_v": 147,
+   "deviazione_v": 0.6192853457068299,
+   "taglio": 0.5,
+   "158 A": {
+    "corretto": 0.7407566790588677,
+    "t": 4.706587951977752,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B"
+    ]
+   },
+   "158 B": {
+    "corretto": 0.7623600059468525,
+    "t": 4.767609807196949,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B"
+    ]
+   }
+  },
+  "taglio_0.3": {
+   "famiglie": 144,
+   "158 A": 0.7502740668307993,
+   "158 B": 0.7714798908475669
+  },
+  "taglio_0.7": {
+   "famiglie": 231,
+   "158 A": 0.6242533271910148,
+   "158 B": 0.649261703320241
+  },
+  "G1": {
+   "famiglie": 194,
+   "in_v": 147,
+   "158 G1": {
+    "corretto": 0.7470360029023898,
+    "t": 4.727134795702601,
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 G1"
+    ]
+   }
+  }
+ },
+ "descrittivi": {
+  "G1": {
+   "giorno_peggiore_senza_stop": -0.08504115876200927,
+   "10_peggiori": [
+    {
+     "giorno": "2021-01-30",
+     "netto": -0.08504115876200927,
+     "moneta": "XRPUSDT",
+     "contributo": -0.08998283301805378
+    },
+    {
+     "giorno": "2021-02-21",
+     "netto": -0.07973777358934556,
+     "moneta": "NEOUSDT",
+     "contributo": -0.03314511089852931
+    },
+    {
+     "giorno": "2021-02-11",
+     "netto": -0.06030985025996017,
+     "moneta": "IOTAUSDT",
+     "contributo": -0.03771048155842943
+    },
+    {
+     "giorno": "2021-02-18",
+     "netto": -0.05949684891523771,
+     "moneta": "SXPUSDT",
+     "contributo": -0.025285043097224413
+    },
+    {
+     "giorno": "2026-08-06",
+     "netto": -0.04807933570227649,
+     "moneta": "RIVERUSDT",
+     "contributo": -0.014784925534718425
+    },
+    {
+     "giorno": "2024-10-14",
+     "netto": -0.04246558430047851,
+     "moneta": "MEMEUSDT",
+     "contributo": -0.010126647266015778
+    },
+    {
+     "giorno": "2026-09-11",
+     "netto": -0.04122241917765943,
+     "moneta": "LABUSDT",
+     "contributo": -0.026630422728256158
+    },
+    {
+     "giorno": "2024-03-17",
+     "netto": -0.041024114988411374,
+     "moneta": "RNDRUSDT",
+     "contributo": -0.00805157701389997
+    },
+    {
+     "giorno": "2022-05-12",
+     "netto": -0.04070390002070239,
+     "moneta": "LUNAUSDT",
+     "contributo": -0.014903539095804915
+    },
+    {
+     "giorno": "2024-08-18",
+     "netto": -0.03914125017230637,
+     "moneta": "DARUSDT",
+     "contributo": -0.02520709599889829
+    }
+   ],
+   "quota_giorni_perdita_oltre_10pc": 0.0,
+   "peso_massimo_moneta": 0.43733790219596586,
+   "giorni_peso_moneta_oltre_60pc": 0,
+   "giorni_con_venduta_oltre_+30pc": 168,
+   "peso_lato_venduto_in_quei_giorni_medio": 1.0,
+   "correlazione_giornaliera_con_G1": 1.0
+  },
+  "A": {
+   "giorno_peggiore_senza_stop": -0.12756915218220136,
+   "10_peggiori": [
+    {
+     "giorno": "2021-01-30",
+     "netto": -0.12756915218220136,
+     "moneta": "XRPUSDT",
+     "contributo": -0.13497424952708068
+    },
+    {
+     "giorno": "2021-02-21",
+     "netto": -0.11960762685074675,
+     "moneta": "NEOUSDT",
+     "contributo": -0.04971766634779397
+    },
+    {
+     "giorno": "2021-02-11",
+     "netto": -0.09046380871766965,
+     "moneta": "IOTAUSDT",
+     "contributo": -0.056565722337644155
+    },
+    {
+     "giorno": "2021-02-18",
+     "netto": -0.08933640418256683,
+     "moneta": "SXPUSDT",
+     "contributo": -0.03792756464583662
+    },
+    {
+     "giorno": "2026-08-06",
+     "netto": -0.07212431157300432,
+     "moneta": "RIVERUSDT",
+     "contributo": -0.02217738830207764
+    },
+    {
+     "giorno": "2024-10-14",
+     "netto": -0.06369656567156393,
+     "moneta": "MEMEUSDT",
+     "contributo": -0.015189970899023667
+    },
+    {
+     "giorno": "2026-09-11",
+     "netto": -0.06184937982345958,
+     "moneta": "LABUSDT",
+     "contributo": -0.03994563409238424
+    },
+    {
+     "giorno": "2024-03-17",
+     "netto": -0.06153585688411307,
+     "moneta": "RNDRUSDT",
+     "contributo": -0.012077365520849957
+    },
+    {
+     "giorno": "2022-05-12",
+     "netto": -0.06105127467044715,
+     "moneta": "LUNAUSDT",
+     "contributo": -0.022355308643707373
+    },
+    {
+     "giorno": "2024-08-18",
+     "netto": -0.05871748166131428,
+     "moneta": "DARUSDT",
+     "contributo": -0.03781064399834743
+    }
+   ],
+   "quota_giorni_perdita_oltre_10pc": 0.0009523809523809524,
+   "peso_massimo_moneta": 0.6560068532939488,
+   "giorni_peso_moneta_oltre_60pc": 5,
+   "giorni_con_venduta_oltre_+30pc": 168,
+   "peso_lato_venduto_in_quei_giorni_medio": 1.5,
+   "correlazione_giornaliera_con_G1": 0.9999997233874675
+  },
+  "B": {
+   "giorno_peggiore_senza_stop": -0.170103359722599,
+   "10_peggiori": [
+    {
+     "giorno": "2021-01-30",
+     "netto": -0.170103359722599,
+     "moneta": "XRPUSDT",
+     "contributo": -0.17996566603610756
+    },
+    {
+     "giorno": "2021-02-21",
+     "netto": -0.15947806055517194,
+     "moneta": "NEOUSDT",
+     "contributo": -0.06629022179705862
+    },
+    {
+     "giorno": "2021-02-11",
+     "netto": -0.1206171321237033,
+     "moneta": "IOTAUSDT",
+     "contributo": -0.07542096311685886
+    },
+    {
+     "giorno": "2021-02-18",
+     "netto": -0.11924130263649135,
+     "moneta": "SXPUSDT",
+     "contributo": -0.050570086194448825
+    },
+    {
+     "giorno": "2026-08-06",
+     "netto": -0.0961736734541399,
+     "moneta": "RIVERUSDT",
+     "contributo": -0.02956985106943685
+    },
+    {
+     "giorno": "2024-10-14",
+     "netto": -0.08492637743233905,
+     "moneta": "MEMEUSDT",
+     "contributo": -0.020253294532031556
+    },
+    {
+     "giorno": "2026-09-11",
+     "netto": -0.08249540321590508,
+     "moneta": "LABUSDT",
+     "contributo": -0.053260845456512315
+    },
+    {
+     "giorno": "2024-03-17",
+     "netto": -0.0820473878091072,
+     "moneta": "RNDRUSDT",
+     "contributo": -0.01610315402779994
+    },
+    {
+     "giorno": "2022-05-12",
+     "netto": -0.0813954366542866,
+     "moneta": "LUNAUSDT",
+     "contributo": -0.02980707819160983
+    },
+    {
+     "giorno": "2024-08-18",
+     "netto": -0.07829756732453005,
+     "moneta": "DARUSDT",
+     "contributo": -0.05041419199779658
+    }
+   ],
+   "quota_giorni_perdita_oltre_10pc": 0.0019047619047619048,
+   "peso_massimo_moneta": 0.8746758043919317,
+   "giorni_peso_moneta_oltre_60pc": 21,
+   "giorni_con_venduta_oltre_+30pc": 168,
+   "peso_lato_venduto_in_quei_giorni_medio": 2.0,
+   "correlazione_giornaliera_con_G1": 0.9999988364960434
+  },
+  "liquidazione_per_moneta": {
+   "monete_giorno": 2368,
+   "monete": [
+    "1000BONKUSDT",
+    "1000FLOKIUSDT",
+    "1000LUNCUSDT",
+    "1000PEPEUSDT",
+    "1000RATSUSDT",
+    "1000SATSUSDT",
+    "1000SHIBUSDT",
+    "1INCHUSDT",
+    "4USDT",
+    "AAVEUSDT",
+    "ACEUSDT",
+    "ACHUSDT",
+    "ACTUSDT",
+    "ADAUSDT",
+    "AERGOUSDT",
+    "AGIXUSDT",
+    "AGLDUSDT",
+    "AI16ZUSDT",
+    "AIAUSDT",
+    "AIOTUSDT",
+    "AIUSDT",
+    "AIXBTUSDT",
+    "AKEUSDT",
+    "ALCHUSDT",
+    "ALGOUSDT",
+    "ALICEUSDT",
+    "ALLOUSDT",
+    "ALPHAUSDT",
+    "ALTUSDT",
+    "AMBUSDT",
+    "ANKRUSDT",
+    "ANTUSDT",
+    "APEUSDT",
+    "API3USDT",
+    "APRUSDT",
+    "APTUSDT",
+    "ARBUSDT",
+    "ARCUSDT",
+    "ARIAUSDT",
+    "ARKMUSDT",
+    "ARPAUSDT",
+    "ARUSDT",
+    "ASTERUSDT",
+    "ASTRUSDT",
+    "ATAUSDT",
+    "ATOMUSDT",
+    "AUCTIONUSDT",
+    "AVAXUSDT",
+    "AXLUSDT",
+    "AXSUSDT",
+    "BAKEUSDT",
+    "BALUSDT",
+    "BANANAS31USDT",
+    "BANDUSDT",
+    "BANKUSDT",
+    "BANUSDT",
+    "BASUSDT",
+    "BATUSDT",
+    "BBUSDT",
+    "BCHUSDT",
+    "BEATUSDT",
+    "BELUSDT",
+    "BERAUSDT",
+    "BICOUSDT",
+    "BIGTIMEUSDT",
+    "BIOUSDT",
+    "BLESSUSDT",
+    "BLURUSDT",
+    "BLZUSDT",
+    "BNBUSDT",
+    "BNXUSDT",
+    "BOMEUSDT",
+    "BONDUSDT",
+    "BRETTUSDT",
+    "BROCCOLI714USDT",
+    "BRUSDT",
+    "BSWUSDT",
+    "BTCUSDT",
+    "BTRUSDT",
+    "BULLAUSDT",
+    "BZRXUSDT",
+    "C98USDT",
+    "CAKEUSDT",
+    "CELOUSDT",
+    "CELRUSDT",
+    "CFXUSDT",
+    "CHILLGUYUSDT",
+    "CHRUSDT",
+    "CHZUSDT",
+    "CKBUSDT",
+    "CLOUSDT",
+    "COMPUSDT",
+    "COTIUSDT",
+    "CRVUSDT",
+    "CTKUSDT",
+    "CTSIUSDT",
+    "CVCUSDT",
+    "CYBERUSDT",
+    "CYSUSDT",
+    "DARUSDT",
+    "DASHUSDT",
+    "DEGOUSDT",
+    "DENTUSDT",
+    "DEXEUSDT",
+    "DODOUSDT",
+    "DODOXUSDT",
+    "DOGEUSDT",
+    "DOGSUSDT",
+    "DOTUSDT",
+    "DRIFTUSDT",
+    "DUSDT",
+    "DUSKUSDT",
+    "DYDXUSDT",
+    "EGLDUSDT",
+    "EIGENUSDT",
+    "ENAUSDT",
+    "ENJUSDT",
+    "ENSUSDT",
+    "EOSUSDT",
+    "EPICUSDT",
+    "ESPORTSUSDT",
+    "ETCUSDT",
+    "ETHFIUSDT",
+    "ETHUSDT",
+    "EULUSDT",
+    "EVAAUSDT",
+    "FARTCOINUSDT",
+    "FETUSDT",
+    "FHEUSDT",
+    "FILUSDT",
+    "FLMUSDT",
+    "FLOCKUSDT",
+    "FLOWUSDT",
+    "FORMUSDT",
+    "FRONTUSDT",
+    "FTMUSDT",
+    "FTTUSDT",
+    "GALAUSDT",
+    "GIGGLEUSDT",
+    "GMTUSDT",
+    "GOATUSDT",
+    "GPSUSDT",
+    "GRASSUSDT",
+    "GRIFFAINUSDT",
+    "GRTUSDT",
+    "GTCUSDT",
+    "GUNUSDT",
+    "GWEIUSDT",
+    "HBARUSDT",
+    "HEIUSDT",
+    "HEMIUSDT",
+    "HIFIUSDT",
+    "HIGHUSDT",
+    "HIPPOUSDT",
+    "HNTUSDT",
+    "HOMEUSDT",
+    "HOTUSDT",
+    "HUMAUSDT",
+    "HUSDT",
+    "HYPEUSDT",
+    "ICNTUSDT",
+    "ICPUSDT",
+    "ICXUSDT",
+    "IDUSDT",
+    "IMXUSDT",
+    "INJUSDT",
+    "IOSTUSDT",
+    "IOTAUSDT",
+    "IOTXUSDT",
+    "IOUSDT",
+    "IPUSDT",
+    "JASMYUSDT",
+    "JELLYJELLYUSDT",
+    "JOEUSDT",
+    "JTOUSDT",
+    "JUPUSDT",
+    "KAITOUSDT",
+    "KASUSDT",
+    "KAVAUSDT",
+    "KLAYUSDT",
+    "KNCUSDT",
+    "KSMUSDT",
+    "LABUSDT",
+    "LDOUSDT",
+    "LEVERUSDT",
+    "LINAUSDT",
+    "LINKUSDT",
+    "LITUSDT",
+    "LPTUSDT",
+    "LQTYUSDT",
+    "LRCUSDT",
+    "LTCUSDT",
+    "LUNA2USDT",
+    "LUNAUSDT",
+    "MAGICUSDT",
+    "MAGMAUSDT",
+    "MANAUSDT",
+    "MANTAUSDT",
+    "MASKUSDT",
+    "MATICUSDT",
+    "MAVUSDT",
+    "MEMEUSDT",
+    "MERLUSDT",
+    "MINAUSDT",
+    "MKRUSDT",
+    "MOODENGUSDT",
+    "MTLUSDT",
+    "MUBARAKUSDT",
+    "MUSDT",
+    "MYROUSDT",
+    "MYXUSDT",
+    "NAORISUSDT",
+    "NEARUSDT",
+    "NEIROETHUSDT",
+    "NEIROUSDT",
+    "NEOUSDT",
+    "NILUSDT",
+    "NMRUSDT",
+    "OCEANUSDT",
+    "OGNUSDT",
+    "OMGUSDT",
+    "OMUSDT",
+    "ONDOUSDT",
+    "ONEUSDT",
+    "ONGUSDT",
+    "ONTUSDT",
+    "ONUSDT",
+    "OPUSDT",
+    "ORDIUSDT",
+    "PENDLEUSDT",
+    "PENGUUSDT",
+    "PEOPLEUSDT",
+    "PERPUSDT",
+    "PHBUSDT",
+    "PIPPINUSDT",
+    "PIXELUSDT",
+    "PLAYUSDT",
+    "POLUSDT",
+    "POPCATUSDT",
+    "PORTALUSDT",
+    "PTBUSDT",
+    "PUMPUSDT",
+    "QTUMUSDT",
+    "RAVEUSDT",
+    "RDNTUSDT",
+    "REEFUSDT",
+    "RENDERUSDT",
+    "RENUSDT",
+    "RESOLVUSDT",
+    "REZUSDT",
+    "RIFUSDT",
+    "RIVERUSDT",
+    "RLCUSDT",
+    "RNDRUSDT",
+    "ROSEUSDT",
+    "RSRUSDT",
+    "RUNEUSDT",
+    "RVNUSDT",
+    "SAGAUSDT",
+    "SAHARAUSDT",
+    "SANDUSDT",
+    "SEIUSDT",
+    "SFPUSDT",
+    "SIRENUSDT",
+    "SKLUSDT",
+    "SKYAIUSDT",
+    "SNXUSDT",
+    "SOLUSDT",
+    "SPELLUSDT",
+    "SPXUSDT",
+    "SRMUSDT",
+    "SSVUSDT",
+    "STEEMUSDT",
+    "STMXUSDT",
+    "STORJUSDT",
+    "STRKUSDT",
+    "STXUSDT",
+    "SUIUSDT",
+    "SUSHIUSDT",
+    "SWARMSUSDT",
+    "SXPUSDT",
+    "SYNUSDT",
+    "TACUSDT",
+    "TAOUSDT",
+    "THETAUSDT",
+    "THEUSDT",
+    "TIAUSDT",
+    "TLMUSDT",
+    "TOKENUSDT",
+    "TOMOUSDT",
+    "TONUSDT",
+    "TRADOORUSDT",
+    "TRBUSDT",
+    "TRUUSDT",
+    "TRXUSDT",
+    "TSTUSDT",
+    "TURBOUSDT",
+    "TUTUSDT",
+    "UAIUSDT",
+    "UBUSDT",
+    "UMAUSDT",
+    "UNFIUSDT",
+    "UNIUSDT",
+    "USELESSUSDT",
+    "USUSDT",
+    "UXLINKUSDT",
+    "VELVETUSDT",
+    "VETUSDT",
+    "VIDTUSDT",
+    "VINEUSDT",
+    "VIRTUALUSDT",
+    "VOXELUSDT",
+    "VVVUSDT",
+    "WAVESUSDT",
+    "WIFUSDT",
+    "WLDUSDT",
+    "WLFIUSDT",
+    "WOOUSDT",
+    "WUSDT",
+    "XAIUSDT",
+    "XEMUSDT",
+    "XLMUSDT",
+    "XMRUSDT",
+    "XPLUSDT",
+    "XRPUSDT",
+    "XTZUSDT",
+    "XVGUSDT",
+    "XVSUSDT",
+    "YFIIUSDT",
+    "YFIUSDT",
+    "YGGUSDT",
+    "ZBTUSDT",
+    "ZECUSDT",
+    "ZENUSDT",
+    "ZEREBROUSDT",
+    "ZILUSDT",
+    "ZKUSDT",
+    "ZROUSDT",
+    "ZRXUSDT"
+   ],
+   "elenco": [
+    [
+     "2021-01-04",
+     "ETHUSDT",
+     "venduta",
+     -0.16380539001027059,
+     1.1976168858329168
+    ],
+    [
+     "2021-01-11",
+     "ADAUSDT",
+     "comprata",
+     0.10035765794411726,
+     0.7599138645022362
+    ],
+    [
+     "2021-01-11",
+     "BATUSDT",
+     "comprata",
+     0.1657996601569813,
+     0.7826930539386884
+    ],
+    [
+     "2021-01-11",
+     "DASHUSDT",
+     "comprata",
+     0.10977827934197512,
+     0.7232665849339327
+    ],
+    [
+     "2021-01-11",
+     "KNCUSDT",
+     "comprata",
+     0.11564649585918076,
+     0.7537971733375549
+    ],
+    [
+     "2021-01-11",
+     "THETAUSDT",
+     "comprata",
+     0.08527547616321547,
+     0.7363718958207147
+    ],
+    [
+     "2021-01-11",
+     "XMRUSDT",
+     "comprata",
+     0.1379173962411391,
+     0.7664884135472372
+    ],
+    [
+     "2021-01-15",
+     "ATOMUSDT",
+     "venduta",
+     -0.1354677623393678,
+     1.3172987974098058
+    ],
+    [
+     "2021-01-15",
+     "LINKUSDT",
+     "venduta",
+     -0.12027875650113411,
+     1.202751428412936
+    ],
+    [
+     "2021-01-16",
+     "ATOMUSDT",
+     "venduta",
+     -0.121619148709172,
+     1.2188645846503985
+    ],
+    [
+     "2021-01-16",
+     "IOSTUSDT",
+     "comprata",
+     0.07547667339837452,
+     0.7948987854251012
+    ],
+    [
+     "2021-01-17",
+     "IOSTUSDT",
+     "comprata",
+     0.07355337976120215,
+     0.8043206913106097
+    ],
+    [
+     "2021-01-21",
+     "IOSTUSDT",
+     "comprata",
+     0.0628572685410572,
+     0.7974655888136334
+    ],
+    [
+     "2021-01-22",
+     "LINKUSDT",
+     "venduta",
+     -0.0968733098625041,
+     1.222975538319683
+    ],
+    [
+     "2021-01-22",
+     "XTZUSDT",
+     "venduta",
+     -0.12595398841523023,
+     1.2646103896103897
+    ],
+    [
+     "2021-01-28",
+     "XLMUSDT",
+     "venduta",
+     -0.07754167544587538,
+     1.2791460031940824
+    ],
+    [
+     "2021-01-29",
+     "XLMUSDT",
+     "venduta",
+     -0.07051518683618417,
+     1.317443046582795
+    ],
+    [
+     "2021-01-29",
+     "XRPUSDT",
+     "venduta",
+     -0.15832433979694865,
+     1.201890359168242
+    ],
+    [
+     "2021-01-30",
+     "XLMUSDT",
+     "venduta",
+     -0.0707069016317751,
+     1.247705174406745
+    ],
+    [
+     "2021-01-30",
+     "XRPUSDT",
+     "venduta",
+     -0.1578460470217625,
+     1.8355100600070597
+    ],
+    [
+     "2021-02-01",
+     "XLMUSDT",
+     "venduta",
+     -0.066725860120002,
+     1.1993235552375687
+    ],
+    [
+     "2021-02-01",
+     "XRPUSDT",
+     "venduta",
+     -0.08706720897197663,
+     1.5279290179471667
+    ],
+    [
+     "2021-02-04",
+     "XRPUSDT",
+     "venduta",
+     -0.09186376363584411,
+     1.2111083186730336
+    ],
+    [
+     "2021-02-04",
+     "ZRXUSDT",
+     "venduta",
+     -0.137621139286314,
+     1.5160493827160495
+    ],
+    [
+     "2021-02-05",
+     "IOTAUSDT",
+     "venduta",
+     -0.1571971631658031,
+     1.234786557674841
+    ],
+    [
+     "2021-02-05",
+     "XTZUSDT",
+     "venduta",
+     -0.1496239387836676,
+     1.1915824915824915
+    ],
+    [
+     "2021-02-05",
+     "ZRXUSDT",
+     "venduta",
+     -0.1004548606367311,
+     1.907414558795134
+    ],
+    [
+     "2021-02-06",
+     "IOTAUSDT",
+     "venduta",
+     -0.16336102722898674,
+     1.1976406884548443
+    ],
+    [
+     "2021-02-08",
+     "IOTAUSDT",
+     "venduta",
+     -0.13483819623051996,
+     1.3411490961159835
+    ],
+    [
+     "2021-02-09",
+     "DOGEUSDT",
+     "comprata",
+     0.013886453862369853,
+     0.8051180853351548
+    ],
+    [
+     "2021-02-09",
+     "ZILUSDT",
+     "venduta",
+     -0.16346701139398093,
+     1.373126873126873
+    ],
+    [
+     "2021-02-10",
+     "IOTAUSDT",
+     "venduta",
+     -0.13785118472138977,
+     1.2270134005572508
+    ],
+    [
+     "2021-02-11",
+     "IOSTUSDT",
+     "venduta",
+     -0.06392669041634594,
+     1.2099928876244668
+    ],
+    [
+     "2021-02-11",
+     "IOTAUSDT",
+     "venduta",
+     -0.11505200602100325,
+     1.5049627791563276
+    ],
+    [
+     "2021-02-11",
+     "ONTUSDT",
+     "venduta",
+     -0.16331217780357596,
+     1.2122776191522076
+    ],
+    [
+     "2021-02-11",
+     "VETUSDT",
+     "venduta",
+     -0.10833679564340028,
+     1.2159834461159889
+    ],
+    [
+     "2021-02-11",
+     "ZRXUSDT",
+     "venduta",
+     -0.07324440696554141,
+     1.2266533732136922
+    ],
+    [
+     "2021-02-12",
+     "IOSTUSDT",
+     "venduta",
+     -0.05831044035542494,
+     1.215121512151215
+    ],
+    [
+     "2021-02-12",
+     "VETUSDT",
+     "venduta",
+     -0.09530377908822822,
+     1.4318495796941952
+    ],
+    [
+     "2021-02-13",
+     "ALGOUSDT",
+     "comprata",
+     0.10346780375530837,
+     0.783790060380864
+    ]
+   ],
+   "peso_medio_G1": 0.030710892569723876,
+   "formula": "venduta se massimo/00:00 >= 1,2/1,01; comprata se minimo/00:00 <= 0,8/0,99; ore con candele; giorni senza candele: solo chiusura"
+  },
+  "candele_a_1_ora": {
+   "coppie": 96,
+   "totale": 110755,
+   "peso_solo_giorno": 3.4106705628049045,
+   "peso_tot": 4199.999999999999,
+   "ore_mancanti_dentro": 87,
+   "per_anno": {
+    "2021": {
+     "monete_giorno": 0,
+     "su": 14608,
+     "quota_peso": 0.0
+    },
+    "2022": {
+     "monete_giorno": 89,
+     "su": 20744,
+     "quota_peso": 0.0043396040958207874
+    },
+    "2023": {
+     "monete_giorno": 4,
+     "su": 20497,
+     "quota_peso": 0.00018178090009489614
+    },
+    "2024": {
+     "monete_giorno": 0,
+     "su": 19614,
+     "quota_peso": 0.0
+    },
+    "2025": {
+     "monete_giorno": 3,
+     "su": 20463,
+     "quota_peso": 0.00015076645998145666
+    },
+    "2026": {
+     "monete_giorno": 0,
+     "su": 14829,
+     "quota_peso": 0.0
+    }
+   },
+   "quota_peso_solo_giorno": 0.0008120644197154536,
+   "differenza_chiusura_ora23_e_R_media": 0.0001857052154182001,
+   "differenza_chiusura_ora23_e_R_massima": 0.014285714285714235
+  }
+ },
+ "esito": {
+  "A": "non promettente",
+  "B": "non promettente",
+  "G1": "non promettente"
+ }
+}

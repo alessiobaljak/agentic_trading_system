@@ -1,0 +1,66 @@
+{
+ "righe": [
+  2100,
+  2100
+ ],
+ "stessi_giorni": true,
+ "differenza_massima_fino_29_settembre": {
+  "lordo": 1.0191500421363742e-16,
+  "spese": 0.005276280376702729,
+  "funding": 9.990923019453923e-17,
+  "netto": 0.005276280376702632,
+  "giro": 4.440892098500626e-16,
+  "monete": 0.0
+ },
+ "giorni_con_differenza_dopo_29_settembre": 5,
+ "coincide": true,
+ "spese_giorni_diversi_per_anno": {
+  "2021": 337,
+  "2022": 365,
+  "2023": 243,
+  "2024": 0,
+  "2025": 0,
+  "2026": 8
+ },
+ "somma_spese_oggi_e_riferimento": [
+  0.3664662265911134,
+  0.37735426665791727
+ ],
+ "ordini_G1_oggi_[variazioni,limite,senza_candele]": [
+  117037,
+  114550,
+  137
+ ],
+ "ordini_per_m": {
+  "G1": [
+   117037,
+   114550,
+   137
+  ],
+  "A": [
+   117037,
+   114535,
+   137
+  ],
+  "B": [
+   117037,
+   114535,
+   137
+  ]
+ },
+ "coerenza": {
+  "A": {
+   "lordo_meno_m_lordo1": 5.551115123125783e-17,
+   "funding_meno_m_funding1": 3.469446951953614e-18,
+   "spese_rapporto_a_G1": 1.5128442516881038,
+   "stesse_variazioni_col_limite": false
+  },
+  "B": {
+   "lordo_meno_m_lordo1": 0.0,
+   "funding_meno_m_funding1": 0.0,
+   "spese_rapporto_a_G1": 2.0372154353354857,
+   "stesse_variazioni_col_limite": false
+  }
+ },
+ "spese_2024_2025_coincidono": true
+}
