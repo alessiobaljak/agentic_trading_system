@@ -1,0 +1,104 @@
+{
+ "BTCUSDT": {
+  "perp_righe_periodo": 2191,
+  "perp_giorni_unici_periodo": 2191,
+  "perp_duplicati_periodo": 0,
+  "perp_non_mezzanotte": 0,
+  "perp_giorni_mancanti_nell_archivio": [],
+  "perp_file_api": [
+   "BTCUSDT-1d-2026-10-28.csv"
+  ],
+  "pannello_nan": 0,
+  "pannello_apertura_contro_chiusura_prima_max": 0.0005666942339253023,
+  "regolamenti_periodo": 6570,
+  "orari_dei_regolamenti": {
+   "0.000": 2190,
+   "8.000": 2190,
+   "16.000": 2190
+  },
+  "secondi_oltre_l_ora_max": 0.0,
+  "intervallo_ore": {
+   "8": 6570
+  },
+  "giorni_con_regolamenti_diversi_da_3": {},
+  "giorni_senza_regolamento": [],
+  "tasso_max": 0.00248993,
+  "tasso_min": -0.00119172,
+  "quota_regolamenti_al_tasso_di_base_0_0001": 0.31765601217656014,
+  "pannello_contro_regolamenti_max_diff": 0.0,
+  "pronti_non_mezzanotte": 0,
+  "pronti_duplicati": 0,
+  "pronti_mancanti_riscaricati": [],
+  "pronti_nan_nella_prova": 0,
+  "pronti_prova_contro_riscaricati_max_diff_rel": 0.0,
+  "base_aperture": {
+   "media": -0.00021060303794495132,
+   "max": 0.0019179776624349554,
+   "min": -0.0014314332984016742,
+   "giorno_max_abs": "2021-04-06"
+  },
+  "mark_ore": 51648,
+  "mark_duplicati": 0,
+  "mark_non_allo_scoccare": 0,
+  "mark_ore_mancanti": 216,
+  "mark_ore_mancanti_giorni": [
+   "2021-07-01",
+   "2021-07-24",
+   "2021-07-25",
+   "2021-07-26",
+   "2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24",
+   "2026-06-29"
+  ]
+ },
+ "ETHUSDT": {
+  "perp_righe_periodo": 2191,
+  "perp_giorni_unici_periodo": 2191,
+  "perp_duplicati_periodo": 0,
+  "perp_non_mezzanotte": 0,
+  "perp_giorni_mancanti_nell_archivio": [],
+  "perp_file_api": [
+   "ETHUSDT-1d-2026-10-28.csv"
+  ],
+  "pannello_nan": 0,
+  "pannello_apertura_contro_chiusura_prima_max": 0.0005309431890787586,
+  "regolamenti_periodo": 6570,
+  "orari_dei_regolamenti": {
+   "0.000": 2190,
+   "8.000": 2190,
+   "16.000": 2190
+  },
+  "secondi_oltre_l_ora_max": 0.0,
+  "intervallo_ore": {
+   "8": 6570
+  },
+  "giorni_con_regolamenti_diversi_da_3": {},
+  "giorni_senza_regolamento": [],
+  "tasso_max": 0.00375,
+  "tasso_min": -0.00356332,
+  "quota_regolamenti_al_tasso_di_base_0_0001": 0.30441400304414,
+  "pannello_contro_regolamenti_max_diff": 0.0,
+  "pronti_non_mezzanotte": 0,
+  "pronti_duplicati": 0,
+  "pronti_mancanti_riscaricati": [],
+  "pronti_nan_nella_prova": 0,
+  "pronti_prova_contro_riscaricati_max_diff_rel": 0.0,
+  "base_aperture": {
+   "media": -0.00018284654682442379,
+   "max": 0.00518089838982716,
+   "min": -0.002538044556782193,
+   "giorno_max_abs": "2021-05-13"
+  },
+  "mark_ore": 51792,
+  "mark_duplicati": 0,
+  "mark_non_allo_scoccare": 0,
+  "mark_ore_mancanti": 72,
+  "mark_ore_mancanti_giorni": [
+   "2022-10-02",
+   "2023-02-24",
+   "2026-06-29"
+  ]
+ }
+}

@@ -1,0 +1,680 @@
+{
+ "ore_mark_riempite": {
+  "BTCUSDT": 216,
+  "ETHUSDT": 72
+ },
+ "ore_riempite_col_giorno": {
+  "BTCUSDT": 0,
+  "ETHUSDT": 0
+ },
+ "scenari": {
+  "A sicura leva 3, 1000 USDT": {
+   "settimane": 300,
+   "annuo": 0.07020531939043911,
+   "sharpe": 3.6000239347568437,
+   "t": 8.646977794901082,
+   "sortino": 61.10634072452002,
+   "per_anno": {
+    "2021": 0.2292310399176612,
+    "2022": 0.007139019604974123,
+    "2023": 0.051488838613728966,
+    "2024": 0.07905312029235895,
+    "2025": 0.028239863368356186,
+    "2026": 0.011144739574134605
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 4.3254983514157805,
+   "curtosi": 25.16755240569767,
+   "discesa": -0.0031442888937760483,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 14,
+     "margine_min": 0.24016390962288534,
+     "giorno_margine_min": "2021-01-07",
+     "giri": 5,
+     "notional_max_su_iniziale": 1.1807503200000002,
+     "episodi_sotto_mantenimento": []
+    },
+    "ETH": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 22,
+     "margine_min": 0.22233954074937579,
+     "giorno_margine_min": "2021-01-06",
+     "giri": 6,
+     "notional_max_su_iniziale": 1.3988025300000007,
+     "episodi_sotto_mantenimento": []
+    }
+   }
+  },
+  "A scritta, liquida, 1000 USDT": {
+   "settimane": 300,
+   "annuo": 0.07847780807764755,
+   "sharpe": 2.481179462832277,
+   "t": 5.959600299636454,
+   "sortino": 5.834593844604009,
+   "per_anno": {
+    "2021": 0.28689510991219774,
+    "2022": 0.009678518092005692,
+    "2023": 0.029983896359485035,
+    "2024": 0.0837324938981555,
+    "2025": 0.03186421609626758,
+    "2026": 0.011989480583956585
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 2.618544438324548,
+   "curtosi": 36.21604869005465,
+   "discesa": -0.038365333847449334,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-03-13",
+       "ora": 20,
+       "prezzo": 61610.44305450497,
+       "entrata": 33053.93,
+       "notional": 0.5548956503477703
+      },
+      {
+       "giorno": "2023-03-14",
+       "ora": 13,
+       "prezzo": 26180.724135685836,
+       "entrata": 17120.1,
+       "notional": 0.50188204720924
+      },
+      {
+       "giorno": "2023-12-04",
+       "ora": 1,
+       "prezzo": 40643.266577969145,
+       "entrata": 24682.5,
+       "notional": 0.5059187908705098
+      },
+      {
+       "giorno": "2024-03-04",
+       "ora": 20,
+       "prezzo": 67662.82964866822,
+       "entrata": 41993.1,
+       "notional": 0.4749217580531899
+      },
+      {
+       "giorno": "2024-11-21",
+       "ora": 3,
+       "prezzo": 95831.69156592283,
+       "entrata": 61735.3,
+       "notional": 0.47960984181035
+      }
+     ],
+     "giorni_sotto_mantenimento": 5,
+     "ribilanci": 8,
+     "margine_min": -0.003907531359657152,
+     "giorno_margine_min": "2023-03-14",
+     "giri": 10,
+     "notional_max_su_iniziale": 1.5546240021169384,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-03-13",
+       "2021-03-13",
+       1
+      ],
+      [
+       "2023-03-14",
+       "2023-03-14",
+       1
+      ],
+      [
+       "2023-12-04",
+       "2023-12-04",
+       1
+      ],
+      [
+       "2024-03-04",
+       "2024-03-04",
+       1
+      ],
+      [
+       "2024-11-21",
+       "2024-11-21",
+       1
+      ]
+     ]
+    },
+    "ETH": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-02-03",
+       "ora": 16,
+       "prezzo": 1616.0789615112644,
+       "entrata": 980.23,
+       "notional": 0.5339165793912123
+      },
+      {
+       "giorno": "2021-05-03",
+       "ora": 16,
+       "prezzo": 3228.4281014106145,
+       "entrata": 1666.1,
+       "notional": 0.570920734765605
+      },
+      {
+       "giorno": "2023-04-05",
+       "ora": 12,
+       "prezzo": 1930.4605546425225,
+       "entrata": 1265.87,
+       "notional": 0.50962614288871
+      },
+      {
+       "giorno": "2024-02-27",
+       "ora": 2,
+       "prezzo": 3265.812563448825,
+       "entrata": 1907.49,
+       "notional": 0.5280194329190832
+      }
+     ],
+     "giorni_sotto_mantenimento": 4,
+     "ribilanci": 12,
+     "margine_min": -0.007824789731397911,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 10,
+     "notional_max_su_iniziale": 1.5455541518416376,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-02-03",
+       "2021-02-03",
+       1
+      ],
+      [
+       "2021-05-03",
+       "2021-05-03",
+       1
+      ],
+      [
+       "2023-04-05",
+       "2023-04-05",
+       1
+      ],
+      [
+       "2024-02-27",
+       "2024-02-27",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "A sicura leva 3, 280 USDT": {
+   "settimane": 300,
+   "annuo": 0.059926473570074607,
+   "sharpe": 3.5820206713304215,
+   "t": 8.603735354876987,
+   "sortino": 51.25933040758439,
+   "per_anno": {
+    "2021": 0.19773820070845644,
+    "2022": 0.005409871168604696,
+    "2023": 0.05011058277299882,
+    "2024": 0.06730450011208329,
+    "2025": 0.01571334984297204,
+    "2026": 0.010878444396007714
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 4.0445861122585995,
+   "curtosi": 22.20760247235332,
+   "discesa": -0.0032929282753456635,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 10,
+     "margine_min": 0.2088287394590093,
+     "giorno_margine_min": "2023-03-17",
+     "giri": 9,
+     "notional_max_su_iniziale": 1.1206564285714289,
+     "episodi_sotto_mantenimento": []
+    },
+    "ETH": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 19,
+     "margine_min": 0.17393853391135816,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 6,
+     "notional_max_su_iniziale": 1.3849529999999997,
+     "episodi_sotto_mantenimento": []
+    }
+   }
+  },
+  "A scritta, liquida, 280 USDT": {
+   "settimane": 300,
+   "annuo": 0.07872808646925966,
+   "sharpe": 2.842954504372161,
+   "t": 6.82855584205456,
+   "sortino": 16.223267921061595,
+   "per_anno": {
+    "2021": 0.2876431447239619,
+    "2022": 0.009792937740440655,
+    "2023": 0.04816326160849685,
+    "2024": 0.07601206901800547,
+    "2025": 0.022525719736502525,
+    "2026": 0.011468793967556623
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 5.314716768827877,
+   "curtosi": 42.52841731691614,
+   "discesa": -0.010955242451113012,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [
+      {
+       "giorno": "2023-03-17",
+       "ora": 10,
+       "prezzo": 26771.598773639522,
+       "entrata": 17120.1,
+       "notional": 0.4781334772423214
+      },
+      {
+       "giorno": "2023-12-05",
+       "ora": 18,
+       "prezzo": 44098.83756700379,
+       "entrata": 27383.9,
+       "notional": 0.47274334775839283
+      },
+      {
+       "giorno": "2024-03-11",
+       "ora": 7,
+       "prezzo": 71140.31680745957,
+       "entrata": 44081.7,
+       "notional": 0.501195412613171
+      },
+      {
+       "giorno": "2025-07-10",
+       "ora": 21,
+       "prezzo": 115756.69563060757,
+       "entrata": 61735.3,
+       "notional": 0.40752189499765645
+      }
+     ],
+     "giorni_sotto_mantenimento": 4,
+     "ribilanci": 7,
+     "margine_min": -0.005441647552923115,
+     "giorno_margine_min": "2025-07-10",
+     "giri": 9,
+     "notional_max_su_iniziale": 1.4512596744510253,
+     "episodi_sotto_mantenimento": [
+      [
+       "2023-03-17",
+       "2023-03-17",
+       1
+      ],
+      [
+       "2023-12-05",
+       "2023-12-05",
+       1
+      ],
+      [
+       "2024-03-11",
+       "2024-03-11",
+       1
+      ],
+      [
+       "2025-07-10",
+       "2025-07-10",
+       1
+      ]
+     ]
+    },
+    "ETH": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-02-03",
+       "ora": 16,
+       "prezzo": 1616.0074976429776,
+       "entrata": 980.23,
+       "notional": 0.5331705083250062
+      },
+      {
+       "giorno": "2021-05-03",
+       "ora": 16,
+       "prezzo": 3228.4281014106145,
+       "entrata": 1666.1,
+       "notional": 0.570920734765605
+      },
+      {
+       "giorno": "2023-04-05",
+       "ora": 12,
+       "prezzo": 1935.9887585454858,
+       "entrata": 1265.87,
+       "notional": 0.5051970183443214
+      },
+      {
+       "giorno": "2024-02-27",
+       "ora": 2,
+       "prezzo": 3268.9738146812483,
+       "entrata": 1907.49,
+       "notional": 0.5221870689117738
+      }
+     ],
+     "giorni_sotto_mantenimento": 4,
+     "ribilanci": 12,
+     "margine_min": -0.007824789731397911,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 10,
+     "notional_max_su_iniziale": 1.5455541518416376,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-02-03",
+       "2021-02-03",
+       1
+      ],
+      [
+       "2021-05-03",
+       "2021-05-03",
+       1
+      ],
+      [
+       "2023-04-05",
+       "2023-04-05",
+       1
+      ],
+      [
+       "2024-02-27",
+       "2024-02-27",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "B sicura leva 3, 1000 USDT": {
+   "settimane": 300,
+   "annuo": 0.07181066416583196,
+   "sharpe": 3.674256646445905,
+   "t": 8.825279001021803,
+   "sortino": 99.82182896459241,
+   "per_anno": {
+    "2021": 0.23256746148595592,
+    "2022": 0.011477237988915631,
+    "2023": 0.04113799670809526,
+    "2024": 0.08596579783838669,
+    "2025": 0.034695832060678805,
+    "2026": 0.009059705016551919
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 4.299330828000665,
+   "curtosi": 24.80344490292678,
+   "discesa": -0.0032238724994024803,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 4,
+     "margine_min": 0.217921362148808,
+     "giorno_margine_min": "2024-11-11",
+     "giri": 2,
+     "notional_max_su_iniziale": 1.495543200000001,
+     "episodi_sotto_mantenimento": []
+    },
+    "ETH": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 19,
+     "margine_min": 0.22233954074937579,
+     "giorno_margine_min": "2021-01-06",
+     "giri": 3,
+     "notional_max_su_iniziale": 1.3988025300000007,
+     "episodi_sotto_mantenimento": []
+    }
+   }
+  },
+  "B scritta, liquida, 1000 USDT": {
+   "settimane": 300,
+   "annuo": 0.08024318986430529,
+   "sharpe": 2.9391851716255233,
+   "t": 7.059694428355248,
+   "sortino": 103.94409249840602,
+   "per_anno": {
+    "2021": 0.2797575554589552,
+    "2022": 0.010663372749912206,
+    "2023": 0.04111594809737498,
+    "2024": 0.08433515160010767,
+    "2025": 0.03810314538433732,
+    "2026": 0.009792635809634225
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 5.992953432566099,
+   "curtosi": 46.2351484789925,
+   "discesa": -0.003470630571791311,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-03-13",
+       "ora": 20,
+       "prezzo": 61610.44305450497,
+       "entrata": 33053.93,
+       "notional": 0.5548956503477703
+      }
+     ],
+     "giorni_sotto_mantenimento": 1,
+     "ribilanci": 19,
+     "margine_min": -0.0003106151762150358,
+     "giorno_margine_min": "2021-03-13",
+     "giri": 3,
+     "notional_max_su_iniziale": 1.5546240021169384,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-03-13",
+       "2021-03-13",
+       1
+      ]
+     ]
+    },
+    "ETH": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-02-03",
+       "ora": 16,
+       "prezzo": 1616.0789615112644,
+       "entrata": 980.23,
+       "notional": 0.5339165793912123
+      },
+      {
+       "giorno": "2021-05-03",
+       "ora": 16,
+       "prezzo": 3228.4281014106145,
+       "entrata": 1666.1,
+       "notional": 0.570920734765605
+      },
+      {
+       "giorno": "2023-04-13",
+       "ora": 11,
+       "prezzo": 1995.188249327695,
+       "entrata": 1307.76,
+       "notional": 0.50682415403826
+      },
+      {
+       "giorno": "2024-02-28",
+       "ora": 9,
+       "prezzo": 3365.2065933929775,
+       "entrata": 2011.8,
+       "notional": 0.5248994749940846
+      }
+     ],
+     "giorni_sotto_mantenimento": 4,
+     "ribilanci": 10,
+     "margine_min": -0.007824789731397911,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 7,
+     "notional_max_su_iniziale": 1.5455541518416376,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-02-03",
+       "2021-02-03",
+       1
+      ],
+      [
+       "2021-05-03",
+       "2021-05-03",
+       1
+      ],
+      [
+       "2023-04-13",
+       "2023-04-13",
+       1
+      ],
+      [
+       "2024-02-28",
+       "2024-02-28",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "B sicura leva 3, 280 USDT": {
+   "settimane": 300,
+   "annuo": 0.05835253064280449,
+   "sharpe": 3.5202378249487127,
+   "t": 8.455337757958093,
+   "sortino": 77.16383085421126,
+   "per_anno": {
+    "2021": 0.19659878739107095,
+    "2022": 0.008415930354816248,
+    "2023": 0.035135124327799444,
+    "2024": 0.0701584799555747,
+    "2025": 0.01993939416061427,
+    "2026": 0.006736396692621605
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 4.186966556616483,
+   "curtosi": 23.218247498461416,
+   "discesa": -0.003150138779294598,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 3,
+     "margine_min": 0.2592295820955067,
+     "giorno_margine_min": "2021-02-08",
+     "giri": 4,
+     "notional_max_su_iniziale": 1.1442857142857144,
+     "episodi_sotto_mantenimento": []
+    },
+    "ETH": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 17,
+     "margine_min": 0.17393853391135816,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 3,
+     "notional_max_su_iniziale": 1.3849529999999997,
+     "episodi_sotto_mantenimento": []
+    }
+   }
+  },
+  "B scritta, liquida, 280 USDT": {
+   "settimane": 300,
+   "annuo": 0.08312946801643697,
+   "sharpe": 3.1039648122711223,
+   "t": 7.45548232297393,
+   "sortino": 104.36461050888103,
+   "per_anno": {
+    "2021": 0.28573998258619754,
+    "2022": 0.012259836961996756,
+    "2023": 0.04388990082655114,
+    "2024": 0.09017973451193931,
+    "2025": 0.03887460849653307,
+    "2026": 0.009219727551072513
+   },
+   "ogni_anno_positivo": true,
+   "asimmetria": 5.902129027017233,
+   "curtosi": 47.53653707765552,
+   "discesa": -0.0034683674569443435,
+   "eventi": {
+    "BTC": {
+     "liquidazioni": [],
+     "giorni_sotto_mantenimento": 0,
+     "ribilanci": 23,
+     "margine_min": 0.025188714084380365,
+     "giorno_margine_min": "2021-03-13",
+     "giri": 2,
+     "notional_max_su_iniziale": 1.6176929254922188,
+     "episodi_sotto_mantenimento": []
+    },
+    "ETH": {
+     "liquidazioni": [
+      {
+       "giorno": "2021-02-03",
+       "ora": 16,
+       "prezzo": 1616.0074976429776,
+       "entrata": 980.23,
+       "notional": 0.5331705083250062
+      },
+      {
+       "giorno": "2021-05-03",
+       "ora": 16,
+       "prezzo": 3228.4281014106145,
+       "entrata": 1666.1,
+       "notional": 0.570920734765605
+      },
+      {
+       "giorno": "2023-04-13",
+       "ora": 12,
+       "prezzo": 1996.2917481361922,
+       "entrata": 1307.76,
+       "notional": 0.5091562142857143
+      },
+      {
+       "giorno": "2024-02-28",
+       "ora": 9,
+       "prezzo": 3366.0661350816904,
+       "entrata": 2011.8,
+       "notional": 0.5232149180663545
+      }
+     ],
+     "giorni_sotto_mantenimento": 4,
+     "ribilanci": 10,
+     "margine_min": -0.007824789731397911,
+     "giorno_margine_min": "2021-05-03",
+     "giri": 7,
+     "notional_max_su_iniziale": 1.5455541518416376,
+     "episodi_sotto_mantenimento": [
+      [
+       "2021-02-03",
+       "2021-02-03",
+       1
+      ],
+      [
+       "2021-05-03",
+       "2021-05-03",
+       1
+      ],
+      [
+       "2023-04-13",
+       "2023-04-13",
+       1
+      ],
+      [
+       "2024-02-28",
+       "2024-02-28",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "A sicura leva 3 dal 2022": {
+   "settimane": 248,
+   "annuo": 0.03865681176849999,
+   "sharpe": 5.19558995270006,
+   "t": 11.346424741229704,
+   "sortino": 30.193026300345647
+  },
+  "B sicura leva 3 dal 2022": {
+   "settimane": 248,
+   "annuo": 0.03959518293101443,
+   "sharpe": 5.204637696627594,
+   "t": 11.36618371884077,
+   "sortino": 51.255373063385406
+  }
+ }
+}

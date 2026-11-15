@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre 2026 (G1 per il conto vero; riesami delle prove 96 e 55; mazzo dello Sharpe corretto).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre 2026 (prova 157: margine delle coperture a pronti).
 
 ## Dati
 
@@ -109,6 +109,19 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 12 novembre
     `MACRO_FLAT_HOURS` = 2 ore fuori dal mercato prima e dopo un evento macro; la prova entra un'ora dopo il comunicato della Fed e
     il guadagno sta in quell'ora (alla prima ora permessa p da 0,02 a 0,18). Cercare: prove su riunioni, dati macro, comunicati con
     entrata entro 2 ore dall'evento; rifarle con l'entrata dopo la finestra.
+
+40. **Margine della gamba venduta contato senza le perdite chiuse** (prova 157, 15 nov 2026): `novantacinquesima.py:64-76` confronta la sola
+    perdita aperta della quantita' rimasta (`L = Q * (P - Pe)`) con la riserva accresciuta delle vendite (`Rc += e`) e dimentica la perdita
+    chiusa `q * (P - Pe)` della parte ridotta; scatta a margine zero, senza mantenimento, una volta al giorno. Il margine vero va sotto zero
+    (BTC 335 aperture, −22% del nozionale), la leva supera 5 per 987 giorni, 9 liquidazioni nella giornata; il conto pubblicato guadagna
+    di piu' (10,5% contro 7,3% con un margine possibile) perche' tiene fino a 2,3 volte il nozionale. Cercare: `riserva`, `Rc`, `margine`
+    in ogni prova coperta (pronti contro perpetuo, trimestrali come la 159) o a leva; rifare con il portafoglio dei future a patrimonio
+    (`audits/repro/prova157_2026-11-15.py margine`, convalida a 1e-16; esempio minimo `esempio`). Il pronti nel portafoglio a pronti
+    non fa da margine.
+41. **Massimo del giorno del prezzo scambiato al posto del mark** (prova 157): le liquidazioni le decide il prezzo mark; il massimo del
+    pannello ha picchi che il mark non ha (BTC +36,2% sull'apertura il 26 luglio 2021). L'archivio del mark orario
+    (`data/futures/um/monthly/markPriceKlines/<S>/1h/`) manca di 216 ore su BTC (fra cui 24-27 luglio 2021) e 72 su ETH: riempire col prezzo
+    scambiato orario (piu' severo) e dirlo. Scarico in cartella temporanea: `audits/repro/prova157_2026-11-15.py scarica <cartella>`.
 
 ## Misure
 

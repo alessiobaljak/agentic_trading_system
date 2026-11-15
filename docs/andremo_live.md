@@ -740,3 +740,9 @@ a pronti e vendere il trimestrale fino alla scadenza rende il 5,5% l'anno con i 
 corretto 0,41) e il 3% con quello in USDT, che si fa liquidare 6 volte su 19 trimestri. **Capito oggi**: la base dei trimestrali paga meno
 del funding dei perpetui negli stessi trimestri (7,3% contro 11,1% l'anno); fra i guadagni «quasi fissi» il funding coperto (157) resta il
 migliore. Conto delle prove 326.
+**15 novembre, il verdetto della revisione sulla prova 157** (`audits/reports/2026-11-15-PROVA157.md`): **FAIL sul calcolo**. I conti si
+rifanno identici e dati, costi e sguardo nel futuro sono puliti, ma il margine del perpetuo era sbagliato: nei rialzi lunghi il conto dei
+future sarebbe andato sotto zero e liquidato 9 volte in una variante e 5 nell'altra. Con le liquidazioni il guadagno è circa +7-8% l'anno, e
+**dal 2022 circa +4% l'anno** (40 USDT su 1.000); il 2021 da solo fa più di metà del guadagno. **Capito oggi**: il funding coperto è
+regolare ma rende poco fuori dagli anni di euforia, e su Binance richiede di spostare il margine fra pronti e future in tempo, cosa che il
+bot oggi non sa fare.

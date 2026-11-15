@@ -1,0 +1,40 @@
+{
+ "BTCUSDT": {
+  "mark": {
+   "salita_max_nella_giornata": 0.3618232281152718,
+   "giorno": "2021-07-26"
+  },
+  "scambiato": {
+   "salita_max_nella_giornata": 0.3618232281152718,
+   "giorno": "2021-07-26"
+  },
+  "mark_2_giorni": {
+   "salita_max": 0.4072042068361086,
+   "giorno": "2021-07-25"
+  },
+  "mark_3_giorni": {
+   "salita_max": 0.43223633389173455,
+   "giorno": "2021-07-24"
+  },
+  "taglio_segnali_diversi_su_600": 0
+ },
+ "ETHUSDT": {
+  "mark": {
+   "salita_max_nella_giornata": 0.27572183093240343,
+   "giorno": "2021-05-24"
+  },
+  "scambiato": {
+   "salita_max_nella_giornata": 0.27612691881756724,
+   "giorno": "2021-05-24"
+  },
+  "mark_2_giorni": {
+   "salita_max": 0.3741014556185973,
+   "giorno": "2025-05-08"
+  },
+  "mark_3_giorni": {
+   "salita_max": 0.4354284244380249,
+   "giorno": "2025-05-08"
+  },
+  "taglio_segnali_diversi_su_600": 0
+ }
+}
