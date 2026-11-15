@@ -481,3 +481,7 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    la prova 97 (CC) l'ha bocciata perché il ricambio settimanale sulle monete di F5 costava quanto il funding (8-9% l'anno): qui il ricambio
    è quasi zero e le monete sono le due più liquide. Da scrivere con le regole prima: l'atteso è un rendimento basso ma molto regolare
    (la 97 aveva discesa −3,6% e volatilità 2,8%), con il rischio della borsa e del funding negativo negli anni di ribasso.
+145. **G1 con una quota fissa di funding coperto** (strategy-scout, 15 novembre, dalla richiesta del proprietario di mettere insieme
+   quello che abbiamo; regole in `programma7/NOVANTOTTESIMA.md`, prova 160 riservata): 80/20 e 60/40, riequilibrio ogni primo del mese,
+   per una curva più regolare (Markowitz, JF 1952). **In attesa**: la serie del funding coperto della prova 157 è bocciata per il margine;
+   la miscela si calcola solo dopo il funding coperto rifatto con una regola di margine scritta prima.

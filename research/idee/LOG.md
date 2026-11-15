@@ -91,3 +91,11 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   il prova BL (115) ha già misurato il BNB negli annunci; la parte del funding del BNB è la prova 157 su un'altra moneta; si segue in avanti raccogliendo i
   gettoni ricevuti, non si prova; (2) altre strade guardate: prestito del USDT (Earn/margine): tasso non scaricabile storico gratis, sotto la base; spread tra
   future trimestrale e perpetuo: stesso dato della 159 e in quella si legge come controllo. Riga del registro nel file.
+
+- 15 novembre 2026 (decimo giro, 08:17): proposta 1 idea, una regola scritta: `programma7/NOVANTOTTESIMA.md` (prova 160): miscela G1 + funding coperto di Bitcoin
+  ed Ether (80/20 e 60/40, riequilibrio mensile, serie già calcolate; esame scritto più «utile» sulla discesa e sui mesi negativi). Angolo 1 (mettere
+  insieme): nel registro nessuna miscela con G1 e il coperto (`--cerca miscela` = 0; le miscele sono tutte fra strategie di direzione, prove 15-33); G1 + G1N
+  scartata (G1N è una variante di G1, correlazione alta). Angolo 2 (dati Binance mai usati): `--cerca topLong`, `top trader`, `prestito`, `basis` = 0 nel
+  registro, ma non scritta nessuna: statistiche dei top trader e opzioni europee di Binance hanno solo uno storico breve (circa 30 giorni sull'API, non
+  verificato qui: da controllare prima di scrivere), prestito del margine non scaricabile storico; il premio pronti-perpetuo è la prova 128 (BP) e la base 159.
+  Probabilità media-bassa per la miscela; il rischio vero del coperto resta non misurato.
