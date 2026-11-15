@@ -1,0 +1,488 @@
+{
+ "filtri_usati": {
+  "BTCUSDT": {
+   "passo": 0.001,
+   "quantita_minima": 0.001,
+   "valore_minimo": 50.0
+  },
+  "ETHUSDT": {
+   "passo": 0.001,
+   "quantita_minima": 0.001,
+   "valore_minimo": 20.0
+  }
+ },
+ "ore_mark_riempite": {
+  "BTCUSDT": 216,
+  "ETHUSDT": 72
+ },
+ "ore_ancora_vuote": {
+  "BTCUSDT": 0,
+  "ETHUSDT": 0
+ },
+ "A": {
+  "annuo_capitale_media52": 0.0627379023601311,
+  "annuo_capitale_composto": 0.0647310562921839,
+  "usdt_su_1000_media52": 62.7379023601311,
+  "usdt_su_1000_composto": 64.7310562921839,
+  "patrimonio_finale_su_1000": 1434.573611904819,
+  "dal_2022": {
+   "settimane": 248,
+   "annuo_media52": 0.03362486059563999,
+   "composto": 0.03416406623882717,
+   "sharpe": 5.2254317859192225,
+   "usdt_su_1000_media52": 33.62486059563999
+  },
+  "volatilita": 0.01741322890475942,
+  "sharpe": 3.602887362434169,
+  "t": 8.653855525713949,
+  "sharpe_corretto": 0.9999999999952968,
+  "famiglie": 196,
+  "gruppo": [
+   "97 CC",
+   "157 A",
+   "157 B",
+   "161 A",
+   "161 B"
+  ],
+  "discesa_giornaliera": -0.00330167976348128,
+  "discesa_settimanale": -0.003135627251202089,
+  "peggiore_settimana": -0.0014226987829178972,
+  "mesi_positivi": 62,
+  "mesi": 70,
+  "giorni": {
+   "positivi": 1657,
+   "fuori": 105,
+   "dentro_negativi": 338
+  },
+  "per_anno_calendario": {
+   "2021": {
+    "rendimento_pct": 22.188338756820336,
+    "funding_usdt": 225.2026495780572,
+    "base_usdt": 0.7924924191896333,
+    "spese_usdt": 4.111754429043778,
+    "rifornimento_usdt": 778.3812002041461,
+    "rifornimenti": 17,
+    "netto_usdt": 221.88338756820303,
+    "funding_BTC": 100.61721985333983,
+    "funding_ETH": 124.58542972471736
+   },
+   "2022": {
+    "rendimento_pct": 0.6821226230472766,
+    "funding_usdt": 15.362281177831132,
+    "base_usdt": -0.1363062452842363,
+    "spese_usdt": 6.891231918688128,
+    "rifornimento_usdt": 191.84453257153527,
+    "rifornimenti": 4,
+    "netto_usdt": 8.33474301385877,
+    "funding_BTC": 8.456779988936901,
+    "funding_ETH": 6.905501188894231
+   },
+   "2023": {
+    "rendimento_pct": 4.918566401500302,
+    "funding_usdt": 62.40719703476268,
+    "base_usdt": -0.6216891763572706,
+    "spese_usdt": 1.2764122224361276,
+    "rifornimento_usdt": 607.8391729637494,
+    "rifornimenti": 12,
+    "netto_usdt": 60.50909563596929,
+    "funding_BTC": 30.74308137786811,
+    "funding_ETH": 31.66411565689458
+   },
+   "2024": {
+    "rendimento_pct": 7.31500802440932,
+    "funding_usdt": 96.84364168477896,
+    "base_usdt": 0.4568053375239208,
+    "spese_usdt": 2.883646851222174,
+    "rifornimento_usdt": 618.9874879186686,
+    "rifornimenti": 12,
+    "netto_usdt": 94.4168001710807,
+    "funding_BTC": 49.629519288065296,
+    "funding_ETH": 47.21412239671365
+   },
+   "2025": {
+    "rendimento_pct": 2.688218079133442,
+    "funding_usdt": 37.373209817370956,
+    "base_usdt": 0.07381707965483977,
+    "spese_usdt": 0.2113347575991481,
+    "rifornimento_usdt": 100.64654040451659,
+    "rifornimenti": 2,
+    "netto_usdt": 37.23569213942665,
+    "funding_BTC": 21.714760272008917,
+    "funding_ETH": 15.658449545362036
+   },
+   "2026": {
+    "rendimento_pct": 0.8572881922764841,
+    "funding_usdt": 17.256853481870852,
+    "base_usdt": -0.02248329863884066,
+    "spese_usdt": 5.0404768069575665,
+    "rifornimento_usdt": 143.7563890694734,
+    "rifornimenti": 2,
+    "netto_usdt": 12.193893376274445,
+    "funding_BTC": 9.955529982658707,
+    "funding_ETH": 7.301323499212144
+   }
+  },
+  "per_anno_esame_settimane": {
+   "2021": 0.2015847169292425,
+   "2022": 0.006764912600717764,
+   "2023": 0.047829503721786626,
+   "2024": 0.07011865991292447,
+   "2025": 0.025969562454941975,
+   "2026": 0.011111527074525895
+  },
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": true,
+   "t_almeno_3": true,
+   "sharpe_corretto_almeno_0_80": true,
+   "nessuna_liquidazione": true
+  },
+  "passa_quattro_condizioni": true,
+  "passa_con_nessuna_liquidazione": true,
+  "liquidazioni": [],
+  "n_liquidazioni": 0,
+  "rifornimenti": {
+   "BTC": 22,
+   "ETH": 27
+  },
+  "rifornimento_usdt_totale": 2441.4553231320897,
+  "ingressi": [
+   5,
+   6
+  ],
+  "giorni_dentro": {
+   "BTC": 1949,
+   "ETH": 1898
+  },
+  "margine_apertura_minimo": [
+   0.31698416964599907,
+   0.34869173580658264
+  ],
+  "leva_max_apertura": [
+   3.154731673562052,
+   2.8678626342744598
+  ],
+  "aperture_leva_oltre_5": [
+   0,
+   0
+  ],
+  "salita_max_pronti_in_posizione": [
+   3.2663811218106087,
+   3.9144767103124707
+  ],
+  "nozionale_max_su_iniziale": [
+   1.6304801503015438,
+   1.6947398878861764
+  ],
+  "quota_riforn_max_su_Q": [
+   0.1772614258678942,
+   0.15726662102954353
+  ],
+  "costo_medio_annuo_capitale": 0.0028210129855664413,
+  "costi_doppi_annuo": 0.0011522725349109974,
+  "per_trimestre_positivi": {
+   "2021": 4,
+   "2022": 3,
+   "2023": 4,
+   "2024": 4,
+   "2025": 4
+  },
+  "corr_G1_giorni": 0.04787014844714639,
+  "corr_BTC_giorni": 0.033848031292237825,
+  "corr_G1_settimane": 0.15166859430350896,
+  "corr_97CC_settimane": 0.9427531574954474,
+  "corr_157_settimane": 0.984881538040932,
+  "corr_BTC_settimane": 0.24620012157585103,
+  "annuo_157_stesse_settimane": 0.10525776515617254,
+  "controlli": {
+   "ordini_limite": {
+    "annuo_composto": 0.0657332435174669,
+    "annuo_media52": 0.0636783371813216,
+    "liquidazioni": 0
+   },
+   "passi_veri_1000_USDT": {
+    "annuo_composto": 0.06083277212032612,
+    "annuo_media52": 0.05906168763668409,
+    "liquidazioni": 0,
+    "rifornimenti": [
+     16,
+     26
+    ],
+    "ingressi_bloccati": [
+     0,
+     0
+    ],
+    "ingressi": [
+     5,
+     6
+    ]
+   },
+   "sempre_dentro": {
+    "annuo_composto": 0.058009378112460874,
+    "annuo_media52": 0.05641225328800098,
+    "sharpe": 3.2693592222123176,
+    "liquidazioni": 0,
+    "rifornimenti": [
+     7,
+     11
+    ],
+    "ingressi": [
+     1,
+     1
+    ]
+   },
+   "sempre_dentro_passi_veri": {
+    "annuo_composto": 0.05420633934663677,
+    "liquidazioni": 0,
+    "ingressi_bloccati": [
+     0,
+     0
+    ],
+    "rifornimenti": [
+     5,
+     10
+    ]
+   }
+  }
+ },
+ "B": {
+  "annuo_capitale_media52": 0.060880620224640296,
+  "annuo_capitale_composto": 0.06275372666499934,
+  "usdt_su_1000_media52": 60.880620224640296,
+  "usdt_su_1000_composto": 62.75372666499934,
+  "patrimonio_finale_su_1000": 1419.3130072225772,
+  "dal_2022": {
+   "settimane": 248,
+   "annuo_media52": 0.03139749803532627,
+   "composto": 0.03186723482809173,
+   "sharpe": 5.212423663336399,
+   "usdt_su_1000_media52": 31.397498035326272
+  },
+  "volatilita": 0.017336418821502702,
+  "sharpe": 3.511718357261239,
+  "t": 8.434874658475133,
+  "sharpe_corretto": 0.9999999999921713,
+  "famiglie": 196,
+  "gruppo": [
+   "97 CC",
+   "157 A",
+   "157 B",
+   "161 A",
+   "161 B"
+  ],
+  "discesa_giornaliera": -0.002870217620330684,
+  "discesa_settimanale": -0.0027266117182157545,
+  "peggiore_settimana": -0.0008314518186133268,
+  "mesi_positivi": 62,
+  "mesi": 70,
+  "giorni": {
+   "positivi": 1679,
+   "fuori": 41,
+   "dentro_negativi": 380
+  },
+  "per_anno_calendario": {
+   "2021": {
+    "rendimento_pct": 22.177086331980256,
+    "funding_usdt": 223.97882689160934,
+    "base_usdt": 0.49052173713242053,
+    "spese_usdt": 2.6984853089404943,
+    "rifornimento_usdt": 660.4985154961527,
+    "rifornimenti": 14,
+    "netto_usdt": 221.77086331980126,
+    "funding_BTC": 99.393397166892,
+    "funding_ETH": 124.58542972471736
+   },
+   "2022": {
+    "rendimento_pct": 0.960608748583347,
+    "funding_usdt": 12.62844806224303,
+    "base_usdt": 0.24025717338045255,
+    "spese_usdt": 1.1322674349334287,
+    "rifornimento_usdt": 0.0,
+    "rifornimenti": 0,
+    "netto_usdt": 11.736437800690055,
+    "funding_BTC": 7.6660667732154,
+    "funding_ETH": 4.9623812890276335
+   },
+   "2023": {
+    "rendimento_pct": 3.7120895834065415,
+    "funding_usdt": 46.73432877849254,
+    "base_usdt": -0.5430018996110064,
+    "spese_usdt": 0.402430843432132,
+    "rifornimento_usdt": 191.64193256525894,
+    "rifornimenti": 4,
+    "netto_usdt": 45.7888960354494,
+    "funding_BTC": 14.841541597886057,
+    "funding_ETH": 31.892787180606476
+   },
+   "2024": {
+    "rendimento_pct": 7.289291808994047,
+    "funding_usdt": 93.61371524421278,
+    "base_usdt": 0.527266507164013,
+    "spese_usdt": 0.8893488393178043,
+    "rifornimento_usdt": 423.4316116947758,
+    "rifornimenti": 8,
+    "netto_usdt": 93.251632912059,
+    "funding_BTC": 45.346377127683226,
+    "funding_ETH": 48.26733811652956
+   },
+   "2025": {
+    "rendimento_pct": 2.6755723861076053,
+    "funding_usdt": 36.86101333279173,
+    "base_usdt": 0.07206606377792446,
+    "spese_usdt": 0.2095686691527991,
+    "rifornimento_usdt": 99.8055240215683,
+    "rifornimenti": 2,
+    "netto_usdt": 36.72351072741685,
+    "funding_BTC": 20.901167159912404,
+    "funding_ETH": 15.959846172879324
+   },
+   "2026": {
+    "rendimento_pct": 0.7125431516611158,
+    "funding_usdt": 15.320535697825543,
+    "base_usdt": -0.020019222537805373,
+    "spese_usdt": 5.258850048127556,
+    "rifornimento_usdt": 176.05514167113068,
+    "rifornimenti": 3,
+    "netto_usdt": 10.04166642716018,
+    "funding_BTC": 8.946575125388577,
+    "funding_ETH": 6.373960572436964
+   }
+  },
+  "per_anno_esame_settimane": {
+   "2021": 0.20149243374290715,
+   "2022": 0.009464966473027636,
+   "2023": 0.036308631066063635,
+   "2024": 0.06988043793083341,
+   "2025": 0.025846823684485876,
+   "2026": 0.009196266635916217
+  },
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": true,
+   "t_almeno_3": true,
+   "sharpe_corretto_almeno_0_80": true,
+   "nessuna_liquidazione": true
+  },
+  "passa_quattro_condizioni": true,
+  "passa_con_nessuna_liquidazione": true,
+  "liquidazioni": [],
+  "n_liquidazioni": 0,
+  "rifornimenti": {
+   "BTC": 8,
+   "ETH": 23
+  },
+  "rifornimento_usdt_totale": 1551.4327254488862,
+  "ingressi": [
+   2,
+   3
+  ],
+  "giorni_dentro": {
+   "BTC": 2055,
+   "ETH": 1947
+  },
+  "margine_apertura_minimo": [
+   0.31698416964599907,
+   0.3499802775448564
+  ],
+  "leva_max_apertura": [
+   3.154731673562052,
+   2.8573038658495027
+  ],
+  "aperture_leva_oltre_5": [
+   0,
+   0
+  ],
+  "salita_max_pronti_in_posizione": [
+   2.7775257916275877,
+   3.9144767103124707
+  ],
+  "nozionale_max_su_iniziale": [
+   1.6521537979098109,
+   1.6024133349116723
+  ],
+  "quota_riforn_max_su_Q": [
+   0.1772614258678942,
+   0.15646992364032486
+  ],
+  "costo_medio_annuo_capitale": 0.0014544043508366272,
+  "costi_doppi_annuo": 0.0011427710518841624,
+  "per_trimestre_positivi": {
+   "2021": 4,
+   "2022": 4,
+   "2023": 4,
+   "2024": 4,
+   "2025": 4
+  },
+  "corr_G1_giorni": 0.05278212689751497,
+  "corr_BTC_giorni": 0.040520920253677664,
+  "corr_G1_settimane": 0.16061902928662347,
+  "corr_97CC_settimane": 0.9445808231907621,
+  "corr_157_settimane": 0.9868829604592273,
+  "corr_BTC_settimane": 0.24089040882596693,
+  "annuo_157_stesse_settimane": 0.10276592631700998,
+  "controlli": {
+   "ordini_limite": {
+    "annuo_composto": 0.06326993172704687,
+    "annuo_media52": 0.06136712709123429,
+    "liquidazioni": 0
+   },
+   "passi_veri_1000_USDT": {
+    "annuo_composto": 0.05906717806747919,
+    "annuo_media52": 0.05739687496438829,
+    "liquidazioni": 0,
+    "rifornimenti": [
+     6,
+     22
+    ],
+    "ingressi_bloccati": [
+     0,
+     0
+    ],
+    "ingressi": [
+     2,
+     3
+    ]
+   },
+   "sempre_dentro": {
+    "annuo_composto": 0.058009378112460874,
+    "annuo_media52": 0.05641225328800098,
+    "sharpe": 3.2693592222123176,
+    "liquidazioni": 0,
+    "rifornimenti": [
+     7,
+     11
+    ],
+    "ingressi": [
+     1,
+     1
+    ]
+   },
+   "sempre_dentro_passi_veri": {
+    "annuo_composto": 0.05420633934663677,
+    "liquidazioni": 0,
+    "ingressi_bloccati": [
+     0,
+     0
+    ],
+    "rifornimenti": [
+     5,
+     10
+    ]
+   }
+  }
+ },
+ "soglia_capitale_gamba_bitcoin": {
+  "4_ottobre_2026": {
+   "prezzo": 84753.57,
+   "quantita_minima": 0.001,
+   "capitale_moneta": 135.732842355,
+   "capitale_totale_due_monete": 271.46568471
+  },
+  "massimo_periodo": {
+   "prezzo": 124658.54,
+   "quantita_minima": 0.001,
+   "capitale_moneta": 199.64065181,
+   "capitale_totale_due_monete": 399.28130362
+  }
+ }
+}
