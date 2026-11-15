@@ -239,6 +239,16 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   neutra**, il sospetto non regge. Ma il titolo **mediano** fa −0,44/−0,53% al mese peggio dell'IWM (t −3,1/−3,9): il paniere medio
   tiene grazie a pochi titoli che salgono moltissimo; un gruppo di 50 ne prende pochi, e il suo risultato tipico scivola verso la
   mediana. Le società vuote nella prova 32 non si vedono (0-2% dei nomi, un minimo): la spiegazione di allora non è confermata.
+* **La prova 35** (le azioni «in gioco»: ogni mattina, fra tutte le azioni liquide, le 20 con il volume dei primi 5 minuti più alto
+  del solito, la rottura della prima candela da 5 minuti; idea I37, nata dalla domanda del proprietario «perché solo le 10 più
+  scambiate»): **bocciata.** Il vantaggio dello studio c'è: 36'520 operazioni dal 2016 al 2024, +0,140% a operazione prima dei costi
+  (t 11,0); con le sole commissioni Sharpe 2,55, vicino al 2,81 dichiarato. Ma lo scarto su quei titoli in quei minuti è di 16,2
+  punti base all'ingresso e 13,0 all'uscita (mediane, 500 operazioni a caso) contro uno stop a 34,5: ogni operazione costa 0,242%,
+  e con la leva il conto va a zero (`prove/P035_risultati.md`). Capito: (1) la risposta alla domanda del proprietario, con un numero:
+  le 10 più scambiate si usano perché il loro scarto è di 0,8-5,8 punti base (mediane, `dati/ESITO_CONTROLLI.md`), le azioni «in gioco» lo hanno da 3 a 20 volte
+  più largo; (2) è la quinta volta che la rottura della prima candela muore sui costi (prove 17, 20, 21, 23, 35); (3) regola per le
+  idee in giornata su titoli singoli: prima dei costi servono più di circa 0,25% a operazione, oppure titoli con lo scarto di pochi
+  punti base. Nel conto: 87.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
