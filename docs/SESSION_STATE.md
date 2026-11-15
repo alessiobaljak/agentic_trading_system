@@ -3,7 +3,7 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (13 novembre 2026, 09:00 UTC)
+## Compito in corso (15 novembre 2026, 16:30 UTC)
 - **Bot**: gira il codice della fase 1 del conto vero (commit 83ddb809, riavvio dell'8 novembre 19:02 UTC); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
   (codice del conto vero, spento) committata (ff89531), non ancora caricata dal bot.
@@ -23,6 +23,11 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   Pomeriggio: voce 11 di G1 misurata (il demo è sopra il paper solo per il primo giorno; a regime il paper sopravvaluta di 0,045
   punti al giorno); prova 155 (G1 frenata dall'indice di paura delle opzioni) non passa, conto 318; le spese di G1 della prova 120
   erano un po' sovrastimate (ordini senza candele a 1 ora).
+  14-15 novembre: prova 156 (uscita dal lato venduto dopo una fiammata) no; lo stato della macchina scrive i pesi di oggi di paper e
+  demo moneta per moneta (96c6094, APPROVE di live-path-reviewer, senza riavvio); il ritardo del demo sul paper nei giorni forti viene
+  dalla moneta che il demo non ha (龙虾USDT) e dai resti sotto il minimo, non dall'arrotondamento. Su richiesta del proprietario: prova
+  157 funding coperto su BTC ed ETH (FAIL di backtest-auditor per il margine; circa +4% l'anno dal 2022), 158 G1 con più leva (no), 159
+  base dei trimestrali (no); idea 145 e prova 160 (G1 con funding coperto) in attesa della 157 rifatta. Conto delle prove 326.
 - **Dashboard**: «Plancia» (aree Crypto e Azioni, menu a sinistra richiudibile); la scheda Azioni la riempie la sessione «trading
   stock». Aree del repository separate (`AREE.md`, blocco `.claude/hooks/aree.py`).
 
@@ -32,6 +37,7 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   F5 + M7 + K2 si misura a tavolino.
 
 ## Decisioni aperte per il proprietario
+- Funding coperto (prova 157): rifarlo come prova nuova con una regola di margine scritta prima, o seguirlo solo a tavolino.
 - Conto vero: `docs/conto_vero.md`, punti 1-5 (Firebase per primo).
 - Confronto settimanale: le soglie di `gate2/THRESHOLDS.md` non vanno approvate così (due sono già superate solo per le monete che il
   demo di Binance non ha): prima decidere come trattare le monete mancanti.
