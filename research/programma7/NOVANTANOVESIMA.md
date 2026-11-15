@@ -67,3 +67,19 @@ riusano i caricatori e i prezzi a pronti della 157; il codice della 157 non si m
 
 ## Testo della riga del registro
 | 161 | CM: il funding coperto su Bitcoin ed Ether con il margine vero (la 157 rifatta dopo il FAIL di backtest-auditor): due portafogli come su Binance, margine al 60% del perpetuo, rifornito a pronti all'apertura quando scende sotto il 45% (due giorni del rialzo peggiore visto), liquidazione modellata con il massimo orario del prezzo mark; N = 30 (A) e 90 (B); esame + nessuna liquidazione (`programma7/NOVANTANOVESIMA.md`); richiesta del proprietario del 15 novembre; non alla cieca (la revisione ha già misurato soglie simili) | 2 | in corso | in corso |
+
+## Regole corrette il 15 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher (`VERIFICA_NOVANTANOVESIMA.md`) ha trovato ambiguità; nessun numero è stato calcolato (solo lo scarico
+del prezzo mark e del prezzo scambiato orari, `novantanovesima_dati.py`, impronte e buchi in `risultati_novantanovesima/impronte_mark.json`:
+il mark manca per 216 ore su BTC e 72 su ETH, il prezzo scambiato non ha buchi). Valgono le letture proposte nella verifica:
+1. **Il patrimonio (A1)**: la strategia è il patrimonio totale composto (non la media dei rendimenti delle due monete); le settimane si
+   compongono dai giorni. Al rientro una moneta riparte da metà del patrimonio totale solo se l'altra è fuori; se l'altra è dentro, riparte
+   dal proprio conto.
+2. **Il prezzo del conto dei future (A2)**: l'apertura oraria del prezzo mark delle 00:00 UTC (dove manca, il prezzo scambiato).
+3. **L'ingresso (A3)**: Q = capitale / (S × 1,0015 + 0,6 × M), con la commissione del perpetuo presa dal margine.
+4. **La quantità da vendere (A5)**: x = (0,6 × Q × M − MB) / (S × 0,9985 − 0,0006 × M + 0,6 × M), così che dopo la riduzione il margine è
+   esattamente il 60%.
+5. **L'ordine all'apertura (A4, A6)**: regolamento delle 00:00, controllo della liquidazione, uscita, riduzione. Con la liquidazione si
+   perde tutto il margine, si vende il pronti e si rientra da capo con le spese d'ingresso.
+6. **I passi delle quantità a 1.000 USDT (A7)**: dal file dei filtri del repository (`bot/portafoglio/filtri_conto_vero.json`), dichiarato
+   come tale; la soglia di capitale per la gamba del Bitcoin al prezzo del 4 ottobre 2026 e al massimo del periodo.

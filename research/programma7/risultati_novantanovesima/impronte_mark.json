@@ -1,0 +1,79 @@
+{
+ "file": 280,
+ "errori": [],
+ "n_errori": 0,
+ "impronte": {
+  "mark1h_BTCUSDT": {
+   "file": 70,
+   "sha256_unico": "9b20478ac0cf264e936f7ecdd4137aeaff71799dc7a92fd00aa40de71092d92e",
+   "byte": 1519897
+  },
+  "mark1h_ETHUSDT": {
+   "file": 70,
+   "sha256_unico": "400e19c2f9e86e52ebb156d77bca09078e34693c90d028333d4e4036ce781a3e",
+   "byte": 1444067
+  },
+  "perp1h_BTCUSDT": {
+   "file": 70,
+   "sha256_unico": "2428ae96321adfc53503eae37eeb70ee3e89c9372907300caf374134dbe73c8b",
+   "byte": 2662576
+  },
+  "perp1h_ETHUSDT": {
+   "file": 70,
+   "sha256_unico": "1a790203a1273a00dff11f35e73749ac537839027d6494d4fda7b11309ab3667",
+   "byte": 2687284
+  }
+ },
+ "buchi": {
+  "mark1h_BTCUSDT": {
+   "ore_attese": 50448,
+   "ore_presenti": 50232,
+   "duplicati": 0,
+   "fuori_scoccare": 0,
+   "ore_mancanti": 216,
+   "giorni_con_buchi": 9,
+   "primi_giorni": [
+    "2021-07-01",
+    "2021-07-24",
+    "2021-07-25",
+    "2021-07-26",
+    "2021-07-27",
+    "2022-07-31",
+    "2022-10-02",
+    "2023-02-24",
+    "2026-06-29"
+   ]
+  },
+  "mark1h_ETHUSDT": {
+   "ore_attese": 50448,
+   "ore_presenti": 50376,
+   "duplicati": 0,
+   "fuori_scoccare": 0,
+   "ore_mancanti": 72,
+   "giorni_con_buchi": 3,
+   "primi_giorni": [
+    "2022-10-02",
+    "2023-02-24",
+    "2026-06-29"
+   ]
+  },
+  "perp1h_BTCUSDT": {
+   "ore_attese": 50448,
+   "ore_presenti": 50448,
+   "duplicati": 0,
+   "fuori_scoccare": 0,
+   "ore_mancanti": 0,
+   "giorni_con_buchi": 0,
+   "primi_giorni": []
+  },
+  "perp1h_ETHUSDT": {
+   "ore_attese": 50448,
+   "ore_presenti": 50448,
+   "duplicati": 0,
+   "fuori_scoccare": 0,
+   "ore_mancanti": 0,
+   "giorni_con_buchi": 0,
+   "primi_giorni": []
+  }
+ }
+}
