@@ -46,8 +46,9 @@ dd = lambda x: ((1 + x).cumprod() / (1 + x).cumprod().cummax() - 1).min()  # noq
 
 
 def comunicati() -> pd.DataFrame:
-    c = pd.read_csv(QUI / "dati" / "P034_comunicati.csv.gz", parse_dates=["deposito"])
-    c["deposito"] = c["deposito"].dt.date
+    c = pd.read_csv(QUI / "dati" / "P034_comunicati.csv.gz", dtype={"simbolo": str}, keep_default_na=False)   # «NA» è un simbolo
+    c["deposito"] = pd.to_datetime(c["deposito"]).dt.date
+    c["sic"] = pd.to_numeric(c["sic"], errors="coerce")
     return c[c["deposito"] <= FINO]
 
 

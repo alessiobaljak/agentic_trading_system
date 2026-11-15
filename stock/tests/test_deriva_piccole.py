@@ -31,3 +31,9 @@ def test_simbolo_di_allora_solo_moduli_prima():
     assert comunicati_piccole.simbolo_di_allora(dm, sm, date(2020, 2, 1)) == "NUOV"
     assert comunicati_piccole.simbolo_di_allora(dm, sm, date(2019, 1, 1)) is None
     assert comunicati_piccole.simbolo_di_allora(dm, sm, date(2021, 6, 1)) is None              # più di 365 giorni prima
+
+
+def test_comunicati_il_simbolo_na_non_e_vuoto():
+    c = p034.comunicati()
+    assert c["simbolo"].map(type).eq(str).all() and (c["simbolo"] != "").all()
+    assert c["deposito"].max() <= p034.FINO
