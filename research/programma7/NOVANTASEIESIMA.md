@@ -138,3 +138,19 @@ se fallita); a schermo al massimo 20 righe. Non si tocca `research/REGISTRO.md` 
 
 ## Testo della riga del registro
 | 158 | **G1 con la leva più alta** (richiesta del proprietario del 15 novembre; regole di strategy-improver): pesi ×1,5 (esposizione lorda 300%, A) e ×2 (400%, B) sulle stesse scelte di G1, con lo stop del conto vero (−35% dal massimo, fuori fino al primo lunedì almeno 3 giorni dopo, poi riparte), liquidazione misurata con le candele a 1 ora (margine 1%), esame approvato + nessuna liquidazione + stop al massimo 2 volte in 5,75 anni (`programma7/NOVANTASEIESIMA.md`); oltre il 200% servono nuovi limiti del conto vero, decisione solo del proprietario | 2 | da fare | da fare |
+
+## Regole corrette il 15 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher (`VERIFICA_NOVANTASEIESIMA.md`, 23 punti) ha trovato ambiguità; nessun numero è stato calcolato.
+Valgono **le letture proposte nella verifica**, con queste decisioni sulle tre domande aperte:
+1. **Il pavimento al 65%** (A1): con il massimo che parte dal capitale e non scende, il pavimento non conta mai; è così anche nella
+   formula del conto vero (`docs/conto_vero.md`, punto 4b). La formula resta come scritta; capitale e massimo di fase partono dal valore
+   prima delle spese di apertura; il rapporto lo dice.
+2. **Composto** (D1): l'equity con lo stop è composta (come il conto vero), e su quella si giudicano lo stop, la liquidazione, ogni anno
+   positivo e il rendimento anno per anno; lo Sharpe e il t si calcolano sulle settimane prese dall'equity composta (rendimento della
+   settimana = equity a fine settimana / equity a inizio settimana − 1). Se un numero sui settimanali sommati diverge, si scrive accanto.
+3. **Nessuna liquidazione** si giudica sulla serie **con lo stop** (il conto vero lo ha); la serie senza stop si scrive accanto come
+   controllo, perché se Binance blocca l'indirizzo della macchina lo stop non protegge (`docs/conto_vero.md`, punto 4i).
+Le altre letture (A2-A6, B2, E1, E2 e le minori) sono quelle della verifica: chiusura a mercato all'ora dello stop con i costi per moneta,
+riapertura con `cs.spese_a_limite` sulla matrice dal vuoto, funding del giorno dello stop pro rata sulle ore, ripartenza al primo lunedì con
+data almeno il giorno dello stop + 3, margine per moneta con la formula esatta, «stop al massimo 2 volte» = scatti ≤ 2 (ogni pavimento
+superato conta come scatto), Sharpe corretto con `corretto_famiglie` sulle sole «158 A» e «158 B» e G1 in una chiamata a parte.

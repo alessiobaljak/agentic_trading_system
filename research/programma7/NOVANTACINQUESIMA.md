@@ -114,3 +114,27 @@ promettente, backtest-auditor.
 
 ## Testo della riga del registro
 | 157 | CB: il funding coperto solo su Bitcoin ed Ether, senza ricambio: comprare a pronti e vendere il perpetuo per lo stesso valore, dentro se la media del funding sugli ultimi N giorni è sopra zero, fuori altrimenti (N = 30 o 90), capitale 1,5 volte il nozionale, costi del programma 7 più 0,15% a pronti, dal 4 gennaio 2021 (`programma7/NOVANTACINQUESIMA.md`); idea 144 (Christin, Routledge, Soska e Zetlin-Jones 2022; Schmeling, Schrimpf e Todorov, BIS 2023; proprietario 15 novembre) | 2 | da fare | da fare |
+
+## Regole corrette il 15 novembre 2026 dopo la verifica, prima di ogni calcolo (sessione principale)
+La verifica di strategy-researcher (`VERIFICA_NOVANTACINQUESIMA.md`) ha trovato ambiguità; nessun rendimento è stato calcolato (solo la
+presenza dei dati e lo scarico dei prezzi a pronti, `novantacinquesima_dati.py`, impronte in `risultati_novantacinquesima/`). Le
+letture che valgono:
+1. **Quantità ferme, niente ribilanciamento gratis (A1)**: all'ingresso si compra a pronti la quantità Q = (capitale della moneta / 1,5)
+   / prezzo e si vende la stessa quantità sul perpetuo; Q **non cambia** finché si resta dentro (è il senso di «senza ricambio»: un conto a
+   nozionale fisso ribilancerebbe ogni giorno senza pagarne il costo). Il conto giornaliero è in USDT sul capitale della moneta (metà del
+   capitale ciascuna): variazione del pronti meno variazione del perpetuo (la base), più il funding vero sul nozionale del giorno (Q per il
+   prezzo mark), meno le spese all'ingresso e all'uscita. All'uscita si chiude tutto; al rientro Q si ricalcola dal capitale di quel giorno.
+2. **Il margine (descrittivo, con una regola)**: il terzo del capitale fuori dal nozionale è la riserva del perpetuo. Si scrive il caso
+   peggiore della perdita del perpetuo contro la riserva; se la perdita aperta del perpetuo supera la riserva, quel giorno si vende a pronti
+   quanto basta a coprirla (con lo 0,15% di costo) e si riduce il perpetuo della stessa quantità: Q cala, e lo si scrive.
+3. **L'esame (A2)**: valgono le quattro condizioni scritte qui sopra e solo quelle: netto positivo; ogni anno di calendario positivo (2021
+   e 2026 parziali contano); t almeno 3, calcolato come Sharpe settimanale per la radice di settimane/52; Sharpe corretto almeno 0,80 con
+   `corretto_famiglie` e il mazzo completo, con le serie settimanali «157 A» (30 giorni) e «157 B» (90 giorni) passate insieme in un solo
+   calcolo. `terza.esito` non si usa (ha soglie diverse). Il resto è descrittivo.
+4. **L'uscita finale (A3)**: il 4 ottobre 2026, all'apertura del 5 come prezzo di uscita, con le sue spese nel giorno 4 ottobre.
+5. **Il capitale (A4)**: per capitale = somma dei due conti delle monete sul capitale totale; per nozionale = diviso per il nozionale
+   d'ingresso; guadagno in USDT l'anno = media settimanale × 52 × 1.000 (semplice, scritto come tale).
+6. **Le letture descrittive (B1-B7)**: il giorno dell'uscita paga le spese e da lì si è fuori; anni di calendario sulla serie giornaliera;
+   nel controllo con ordini limite il perpetuo costa 0,02% più lo scarto di 0,01% (come `seconda.costi_moneta`); correlazioni sui
+   rendimenti giornalieri netti con G1 ricalcolato e con il Bitcoin, e su quelli settimanali con la prova 97; «sempre dentro» solo
+   descrittivo; la salita massima del prezzo come la scrive la verifica.

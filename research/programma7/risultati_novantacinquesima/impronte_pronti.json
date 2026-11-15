@@ -1,0 +1,12 @@
+{
+ "BTCUSDT": {
+  "stato": "ok",
+  "sha256": "f7d154a55dd47534b0fdeca70ff78a7fbae657faf27fae74abc74f3575fa18c2",
+  "byte": 18980
+ },
+ "ETHUSDT": {
+  "stato": "ok",
+  "sha256": "5a77427447048847463e2952ea04dce017e85c074d9db62a2ee3d2fbaac06740",
+  "byte": 17154
+ }
+}
