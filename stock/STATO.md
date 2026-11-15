@@ -234,6 +234,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   regole diverse; sospetto (da misurare, non misurato): un paniere a pesi uguali di piccole scambiate fa peggio dell'IWM di per sé
   negli anni 2016-2024, e la copertura non è neutra. Prima di un'altra prova sulle piccole: misurare quel paniere di base contro
   l'IWM. Nel conto: 85.
+* **Il controllo del 15 novembre** (`prove/P034b_risultati.md`, non è una prova): il paniere di **tutte** le piccole ammesse, a pesi
+  uguali, fa quasi come l'IWM (−0,13% al mese, t −1,24, dal 2018; −0,02% dal 2016 per chi ha un comunicato): **la copertura è quasi
+  neutra**, il sospetto non regge. Ma il titolo **mediano** fa −0,44/−0,53% al mese peggio dell'IWM (t −3,1/−3,9): il paniere medio
+  tiene grazie a pochi titoli che salgono moltissimo; un gruppo di 50 ne prende pochi, e il suo risultato tipico scivola verso la
+  mediana. Le società vuote nella prova 32 non si vedono (0-2% dei nomi, un minimo): la spiegazione di allora non è confermata.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
