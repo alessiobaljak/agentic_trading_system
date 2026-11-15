@@ -338,3 +338,16 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   novembre 2023 ad aprile 2024 G1 −21,3%, G1 neutra −15,3%). Un solo halving nei dati: non è una regola. G1 neutra: correlazione
   settimanale con G1 0,91; Sharpe corretto per famiglie con il mazzo completo 0,70 contro 0,75 di G1 (misure dalla serie del mazzo);
   dal 2025 +74,6% contro +93,9%; la revisione del 29 ottobre (`REVISIONE_G1N.md`) la tiene come confronto, non come sostituta.
+* **15 novembre 2026, 04:40 UTC, voce 8, il settimo ribilancio a 1.000 USDT** (`ops/results/0743-15nov-log-ribilancio-1000.md`,
+  `0744-15nov-stato-ribilancio-1000.md`): 40 ordini (38 a limite, 2 a mercato), 13 variazioni sotto il minimo (5,5% del conto), 1
+  rifiutato (龙虾USDT); scarto dalle posizioni volute 9,4%. Equity del demo 1.027,58 (+2,76% dall'8 novembre); G1 nel paper 11.039,17
+  (+3,95% dall'8 novembre): il demo è 1,2 punti sotto. Il 14 novembre di nuovo demo +2,26% contro paper +3,51% (−1,25); dal 9 novembre
+  (7 giorni) demo +3,25%, paper +5,49%, −0,32 punti al giorno. Pesi dopo il ribilancio (comparabili): paper 200,0%, demo 194,9%.
+* **15 novembre 2026, voce 11, il 14 novembre moneta per moneta** (`misure_g1/voce11_attribuzione_14nov.py`: pesi delle 16:41 del 14,
+  quelli del demo riportati ai prezzi delle 00:05; prezzi mark pubblici dalle 00:05 del 14 alle 00:05 del 15): con i pesi il paper fa
+  +3,34% e il demo +2,38%, **−0,96 dei −1,25 punti spiegati dalle posizioni**. **龙虾USDT da sola −0,59** (venduta nel paper al 3,2%,
+  quel giorno −18,5%, il demo non ce l'ha); il resto (−0,37) è il lato venduto del demo un po' più piccolo quasi su ogni moneta
+  (MUBARAKUSDT −5,0/−4,6, JTOUSDT −4,4/−4,0: forse l'arrotondamento delle quantità verso lo zero), che pesa nei giorni in cui le
+  monete vendute crollano (−13/−30%). **Capito**: nei giorni forti di G1 il demo perde soprattutto per la moneta che sul demo non
+  esiste ma sul conto vero sì: il conto vero dovrebbe stare più vicino al paper del demo. L'arrotondamento resta anche sul conto vero:
+  da misurare con le prossime letture (il segno, quanto vale per moneta).

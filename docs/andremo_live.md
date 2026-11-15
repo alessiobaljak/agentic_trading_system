@@ -725,3 +725,7 @@ non segue il mercato e nei mesi di forte rialzo guadagna come in quelli di forte
 peggiore è stato quello prima dell'halving del 2024, quando salivano le monete piccole e affollate (novembre 2023 - aprile 2024: G1 −21,3%,
 G1 neutra −15,3%). **Capito oggi**: il nemico di G1 non è il rialzo, è il rialzo delle monete affollate; G1 neutra ne attenua solo una
 parte e dal 2025 rende meno (Sharpe corretto 0,70 contro 0,75).
+**15 novembre, 04:40 UTC, il demo contro il paper** (`ops/results/0744-15nov-stato-ribilancio-1000.md`, `research/programma7/misure_g1/voce11_attribuzione_14nov.py`):
+il 14 novembre demo +2,26% contro paper +3,51%; con i pesi moneta per moneta si spiegano 0,96 dei 1,25 punti: 0,59 da una sola moneta
+che il paper vende e il demo non ha (龙虾USDT, −18,5% quel giorno; sul conto vero esiste), il resto da posizioni vendute un po' più piccole
+sul demo. **Capito oggi**: il ritardo del demo nei giorni forti viene soprattutto da monete che il demo non ha; il conto vero le avrebbe.
