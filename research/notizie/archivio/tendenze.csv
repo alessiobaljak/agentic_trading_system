@@ -1544,3 +1544,18 @@ ora,posizione,id,sigla,nome,rango_capitalizzazione
 2026-11-15 06:13,13,derive,DRV,Derive,132
 2026-11-15 06:13,14,lighter,LIT,Lighter,80
 2026-11-15 06:13,15,tether,USDT,Tether,3
+2026-11-15 08:19,1,bitcoin,BTC,Bitcoin,1
+2026-11-15 08:19,2,kava,KAVA,Kava,476
+2026-11-15 08:19,3,hyperliquid,HYPE,Hyperliquid,10
+2026-11-15 08:19,4,ethereum,ETH,Ethereum,2
+2026-11-15 08:19,5,quantus,QTC,Quantus,961
+2026-11-15 08:19,6,ripple,XRP,XRP,6
+2026-11-15 08:19,7,pi-network,PI,Pi Network,84
+2026-11-15 08:19,8,pearl-2,PEARL,Pearl,92
+2026-11-15 08:19,9,beam-2,BEAM,Beam,149
+2026-11-15 08:19,10,zcash,ZEC,Zcash,11
+2026-11-15 08:19,11,solana,SOL,Solana,7
+2026-11-15 08:19,12,near,NEAR,NEAR Protocol,23
+2026-11-15 08:19,13,uniswap,UNI,Uniswap,29
+2026-11-15 08:19,14,acurast,ACU,Acurast,384
+2026-11-15 08:19,15,chainlink,LINK,Chainlink,17
