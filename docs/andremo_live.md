@@ -735,3 +735,8 @@ la **157 passa l'esame scritto** (Bitcoin ed Ether comprati a pronti e venduti s
 perpetuo nei rialzi lunghi. La **158 non passa**: con la leva al 300-400% lo Sharpe resta quello di G1 (corretto 0,74-0,76), la discesa
 arriva a −42/−47% e lo stop scatta 1-2 volte. **Capito oggi**: la fonte di guadagno più regolare che abbiamo trovato è il funding
 coperto; rende poco ma quasi senza discese, e si muove quasi indipendente da G1 (correlazione 0,15).
+**15 novembre, la prova 159, la base dei future trimestrali** (`research/programma7/RISULTATI_NOVANTASETTESIMA.md`): **non passa**. Comprare
+a pronti e vendere il trimestrale fino alla scadenza rende il 5,5% l'anno con i contratti in moneta (discesa −4%, 2020 negativo, Sharpe
+corretto 0,41) e il 3% con quello in USDT, che si fa liquidare 6 volte su 19 trimestri. **Capito oggi**: la base dei trimestrali paga meno
+del funding dei perpetui negli stessi trimestri (7,3% contro 11,1% l'anno); fra i guadagni «quasi fissi» il funding coperto (157) resta il
+migliore. Conto delle prove 326.
