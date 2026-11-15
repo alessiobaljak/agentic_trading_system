@@ -351,3 +351,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   monete vendute crollano (−13/−30%). **Capito**: nei giorni forti di G1 il demo perde soprattutto per la moneta che sul demo non
   esiste ma sul conto vero sì: il conto vero dovrebbe stare più vicino al paper del demo. L'arrotondamento resta anche sul conto vero:
   da misurare con le prossime letture (il segno, quanto vale per moneta).
+* **15 novembre 2026, voce nuova (richiesta del proprietario: la leva più alta), regole scritte, non calcolate**: scritta la prova 158
+  (`research/programma7/NOVANTASEIESIMA.md`): G1 con pesi ×1,5 e ×2 (esposizione lorda 300% e 400%), stop del conto vero applicato
+  (fuori fino al primo lunedì almeno 3 giorni dopo, poi riparte), liquidazione e discesa dentro la giornata con le candele a 1 ora
+  (margine di mantenimento 1%), esame approvato più «nessuna liquidazione e stop al massimo 2 volte in 5,75 anni». Fonti dei punti di
+  partenza: discesa −30,1% e giorno peggiore −8,5% (prova 120), limiti del conto vero (`docs/conto_vero.md`, punto 4b). Alzare sopra il
+  200% cambia i limiti fissi: lo decide solo il proprietario. Da committare e far verificare prima del calcolo; nessuna strategia
+  spenta o sostituita.
