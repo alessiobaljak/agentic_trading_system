@@ -817,3 +817,12 @@ prove 153-155 non erano nel mazzo. Aggiunte (`asticella.py`: 154 e 155 con le se
 Sharpe del suo `esame.json`). Al taglio 0,5: 194 famiglie (erano 191); G1 **0,757** (280 USDT 0,685), F5 + M7 + K2 0,813 (al 19
 ottobre 0,818), C3 0,634: i numeri quasi non cambiano. **Regola pratica**: a ogni prova nuova, nello stesso commit dei risultati,
 si aggiungono le sue serie al mazzo e si lancia questo test.
+**15 novembre, sera: le serie a incasso quasi fisso falsano il mazzo.** Le prove 157 e 161 (funding coperto) hanno uno Sharpe
+settimanale di 3,5-3,9 gonfiato dalle settimane legate fra loro (correlazione con la settimana prima 0,76, revisione della 161,
+`audits/reports/2026-11-15-PROVA161.md`, problema Alto 1; a scala d'anno circa 0,9-1,0). Entrando nel mazzo alzano la dispersione
+degli Sharpe e abbassano lo Sharpe corretto di tutte le prove, senza che le prove siano cambiate: G1 da **0,756** (senza 157, 159 e
+161) a **0,596** (mazzo del 15 novembre sera), la miscela F5 + M7 + K2 da 0,817 a 0,705 (misura della sessione principale con le
+misure delle candidate di `mazzo_asticella.candidate()`). **Proposta, da decidere con il proprietario** (cambia il modo di contare
+approvato l'11 novembre): nel mazzo, per ogni serie, lo Sharpe corretto per le settimane legate (Lo, «The statistics of Sharpe
+ratios», Financial Analysts Journal 2002) al posto di quello semplice; finché non si decide, i numeri corretti dal 15 novembre si
+scrivono con e senza le serie a incasso quasi fisso.

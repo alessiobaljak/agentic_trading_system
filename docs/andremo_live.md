@@ -746,3 +746,8 @@ future sarebbe andato sotto zero e liquidato 9 volte in una variante e 5 nell'al
 **dal 2022 circa +4% l'anno** (40 USDT su 1.000); il 2021 da solo fa più di metà del guadagno. **Capito oggi**: il funding coperto è
 regolare ma rende poco fuori dagli anni di euforia, e su Binance richiede di spostare il margine fra pronti e future in tempo, cosa che il
 bot oggi non sa fare.
+**15 novembre, sera, la prova 160 (G1 con una parte di funding coperto) e un effetto sul conto delle prove**: la miscela 60/40 ha la discesa
+−17,5% contro −30,1% di G1 e uno Sharpe un poco più alto, ma rende 41% l'anno contro 66% e non passa l'esame (Sharpe corretto 0,72); il
+coperto non protegge nelle giornate peggiori di G1, la discesa scende solo perché G1 pesa meno. **Capito oggi**: le prove a incasso quasi
+fisso, con le settimane legate fra loro, gonfiano lo Sharpe settimanale e abbassano lo Sharpe corretto di tutte le altre (G1 da 0,756 a
+0,596 senza che G1 cambi); c'è una correzione nota (Lo 2002) da decidere con il proprietario (backlog P34). Conto delle prove 330.
