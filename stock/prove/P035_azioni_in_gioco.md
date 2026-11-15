@@ -74,3 +74,12 @@ Da leggere accanto (non sono prove): operazioni, quota in guadagno, guadagno med
 misurato (mediana, media, 90° percentile) confrontato con lo stop medio in punti base; la versione senza leva; il risultato anno per
 anno. **Se passa uno dei due esami:** revisore separato, poi la misura **in avanti** sul demo (nessun periodo chiuso: già usato dalla
 famiglia «in giornata»), con la leva solo se il proprietario la approva.
+
+## Aggiunta prima del calcolo (15 novembre 2026; nessun prezzo scaricato, nessun risultato visto)
+
+Rileggendo il programma: la regola «se il minuto dell'ingresso tocca anche lo stop, si esce allo stop» conta anche un minimo che può
+essere avvenuto **prima** della rottura (nel minuto della rottura di un acquisto il prezzo arriva da sotto il livello, quindi il suo
+minimo è quasi sempre sotto lo stop, che è a un decimo dell'ATR): renderebbe quasi tutte le operazioni perdenti per un errore di
+calcolo, non per il mercato. Nel minuto dell'ingresso quindi: **se il minuto è iniziato già oltre il livello** (ingresso all'apertura
+del minuto), lo stop vale se il minuto lo tocca; **se è iniziato prima del livello**, lo stop vale solo se la **chiusura** del minuto
+è oltre lo stop (allora si esce allo stop). Dai minuti dopo, come scritto sopra. Nient'altro cambia.
