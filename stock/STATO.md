@@ -227,6 +227,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   settori qui non c'è; con i costi −7,2% in 9 anni (`prove/P033_risultati.md`). Capito: in tre giorni (12-14 novembre) sono cadute sei idee pubblicate
   (prove 28-33) su notizie, comunicati, conti, vendite allo scoperto e settori; nelle azioni americane dal 2016 gli effetti noti, dopo
   i costi, non ci sono più o sono troppo piccoli per vedersi. Nel conto: 83.
+* **La prova 34** (la deriva dopo i risultati nelle aziende piccole, comprate dopo la reazione più alta e coperte con l'IWM; idea
+  I36, l'ultima parte della I29): **bocciata.** Il quinto con la reazione più alta fa peggio dell'IWM nel mese dopo (−0,27% al mese,
+  t −1,20); con i costi −39,3% dal 2016 al 2024 (`prove/P034_risultati.md`). L'idea I29 (le aziende piccole) è provata in tutte e tre
+  le parti. Capito: il lato comprato delle piccole coperto con l'IWM ha perso in **quattro prove su quattro** (27, 28, 32, 34), con
+  regole diverse; sospetto (da misurare, non misurato): un paniere a pesi uguali di piccole scambiate fa peggio dell'IWM di per sé
+  negli anni 2016-2024, e la copertura non è neutra. Prima di un'altra prova sulle piccole: misurare quel paniere di base contro
+  l'IWM. Nel conto: 85.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
