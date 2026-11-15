@@ -1,0 +1,170 @@
+{
+ "BTCUSDT": {
+  "mark1h": {
+   "righe": 50232,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "non_allo_scoccare": 0,
+   "ore_mancanti": 216,
+   "alto_sotto_apertura": 0,
+   "valori_non_positivi": 0
+  },
+  "perp1h": {
+   "righe": 50448,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "non_allo_scoccare": 0,
+   "ore_mancanti": 0,
+   "alto_sotto_apertura": 0,
+   "valori_non_positivi": 0
+  },
+  "mark_contro_scambiato_apertura": {
+   "mediana": 1.0394297357274596e-06,
+   "p01": -0.0008862684451351131,
+   "p999": 0.0008087551398261106,
+   "oltre_1pct": 0,
+   "peggiori": {
+    "2021-02-08 13:00:00": 0.007302822504763773,
+    "2022-09-21 18:00:00": 0.0053952514163735366,
+    "2022-07-12 12:00:00": 0.005034151277510723,
+    "2021-09-07 15:00:00": 0.004074977734663143,
+    "2021-02-22 11:00:00": 0.0039461621248158
+   }
+  },
+  "mark_alto_orario_su_apertura_max": {
+   "2021-01-29 08:00:00": 0.13147431099515927,
+   "2023-10-23 22:00:00": 0.10415986133446764,
+   "2021-02-08 12:00:00": 0.0992516374760859,
+   "2022-05-11 13:00:00": 0.08564966077930158,
+   "2023-10-16 13:00:00": 0.08115280423667093
+  },
+  "ore_mark_riempite_dal_codice": 216,
+  "ore_ancora_vuote": 0,
+  "pronti": {
+   "giorni_nel_periodo": 2101,
+   "attesi": 2101,
+   "nan_nel_periodo": 0,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "pronti_su_mark_00": {
+    "mediana": 0.00037889010411484847,
+    "min": -0.0025066488169949164,
+    "max": 0.001500455681113344,
+    "oltre_1pct": 0,
+    "peggiori": {
+     "2021-05-13": -0.0025066488169949164,
+     "2021-02-12": -0.001971769388909528,
+     "2021-03-11": -0.0018733499064713666,
+     "2021-02-17": -0.0017941251999117336,
+     "2021-02-07": -0.0017460077239122018
+    }
+   }
+  },
+  "funding": {
+   "duplicati_file": 0,
+   "regolamenti_nel_periodo": 6300,
+   "attesi_ogni_8_ore": 6300,
+   "mancanti": [],
+   "n_mancanti": 0,
+   "fuori_dalle_00_08_16": 0,
+   "ms_oltre_lo_scoccare_max": 47,
+   "intervalli_diversi_da_8": 0,
+   "tasso_min": -0.00119172,
+   "tasso_max": 0.00248993,
+   "quota_al_tasso_base_0_0001": 0.30746031746031743,
+   "quota_negativi": 0.13968253968253969
+  },
+  "funding_pannello_contro_vero": {
+   "giorni": 2190,
+   "senza_vero": 0,
+   "diversi_1e12": 0,
+   "esempi": {}
+  },
+  "pannello_giorni_senza_candela_nel_periodo": [],
+  "pannello_volume_zero": 0
+ },
+ "ETHUSDT": {
+  "mark1h": {
+   "righe": 50376,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "non_allo_scoccare": 0,
+   "ore_mancanti": 72,
+   "alto_sotto_apertura": 0,
+   "valori_non_positivi": 0
+  },
+  "perp1h": {
+   "righe": 50448,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "non_allo_scoccare": 0,
+   "ore_mancanti": 0,
+   "alto_sotto_apertura": 0,
+   "valori_non_positivi": 0
+  },
+  "mark_contro_scambiato_apertura": {
+   "mediana": 3.009954047450414e-06,
+   "p01": -0.0012121719558413763,
+   "p999": 0.001101143705100789,
+   "oltre_1pct": 0,
+   "peggiori": {
+    "2021-02-08 13:00:00": 0.008469659278020347,
+    "2022-09-21 18:00:00": 0.007965990976327109,
+    "2022-05-28 17:00:00": 0.007508995378629035,
+    "2025-09-17 18:00:00": 0.006478259893809346,
+    "2021-09-07 15:00:00": 0.00627016935450575
+   }
+  },
+  "mark_alto_orario_su_apertura_max": {
+   "2025-03-02 16:00:00": 0.1213334128850232,
+   "2022-07-16 16:00:00": 0.11386886029086463,
+   "2022-05-11 13:00:00": 0.1016879170994438,
+   "2023-01-14 00:00:00": 0.10162292256367378,
+   "2024-05-20 19:00:00": 0.0984098742556545
+  },
+  "ore_mark_riempite_dal_codice": 72,
+  "ore_ancora_vuote": 0,
+  "pronti": {
+   "giorni_nel_periodo": 2101,
+   "attesi": 2101,
+   "nan_nel_periodo": 0,
+   "duplicati": 0,
+   "fuori_ordine": 0,
+   "pronti_su_mark_00": {
+    "mediana": 0.00037607231820158127,
+    "min": -0.004933351440569944,
+    "max": 0.002533259262411436,
+    "oltre_1pct": 0,
+    "peggiori": {
+     "2021-05-13": -0.004933351440569944,
+     "2021-02-09": -0.0033280113685771884,
+     "2021-01-10": -0.00302133971238594,
+     "2021-01-11": -0.0029571687494037713,
+     "2021-01-19": -0.002609965237471701
+    }
+   }
+  },
+  "funding": {
+   "duplicati_file": 0,
+   "regolamenti_nel_periodo": 6300,
+   "attesi_ogni_8_ore": 6300,
+   "mancanti": [],
+   "n_mancanti": 0,
+   "fuori_dalle_00_08_16": 0,
+   "ms_oltre_lo_scoccare_max": 47,
+   "intervalli_diversi_da_8": 0,
+   "tasso_min": -0.00356332,
+   "tasso_max": 0.00375,
+   "quota_al_tasso_base_0_0001": 0.2973015873015873,
+   "quota_negativi": 0.15714285714285714
+  },
+  "funding_pannello_contro_vero": {
+   "giorni": 2190,
+   "senza_vero": 0,
+   "diversi_1e12": 0,
+   "esempi": {}
+  },
+  "pannello_giorni_senza_candela_nel_periodo": [],
+  "pannello_volume_zero": 0
+ }
+}

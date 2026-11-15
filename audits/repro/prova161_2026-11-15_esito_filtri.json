@@ -1,0 +1,330 @@
+{
+ "passi_del_repository": [
+  [
+   0.001,
+   0.001,
+   50.0
+  ],
+  [
+   0.001,
+   0.001,
+   20.0
+  ]
+ ],
+ "A": {
+  "diff_con_la_prova_passi1000": 9.993633524885137e-17,
+  "capitale_250": {
+   "composto": 0.05205346906461883,
+   "sharpe": 3.5282598484735908,
+   "anno_min": 0.005040725467610918,
+   "dal_2022": 0.027087266347123322,
+   "liq": 0,
+   "ingressi_bloccati": [
+    184,
+    0
+   ],
+   "rif": [
+    14,
+    24
+   ],
+   "chiusure_da_rifornimento": [
+    9,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    19.93001,
+    9.901440000000003
+   ],
+   "giorni_dentro": [
+    1756,
+    1898
+   ]
+  },
+  "capitale_280": {
+   "composto": 0.0526985967384368,
+   "sharpe": 3.6661285124796708,
+   "anno_min": 0.004657598176536548,
+   "dal_2022": 0.027825978581948296,
+   "liq": 0,
+   "ingressi_bloccati": [
+    18,
+    0
+   ],
+   "rif": [
+    14,
+    23
+   ],
+   "chiusure_da_rifornimento": [
+    7,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    19.93001,
+    11.001600000000002
+   ],
+   "giorni_dentro": [
+    1924,
+    1898
+   ]
+  },
+  "capitale_500": {
+   "composto": 0.05669745385525937,
+   "sharpe": 3.5679440814267838,
+   "anno_min": 0.004988420282336925,
+   "dal_2022": 0.029670624790563906,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    13,
+    25
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    24.322869999999998,
+    17.148039999999998
+   ],
+   "giorni_dentro": [
+    1949,
+    1898
+   ]
+  },
+  "capitale_1000": {
+   "composto": 0.06083277212032612,
+   "sharpe": 3.562733871676251,
+   "anno_min": 0.005951937881481295,
+   "dal_2022": 0.03144626897116594,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    16,
+    26
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    36.76936,
+    33.07122
+   ],
+   "giorni_dentro": [
+    1949,
+    1898
+   ]
+  },
+  "capitale_2000": {
+   "composto": 0.06298378904412494,
+   "sharpe": 3.6186253671564548,
+   "anno_min": 0.006408043266012076,
+   "dal_2022": 0.032946823525572204,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    18,
+    26
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    73.53872,
+    67.3673
+   ],
+   "giorni_dentro": [
+    1949,
+    1898
+   ]
+  }
+ },
+ "B": {
+  "diff_con_la_prova_passi1000": 4.440892098500626e-16,
+  "capitale_250": {
+   "composto": 0.05074807087738953,
+   "sharpe": 3.440946639815546,
+   "anno_min": 0.0048515501511781816,
+   "dal_2022": 0.024565926138531605,
+   "liq": 0,
+   "ingressi_bloccati": [
+    249,
+    0
+   ],
+   "rif": [
+    7,
+    21
+   ],
+   "chiusure_da_rifornimento": [
+    6,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    36.76936,
+    9.901440000000003
+   ],
+   "giorni_dentro": [
+    1800,
+    1947
+   ]
+  },
+  "capitale_280": {
+   "composto": 0.0506229479109892,
+   "sharpe": 3.540230170414572,
+   "anno_min": 0.004537194531362735,
+   "dal_2022": 0.025380183336388657,
+   "liq": 0,
+   "ingressi_bloccati": [
+    124,
+    0
+   ],
+   "rif": [
+    7,
+    21
+   ],
+   "chiusure_da_rifornimento": [
+    6,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    36.76936,
+    11.001600000000002
+   ],
+   "giorni_dentro": [
+    1925,
+    1947
+   ]
+  },
+  "capitale_500": {
+   "composto": 0.0543805586118129,
+   "sharpe": 3.45575037988205,
+   "anno_min": 0.0075470259818661845,
+   "dal_2022": 0.02692628199614104,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    4,
+    21
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    36.76936,
+    17.148039999999998
+   ],
+   "giorni_dentro": [
+    2055,
+    1947
+   ]
+  },
+  "capitale_1000": {
+   "composto": 0.059067178067478965,
+   "sharpe": 3.4851061996350747,
+   "anno_min": 0.008521810360983983,
+   "dal_2022": 0.02949280504169129,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    6,
+    22
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    36.76936,
+    33.07122
+   ],
+   "giorni_dentro": [
+    2055,
+    1947
+   ]
+  },
+  "capitale_2000": {
+   "composto": 0.060638547118137875,
+   "sharpe": 3.5075994844138774,
+   "anno_min": 0.009018921254839274,
+   "dal_2022": 0.030323439499405712,
+   "liq": 0,
+   "ingressi_bloccati": [
+    0,
+    0
+   ],
+   "rif": [
+    6,
+    22
+   ],
+   "chiusure_da_rifornimento": [
+    0,
+    0
+   ],
+   "rifornimenti_a_pronti_sotto_5_usdt": [
+    0,
+    0
+   ],
+   "rifornimento_min_usdt": [
+    73.53872,
+    67.3673
+   ],
+   "giorni_dentro": [
+    2055,
+    1947
+   ]
+  }
+ }
+}

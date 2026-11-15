@@ -1,6 +1,5 @@
 # Indice della memoria dell'auditor (massimo 40 righe)
 Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KNOWN_PITFALLS.md`; il resto solo se serve.
-
 ## Stato degli audit per strategia
 | Strategia | Ultimo audit | Verdetto | Note |
 |---|---|---|---|
@@ -11,7 +10,8 @@ Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KN
 | Prova 96: G22, deriva del Bitcoin dopo la Fed (riesame) | 2026-11-12 | PASS tecnico del «no» | p 0,0205 rifatta identica; nessun errore la porta a 0,01; Medi: controllo a caso esagera, limite macro di 2 ore |
 | Prova 55: C3, punteggio unico F5 + K2 + M7 (riesame) | 2026-11-12 | FAIL del calcolo, «no» confermato | settimana oltre il periodo; «peggio di F5» falso sulle stesse settimane (1,87 contro 1,61); corretto oggi 0,75 |
 | Mazzo dello Sharpe corretto (`asticella.py`, `78235da`) | 2026-11-12 | FAIL del mazzo | numeri rifatti identici; 27 varianti senza serie tolte, 81-82 senza filtro, conferme dentro; corretti G1 0,733, miscela 0,797/0,802 |
-| Prova 157: CB, funding coperto su BTC ed ETH | 2026-11-15 | FAIL del calcolo | margine senza perdite chiuse: 9 e 5 liquidazioni; con margine possibile 7,3%/7,4% (non 10,5%), dal 2022 circa 4%; da rifare con la regola scritta prima |
+| Prova 157: CB, funding coperto su BTC ed ETH | 2026-11-15 | FAIL del calcolo | margine senza perdite chiuse: 9 e 5 liquidazioni; con margine possibile 7,3%/7,4% (non 10,5%), dal 2022 circa 4%; rifatta come 161 |
+| Prova 161: CM, funding coperto con il margine vero (la 157 rifatta) | 2026-11-15 | PASS tecnico | Alti: settimane legate (t corretto 2,4-3,2, Sharpe l'anno ~0,9-1,0); bot senza pronti e trasferimenti; dal 2022 ~3%, ultimi 12 mesi ~1,3% |
 | G11, G1N, F5, eventi (paper); vecchie `bot/strategies/` (ferme dal 13 ott) | mai | — | solo elenco con lo stato al prossimo avvio completo |
 
 ## Cosa contiene ogni file
@@ -21,19 +21,20 @@ Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KN
   `g1_2026-11-12.py`, `g1_parte2_*` (G1 e conti giornalieri di `nucleo`: cache `CACHE_G1N`, parte `base` prima); `prova113_*` (eventi
   orari, ore in cartella temporanea); `prova96_*` (p in otto modi); `prova55_*` (punteggio a parti); `mazzo_2026-11-12.py` (prima
   `cache <cartella>`, poi `numeri`, `copertura`, `allinea`, `eventi`, `sensi`, `regola_scritta`, `fino57`, `varianti_g1`);
-  `prova157_2026-11-15.py` (coperture pronti contro perpetuo: `scarica <cartella>`, `dati`, `rifai` 8 minuti, `margine` a patrimonio
-  con liquidazione al mark orario, `filtri`, `extra`, `esempio`).
+  `prova157_2026-11-15.py` (coperture: `scarica <cartella>`, `dati`, `rifai`, `margine`, `filtri`, `extra`, `esempio`); `prova161_2026-11-15.py`
+  (simulatore ora per ora dalle regole; `rifai` prima, poi `indipendente`, `margine`, `sensi`, `misure`, `robustezza_t`, `filtri`, `corretti`,
+  `tasso_base`, `limiti_bot`).
 
 ## Decisioni aperte per Alessio
 - (7 nov) Minimo di anni e di operazioni; perdita giornaliera del 5% da simulare o no. (11 nov) Riesame che rende candidata una
   «costruzione» esclusa; famiglia del funding nelle miscele; minimo di eventi; esame in avanti delle monete gratis scritto prima.
-- (12 nov) G1 sul conto vero: soglia (0,95 scritta, 0,80 di oggi), costo degli ordini limite, tetto per moneta, capitale minimo.
-- (12 nov) Prova 96: limite di 2 ore attorno agli eventi macro; soglia a eventi. Prova 55: «qualche punto sotto» per C3; riserva del 23 ott.
-- (12 nov) Mazzo: prove dopo la scoperta (G1 fino alla 57: 0,946; tutte: 0,733-0,769); prove senza serie; conferme; serie corte.
-- (15 nov) Prova 157: rifarla come prova nuova con la regola di margine scritta prima? Vale circa il 4% l'anno dal 2022? Commissione a
-  pronti, mantenimento, soglia di margine; capitale minimo (sotto circa 300 USDT niente BTC).
+- (12 nov) G1 sul conto vero: soglia (0,95 scritta, 0,80 di oggi), costo dei limiti, tetto per moneta, capitale minimo.
+- (12 nov) Prova 96: limite macro di 2 ore; soglia a eventi. Prova 55: «qualche punto sotto»; riserva del 23 ott. Mazzo: prove dopo
+  la scoperta (G1 fino alla 57: 0,946; tutte 0,733-0,769), prove senza serie, conferme, serie corte.
+- (15 nov) Coperture 157/161: ~3% l'anno dal 2022 vale il rischio di borsa?; t corretto per settimane legate; pronti 0,10%+0,05%,
+  mantenimento 0,5%, capitale minimo ~400 USDT; gamba a pronti e trasferimenti nel bot; 161 idea nuova o 157 rifatta.
 
 ## Note di metodo
-- Mai il `main` delle prove (riscrive i risultati): importare le funzioni (voce 11). L'auditor non committa (11 nov).
-- Copia troncata: commit con `gh api` (voce 17); mai `grep -r research/`. Script: `python3 -I audits/repro/<script>.py` dalla radice.
+- Mai il `main` delle prove (voce 11); l'auditor non committa (11 nov). Copia troncata: commit con `gh api` (voce 17); mai
+  `grep -r research/` né `ls research/data` (negato). Script: `python3 -I audits/repro/<script>.py` dalla radice.
 - La sessione principale lavora in parallelo (giro del mattino): file cambiati fuori da `audits/` durante l'audit non sono dell'auditor.

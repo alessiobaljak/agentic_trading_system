@@ -1,0 +1,30 @@
+{
+ "A": {
+  "BTCUSDT": {
+   "giorni_dentro": 1949,
+   "oltre_5pct_del_patrimonio": 1,
+   "oltre_5pct_del_margine_al_60": 224,
+   "perdita_max_su_patrimonio": 0.06164620185847214
+  },
+  "ETHUSDT": {
+   "giorni_dentro": 1898,
+   "oltre_5pct_del_patrimonio": 1,
+   "oltre_5pct_del_margine_al_60": 321,
+   "perdita_max_su_patrimonio": 0.05180610836320693
+  }
+ },
+ "B": {
+  "BTCUSDT": {
+   "giorni_dentro": 2055,
+   "oltre_5pct_del_patrimonio": 1,
+   "oltre_5pct_del_margine_al_60": 243,
+   "perdita_max_su_patrimonio": 0.06164620185847214
+  },
+  "ETHUSDT": {
+   "giorni_dentro": 1947,
+   "oltre_5pct_del_patrimonio": 2,
+   "oltre_5pct_del_margine_al_60": 338,
+   "perdita_max_su_patrimonio": 0.05180610836320693
+  }
+ }
+}

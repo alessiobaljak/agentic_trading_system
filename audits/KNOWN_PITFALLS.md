@@ -1,7 +1,8 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre 2026 (prova 157: margine delle coperture a pronti).
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre 2026 (prova 157: margine delle coperture a pronti;
+prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
 
 ## Dati
 
@@ -122,6 +123,12 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre
     pannello ha picchi che il mark non ha (BTC +36,2% sull'apertura il 26 luglio 2021). L'archivio del mark orario
     (`data/futures/um/monthly/markPriceKlines/<S>/1h/`) manca di 216 ore su BTC (fra cui 24-27 luglio 2021) e 72 su ETH: riempire col prezzo
     scambiato orario (piu' severo) e dirlo. Scarico in cartella temporanea: `audits/repro/prova157_2026-11-15.py scarica <cartella>`.
+43. **Limiti fissi del bot che vedono una gamba sola di una copertura** (prova 161): la perdita giornaliera del 5% (`hard_limits.py:21`)
+    sul solo portafoglio dei future scatta in 224-338 giorni per moneta (sul patrimonio 1-2); la leva massima 2 in alta volatilita'
+    (`hard_limits.py:33-37`) e' sotto la leva che la regola accetta (2,2, nella giornata 3,27). Un limite che chiude il perpetuo lascia il
+    pronti scoperto. Cercare: strategie con due gambe su portafogli diversi; misura `audits/repro/prova161_2026-11-15.py limiti_bot`.
+    Da misurare anche la quota del guadagno dal tasso di base del funding (0,01% ogni 8 ore, fissato dalla borsa): 161 il 29-30%,
+    senza il 2022 diventa negativo (`... tasso_base`).
 
 ## Misure
 
@@ -146,6 +153,9 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre
     0,80 (brief del 12 nov). Dirlo sempre accanto all'esito, con la soglia scritta prima e quella del brief.
 30. **L'esito dello Sharpe corretto dipende dall'«aggiunta» del 23 ottobre** (V senza i gruppi con t sotto −3): senza, G1 ha 0,0000
     invece di 0,87. Riportare tutti e due.
+    Prova 161 (15 nov): 1,00 con l'aggiunta (asticella 1,885), 0,0000 senza (asticella 10,16), e 1,00 anche per «sempre dentro»: il
+    valore non ha vie di mezzo e non distingue il segnale. Controllo: rifare sempre con la versione banale della strategia
+    (`audits/repro/prova161_2026-11-15.py corretti`).
 31. **Controllo su «giorni a caso» più calmi degli eventi** (prova 96, 12 nov 2026): le medie di 46 giorni senza riunione hanno la
     dispersione dei giorni calmi (1,48% contro 2,05% per operazione), e «nessuna delle 2.000 estrazioni arriva alla media» sembra una p
     di zero; a pari dispersione la quota è 0,95%. Cercare: `quota_caso`, `estrazioni` di giorni senza evento citate a sostegno;
@@ -170,6 +180,12 @@ raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre
     C3 dal 2022 (250 settimane) contro F5 dal 2021 (302); sulle stesse settimane F5 fa 1,69 (1,61 dopo le parita') e C3 e' sopra.
     Cercare: Sharpe di un'altra prova citati nel verdetto e presi da un altro `RISULTATI_*.md` o `esame.json` con un `inizio` diverso;
     rifare sempre sulle stesse settimane (`audits/repro/prova55_2026-11-12.py base`, `F5_come_nel_verdetto`).
+42. **Settimane legate fra loro nelle strategie a incasso quasi fisso** (coperture del funding, prova 161, 15 nov 2026): t = Sharpe ×
+    radice di settimane/52 (`terza.py:340-342`) presume settimane indipendenti; con il funding che resta alto o basso per mesi la
+    correlazione a una settimana e' 0,76. t da 8,65 a 3,24 (13 settimane di ritardo), 2,81 (26), 2,52 (52); Sharpe l'anno da 3,6 a circa
+    0,9-1,0; la famiglia risulta la piu' alta del mazzo (3,29). Lo Sharpe corretto con le settimane efficaci resta 0,97-0,99 (non e'
+    l'autocorrelazione a saturarlo, e' la volatilita' quasi nulla). Cercare: volatilita' annua sotto il 3%, `w.autocorr(1)` sopra 0,3,
+    serie usate in miscele pesate sulla volatilita'. Misura: `audits/repro/prova161_2026-11-15.py robustezza_t`.
 
 ## Procedura dell'audit
 
