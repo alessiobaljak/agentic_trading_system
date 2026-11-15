@@ -336,6 +336,7 @@ FUORI_DAL_MAZZO = {
 DIFFERENZE_DAL_REGISTRO = {
     89: "il registro conta 2 (F5C e il controllo col fattore mescolato, VENTISETTESIMA.md); nel mazzo solo F5C: un controllo non e' "
         "una strategia provata",
+    161: "in calcolo il 15 novembre: entra quando salva le serie (il controllo delle cartelle se ne accorge)",
 }
 
 

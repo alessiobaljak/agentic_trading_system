@@ -56,3 +56,7 @@ backtest-auditor ha bocciato per il margine del perpetuo (`audits/reports/2026-1
 stato liquidato; il guadagno vero è più basso). Usarla gonfierebbe la miscela. **La prova 160 non si calcola** finché il funding coperto
 non è rifatto come prova nuova con una regola di margine scritta prima (decisione chiesta al proprietario il 15 novembre); allora la
 miscela userà quella serie, con queste regole e senza altri cambi. Il numero 160 resta riservato.
+
+**Aggiornamento del 15 novembre, sera**: il proprietario ha chiesto di rifare il funding coperto con il margine giusto: è la prova 161
+(`NOVANTANOVESIMA.md`). Quando la 161 avrà le sue serie, la miscela userà la serie «161 B» (90 giorni, la lenta, come scritto sopra per la
+157) al posto di quella della 157, con queste regole e senza altri cambi.
