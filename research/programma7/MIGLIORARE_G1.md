@@ -364,3 +364,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   nessuna liquidazione con il margine unico; peso per moneta oltre il 60% in 5 e 21 giorni. Sharpe corretto 0,741 e 0,762 (G1 0,747):
   **non passa**, come G1 stessa con il mazzo completo. La leva non migliora la strategia: moltiplica guadagni e discese, e sopra il
   200% cambia i limiti fissi del conto vero (decisione solo del proprietario).
+* **15 novembre 2026, 12:30 UTC, voce 11, le posizioni più piccole del demo non sono l'arrotondamento** (`misure_g1/voce11_arrotondamento_15nov.py`:
+  pesi dopo il ribilancio del 15 novembre, `ops/results/0744`, passi delle quantità pubblici di Binance): sulle 48 monete che hanno
+  tutti e due, il demo è più piccolo del paper solo in 14 (non è sistematico); l'arrotondamento delle quantità verso lo zero vale in
+  tutto 0,38 punti del conto contro 1,11 di differenza osservata. Le differenze grandi sono variazioni del giorno rimaste sotto il
+  minimo di Binance (BCHUSDT 6,67/5,53, GTCUSDT 2,09/1,61, BRUSDT 1,78/1,33): **la correzione alla lettura del 14 novembre** è che il
+  lato venduto più piccolo veniva dai resti sotto il minimo (voce 9), non dai passi delle quantità. Sul conto vero con 1.000 USDT i resti
+  sotto il minimo restano; le monete mancanti no.
