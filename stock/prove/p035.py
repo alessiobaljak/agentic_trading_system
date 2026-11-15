@@ -53,11 +53,12 @@ def cartella(nome: str):
 
 
 # --- (1) i filtri del giorno -------------------------------------------------------------------------------------------------------
-def filtri(df: pd.DataFrame, rett: pd.Series) -> pd.DataFrame:
+def filtri(df: pd.DataFrame, rett: pd.Series, volume: pd.Series) -> pd.DataFrame:
     """Per un titolo, giorno per giorno: l'ATR e il volume medio delle 14 sedute prima nei termini di oggi (frazionamenti e dividendi
     tolti con il fattore della chiusura rettificata `f`), il fattore, e se passa i filtri (apertura di oggi sopra 5 dollari)."""
     g = pd.Index(controlli.date_ny(df.index))
-    d = pd.DataFrame({c: df[c].to_numpy(float) for c in COLONNE + ["volume"]}, index=g)
+    d = pd.DataFrame({c: df[c].to_numpy(float) for c in COLONNE}, index=g)
+    d["volume"] = volume.reindex(df.index).to_numpy(float)
     d["f"] = rett.reindex(g).to_numpy() / d["close"]
     hi, lo, cl = d["high"] * d["f"], d["low"] * d["f"], d["close"] * d["f"]
     tr = pd.concat([hi, cl.shift(1)], axis=1).max(axis=1) - pd.concat([lo, cl.shift(1)], axis=1).min(axis=1)
@@ -208,7 +209,7 @@ def minuti(g: date, simboli: list[str]) -> dict[str, pd.DataFrame]:
         x = pd.read_csv(f, keep_default_na=False, na_values=[""])
     else:
         b = _barre(simboli, "1Min", alle(g, 9, 35), alle(g, 15, 59)) if simboli else {}
-        pezzi = [df.reset_index().assign(simbolo=s) for s, df in b.items() if len(df)]
+        pezzi = [df.rename_axis("t").reset_index().assign(simbolo=s) for s, df in b.items() if len(df)]
         x = pd.concat(pezzi) if pezzi else pd.DataFrame(columns=["t"] + COLONNE + ["volume", "simbolo"])
         x.to_csv(f, index=False)
     out = {}
@@ -255,7 +256,8 @@ def calcola() -> dict:
     atr: dict[tuple[str, date], float] = {}
     rotti = con_prezzi = 0
     for s in simboli:
-        if archivio.carica(s, TIPI["raw"]) is None:
+        grezzo = archivio.carica(s, TIPI["raw"])
+        if grezzo is None or grezzo.empty:
             continue
         try:
             df, rett, _ = prepara_titolo(s, FINO, TIPI["raw"], TIPI["az"])
@@ -265,7 +267,7 @@ def calcola() -> dict:
         if len(df) <= SEDUTE + 1:
             continue
         con_prezzi += 1
-        d = filtri(df, rett)
+        d = filtri(df, rett, grezzo["volume"])
         si = [g for g in d.index[d["passa"].to_numpy()] if g in indice]
         if not si:
             continue

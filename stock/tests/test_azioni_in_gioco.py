@@ -19,7 +19,7 @@ def test_filtri_atr_e_volume_delle_sedute_prima():
     i = pd.date_range("2024-01-02", periods=n, freq="B", tz="America/New_York")
     df = pd.DataFrame({"open": 10.0, "high": 11.0, "low": 9.0, "close": 10.0, "volume": 2_000_000.0}, index=i)
     rett = pd.Series(10.0, index=pd.Index(i.date))
-    d = p035.filtri(df, rett)
+    d = p035.filtri(df[["open", "high", "low", "close"]], rett, df["volume"])
     assert d["passa"].iloc[:14].sum() == 0               # servono le 14 sedute prima
     assert d["passa"].iloc[14:].all()
     assert abs(d["atr"].iloc[-1] - 2.0) < 1e-9 and abs(d["adv"].iloc[-1] - 2e6) < 1e-6
