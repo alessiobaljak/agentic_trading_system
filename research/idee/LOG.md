@@ -99,3 +99,11 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   registro, ma non scritta nessuna: statistiche dei top trader e opzioni europee di Binance hanno solo uno storico breve (circa 30 giorni sull'API, non
   verificato qui: da controllare prima di scrivere), prestito del margine non scaricabile storico; il premio pronti-perpetuo è la prova 128 (BP) e la base 159.
   Probabilità media-bassa per la miscela; il rischio vero del coperto resta non misurato.
+
+- 16 novembre 2026 (giro delle 08:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Angolo 1 (lato comprato di G1): le fasce di
+  grandezza e i due lati sono già misurati (`MIGLIORARE_G1.md`, voci 151-181: il comprato lavora in tutte le fasce, il funding 2026 viene soprattutto da lì); la
+  voce 12 ha diviso solo il lato venduto per età e fiammate. Un taglio simile sul comprato (per età o grandezza) sarebbe una variante di G1 scelta guardando i
+  dati, stessa famiglia di prove, e non ho trovato uno studio serio che dica cosa fanno le monete con il funding più negativo nei giorni dopo (la prova 141 è il
+  funding che gira da positivo a negativo). Angolo 2 (archivio pubblico di Binance): `--cerca` su interesse aperto, acquisti a mercato, top trader, rapporto long/short,
+  liquidazioni: interesse aperto e acquisti a mercato sono già in K1/K2 (G6, P2), le liquidazioni sono LQ (112) e le prove 157-161; nessuna serie dell'archivio
+  davvero mai usata. Nessuna riga di registro.
