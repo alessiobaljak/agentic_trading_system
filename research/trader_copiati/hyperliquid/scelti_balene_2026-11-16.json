@@ -1,0 +1,146 @@
+{
+ "scelti_il": "2026-11-16 00:19",
+ "conti_in_classifica": 47799,
+ "conti": [
+  {
+   "indirizzo": "0x87f9cd15f5050a9283b8896300f7c8cf69ece2cf",
+   "conto": 129688391.55958,
+   "rendimento_mese": 0.3028289908,
+   "guadagno_mese": 37359354.27756699,
+   "volume_mese": 22996304568.299995
+  },
+  {
+   "indirizzo": "0xb83de012dba672c76a7dbbbf3e459cb59d7d6e36",
+   "conto": 99935511.06621,
+   "rendimento_mese": 0.6301093812,
+   "guadagno_mese": 110550061.059692,
+   "volume_mese": 729893341.46
+  },
+  {
+   "indirizzo": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+   "conto": 97627853.586993,
+   "rendimento_mese": 0.2180084564,
+   "guadagno_mese": 20466021.842145994,
+   "volume_mese": 44297614382.54999
+  },
+  {
+   "indirizzo": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
+   "conto": 93863296.360105,
+   "rendimento_mese": 0.4815934626,
+   "guadagno_mese": 25883522.54268,
+   "volume_mese": 14101903622.03
+  },
+  {
+   "indirizzo": "0x5b5d51203a0f9079f8aeb098a6523a13f298c060",
+   "conto": 84313481.254693,
+   "rendimento_mese": 0.7938699231,
+   "guadagno_mese": 147611426.914853,
+   "volume_mese": 649246466.26
+  },
+  {
+   "indirizzo": "0x856c35038594767646266bc7fd68dc26480e910d",
+   "conto": 75239260.076955,
+   "rendimento_mese": 0.0561041979,
+   "guadagno_mese": 3089200.0736869997,
+   "volume_mese": 1878934181.7
+  },
+  {
+   "indirizzo": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
+   "conto": 71466953.435075,
+   "rendimento_mese": 0.0963265931,
+   "guadagno_mese": 11660476.668566002,
+   "volume_mese": 5837513427.23
+  },
+  {
+   "indirizzo": "0xdf954bbe619273a56e0cfa90dad8382195dc7d72",
+   "conto": 65078605.427720994,
+   "rendimento_mese": 0.8631063264,
+   "guadagno_mese": 31736906.715409003,
+   "volume_mese": 244429960.04999998
+  },
+  {
+   "indirizzo": "0x0b8aa35c28b7c6ab18f11dc168f437a8a69fd4f8",
+   "conto": 46787696.43591101,
+   "rendimento_mese": 0.9595666969,
+   "guadagno_mese": 19252167.316738002,
+   "volume_mese": 1068687984.9399999
+  },
+  {
+   "indirizzo": "0xff4cd3826ecee12acd4329aada4a2d3419fc463c",
+   "conto": 44834220.147973984,
+   "rendimento_mese": 0.1095271073,
+   "guadagno_mese": 3896657.576741999,
+   "volume_mese": 11495099414.309996
+  },
+  {
+   "indirizzo": "0x484bc1608211d0604bf70bae72792a56884562f8",
+   "conto": 44499788.566724,
+   "rendimento_mese": 0.8358708307,
+   "guadagno_mese": 12497349.068195002,
+   "volume_mese": 160873918.04
+  },
+  {
+   "indirizzo": "0xfc27136e42af1732ddc9ce2605ea9bff1b959d9d",
+   "conto": 43679314.015112,
+   "rendimento_mese": 0.7352919247,
+   "guadagno_mese": 25997731.981237,
+   "volume_mese": 2044920685.5
+  },
+  {
+   "indirizzo": "0x77375a8c9d13bf79afb2a87f1b0ac1dfd5f5bf66",
+   "conto": 41893042.167094,
+   "rendimento_mese": 0.1625139066,
+   "guadagno_mese": 1536169.851274,
+   "volume_mese": 156812931.31
+  },
+  {
+   "indirizzo": "0xf818fa41af44a1b42ba7433f4ec472be40a2c268",
+   "conto": 40103015.436450005,
+   "rendimento_mese": 0.4653717678,
+   "guadagno_mese": 10848575.354268,
+   "volume_mese": 150127450.66000003
+  },
+  {
+   "indirizzo": "0xcac19662ec88d23fa1c81ac0e8570b0cf2ff26b3",
+   "conto": 36878027.187810004,
+   "rendimento_mese": 0.1047314785,
+   "guadagno_mese": 2003418.271028,
+   "volume_mese": 51110287.1
+  },
+  {
+   "indirizzo": "0x15a4f009bb324a3fb9e36137136b201e3fe0dfdb",
+   "conto": 34414498.294107,
+   "rendimento_mese": 0.277448926,
+   "guadagno_mese": 7474479.328694,
+   "volume_mese": 169023968.26
+  },
+  {
+   "indirizzo": "0x8af700ba841f30e0a3fcb0ee4c4a9d223e1efa05",
+   "conto": 32557424.095161,
+   "rendimento_mese": 0.1554521664,
+   "guadagno_mese": 1708258.955873,
+   "volume_mese": 19081378.78
+  },
+  {
+   "indirizzo": "0xecc846a664e910103c179827dd23fea82cfcd8ce",
+   "conto": 32108618.324982,
+   "rendimento_mese": 0.1136295384,
+   "guadagno_mese": 3532322.640578,
+   "volume_mese": 71893100.04
+  },
+  {
+   "indirizzo": "0xfe7ce058edc7cfcde9ef8262ba51f8d4796ab7ae",
+   "conto": 31455751.037642,
+   "rendimento_mese": 1.2663835672,
+   "guadagno_mese": 21453941.199237,
+   "volume_mese": 362067675.73
+  },
+  {
+   "indirizzo": "0x49e96e255ba418d08e66c35b588e2f2f3766e1d0",
+   "conto": 30250691.895101,
+   "rendimento_mese": 0.2388590115,
+   "guadagno_mese": 12623624.405999001,
+   "volume_mese": 1699082882.69
+  }
+ ]
+}
