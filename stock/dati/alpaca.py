@@ -129,6 +129,28 @@ def quotazioni(simbolo: str, inizio: datetime, fine: datetime, feed: str = "sip"
     return df.set_index("t")[["bid", "ask", "bid_size", "ask_size"]]
 
 
+def scambi(simbolo: str, inizio: datetime, fine: datetime, feed: str = "sip",
+           massimo: int | None = None) -> pd.DataFrame:
+    """Le operazioni di mercato (prezzo e quantità) fra `inizio` e `fine`, per finestre brevi: servono a misurare lo scarto
+    effettivo, cioè quanto si è pagato davvero rispetto al prezzo di mezzo (`stock/prove/P036b_costo_fuori_seduta.md`)."""
+    fine = _fine_ammessa(fine)
+    parametri = {"symbols": simbolo, "start": _iso(inizio), "end": _iso(fine), "feed": feed,
+                 "limit": 10000, "sort": "asc"}
+    righe: list[dict] = []
+    while True:
+        j = _get(f"{DATI_URL}/v2/stocks/trades", parametri)
+        righe.extend((j.get("trades") or {}).get(simbolo, []))
+        token = j.get("next_page_token")
+        if not token or (massimo is not None and len(righe) >= massimo):
+            break
+        parametri["page_token"] = token
+    if not righe:
+        return pd.DataFrame(columns=["prezzo", "quantita"], index=pd.DatetimeIndex([], tz="UTC", name="t"))
+    df = pd.DataFrame(righe).rename(columns={"p": "prezzo", "s": "quantita"})
+    df["t"] = pd.to_datetime(df["t"], utc=True, format="ISO8601")
+    return df.set_index("t")[["prezzo", "quantita"]]
+
+
 def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.DataFrame:
     """Frazionamenti (anche inversi), dividendi in contanti e scissioni, con la data di stacco.
 
