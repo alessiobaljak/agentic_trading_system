@@ -249,6 +249,14 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   più largo; (2) è la quinta volta che la rottura della prima candela muore sui costi (prove 17, 20, 21, 23, 35); (3) regola per le
   idee in giornata su titoli singoli: prima dei costi servono più di circa 0,25% a operazione, oppure titoli con lo scarto di pochi
   punti base. Nel conto: 87.
+* **La prova 36** (gli acquisti dei dirigenti nell'S&P 500 comprati due minuti dopo la pubblicazione alla SEC, anche negli orari
+  estesi, venduti all'apertura dopo; idea I22): **bocciata.** Il vantaggio c'è anche arrivando dopo: 2'615 operazioni dal 2016 al 2024,
+  +0,223% a operazione prima dei costi (t 5,4), +0,18% anche con un'ora di ritardo. Ma due depositi su tre arrivano dopo la chiusura, e
+  lì lo scarto misurato ha mediana 103,6 punti base contro 7,6 in seduta: con i costi −44,3% in 9 anni (`prove/P036_risultati.md`). In
+  seduta (802 operazioni) resta +0,05% a operazione prima delle commissioni: troppo poco. Capito: (1) il modulo 4 è l'annuncio stesso,
+  e l'ora d'accettazione della SEC è utilizzabile (copertura 99,5%: `dati/depositi_dirigenti.py`); (2) il vantaggio vive proprio
+  dove comprare costa di più, fra la pubblicazione e l'apertura dopo (dall'apertura in poi non resta niente: prova 18); (3) dubbio
+  aperto sul costo fuori seduta (forse contato due volte, idea I38): si può solo misurare, non usare per promuovere. Nel conto: 89.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
