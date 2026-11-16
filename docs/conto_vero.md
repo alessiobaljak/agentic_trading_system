@@ -60,7 +60,8 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
       conto vuoto con la riapertura alla mezzanotte, una moneta oltre il 60% fa saltare la decisione del giorno, il blocco di Binance
       rispettato per intero.
    Chiusa: lo Sharpe corretto 0,86 di G1 (il proprietario ha approvato la soglia di 0,80 il 9 novembre, contata per famiglie l'11).
-5. **Il riavvio che carica la fase 2** sulla macchina (il bot gira ancora il codice della fase 1; il conto vero resta spento): con il
+5. **FATTO il 16 novembre 2026, 07:36 UTC** (ok del proprietario «ok riavvio», richiesta 0747, versione 884b9b1a; conto vero spento,
+   `DRY_RUN` vero; paper e demo ripartiti, `ops/results/0753-16nov-stato-un-ora-dopo-riavvio.md`). **Il riavvio che carica la fase 2** sulla macchina (il bot gira ancora il codice della fase 1; il conto vero resta spento): con il
    suo ok, in un'ora tranquilla. Finché non c'è, un riavvio per un guasto caricherebbe comunque l'ultimo codice del branch.
 6. **Alla fine, l'accensione**: la richiesta esplicita, i 280 USDT nel portafoglio dei future, l'ok al riavvio.
 

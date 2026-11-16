@@ -759,3 +759,8 @@ settimanale (`gate2/reports/2026-11-16-G1.md`): il demo fa −0,30 punti al gior
 non riproduce il paper dal 9 novembre (funding di novembre stimato); commissioni 1,38 volte l'assunto. Allocatore
 (`allocazione/reports/2026-11-16.md`): tieni G1, una strategia sola. **Capito questa settimana**: G1 guadagna nelle settimane di ribasso
 come quella appena passata; il demo ne prende circa la metà del guadagno nei giorni forti per le monete che non ha.
+**16 novembre, 07:36 UTC, il riavvio con la fase 2** (ok del proprietario «ok riavvio»; `ops/results/0747`, `0748`, `0753`, `0754`): il bot
+gira la versione 884b9b1a (conto vero spento senza interruttore, pulsante di approvazione della versione, funding dei paper per
+regolamento); `DRY_RUN` vero; dopo un'ora paper G1, G11, G1 neutra, F5, eventi e demo hanno fatto il loro giro (08:07-08:25), nessun errore
+nuovo nel registro (restano i soliti rifiuti dell'interesse aperto di due monete tolte dal listino, del vecchio sistema). 2.810 test passati
+prima del riavvio.

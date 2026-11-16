@@ -4,7 +4,8 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 (`docs/andremo_live.md`) e nei piani.
 
 ## Compito in corso (15 novembre 2026, 16:30 UTC)
-- **Bot**: gira il codice della fase 1 del conto vero (commit 83ddb809, riavvio dell'8 novembre 19:02 UTC); `DRY_RUN` vero. Demo di G1
+- **Bot**: dal 16 novembre 07:36 UTC gira la fase 2 (versione 884b9b1a: conto vero spento, pulsante di approvazione, funding dei paper per
+  regolamento); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
   (codice del conto vero, spento) committata (ff89531), non ancora caricata dal bot.
 - **Conto vero**: lista del proprietario e decisioni in `docs/conto_vero.md` (riletta il 12 novembre). Punti aperti prima
