@@ -38,3 +38,11 @@ def test_netto_e_ore():
     assert abs(n - (0.01 - 0.002 - 2e-4 - 2e-4 * 1.01 - 2.0 / 10_000)) < 1e-12
     assert p036b.ora_di(t("2024-03-04 16:30")) == "16:00-16:59" and p036b.ora_di(t("2024-03-04 05:00")) == "4:00-6:59"
     assert p036b.ora_di(t("2024-03-04 12:00")) == "in seduta" and p036b.ora_di(t("2024-03-04 19:59")) == "18:00-19:59"
+
+
+def test_scarto_effettivo_con_ore_di_precisione_diversa():
+    s = pd.DataFrame({"prezzo": [10.05]}, index=pd.DatetimeIndex([t("2024-03-04 17:02:05")], name="t").as_unit("us"))
+    s["quantita"] = 100
+    q = Q.copy()
+    q.index = q.index.as_unit("ns")
+    assert abs(p036b.scarto_effettivo(s, q) - 0.05 / 10.0) < 1e-12

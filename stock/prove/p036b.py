@@ -57,6 +57,9 @@ def scarto_effettivo(scambi: pd.DataFrame, q: pd.DataFrame) -> float:
         return float("nan")
     m = ((q["bid"] + q["ask"]) / 2).rename("mezzo").sort_index()
     s = scambi.sort_index()
+    # le ore di Alpaca possono arrivare con precisioni diverse (microsecondi o nanosecondi): si portano alla stessa
+    m.index = pd.DatetimeIndex(m.index).as_unit("ns").rename("t")
+    s.index = pd.DatetimeIndex(s.index).as_unit("ns").rename("t")
     x = pd.merge_asof(s.reset_index(), m.reset_index(), on="t", direction="backward").dropna(subset=["mezzo"])
     if x.empty:
         return float("nan")
