@@ -130,6 +130,7 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento del 13 novembre (dati fino all'11 novembre; la seconda tornata rifatta a parte dopo il limite di tempo del giro): M-001c 364 su 400 (in corso, −0,40% a trade); M-002 2.570 (non passa, p 0,07); M-003 1.050 (non passa, p 0,98); N-001 75, N-002 80, N-003 39.
   Aggiornamento del 14 novembre (dati fino al 12 novembre; la seconda tornata di nuovo rifatta a parte: lo scarico più i due calcoli superano ormai i 55 minuti): M-001c 368 su 400 (in corso, −0,47% a trade); M-002 2.601 (non passa, p 0,07); M-003 1.070 (non passa, p 0,98); N-001 75, N-002 82, N-003 42.
   Aggiornamento del 15 novembre (dati fino al 13 novembre; tutto il giro entro il tempo): M-001c 377 su 400 (in corso); M-002 2.677 (non passa, p 0,08); M-003 1.092 (non passa, p 0,98); N-001 76, N-002 87, N-003 44.
+  Aggiornamento del 16 novembre (dati fino al 14 novembre; la seconda tornata rifatta a parte): M-001c 377 su 400 (in corso, nessun trade chiuso in più); M-002 2.769 (non passa, p 0,16); M-003 1.127 (non passa, p 0,98); N-001 76, N-002 99, N-003 44.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 

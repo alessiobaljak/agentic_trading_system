@@ -751,3 +751,11 @@ bot oggi non sa fare.
 coperto non protegge nelle giornate peggiori di G1, la discesa scende solo perché G1 pesa meno. **Capito oggi**: le prove a incasso quasi
 fisso, con le settimane legate fra loro, gonfiano lo Sharpe settimanale e abbassano lo Sharpe corretto di tutte le altre (G1 da 0,756 a
 0,596 senza che G1 cambi); c'è una correzione nota (Lo 2002) da decidere con il proprietario (backlog P34). Conto delle prove 330.
+**Riepilogo settimanale del 16 novembre** (dal 9 al 16 novembre, Bitcoin −12,7%): demo di G1 +2,8% (1.002,74 → 1.031,22 USDT); paper del
+bot: G1 +5,3%, G11 +3,3%, G1 neutra +4,8%, F5 +5,0%, eventi fermi; conto a tavolino: HLI −6,8% e DXI −1,1% dal 2 novembre, G1 sulle stesse
+monete +5,1% e +4,4%; copia dei trader di Hyperliquid dal 2 al 5 novembre: migliori del mese +22,3%, a esposizione uguale +22,1%, balene
++60,9% (tutti molto venduti in una settimana di forte ribasso; G1 nel paper negli stessi giorni circa +8,8% e +5,8%). Confronto
+settimanale (`gate2/reports/2026-11-16-G1.md`): il demo fa −0,30 punti al giorno sul paper, quasi tutto il 13 e 14 novembre; la ricerca
+non riproduce il paper dal 9 novembre (funding di novembre stimato); commissioni 1,38 volte l'assunto. Allocatore
+(`allocazione/reports/2026-11-16.md`): tieni G1, una strategia sola. **Capito questa settimana**: G1 guadagna nelle settimane di ribasso
+come quella appena passata; il demo ne prende circa la metà del guadagno nei giorni forti per le monete che non ha.
