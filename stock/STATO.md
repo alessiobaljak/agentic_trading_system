@@ -257,6 +257,15 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   e l'ora d'accettazione della SEC è utilizzabile (copertura 99,5%: `dati/depositi_dirigenti.py`); (2) il vantaggio vive proprio
   dove comprare costa di più, fra la pubblicazione e l'apertura dopo (dall'apertura in poi non resta niente: prova 18); (3) dubbio
   aperto sul costo fuori seduta (forse contato due volte, idea I38): si può solo misurare, non usare per promuovere. Nel conto: 89.
+* **Il controllo del 16 novembre sul costo fuori seduta** (`prove/P036b_risultati.md`, non è una prova; chiesto dal proprietario):
+  600 ingressi della prova 36 con le quotazioni e le operazioni di mercato del minuto. (1) **Nessun doppio conteggio**: fuori seduta la
+  barra apre in mediana al prezzo di mezzo (−0,03), solo il 30% al prezzo di chi vende. (2) **Le quotazioni esagerano**: fuori seduta
+  metà dello scarto quotato vale 41,6 punti base, ma chi ha scambiato ha pagato 21,4 (dopo la chiusura 19,1); la prova 36 ne contava
+  51,8. (3) Con il costo effettivo, dopo la chiusura resta circa +0,07% a operazione (stima: +0,317% prima dei costi della prova 36,
+  meno 19 + 4 punti base e le commissioni), non distinguibile da zero; prima dell'apertura si perde comunque (−0,45%, t −5,3). (4) Un
+  ingresso fuori seduta su tre non ha nemmeno una quotazione valida nei 5 minuti prima. Capito: la porta degli acquisti dei dirigenti
+  fuori seduta è chiusa; per le idee future su eventi fuori seduta il costo da usare è lo scarto effettivo (circa 20 punti base per
+  lato dopo la chiusura, sull'S&P 500), non quello quotato.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
