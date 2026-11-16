@@ -371,3 +371,10 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   minimo di Binance (BCHUSDT 6,67/5,53, GTCUSDT 2,09/1,61, BRUSDT 1,78/1,33): **la correzione alla lettura del 14 novembre** è che il
   lato venduto più piccolo veniva dai resti sotto il minimo (voce 9), non dai passi delle quantità. Sul conto vero con 1.000 USDT i resti
   sotto il minimo restano; le monete mancanti no.
+* **16 novembre 2026, 04:40 UTC, voce 8, il nono ribilancio a 1.000 USDT** (`ops/results/0745-16nov-log-ribilancio-1000.md`,
+  `0746-16nov-stato-ribilancio-1000.md`; il lunedì cambia l'universo): 33 ordini (31 a limite, 2 a mercato), 26 variazioni sotto il minimo
+  (6,6% del conto), 2 rifiutati: **EVAAUSDT e UAIUSDT**, entrate nell'universo oggi e assenti sul demo («Invalid symbol» al margine unico;
+  peso nel paper −0,90% e −1,36%), mentre 龙虾USDT non è più fra i rifiutati. Scarto dalle posizioni volute 9,0%, nessuna moneta oltre il
+  2%; esposizione lorda paper 200,0%, demo 192,8%. Equity del demo 1.031,22 (+3,12% dall'8 novembre); G1 nel paper 11.107,06 (+4,59%
+  dall'8 novembre): il demo 1,5 punti sotto. Dal 9 novembre (8 giorni) demo +3,62%, paper +6,14%, −0,31 punti al giorno. Funding dal
+  7 novembre +16,90 USDT, commissioni 1,32 USDT.
