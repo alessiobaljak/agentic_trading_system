@@ -270,7 +270,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   ricerca su GitHub): **bocciata da sola** (Sharpe con i costi 0,56 contro 0,87 dello SPY), **passa il criterio per la miscela**
   (correlazione −0,00, miscela 1,18 contro 1,08, t 1,67, 85% dei campionamenti; `prove/P037_risultati.md`). Due allarmi scritti nel
   risultato: senza marzo 2020 lo Sharpe è 0,02 (il 2020 fa +32,3%, gli altri anni fra −4% e +5%), e con un giorno di ritardo è
-  −0,54. **In revisione separata** (`prove/REVISIONE_P037.md`); il periodo chiuso solo dopo un PASS. Nel conto: 91.
+  −0,54. **FAIL del revisore separato** (`prove/REVISIONE_P037.md`): il calcolo è giusto e fedele all'articolo, ma il passaggio
+  dipende da un solo mese (marzo 2020 fa il 101% del guadagno in logaritmi, controllato dalla sessione); senza, t della parte 0,07 e
+  42% dei campionamenti; dopo la fine del campione dell'articolo t 0,70; il margine sui costi è sottile (cade con costi più alti del
+  30%). Periodo chiuso **non aperto**. Capito: il criterio per la miscela con t 1,3 si supera per caso circa una volta su dieci senza
+  vantaggio vero (prove 31 e 37, tutte e due cadute alla revisione): il revisore separato è indispensabile. Nel conto: 91.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
@@ -315,6 +319,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 * Il simulatore gira su un titolo alla volta: la prova 1 (2 titoli × 3 varianti di costo, 880'000 minuti ciascuno) ha impiegato 4
   minuti. Il simulatore a più titoli adesso c'è.
 * Le commissioni di Interactive Brokers (0,005 dollari per azione, minimo 1) sono **da verificare** sul listino ufficiale.
+* **Le chiusure giornaliere di SPY di Alpaca** (trovato dal revisore della prova 37, controllato dalla sessione il 16 nov 2026):
+  contro Yahoo, in marzo 2020 14 giorni su 22 differiscono di più di 5 punti base (fino a 287), nel 2019 15 su 252. Le usano lo SPY di
+  riferimento di tutte le prove e le parti delle prove 15 e 16, quindi la miscela della prova 25 sul demo. Da rifare: le prove 15, 16 e
+  25 con le chiusure ufficiali (Yahoo) e vedere se cambia qualcosa; non urgente per gli esiti già bocciati, importante per la miscela.
+* **Il conto dello Sharpe corretto** (`carica_serie`) comprende anche le 9 serie `*_chiuso` (trovato dal revisore della prova 37):
+  conta di più le prove (più prudente), ma usa serie con date del periodo chiuso; da decidere se escluderle.
 
 ## Il prossimo passo
 
