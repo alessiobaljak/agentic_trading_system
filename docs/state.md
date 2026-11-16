@@ -1,12 +1,12 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-16 06:30 UTC_
+_Generato: 2026-11-16 06:41 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$817.25**
-- ultimo heartbeat: 2026-11-16 06:30 UTC
+- ultimo heartbeat: 2026-11-16 06:41 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
@@ -377,13 +377,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 22 | 1.7% |
-| holdout | 1 | 0.1% |
-| pf_ex_top | 3 | 0.2% |
-| total_return | 1207 | 91.4% |
 | consistency | 17 | 1.3% |
-| trades | 6 | 0.5% |
+| total_return | 1207 | 91.4% |
+| regime | 22 | 1.7% |
 | recovery | 64 | 4.8% |
+| holdout | 1 | 0.1% |
+| trades | 6 | 0.5% |
+| pf_ex_top | 3 | 0.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -391,13 +391,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 2815 | 8.3% |
-| holdout | 153 | 0.5% |
-| pf_ex_top | 242 | 0.7% |
 | total_return | 26463 | 78.0% |
+| holdout | 153 | 0.5% |
+| regime | 2815 | 8.3% |
+| recovery | 2737 | 8.1% |
 | consistency | 589 | 1.7% |
 | trades | 936 | 2.8% |
-| recovery | 2737 | 8.1% |
+| pf_ex_top | 242 | 0.7% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
@@ -458,24 +458,24 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 |---|---|---|---|---|
 | TRUMPUSDT|gen_d16d1d02 | watch | 5 | 3.035 / 1.591 | mfe mediana 1.11R < primo TP 2.00R |
 | MYXUSDT|gen_8931b93c | watch | 4 | 0.34 / 1.583 | PF 0.34 vs 1.58 atteso · mfe mediana 0.76R < primo TP 1.50R |
+| SAHARAUSDT|gen_c934a6f7 | watch | 3 | 99.0 / 1.687 | mfe mediana 0.52R < primo TP 0.75R |
 | STXUSDT|gen_0aa0d29c | watch | 3 | 0.0 / 1.663 | PF 0.00 vs 1.66 atteso · mfe mediana 0.15R < primo TP 1.00R |
 | SCRUSDT|gen_0e030446 | watch | 3 | 0.344 / 1.851 | PF 0.34 vs 1.85 atteso |
-| SAHARAUSDT|gen_c934a6f7 | watch | 3 | 99.0 / 1.687 | mfe mediana 0.52R < primo TP 0.75R |
 | TAUSDT|gen_01fbe76f | watch | 2 | 0.161 / 1.711 | PF 0.16 vs 1.71 atteso · mfe mediana 0.79R < primo TP 1.50R |
+| BMTUSDT|gen_be64073c | watch | 2 | 0.366 / 2.843 | PF 0.37 vs 2.84 atteso · mfe mediana 0.99R < primo TP 1.50R |
+| BTRUSDT|gen_5a52c06b | watch | 2 | 0.566 / 1.784 | PF 0.57 vs 1.78 atteso |
+| EIGENUSDT|gen_1b7827f3 | watch | 2 | 0.262 / 1.475 | PF 0.26 vs 1.48 atteso · mfe mediana 0.84R < primo TP 1.50R |
+| RENDERUSDT|gen_b028553e | watch | 2 | 0.0 / 1.617 | PF 0.00 vs 1.62 atteso · mfe mediana 0.59R < primo TP 1.50R |
+| JTOUSDT|gen_94062d5f | watch | 2 | 99.0 / 1.351 | mfe mediana 0.68R < primo TP 1.00R |
+| HEMIUSDT|gen_c1f71d65 | watch | 2 | 0.829 / 1.54 | PF 0.83 vs 1.54 atteso |
+| PARTIUSDT|gen_64263ae7 | watch | 2 | 0.597 / 1.953 | PF 0.60 vs 1.95 atteso · mfe mediana 1.03R < primo TP 2.00R |
 | IDOLUSDT|gen_5ad54558 | watch | 2 | 0.18 / 2.23 | PF 0.18 vs 2.23 atteso · mfe mediana 0.82R < primo TP 1.50R |
 | SYRUPUSDT|gen_f3b97917 | watch | 2 | 0.744 / 2.064 | PF 0.74 vs 2.06 atteso · mfe mediana 1.06R < primo TP 2.00R |
-| HEMIUSDT|gen_c1f71d65 | watch | 2 | 0.829 / 1.54 | PF 0.83 vs 1.54 atteso |
-| BMTUSDT|gen_be64073c | watch | 2 | 0.366 / 2.843 | PF 0.37 vs 2.84 atteso · mfe mediana 0.99R < primo TP 1.50R |
-| PARTIUSDT|gen_64263ae7 | watch | 2 | 0.597 / 1.953 | PF 0.60 vs 1.95 atteso · mfe mediana 1.03R < primo TP 2.00R |
-| RENDERUSDT|gen_b028553e | watch | 2 | 0.0 / 1.617 | PF 0.00 vs 1.62 atteso · mfe mediana 0.59R < primo TP 1.50R |
-| BTRUSDT|gen_5a52c06b | watch | 2 | 0.566 / 1.784 | PF 0.57 vs 1.78 atteso |
 | UBUSDT|gen_92b77c39 | watch | 2 | 0.178 / 1.502 | PF 0.18 vs 1.50 atteso · mfe mediana 1.20R < primo TP 2.00R |
-| EIGENUSDT|gen_1b7827f3 | watch | 2 | 0.262 / 1.475 | PF 0.26 vs 1.48 atteso · mfe mediana 0.84R < primo TP 1.50R |
-| JTOUSDT|gen_94062d5f | watch | 2 | 99.0 / 1.351 | mfe mediana 0.68R < primo TP 1.00R |
-| VELVETUSDT|gen_e933160c | watch | 1 | 0.0 / 2.559 | PF 0.00 vs 2.56 atteso · mfe mediana 0.60R < primo TP 1.50R |
-| FLOCKUSDT|gen_2350695a | watch | 1 | 0.0 / 1.758 | PF 0.00 vs 1.76 atteso |
-| AINUSDT|gen_9839aec0 | watch | 1 | 0.0 / 1.407 | PF 0.00 vs 1.41 atteso · mfe mediana 0.58R < primo TP 1.50R |
-| JUPUSDT|gen_6a3a37f1 | watch | 1 | 0.0 / 1.459 | PF 0.00 vs 1.46 atteso |
+| BANKUSDT|gen_7100bb59 | watch | 1 | 0.0 / 1.938 | PF 0.00 vs 1.94 atteso · mfe mediana 0.10R < primo TP 0.75R |
+| KERNELUSDT|gen_96ed157e | watch | 1 | 0.0 / 3.627 | PF 0.00 vs 3.63 atteso · mfe mediana 0.02R < primo TP 2.00R |
+| XPINUSDT|gen_f311acf9 | watch | 1 | 0.0 / 3.282 | PF 0.00 vs 3.28 atteso |
+| XVGUSDT|gen_5c841d4a | watch | 1 | 0.0 / 2.218 | PF 0.00 vs 2.22 atteso |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
@@ -492,7 +492,7 @@ _la confidenza del segnale modula size e leva: qui si verifica che predica davve
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
 
 ## G1 oggi, moneta per moneta: paper e demo (sola lettura)
-Letto il 2026-11-16 06:30 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,032.02 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
+Letto il 2026-11-16 06:41 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,032.02 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
 - demo: non letto: manca la chiave del conto demo (c'è solo sulla macchina)
 - WLFIUSDT -11.35/— · TRXUSDT +8.90/— · XMRUSDT -7.14/— · XLMUSDT +7.06/— · HYPEUSDT -6.89/— · POLUSDT +6.69/—
 - WIFUSDT -6.67/— · BCHUSDT +6.48/— · RENDERUSDT -6.23/— · ATOMUSDT +5.92/— · ASTERUSDT -5.80/— · JTOUSDT -5.47/—
