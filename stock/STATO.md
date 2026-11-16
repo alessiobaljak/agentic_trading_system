@@ -266,6 +266,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   ingresso fuori seduta su tre non ha nemmeno una quotazione valida nei 5 minuti prima. Capito: la porta degli acquisti dei dirigenti
   fuori seduta è chiusa; per le idee future su eventi fuori seduta il costo da usare è lo scarto effettivo (circa 20 punti base per
   lato dopo la chiusura, sull'S&P 500), non quello quotato.
+* **La prova 37** (anticipare il ribilanciamento dei fondi 60/40: SPY contro IEF, regole dell'articolo NBER w33554, idea I39 dalla
+  ricerca su GitHub): **bocciata da sola** (Sharpe con i costi 0,56 contro 0,87 dello SPY), **passa il criterio per la miscela**
+  (correlazione −0,00, miscela 1,18 contro 1,08, t 1,67, 85% dei campionamenti; `prove/P037_risultati.md`). Due allarmi scritti nel
+  risultato: senza marzo 2020 lo Sharpe è 0,02 (il 2020 fa +32,3%, gli altri anni fra −4% e +5%), e con un giorno di ritardo è
+  −0,54. **In revisione separata** (`prove/REVISIONE_P037.md`); il periodo chiuso solo dopo un PASS. Nel conto: 91.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
