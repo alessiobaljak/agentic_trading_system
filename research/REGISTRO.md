@@ -476,14 +476,22 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    si posizionano su una moneta prima che salga di colpo, le loro posizioni lette moneta per moneta sarebbero un segnale. **Non ancora**:
    12 giorni di posizioni e una decina di fiammate, niente di serio da scrivere; si riguarda quando le posizioni raccolte superano i 3
    mesi (circa febbraio 2027). Copiare i conti e il loro contrario sono già le idee 132 e 135, in avanti.
-144. **Il funding coperto solo su Bitcoin ed Ether, senza ricambio** (dalla domanda del proprietario del 15 novembre: «un algoritmo in
+144. ~~**Il funding coperto solo su Bitcoin ed Ether, senza ricambio**~~ → prove 157 (FAIL della revisione: margine non modellato) e 161 (rifatta con il margine vero: PASS tecnico con due problemi Alti, `audits/reports/2026-11-15-PROVA161.md`) (dalla domanda del proprietario del 15 novembre: «un algoritmo in
    grado di farmi avere guadagni costanti, giornalieri»): comprare a pronti e vendere il perpetuo della stessa moneta per lo stesso
    valore, tenere e incassare il funding; si esce solo quando il funding medio diventa negativo. È la fonte di guadagno più regolare
    delle crypto (Christin, Routledge, Soska e Zetlin-Jones, «The crypto carry trade», 2022; Schmeling, Schrimpf e Todorov, BIS 2023), ma
    la prova 97 (CC) l'ha bocciata perché il ricambio settimanale sulle monete di F5 costava quanto il funding (8-9% l'anno): qui il ricambio
    è quasi zero e le monete sono le due più liquide. Da scrivere con le regole prima: l'atteso è un rendimento basso ma molto regolare
    (la 97 aveva discesa −3,6% e volatilità 2,8%), con il rischio della borsa e del funding negativo negli anni di ribasso.
-145. **G1 con una quota fissa di funding coperto** (strategy-scout, 15 novembre, dalla richiesta del proprietario di mettere insieme
+145. ~~**G1 con una quota fissa di funding coperto**~~ → prova 160 (no per l'esame: Sharpe corretto 0,64 e 0,72, sotto 0,80; calcolata sulla parte coperta della prova 161) (strategy-scout, 15 novembre, dalla richiesta del proprietario di mettere insieme
    quello che abbiamo; regole in `programma7/NOVANTOTTESIMA.md`, prova 160 riservata): 80/20 e 60/40, riequilibrio ogni primo del mese,
    per una curva più regolare (Markowitz, JF 1952). **In attesa**: la serie del funding coperto della prova 157 è bocciata per il margine;
    la miscela si calcola solo dopo il funding coperto rifatto con una regola di margine scritta prima.
+146. **Gli eventi del calendario di CoinMarketCap** (idea del proprietario del 16 novembre, dal grafico degli eventi di CoinMarketCap):
+   comprare o vendere le monete intorno agli eventi annunciati (aggiornamenti della rete, sblocchi, quotazioni, riunioni). **Non si può
+   provare oggi**: il collegamento a CoinMarketCap dà solo il calendario delle prossime due settimane, una moneta alla volta, e non lo
+   storico degli eventi passati; sul grafico del Bitcoin una ventina di eventi in due anni. I tipi più importanti sono già provati con
+   altre fonti (nuove quotazioni, sblocchi, attacchi ai protocolli, dati macro, annunci di Binance: prove 21, 43, 71, 74, 96, 98, 103,
+   105-107, 131, 140 e 146). Il 17 novembre lo scout non trova altre fonti con lo storico (il calendario di DefiLlama ora è a pagamento).
+   **In attesa** della risposta del proprietario (chiesta il 16 novembre): salvare ogni giorno il calendario delle prime 20-30 monete per
+   costruire un archivio nostro e provarla fra qualche mese, tipo di evento per tipo di evento.

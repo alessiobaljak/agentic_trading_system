@@ -107,3 +107,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   funding che gira da positivo a negativo). Angolo 2 (archivio pubblico di Binance): `--cerca` su interesse aperto, acquisti a mercato, top trader, rapporto long/short,
   liquidazioni: interesse aperto e acquisti a mercato sono già in K1/K2 (G6, P2), le liquidazioni sono LQ (112) e le prove 157-161; nessuna serie dell'archivio
   davvero mai usata. Nessuna riga di registro.
+
+- 17 novembre 2026 (giro delle 12:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Controllato con `--cerca`: (1) ora del giorno e
+  regolamento del funding (Eross e altri 2019, Wen e altri 2022; Vojtko e Padysak 2022 su Bitcoin): `--cerca UTC` trova solo G25 (rendimento delle prime 23 ore); un
+  vantaggio per ora vale circa 0,01-0,03% e i costi di un giro (0,04% a limite, 0,10% a mercato) lo mangiano: è un indicatore sul prezzo, la lezione dice no;
+  (2) funding di un'altra borsa (Bybit, OKX): Bybit e Kraken non sono in registro, ma l'idea è la stessa delle prove 135 e 137 (Hyperliquid contro Binance), stessa
+  famiglia di prove; (3) sblocchi dei token e diluizione: già prove 74 e 131; il calendario di DefiLlama ora risponde 402 (a pagamento), niente dati nuovi;
+  (4) stagionalità di giorno della settimana, fine mese: nessuna fonte seria con ragione economica, un asset, pochi casi. Nessuna riga di registro.

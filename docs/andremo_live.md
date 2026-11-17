@@ -773,3 +773,11 @@ Binance ha un funding suo, con molte meno monete pagate ogni 4 ore; sul mercato 
 ogni 8 ore, e il paper conta quei pagamenti veri. Il 16 novembre paper +0,22% del conto, demo +0,13%. **Capito oggi**: la parte più grande
 dello scarto fra demo e paper «a regime» viene dal conto demo, non da un costo che il conto vero avrebbe; il conto vero incasserebbe il
 funding del mercato vero, come il paper. Resta da confermare leggendo dalla macchina gli intervalli del funding del demo.
+**17 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 24, nessuna chiusura nuova dopo il 21 ottobre. G1, voce 3: gli
+incassi del demo stesso confermano che il conto demo ha meno monete a 4 ore (agli orari diversi da 00, 08 e 16 il demo riceve il funding
+su 15-20 monete per regolamento, il paper su 52-54; `MIGLIORARE_G1.md`), quindi niente lettura in più dalla macchina. Voce 2: dal 12 al
+17 novembre la commissione del demo è lo 0,0273% del valore scambiato, con il 34% del valore a commissione piena (era il 27% dal 9 al
+12). Ricerca nuova: strategy-scout non trova idee con un perché forte (scartate con il perché in `research/idee/LOG.md`); nella coda
+l'idea 146, gli eventi di CoinMarketCap, in attesa del proprietario. **Capito oggi**: un terzo del valore scambiato da G1 paga la
+commissione piena; sul conto vero la quota può essere diversa (il libro degli ordini del demo non è quello vero), ma è la misura
+migliore che abbiamo, ed è sopra quella del modello.

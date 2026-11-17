@@ -397,3 +397,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   (circa −20%, la parte più grande dello scarto «a regime») è del conto demo, non un costo del conto vero, che incasserebbe il funding
   del mercato vero come il paper. Il confronto del funding si fa quindi fra il paper e il mercato vero (l'archivio di Binance, quando
   esce il file di novembre), non fra demo e paper.
+* **17 novembre 2026, 12:30 UTC, voci 3 e 2 con le esecuzioni e i pagamenti del demo** (`ops/results/0757-17nov-stato-funding-demo-paper.md`,
+  sezioni «il funding per regolamento» ed «esecuzioni, commissioni e funding»). **Voce 3, la conferma dagli incassi del demo stesso**:
+  ai regolamenti delle 00, 08 e 16 il demo riceve il funding su quasi tutte le monete del paper (da 48/51 a 52/56 pagamenti demo/paper),
+  agli altri orari su molte meno (15 novembre, 12 e 20: 39/104; 16 novembre, 04, 12 e 20: 45/156; 17 novembre, 04: 17/54), cioè circa
+  15-20 monete per regolamento contro 52-54 del paper. Sul demo quindi solo circa un terzo delle monete di G1 paga ogni 4 ore, contro 49
+  su 67 del mercato vero: la lettura dell'elenco degli intervalli del demo dalla macchina darebbe solo i nomi, non cambia la conclusione,
+  e non si fa. Il funding del demo non si usa per giudicare il conto vero. **Voce 2**: dal 12 al 17 novembre (6 giorni) il demo ha
+  scambiato 1.879 USDT con 0,5121 USDT di commissioni, **0,0273% del valore**; il 66% del valore è rimasto nel libro (commissione bassa)
+  e il 34% ha pagato la commissione piena, contro il 73% e 0,0254% dei primi giorni a regime (9-12 novembre); da un giorno all'altro la
+  quota nel libro va dal 26% (14 novembre, solo 68 USDT) all'80%. I 13 giorni a regime chiesti dal revisore per conoscere la quota a ±5
+  punti si raggiungono il 21 novembre: il conto sull'esame a 280 USDT con il mazzo completo si rifà nel confronto settimanale del 23.
