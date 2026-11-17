@@ -378,3 +378,11 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   2%; esposizione lorda paper 200,0%, demo 192,8%. Equity del demo 1.031,22 (+3,12% dall'8 novembre); G1 nel paper 11.107,06 (+4,59%
   dall'8 novembre): il demo 1,5 punti sotto. Dal 9 novembre (8 giorni) demo +3,62%, paper +6,14%, −0,31 punti al giorno. Funding dal
   7 novembre +16,90 USDT, commissioni 1,32 USDT.
+* **17 novembre 2026, 04:40 UTC, voce 8, il decimo ribilancio a 1.000 USDT, il primo intero con la fase 2** (`ops/results/0755-17nov-log-ribilancio-1000.md`,
+  `0756-17nov-stato-ribilancio-1000.md`): 14 ordini (12 a limite, 2 a mercato), 41 variazioni sotto il minimo (7,6% del conto), 3 rifiutati:
+  EVAAUSDT e UAIUSDT (assenti sul demo) e **LITUSDT** («Invalid symbol status for opening» sul demo; sul mercato vero è in TRADING,
+  exchangeInfo pubblico di oggi): un'altra moneta che manca solo al demo, −3,3% di scarto. Scarto totale 13,2%; esposizione lorda paper
+  200,0%, demo 196,3%. Equity del demo 1.049,56 (+4,96% dall'8 novembre); G1 nel paper 11.267,75 (+6,11% dall'8 novembre): il demo 1,15
+  punti sotto; negli ultimi due giorni quasi uguali (−0,12 e +0,04). Dal 9 novembre (9 giorni) demo +5,46%, paper +7,67%, −0,24 punti al
+  giorno. Funding dal 7 novembre +18,54 USDT, commissioni 1,40 USDT. Il funding del paper per regolamento (fase 2) si confronta dal
+  prossimo confronto settimanale.
