@@ -408,3 +408,11 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   e il 34% ha pagato la commissione piena, contro il 73% e 0,0254% dei primi giorni a regime (9-12 novembre); da un giorno all'altro la
   quota nel libro va dal 26% (14 novembre, solo 68 USDT) all'80%. I 13 giorni a regime chiesti dal revisore per conoscere la quota a ±5
   punti si raggiungono il 21 novembre: il conto sull'esame a 280 USDT con il mazzo completo si rifà nel confronto settimanale del 23.
+* **17 novembre 2026, 16:30 UTC, voce 2, quanto vale al massimo l'ordine «solo nel libro»** (stima dai numeri di
+  `ops/results/0757-17nov-stato-funding-demo-paper.md`, dal 12 novembre 00:00 al 17 novembre 08:32, 5,36 giorni): il demo ha pagato
+  0,5121 USDT di commissioni su 1.879 USDT scambiati; se tutto fosse rimasto nel libro (0,02%) avrebbe pagato 0,3758: **0,136 USDT in
+  meno, lo 0,0025% del conto al giorno, circa 0,9 punti l'anno** (somma semplice, conto di 1.039 USDT; G1 scambia ogni giorno circa un
+  terzo del conto). È il massimo: un ordine «solo nel libro» che il prezzo non tocca resta da fare dopo, a un prezzo peggiore o a mercato
+  (0,04%), e lo scarto dai pesi voluti cresce. **Capito**: il guadagno possibile è piccolo rispetto al rischio di eseguire meno ordini;
+  il cambio non si fa ora (tocca il percorso degli ordini: live-path-reviewer e riavvio con l'ok del proprietario) e si riguarda solo se
+  la quota a commissione piena dei 13 giorni a regime (21 novembre) resta sopra un terzo, o sul conto vero.

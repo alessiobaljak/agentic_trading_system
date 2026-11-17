@@ -797,6 +797,9 @@ vero. Da fare: leggere dalla macchina gli intervalli del funding del demo (`demo
 **17 novembre, 12:30**: confermato senza la lettura dalla macchina, dagli incassi del demo stesso: agli orari diversi da 00, 08 e 16
 il demo riceve il funding su 15-20 monete per regolamento, il paper su 52-54 (`MIGLIORARE_G1.md`, diario). Resta aperto solo il punto (2),
 l'ordine «solo nel libro»: dal 12 al 17 novembre il 34% del valore paga la commissione piena (0,0273% medio).
+**17 novembre, 16:30**: il punto (2) vale al massimo circa 0,9 punti l'anno (0,0025% del conto al giorno, stima dai numeri del
+12-17 novembre, `MIGLIORARE_G1.md`), prima degli ordini che non si eseguono: non si fa ora; si riguarda con i 13 giorni a regime (21
+novembre) o sul conto vero.
 
 ### P34. Il mazzo dello Sharpe corretto si ferma alla prova 102, e il residuo delle parità dentro M7 — trovata il 12 novembre 2026 (riesami 55 e 96)
 **Perché:** i riesami del 12 novembre (`audits/reports/2026-11-12-RIESAME_PROVA55.md`, `2026-11-12-RIESAME_PROVA96.md`) dicono che

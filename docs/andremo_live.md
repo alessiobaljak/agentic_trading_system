@@ -781,3 +781,9 @@ su 15-20 monete per regolamento, il paper su 52-54; `MIGLIORARE_G1.md`), quindi 
 l'idea 146, gli eventi di CoinMarketCap, in attesa del proprietario. **Capito oggi**: un terzo del valore scambiato da G1 paga la
 commissione piena; sul conto vero la quota può essere diversa (il libro degli ordini del demo non è quello vero), ma è la misura
 migliore che abbiamo, ed è sopra quella del modello.
+**17 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 24, nessuna chiusura nuova. G1, voce 2: l'ordine «solo nel libro»
+(mai a commissione piena) farebbe risparmiare al massimo circa 0,9 punti l'anno (stima dai numeri del demo dal 12 al 17 novembre,
+`MIGLIORARE_G1.md`), meno gli ordini che non si eseguirebbero: non si fa ora. Ricerca: nessuna prova pronta e lo scout già passato
+alle 12:30 senza idee forti; la coda è stata riallineata (idee 136 e 137 chiuse: erano già fatte, prova 149 e riesami dell'11-12
+novembre; 37 idee aperte). **Capito oggi**: il costo in più delle commissioni del demo vale poco meno di un punto l'anno; non è lì
+che G1 può migliorare di molto.
