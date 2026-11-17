@@ -43,6 +43,7 @@ FONTI = {
     "cryptobriefing": "https://cryptobriefing.com/feed/",
     "cryptobriefing2": "https://cryptobriefing.com/feed/?paged=2",   # 4 nov 2026: la prima pagina (30) non bastava fra due giri
     "cryptobriefing3": "https://cryptobriefing.com/feed/?paged=3",   # 10 nov 2026: piene anche le prime due alle 16:18
+    "cryptobriefing4": "https://cryptobriefing.com/feed/?paged=4",   # 17 nov 2026: piene tutte e tre alle 20:18 (98 articoli in 4 ore)
     "coinjournal": "https://coinjournal.net/feed/",
     "cryptonewsdotnet": "https://crypto.news/feed/",
     "bitcoinist": "https://bitcoinist.com/feed/",

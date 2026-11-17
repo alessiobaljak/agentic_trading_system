@@ -787,3 +787,8 @@ migliore che abbiamo, ed è sopra quella del modello.
 alle 12:30 senza idee forti; la coda è stata riallineata (idee 136 e 137 chiuse: erano già fatte, prova 149 e riesami dell'11-12
 novembre; 37 idee aperte). **Capito oggi**: il costo in più delle commissioni del demo vale poco meno di un punto l'anno; non è lì
 che G1 può migliorare di molto.
+**17 novembre, 20:20 UTC, giro delle 4 ore**: raccolta 24 fonti su 24, ma le tre pagine di Crypto Briefing erano tutte piene (98 articoli
+pubblicati fra le 16 e le 20, `research/notizie/archivio/giri.csv`): fra le 16:16 e le 16:33 qualche articolo di quella fonte può
+mancare. Aggiunta la quarta pagina (`research/notizie/raccolta.py`; alle 20:30 copriva dalle 13:55 alle 16:38). Nessuna chiusura nuova.
+G1: nessun passo nuovo possibile in questo giro (la voce 2 aspetta i 13 giorni a regime del 21 novembre, la voce 8 la lettura del
+mattino). Ricerca: nessuna prova pronta, scout già passato oggi. **Capito oggi** (sera): niente di nuovo sulle strategie.
