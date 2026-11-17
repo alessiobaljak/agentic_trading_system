@@ -323,6 +323,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   contro Yahoo, in marzo 2020 14 giorni su 22 differiscono di più di 5 punti base (fino a 287), nel 2019 15 su 252. Le usano lo SPY di
   riferimento di tutte le prove e le parti delle prove 15 e 16, quindi la miscela della prova 25 sul demo. Da rifare: le prove 15, 16 e
   25 con le chiusure ufficiali (Yahoo) e vedere se cambia qualcosa; non urgente per gli esiti già bocciati, importante per la miscela.
+  **Fatto il 17 nov 2026** (`prove/P025c_risultati.md`, controllo, non è una prova): SPY differisce oltre 5 punti base in 81 chiusure
+  su 2'264 (fino a 287) e 26 aperture, QQQ in 1 chiusura; con le chiusure ufficiali le parti delle prove 15 e 16 cambiano di 0-0,02
+  di Sharpe e **la miscela resta 1,08** (correlazione 0,9996 con la serie di prima) contro 0,87 del tenere lo SPY (0,89 con Alpaca):
+  resta sul demo come è. Lo SPY di riferimento delle prove passate era un poco più alto del vero (0,89 contro 0,87): le bocciature
+  contro lo SPY restano tali.
 * **Il conto dello Sharpe corretto** (`carica_serie`) comprende anche le 9 serie `*_chiuso` (trovato dal revisore della prova 37):
   conta di più le prove (più prudente), ma usa serie con date del periodo chiuso; da decidere se escluderle.
 
