@@ -3,11 +3,11 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (15 novembre 2026, 16:30 UTC)
+## Compito in corso (17 novembre 2026, 12:30 UTC)
 - **Bot**: dal 16 novembre 07:36 UTC gira la fase 2 (versione 884b9b1a: conto vero spento, pulsante di approvazione, funding dei paper per
   regolamento); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
-  (codice del conto vero, spento) committata (ff89531), non ancora caricata dal bot.
+  (codice del conto vero, spento) committata (ff89531), caricata dal riavvio del 16 novembre.
 - **Conto vero**: lista del proprietario e decisioni in `docs/conto_vero.md` (riletta il 12 novembre). Punti aperti prima
   dell'accensione: canale di approvazione della versione (firma o dashboard: la regola di GitHub non basta), Firebase, Binance, le
   decisioni a-k, i problemi 66, 70, 72, 73, pulsante e stato in dashboard, revisione finale.
@@ -29,6 +29,11 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   dalla moneta che il demo non ha (龙虾USDT) e dai resti sotto il minimo, non dall'arrotondamento. Su richiesta del proprietario: prova
   157 funding coperto su BTC ed ETH (FAIL di backtest-auditor per il margine; circa +4% l'anno dal 2022), 158 G1 con più leva (no), 159
   base dei trimestrali (no); idea 145 e prova 160 (G1 con funding coperto) in attesa della 157 rifatta. Conto delle prove 326.
+  16-17 novembre: prova 161 (funding coperto con il margine vero) PASS tecnico con 2 Alti, prova 160 no per l'esame; conto 330. Riavvio
+  con la fase 2 (ok del proprietario). Lunedì: confronto settimanale e allocatore (tieni G1). Prova in avanti del programma 5: M-001c non
+  passa. Il funding più basso del demo è del conto demo (meno monete a 4 ore), confermato dagli incassi del demo stesso; nello stato
+  c'è il confronto regolamento per regolamento (d5c6708). Commissione del demo 12-17 novembre 0,0273%, 34% del valore a commissione
+  piena. Idea 146 (eventi di CoinMarketCap) in attesa del proprietario; scout del 17 senza idee forti.
 - **Dashboard**: «Plancia» (aree Crypto e Azioni, menu a sinistra richiudibile); la scheda Azioni la riempie la sessione «trading
   stock». Aree del repository separate (`AREE.md`, blocco `.claude/hooks/aree.py`).
 
@@ -49,6 +54,7 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   mancanti, file vecchi), le voci rimaste del backlog P32.
 - Idee passate a strategy-scout il 12 novembre: differenze di funding fra borse, base dei future trimestrali, dominanza del Bitcoin.
 - Decisione aperta: la variante di G1 con il tetto del 20% per moneta (prova 152) al revisore e poi nel paper accanto a G1?
-- Lunedì 16 novembre: riepilogo settimanale con la miscela a tavolino, gate2-reconciler (funding di novembre: usare la stima, non il
-  pannello; dire del salto del funding dei paper dopo il riavvio), portfolio-allocator.
+- Ogni mattina alle 04:17: log-bot e stato dalla macchina (prossime richieste 0758 e 0759), voce 8 del piano di G1.
+- Lunedì 23 novembre: riepilogo settimanale, gate2-reconciler (il funding si giudica contro il mercato vero, non contro il demo; la
+  quota a commissione piena con 13 giorni a regime), portfolio-allocator.
 - Il contesto di questa conversazione è molto lungo: conviene compattarla.
