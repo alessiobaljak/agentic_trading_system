@@ -790,6 +790,10 @@ esecuzioni per moneta del demo per giorni passati: le voci 10 e 11 del piano di 
 `voce11_rapporto.md`) si fermano lì (la finestra del 29 ottobre: 1 punto su 1,65 non spiegato; l'8 novembre: il recupero del paper
 dalle 20:09). Serve una lettura di sola lettura del diario di `/portafoglio/f5g1` per i giorni chiesti, da aggiungere alla lista
 bianca della macchina: live-path-reviewer prima del commit.
+**17 novembre**: il confronto del funding regolamento per regolamento è nello stato (d5c6708). Il demo incassa meno perché il conto
+demo ha un funding suo (molte meno monete a 4 ore del mercato vero, dove sono 49 su 67): il funding del demo non rappresenta il conto
+vero. Da fare: leggere dalla macchina gli intervalli del funding del demo (`demo-fapi` `/fapi/v1/fundingInfo`, pubblico; da qui errore
+451) per confermarlo; nel confronto settimanale il funding si giudica contro il mercato vero, non contro il demo.
 
 ### P34. Il mazzo dello Sharpe corretto si ferma alla prova 102, e il residuo delle parità dentro M7 — trovata il 12 novembre 2026 (riesami 55 e 96)
 **Perché:** i riesami del 12 novembre (`audits/reports/2026-11-12-RIESAME_PROVA55.md`, `2026-11-12-RIESAME_PROVA96.md`) dicono che

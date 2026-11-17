@@ -386,3 +386,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   punti sotto; negli ultimi due giorni quasi uguali (−0,12 e +0,04). Dal 9 novembre (9 giorni) demo +5,46%, paper +7,67%, −0,24 punti al
   giorno. Funding dal 7 novembre +18,54 USDT, commissioni 1,40 USDT. Il funding del paper per regolamento (fase 2) si confronta dal
   prossimo confronto settimanale.
+* **17 novembre 2026, 09:00 UTC, voce 3, perché il demo incassa meno funding del paper** (sezione nuova dello stato, commit d5c6708,
+  revisione `reviews/reports/2026-11-17-stato-funding-demo-paper.md`; prima lettura `ops/results/0757-17nov-stato-funding-demo-paper.md`):
+  regolamento per regolamento, alle 00, 08 e 16 UTC il demo incassa **più** del paper (per esempio il 17 novembre alle 00 +0,068% contro
+  +0,026% del conto), ma nelle altre ore il paper registra molti più pagamenti (16 novembre: 156 contro 45) e incassa molto di più
+  (+0,141% contro +0,040%); nel giorno intero del 16 novembre paper +0,22%, demo +0,13%. La causa: **sul mercato vero di Binance 49 delle
+  67 monete di G1 di oggi pagano il funding più spesso che ogni 8 ore** (`/fapi/v1/fundingInfo` pubblico, 17 novembre), e il paper conta
+  quei regolamenti veri (`/fapi/v1/fundingRate` del mercato vero); il conto demo ha un suo funding, con molte meno monete a 4 ore e tassi
+  suoi (il pubblico del demo non si legge da qui, errore 451: da confermare dalla macchina). **Capito**: il funding più basso del demo
+  (circa −20%, la parte più grande dello scarto «a regime») è del conto demo, non un costo del conto vero, che incasserebbe il funding
+  del mercato vero come il paper. Il confronto del funding si fa quindi fra il paper e il mercato vero (l'archivio di Binance, quando
+  esce il file di novembre), non fra demo e paper.

@@ -768,3 +768,8 @@ prima del riavvio.
 chiude 422 operazioni con −0,41% a operazione (p 0,72): **non passa**; con M-002 e M-003 già bocciate, nessuna delle procedure di scelta
 mensile del programma 5 regge sui dati nuovi. Resta in corso la seconda tornata (N-001, N-002, N-003). **Capito oggi**: le regole scelte
 ogni mese per moneta sul passato recente non hanno funzionato in avanti in nessuna delle tre versioni.
+**17 novembre, perché il demo incassa meno funding del paper** (`ops/results/0757-17nov-stato-funding-demo-paper.md`): il conto demo di
+Binance ha un funding suo, con molte meno monete pagate ogni 4 ore; sul mercato vero 49 delle 67 monete di G1 di oggi pagano più spesso che
+ogni 8 ore, e il paper conta quei pagamenti veri. Il 16 novembre paper +0,22% del conto, demo +0,13%. **Capito oggi**: la parte più grande
+dello scarto fra demo e paper «a regime» viene dal conto demo, non da un costo che il conto vero avrebbe; il conto vero incasserebbe il
+funding del mercato vero, come il paper. Resta da confermare leggendo dalla macchina gli intervalli del funding del demo.
