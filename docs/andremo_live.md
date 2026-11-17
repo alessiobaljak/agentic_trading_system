@@ -764,3 +764,7 @@ gira la versione 884b9b1a (conto vero spento senza interruttore, pulsante di app
 regolamento); `DRY_RUN` vero; dopo un'ora paper G1, G11, G1 neutra, F5, eventi e demo hanno fatto il loro giro (08:07-08:25), nessun errore
 nuovo nel registro (restano i soliti rifiuti dell'interesse aperto di due monete tolte dal listino, del vecchio sistema). 2.810 test passati
 prima del riavvio.
+**17 novembre, la prova in avanti del programma 5 arriva al verdetto** (`research/programma5/avanti/A.md`, dati fino al 15 novembre): M-001c
+chiude 422 operazioni con −0,41% a operazione (p 0,72): **non passa**; con M-002 e M-003 già bocciate, nessuna delle procedure di scelta
+mensile del programma 5 regge sui dati nuovi. Resta in corso la seconda tornata (N-001, N-002, N-003). **Capito oggi**: le regole scelte
+ogni mese per moneta sul passato recente non hanno funzionato in avanti in nessuna delle tre versioni.

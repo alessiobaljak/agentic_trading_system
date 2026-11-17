@@ -254,7 +254,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
   copertura, reti d'acquisto sotto il prezzo (I-016), scalping con ordini limite (I-020): **bruciate**.
 * **Fase 2, 2024-2026, 100 monete** (J-001…J-010): continuazioni (J-001, J-002, J-005) positive ma quanto il caso;
   rimbalzi andati male nel secondo semestre 2025; reti nelle code e idee di sessione: **bruciate**.
-* **Procedure di scelta mensile** (M-001, M-002, M-003): M-002 bocciata sui dati nuovi; M-001c e M-003 in prova in avanti
+* **Procedure di scelta mensile** (M-001, M-002, M-003): M-002 bocciata sui dati nuovi; **prova in avanti chiusa il 17 novembre 2026: nessuna passa** (M-001c 422 trade, −0,41% a trade, p 0,72; M-002 p 0,17; M-003 p 0,98; `programma5/avanti/A.md`); già: M-001c e M-003 in prova in avanti
   (`programma5/avanti/A.md`), per ora negative.
 * **Fattori fra monete a ore** (E-114: volatilità, beta, salti, illiquidità, distanza dal massimo, asimmetria) e **modello
   ridge su 21 segnali** (K-001): **bruciati**.
