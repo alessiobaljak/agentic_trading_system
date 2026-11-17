@@ -229,6 +229,7 @@ def build() -> str:
     lines += _calibration_section(fb)
     # in fondo: l'agente della macchina taglia le risposte oltre i 20.000 caratteri tenendo testa e coda (ops_agent.truncate)
     lines += sezione_pesi_g1_oggi(fb, cliente=cliente_demo)
+    lines += sezione_funding_demo_paper(fb, cliente=cliente_demo)
     return "\n".join(lines)
 
 
@@ -1186,6 +1187,115 @@ def sezione_pesi_g1_oggi(fb, cliente=None, now: float | None = None, dormi=time.
 MONETE_PER_RIGA = 6
 EQUITY_DEMO_MASSIMA = 1e9         # oltre, l'equity letta da Firebase non è un numero sensato (problema 85)
 EQUITY_VECCHIA_S = 2 * 3600       # il demo riscrive l'equity ogni ora (demo_binance.py): oltre 2 ore si avvisa
+GIORNI_FUNDING_CONFRONTO = 3      # il confronto del funding per regolamento: oggi e i due giorni prima
+MONETE_FUNDING_CONFRONTO = 6      # le monete più grandi del demo nell'ultimo regolamento, accanto alle più grandi del paper
+MONETE_DEL_FUNDING_PAPER = 10     # quante monete il paper pubblica per regolamento (bot/portafoglio/f5.py, MONETE_DEL_FUNDING)
+
+
+def sezione_funding_demo_paper(fb, cliente=None, now: float | None = None, dormi=time.sleep) -> list:
+    """Il funding di G1 regolamento per regolamento, sul demo (incassi veri di Binance, ``/fapi/v1/income`` FUNDING_FEE) contro il
+    paper (``/paper_g1/funding/{giorno}/{ora}``, pubblicato dalla fase 2 del 16 novembre 2026), in % del conto di ciascuno, e nell'ultimo
+    regolamento le monete più grandi (research/programma7/MIGLIORARE_G1.md, voce 3: il demo incassa meno funding del paper). Sola
+    lettura; in fondo allo stato perché il taglio dei 20.000 caratteri dell'agente tiene la coda; un errore diventa «non letto»."""
+    titolo = "## G1: il funding per regolamento, demo contro paper (sola lettura)"
+    try:
+        return _funding_demo_paper(fb, cliente, time.time() if now is None else float(now), dormi, titolo)
+    except Exception as exc:  # noqa: BLE001
+        return [titolo, f"- non letto: {_motivo(exc)}", ""]
+
+
+def _equity_valida(st: dict) -> float:
+    e = float(st["equity"]) if isinstance(st, dict) and _numero(st.get("equity")) else 0.0
+    return e if math.isfinite(e) and 0 < e < EQUITY_DEMO_MASSIMA else 0.0
+
+
+def _funding_demo_paper(fb, cliente, now: float, dormi, titolo: str) -> list:
+    if nella_finestra_vietata(now):
+        return [titolo, "- non letto: finestra del ribilancio del demo (23:50-01:45 UTC), richiedere dopo", ""]
+
+    rotti = []
+
+    def rtdb(ramo):
+        try:
+            v = fb.get_rtdb(ramo) if fb is not None else None
+        except Exception:  # noqa: BLE001
+            rotti.append(ramo)
+            return {}
+        return v if isinstance(v, dict) else {}
+
+    oggi = int(now // 86400)
+    giorni = [_giorno(d * 86400) for d in range(oggi - GIORNI_FUNDING_CONFRONTO + 1, oggi + 1)]
+    paper = {g: v for g, v in rtdb("/paper_g1/funding").items() if g in giorni and isinstance(v, dict)}
+    eq_demo, eq_paper = _equity_valida(rtdb("/demo_binance/stato")), _equity_valida(rtdb("/paper_g1/stato"))
+    if rotti:                      # revisione del 17 novembre 2026, problema 92: Firebase che non risponde non è «non ancora»
+        return [titolo, f"- non letto: Firebase non risponde ({', '.join(rotti)})", ""]
+    if not paper:
+        return [titolo, "- non ancora: il paper di G1 non ha funding per regolamento in questi giorni (`/paper_g1/funding`)", ""]
+    if eq_demo <= 0 or eq_paper <= 0:
+        return [titolo, "- non letto: manca l'equity del demo o del paper", ""]
+    if cliente is None:
+        try:
+            cliente = cliente_di_sola_lettura()
+        except Exception as exc:  # noqa: BLE001  (il testo dell'errore di una chiave non si stampa)
+            return [titolo, f"- non letto: chiave del conto demo non leggibile ({type(exc).__name__})", ""]
+        if cliente is None:
+            return [titolo, "- non letto: manca la chiave del conto demo (c'è solo sulla macchina)", ""]
+    lt = _Lettore(cliente, dormi=dormi)
+    da_ms = (oggi - GIORNI_FUNDING_CONFRONTO + 1) * 86400_000
+    righe, completo = _pagine(lt, "/fapi/v1/income", {"incomeType": "FUNDING_FEE", "startTime": da_ms, "endTime": int(now * 1000)},
+                              lambda r: (r.get("tranId"), r.get("symbol"), r.get("time"), r.get("income")))
+    return [titolo] + confronto_funding_regolamenti(righe, paper, eq_demo, eq_paper, giorni) + (
+        [] if completo else ["- incassi forse incompleti (oltre il numero massimo di pagine)"]) + [""]
+
+
+def confronto_funding_regolamenti(funding: list, paper: dict, eq_demo: float, eq_paper: float, giorni: list) -> list:
+    """Le righe del confronto: per ogni regolamento (00, 08, 16 UTC, e «altre» per le monete con il funding ogni 1 o 4 ore) il funding
+    del demo e del paper in % del proprio conto (equity di oggi di ciascuno: un'approssimazione dichiarata), e nell'ultimo regolamento
+    00/08/16 le monete più grandi, demo/paper; «—» per una moneta che il paper non mette fra le sue più grandi."""
+    demo: dict = {}
+    for r in funding:
+        if (r.get("asset") or "USDT") != "USDT" or not r.get("time") or not _numero(r.get("income")):
+            continue
+        k = (_giorno(int(r["time"]) / 1000), _regolamento(r["time"]))
+        x = demo.setdefault(k, {"totale": 0.0, "monete": {}, "pagamenti": 0})
+        v, s = float(r["income"]), r.get("symbol") or "?"
+        x["totale"] += v
+        x["pagamenti"] += 1
+        x["monete"][s] = x["monete"].get(s, 0.0) + v
+    righe, ultimo = [], None
+    for g in giorni:
+        p_g = paper.get(g)
+        if not isinstance(p_g, dict):
+            continue
+        for reg in ("00", "08", "16", "altre"):
+            voci = [v for h, v in sorted(p_g.items()) if isinstance(v, dict)
+                    and ((str(h)[:2] == reg) if reg != "altre" else (str(h)[:2] not in ("00", "08", "16")))]
+            if not voci:
+                continue
+            p_tot = sum(float(v["incassato"]) for v in voci if _numero(v.get("incassato")))
+            p_n = sum(int(v["monete"]) for v in voci if _numero(v.get("monete")))
+            d = demo.get((g, reg), {"totale": 0.0, "monete": {}, "pagamenti": 0})
+            dp, pp = 100 * d["totale"] / eq_demo, 100 * p_tot / eq_paper
+            # pagamenti da tutte e due le parti (problema 90): nella riga «altre» una moneta pagata ogni 4 ore conta più volte
+            righe.append(f"| {g} {reg} | {dp:+.4f}% | {pp:+.4f}% | {dp - pp:+.4f}% | {d['pagamenti']}/{p_n} |")
+            if reg != "altre":
+                ultimo = (g, reg, d, voci[0])
+    if not righe:
+        return ["- nessun regolamento del paper nei giorni letti"]
+    out = [f"Equity di oggi: demo {eq_demo:,.2f} USDT, paper {eq_paper:,.2f}; + incassato. Paper da `/paper_g1/funding` (dalla fase 2 del "
+           "16 novembre 2026), demo dagli incassi di Binance.", "",
+           "| regolamento | demo | paper | demo meno paper | pagamenti demo/paper |", "|---|---|---|---|---|"] + righe
+    if ultimo:
+        g, reg, d, v = ultimo
+        maggiori = {s: float(x) for s, x in (v.get("maggiori") or {}).items() if _numero(x)} if isinstance(v.get("maggiori"), dict) else {}
+        dal_demo = sorted(d["monete"], key=lambda s: (-abs(d["monete"][s]), s))[:MONETE_FUNDING_CONFRONTO]
+        simboli = sorted(set(maggiori) | set(dal_demo), key=lambda s: (-max(abs(maggiori.get(s, 0.0)) / eq_paper,
+                                                                            abs(d["monete"].get(s, 0.0)) / eq_demo), s))
+        celle = [f"{s} {100 * d['monete'].get(s, 0.0) / eq_demo:+.4f}/" + (f"{100 * maggiori[s] / eq_paper:+.4f}" if s in maggiori else "—")
+                 for s in simboli]
+        out += ["", f"- regolamento {g} {reg}, le monete più grandi in % del conto, demo/paper (— = non fra le "
+                    f"{MONETE_DEL_FUNDING_PAPER} più grandi pubblicate dal paper): " + " · ".join(celle)]
+    return out
 
 
 def _pesi_g1_oggi(fb, cliente, now: float, dormi, titolo: str) -> list:

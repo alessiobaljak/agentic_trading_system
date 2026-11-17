@@ -9,20 +9,19 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato al 14 nov 2026)
-- **Ultima revisione**: `reports/2026-11-14-stato-pesi-g1-oggi.md`, sezione «G1 oggi, moneta per moneta» dello «stato»: primo
-  giro REQUEST CHANGES (84 Medio), **secondo giro APPROVE** (un solo cliente e stop comune al primo 429/418; 89 Basso, un commento).
-  Non committata: se committata, confrontare con `giro14nov/copia2/`. Prove: `giro14nov/test_prove_14nov_b.py` (stato intero),
-  `mutazioni2.py <radice> <cartella>` (carica davvero la copia mutata: il conftest dei test mette la radice in testa).
+## Stato (aggiornato al 17 nov 2026)
+- **Ultima revisione**: `reports/2026-11-17-stato-funding-demo-paper.md`, sezione «G1: il funding per regolamento, demo contro paper»
+  dello «stato»: **APPROVE** (0 bloccanti, alti, medi; Bassi 90-94: monete della riga «altre», «—», Firebase muto, letture doppie, test).
+  Non committata: se committata, confrontare con `giro17nov/copia/` (md5 `6b5a6a8c`, test `27399f22`). Prove: `giro17nov/test_prove_17nov.py`
+  (stato intero), `giro17nov/mutazioni.py <radice> <cartella>`.
+- 14 nov, pesi di oggi: committata come `96c6094`, uguale alla copia approvata salvo il commento del 89 (89 chiuso, verificato il 17 nov).
 - 12 nov: funding dei paper APPROVE (committato `3624baa`; 83 Basso latente); sezione delle esecuzioni del demo APPROVE (`3566bd4`).
 - Conto vero: `reports/2026-11-12-conto-vero-versione-firebase-2.md` (committato `da91124`): **APPROVE per il commit**, **REQUEST
   CHANGES per l'accensione**: 54 (ii) Alto (la chiave di amministratore di Firebase scrive l'approvazione: decisione di Alessio),
-  70 Medio, 78 Basso (il test di guardia del 54 non vede la costante importata). Chiusi 74-77. Sulla macchina, al 12 nov, `1a8522f`.
-- Voci aperte: 4 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione).
-- Alla prossima revisione: se committato, confrontare il commit con `giro12nov/copia2` (copia del secondo giro, senza git); rifare
-  S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`, un giro al minuto: S1 e S2 senza giri restano bloccate, giusto) e `mutazioni2.py`.
+  70 Medio, 78 Basso. Riavvio della fase 2 fatto il 16 nov alle 07:36 UTC con l'ok del proprietario (conto vero spento).
+- Voci aperte: 5 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; funding demo contro paper fino al commit).
 - Per l'accensione: decisione sul 54, test di guardia completo (78), 70, regole pubblicate e pulsanti provati, pulsante «Approva» con
-  il verdetto del revisore e «Revoca», revisione nuova.
+  il verdetto del revisore e «Revoca», revisione nuova; rifare S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`) e `mutazioni2.py`.
 
 ## Promemoria
 - Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero lo riusa con `HOST = "fapi.binance.com"`).

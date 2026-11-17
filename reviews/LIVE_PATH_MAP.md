@@ -17,10 +17,11 @@ Firebase) sono nella sezione 14.
 
 Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) e `eventi.py` (dati pubblici da `fapi.binance.com`,
 `f5.py:47`, `:163-168`), `scripts/verify_keys.py` (legge il conto, `:33-38`), dal 12 nov (`3566bd4`) la fotografia
-dello stato (`scripts/state_snapshot.py:843-874` `SoloLettura`: solo GET su `userTrades`, `commissionRate`, `income` e `time` del
-conto demo, con la chiave del demo, con la richiesta «stato»; finestra vietata 23:50-01:45 UTC `:829`, stop al primo 429/418 `:861-868`,
-soglia del peso usato 600 `:821`, tetto 1.000 `:820`; righe del 14 nov); dal 14 nov (non committato, APPROVE) anche `GET /fapi/v2/positionRisk`
-(`:816-817`, `sezione_pesi_g1_oggi`), un solo cliente per le due sezioni (`:120-126`) e stop comune al primo 429/418 (`:861-868`).
+dello stato (`scripts/state_snapshot.py:844-874` `SoloLettura`: solo GET su `userTrades`, `commissionRate`, `income`, `positionRisk` e
+`time` del conto demo, con la chiave del demo, con la richiesta «stato»; finestra vietata 23:50-01:45 UTC `:830`, stop al primo 429/418
+`:862-869`, soglia del peso usato 600 `:822`, tetto 1.000 per sezione `:821`; righe del 17 nov); dal 14 nov (`96c6094`) `positionRisk`
+(`:817-818`, `sezione_pesi_g1_oggi`) e un solo cliente per le sezioni (`:120-126`); dal 17 nov (non committato, APPROVE) una terza sezione,
+`sezione_funding_demo_paper` (`:1194-1289`), che rilegge `income` FUNDING_FEE dei 3 giorni con lo stesso cliente (`:232`).
 `bot/risk/portafoglio.py` è una simulazione.
 
 ## 2. Il giro del bot (un solo filo)
@@ -189,8 +190,8 @@ Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52
 dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24 (vecchio bot), 34 (identificativi degli eventi), 35
 (`DRY_RUN` falso ferma anche il demo; chiuso al riavvio con `ff89531`). Fuori dal codice: chiavi vere non limitate all'indirizzo,
 prelievo non detto; regole pubblicate senza i comandi del demo e del conto vero; servizio che riparte da solo con l'ultimo codice
-spinto. Conto vero: 54 ii Alto, 70 Medio, 78 Basso (sezione 14). Paper: 83 Basso latente. Fotografia dello stato
-(14 nov, non committata, APPROVE): 89 Basso (un commento).
+spinto. Conto vero: 54 ii Alto, 70 Medio, 78 Basso (sezione 14). Paper: 83 Basso latente. Fotografia dello stato:
+89 chiuso (`96c6094`); 17 nov (non committata, APPROVE) Bassi 90-94 (testi e conteggi della sezione del funding, letture doppie, test).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
 ## 14. Il conto vero: fase 2 (`ff89531`), versione approvata su Firebase (`a267c40`), secondo giro del 12 nov non committato
@@ -261,3 +262,6 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
   dal paper di G1 solo `ultimo_lunedi` e `pesi` (`demo_binance.py:870-874`), invariato. Nessun invariante del percorso cambiato.
 - 14 nov (non committato; primo giro REQUEST CHANGES per l'84, secondo giro APPROVE): la funzione di sola lettura dello «stato» ammette anche `GET /fapi/v2/positionRisk`
   del demo (peso 5). Nessun invariante del percorso degli ordini cambiato. Il funding dei paper è committato come `3624baa`.
+- 17 nov (non committato, APPROVE): lo «stato» legge una volta in più `income` FUNDING_FEE del demo (3 giorni) per il confronto
+  del funding per regolamento con il paper; stesso cliente, stessa finestra, stesso blocco. `96c6094` = sezione dei pesi approvata il 14 nov.
+  Nessun invariante del percorso degli ordini cambiato.
