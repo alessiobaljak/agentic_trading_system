@@ -275,6 +275,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   42% dei campionamenti; dopo la fine del campione dell'articolo t 0,70; il margine sui costi è sottile (cade con costi più alti del
   30%). Periodo chiuso **non aperto**. Capito: il criterio per la miscela con t 1,3 si supera per caso circa una volta su dieci senza
   vantaggio vero (prove 31 e 37, tutte e due cadute alla revisione): il revisore separato è indispensabile. Nel conto: 91.
+* **La prova 38** (la stagionalità dello stesso mese nell'S&P 500, comprate le 50 salite di più nello stesso mese dell'anno prima e
+  vendute le 50 scese di più; idea I45): **bocciata.** Già prima dei costi comprati meno venduti fanno −0,11% al mese (t −0,28) dal
+  2017 al 2024: l'effetto di Heston e Sadka (t 7,6 nello studio) nelle grandi americane dopo la pubblicazione non c'è; con i costi
+  −33,9% (`prove/P038_risultati.md`). Capito: con un conto da 100'000 dollari diviso in 100 posizioni che cambiano quasi tutte ogni
+  mese, le sole commissioni minime pesano circa il 2% l'anno: una strategia mensile a molti titoli deve rendere più di questo prima di
+  tutto il resto. Nel conto: 93.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
