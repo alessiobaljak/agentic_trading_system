@@ -812,4 +812,5 @@ moneta pagano funding molto simili; la differenza è di pochi punti l'anno e non
 **18 novembre, sera**: raccolte delle 12:20, 16:20 e 20:20 regolari (25, 24 e 25 fonti su 25; alle 16:20 non ha risposto ZyCrypto),
 nessuna chiusura nuova. Lo scout delle 12:30 non trova idee forti (`research/idee/LOG.md`); non è stato richiamato alle 16:17 e alle
 20:17. G1: nessun passo nuovo fino alla lettura del mattino. **Capito oggi**: la prova 162 (funding fra USDT e USDC) chiude un'altra
-strada del guadagno «senza prezzo» su Binance: dopo il funding coperto (157, 161) anche questa rende troppo poco dopo le spese.
+strada del guadagno «senza prezzo» su Binance: il funding coperto (161) rende poco, circa +3% l'anno dal 2022, e questa rende quasi
+zero dopo le spese.
