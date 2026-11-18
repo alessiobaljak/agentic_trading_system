@@ -114,3 +114,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   (2) funding di un'altra borsa (Bybit, OKX): Bybit e Kraken non sono in registro, ma l'idea è la stessa delle prove 135 e 137 (Hyperliquid contro Binance), stessa
   famiglia di prove; (3) sblocchi dei token e diluizione: già prove 74 e 131; il calendario di DefiLlama ora risponde 402 (a pagamento), niente dati nuovi;
   (4) stagionalità di giorno della settimana, fine mese: nessuna fonte seria con ragione economica, un asset, pochi casi. Nessuna riga di registro.
+
+- 18 novembre 2026 (giro delle 08:17): proposta 1 idea, una regola scritta: `programma7/CENTESIMA.md` (prova 162, idea 147): il funding fra il perpetuo in USDT e
+  quello in USDC della stessa moneta (vendere il contratto che paga di più, comprare l'altro; senza rischio sul prezzo; mai provato: `--cerca USDC` = 0; dati
+  gratuiti di data.binance.vision dal gennaio 2024, verificata solo l'esistenza dei file; meno di 3 anni di storia; meccanismo: He, Manela, Ross e von Wachter, arXiv
+  2212.06888). Probabilità medio-bassa (lordo piccolo, spese di quattro gambe), detto nel file. Scartata: la chiusura dei perpetui di Binance dopo l'annuncio (134
+  annunci «Will Delist» su perpetui dal 2021): già G13 e G13C (prove 71 e 107). Altri angoli controllati con `--cerca`: fine settimana (solo azioni e CME), ETF (G24),
+  halving (0, ma 3 eventi: t da 3 fuori portata). Nessun'altra idea forte.

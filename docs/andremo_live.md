@@ -798,3 +798,8 @@ ha fatto 0,62 punti meno del paper nella tabella del giorno: le posizioni divers
 funding e spese sono uguali, il resto non si spiega con i prezzi del mercato vero (prezzi propri del conto demo o ore diverse delle
 letture; il 18 restituisce già 0,23). Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: con il conto piccolo i resti sotto il
 minimo pesano soprattutto sulle monete piccole che si muovono molto (il demo vendeva meno di due monete scese del 30% e del 16%).
+**18 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25, nessuna chiusura nuova. Ricerca nuova: strategy-scout propone
+l'idea 147, **il funding fra il perpetuo in USDT e quello in USDC della stessa moneta** (comprato uno, venduto l'altro: niente rischio sul
+prezzo, guadagno regolare se la differenza dura; dato mai usato). Regole in `research/programma7/CENTESIMA.md`, corrette prima del
+commit (la differenza si misura per giorno, perché i due contratti possono pagare a intervalli diversi); prova 162 nel registro, prima la
+verifica di strategy-researcher. Probabilità medio-bassa (lordo piccolo, quattro gambe di spese).
