@@ -416,3 +416,16 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   (0,04%), e lo scarto dai pesi voluti cresce. **Capito**: il guadagno possibile è piccolo rispetto al rischio di eseguire meno ordini;
   il cambio non si fa ora (tocca il percorso degli ordini: live-path-reviewer e riavvio con l'ok del proprietario) e si riguarda solo se
   la quota a commissione piena dei 13 giorni a regime (21 novembre) resta sopra un terzo, o sul conto vero.
+* **18 novembre 2026, 04:50 UTC, voce 8, l'undicesimo ribilancio a 1.000 USDT** (`ops/results/0758-18nov-log-ribilancio-1000.md`,
+  `0759-18nov-stato-ribilancio-1000.md`): 8 ordini (7 a limite, 1 a mercato), 45 variazioni sotto il minimo (8,3% del conto), gli stessi
+  3 rifiutati (EVAAUSDT e UAIUSDT assenti sul demo, LITUSDT non apribile); nessun errore nuovo nel registro; paper G1, G11 e G1 neutra
+  ribilanciati alle 00:09-00:17, ordini limite del paper 56 eseguiti su 56. Scarto fra posizioni vere e volute 13,8%; esposizione lorda
+  paper 200,0%, demo 198,0%. Equity del demo 1.033,31 (+3,33% dall'8 novembre), G1 nel paper 11.140,93 (+4,92%, base di ieri): il demo
+  1,59 punti sotto (ieri 1,15). Fra le due letture delle 04:20 il demo −1,55%, il paper −1,13%. Dal 9 novembre (10 giorni) demo +3,83%,
+  paper +6,46%, −0,26 punti al giorno. **Il 17 novembre moneta per moneta** (`misure_g1/voce11_attribuzione_17nov.py`, pesi delle 04:20
+  del 17, prezzi mark del mercato vero dalle 00:05 alle 00:05): paper −0,74%, demo con i suoi pesi −0,87%, **le posizioni diverse spiegano
+  −0,13 punti** (BULLAUSDT −0,11 e MAGMAUSDT −0,08: il demo vendeva meno di due monete scese del 30% e del 16%, resti sotto il minimo;
+  LITUSDT, che manca, +0,07); funding (+0,140% contro +0,139%) e spese uguali. Il paper da ribilancio a ribilancio fa −0,51% (11.200,92 →
+  11.143,37), vicino al calcolo. Il resto dello scarto del giorno (circa 0,3 punti) **non si spiega con i prezzi del mercato vero**: le
+  cause possibili sono i prezzi propri del conto demo (ha libri e prezzi suoi, come il funding) e le ore diverse delle letture (il paper
+  scrive l'equity verso le :06 di ogni ora, il demo verso le :35); la riga del 18 restituisce già +0,23. Non è un costo dell'esecuzione.

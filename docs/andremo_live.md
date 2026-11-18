@@ -792,3 +792,9 @@ pubblicati fra le 16 e le 20, `research/notizie/archivio/giri.csv`): fra le 16:1
 mancare. Aggiunta la quarta pagina (`research/notizie/raccolta.py`; alle 20:30 copriva dalle 13:55 alle 16:38). Nessuna chiusura nuova.
 G1: nessun passo nuovo possibile in questo giro (la voce 2 aspetta i 13 giorni a regime del 21 novembre, la voce 8 la lettura del
 mattino). Ricerca: nessuna prova pronta, scout già passato oggi. **Capito oggi** (sera): niente di nuovo sulle strategie.
+**18 novembre, 04:50 UTC, l'undicesimo ribilancio del demo a 1.000 USDT** (`ops/results/0758`, `0759`): nessun errore nuovo, gli stessi
+3 rifiuti (EVAA, UAI, LIT), 8 ordini, 45 variazioni sotto il minimo. Demo +3,33% dall'8 novembre, paper G1 +4,92%. Il 17 novembre il demo
+ha fatto 0,62 punti meno del paper nella tabella del giorno: le posizioni diverse ne spiegano 0,13 (`misure_g1/voce11_attribuzione_17nov.py`),
+funding e spese sono uguali, il resto non si spiega con i prezzi del mercato vero (prezzi propri del conto demo o ore diverse delle
+letture; il 18 restituisce già 0,23). Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: con il conto piccolo i resti sotto il
+minimo pesano soprattutto sulle monete piccole che si muovono molto (il demo vendeva meno di due monete scese del 30% e del 16%).
