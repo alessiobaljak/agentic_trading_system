@@ -121,3 +121,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   2212.06888). Probabilità medio-bassa (lordo piccolo, spese di quattro gambe), detto nel file. Scartata: la chiusura dei perpetui di Binance dopo l'annuncio (134
   annunci «Will Delist» su perpetui dal 2021): già G13 e G13C (prove 71 e 107). Altri angoli controllati con `--cerca`: fine settimana (solo azioni e CME), ETF (G24),
   halving (0, ma 3 eventi: t da 3 fuori portata). Nessun'altra idea forte.
+
+- 18 novembre 2026 (giro delle 12:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido, dopo la prova 162). Controllato con `--cerca`:
+  (1) illiquidità di Amihud (`--cerca Amihud` e `illiquid` = 0): mai provata, ma è un segnale fra monete dalle sole candele (prezzo e volume), parente di 9, 66 e 150,
+  e le 100 monete sono tutte liquide: la lezione delle prove 150-154 dice no; (2) asimmetria, beta, lotteria: già 9, 52, 66, 86, 88, 150; (3) ritorno a breve
+  (reversal): nessuna voce con quel nome, ma è un indicatore sul prezzo coperto dalle prove di momento e inversione dei programmi 5-6; (4) funding fra contratti
+  della stessa moneta in valuta diversa: la 162 (no per le spese dei cambi di lato). Nessun dato nuovo né fatto in avanti nei nostri dati che lo giustifichi:
+  non vale abbassare lo Sharpe corretto delle strategie in corso. Nessuna riga di registro.
