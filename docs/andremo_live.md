@@ -809,3 +809,7 @@ t 0,15 e −10,15; il funding lordo raccolto è 2,2% e 4,6% l'anno, le spese 1,9
 Conto delle prove 332 (serie aggiunte al mazzo). Le letture del ricercatore non previste dalle regole (orari al minuto, storia non
 consecutiva, chiusure, margine ora per ora) non cambiano l'esito e si accettano. **Capito oggi**: su Binance i due contratti della stessa
 moneta pagano funding molto simili; la differenza è di pochi punti l'anno e non copre le spese di cambiare lato.
+**18 novembre, sera**: raccolte delle 12:20, 16:20 e 20:20 regolari (25, 24 e 25 fonti su 25; alle 16:20 non ha risposto ZyCrypto),
+nessuna chiusura nuova. Lo scout delle 12:30 non trova idee forti (`research/idee/LOG.md`); non è stato richiamato alle 16:17 e alle
+20:17. G1: nessun passo nuovo fino alla lettura del mattino. **Capito oggi**: la prova 162 (funding fra USDT e USDC) chiude un'altra
+strada del guadagno «senza prezzo» su Binance: dopo il funding coperto (157, 161) anche questa rende troppo poco dopo le spese.
