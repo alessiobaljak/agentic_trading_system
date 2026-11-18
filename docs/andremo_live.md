@@ -803,3 +803,9 @@ l'idea 147, **il funding fra il perpetuo in USDT e quello in USDC della stessa m
 prezzo, guadagno regolare se la differenza dura; dato mai usato). Regole in `research/programma7/CENTESIMA.md`, corrette prima del
 commit (la differenza si misura per giorno, perché i due contratti possono pagare a intervalli diversi); prova 162 nel registro, prima la
 verifica di strategy-researcher. Probabilità medio-bassa (lordo piccolo, quattro gambe di spese).
+**18 novembre, 09:40 UTC, la prova 162 non passa** (`research/programma7/RISULTATI_CENTESIMA.md`): il funding fra il perpetuo in USDT e
+quello in USDC della stessa moneta, su 40 monete dal febbraio 2024. A (decisione mensile) +0,10% l'anno netto, B (settimanale) −5,55%;
+t 0,15 e −10,15; il funding lordo raccolto è 2,2% e 4,6% l'anno, le spese 1,9% e 10,4%. Con il margine in comune nessun giorno a rischio.
+Conto delle prove 332 (serie aggiunte al mazzo). Le letture del ricercatore non previste dalle regole (orari al minuto, storia non
+consecutiva, chiusure, margine ora per ora) non cambiano l'esito e si accettano. **Capito oggi**: su Binance i due contratti della stessa
+moneta pagano funding molto simili; la differenza è di pochi punti l'anno e non copre le spese di cambiare lato.

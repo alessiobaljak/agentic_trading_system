@@ -1,0 +1,4122 @@
+{
+ "impronte": {
+  "funding_1000BONKUSDC": {
+   "file": 30,
+   "sha256_unico": "4772ba42fce4a6c0873522ab2d8440532c14c00025b2e2328a53b32077ea0c1c",
+   "byte": 37648
+  },
+  "funding_1000BONKUSDT": {
+   "file": 30,
+   "sha256_unico": "ec63df59ba3ae2dbd8c0e712f9900be00a2b5a3e3bb1cab8b8121a16cab20821",
+   "byte": 41106
+  },
+  "funding_1000PEPEUSDC": {
+   "file": 32,
+   "sha256_unico": "bf15d069d610e5fa60b9b5fe0a667733140b863a93448573b65f9b46c7518a21",
+   "byte": 27130
+  },
+  "funding_1000PEPEUSDT": {
+   "file": 32,
+   "sha256_unico": "da140becdcd03b3ef1a973b45a5299f47c22c7f804c4c4a6b36100c5a7b927f9",
+   "byte": 28068
+  },
+  "funding_1000SHIBUSDC": {
+   "file": 32,
+   "sha256_unico": "05479150b9975c606852445f503e21b4d155cf3bf42c84fb2a083528716dd4b9",
+   "byte": 26920
+  },
+  "funding_1000SHIBUSDT": {
+   "file": 32,
+   "sha256_unico": "0b2aebfa778cfdca80ce7c0e4a54977d0b5385b34df677d6ecf750766b726643",
+   "byte": 28805
+  },
+  "funding_AAVEUSDC": {
+   "file": 17,
+   "sha256_unico": "d96b10aed94f288c25888d22f8ff30af3082826600085fdba6af3fbcb441972c",
+   "byte": 14341
+  },
+  "funding_AAVEUSDT": {
+   "file": 17,
+   "sha256_unico": "4b73d70f279afa949adf3f10e14a26f64650affb89df6dad7b021354e19e3078",
+   "byte": 16002
+  },
+  "funding_ADAUSDC": {
+   "file": 20,
+   "sha256_unico": "2bbe836bff200cb5376dd02444109abf45fa1619c384324966f59346dae5fff6",
+   "byte": 27046
+  },
+  "funding_ADAUSDT": {
+   "file": 20,
+   "sha256_unico": "49a28a1919bf2bedc79c77a8587669e05a0d12a9cbf3d491df3e934b00db4632",
+   "byte": 18088
+  },
+  "funding_ARBUSDC": {
+   "file": 31,
+   "sha256_unico": "aba66c9baf27ead75a6d0351aba4bf298953b0ea53fb58a1de68c66c9d8fa8e4",
+   "byte": 25218
+  },
+  "funding_ARBUSDT": {
+   "file": 31,
+   "sha256_unico": "6813d791575fe0e2533cab78d62b489f68fe4c2fedac93b47332b93dd5d6f44b",
+   "byte": 27264
+  },
+  "funding_AVAXUSDC": {
+   "file": 32,
+   "sha256_unico": "6a3c46fc7720ced112d0cd048f2538d73a7a1a7ff70a8b5f595e568775482c37",
+   "byte": 27412
+  },
+  "funding_AVAXUSDT": {
+   "file": 32,
+   "sha256_unico": "ee3a6f837b58967f348858eeb9e8b6ac3d0f84e9afacd27abc279f0a32b36e8f",
+   "byte": 28886
+  },
+  "funding_BCHUSDC": {
+   "file": 31,
+   "sha256_unico": "08641905ff566efa4ce1a3b5b2577732191004dc0614f3ca178d2367b65337f6",
+   "byte": 27943
+  },
+  "funding_BCHUSDT": {
+   "file": 31,
+   "sha256_unico": "00d5834949be01995c37751328136189a23781da909f9d1b091b02b63b262c88",
+   "byte": 28514
+  },
+  "funding_BIOUSDC": {
+   "file": 15,
+   "sha256_unico": "daed261b177c8e39d48f9a5faab35a50f97dddb53208b8033d2783bad537b073",
+   "byte": 25377
+  },
+  "funding_BIOUSDT": {
+   "file": 15,
+   "sha256_unico": "c874df8ff0ee31eaabcdebb1f34e52211737fc78540d5846d3592205364bebc4",
+   "byte": 28291
+  },
+  "funding_BNBUSDC": {
+   "file": 34,
+   "sha256_unico": "5c38a77326373b100e612f8968dbc7a4ec30a93d8e3c7ecef11b708f51ce0498",
+   "byte": 27916
+  },
+  "funding_BNBUSDT": {
+   "file": 34,
+   "sha256_unico": "d102c28fb6eaaa3e121a298ed25044a2d9f0dbfa8284b877d54a69f4bb21892e",
+   "byte": 27397
+  },
+  "funding_BOMEUSDC": {
+   "file": 31,
+   "sha256_unico": "3edd19cc57dfec55f794305c07feb29ae786375f736d4f642e845f1feac89ce7",
+   "byte": 34711
+  },
+  "funding_BOMEUSDT": {
+   "file": 31,
+   "sha256_unico": "61dfac004b7abf2b582c09106517fe8c5dcfb17ad7b694bd818a326387391588",
+   "byte": 39983
+  },
+  "funding_BTCUSDC": {
+   "file": 34,
+   "sha256_unico": "07cc65e14b6ba7f75b3957271a5bc31a101bffa3c5969ca6ef8b30e3008ffd9c",
+   "byte": 29845
+  },
+  "funding_BTCUSDT": {
+   "file": 34,
+   "sha256_unico": "b2c0c7f6d1b13e4cd0e4ef86fd2b256fc200823f502a53cfacb4df20af9aed36",
+   "byte": 30272
+  },
+  "funding_CRVUSDC": {
+   "file": 28,
+   "sha256_unico": "e42147d96651c518153fbd993c3d44c920a4736c64c7ba91f5f1ef889c1dec74",
+   "byte": 22259
+  },
+  "funding_CRVUSDT": {
+   "file": 28,
+   "sha256_unico": "593534d806a71669b713d8b794815026b190844bef48ea86d38683e90099a86f",
+   "byte": 22959
+  },
+  "funding_DATAIPUSDC": {
+   "file": 4,
+   "sha256_unico": "8db9701c039d1f1d669c4f293ff9e2faa3341c1f2ff482a3d936b3695e67d0d9",
+   "byte": 5288
+  },
+  "funding_DATAIPUSDT": {
+   "file": 4,
+   "sha256_unico": "a4dc0a27b88439a9bc5c2d405e8167484411cb26b81a03b1d1b07a4a48b4ff07",
+   "byte": 5672
+  },
+  "funding_DOGEUSDC": {
+   "file": 34,
+   "sha256_unico": "d04b23d874496ebc532cd39633dc2052234b08acecb3dbec56d5be334e5faada",
+   "byte": 28912
+  },
+  "funding_DOGEUSDT": {
+   "file": 34,
+   "sha256_unico": "f576d9e04aa4a83c3fc7451e5d39aab1089042570ae60720411314aaf7b57349",
+   "byte": 30234
+  },
+  "funding_ENAUSDC": {
+   "file": 30,
+   "sha256_unico": "348a3543fd3f3fb86832839474882128b58971dfe4fa96366776f79578def3d5",
+   "byte": 41139
+  },
+  "funding_ENAUSDT": {
+   "file": 30,
+   "sha256_unico": "13cebf233adf690509977af0802e07bfc893f9e9b6208bd5f5478c7809d80df0",
+   "byte": 43027
+  },
+  "funding_ETHUSDC": {
+   "file": 34,
+   "sha256_unico": "9ceb122f42f09c982cb6d22ae5c2e72b2449b6a69377baf2b635f5cc0b9a9d2c",
+   "byte": 29710
+  },
+  "funding_ETHUSDT": {
+   "file": 34,
+   "sha256_unico": "708ef50ae5eb2e9379d7a65a2d31c45cf1b015ebef7ee32095409118a126de0f",
+   "byte": 30468
+  },
+  "funding_ETHFIUSDC": {
+   "file": 30,
+   "sha256_unico": "60a48b3c2de13f3aee50e03d614c443c9032d7d0826bc25f7bbf2d8f0ccbbac6",
+   "byte": 37131
+  },
+  "funding_ETHFIUSDT": {
+   "file": 30,
+   "sha256_unico": "e51b57dbf3160e1578353f08320dc64edaaa660b18c24fc53bb1122bd2dab360",
+   "byte": 40110
+  },
+  "funding_FILUSDC": {
+   "file": 31,
+   "sha256_unico": "fdcb62700e968494b9712083d956b7b00950572b8092657288053094a29b5640",
+   "byte": 24641
+  },
+  "funding_FILUSDT": {
+   "file": 31,
+   "sha256_unico": "ef4f8f2dd53390033dba90a7ea2f90c1ac8dc202785b7d86cb30e0acbd5f46e2",
+   "byte": 26641
+  },
+  "funding_HBARUSDC": {
+   "file": 20,
+   "sha256_unico": "275db8073dae08a49c18e330528e2995bd8aaafc75d271bc0891cdf0d501248d",
+   "byte": 26231
+  },
+  "funding_HBARUSDT": {
+   "file": 20,
+   "sha256_unico": "4651374447a46db01e796bf453ce101432a97969934e917ded06794e96f4086f",
+   "byte": 18660
+  },
+  "funding_IPUSDC": {
+   "file": 16,
+   "sha256_unico": "8b4aad593fd11e276a929a6b354c2d7611b2627a3cda33a30784429d11599d7e",
+   "byte": 24955
+  },
+  "funding_IPUSDT": {
+   "file": 16,
+   "sha256_unico": "eeb2c1e46be37ee827511018a1a65bc41a1050bfbf274d73a045fa09c902148a",
+   "byte": 27215
+  },
+  "funding_KAITOUSDC": {
+   "file": 20,
+   "sha256_unico": "cba045ff294f66b69857e149792fec2838f9948f75fe0d10e1c005959f6224b2",
+   "byte": 27934
+  },
+  "funding_KAITOUSDT": {
+   "file": 20,
+   "sha256_unico": "0d355206d3ac2328b0795303c269240eafb9954b4410cbb6738300ea41ee8b8a",
+   "byte": 29425
+  },
+  "funding_LINKUSDC": {
+   "file": 33,
+   "sha256_unico": "b5ab66beaacb93d1a85196b3df6e9b4ac8264ad2005eaa6cd232c533993d3971",
+   "byte": 27145
+  },
+  "funding_LINKUSDT": {
+   "file": 33,
+   "sha256_unico": "f23ad497825b23206a916fb1160146d850d28a14ce5827bde8c9ebe22165b389",
+   "byte": 28654
+  },
+  "funding_LTCUSDC": {
+   "file": 31,
+   "sha256_unico": "ebeee2305ef1a5baef3cb0794f47fe860e5bef4e8be32a3fa5f9f0ba1fb1fbcc",
+   "byte": 25662
+  },
+  "funding_LTCUSDT": {
+   "file": 31,
+   "sha256_unico": "d60b869e8da39bce022806296c72b623112d68632bdb55428155a08da1861ee9",
+   "byte": 27291
+  },
+  "funding_MATICUSDC": {
+   "file": 22,
+   "sha256_unico": "5d38fe553644a7546bc18185b9b509f7aa7dcb6530a508acd257ca2d0efb973b",
+   "byte": 14453
+  },
+  "funding_MATICUSDT": {
+   "file": 31,
+   "sha256_unico": "83fec6507a2fb9e1d2389d20a9d8fbe964eff71a45cd3c2e9eef5c2de5c84de7",
+   "byte": 21573
+  },
+  "funding_NEARUSDC": {
+   "file": 31,
+   "sha256_unico": "f521a088e647afd86ae3837aacf23fe87a05d6c4b6f0cc61ecc2b49ee7af8e48",
+   "byte": 24984
+  },
+  "funding_NEARUSDT": {
+   "file": 31,
+   "sha256_unico": "3f808c612f18dd1405dc1ede568f9efb93385b46f7c4116ea46143383e4c9271",
+   "byte": 27061
+  },
+  "funding_NEOUSDC": {
+   "file": 31,
+   "sha256_unico": "6d15128ea18275d0bbbdec623b86e3878ad66f275ec3c31b5504b4582e1c59d2",
+   "byte": 24397
+  },
+  "funding_NEOUSDT": {
+   "file": 31,
+   "sha256_unico": "0fd8abb40152fe402f743e8b00f6a5a3d0c72789a2bd7f0fe669800fbd565248",
+   "byte": 25698
+  },
+  "funding_ORDIUSDC": {
+   "file": 33,
+   "sha256_unico": "32507512c6b7fb59eeb021eb554c8036ea29dcf4ca39ce978f11132a927f55cc",
+   "byte": 37985
+  },
+  "funding_ORDIUSDT": {
+   "file": 33,
+   "sha256_unico": "8bfa4144e9b844c14ada34acae1f877d92b841e92ba5b80fb2492f048b06cd9f",
+   "byte": 44253
+  },
+  "funding_PENGUUSDC": {
+   "file": 16,
+   "sha256_unico": "8e17eee4c29b9dfe8539db30f9705cf135c5005de50128ee8171f4736fb439c8",
+   "byte": 20778
+  },
+  "funding_PENGUUSDT": {
+   "file": 16,
+   "sha256_unico": "5f114ab84036a982001b1c37489f026f61184f87b8df37a0e3fe32d1e67297e9",
+   "byte": 23629
+  },
+  "funding_PNUTUSDC": {
+   "file": 20,
+   "sha256_unico": "c09061fe99c9c5d033cd310a11adfe0e5bb72f169218b194795faa4c7750d3c6",
+   "byte": 24526
+  },
+  "funding_PNUTUSDT": {
+   "file": 20,
+   "sha256_unico": "9d9930b3ccd2f8f96409a6398205d5a34a87705443189a29540e2e7d05b289c0",
+   "byte": 27309
+  },
+  "funding_SOLUSDC": {
+   "file": 34,
+   "sha256_unico": "42fdaeaab208f908515040c0ea39f5ce39af801404d7a012973f850d7ec8de9f",
+   "byte": 30315
+  },
+  "funding_SOLUSDT": {
+   "file": 34,
+   "sha256_unico": "91209f0646cc5e660701b429adec9362d44272dde391effc29545a3ceff0bf09",
+   "byte": 30812
+  },
+  "funding_SUIUSDC": {
+   "file": 33,
+   "sha256_unico": "83eb765b6e4a4fe39269ca15ecc4e02a4e592d407d25183f4341510dc60ba9e2",
+   "byte": 27946
+  },
+  "funding_SUIUSDT": {
+   "file": 33,
+   "sha256_unico": "799754782d53933edf5ce8c2334a2d09a626dd9119001e631316f46f0b5eafbb",
+   "byte": 29837
+  },
+  "funding_TIAUSDC": {
+   "file": 31,
+   "sha256_unico": "7e1a9e6df1c9d95f76df271decc1ad947bacca57471109d85d5f5dcb04d22ac3",
+   "byte": 40866
+  },
+  "funding_TIAUSDT": {
+   "file": 31,
+   "sha256_unico": "66f5d95fe382209ebdd5bbe905f3a9269dea68353d2d8bd02b6854e1e2bdd70e",
+   "byte": 44077
+  },
+  "funding_TRUMPUSDC": {
+   "file": 20,
+   "sha256_unico": "6222e0a479f38180eac936f9e4a9b1ad39e1107713cdfab9cdd4da1efa26cb88",
+   "byte": 29215
+  },
+  "funding_TRUMPUSDT": {
+   "file": 20,
+   "sha256_unico": "079f169a4b9e4d220b734979286d7a3906e27cffc10e1f037d52a42b8b04094c",
+   "byte": 30518
+  },
+  "funding_UNIUSDC": {
+   "file": 17,
+   "sha256_unico": "ce9b8f58d404b34e12ec18afa88975042fa5de6ee3863fb764455e0459c91988",
+   "byte": 13585
+  },
+  "funding_UNIUSDT": {
+   "file": 17,
+   "sha256_unico": "33a562256baebadc782fcce72b6fa214fbfc0dffdf8297e6c0cef75b208faf2c",
+   "byte": 15340
+  },
+  "funding_WIFUSDC": {
+   "file": 31,
+   "sha256_unico": "c754294aff5572eb74df940b09d8be6c1a53f36d118db09665e4f6db16d57a2d",
+   "byte": 38608
+  },
+  "funding_WIFUSDT": {
+   "file": 31,
+   "sha256_unico": "cc6d15a072e8e1972ad97fe92a8deba50cda40be84084271755273a04aa1e2ca",
+   "byte": 41403
+  },
+  "funding_WLDUSDC": {
+   "file": 32,
+   "sha256_unico": "2f09d02c3351e44521ec3b7bd2ff81f5bdf2ece6d75710e889e86dd71c2d55df",
+   "byte": 26880
+  },
+  "funding_WLDUSDT": {
+   "file": 32,
+   "sha256_unico": "9b63c700956351a28f03cb4f6a744c8550ead526dfe858336b8ef580372a34d0",
+   "byte": 28235
+  },
+  "funding_WLFIUSDC": {
+   "file": 14,
+   "sha256_unico": "2fa7fceafe64ea9e98d8930dab91773523bbdf271dd1d52dabf85a8efff11a58",
+   "byte": 16713
+  },
+  "funding_WLFIUSDT": {
+   "file": 14,
+   "sha256_unico": "d9e84d952e3762ae4d65a3a222a9394700b09c70fe22782a150ecdef852030d5",
+   "byte": 18091
+  },
+  "funding_XRPUSDC": {
+   "file": 34,
+   "sha256_unico": "f42f3cf517377ac2114eb3af1a506da63d5ff53a14e1104423bb11ad1a3e2354",
+   "byte": 28887
+  },
+  "funding_XRPUSDT": {
+   "file": 34,
+   "sha256_unico": "c85f2702dc14ea1095b083f9e5125ce2be307389cd904dd50d7575c0bff60ee0",
+   "byte": 30096
+  },
+  "funding_ZECUSDC": {
+   "file": 12,
+   "sha256_unico": "e8710d10d618e42be903fae901a9c4d25273977ca42c06e39c25e645eea5cbc9",
+   "byte": 16392
+  },
+  "funding_ZECUSDT": {
+   "file": 12,
+   "sha256_unico": "10286c9ed67df8d00d96db9a6cfec1735f10b0475f86bc6a75e1b6966787d863",
+   "byte": 11177
+  },
+  "d1_1000BONKUSDC": {
+   "file": 30,
+   "sha256_unico": "8dec927c40203c2958d82e70853232a72f5e955c62d3856629f6b18c8b8c1aaa",
+   "byte": 58576
+  },
+  "d1_1000BONKUSDT": {
+   "file": 30,
+   "sha256_unico": "e3b50aeac2a6548b2e9f9787dd8cfc12d020701bf4c6c0d86c7924ba868fc3a1",
+   "byte": 61292
+  },
+  "d1_1000PEPEUSDC": {
+   "file": 32,
+   "sha256_unico": "25bba5958feddb46380da53aae15042e0cb12d2e8f032d44017a47d294fbb14c",
+   "byte": 65998
+  },
+  "d1_1000PEPEUSDT": {
+   "file": 32,
+   "sha256_unico": "e3d33786014fa2f1aee2561ae303b840342c05f39a772ca7e6b0b3995f336090",
+   "byte": 69557
+  },
+  "d1_1000SHIBUSDC": {
+   "file": 32,
+   "sha256_unico": "26bda407c62b7eab52bed04c0de178f73d09ed35afc9645dfe0f6fff8d55ee4c",
+   "byte": 60313
+  },
+  "d1_1000SHIBUSDT": {
+   "file": 32,
+   "sha256_unico": "8582d2114bd6e91d07007d443b7be4584ebadc8a3079f47f753d90e72efc4f4c",
+   "byte": 64374
+  },
+  "d1_AAVEUSDC": {
+   "file": 17,
+   "sha256_unico": "6d4672e2473a2de2857c742590737fa88be88249d11fe9b09f4707c25db4496d",
+   "byte": 28876
+  },
+  "d1_AAVEUSDT": {
+   "file": 17,
+   "sha256_unico": "6fb883633a204158c816293c5de6874122c22e0899307dda3280583ff9b25d71",
+   "byte": 31361
+  },
+  "d1_ADAUSDC": {
+   "file": 20,
+   "sha256_unico": "4ebaf48858ad147efd29021e0a9c3ebf68f89bafa8c17aa03ee35e1ec516c346",
+   "byte": 37834
+  },
+  "d1_ADAUSDT": {
+   "file": 20,
+   "sha256_unico": "23e6490c53722b5d958187d9d792c79f620896ee77c9bd3617e8141735464be0",
+   "byte": 37840
+  },
+  "d1_ARBUSDC": {
+   "file": 31,
+   "sha256_unico": "1a40dc78377d7bafa486f28bc665996624ccbeb8c4204f47ed8e9691fb403117",
+   "byte": 57459
+  },
+  "d1_ARBUSDT": {
+   "file": 31,
+   "sha256_unico": "660a3f0d68fa81816878334b0946a01a6f8f3ec976db3b38c68f804813c57fce",
+   "byte": 61575
+  },
+  "d1_AVAXUSDC": {
+   "file": 32,
+   "sha256_unico": "b9cb85429cafcdd2cf308a743bd4a61f057d0e18bfb4593353e02c793a4c6aec",
+   "byte": 60687
+  },
+  "d1_AVAXUSDT": {
+   "file": 32,
+   "sha256_unico": "b7e2651c0f6e93e596e51ef2596bb4aa913ddd9f9baa6a48da7a5d4fcf96cbc5",
+   "byte": 58356
+  },
+  "d1_BCHUSDC": {
+   "file": 31,
+   "sha256_unico": "499c4aabf73a5923cc9bc520f84f3887fa10710b329e657fbe0ceb19bce0f841",
+   "byte": 58027
+  },
+  "d1_BCHUSDT": {
+   "file": 31,
+   "sha256_unico": "13bf0c9cb1eecd1dd4a075b10ebe18964f9f9926471b0d9fb1c71a670ae9d0a9",
+   "byte": 60921
+  },
+  "d1_BIOUSDC": {
+   "file": 15,
+   "sha256_unico": "ad768380c65ffadfcd859362ae6a6e51e530c9215a39e2d089bbf883360619cb",
+   "byte": 26188
+  },
+  "d1_BIOUSDT": {
+   "file": 15,
+   "sha256_unico": "2e42a7a569a85790b49b132e76f306b41e123594a8f3a5d257764c65e7149b88",
+   "byte": 28751
+  },
+  "d1_BNBUSDC": {
+   "file": 34,
+   "sha256_unico": "4fa627d2e9700a2bb2ac3ffedf44f127c84c3db4452070cf44604e9710626340",
+   "byte": 63947
+  },
+  "d1_BNBUSDT": {
+   "file": 34,
+   "sha256_unico": "aa9a29ef8da3ce74cd8a544a0b49571e7403da3b54e2b71792e235c5053a98dc",
+   "byte": 66862
+  },
+  "d1_BOMEUSDC": {
+   "file": 31,
+   "sha256_unico": "af602751cdaf7e5f674c8956fbf26aafcd44d241ac5851283550eeafb6bd9239",
+   "byte": 58780
+  },
+  "d1_BOMEUSDT": {
+   "file": 31,
+   "sha256_unico": "3239b544ea34c94ab16d301ec93c200fbf4ccd39476de5846abcc4e04aaaea99",
+   "byte": 62497
+  },
+  "d1_BTCUSDC": {
+   "file": 34,
+   "sha256_unico": "a8f389af6aa5d5e8278306573381a7780f612f7e4237ea17f0c77ba90d62769a",
+   "byte": 67506
+  },
+  "d1_BTCUSDT": {
+   "file": 34,
+   "sha256_unico": "24900a0aacf5a5d856575ba6fe2bda39461fb3e6e16fe8ae02fa1a49393c1f12",
+   "byte": 71299
+  },
+  "d1_CRVUSDC": {
+   "file": 28,
+   "sha256_unico": "fa35bfa94f45ad6a735dca67199a6c2b92d20539dffbfdc53684345cd56b67ee",
+   "byte": 52803
+  },
+  "d1_CRVUSDT": {
+   "file": 28,
+   "sha256_unico": "787628f30b160af9fdcc90eb4499700e683d6f8107101f1d83096b7dcdcf6c9c",
+   "byte": 51436
+  },
+  "d1_DATAIPUSDC": {
+   "file": 4,
+   "sha256_unico": "ced553fc2f685b5700754e86518b55073fc2652c4e90cba644615034be617a72",
+   "byte": 6646
+  },
+  "d1_DATAIPUSDT": {
+   "file": 4,
+   "sha256_unico": "fd74b317273c005b299dd26e778dcb94f83195a540ca2beecc0b919e817a055a",
+   "byte": 6966
+  },
+  "d1_DOGEUSDC": {
+   "file": 34,
+   "sha256_unico": "442b454c73fabc5c179f74273abca663582b64b67820e59c7072f57076ed2a32",
+   "byte": 64449
+  },
+  "d1_DOGEUSDT": {
+   "file": 34,
+   "sha256_unico": "a0c6be8d69fa3072fb497d3dad336a4026f45e730e23d4f59b07f004085ac69a",
+   "byte": 68939
+  },
+  "d1_ENAUSDC": {
+   "file": 30,
+   "sha256_unico": "a017c7cb2ca7e914a35ebf4579d9186fca447810d932c5d9b308696d79114068",
+   "byte": 55415
+  },
+  "d1_ENAUSDT": {
+   "file": 30,
+   "sha256_unico": "b0d60e2d590367630edcce66a6e69b8ce9c232a67906bd2dfda77ff48bd439ed",
+   "byte": 58545
+  },
+  "d1_ETHUSDC": {
+   "file": 34,
+   "sha256_unico": "ebd511d2c097317faaac57a9a3a5de672d48af0e5e4e5ddbf17f050c7778aab8",
+   "byte": 69797
+  },
+  "d1_ETHUSDT": {
+   "file": 34,
+   "sha256_unico": "025feffabd73b8e4541dc1eab511c5d69ddfe0214b02ddaf5be468c0e4c84bb6",
+   "byte": 72442
+  },
+  "d1_ETHFIUSDC": {
+   "file": 30,
+   "sha256_unico": "f61a3fc79476c4565e01de5c586a321e23507886947ec881c295d16ef3b3efca",
+   "byte": 56821
+  },
+  "d1_ETHFIUSDT": {
+   "file": 30,
+   "sha256_unico": "d63e3a51f91cf2dcfc0ed4a4257d88994e3d73092d94df7760dd99f6cb7383ab",
+   "byte": 58977
+  },
+  "d1_FILUSDC": {
+   "file": 31,
+   "sha256_unico": "521154bcbc26ac42df3dc8f8cb7138e84f586f049b637558d427dfbef2b397c3",
+   "byte": 55509
+  },
+  "d1_FILUSDT": {
+   "file": 31,
+   "sha256_unico": "2d8ed11b0093c308854f2e3b988da61edd6f1f9c309c17b8ec9dd5a6d8ca9cec",
+   "byte": 57646
+  },
+  "d1_HBARUSDC": {
+   "file": 20,
+   "sha256_unico": "b107eac56e8bdf7de2abaa0598d1d2752d49f5629fe8b0e09b1d5a7ddd6620be",
+   "byte": 36516
+  },
+  "d1_HBARUSDT": {
+   "file": 20,
+   "sha256_unico": "80b3fbf6c531bd611ed5e81d2f15d4f728881d51ae48990e3a951a2db064f805",
+   "byte": 38067
+  },
+  "d1_IPUSDC": {
+   "file": 20,
+   "sha256_unico": "6153dfa4efb4545cee009eefdb64e160890ec7032e3bd9cef61ee2035caab730",
+   "byte": 31871
+  },
+  "d1_IPUSDT": {
+   "file": 20,
+   "sha256_unico": "5da53a644762ac583f6eb2eee9b9bf6e35f420e1e78d5829498114382f9cf0da",
+   "byte": 33323
+  },
+  "d1_KAITOUSDC": {
+   "file": 20,
+   "sha256_unico": "a3a894d9f0ae929f4e4c7923c9a94dba930e4de6db04ee351e209c7bd8dd5dbb",
+   "byte": 36961
+  },
+  "d1_KAITOUSDT": {
+   "file": 20,
+   "sha256_unico": "6ee181f11e3e9468121d259ba445fe030604ba76e6a3d472141d4c7bf1303ae5",
+   "byte": 38881
+  },
+  "d1_LINKUSDC": {
+   "file": 33,
+   "sha256_unico": "f5e78c4765b958f9f2490d15b7c23d58ab1ca6ad69821d8b64b4b18b7b56b7dc",
+   "byte": 60555
+  },
+  "d1_LINKUSDT": {
+   "file": 33,
+   "sha256_unico": "45aaf446ed3b1f6d8c879a7d995ed2bb7d7b650da04b634ae02eedb94140e410",
+   "byte": 64643
+  },
+  "d1_LTCUSDC": {
+   "file": 31,
+   "sha256_unico": "c6badc0debf0b3de547d8c73cecad1f1ea25daecb7f76527d0a4c941efb15bc0",
+   "byte": 56310
+  },
+  "d1_LTCUSDT": {
+   "file": 31,
+   "sha256_unico": "5922ca446c885abebd31ec8b7a50fbc1624f35252d2336fa8ff5f46adbf348fc",
+   "byte": 59971
+  },
+  "d1_MATICUSDC": {
+   "file": 6,
+   "sha256_unico": "88dd8a9dc5c78946548e9ea65647130f602f051a3ce157267288e96cb4db5bb9",
+   "byte": 8281
+  },
+  "d1_MATICUSDT": {
+   "file": 6,
+   "sha256_unico": "ee72f99594c5dd9c6b1944c13660de0d9f6ea7d21f1757bf933aad1d7a296b8e",
+   "byte": 9989
+  },
+  "d1_NEARUSDC": {
+   "file": 31,
+   "sha256_unico": "5c68d6390f75a8ea3bf42e8f0688c09544a4c6bb998aff04e7198e281d442b07",
+   "byte": 51581
+  },
+  "d1_NEARUSDT": {
+   "file": 31,
+   "sha256_unico": "da8d0d7d75763c1e6faaaae93961a6e7acaf51a5bc6ed837906249c1c8cd3f2a",
+   "byte": 55391
+  },
+  "d1_NEOUSDC": {
+   "file": 31,
+   "sha256_unico": "d608855581d1968df160458ec9165887c2da96f8e7dcd3d8f1c3b605321a7cd8",
+   "byte": 55536
+  },
+  "d1_NEOUSDT": {
+   "file": 31,
+   "sha256_unico": "cb07307aa23b896dbefddcd84a6d798962519740fb60b148a9f37d8b17aafafb",
+   "byte": 57133
+  },
+  "d1_ORDIUSDC": {
+   "file": 33,
+   "sha256_unico": "a749c2387d20fb40a872fcb0eab19564e18fd4b91f57c8524b6b8998910cbac1",
+   "byte": 58995
+  },
+  "d1_ORDIUSDT": {
+   "file": 33,
+   "sha256_unico": "975d7a75afca1f757aac8a8cc9b2f9c3c8aacd466508195c2682dc382ca641df",
+   "byte": 63247
+  },
+  "d1_PENGUUSDC": {
+   "file": 16,
+   "sha256_unico": "c1cc7efbb92f5590ff900b38fa0a63ae4436b56b1b222679749bf7dac6034af9",
+   "byte": 29919
+  },
+  "d1_PENGUUSDT": {
+   "file": 16,
+   "sha256_unico": "2d26baab114d4b74598924348a1929dc6c96b85c7a7a2b5b956365eef9816964",
+   "byte": 32635
+  },
+  "d1_PNUTUSDC": {
+   "file": 20,
+   "sha256_unico": "20e3cdbbfdeb84357e95f1830d8fee4f332a70ba27b86918b04d3a62d4b370ce",
+   "byte": 36523
+  },
+  "d1_PNUTUSDT": {
+   "file": 20,
+   "sha256_unico": "31560de8db764107b7b15e98c441bf73f908ff0385facb7ba786c786fe86609a",
+   "byte": 38554
+  },
+  "d1_SOLUSDC": {
+   "file": 34,
+   "sha256_unico": "40ce7da752bd5c945d76189e255515e9229becbb74c89d18e6c83aab7a529174",
+   "byte": 67310
+  },
+  "d1_SOLUSDT": {
+   "file": 34,
+   "sha256_unico": "08cd986b93dd45bec49c80018baf283f4508341d6654a5ba3518a291d99e1896",
+   "byte": 67806
+  },
+  "d1_SUIUSDC": {
+   "file": 33,
+   "sha256_unico": "4d9845ccce546035f630c5b9738eca4db5dbff48f7404d1a54a4a5d8e40b4cb0",
+   "byte": 64950
+  },
+  "d1_SUIUSDT": {
+   "file": 33,
+   "sha256_unico": "b1ca220dd44e0ebcaf172aa703d1f557c8249702b150221ad4e2233d59af50a0",
+   "byte": 67046
+  },
+  "d1_TIAUSDC": {
+   "file": 31,
+   "sha256_unico": "252a04ff1c5c843284b08dccecc553dca12849c1cee15682db58c3ab54dd1ee1",
+   "byte": 54712
+  },
+  "d1_TIAUSDT": {
+   "file": 31,
+   "sha256_unico": "4c38fdbdde784b5bface82f898d581ffc6ca8428dc7239a1162fa0009e540816",
+   "byte": 59094
+  },
+  "d1_TRUMPUSDC": {
+   "file": 20,
+   "sha256_unico": "247bd4a3efca35f63400f67e689385ec0b5512e83a067c504d0d325df332d54d",
+   "byte": 37583
+  },
+  "d1_TRUMPUSDT": {
+   "file": 20,
+   "sha256_unico": "e0d419bfe1288aadf4ae0d47c56030881bf545e17bdfcee8af7e587698ae7f60",
+   "byte": 40051
+  },
+  "d1_UNIUSDC": {
+   "file": 17,
+   "sha256_unico": "63cbfc266ec5a1ebc4c00aa36a10ebb48bbce9450efa4738769b612317198f50",
+   "byte": 27923
+  },
+  "d1_UNIUSDT": {
+   "file": 17,
+   "sha256_unico": "c01a266488a21830c09779ffe666b87988e0b77c558be7936cc5393b68fb9c81",
+   "byte": 30412
+  },
+  "d1_WIFUSDC": {
+   "file": 31,
+   "sha256_unico": "9949aa7dcefe95b73f8b2647dcb22d2e0627db7309cf5d64f4f68f367e7805fd",
+   "byte": 59374
+  },
+  "d1_WIFUSDT": {
+   "file": 31,
+   "sha256_unico": "93bf0cd04cf7656faf026cf9721dae0ec5fe87d6a7da64cf13c97e4aa23d78dc",
+   "byte": 62584
+  },
+  "d1_WLDUSDC": {
+   "file": 32,
+   "sha256_unico": "d4ec4eb1362982f7fe3e6ff6600b4d547ea087d1fc08071046e1ab4a0dc94c2f",
+   "byte": 62576
+  },
+  "d1_WLDUSDT": {
+   "file": 32,
+   "sha256_unico": "3e3d5e27a3829840b5f9b294e3b26b56576effa5a42a86da410c5e1cff0462b7",
+   "byte": 61941
+  },
+  "d1_WLFIUSDC": {
+   "file": 14,
+   "sha256_unico": "8f4642399f929398080f7f37afe1295e1636e9a36a74a996965aa428f238bc1f",
+   "byte": 24493
+  },
+  "d1_WLFIUSDT": {
+   "file": 14,
+   "sha256_unico": "a4fb58ba5ae9b5a235d653f3b4a00ca0733bd0f8d434d58e0a88a8b84a24f1cd",
+   "byte": 26465
+  },
+  "d1_XRPUSDC": {
+   "file": 34,
+   "sha256_unico": "86ba5a2b5e007048eb9b0a121e4e88c7e5417ceb048f2ddea5c462e37cdff768",
+   "byte": 65055
+  },
+  "d1_XRPUSDT": {
+   "file": 34,
+   "sha256_unico": "bd25a28d05f346326700b8266be4c45c379d14c865165947581d0f45fed43da4",
+   "byte": 67967
+  },
+  "d1_ZECUSDC": {
+   "file": 12,
+   "sha256_unico": "509155634b98753e1e2e045ebe8c21b8d5f65e85421e6131cfe6c0b7fb6b1713",
+   "byte": 22403
+  },
+  "d1_ZECUSDT": {
+   "file": 12,
+   "sha256_unico": "7ea8ebb2ad3a2be9d2c1e0e79507407479c263c2e4f6f664d7aca353339a04a2",
+   "byte": 24460
+  },
+  "k1h_1000BONKUSDC": {
+   "file": 30,
+   "sha256_unico": "6f27204f257a9c4bf47e5b14b0bd1be1efe7ed89f3d16a3c6b35f803a76f1a5b",
+   "byte": 1030091
+  },
+  "k1h_1000BONKUSDT": {
+   "file": 30,
+   "sha256_unico": "cce25efb8303cc190e3a18bf813cef452a551a0164aca94b85944eb7cc5fae4f",
+   "byte": 1095486
+  },
+  "k1h_1000PEPEUSDC": {
+   "file": 32,
+   "sha256_unico": "461d1250ebd4e9055526b6d5b15c0620edf5d3d96e7f1d236f7271f977e7b056",
+   "byte": 1181015
+  },
+  "k1h_1000PEPEUSDT": {
+   "file": 32,
+   "sha256_unico": "797c8fe7d7edc1fc209b06225a4d22c63fb54fc0ddbbcc06c9260e6cbfb4ebc3",
+   "byte": 1274768
+  },
+  "k1h_1000SHIBUSDC": {
+   "file": 32,
+   "sha256_unico": "4c83bd36d0e20994ae45081c597b7e8744107e0453108906f358f60f231177c2",
+   "byte": 1050488
+  },
+  "k1h_1000SHIBUSDT": {
+   "file": 32,
+   "sha256_unico": "d43ec6b08813213bd81c3a5c853dc46a8f68b210014447f3f28f911cf3525e87",
+   "byte": 1142565
+  },
+  "k1h_AAVEUSDC": {
+   "file": 17,
+   "sha256_unico": "96ebb8acfa709c2b5c7a00d9826514a7d8f31a0629524f623ed956a90ea2a4d3",
+   "byte": 474854
+  },
+  "k1h_AAVEUSDT": {
+   "file": 17,
+   "sha256_unico": "8abf8f7e33b41c655d7d4c21b2286791b37bc218fedd29ef954bb882a35e8cb8",
+   "byte": 534920
+  },
+  "k1h_ADAUSDC": {
+   "file": 20,
+   "sha256_unico": "2fc67416c8aebd00fd24c3ca34fbb79f132b6bc2b1dc756057402045fc9fad67",
+   "byte": 655857
+  },
+  "k1h_ADAUSDT": {
+   "file": 20,
+   "sha256_unico": "fe51b402ace985cea08dcfa20a2f2760b6683f9e026282c75cfdf8f44a9fea27",
+   "byte": 663153
+  },
+  "k1h_ARBUSDC": {
+   "file": 31,
+   "sha256_unico": "cb61de80487d763847d3e1af1d6ad7b2e3a459cc1f53c6e3f8015eaae3811b5c",
+   "byte": 991953
+  },
+  "k1h_ARBUSDT": {
+   "file": 31,
+   "sha256_unico": "182b4ded8da94d7f758873890b05cd96bbe6d1c80cd26be64d0035a234ae765f",
+   "byte": 1084782
+  },
+  "k1h_AVAXUSDC": {
+   "file": 32,
+   "sha256_unico": "d9ea77db7366c335c11201fe925277eb447af30b42b8352cfd69c1b1561ec9c3",
+   "byte": 1053827
+  },
+  "k1h_AVAXUSDT": {
+   "file": 32,
+   "sha256_unico": "5453881fd1f3828b3e2e73939285f0d623b05503752e2ab8ff42a8f2193c0c30",
+   "byte": 1008006
+  },
+  "k1h_BCHUSDC": {
+   "file": 31,
+   "sha256_unico": "15847c4deb8a79f174c0047df21029fd71a58c886efe06bb9755d1fa91d436a1",
+   "byte": 999332
+  },
+  "k1h_BCHUSDT": {
+   "file": 31,
+   "sha256_unico": "d2115549b8d896b244adcf3ee93b9ed148fbe49326218743afbf3756c530b046",
+   "byte": 1076307
+  },
+  "k1h_BIOUSDC": {
+   "file": 15,
+   "sha256_unico": "e79ee99ffea68e1b89618e0f4184d20cbb9d7d7df1b5585025543c3a1bfe17ac",
+   "byte": 445910
+  },
+  "k1h_BIOUSDT": {
+   "file": 15,
+   "sha256_unico": "97c01ec52fd18735c23663bfc99e8be39c0cb36559ab42b535c7ae3ad2343a14",
+   "byte": 503556
+  },
+  "k1h_BNBUSDC": {
+   "file": 34,
+   "sha256_unico": "e5682570e442d381f0d641f61c0a33622ac0d08d6cf3dd729a8143a36230edfe",
+   "byte": 1097852
+  },
+  "k1h_BNBUSDT": {
+   "file": 34,
+   "sha256_unico": "a587fde4b2f04af2dd7f46a695f0d454aa265121a5b9ddb0704a4b39a59e1922",
+   "byte": 1172143
+  },
+  "k1h_BOMEUSDC": {
+   "file": 31,
+   "sha256_unico": "0985b131a9388b1482c4ca78a3e60132979b7e5bb90565061b3d41fbeeb9cda3",
+   "byte": 1024188
+  },
+  "k1h_BOMEUSDT": {
+   "file": 31,
+   "sha256_unico": "f489ec8fb6ed43e10e53a637f3b74f47e30aca26d8d64609e4b06af51bda2f89",
+   "byte": 1110486
+  },
+  "k1h_BTCUSDC": {
+   "file": 34,
+   "sha256_unico": "4302ded6e12472628d804d6de7ba095ec3d9e52d61bdd38fedfeb6992a9b09ee",
+   "byte": 1201182
+  },
+  "k1h_BTCUSDT": {
+   "file": 34,
+   "sha256_unico": "39e574fdbff6f4c4f07929f123fc966caf6174ead97b75c351db01047043b8ad",
+   "byte": 1286721
+  },
+  "k1h_CRVUSDC": {
+   "file": 28,
+   "sha256_unico": "ffd8bfb7396ea229111ddcfa4e0587702f4a52e33b92a3a611a5ad35a300cb18",
+   "byte": 913904
+  },
+  "k1h_CRVUSDT": {
+   "file": 28,
+   "sha256_unico": "7e91d7d21db6d91a7961b9c071fa3469500758eefbc0763c6fdb91ee1a80e9bc",
+   "byte": 876476
+  },
+  "k1h_DATAIPUSDC": {
+   "file": 4,
+   "sha256_unico": "87b418e94d1c96d5c775e3cfbccc1c5d389a1b4d3a1cd77e7425a31469365202",
+   "byte": 106762
+  },
+  "k1h_DATAIPUSDT": {
+   "file": 4,
+   "sha256_unico": "3513ede2aa07b597341912b0f373b0c7b95af82eab5de588287424e6ccacee4b",
+   "byte": 115083
+  },
+  "k1h_DOGEUSDC": {
+   "file": 34,
+   "sha256_unico": "1df9c1b496784f6517b2d56178baf25250d3b85b5a18711b950bcdfc1c56fe2c",
+   "byte": 1133865
+  },
+  "k1h_DOGEUSDT": {
+   "file": 34,
+   "sha256_unico": "b49a99aafa0a6f21d2d30cfd398c63974bea7db454e750749d436723f7224629",
+   "byte": 1231656
+  },
+  "k1h_ENAUSDC": {
+   "file": 30,
+   "sha256_unico": "9ac86da498db16a302442681a61ac6ab5af88f628f1ed0e7ff562835df4e3806",
+   "byte": 961075
+  },
+  "k1h_ENAUSDT": {
+   "file": 30,
+   "sha256_unico": "2fc13caef337dc42537dfc87fce1c5f44f0486b6ebda75b07bcf3e8e03fd8400",
+   "byte": 1033613
+  },
+  "k1h_ETHUSDC": {
+   "file": 34,
+   "sha256_unico": "a1e9f9184afa56a7d4452dcd285d157c145b4515e8166559143cacae5ad3ecd2",
+   "byte": 1249110
+  },
+  "k1h_ETHUSDT": {
+   "file": 34,
+   "sha256_unico": "4d186688e576a77c7a4c28ef08f86d8d400d8ef05aa3c2f647b22fbdec2be5e9",
+   "byte": 1313397
+  },
+  "k1h_ETHFIUSDC": {
+   "file": 30,
+   "sha256_unico": "9280871cfef54737f9dab53902dc0fe499665eb469f078505ce7259c1471be22",
+   "byte": 981967
+  },
+  "k1h_ETHFIUSDT": {
+   "file": 30,
+   "sha256_unico": "37005bb5661e25453ab911d4279e56d40ec72c138168315e976a0646c6ba41f9",
+   "byte": 1038558
+  },
+  "k1h_FILUSDC": {
+   "file": 31,
+   "sha256_unico": "915f7dc2eb570a9cb36ef164f68b8a59960dade18b3f9f20a729f273d2ef8cf6",
+   "byte": 941838
+  },
+  "k1h_FILUSDT": {
+   "file": 31,
+   "sha256_unico": "5c72e77157b43f01c8eaeb452fd2a4774821072aa285cf0f84b92b37b59e8070",
+   "byte": 997621
+  },
+  "k1h_HBARUSDC": {
+   "file": 20,
+   "sha256_unico": "7e9d1561ef3af650a16f97a844921a468d46b5cd6c78060357ad2db506698284",
+   "byte": 630351
+  },
+  "k1h_HBARUSDT": {
+   "file": 20,
+   "sha256_unico": "05f05ae958e1783ac8fb91f74d9646d5be9c14d52c4f872f1285cc2b5c33a50a",
+   "byte": 669933
+  },
+  "k1h_IPUSDC": {
+   "file": 20,
+   "sha256_unico": "01f51022b809cff855bd49cc13e21fc740c228bba8026f775938f3483b3556bc",
+   "byte": 532931
+  },
+  "k1h_IPUSDT": {
+   "file": 20,
+   "sha256_unico": "2658c48eab687d25cca9cffeeed3238cb89d08e8d79e47fa9d53f1fba40d3fd1",
+   "byte": 568330
+  },
+  "k1h_KAITOUSDC": {
+   "file": 20,
+   "sha256_unico": "4f5a5d173809e4df0771a4db6910d5dbe3d043f3774d04567752109486cfc4ff",
+   "byte": 635775
+  },
+  "k1h_KAITOUSDT": {
+   "file": 20,
+   "sha256_unico": "4972af83fdd3641c049bc197a3c57d05c4c229c2e14be0ba5f7d48957d3beb8e",
+   "byte": 680798
+  },
+  "k1h_LINKUSDC": {
+   "file": 33,
+   "sha256_unico": "dd3581e67f3b95dc4763abdc22f4746109b392ccffb728c207314b3e6aad294f",
+   "byte": 1049779
+  },
+  "k1h_LINKUSDT": {
+   "file": 33,
+   "sha256_unico": "9ffde090da0576281d4b5e1c473e8b87f351d65df2f6f51e0a14fa0a8d9a1e9a",
+   "byte": 1148352
+  },
+  "k1h_LTCUSDC": {
+   "file": 31,
+   "sha256_unico": "ee159919f838417bdf57a9478ff1418a8cfb08ec6dd4849307adab37d01d39ea",
+   "byte": 963794
+  },
+  "k1h_LTCUSDT": {
+   "file": 31,
+   "sha256_unico": "37f4ca04bd67a688c252edfb0a8f0c28cf78f211c23b4f17a845af5b4d114562",
+   "byte": 1052109
+  },
+  "k1h_MATICUSDC": {
+   "file": 6,
+   "sha256_unico": "d6b212594e92bf8f6943e58434b9befcb22f8939ebebc3866da5b153ad2002d3",
+   "byte": 131206
+  },
+  "k1h_MATICUSDT": {
+   "file": 6,
+   "sha256_unico": "6c44ed4f004cfea66edfc8be39519fe6e0fd433871008487be1f2fb40c37f7e3",
+   "byte": 169481
+  },
+  "k1h_NEARUSDC": {
+   "file": 31,
+   "sha256_unico": "4cceef0b13535fa5ef288d15940cbe7a13ea0130abc3a3b05b889167795ac88b",
+   "byte": 854684
+  },
+  "k1h_NEARUSDT": {
+   "file": 31,
+   "sha256_unico": "2d7783c8c1232ce0d184087a12d889160d91fa09c75951f434489ec7e16eb4e9",
+   "byte": 946695
+  },
+  "k1h_NEOUSDC": {
+   "file": 31,
+   "sha256_unico": "6e31872e6f1aee9824bd1d824387f1805434fe25b6549fbc07a97185750d7a74",
+   "byte": 947105
+  },
+  "k1h_NEOUSDT": {
+   "file": 31,
+   "sha256_unico": "7796a934c12226e6d19fa322a3735e91ce688613b1726628cc306f1dbfd27c42",
+   "byte": 988614
+  },
+  "k1h_ORDIUSDC": {
+   "file": 33,
+   "sha256_unico": "946e05d657590d82b4d83a91caa1234ab1196065b3f74c3940f3031c71d3a0a7",
+   "byte": 1001458
+  },
+  "k1h_ORDIUSDT": {
+   "file": 33,
+   "sha256_unico": "fdb37b71c97a9bf5eba80d60d380b98471c5da1522e8e6c41a4944b4990e1384",
+   "byte": 1101350
+  },
+  "k1h_PENGUUSDC": {
+   "file": 16,
+   "sha256_unico": "fe6f74a5666a9590a135f59fca2b946b1e34629687d7bf50067206d8edd86802",
+   "byte": 521917
+  },
+  "k1h_PENGUUSDT": {
+   "file": 16,
+   "sha256_unico": "811d88296dc33b0758f0f6b4842d4c23163603a921c49a0bd65d83ad82cf8f3c",
+   "byte": 584266
+  },
+  "k1h_PNUTUSDC": {
+   "file": 20,
+   "sha256_unico": "88415ebbb8931d9808648da89eccfe5c5890b806dc16b52a2b8e45fbab97645e",
+   "byte": 630730
+  },
+  "k1h_PNUTUSDT": {
+   "file": 20,
+   "sha256_unico": "2092b2cc16f3d4b2b1e2a84ff6bce76f514282159a7efa209fb3a147a3954201",
+   "byte": 678762
+  },
+  "k1h_SOLUSDC": {
+   "file": 34,
+   "sha256_unico": "c1db77e1df2d0ad1be09d44ecdec2ba9dc1f499121b54aec0b74817353df9d83",
+   "byte": 1177274
+  },
+  "k1h_SOLUSDT": {
+   "file": 34,
+   "sha256_unico": "5135c2c857314f8ce9cf3b02f2ef68ac1209363150b9cfeae6997048898c65b0",
+   "byte": 1192347
+  },
+  "k1h_SUIUSDC": {
+   "file": 33,
+   "sha256_unico": "dfc91e4518f7531510d97ee8127c0c4ae3489f127fbeb01c4f177d7be18b59ed",
+   "byte": 1152455
+  },
+  "k1h_SUIUSDT": {
+   "file": 33,
+   "sha256_unico": "873151bc8d604f3d2b388edbb2d1bd8718c89a9436005b1f5684f3dbc7ce4987",
+   "byte": 1199844
+  },
+  "k1h_TIAUSDC": {
+   "file": 31,
+   "sha256_unico": "5851d079766307e5f97a75fd8c5b4c1aa620dd714f518a34f96d6e830fd29ca0",
+   "byte": 936316
+  },
+  "k1h_TIAUSDT": {
+   "file": 31,
+   "sha256_unico": "923f5aa8ce1595ab0bdb72a8cda1e3c94bb7ba7f1fba36b14b2a08be65df98ff",
+   "byte": 1037263
+  },
+  "k1h_TRUMPUSDC": {
+   "file": 20,
+   "sha256_unico": "531bde57ceb2ed453d36e950c1e532727e825f8ae3a9bb665816643e2f97b38c",
+   "byte": 646157
+  },
+  "k1h_TRUMPUSDT": {
+   "file": 20,
+   "sha256_unico": "259b9b80639a39c575a6b96a0c248fd3dd8d69d8412be38870a098e450414c66",
+   "byte": 705254
+  },
+  "k1h_UNIUSDC": {
+   "file": 17,
+   "sha256_unico": "b057e171e0edd10b47cbb6b6bfe4fe06979dfadfce0c94fad098f89ffa324e1f",
+   "byte": 460051
+  },
+  "k1h_UNIUSDT": {
+   "file": 17,
+   "sha256_unico": "87f24236c6ae2cbff7abc1ca76bbf2e2ec835c25663c40d0cde0311d129efc11",
+   "byte": 518844
+  },
+  "k1h_WIFUSDC": {
+   "file": 31,
+   "sha256_unico": "7d79ed9c99783073b6fc990743f4b73054a19ac923208f35927e77233220f934",
+   "byte": 1034858
+  },
+  "k1h_WIFUSDT": {
+   "file": 31,
+   "sha256_unico": "1b43f8618d4f2258c5d779dac7ac4e9b1d9833fe913ffb0dca952b104673a297",
+   "byte": 1116560
+  },
+  "k1h_WLDUSDC": {
+   "file": 32,
+   "sha256_unico": "a9becd9dc73ca830bde9a7a712affdc65bcdaf862b7c0244ff11885cca9e2d2c",
+   "byte": 1103390
+  },
+  "k1h_WLDUSDT": {
+   "file": 32,
+   "sha256_unico": "d811ac4fa46e5d94015d6ad6257901a1151a7ce402063af4f54dea5687ee56e3",
+   "byte": 1093050
+  },
+  "k1h_WLFIUSDC": {
+   "file": 14,
+   "sha256_unico": "baa0a1d912a7a96c93b30fe8249b061b595b783a34f775336bfba8daa19d1fb1",
+   "byte": 411254
+  },
+  "k1h_WLFIUSDT": {
+   "file": 14,
+   "sha256_unico": "3b21977fdba8f4c4ae979fbe52cf68112b9f538388799f87bad968a886e15bb7",
+   "byte": 456613
+  },
+  "k1h_XRPUSDC": {
+   "file": 34,
+   "sha256_unico": "840e0c4abf44e81964706b96cec1a11798412bfd24c387c5c92ea1e52a50d616",
+   "byte": 1142678
+  },
+  "k1h_XRPUSDT": {
+   "file": 34,
+   "sha256_unico": "9cd562fb722881099d587427bf4605480ec70a86217a5dd59959d05e0ae261e9",
+   "byte": 1214812
+  },
+  "k1h_ZECUSDC": {
+   "file": 12,
+   "sha256_unico": "99f4d6d84723509bc44229c2e3f5a309922a077180ca96f15a2ccd472ee36ce2",
+   "byte": 390757
+  },
+  "k1h_ZECUSDT": {
+   "file": 12,
+   "sha256_unico": "f0214081c9551e4c40f596ad257ae3ee9e7551a8d02fdfd1b697c27d8a8dfb22",
+   "byte": 440542
+  },
+  "mark1h_1000BONKUSDC": {
+   "file": 30,
+   "sha256_unico": "59b5c173b61625e823a1e6b0122a2ce00a55f667ea81bfac4d6507eb546c66ee",
+   "byte": 467516
+  },
+  "mark1h_1000BONKUSDT": {
+   "file": 30,
+   "sha256_unico": "d4b24733c60c98f6dd224ca4597099eda55a07ca99791706d7b74c5e1d3010f0",
+   "byte": 466858
+  },
+  "mark1h_1000PEPEUSDC": {
+   "file": 32,
+   "sha256_unico": "fca4c984d9422dbe41b7a5ad1aea9f2d02346694d7ab0390607b4cc05e8441ea",
+   "byte": 500957
+  },
+  "mark1h_1000PEPEUSDT": {
+   "file": 32,
+   "sha256_unico": "89ae3c5f84261b6277afbe4231b80840ade72642e516e99d27c9803d08555ad6",
+   "byte": 505206
+  },
+  "mark1h_1000SHIBUSDC": {
+   "file": 32,
+   "sha256_unico": "705db1cfd9fa0bc6bb86c53703ce6f1557c99b67bf6965746d349b7f8184c389",
+   "byte": 473402
+  },
+  "mark1h_1000SHIBUSDT": {
+   "file": 32,
+   "sha256_unico": "e146d842859127333018de69f3ef9be034e6c932d15fb8748dbeda1e3f9704cc",
+   "byte": 486841
+  },
+  "mark1h_AAVEUSDC": {
+   "file": 17,
+   "sha256_unico": "b32b62f6cfd40e19d1b4e21051216ef92787c47dcc3abebe94d19c7c7934b613",
+   "byte": 311326
+  },
+  "mark1h_AAVEUSDT": {
+   "file": 17,
+   "sha256_unico": "dda4ce0b1df3589440bbb49109325fee956cde43636418b18601c66206779830",
+   "byte": 311722
+  },
+  "mark1h_ADAUSDC": {
+   "file": 20,
+   "sha256_unico": "65bf2b9916b16bba16af89675f245f02b4f2f56b66c4a107dcb9bbea6e894433",
+   "byte": 317412
+  },
+  "mark1h_ADAUSDT": {
+   "file": 20,
+   "sha256_unico": "6968f8f8212be663ff05e269c7cb9c6728247b979a661031f05ea2325ed38d18",
+   "byte": 319662
+  },
+  "mark1h_ARBUSDC": {
+   "file": 31,
+   "sha256_unico": "df5ac548856e7f57c651aa4d5890d3e33e0e8243ed7bf4efb25887bad818c3a6",
+   "byte": 494336
+  },
+  "mark1h_ARBUSDT": {
+   "file": 31,
+   "sha256_unico": "45a419b10b259400dcaaa138779b35f3c68b302252742f8a8e35e79e2ecc7472",
+   "byte": 508272
+  },
+  "mark1h_AVAXUSDC": {
+   "file": 32,
+   "sha256_unico": "fea375ed4ed158a461616ea3184a8f56bfcdad48b3c8c8558bff4ba538be8313",
+   "byte": 563270
+  },
+  "mark1h_AVAXUSDT": {
+   "file": 32,
+   "sha256_unico": "7c5c21cdedec72f89d21cada93f8cac7ae9dfa206fb10f829411ec3a8ab54a24",
+   "byte": 569254
+  },
+  "mark1h_BCHUSDC": {
+   "file": 31,
+   "sha256_unico": "97338509e51410a75cd665a556897ad03d794f27eba21ac13d14a3055e9fbf89",
+   "byte": 605454
+  },
+  "mark1h_BCHUSDT": {
+   "file": 31,
+   "sha256_unico": "ac91602dc5abd2a50e1b74f50b3d03f0090f7e416a8fdd56df6dce01de0a57c0",
+   "byte": 590086
+  },
+  "mark1h_BIOUSDC": {
+   "file": 15,
+   "sha256_unico": "f645e2ca0e2c49219f4086896f3d44eafe62b132322d91344a48b18ce5b77fc1",
+   "byte": 220352
+  },
+  "mark1h_BIOUSDT": {
+   "file": 15,
+   "sha256_unico": "1e956ea74d1cacaea096b2681c2921ef74774124703c426dfe332706082f91c7",
+   "byte": 233417
+  },
+  "mark1h_BNBUSDC": {
+   "file": 34,
+   "sha256_unico": "30b3a422391d52dab4f5d692b391399d86f0e6c0789bf051c28e19b63f6c2959",
+   "byte": 670371
+  },
+  "mark1h_BNBUSDT": {
+   "file": 34,
+   "sha256_unico": "bffc9f8e2167862deb011f28097902e20bf59eccf36c1fdb764524ff641063f3",
+   "byte": 663251
+  },
+  "mark1h_BOMEUSDC": {
+   "file": 31,
+   "sha256_unico": "aefc9d0b4b913c9d5dfb53d9b8041b6bca75d4ce22e32e126a89ceb457705918",
+   "byte": 434709
+  },
+  "mark1h_BOMEUSDT": {
+   "file": 31,
+   "sha256_unico": "1c3ac49db49d7eabfe52c580aec2c789db83e785712353becfe9bde713f8b711",
+   "byte": 448543
+  },
+  "mark1h_BTCUSDC": {
+   "file": 34,
+   "sha256_unico": "32e7495362351762018bd915f9e595236eeed786be87ba3b7dcc3f6ae09beb29",
+   "byte": 747446
+  },
+  "mark1h_BTCUSDT": {
+   "file": 34,
+   "sha256_unico": "c3609240324c043b05659cef1f919f72d52878caef32b503790613867ec19c9e",
+   "byte": 719122
+  },
+  "mark1h_CRVUSDC": {
+   "file": 28,
+   "sha256_unico": "3568f1a6a0fbb0f0956c49c1ac8b45983e6ffd8285c3e6e7cba7f6cf4fc669ac",
+   "byte": 456830
+  },
+  "mark1h_CRVUSDT": {
+   "file": 28,
+   "sha256_unico": "50674ff8f8f8dc05d4ce5676e49424c0656cc9df442432b977176af457ce0f13",
+   "byte": 465321
+  },
+  "mark1h_DATAIPUSDC": {
+   "file": 4,
+   "sha256_unico": "45663c004a6cf52eb364a721aafbd27ad4bf0edfc76037301c697a72099e5f1f",
+   "byte": 60746
+  },
+  "mark1h_DATAIPUSDT": {
+   "file": 4,
+   "sha256_unico": "9c605624811f4eb34fae5880bcf0e547436564c8222e3e155fdd8d7885654903",
+   "byte": 59759
+  },
+  "mark1h_DOGEUSDC": {
+   "file": 34,
+   "sha256_unico": "fa36607e7bb93e2b5ec3ea927ca94eac13ac1d4abb17c573f65c37930e95ec96",
+   "byte": 546263
+  },
+  "mark1h_DOGEUSDT": {
+   "file": 34,
+   "sha256_unico": "6192c9f5f92bc8fce64c9dec90427bb8b9ecefcd36d94d5ef02db34a7bad824c",
+   "byte": 549801
+  },
+  "mark1h_ENAUSDC": {
+   "file": 30,
+   "sha256_unico": "add315a920fdfb31329b16afc9a3970d3636737206ebdbc7ece51852552debcc",
+   "byte": 497819
+  },
+  "mark1h_ENAUSDT": {
+   "file": 30,
+   "sha256_unico": "5a5cb3050c1dd28b90a4c343293fafebcd64e87fc0073574f19520a1d46ab856",
+   "byte": 499311
+  },
+  "mark1h_ETHUSDC": {
+   "file": 34,
+   "sha256_unico": "5970a63396c88ecb3c439c643f9b9f0d75cfeb5ffb4a700d1928f97324237720",
+   "byte": 714550
+  },
+  "mark1h_ETHUSDT": {
+   "file": 34,
+   "sha256_unico": "819ed087352a97633c0e86dafe136c17d78ce32972b33067af14d17fa874a62f",
+   "byte": 678197
+  },
+  "mark1h_ETHFIUSDC": {
+   "file": 30,
+   "sha256_unico": "54d8df811a5c338fd367e02cb24612ba1aacfa2e487b89932b3dccbd2c58194b",
+   "byte": 512937
+  },
+  "mark1h_ETHFIUSDT": {
+   "file": 30,
+   "sha256_unico": "fe685e159bab43f4806994950a964af51ab7802af4797601919fedd9c9a872cf",
+   "byte": 514158
+  },
+  "mark1h_FILUSDC": {
+   "file": 31,
+   "sha256_unico": "d7fe285b6bee5ef9a9386799ca518f7335c25f3af9b8795cc5e7c0108107b94a",
+   "byte": 507206
+  },
+  "mark1h_FILUSDT": {
+   "file": 31,
+   "sha256_unico": "9e671756645c0d13ef8a5db0e70ba252ab568d7b58d20c281755ca5c2ffad65c",
+   "byte": 519620
+  },
+  "mark1h_HBARUSDC": {
+   "file": 20,
+   "sha256_unico": "b6276f3780338dff448f8b4b1c7686972a2b878f02067df9864abdb5b4563233",
+   "byte": 317834
+  },
+  "mark1h_HBARUSDT": {
+   "file": 20,
+   "sha256_unico": "e2d4f3290f8cd7b6af93751ce5078137efa80de4384277f599f597e4d2bd8b77",
+   "byte": 312990
+  },
+  "mark1h_IPUSDC": {
+   "file": 20,
+   "sha256_unico": "f01f04095b412bda215b71d2e1ec3fe8c10e80ad7c0cad1bd02392ef3babf41e",
+   "byte": 297201
+  },
+  "mark1h_IPUSDT": {
+   "file": 20,
+   "sha256_unico": "d55111dcf62611946f8defe47e8e9dd491e58c4aab0db1ac2cafcc6dac3d89dd",
+   "byte": 296540
+  },
+  "mark1h_KAITOUSDC": {
+   "file": 20,
+   "sha256_unico": "b0d672fde84c30e09759daf54de0925a346310cef4b1d99f8bb1c5029c7d8c6b",
+   "byte": 329402
+  },
+  "mark1h_KAITOUSDT": {
+   "file": 20,
+   "sha256_unico": "979f08b696ce5a66276595084b12dc3cae93e8f852d7f63dcfc14ced99f8e798",
+   "byte": 323423
+  },
+  "mark1h_LINKUSDC": {
+   "file": 33,
+   "sha256_unico": "1340c5f31b9e8d535cf6dbade74c5f9336b08bb02479859190c0fb8fd2523a6b",
+   "byte": 586782
+  },
+  "mark1h_LINKUSDT": {
+   "file": 33,
+   "sha256_unico": "9e56fbc40f9327477f27910f7275d94280b9a360eb00fabea6d488d25d2fd813",
+   "byte": 585577
+  },
+  "mark1h_LTCUSDC": {
+   "file": 31,
+   "sha256_unico": "fb35965211c148c075dbdb312b00ce6e0d066e2de97bd749efecc36a0cd5322c",
+   "byte": 554603
+  },
+  "mark1h_LTCUSDT": {
+   "file": 31,
+   "sha256_unico": "fb6dd50ea688b7beaece8c2e0df374358b8223227cbe5973fe937a4f948d9464",
+   "byte": 523044
+  },
+  "mark1h_MATICUSDC": {
+   "file": 23,
+   "sha256_unico": "b3bc55d331747bf2dba7eaf941ac68e37ad049ddda2e95734549b25fa0753414",
+   "byte": 178159
+  },
+  "mark1h_MATICUSDT": {
+   "file": 31,
+   "sha256_unico": "89b9cc12c334a52aada5cf0d464e38e5345d669a6df0ba9169139dba0fb511a0",
+   "byte": 327102
+  },
+  "mark1h_NEARUSDC": {
+   "file": 31,
+   "sha256_unico": "991c567b72eae195d0dd8a18019ed4ce0182433ecb11fcbd2444e04274415868",
+   "byte": 515944
+  },
+  "mark1h_NEARUSDT": {
+   "file": 31,
+   "sha256_unico": "ecd80a5a76d983bc6d357d14ee31ad995db413fa83b21ed2f0b7e358749f26c4",
+   "byte": 519101
+  },
+  "mark1h_NEOUSDC": {
+   "file": 31,
+   "sha256_unico": "656944f52e7b5608f1de2f7b14ee84e20e5b31874e4502f814f5f669bf096180",
+   "byte": 525093
+  },
+  "mark1h_NEOUSDT": {
+   "file": 31,
+   "sha256_unico": "5248d9255c768e66e1fae2032e2ca5f4124ab94ad659c5a6b63aaee86aa96670",
+   "byte": 509693
+  },
+  "mark1h_ORDIUSDC": {
+   "file": 33,
+   "sha256_unico": "bd43072036b11b5f4cd2e5b802e78b42adaabdcaa91942edaacfc26f2d8698e3",
+   "byte": 579898
+  },
+  "mark1h_ORDIUSDT": {
+   "file": 33,
+   "sha256_unico": "9508206396d291a7a9d58959ee32b7faa8a18c48271d8dfa0ce392c029cb9e7e",
+   "byte": 588525
+  },
+  "mark1h_PENGUUSDC": {
+   "file": 16,
+   "sha256_unico": "afb80188a98167e5abf7b0cfcee53ddb3f7ceb1a93cc33052661fa1e1863a5f4",
+   "byte": 232731
+  },
+  "mark1h_PENGUUSDT": {
+   "file": 16,
+   "sha256_unico": "55c8a3fb1c804af3bdece2ff1fae9f1823ff302f1d3dd76eda45e12b49e3d3f8",
+   "byte": 243406
+  },
+  "mark1h_PNUTUSDC": {
+   "file": 20,
+   "sha256_unico": "b2b0abe9eeaadfcd43eeb14bc4892e57a2f779d3d5de55e48ff6a8e15ba55b05",
+   "byte": 319877
+  },
+  "mark1h_PNUTUSDT": {
+   "file": 20,
+   "sha256_unico": "5dfa307376fe0c978e8ad47da7992f27875be3dc4a3f43d7cfba6ffc9f1eedba",
+   "byte": 320672
+  },
+  "mark1h_SOLUSDC": {
+   "file": 34,
+   "sha256_unico": "5376924baa02804ee007ceb15dd745549515a4fe3241d010c03576269e23858d",
+   "byte": 645591
+  },
+  "mark1h_SOLUSDT": {
+   "file": 34,
+   "sha256_unico": "413ff42120fe3e63f2b3b5a59a7ba209f91eff39f16393ec65509cfa96cf82dd",
+   "byte": 633703
+  },
+  "mark1h_SUIUSDC": {
+   "file": 33,
+   "sha256_unico": "b12345fd7215fb333ce2bbffcb1b9d6704a0e09572e4188ce1d40a763eff1f22",
+   "byte": 577947
+  },
+  "mark1h_SUIUSDT": {
+   "file": 33,
+   "sha256_unico": "f0293cc899aab9b2a8879cdbf4fc5be6d241bee84f0e71678060b4bd02a4aeef",
+   "byte": 567459
+  },
+  "mark1h_TIAUSDC": {
+   "file": 31,
+   "sha256_unico": "4be1e3cada92e1b21a6e0f3bcfc2a43fb64bfd9246c29d4edf68a1e7c74faf29",
+   "byte": 522773
+  },
+  "mark1h_TIAUSDT": {
+   "file": 31,
+   "sha256_unico": "e8e50e530460bff945f2959eb3d7c2dec976a3baa172a6bad78e0b53f4ef0510",
+   "byte": 534005
+  },
+  "mark1h_TRUMPUSDC": {
+   "file": 20,
+   "sha256_unico": "7fcba0cc077d41f0bfcb65630f98f068d0b8a1e8fb07d1370f770570d1d5d50b",
+   "byte": 337965
+  },
+  "mark1h_TRUMPUSDT": {
+   "file": 20,
+   "sha256_unico": "12197f0c3e7673266790066696cdb7230635c389ae1f15654bbbd4a6a1e18737",
+   "byte": 334564
+  },
+  "mark1h_UNIUSDC": {
+   "file": 17,
+   "sha256_unico": "f072f242abf52cddb2b7d17b0ce238465796c5babc74dc3ec99809ee5a2fe503",
+   "byte": 279161
+  },
+  "mark1h_UNIUSDT": {
+   "file": 17,
+   "sha256_unico": "57ab448a169e88147215595760cc5a8ca9041a45e9dedb09f18c3e12960691b0",
+   "byte": 285564
+  },
+  "mark1h_WIFUSDC": {
+   "file": 31,
+   "sha256_unico": "632b1578965efe2abf6e32b6f7de12b1ef25c07257ebab2cfe5a032ada8e9a3c",
+   "byte": 532195
+  },
+  "mark1h_WIFUSDT": {
+   "file": 31,
+   "sha256_unico": "a26cde896a57d4ed451ed1459d02d8804de4d1e892ec530878f3658f010aba28",
+   "byte": 526103
+  },
+  "mark1h_WLDUSDC": {
+   "file": 32,
+   "sha256_unico": "f504c438cbf3b4be687497e8955ba498920ad154e9b08705b6bfed12abd1f1dc",
+   "byte": 557711
+  },
+  "mark1h_WLDUSDT": {
+   "file": 32,
+   "sha256_unico": "345964fc8881d245f3a8ec43f3a84b31389e72de86819841901eea70d067a5b8",
+   "byte": 553474
+  },
+  "mark1h_WLFIUSDC": {
+   "file": 14,
+   "sha256_unico": "5bab3c2f14b473dadd767dfd7f0de17592900c2e4770f42aba1a9fe19e05b49a",
+   "byte": 211252
+  },
+  "mark1h_WLFIUSDT": {
+   "file": 14,
+   "sha256_unico": "17e32c8b7e7e80de5f7ec367d3c65794e13a2a9f2bbc1e2e3b67e0fb918b8f81",
+   "byte": 220115
+  },
+  "mark1h_XRPUSDC": {
+   "file": 34,
+   "sha256_unico": "97821e3fd7d81ac5ed00b9228d5185c968d8c5a2d964e90bdd72b7728bc9e949",
+   "byte": 571099
+  },
+  "mark1h_XRPUSDT": {
+   "file": 34,
+   "sha256_unico": "6439d0b9512a09e3dd7c344e667778665b26397c02f8c27d790b00f9cc57e538",
+   "byte": 564404
+  },
+  "mark1h_ZECUSDC": {
+   "file": 12,
+   "sha256_unico": "03ff90e15c84a5b32811652df62908aa4b0a3b4053fcfe343b8609929a9f1915",
+   "byte": 232228
+  },
+  "mark1h_ZECUSDT": {
+   "file": 12,
+   "sha256_unico": "de5794023281d403ef8b9d3f4e188709a424725a86ec44d3245c39795e50b48d",
+   "byte": 245429
+  }
+ },
+ "mancanti_404": {
+  "funding_IPUSDC": [
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "funding_IPUSDT": [
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "funding_MATICUSDC": [
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "d1_MATICUSDC": [
+   "2024-10",
+   "2024-11",
+   "2024-12",
+   "2025-01",
+   "2025-02",
+   "2025-03",
+   "2025-04",
+   "2025-05",
+   "2025-06",
+   "2025-07",
+   "2025-08",
+   "2025-09",
+   "2025-10",
+   "2025-11",
+   "2025-12",
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "d1_MATICUSDT": [
+   "2024-10",
+   "2024-11",
+   "2024-12",
+   "2025-01",
+   "2025-02",
+   "2025-03",
+   "2025-04",
+   "2025-05",
+   "2025-06",
+   "2025-07",
+   "2025-08",
+   "2025-09",
+   "2025-10",
+   "2025-11",
+   "2025-12",
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "k1h_MATICUSDC": [
+   "2024-10",
+   "2024-11",
+   "2024-12",
+   "2025-01",
+   "2025-02",
+   "2025-03",
+   "2025-04",
+   "2025-05",
+   "2025-06",
+   "2025-07",
+   "2025-08",
+   "2025-09",
+   "2025-10",
+   "2025-11",
+   "2025-12",
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "k1h_MATICUSDT": [
+   "2024-10",
+   "2024-11",
+   "2024-12",
+   "2025-01",
+   "2025-02",
+   "2025-03",
+   "2025-04",
+   "2025-05",
+   "2025-06",
+   "2025-07",
+   "2025-08",
+   "2025-09",
+   "2025-10",
+   "2025-11",
+   "2025-12",
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ],
+  "mark1h_MATICUSDC": [
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09",
+   "2026-10"
+  ]
+ },
+ "buchi": {
+  "d1_1000BONKUSDC": {
+   "da": 1714608000000,
+   "a": 1793404800000,
+   "presenti": 913,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_1000BONKUSDT": {
+   "da": 1714521600000,
+   "a": 1793404800000,
+   "presenti": 914,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_1000PEPEUSDC": {
+   "da": 1709769600000,
+   "a": 1793404800000,
+   "presenti": 969,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_1000PEPEUSDT": {
+   "da": 1709251200000,
+   "a": 1793404800000,
+   "presenti": 975,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_1000SHIBUSDC": {
+   "da": 1711584000000,
+   "a": 1793404800000,
+   "presenti": 948,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_1000SHIBUSDT": {
+   "da": 1709251200000,
+   "a": 1793404800000,
+   "presenti": 975,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_AAVEUSDC": {
+   "da": 1750032000000,
+   "a": 1793404800000,
+   "presenti": 503,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_AAVEUSDT": {
+   "da": 1748736000000,
+   "a": 1793404800000,
+   "presenti": 518,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ADAUSDC": {
+   "da": 1741219200000,
+   "a": 1793404800000,
+   "presenti": 605,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ADAUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ARBUSDC": {
+   "da": 1713398400000,
+   "a": 1793404800000,
+   "presenti": 927,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ARBUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_AVAXUSDC": {
+   "da": 1710892800000,
+   "a": 1793404800000,
+   "presenti": 956,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_AVAXUSDT": {
+   "da": 1709251200000,
+   "a": 1793404800000,
+   "presenti": 975,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BCHUSDC": {
+   "da": 1712188800000,
+   "a": 1793404800000,
+   "presenti": 941,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BCHUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BIOUSDC": {
+   "da": 1756080000000,
+   "a": 1793404800000,
+   "presenti": 433,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BIOUSDT": {
+   "da": 1754006400000,
+   "a": 1793404800000,
+   "presenti": 457,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BNBUSDC": {
+   "da": 1704326400000,
+   "a": 1793404800000,
+   "presenti": 1032,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BNBUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BOMEUSDC": {
+   "da": 1714003200000,
+   "a": 1793404800000,
+   "presenti": 920,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BOMEUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BTCUSDC": {
+   "da": 1704326400000,
+   "a": 1793404800000,
+   "presenti": 1032,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_BTCUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_CRVUSDC": {
+   "da": 1720051200000,
+   "a": 1793404800000,
+   "presenti": 850,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_CRVUSDT": {
+   "da": 1719792000000,
+   "a": 1793404800000,
+   "presenti": 853,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_DATAIPUSDC": {
+   "da": 1783036800000,
+   "a": 1793404800000,
+   "presenti": 121,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_DATAIPUSDT": {
+   "da": 1783036800000,
+   "a": 1793404800000,
+   "presenti": 121,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_DOGEUSDC": {
+   "da": 1705536000000,
+   "a": 1793404800000,
+   "presenti": 1018,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_DOGEUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ENAUSDC": {
+   "da": 1714608000000,
+   "a": 1793404800000,
+   "presenti": 913,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ENAUSDT": {
+   "da": 1714521600000,
+   "a": 1793404800000,
+   "presenti": 914,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ETHUSDC": {
+   "da": 1704326400000,
+   "a": 1793404800000,
+   "presenti": 1032,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ETHUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ETHFIUSDC": {
+   "da": 1714608000000,
+   "a": 1793404800000,
+   "presenti": 913,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ETHFIUSDT": {
+   "da": 1714521600000,
+   "a": 1793404800000,
+   "presenti": 914,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_FILUSDC": {
+   "da": 1713398400000,
+   "a": 1793404800000,
+   "presenti": 927,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_FILUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_HBARUSDC": {
+   "da": 1741305600000,
+   "a": 1793404800000,
+   "presenti": 604,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_HBARUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_IPUSDC": {
+   "da": 1741132800000,
+   "a": 1793404800000,
+   "presenti": 606,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_IPUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_KAITOUSDC": {
+   "da": 1741132800000,
+   "a": 1793404800000,
+   "presenti": 606,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_KAITOUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_LINKUSDC": {
+   "da": 1708041600000,
+   "a": 1793404800000,
+   "presenti": 989,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_LINKUSDT": {
+   "da": 1706745600000,
+   "a": 1793404800000,
+   "presenti": 1004,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_LTCUSDC": {
+   "da": 1712793600000,
+   "a": 1793404800000,
+   "presenti": 934,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_LTCUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_MATICUSDC": {
+   "da": 1714003200000,
+   "a": 1726012800000,
+   "presenti": 140,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_MATICUSDT": {
+   "da": 1711929600000,
+   "a": 1726012800000,
+   "presenti": 164,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_NEARUSDC": {
+   "da": 1712793600000,
+   "a": 1793404800000,
+   "presenti": 934,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_NEARUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_NEOUSDC": {
+   "da": 1713398400000,
+   "a": 1793404800000,
+   "presenti": 927,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_NEOUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ORDIUSDC": {
+   "da": 1708560000000,
+   "a": 1793404800000,
+   "presenti": 983,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ORDIUSDT": {
+   "da": 1706745600000,
+   "a": 1793404800000,
+   "presenti": 1004,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_PENGUUSDC": {
+   "da": 1753228800000,
+   "a": 1793404800000,
+   "presenti": 466,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_PENGUUSDT": {
+   "da": 1751328000000,
+   "a": 1793404800000,
+   "presenti": 488,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_PNUTUSDC": {
+   "da": 1741305600000,
+   "a": 1793404800000,
+   "presenti": 604,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_PNUTUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_SOLUSDC": {
+   "da": 1704326400000,
+   "a": 1793404800000,
+   "presenti": 1032,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_SOLUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_SUIUSDC": {
+   "da": 1707350400000,
+   "a": 1793404800000,
+   "presenti": 997,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_SUIUSDT": {
+   "da": 1706745600000,
+   "a": 1793404800000,
+   "presenti": 1004,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_TIAUSDC": {
+   "da": 1714003200000,
+   "a": 1793404800000,
+   "presenti": 920,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_TIAUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_TRUMPUSDC": {
+   "da": 1741219200000,
+   "a": 1793404800000,
+   "presenti": 605,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_TRUMPUSDT": {
+   "da": 1740787200000,
+   "a": 1793404800000,
+   "presenti": 610,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_UNIUSDC": {
+   "da": 1750032000000,
+   "a": 1793404800000,
+   "presenti": 503,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_UNIUSDT": {
+   "da": 1748736000000,
+   "a": 1793404800000,
+   "presenti": 518,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WIFUSDC": {
+   "da": 1712188800000,
+   "a": 1793404800000,
+   "presenti": 941,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WIFUSDT": {
+   "da": 1711929600000,
+   "a": 1793404800000,
+   "presenti": 944,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WLDUSDC": {
+   "da": 1710374400000,
+   "a": 1793404800000,
+   "presenti": 962,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WLDUSDT": {
+   "da": 1709251200000,
+   "a": 1793404800000,
+   "presenti": 975,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WLFIUSDC": {
+   "da": 1757289600000,
+   "a": 1793404800000,
+   "presenti": 419,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_WLFIUSDT": {
+   "da": 1756684800000,
+   "a": 1793404800000,
+   "presenti": 426,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_XRPUSDC": {
+   "da": 1704326400000,
+   "a": 1793404800000,
+   "presenti": 1032,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_XRPUSDT": {
+   "da": 1704067200000,
+   "a": 1793404800000,
+   "presenti": 1035,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ZECUSDC": {
+   "da": 1763510400000,
+   "a": 1793404800000,
+   "presenti": 347,
+   "mancanti": 0,
+   "primi": []
+  },
+  "d1_ZECUSDT": {
+   "da": 1761955200000,
+   "a": 1793404800000,
+   "presenti": 365,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000BONKUSDC": {
+   "da": 1714633200000,
+   "a": 1793487600000,
+   "presenti": 21905,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000BONKUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21936,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000PEPEUSDC": {
+   "da": 1709798400000,
+   "a": 1793487600000,
+   "presenti": 23248,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000PEPEUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23400,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000SHIBUSDC": {
+   "da": 1711609200000,
+   "a": 1793487600000,
+   "presenti": 22745,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_1000SHIBUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23400,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_AAVEUSDC": {
+   "da": 1750060800000,
+   "a": 1793487600000,
+   "presenti": 12064,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_AAVEUSDT": {
+   "da": 1748736000000,
+   "a": 1793487600000,
+   "presenti": 12432,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ADAUSDC": {
+   "da": 1741255200000,
+   "a": 1793487600000,
+   "presenti": 14510,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ADAUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ARBUSDC": {
+   "da": 1713423600000,
+   "a": 1793487600000,
+   "presenti": 22241,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ARBUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_AVAXUSDC": {
+   "da": 1710918000000,
+   "a": 1793487600000,
+   "presenti": 22937,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_AVAXUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23400,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BCHUSDC": {
+   "da": 1712214000000,
+   "a": 1793487600000,
+   "presenti": 22577,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BCHUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BIOUSDC": {
+   "da": 1756105200000,
+   "a": 1793487600000,
+   "presenti": 10385,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BIOUSDT": {
+   "da": 1754006400000,
+   "a": 1793487600000,
+   "presenti": 10968,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BNBUSDC": {
+   "da": 1704369600000,
+   "a": 1793487600000,
+   "presenti": 24756,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BNBUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BOMEUSDC": {
+   "da": 1714028400000,
+   "a": 1793487600000,
+   "presenti": 22073,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BOMEUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BTCUSDC": {
+   "da": 1704369600000,
+   "a": 1793487600000,
+   "presenti": 24756,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_BTCUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_CRVUSDC": {
+   "da": 1720076400000,
+   "a": 1793487600000,
+   "presenti": 20393,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_CRVUSDT": {
+   "da": 1719792000000,
+   "a": 1793487600000,
+   "presenti": 20472,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_DATAIPUSDC": {
+   "da": 1783058400000,
+   "a": 1793487600000,
+   "presenti": 2898,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_DATAIPUSDT": {
+   "da": 1783058400000,
+   "a": 1793487600000,
+   "presenti": 2898,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_DOGEUSDC": {
+   "da": 1705572000000,
+   "a": 1793487600000,
+   "presenti": 24422,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_DOGEUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ENAUSDC": {
+   "da": 1714633200000,
+   "a": 1793487600000,
+   "presenti": 21905,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ENAUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21936,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ETHUSDC": {
+   "da": 1704369600000,
+   "a": 1793487600000,
+   "presenti": 24756,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ETHUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ETHFIUSDC": {
+   "da": 1714633200000,
+   "a": 1793487600000,
+   "presenti": 21905,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ETHFIUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21936,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_FILUSDC": {
+   "da": 1713423600000,
+   "a": 1793487600000,
+   "presenti": 22241,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_FILUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_HBARUSDC": {
+   "da": 1741341600000,
+   "a": 1793487600000,
+   "presenti": 14486,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_HBARUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_IPUSDC": {
+   "da": 1741168800000,
+   "a": 1793487600000,
+   "presenti": 14534,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_IPUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_KAITOUSDC": {
+   "da": 1741168800000,
+   "a": 1793487600000,
+   "presenti": 14534,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_KAITOUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_LINKUSDC": {
+   "da": 1708070400000,
+   "a": 1793487600000,
+   "presenti": 23728,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_LINKUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24096,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_LTCUSDC": {
+   "da": 1712818800000,
+   "a": 1793487600000,
+   "presenti": 22409,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_LTCUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_MATICUSDC": {
+   "da": 1714028400000,
+   "a": 1726045200000,
+   "presenti": 3339,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_MATICUSDT": {
+   "da": 1711929600000,
+   "a": 1726045200000,
+   "presenti": 3922,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_NEARUSDC": {
+   "da": 1712818800000,
+   "a": 1793487600000,
+   "presenti": 22409,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_NEARUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_NEOUSDC": {
+   "da": 1713423600000,
+   "a": 1793487600000,
+   "presenti": 22241,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_NEOUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ORDIUSDC": {
+   "da": 1708585200000,
+   "a": 1793487600000,
+   "presenti": 23585,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ORDIUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24096,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_PENGUUSDC": {
+   "da": 1753254000000,
+   "a": 1793487600000,
+   "presenti": 11177,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_PENGUUSDT": {
+   "da": 1751328000000,
+   "a": 1793487600000,
+   "presenti": 11712,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_PNUTUSDC": {
+   "da": 1741341600000,
+   "a": 1793487600000,
+   "presenti": 14486,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_PNUTUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_SOLUSDC": {
+   "da": 1704369600000,
+   "a": 1793487600000,
+   "presenti": 24756,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_SOLUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_SUIUSDC": {
+   "da": 1707375600000,
+   "a": 1793487600000,
+   "presenti": 23921,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_SUIUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24096,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_TIAUSDC": {
+   "da": 1714028400000,
+   "a": 1793487600000,
+   "presenti": 22073,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_TIAUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_TRUMPUSDC": {
+   "da": 1741255200000,
+   "a": 1793487600000,
+   "presenti": 14510,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_TRUMPUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14640,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_UNIUSDC": {
+   "da": 1750060800000,
+   "a": 1793487600000,
+   "presenti": 12064,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_UNIUSDT": {
+   "da": 1748736000000,
+   "a": 1793487600000,
+   "presenti": 12432,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WIFUSDC": {
+   "da": 1712214000000,
+   "a": 1793487600000,
+   "presenti": 22577,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WIFUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22656,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WLDUSDC": {
+   "da": 1710399600000,
+   "a": 1793487600000,
+   "presenti": 23081,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WLDUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23400,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WLFIUSDC": {
+   "da": 1757318400000,
+   "a": 1793487600000,
+   "presenti": 10048,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_WLFIUSDT": {
+   "da": 1756684800000,
+   "a": 1793487600000,
+   "presenti": 10224,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_XRPUSDC": {
+   "da": 1704369600000,
+   "a": 1793487600000,
+   "presenti": 24756,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_XRPUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24840,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ZECUSDC": {
+   "da": 1763546400000,
+   "a": 1793487600000,
+   "presenti": 8318,
+   "mancanti": 0,
+   "primi": []
+  },
+  "k1h_ZECUSDT": {
+   "da": 1761955200000,
+   "a": 1793487600000,
+   "presenti": 8760,
+   "mancanti": 0,
+   "primi": []
+  },
+  "mark1h_1000BONKUSDC": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_1000BONKUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_1000PEPEUSDC": {
+   "da": 1709683200000,
+   "a": 1793487600000,
+   "presenti": 23256,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_1000PEPEUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23376,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_1000SHIBUSDC": {
+   "da": 1711497600000,
+   "a": 1793487600000,
+   "presenti": 22752,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_1000SHIBUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23376,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_AAVEUSDC": {
+   "da": 1750060800000,
+   "a": 1793487600000,
+   "presenti": 12040,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_AAVEUSDT": {
+   "da": 1748736000000,
+   "a": 1793487600000,
+   "presenti": 12408,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ADAUSDC": {
+   "da": 1741219200000,
+   "a": 1793487600000,
+   "presenti": 14496,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ADAUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ARBUSDC": {
+   "da": 1713312000000,
+   "a": 1793487600000,
+   "presenti": 22248,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ARBUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_AVAXUSDC": {
+   "da": 1710892800000,
+   "a": 1793487600000,
+   "presenti": 22920,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_AVAXUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23376,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BCHUSDC": {
+   "da": 1712188800000,
+   "a": 1793487600000,
+   "presenti": 22560,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BCHUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BIOUSDC": {
+   "da": 1756101600000,
+   "a": 1793487600000,
+   "presenti": 10362,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BIOUSDT": {
+   "da": 1754006400000,
+   "a": 1793487600000,
+   "presenti": 10944,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BNBUSDC": {
+   "da": 1704240000000,
+   "a": 1793487600000,
+   "presenti": 24768,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BNBUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BOMEUSDC": {
+   "da": 1713952800000,
+   "a": 1793487600000,
+   "presenti": 22070,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BOMEUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BTCUSDC": {
+   "da": 1704240000000,
+   "a": 1793487600000,
+   "presenti": 24768,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_BTCUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_CRVUSDC": {
+   "da": 1720051200000,
+   "a": 1793487600000,
+   "presenti": 20376,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_CRVUSDT": {
+   "da": 1719792000000,
+   "a": 1793487600000,
+   "presenti": 20448,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_DATAIPUSDC": {
+   "da": 1783058400000,
+   "a": 1793487600000,
+   "presenti": 2898,
+   "mancanti": 0,
+   "primi": []
+  },
+  "mark1h_DATAIPUSDT": {
+   "da": 1783058400000,
+   "a": 1793487600000,
+   "presenti": 2898,
+   "mancanti": 0,
+   "primi": []
+  },
+  "mark1h_DOGEUSDC": {
+   "da": 1705536000000,
+   "a": 1793487600000,
+   "presenti": 24408,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_DOGEUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ENAUSDC": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ENAUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ETHUSDC": {
+   "da": 1704240000000,
+   "a": 1793487600000,
+   "presenti": 24768,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ETHUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ETHFIUSDC": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ETHFIUSDT": {
+   "da": 1714521600000,
+   "a": 1793487600000,
+   "presenti": 21912,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_FILUSDC": {
+   "da": 1713312000000,
+   "a": 1793487600000,
+   "presenti": 22248,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_FILUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_HBARUSDC": {
+   "da": 1741305600000,
+   "a": 1793487600000,
+   "presenti": 14472,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_HBARUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_IPUSDC": {
+   "da": 1741132800000,
+   "a": 1793487600000,
+   "presenti": 14520,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_IPUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_KAITOUSDC": {
+   "da": 1741132800000,
+   "a": 1793487600000,
+   "presenti": 14520,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_KAITOUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_LINKUSDC": {
+   "da": 1707955200000,
+   "a": 1793487600000,
+   "presenti": 23736,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_LINKUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24072,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_LTCUSDC": {
+   "da": 1712793600000,
+   "a": 1793487600000,
+   "presenti": 22392,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_LTCUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_MATICUSDC": {
+   "da": 1713952800000,
+   "a": 1772010000000,
+   "presenti": 16128,
+   "mancanti": 0,
+   "primi": []
+  },
+  "mark1h_MATICUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_NEARUSDC": {
+   "da": 1712793600000,
+   "a": 1793487600000,
+   "presenti": 22392,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_NEARUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_NEOUSDC": {
+   "da": 1713312000000,
+   "a": 1793487600000,
+   "presenti": 22248,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_NEOUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ORDIUSDC": {
+   "da": 1708473600000,
+   "a": 1793487600000,
+   "presenti": 23592,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ORDIUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24072,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_PENGUUSDC": {
+   "da": 1753254000000,
+   "a": 1793487600000,
+   "presenti": 11153,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_PENGUUSDT": {
+   "da": 1751328000000,
+   "a": 1793487600000,
+   "presenti": 11688,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_PNUTUSDC": {
+   "da": 1741305600000,
+   "a": 1793487600000,
+   "presenti": 14472,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_PNUTUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_SOLUSDC": {
+   "da": 1704240000000,
+   "a": 1793487600000,
+   "presenti": 24768,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_SOLUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_SUIUSDC": {
+   "da": 1707350400000,
+   "a": 1793487600000,
+   "presenti": 23904,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_SUIUSDT": {
+   "da": 1706745600000,
+   "a": 1793487600000,
+   "presenti": 24072,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_TIAUSDC": {
+   "da": 1713952800000,
+   "a": 1793487600000,
+   "presenti": 22070,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_TIAUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_TRUMPUSDC": {
+   "da": 1741219200000,
+   "a": 1793487600000,
+   "presenti": 14496,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_TRUMPUSDT": {
+   "da": 1740787200000,
+   "a": 1793487600000,
+   "presenti": 14616,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_UNIUSDC": {
+   "da": 1750060800000,
+   "a": 1793487600000,
+   "presenti": 12040,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_UNIUSDT": {
+   "da": 1748736000000,
+   "a": 1793487600000,
+   "presenti": 12408,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WIFUSDC": {
+   "da": 1712188800000,
+   "a": 1793487600000,
+   "presenti": 22560,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WIFUSDT": {
+   "da": 1711929600000,
+   "a": 1793487600000,
+   "presenti": 22632,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WLDUSDC": {
+   "da": 1710320400000,
+   "a": 1793487600000,
+   "presenti": 23079,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WLDUSDT": {
+   "da": 1709251200000,
+   "a": 1793487600000,
+   "presenti": 23376,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WLFIUSDC": {
+   "da": 1757318400000,
+   "a": 1793487600000,
+   "presenti": 10024,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_WLFIUSDT": {
+   "da": 1756684800000,
+   "a": 1793487600000,
+   "presenti": 10200,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_XRPUSDC": {
+   "da": 1704240000000,
+   "a": 1793487600000,
+   "presenti": 24768,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_XRPUSDT": {
+   "da": 1704067200000,
+   "a": 1793487600000,
+   "presenti": 24816,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ZECUSDC": {
+   "da": 1763542800000,
+   "a": 1793487600000,
+   "presenti": 8295,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  },
+  "mark1h_ZECUSDT": {
+   "da": 1761955200000,
+   "a": 1793487600000,
+   "presenti": 8736,
+   "mancanti": 24,
+   "primi": [
+    "2026-06-29 00:00",
+    "2026-06-29 01:00",
+    "2026-06-29 02:00",
+    "2026-06-29 03:00",
+    "2026-06-29 04:00",
+    "2026-06-29 05:00",
+    "2026-06-29 06:00",
+    "2026-06-29 07:00"
+   ]
+  }
+ }
+}

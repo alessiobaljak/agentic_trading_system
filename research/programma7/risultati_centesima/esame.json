@@ -1,0 +1,1273 @@
+{
+ "qualita_dati_mark": {
+  "1000BONK": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   }
+  },
+  "1000PEPE": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 1488,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1464
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 1608,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1584
+   }
+  },
+  "1000SHIB": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 1488,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1464
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2112,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2088
+   }
+  },
+  "AAVE": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 12456,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 12432
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 12824,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 12800
+   }
+  },
+  "ADA": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10368,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10344
+   }
+  },
+  "ARB": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2616,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2592
+   }
+  },
+  "AVAX": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 1488,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1464
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 1944,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1920
+   }
+  },
+  "BCH": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2304,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2280
+   }
+  },
+  "BIO": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 13920,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 13896
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 14502,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 14478
+   }
+  },
+  "BNB": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 96,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 72
+   }
+  },
+  "BOME": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2794,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2770
+   }
+  },
+  "BTC": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 96,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 72
+   }
+  },
+  "CRV": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 4416,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 4392
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 4488,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 4464
+   }
+  },
+  "DATAIP": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 21966,
+    "ore_riempite_dal_prezzo_scambiato": 0,
+    "ore_ancora_vuote": 21966
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 21966,
+    "ore_riempite_dal_prezzo_scambiato": 0,
+    "ore_ancora_vuote": 21966
+   }
+  },
+  "DOGE": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 456,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 432
+   }
+  },
+  "ENA": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   }
+  },
+  "ETH": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 96,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 72
+   }
+  },
+  "ETHFI": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2952,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2928
+   }
+  },
+  "FIL": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2616,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2592
+   }
+  },
+  "HBAR": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10392,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10368
+   }
+  },
+  "IP": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10344,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10320
+   }
+  },
+  "KAITO": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10344,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10320
+   }
+  },
+  "LINK": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 792,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 768
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 1128,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1104
+   }
+  },
+  "LTC": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2472,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2448
+   }
+  },
+  "MATIC": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 0,
+    "ore_ancora_vuote": 2232
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 8736,
+    "ore_riempite_dal_prezzo_scambiato": 0,
+    "ore_ancora_vuote": 8736
+   }
+  },
+  "NEAR": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2472,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2448
+   }
+  },
+  "NEO": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2616,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2592
+   }
+  },
+  "ORDI": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 792,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 768
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 1272,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1248
+   }
+  },
+  "PENGU": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 13176,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 13152
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 13711,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 13687
+   }
+  },
+  "PNUT": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10392,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10368
+   }
+  },
+  "SOL": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 96,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 72
+   }
+  },
+  "SUI": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 792,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 768
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 960,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 936
+   }
+  },
+  "TIA": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2794,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2770
+   }
+  },
+  "TRUMP": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 10248,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10224
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 10368,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 10344
+   }
+  },
+  "UNI": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 12456,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 12432
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 12824,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 12800
+   }
+  },
+  "WIF": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 2232,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2208
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 2304,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 2280
+   }
+  },
+  "WLD": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 1488,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1464
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 1785,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 1761
+   }
+  },
+  "WLFI": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 14664,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 14640
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 14840,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 14816
+   }
+  },
+  "XRP": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 48,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 24
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 96,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 72
+   }
+  },
+  "ZEC": {
+   "T": {
+    "ore_mark_mancanti_prima_del_riempimento": 16128,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 16104
+   },
+   "C": {
+    "ore_mark_mancanti_prima_del_riempimento": 16569,
+    "ore_riempite_dal_prezzo_scambiato": 24,
+    "ore_ancora_vuote": 16545
+   }
+  }
+ },
+ "famiglie": {
+  "serie_nel_mazzo": 283,
+  "famiglie": 198,
+  "in_v": 150,
+  "deviazione_v": 0.6812253778447532
+ },
+ "base_prezzi": {
+  "ore_coppia": 769215,
+  "percentili_pct_0.1_1_5_25_50_75_95_99_99.9": [
+   -25.781002451269945,
+   -0.22500851119872056,
+   -0.1454016721192386,
+   -0.07050488669236299,
+   -0.019384500613517375,
+   0.021287359462329736,
+   0.08395898364585745,
+   52.24899598393573,
+   100.58201389654604
+  ],
+  "assoluta_massima_pct": 146.16883557089517,
+  "quota_ore_sopra_0.5pct": 0.016618240673933814,
+  "quota_ore_sopra_1pct": 0.0163400349707169,
+  "per_moneta_max_pct": {
+   "1000BONK": 0.6918141800131172,
+   "1000PEPE": 1.8020017342484707,
+   "1000SHIB": 0.4288882269221861,
+   "AAVE": 1.5069538802482407,
+   "ADA": 2.5633036824290967,
+   "ARB": 0.4619703176548695,
+   "AVAX": 0.5554572532800561,
+   "BCH": 0.29512364812390723,
+   "BIO": 4.041225187594444,
+   "BNB": 0.36689563007914483,
+   "BOME": 1.021009211419377,
+   "BTC": 0.521711681718795,
+   "CRV": 0.5811135668979395,
+   "DATAIP": 0.6557297830374731,
+   "DOGE": 0.41471619800693693,
+   "ENA": 3.338294232649075,
+   "ETH": 0.4527052852476787,
+   "ETHFI": 5.846551933459265,
+   "FIL": 5.10560018723435,
+   "HBAR": 4.548617393481546,
+   "IP": 2.1417197780740804,
+   "KAITO": 7.961240044898177,
+   "LINK": 0.41105683307518515,
+   "LTC": 0.28995653894738904,
+   "MATIC": 146.16883557089517,
+   "NEAR": 0.29375764993878617,
+   "NEO": 0.36900369003689537,
+   "ORDI": 1.154369139868261,
+   "PENGU": 0.5526800596543424,
+   "PNUT": 0.7681643440653363,
+   "SOL": 0.481233166313344,
+   "SUI": 0.5418218252928542,
+   "TIA": 0.9817571301015793,
+   "TRUMP": 1.0097339601493838,
+   "UNI": 1.1253087212699686,
+   "WIF": 0.6576650204393353,
+   "WLD": 0.6903630166363306,
+   "WLFI": 2.763800443081299,
+   "XRP": 0.47230603834438334,
+   "ZEC": 0.20780093052374937
+  }
+ },
+ "d_media_pct_al_giorno_per_anno_e_moneta": {
+  "1000BONK": {
+   "2024": 0.004330922448979591,
+   "2025": -0.010253016438356166,
+   "2026": -0.013640375000000001
+  },
+  "1000PEPE": {
+   "2024": 0.009990824503311258,
+   "2025": -0.006663939726027396,
+   "2026": -0.006449552631578948
+  },
+  "1000SHIB": {
+   "2024": -0.0060297224199288265,
+   "2025": -0.00699751506849315,
+   "2026": -0.0032267236842105267
+  },
+  "AAVE": {
+   "2024": null,
+   "2025": -0.009832507537688443,
+   "2026": -0.003266993421052632
+  },
+  "ADA": {
+   "2024": null,
+   "2025": -0.0050585657894736845,
+   "2026": -0.005133713815789474
+  },
+  "ARB": {
+   "2024": -0.0028542192307692326,
+   "2025": -0.00642395890410959,
+   "2026": -0.0032399177631578947
+  },
+  "AVAX": {
+   "2024": -0.006451162629757787,
+   "2025": -0.0076206876712328776,
+   "2026": -0.0021456315789473686
+  },
+  "BCH": {
+   "2024": -0.010560952554744525,
+   "2025": -0.005658654794520549,
+   "2026": -0.0028510625
+  },
+  "BIO": {
+   "2024": null,
+   "2025": -0.03910322480620156,
+   "2026": -0.013796059210526316
+  },
+  "BNB": {
+   "2024": 0.0016644191780821917,
+   "2025": 2.603013698630136e-05,
+   "2026": -0.0031943223684210527
+  },
+  "BOME": {
+   "2024": -0.0019435753968253986,
+   "2025": -0.003874983561643836,
+   "2026": -0.002764292763157896
+  },
+  "BTC": {
+   "2024": 0.00024019178082191727,
+   "2025": 0.0001551999999999997,
+   "2026": -0.0006543782894736843
+  },
+  "CRV": {
+   "2024": 0.0042854619565217385,
+   "2025": -0.0025964356164383563,
+   "2026": -0.0022577269736842116
+  },
+  "DATAIP": {
+   "2024": null,
+   "2025": null,
+   "2026": -0.010373181818181813
+  },
+  "DOGE": {
+   "2024": 0.00047456857142857116,
+   "2025": -0.002811090410958904,
+   "2026": -0.0036801973684210533
+  },
+  "ENA": {
+   "2024": -0.011247212244897963,
+   "2025": -0.008388257534246575,
+   "2026": -0.0032638782894736846
+  },
+  "ETH": {
+   "2024": 0.003167227397260275,
+   "2025": 0.0008435369863013696,
+   "2026": -0.0006445526315789475
+  },
+  "ETHFI": {
+   "2024": -0.006671248979591839,
+   "2025": 0.019848994520547943,
+   "2026": -0.004315401315789475
+  },
+  "FIL": {
+   "2024": -0.004349888461538462,
+   "2025": -0.0038190465753424655,
+   "2026": -0.0011636875000000004
+  },
+  "HBAR": {
+   "2024": null,
+   "2025": -0.005596414473684212,
+   "2026": -0.004781243421052633
+  },
+  "IP": {
+   "2024": null,
+   "2025": -0.013855437499999994,
+   "2026": -0.01890120670391061
+  },
+  "KAITO": {
+   "2024": null,
+   "2025": -0.0206695,
+   "2026": -0.008536773026315796
+  },
+  "LINK": {
+   "2024": -0.0010851993769470409,
+   "2025": -0.00364426301369863,
+   "2026": -0.002045703947368421
+  },
+  "LTC": {
+   "2024": -0.005085439849624061,
+   "2025": -0.00301726301369863,
+   "2026": -0.0037024440789473682
+  },
+  "MATIC": {
+   "2024": -0.00033540873015873055,
+   "2025": 0.0,
+   "2026": 0.0009523809523809525
+  },
+  "NEAR": {
+   "2024": -0.00562842105263158,
+   "2025": -0.01285815890410959,
+   "2026": -0.0018794473684210534
+  },
+  "NEO": {
+   "2024": -0.0017190153846153846,
+   "2025": -0.0052935616438356155,
+   "2026": 0.007958371710526315
+  },
+  "ORDI": {
+   "2024": -0.0009801671924290225,
+   "2025": -0.0004377315068493157,
+   "2026": -0.005827407894736844
+  },
+  "PENGU": {
+   "2024": null,
+   "2025": -0.0110445987654321,
+   "2026": -0.004295368421052632
+  },
+  "PNUT": {
+   "2024": null,
+   "2025": -0.002062437500000001,
+   "2026": -0.00530556907894737
+  },
+  "SOL": {
+   "2024": 0.0001747424657534244,
+   "2025": -0.0012242931506849315,
+   "2026": -0.0019402368421052628
+  },
+  "SUI": {
+   "2024": -0.0010036322188449853,
+   "2025": -0.0024757890410958905,
+   "2026": -0.006910240131578947
+  },
+  "TIA": {
+   "2024": -0.011615281746031747,
+   "2025": -0.011702495890410959,
+   "2026": -0.004850450657894739
+  },
+  "TRUMP": {
+   "2024": null,
+   "2025": -0.012809088815789476,
+   "2026": -0.0012549703947368433
+  },
+  "UNI": {
+   "2024": null,
+   "2025": -0.0061336180904522615,
+   "2026": -0.005408990131578948
+  },
+  "WIF": {
+   "2024": -0.0025359452554744527,
+   "2025": -0.009365690410958905,
+   "2026": -0.006876430921052632
+  },
+  "WLD": {
+   "2024": -0.000549986394557823,
+   "2025": -0.005573361643835616,
+   "2026": -0.0027180756578947373
+  },
+  "WLFI": {
+   "2024": null,
+   "2025": -0.011093686956521739,
+   "2026": -0.0027774506578947373
+  },
+  "XRP": {
+   "2024": 0.002592663013698629,
+   "2025": -0.005880487671232878,
+   "2026": -0.006102319078947369
+  },
+  "ZEC": {
+   "2024": null,
+   "2025": 0.009545116279069767,
+   "2026": -0.0011660888157894738
+  }
+ },
+ "universo": {
+  "1000BONK": {
+   "primo_mese_usdc": "2024-05",
+   "primo_giorno_utile_A": "2024-06-01",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-06-01"
+  },
+  "1000PEPE": {
+   "primo_mese_usdc": "2024-03",
+   "primo_giorno_utile_A": "2024-04-06",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-04-06"
+  },
+  "1000SHIB": {
+   "primo_mese_usdc": "2024-03",
+   "primo_giorno_utile_A": "2024-04-27",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-04-27"
+  },
+  "AAVE": {
+   "primo_mese_usdc": "2025-06",
+   "primo_giorno_utile_A": "2025-07-16",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-07-16"
+  },
+  "ADA": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-05",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-04-05"
+  },
+  "ARB": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-18",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-18"
+  },
+  "AVAX": {
+   "primo_mese_usdc": "2024-03",
+   "primo_giorno_utile_A": "2024-04-19",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-04-19"
+  },
+  "BCH": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-04",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-04"
+  },
+  "BIO": {
+   "primo_mese_usdc": "2025-08",
+   "primo_giorno_utile_A": "2025-09-24",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-09-24"
+  },
+  "BNB": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-03"
+  },
+  "BOME": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-25",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-25"
+  },
+  "BTC": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-03"
+  },
+  "CRV": {
+   "primo_mese_usdc": "2024-07",
+   "primo_giorno_utile_A": "2024-08-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-08-03"
+  },
+  "DATAIP": {
+   "primo_mese_usdc": "2026-07",
+   "primo_giorno_utile_A": "2026-08-02",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2026-08-02"
+  },
+  "DOGE": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-17",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-17"
+  },
+  "ENA": {
+   "primo_mese_usdc": "2024-05",
+   "primo_giorno_utile_A": "2024-06-01",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-06-01"
+  },
+  "ETH": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-03"
+  },
+  "ETHFI": {
+   "primo_mese_usdc": "2024-05",
+   "primo_giorno_utile_A": "2024-06-01",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-06-01"
+  },
+  "FIL": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-18",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-18"
+  },
+  "HBAR": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-06",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-04-06"
+  },
+  "IP": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-04",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-06-28",
+   "primo_giorno_utile_B": "2025-04-04"
+  },
+  "KAITO": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-04",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-04-04"
+  },
+  "LINK": {
+   "primo_mese_usdc": "2024-02",
+   "primo_giorno_utile_A": "2024-03-17",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-03-17"
+  },
+  "LTC": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-11",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-11"
+  },
+  "MATIC": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-25",
+   "ultimo_giorno_candele_entrambi": "2024-09-11",
+   "ultimo_giorno_funding_entrambi": "2026-01-21",
+   "primo_giorno_utile_B": "2024-05-25"
+  },
+  "NEAR": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-11",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-11"
+  },
+  "NEO": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-18",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-18"
+  },
+  "ORDI": {
+   "primo_mese_usdc": "2024-02",
+   "primo_giorno_utile_A": "2024-03-23",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-03-23"
+  },
+  "PENGU": {
+   "primo_mese_usdc": "2025-07",
+   "primo_giorno_utile_A": "2025-08-22",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-08-22"
+  },
+  "PNUT": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-06",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-04-06"
+  },
+  "SOL": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-03"
+  },
+  "SUI": {
+   "primo_mese_usdc": "2024-02",
+   "primo_giorno_utile_A": "2024-03-09",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-03-09"
+  },
+  "TIA": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-25",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-25"
+  },
+  "TRUMP": {
+   "primo_mese_usdc": "2025-03",
+   "primo_giorno_utile_A": "2025-04-05",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-04-05"
+  },
+  "UNI": {
+   "primo_mese_usdc": "2025-06",
+   "primo_giorno_utile_A": "2025-07-16",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-07-16"
+  },
+  "WIF": {
+   "primo_mese_usdc": "2024-04",
+   "primo_giorno_utile_A": "2024-05-04",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-05-04"
+  },
+  "WLD": {
+   "primo_mese_usdc": "2024-03",
+   "primo_giorno_utile_A": "2024-04-13",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-04-13"
+  },
+  "WLFI": {
+   "primo_mese_usdc": "2025-09",
+   "primo_giorno_utile_A": "2025-10-08",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-10-08"
+  },
+  "XRP": {
+   "primo_mese_usdc": "2024-01",
+   "primo_giorno_utile_A": "2024-02-03",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2024-02-03"
+  },
+  "ZEC": {
+   "primo_mese_usdc": "2025-11",
+   "primo_giorno_utile_A": "2025-12-19",
+   "ultimo_giorno_candele_entrambi": "2026-10-31",
+   "ultimo_giorno_funding_entrambi": "2026-10-31",
+   "primo_giorno_utile_B": "2025-12-19"
+  }
+ },
+ "A": {
+  "numeri": {
+   "giorni": 974,
+   "annuo_capitale": 0.0009524815450751387,
+   "per_anno": {
+    "2024": -0.008462222390950154,
+    "2025": 0.010302311831703014,
+    "2026": -0.0008025965083751416
+   },
+   "sharpe_settimane": 0.09158777026782904,
+   "settimane": 137,
+   "t": 0.14866067413490244,
+   "asimmetria": -0.8587448078041129,
+   "curtosi": 6.111573800581905,
+   "discesa_settimanale": -0.014903100383226842,
+   "discesa_giornaliera": -0.015977613911603017,
+   "sharpe_365_giorni_fino_30_ottobre": 0.12005359441846117,
+   "costo_medio_annuo_capitale": 0.019363414828384617,
+   "funding_annuo": 0.022087597710358155,
+   "lordo_prezzo_annuo": -0.0017717013368984023,
+   "giorni_fermi": 0,
+   "monete_medie_in_posizione": 15.534907597535934,
+   "primo_giorno": "2024-03-01",
+   "ultimo_giorno": "2026-10-30",
+   "periodo_esame_dal": "2024-02-26",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 0.0019943578707737526,
+  "gruppo": [
+   "162 A"
+  ],
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "margine_mai_a_rischio": true
+  },
+  "esito": "non passa",
+  "margine_in_comune": {
+   "giorni_a_rischio": [],
+   "giorni_liquidati": [],
+   "gamba_isolata_a_rischio": 385,
+   "gamba_isolata_liquidata": 267,
+   "giorni_con_posizione": 974,
+   "leva_massima_conto": 4.12039850392593,
+   "equity_minima": 0.9929633720884419,
+   "base_massima": {
+    "valore": 0.05846551933459265,
+    "moneta": "ETHFI",
+    "giorno": "2025-10-01"
+   }
+  },
+  "controlli": {
+   "ordine_limite_0_02": {
+    "annuo_capitale": 0.009315562517559259,
+    "sharpe_settimane": 1.3983435066081003,
+    "t": 2.269721031057164,
+    "per_anno": {
+     "2024": 0.00015048080998833748,
+     "2025": 0.018803861400125646,
+     "2026": 0.007141588624423849
+    }
+   },
+   "senza_la_moneta_migliore": {
+    "moneta": "BIO",
+    "contributo_giornaliero_somma": 0.00400327530525927,
+    "annuo_capitale": -0.0005282987709303563,
+    "sharpe_settimane": -0.10169773732182456,
+    "per_anno": {
+     "2024": -0.008462222390950154,
+     "2025": 0.008531071563489007,
+     "2026": -0.0034289243297983755
+    }
+   },
+   "contributo_per_moneta_somma_giornaliera_top5": {
+    "BIO": 0.00400327530525927,
+    "ETHFI": 0.0036350417266875004,
+    "TIA": 0.0023210717870310008,
+    "KAITO": 0.001973551105095717,
+    "NEAR": 0.001360421488829438
+   },
+   "contributo_per_moneta_peggiori3": {
+    "SUI": -0.0015870686761511033,
+    "BOME": -0.001849804931990539,
+    "LINK": -0.002078910293246848
+   },
+   "cambi_di_lato": 52,
+   "ingressi_o_riaperture": 204,
+   "decisioni": 32,
+   "monete_non_ferme_per_decisione_media": 15.53125,
+   "decisioni_con_moneta_ferma_per_giorno_senza_funding": 0,
+   "decisioni_con_moneta_ferma_per_soglia": 471,
+   "chiusure_forzate_contratto_finito_o_buco": [
+    [
+     "IP",
+     "2026-06-29"
+    ]
+   ],
+   "persistenza_30_giorni": {
+    "coppie_moneta_giorno": 14716,
+    "stessa_segnalazione": 0.493000815438978,
+    "opposta": 0.09357162272356619,
+    "ferma_dopo": 0.4134275618374558
+   },
+   "regola_gamba_isolata": {
+    "giorni_a_rischio": 385,
+    "giorni_liquidati": 267
+   },
+   "G1": {
+    "corr_G1_giorni": 0.014875241237241727,
+    "corr_G1_settimane": -0.034642265515702826,
+    "settimane_comuni_G1": 136,
+    "G1_stesse_settimane_annuo": 0.6350417139682899,
+    "G1_stesse_settimane_sharpe": 2.5566080500256416,
+    "miscela_80_20_annuo": 0.5081656932777815,
+    "miscela_80_20_sharpe": 2.557890176504767
+   }
+  }
+ },
+ "B": {
+  "numeri": {
+   "giorni": 985,
+   "annuo_capitale": -0.055459540553135664,
+   "per_anno": {
+    "2024": -0.053552925493359396,
+    "2025": -0.05082245727515506,
+    "2026": -0.06304017543898385
+   },
+   "sharpe_settimane": -6.232580150015934,
+   "settimane": 138,
+   "t": -10.153265517745268,
+   "asimmetria": 1.4230063553915504,
+   "curtosi": 7.785582475653122,
+   "discesa_settimanale": -0.14312702534772215,
+   "discesa_giornaliera": -0.1466558438758786,
+   "sharpe_365_giorni_fino_30_ottobre": -3.495822233839752,
+   "costo_medio_annuo_capitale": 0.10381880784807958,
+   "funding_annuo": 0.045610251653184775,
+   "lordo_prezzo_annuo": 0.002749015641759139,
+   "giorni_fermi": 14,
+   "monete_medie_in_posizione": 6.903553299492386,
+   "primo_giorno": "2024-02-19",
+   "ultimo_giorno": "2026-10-30",
+   "periodo_esame_dal": "2024-02-19",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 9.413744833278498e-13,
+  "gruppo": [
+   "162 B"
+  ],
+  "condizioni": {
+   "netto_positivo": false,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "margine_mai_a_rischio": true
+  },
+  "esito": "non passa",
+  "margine_in_comune": {
+   "giorni_a_rischio": [],
+   "giorni_liquidati": [],
+   "gamba_isolata_a_rischio": 88,
+   "gamba_isolata_liquidata": 38,
+   "giorni_con_posizione": 971,
+   "leva_massima_conto": 3.043608574680133,
+   "equity_minima": 0.9926155005030299,
+   "base_massima": {
+    "valore": 0.05846551933459265,
+    "moneta": "ETHFI",
+    "giorno": "2025-10-06"
+   }
+  },
+  "controlli": {
+   "ordine_limite_0_02": {
+    "annuo_capitale": -0.010822409892965384,
+    "sharpe_settimane": -1.315277508074013,
+    "t": -2.1426698811020755,
+    "per_anno": {
+     "2024": -0.009368459486180454,
+     "2025": -0.006612815312370691,
+     "2026": -0.017414503295169616
+    }
+   },
+   "senza_la_moneta_migliore": {
+    "moneta": "ETHFI",
+    "contributo_giornaliero_somma": 0.007247158161015473,
+    "annuo_capitale": -0.06290530402140693,
+    "sharpe_settimane": -7.327725261523519,
+    "per_anno": {
+     "2024": -0.055003611666439634,
+     "2025": -0.06971840746171742,
+     "2026": -0.06296488725840797
+    }
+   },
+   "contributo_per_moneta_somma_giornaliera_top5": {
+    "ETHFI": 0.007247158161015473,
+    "DATAIP": 0.0007173837019137471,
+    "IP": -0.00024204843693263666,
+    "SOL": -0.0008706358055979105,
+    "PENGU": -0.0012711930144062252
+   },
+   "contributo_per_moneta_peggiori3": {
+    "1000BONK": -0.007839225800091061,
+    "BOME": -0.008120459616206003,
+    "BNB": -0.00895463507592902
+   },
+   "cambi_di_lato": 48,
+   "ingressi_o_riaperture": 567,
+   "decisioni": 141,
+   "monete_non_ferme_per_decisione_media": 6.900709219858156,
+   "decisioni_con_moneta_ferma_per_giorno_senza_funding": 0,
+   "decisioni_con_moneta_ferma_per_soglia": 3331,
+   "chiusure_forzate_contratto_finito_o_buco": [
+    [
+     "MATIC",
+     "2024-09-11"
+    ]
+   ],
+   "persistenza_30_giorni": {
+    "coppie_moneta_giorno": 6951,
+    "stessa_segnalazione": 0.23852683067184577,
+    "opposta": 0.09149762624082866,
+    "ferma_dopo": 0.6699755430873255
+   },
+   "regola_gamba_isolata": {
+    "giorni_a_rischio": 88,
+    "giorni_liquidati": 38
+   },
+   "G1": {
+    "corr_G1_giorni": 0.04651022629696089,
+    "corr_G1_settimane": 0.0242822666388297,
+    "settimane_comuni_G1": 137,
+    "G1_stesse_settimane_annuo": 0.639985442143843,
+    "G1_stesse_settimane_sharpe": 2.5846776138300624,
+    "miscela_80_20_annuo": 0.5009111705525885,
+    "miscela_80_20_sharpe": 2.5281013775827126
+   }
+  }
+ }
+}
