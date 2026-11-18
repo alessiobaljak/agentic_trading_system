@@ -281,6 +281,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   −33,9% (`prove/P038_risultati.md`). Capito: con un conto da 100'000 dollari diviso in 100 posizioni che cambiano quasi tutte ogni
   mese, le sole commissioni minime pesano circa il 2% l'anno: una strategia mensile a molti titoli deve rendere più di questo prima di
   tutto il resto. Nel conto: 93.
+* **La prova 39** (l'emissione netta di azioni nell'S&P 500: comprate le 50 aziende che hanno ridotto di più le azioni in un anno,
+  vendute le 50 che le hanno aumentate; idea I42): **bocciata.** Fatta con i dati della SEC giusti questa volta (la data di deposito
+  di ogni numero e il codice SEC del simbolo di allora: i due difetti della prova 31; `dati/P039_*.csv.gz`, 95% dei membri coperti).
+  Prima dei costi comprati meno venduti +0,14% al mese (t 0,53): la direzione dello studio, ma non distinguibile dal caso; con i costi
+  −4,9% in 8 anni (`prove/P039_risultati.md`). Capito: anche l'effetto che Fama e French trovavano fra le grandi, dopo il 2017 nell'S&P
+  500 è al massimo di 1-2% l'anno prima dei costi. Strumento nuovo: le azioni in circolazione con la data di deposito servono anche
+  per la misura vera dei giorni dei dividendi (idea I46). Nel conto: 95.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
