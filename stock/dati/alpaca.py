@@ -274,6 +274,37 @@ def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetim
     return out
 
 
+def dividendi_pagati(simboli: list[str], inizio, fine, a_gruppi_di: int = 50) -> pd.DataFrame:
+    """I dividendi in contanti con la data di stacco, la **data di pagamento** e l'importo per azione (prova 40,
+    `stock/prove/P040_dividendi_pagati.md`), per molti titoli con poche richieste. Colonne: simbolo, stacco, pagamento, importo."""
+    righe: list[dict] = []
+    voluti = set(simboli)
+    da0 = inizio.date() if isinstance(inizio, datetime) else inizio
+    a = fine.date() if isinstance(fine, datetime) else fine
+    for i in range(0, len(simboli), a_gruppi_di):
+        gruppo = simboli[i:i + a_gruppi_di]
+        da = da0
+        while da <= a:
+            fino = min(a, da + timedelta(days=360))
+            parametri = {"symbols": ",".join(gruppo), "types": "cash_dividend", "start": da.isoformat(), "end": fino.isoformat(),
+                         "limit": 1000}
+            while True:
+                j = _get(f"{DATI_URL}/v1/corporate-actions", parametri)
+                for x in (j.get("corporate_actions") or {}).get("cash_dividends", []):
+                    if x.get("symbol") in voluti and x.get("payable_date"):
+                        righe.append({"simbolo": x["symbol"], "stacco": x["ex_date"], "pagamento": x["payable_date"],
+                                      "importo": float(x["rate"])})
+                token = j.get("next_page_token")
+                if not token:
+                    break
+                parametri["page_token"] = token
+            da = fino + timedelta(days=1)
+    df = pd.DataFrame(righe, columns=["simbolo", "stacco", "pagamento", "importo"])
+    for c in ("stacco", "pagamento"):
+        df[c] = pd.to_datetime(df[c]).dt.date
+    return df.drop_duplicates().sort_values(["pagamento", "simbolo"]).reset_index(drop=True)
+
+
 def notizie(simboli: list[str] | None, inizio: datetime, fine: datetime, pagine_massime: int = 40,
             pausa: float = 0.0) -> tuple[list[dict], bool]:
     """Le notizie (fonte Benzinga) con uno dei simboli, fra due istanti, dalla più vecchia; senza il testo intero.
