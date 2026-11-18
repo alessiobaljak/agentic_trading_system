@@ -1,19 +1,19 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-11-15.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-11-16.zip",
  "procedure": {
   "N-001": {
-   "trade": 76,
+   "trade": 81,
    "netto": {
-    "n": 76,
-    "giorni": 24,
-    "media": -0.023606306737415345,
-    "basso": -0.054384870672408894,
-    "alto": 0.01425549889567404,
-    "p": 0.906009399060094
+    "n": 81,
+    "giorni": 26,
+    "media": -0.02238624358522162,
+    "basso": -0.05086469540797249,
+    "alto": 0.013306557076377502,
+    "p": 0.9027097290270973
    },
-   "netto_doppio": -0.02539578042162587,
-   "caso_netto": -0.006093673662162913,
-   "senza_migliore": -0.03505896888287811,
+   "netto_doppio": -0.02417636704201174,
+   "caso_netto": -0.0038425040337981544,
+   "senza_migliore": -0.03305783521550623,
    "per_moneta": {
     "1000PEPEUSDT": {
      "trade": 2,
@@ -56,8 +56,8 @@
      "netto": -0.07319047438439678
     },
     "FARTCOINUSDT": {
-     "trade": 1,
-     "netto": -0.1391752877973906
+     "trade": 2,
+     "netto": -0.0343702624088533
     },
     "GUSDT": {
      "trade": 3,
@@ -88,8 +88,8 @@
      "netto": -0.05975981452859345
     },
     "ONEUSDT": {
-     "trade": 6,
-     "netto": 0.06692434534837488
+     "trade": 7,
+     "netto": 0.04409571073566733
     },
     "PENGUUSDT": {
      "trade": 1,
@@ -100,20 +100,24 @@
      "netto": -0.03185775874013042
     },
     "PROMUSDT": {
-     "trade": 2,
-     "netto": -0.004599001428537516
+     "trade": 3,
+     "netto": 6.486229220616438e-05
     },
     "PYTHUSDT": {
      "trade": 1,
      "netto": -0.16201513756906086
+    },
+    "RAREUSDT": {
+     "trade": 1,
+     "netto": -0.06434248810333107
     },
     "REZUSDT": {
      "trade": 5,
      "netto": 0.006977574674703497
     },
     "SAGAUSDT": {
-     "trade": 1,
-     "netto": -0.008760556844547438
+     "trade": 2,
+     "netto": 0.02471212856329954
     },
     "SPXUSDT": {
      "trade": 1,
@@ -160,21 +164,21 @@
      "netto": -0.09722483660130718
     }
    },
-   "esito": "in corso (76 trade chiusi su 400)"
+   "esito": "in corso (81 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 117,
+   "trade": 144,
    "netto": {
-    "n": 117,
-    "giorni": 21,
-    "media": 0.0006370711368496316,
-    "basso": -0.011276256496465515,
-    "alto": 0.01402311121707861,
-    "p": 0.43975602439756023
+    "n": 144,
+    "giorni": 22,
+    "media": 0.0006729335035197857,
+    "basso": -0.006543710324646854,
+    "alto": 0.012316966929114515,
+    "p": 0.42305769423057693
    },
-   "netto_doppio": -0.0011219032221247284,
-   "caso_netto": -0.0026475170760352183,
-   "senza_migliore": -0.003368645554036688,
+   "netto_doppio": -0.0010937331631468805,
+   "caso_netto": -0.002780539790646018,
+   "senza_migliore": -0.0024620973024012255,
    "per_moneta": {
     "1000BONKUSDT": {
      "trade": 1,
@@ -185,20 +189,24 @@
      "netto": -0.00044720676777696257
     },
     "1000SHIBUSDT": {
-     "trade": 1,
-     "netto": 0.008992192881744934
+     "trade": 2,
+     "netto": 0.002805790856046344
     },
     "AAVEUSDT": {
      "trade": 1,
      "netto": -0.004693975269665838
+    },
+    "ACEUSDT": {
+     "trade": 1,
+     "netto": 0.01992732210755002
     },
     "ADAUSDT": {
      "trade": 2,
      "netto": -0.005611924242643205
     },
     "APTUSDT": {
-     "trade": 3,
-     "netto": -0.00194946541248858
+     "trade": 4,
+     "netto": -0.00168707655711623
     },
     "ARBUSDT": {
      "trade": 1,
@@ -228,9 +236,17 @@
      "trade": 1,
      "netto": -0.0043249915095315596
     },
+    "BOMEUSDT": {
+     "trade": 1,
+     "netto": 0.014658333333333242
+    },
     "BTCUSDT": {
      "trade": 5,
      "netto": 0.006410804761367109
+    },
+    "COTIUSDT": {
+     "trade": 1,
+     "netto": 0.0073731430755508386
     },
     "CRVUSDT": {
      "trade": 4,
@@ -249,8 +265,8 @@
      "netto": -0.010573045177222734
     },
     "EIGENUSDT": {
-     "trade": 1,
-     "netto": 0.06324609423434593
+     "trade": 2,
+     "netto": 0.037743327928405374
     },
     "ENAUSDT": {
      "trade": 3,
@@ -273,12 +289,16 @@
      "netto": -0.009427554929116342
     },
     "FETUSDT": {
-     "trade": 2,
-     "netto": -0.01005051055139553
+     "trade": 3,
+     "netto": -0.006236227571640639
     },
     "FILUSDT": {
      "trade": 1,
      "netto": -0.01667900588620017
+    },
+    "GALAUSDT": {
+     "trade": 1,
+     "netto": 0.008261919504643857
     },
     "GUSDT": {
      "trade": 1,
@@ -296,6 +316,18 @@
      "trade": 3,
      "netto": 0.021825377558751424
     },
+    "JTOUSDT": {
+     "trade": 1,
+     "netto": 0.010404424103737788
+    },
+    "JUPUSDT": {
+     "trade": 1,
+     "netto": 0.02536049382716057
+    },
+    "LDOUSDT": {
+     "trade": 1,
+     "netto": 0.003167520061138764
+    },
     "LINKUSDT": {
      "trade": 2,
      "netto": -0.000293600268501813
@@ -312,9 +344,13 @@
      "trade": 2,
      "netto": -0.00962983164690626
     },
+    "MINAUSDT": {
+     "trade": 1,
+     "netto": 0.007789041095890539
+    },
     "MORPHOUSDT": {
-     "trade": 2,
-     "netto": -0.010324051688740302
+     "trade": 3,
+     "netto": -0.011015190480622458
     },
     "NEARUSDT": {
      "trade": 2,
@@ -328,9 +364,21 @@
      "trade": 2,
      "netto": -0.02182267599880742
     },
-    "OPUSDT": {
+    "ONGUSDT": {
      "trade": 1,
-     "netto": 0.03564057052297944
+     "netto": 0.00022020202020203326
+    },
+    "OPUSDT": {
+     "trade": 2,
+     "netto": 0.02377135454052661
+    },
+    "ORDIUSDT": {
+     "trade": 1,
+     "netto": 0.006181755986317119
+    },
+    "PENDLEUSDT": {
+     "trade": 1,
+     "netto": -0.022961346237180467
     },
     "PENGUUSDT": {
      "trade": 2,
@@ -345,8 +393,8 @@
      "netto": -0.014227038222556974
     },
     "RAREUSDT": {
-     "trade": 1,
-     "netto": -0.019380487804877982
+     "trade": 3,
+     "netto": -0.03189482053159148
     },
     "RENDERUSDT": {
      "trade": 1,
@@ -357,20 +405,24 @@
      "netto": 0.009371130874954552
     },
     "SEIUSDT": {
-     "trade": 1,
-     "netto": 0.01668591549295775
+     "trade": 2,
+     "netto": 0.007710337425623239
     },
     "SOLUSDT": {
      "trade": 4,
      "netto": 0.0047748790886953515
+    },
+    "SPXUSDT": {
+     "trade": 1,
+     "netto": -0.005266204506065828
     },
     "STEEMUSDT": {
      "trade": 1,
      "netto": -0.07684075860465106
     },
     "STRKUSDT": {
-     "trade": 1,
-     "netto": 0.033494117647058695
+     "trade": 2,
+     "netto": 0.028838088826622442
     },
     "STXUSDT": {
      "trade": 1,
@@ -379,6 +431,10 @@
     "SUIUSDT": {
      "trade": 3,
      "netto": -8.012682569877652e-05
+    },
+    "SUSHIUSDT": {
+     "trade": 1,
+     "netto": 0.011151601908657296
     },
     "SYNUSDT": {
      "trade": 1,
@@ -409,12 +465,16 @@
      "netto": 0.0389340189554346
     },
     "VIRTUALUSDT": {
-     "trade": 3,
-     "netto": -0.00014193601418815519
+     "trade": 4,
+     "netto": -0.001546435705027359
     },
     "VVVUSDT": {
      "trade": 1,
      "netto": 0.008801687388987813
+    },
+    "WIFUSDT": {
+     "trade": 1,
+     "netto": 0.01078851298190411
     },
     "WLDUSDT": {
      "trade": 2,
@@ -435,55 +495,91 @@
     "ZECUSDT": {
      "trade": 2,
      "netto": -0.0374459614551658
+    },
+    "ZENUSDT": {
+     "trade": 1,
+     "netto": 0.01017147223637285
+    },
+    "ZROUSDT": {
+     "trade": 1,
+     "netto": -0.03457305014417331
     }
    },
-   "esito": "in corso (117 trade chiusi su 400)"
+   "esito": "in corso (144 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 45,
+   "trade": 95,
    "netto": {
-    "n": 45,
-    "giorni": 16,
-    "media": -0.022223411624411316,
-    "basso": -0.05020182569886917,
-    "alto": 0.008773353139723791,
-    "p": 0.928007199280072
+    "n": 95,
+    "giorni": 17,
+    "media": -0.011765922330156605,
+    "basso": -0.0384717452050138,
+    "alto": 0.006764616512212285,
+    "p": 0.9224077592240776
    },
-   "netto_doppio": -0.026320643787876696,
-   "caso_netto": 0.018631075730805916,
-   "senza_migliore": -0.03185119445156188,
+   "netto_doppio": -0.0158705727331007,
+   "caso_netto": 0.013572373365200258,
+   "senza_migliore": -0.014608466166705223,
    "per_moneta": {
     "1000BONKUSDT": {
-     "trade": 1,
-     "netto": -0.06111513417975172
+     "trade": 2,
+     "netto": -0.03077339535596359
     },
     "1000PEPEUSDT": {
-     "trade": 2,
-     "netto": 0.012434323392241278
+     "trade": 3,
+     "netto": -0.018741354456571494
     },
     "1000SHIBUSDT": {
-     "trade": 2,
-     "netto": -0.036756979553301324
+     "trade": 3,
+     "netto": -0.022681580436375342
     },
     "AAVEUSDT": {
-     "trade": 2,
-     "netto": -0.008302848076077783
+     "trade": 3,
+     "netto": 0.014701718236799976
+    },
+    "ADAUSDT": {
+     "trade": 1,
+     "netto": 0.010655225263916799
+    },
+    "ALGOUSDT": {
+     "trade": 1,
+     "netto": -0.01844183201828768
+    },
+    "APTUSDT": {
+     "trade": 1,
+     "netto": -0.056256274397139434
     },
     "ARBUSDT": {
      "trade": 2,
      "netto": -0.04757029892027605
     },
-    "AVAXUSDT": {
+    "ARUSDT": {
      "trade": 1,
-     "netto": -0.011688810452050542
+     "netto": -0.03871684486742034
+    },
+    "ATOMUSDT": {
+     "trade": 1,
+     "netto": 0.004804872058626793
+    },
+    "AVAXUSDT": {
+     "trade": 2,
+     "netto": -0.031000566779177435
     },
     "BCHUSDT": {
      "trade": 2,
      "netto": -0.08150485289702511
     },
-    "CELRUSDT": {
+    "BOMEUSDT": {
      "trade": 1,
-     "netto": -0.05202360198033187
+     "netto": -0.07757614824247804
+    },
+    "CELRUSDT": {
+     "trade": 2,
+     "netto": -0.014840767193994093
+    },
+    "COTIUSDT": {
+     "trade": 1,
+     "netto": -0.012436892544532716
     },
     "CVCUSDT": {
      "trade": 1,
@@ -493,9 +589,41 @@
      "trade": 1,
      "netto": -0.010229553068836408
     },
-    "EIGENUSDT": {
+    "DOGEUSDT": {
      "trade": 1,
-     "netto": -0.0375497310129754
+     "netto": -0.009928301760897245
+    },
+    "EGLDUSDT": {
+     "trade": 1,
+     "netto": 0.007701452037366142
+    },
+    "EIGENUSDT": {
+     "trade": 2,
+     "netto": -0.046007610199307575
+    },
+    "ETCUSDT": {
+     "trade": 1,
+     "netto": 0.008140814998212776
+    },
+    "ETHFIUSDT": {
+     "trade": 1,
+     "netto": -0.10016464827712586
+    },
+    "ETHUSDT": {
+     "trade": 1,
+     "netto": 0.00932955094090783
+    },
+    "FARTCOINUSDT": {
+     "trade": 1,
+     "netto": -0.029478692050525272
+    },
+    "FETUSDT": {
+     "trade": 1,
+     "netto": 0.010422398554826405
+    },
+    "GALAUSDT": {
+     "trade": 1,
+     "netto": 0.06223917709857454
     },
     "GUSDT": {
      "trade": 1,
@@ -506,24 +634,36 @@
      "netto": 0.09288123142037773
     },
     "INJUSDT": {
-     "trade": 1,
-     "netto": 0.007248031140448993
+     "trade": 2,
+     "netto": -0.01649462238998847
     },
     "IOSTUSDT": {
      "trade": 1,
      "netto": 0.05346980808746247
     },
-    "JUPUSDT": {
+    "JTOUSDT": {
      "trade": 1,
-     "netto": 0.08863822463532485
+     "netto": -0.03977989077704167
+    },
+    "JUPUSDT": {
+     "trade": 2,
+     "netto": 0.12431707133764197
+    },
+    "LDOUSDT": {
+     "trade": 1,
+     "netto": 0.03775639104372362
     },
     "LINKUSDT": {
-     "trade": 1,
-     "netto": -0.016170540771977167
+     "trade": 2,
+     "netto": 0.007334497096738715
     },
     "LSKUSDT": {
      "trade": 1,
      "netto": 0.1194850806145116
+    },
+    "LTCUSDT": {
+     "trade": 1,
+     "netto": -0.006945752763078291
     },
     "MORPHOUSDT": {
      "trade": 1,
@@ -533,41 +673,85 @@
      "trade": 1,
      "netto": -0.07205877312175413
     },
-    "ONDOUSDT": {
+    "NEARUSDT": {
      "trade": 1,
-     "netto": -0.0644709241416745
+     "netto": 0.03704995583552271
+    },
+    "ONDOUSDT": {
+     "trade": 2,
+     "netto": -0.03577565650071305
     },
     "ONEUSDT": {
      "trade": 2,
      "netto": 0.0984945359076898
     },
+    "ONGUSDT": {
+     "trade": 1,
+     "netto": 0.007879187102450044
+    },
     "OPUSDT": {
      "trade": 1,
      "netto": -0.03222227002070611
     },
-    "PENDLEUSDT": {
+    "ORDIUSDT": {
      "trade": 1,
-     "netto": -0.06635566418240679
+     "netto": 0.0029087272483504156
+    },
+    "PENDLEUSDT": {
+     "trade": 2,
+     "netto": 0.009888464641097154
     },
     "PENGUUSDT": {
-     "trade": 1,
-     "netto": -0.06556950473686626
+     "trade": 2,
+     "netto": -0.07294812224810598
     },
     "POLUSDT": {
+     "trade": 2,
+     "netto": -0.029803689192304594
+    },
+    "PYTHUSDT": {
      "trade": 1,
-     "netto": -0.059637678466232406
+     "netto": -0.04171510446985882
+    },
+    "RENDERUSDT": {
+     "trade": 1,
+     "netto": 0.025804577249560205
     },
     "REZUSDT": {
      "trade": 2,
      "netto": 0.12610013876838683
     },
+    "SAGAUSDT": {
+     "trade": 1,
+     "netto": -0.010251382830196323
+    },
+    "SEIUSDT": {
+     "trade": 1,
+     "netto": 0.03362014765898189
+    },
+    "SOLUSDT": {
+     "trade": 1,
+     "netto": -0.022276594651919324
+    },
     "STEEMUSDT": {
      "trade": 1,
      "netto": -0.20592186330845322
     },
+    "SUIUSDT": {
+     "trade": 1,
+     "netto": 0.019097256210272452
+    },
+    "SUSHIUSDT": {
+     "trade": 1,
+     "netto": 0.02956357271692776
+    },
     "SYNUSDT": {
      "trade": 1,
      "netto": -0.18725275074874131
+    },
+    "TAOUSDT": {
+     "trade": 1,
+     "netto": 0.023919122247545728
     },
     "TRXUSDT": {
      "trade": 1,
@@ -577,13 +761,21 @@
      "trade": 1,
      "netto": 0.010298318288989541
     },
-    "VIRTUALUSDT": {
+    "VETUSDT": {
      "trade": 1,
-     "netto": -0.03268503420277049
+     "netto": 0.04265007864357837
+    },
+    "VIRTUALUSDT": {
+     "trade": 2,
+     "netto": -0.024710498512850104
+    },
+    "VTHOUSDT": {
+     "trade": 1,
+     "netto": -0.03402452596124901
     },
     "WIFUSDT": {
-     "trade": 1,
-     "netto": -0.041374631311929866
+     "trade": 2,
+     "netto": -0.029368633311102885
     },
     "XLMUSDT": {
      "trade": 2,
@@ -594,15 +786,23 @@
      "netto": -0.048344949672747606
     },
     "XRPUSDT": {
-     "trade": 1,
-     "netto": -0.006216234678749809
+     "trade": 2,
+     "netto": 0.005725360141467143
     },
     "ZECUSDT": {
      "trade": 1,
      "netto": -0.043743867776566595
+    },
+    "ZENUSDT": {
+     "trade": 1,
+     "netto": 0.0017044155177973266
+    },
+    "ZETAUSDT": {
+     "trade": 1,
+     "netto": -0.03010539099641259
     }
    },
-   "esito": "in corso (45 trade chiusi su 400)"
+   "esito": "in corso (95 trade chiusi su 400)"
   }
  }
 }

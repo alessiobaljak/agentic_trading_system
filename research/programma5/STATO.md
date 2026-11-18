@@ -135,6 +135,9 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   trade, intervallo al 95% −1,94; +1,24, p 0,72 contro la soglia 0,0167; a costi doppi −0,61%); con M-002 (2.904, p 0,17) e M-003
   (1.166, p 0,98) già bocciate, **nessuna procedura di scelta mensile del programma 5 passa la prova in avanti**. Seconda tornata in
   corso: N-001 76, N-002 117, N-003 45.
+  Aggiornamento del 18 novembre (dati fino al 16 novembre; il giro interrotto dal riavvio del contenitore e rilanciato, la seconda
+  tornata rifatta a parte): M-001c 455 (già bocciata, −0,49% a trade, p 0,77); M-002 3.196 (p 0,28) e M-003 1.361 (p 0,98) non passano;
+  seconda tornata in corso: N-001 81 (−2,24% a trade), N-002 144 (+0,07%, p 0,42), N-003 95 (−1,18%).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
