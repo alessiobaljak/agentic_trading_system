@@ -6,8 +6,8 @@
   "indices": 18,
   "commodities": 3,
   "forex": 4,
-  "metals": 13,
-  "errore": 5
+  "errore": 5,
+  "metals": 13
  },
  "sha256": "8c0bb5b65a6e66c5cf6d170bde4280908433b378b9a7a111fbdff66897a828db"
 }
