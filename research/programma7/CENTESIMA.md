@@ -44,9 +44,7 @@ contratto in USDC) sulle ultime L giornate intere. Per giorno e non per ciclo pe
 * Se d > +θ: **vendere il perpetuo in USDT e comprare quello in USDC**. Se d < −θ: il contrario. Se |d| ≤ θ: moneta ferma (nessuna posizione).
 * Tutte le monete non ferme hanno lo stesso valore nominale per gamba (pesi uguali, 1 diviso il numero di monete non ferme, al massimo 1 di
   valore nominale per gamba in totale). Capitale = valore nominale di una gamba (margine al 50% per gamba, nessuna leva sopra il 2x; il
-  rendimento è sul capitale). La liquidazione e il margine separato fra i due contratti si controllano come nella prova 161: si segna
-  il massimo spostamento fra i due prezzi a un'ora (`mark_1h` dove c'è; altrimenti il massimo delle candele giornaliere) e se avrebbe
-  messo a rischio il margine.
+  rendimento è sul capitale). Il controllo del margine è nella sezione «Chiusura della verifica», punto 11 (margine in comune).
 * Rendimento giornaliero di una moneta = (rendimento dell'apertura D all'apertura D+1 della gamba comprata meno quello della venduta) +
   funding vero di **tutte** le scadenze del giorno D di ciascun contratto: Σ f(venduto) − Σ f(comprato), con f il tasso pubblicato (chi è
 venduto incassa f quando è positivo, chi è comprato lo paga) − spese. Nota: sul conto la gamba in USDC richiede la modalità con più
@@ -62,11 +60,54 @@ garanzie di Binance (gli USDT valgono come margine); nel calcolo il capitale è 
   solo il primo giorno di ogni mese.
 * **B (veloce)**: L = 7 giorni, θ = 0,015% al giorno (circa 5,5% l'anno; lo 0,005% per ciclo di 8 ore), decisione solo il lunedì.
 Nessuna soglia, finestra o frequenza diversa dopo i risultati. Perché solo due: la differenza sta fra «persistente da un mese» e «da una
-settimana»; θ pari a circa 3 e 6 volte le spese di un cambio ammortizzate nel periodo di tenuta. Conta **2 prove**
+settimana»; le soglie corrispondono a circa 2,2% e 5,5% l'anno (un cambio di lato costa circa 0,24-0,28%, più di θ × i giorni di tenuta:
+la verifica lo ha notato; la soglia non si cambia). Conta **2 prove**
 (le due serie hanno probabilmente correlazione alta: la famiglia è una, `corretto_famiglie` nel conto).
 **Controlli descrittivi, non varianti** (si scrivono, non si scelgono): media di d per anno e per moneta; quota di giorni con la stessa
 segnalazione del mese dopo (persistenza); distribuzione della differenza fra i prezzi dei due contratti (il rischio di base); numero di
 cambi di lato; rendimento con ordine limite; rendimento senza la moneta migliore.
+
+## Chiusura della verifica (18 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTESIMA.md`, 14 punti). **Dove il testo sopra dice diversamente, vale questa sezione.**
+1. **Universo**: l'elenco fisso dei 40 simboli in USDC dell'archivio con il rispettivo in USDT, scritto in `VERIFICA_CENTESIMA.md` con il
+   primo mese; si copia nel rapporto con il primo giorno utile di ogni moneta. Nessuna moneta si aggiunge o si toglie dopo.
+2. **Storia**: si conta in giorni UTC interi con la candela giornaliera **e** almeno un funding pubblicato, per **tutti e due** i contratti.
+3. **Inizio**: una moneta entra alla prima decisione della variante con almeno **30** giorni interi di storia (per tutte e due le
+   varianti, come scritto nell'universo); la serie di ogni variante parte dal primo giorno con almeno una moneta non ferma; i giorni
+   senza posizione valgono 0 e restano nella serie.
+4. **Fine**: l'ultimo giorno D è il **30 ottobre 2026** (il 31 non ha l'apertura del giorno dopo nell'archivio mensile).
+5. **Funding nel segnale**: il giorno di un pagamento è la data UTC del suo orario; nel segnale della decisione D entrano i pagamenti delle
+   giornate D−L … D−1, cioè con orario da D−L 00:00 compreso a D 00:00 **escluso**. Solo i file mensili dell'archivio, mai il pannello.
+6. **Giorni senza funding**: se in una delle L giornate un contratto non ha nessun pagamento, la moneta è ferma a quella decisione; i casi
+   si contano e si scrivono.
+7. **Funding nel rendimento**: la posizione tenuta dall'apertura di D all'apertura di D+1 riceve o paga i pagamenti con orario **dopo** D 00:00
+   e **fino a** D+1 00:00 compreso (il pagamento delle 00:00 va alla posizione che c'era a quell'istante, come nel motore di G1: chi apre
+   alle 00:00 di D non conta il pagamento delle 00:00 di D; chi chiude all'apertura di D lo conta).
+8. **Pesi**: il rendimento si calcola a pesi costanti 1/N fra due decisioni (riequilibrio giornaliero implicito a costo zero: è un limite e
+   si scrive nel rapporto); le spese si pagano solo il giorno della decisione.
+9. **Spese**: spesa del giorno di decisione = somma su ogni gamba di (0,05% + scarto 0,01% su BTC, ETH, SOL o 0,02% sulle altre, uguale per
+   USDT e USDC) × |peso nuovo con segno − peso vecchio con segno|; un cambio di lato è chiusura più apertura delle due gambe; quando cambia N
+   si scambia la differenza dei pesi sulle gambe delle monete che restano. Lo scarto uguale per il USDC, meno liquido, è ottimista: si scrive
+   come limite.
+10. **Contratto che finisce** (MATIC, IP e simili): se un contratto non ha più candele o funding, la posizione si chiude all'ultima apertura
+    disponibile con le spese di chiusura e la moneta esce; il caso si scrive.
+11. **Margine (decisione della sessione principale)**: le due gambe stanno nello stesso portafoglio dei future di Binance con il **margine in
+    comune** (modalità con più garanzie, come il margine unico che il bot usa già sul demo): un profitto su una gamba copre la perdita
+    sull'altra. A ogni ora, con le quantità fisse dalla decisione e i prezzi del punto 12: equity del conto = capitale + profitto o perdita
+    di prezzo di tutte le gambe + funding e spese già maturati. Il giorno è **a rischio** se in una qualunque ora l'equity scende sotto il
+    **10% del capitale**; **liquidato** se scende sotto il mantenimento, 0,5% del valore delle gambe (come nella 161). Solo come descrizione,
+    non nell'esame: la regola per gamba isolata della verifica (margine 50% del valore iniziale ± la sola gamba, «a rischio» sotto il 10% del
+    valore corrente), la base massima fra i due prezzi e la leva massima.
+12. **Prezzi per il margine**: il prezzo mark a 1 ora di ogni contratto; dove manca un'ora, il prezzo scambiato a 1 ora dello stesso contratto;
+    mai le candele giornaliere. Le ore mancanti si contano.
+13. **Dati**: è autorizzato un solo script nuovo, `programma7/centesima_dati.py` (sul modello di `novantanovesima_dati.py`), che scarica da
+    `data.binance.vision` fundingRate, candele 1d e 1h e mark a 1 ora dei 40 simboli in USDC e dei corrispondenti in USDT, con impronte e
+    buchi in `risultati_centesima/`; i dati in `research/data/` (non committati).
+14. **Esame**: per ciascuna variante la serie settimanale netta (somma dei netti giornalieri per settimana da lunedì); tutte e due le varianti
+    in `nuove` di `corretto_famiglie`; i numeri dell'esame sono quelli di `numeri_settimana` sulla serie dopo `periodo()` (tagliata al 5
+    ottobre 2026); Sharpe su 365 giorni e numeri fino al 30 ottobre solo come descrizione. Ogni variante si giudica da sola: la prova è
+    promettente se almeno una variante supera tutto l'esame. Netto annuo su capitale = media giornaliera netta (giorni fermi compresi) × 365,
+    capitale = valore nominale di una gamba; per anno la stessa media nel sotto-periodo («ogni anno positivo» = media del sotto-periodo > 0).
 
 ## L'esame (regole approvate dal proprietario il 9 e l'11 novembre)
 Passa se: netto dopo i costi positivo; **ogni anno positivo** (2024, 2025, 2026 parziale); t almeno 3; Sharpe corretto almeno 0,80 con il
