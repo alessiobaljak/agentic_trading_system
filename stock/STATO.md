@@ -288,6 +288,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   −4,9% in 8 anni (`prove/P039_risultati.md`). Capito: anche l'effetto che Fama e French trovavano fra le grandi, dopo il 2017 nell'S&P
   500 è al massimo di 1-2% l'anno prima dei costi. Strumento nuovo: le azioni in circolazione con la data di deposito servono anche
   per la misura vera dei giorni dei dividendi (idea I46). Nel conto: 95.
+* **La prova 40** (i giorni con molti dividendi pagati: lo SPY solo quando i dollari pagati dall'S&P 500 sono sopra la mediana
+  dell'anno prima, regola dello studio di Hartzmark e Solomon; idea I46): **bocciata** (Sharpe 0,58 contro 0,85;
+  `prove/P040_risultati.md`). Un difetto dei dati visto nel risultato (2017-2019 a zero) e controllato con un metodo scritto prima di
+  guardare (`prove/P040b_risultati.md`): **Alpaca non ha le date di pagamento dei dividendi prima del 2020**. Sugli anni completi
+  (2021-2024) l'effetto non c'è: +5,7 contro +5,6 punti base al giorno (t 0,01). Capito: (1) la pressione dei dividendi reinvestiti,
+  forte nello studio fino al 2018, sull'S&P 500 del 2021-2024 non si vede; (2) **le date di pagamento di Alpaca partono dal 2020**:
+  ogni idea che le usa ha solo 4-5 anni. Nel conto: 97.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
