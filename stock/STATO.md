@@ -303,6 +303,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   appena depositato il bilancio annuale, non chi non cambia il testo. Trovato nel controllo dei dati e corretto nelle regole prima del
   calcolo (classifica dentro il tipo). Strumento nuovo: `dati/testi_bilanci.py` (le somiglianze di 22'490 bilanci 2015-2024 di
   733 aziende, `prove/dati/P041_somiglianze.csv.gz`; i testi non si salvano). Nel conto: 99.
+* **La prova 42, in corso dal 19 novembre** (gli attivisti: comprare in seduta, o all'asta d'apertura, dopo la pubblicazione di un
+  modulo 13D alla SEC, coperti con l'IWM, per 20 sedute; idea I43): regole committate prima di scaricare i depositi
+  (`prove/P042_attivisti.md`), caricatore `dati/attivisti.py`, primo passo `prove/p042a.py` (l'elenco dei 13D con l'ora, su GitHub). **Ferma
+  in attesa del proprietario**: il blocco della privacy non lascia più mettere l'indirizzo di contatto nei comandi della sessione, e la
+  SEC lo chiede in ogni richiesta; serve il segreto `SEC_CONTATTO` nel repository (il lavoro di GitHub lo legge già). Chiuse senza prova
+  le idee I13 (la deriva dopo i risultati nell'S&P 500: mancata sulle 10 grandi e sulle piccole), I29 (completata), I41 (= prova 40).
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS

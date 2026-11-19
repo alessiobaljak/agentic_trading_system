@@ -48,6 +48,8 @@ jobs:
           PROVA: ${{ inputs.prova }}
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          # l'indirizzo di contatto che la SEC chiede nelle richieste (segreto del repository, mai in un file)
+          SEC_CONTATTO: ${{ secrets.SEC_CONTATTO }}
         run: python -m "stock.prove.$PROVA"
       - name: Tieni i dati scaricati (anche se la prova si è fermata)
         if: always()
@@ -63,6 +65,8 @@ jobs:
           git config user.name "azioni-ricerca"
           git config user.email "noreply@anthropic.com"
           git add stock/prove/*_risultati.md stock/prove/serie/*.csv 2>/dev/null || true
+          # solo dati pubblici della SEC (elenchi di depositi), mai prezzi: file che iniziano con «sec_»
+          git add stock/prove/dati/sec_*.csv.gz || true
           if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
           git commit -m "stock: risultati della prova $PROVA (GitHub) [skip ci]"
           for i in 1 2 3 4; do
