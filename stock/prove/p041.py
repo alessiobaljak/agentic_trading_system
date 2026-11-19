@@ -38,8 +38,8 @@ QUATTRO_MESI = timedelta(days=122)
 TIPI = {"raw": "1Day_allora", "az": "azioni_allora", "asof": "-"}
 
 
-def carica_somiglianze(finta: bool = False) -> dict[int, list[tuple[date, float]]]:
-    """Codice SEC → [(deposito, somiglianza)] in ordine di deposito. Con `finta`, dai file per azienda già fatti in locale."""
+def carica_somiglianze(finta: bool = False) -> dict[int, list[tuple[date, float, str]]]:
+    """Codice SEC → [(deposito, somiglianza, tipo)] in ordine di deposito. Con `finta`, dai file per azienda già fatti in locale."""
     if finta:
         pezzi = [pd.read_csv(f) for f in (cartella_dati() / "sec" / "somiglianze").glob("*.csv")]
         s = pd.concat(pezzi)
@@ -47,13 +47,23 @@ def carica_somiglianze(finta: bool = False) -> dict[int, list[tuple[date, float]
         s = pd.read_csv(QUI / "dati" / "P041_somiglianze.csv.gz")
     s = s.dropna(subset=["somiglianza"])
     s["deposito"] = pd.to_datetime(s["deposito"]).dt.date
-    return {int(k): sorted(zip(g["deposito"], g["somiglianza"].astype(float))) for k, g in s.groupby("cik")}
+    return {int(k): sorted(zip(g["deposito"], g["somiglianza"].astype(float), g["tipo"])) for k, g in s.groupby("cik")}
 
 
-def segnale(bilanci: list[tuple[date, float]], giorno: date) -> float | None:
-    """La somiglianza del bilancio più recente depositato prima del giorno e non più di 4 mesi prima."""
-    noti = [(d, v) for d, v in bilanci if d < giorno and giorno - d <= QUATTRO_MESI]
-    return max(noti)[1] if noti else None
+def segnale(bilanci: list[tuple[date, float, str]], giorno: date) -> tuple[float, str] | None:
+    """La somiglianza (e il tipo) del bilancio più recente depositato prima del giorno e non più di 4 mesi prima."""
+    noti = [b for b in bilanci if b[0] < giorno and giorno - b[0] <= QUATTRO_MESI]
+    return max(noti)[1:] if noti else None
+
+
+def in_classifica(grezzi: dict[str, tuple[float, str]]) -> dict[str, float]:
+    """Il posto in classifica della somiglianza dentro il suo tipo di bilancio (aggiunta alle regole prima del calcolo): fra 0 e 1,
+    (posto − 0,5) / quanti, con il posto medio a pari valore; un 10-K si confronta solo con i 10-K, un 10-Q con i 10-Q."""
+    if not grezzi:
+        return {}
+    s = pd.DataFrame([(k, v, t) for k, (v, t) in grezzi.items()], columns=["s", "v", "tipo"])
+    s["q"] = (s.groupby("tipo")["v"].rank(method="average") - 0.5) / s.groupby("tipo")["v"].transform("size")
+    return dict(zip(s["s"], s["q"].astype(float)))
 
 
 def calcola(finta: bool = False) -> dict:
@@ -75,12 +85,12 @@ def calcola(finta: bool = False) -> dict:
     codici = {s: sorted(zip(g["giorno"].dt.date, g["cik"].astype(int))) for s, g in c.groupby("simbolo")}
     somi = carica_somiglianze(finta)
     rng = np.random.default_rng(41)
-    elenchi, mesi, cambi, con_segnale, mediane = {}, [], [], [], []
+    elenchi, mesi, cambi, con_segnale, mediane, annuali = {}, [], [], [], [], []
     prima = (set(), set())
     fuori = {"senza prezzo": 0, "senza codice": 0, "senza bilancio recente": 0}
     for k in decisioni:
         g, g_dopo = fini[k], fini[k + 1]
-        v = {}
+        grezzi = {}
         for s in sorted(membri[g]):
             if s not in rett or g not in rett[s].index:
                 fuori["senza prezzo"] += 1
@@ -93,7 +103,8 @@ def calcola(finta: bool = False) -> dict:
             if x is None:
                 fuori["senza bilancio recente"] += 1
                 continue
-            v[s] = x
+            grezzi[s] = x
+        v = in_classifica(grezzi)
         con_segnale.append(len(v))
         if finta and v:
             chiavi = list(v)
@@ -102,8 +113,9 @@ def calcola(finta: bool = False) -> dict:
         elenchi[g] = (alti, bassi)
         if not alti:
             continue
-        mediane.append((g.year, float(np.median([v[s] for s in alti])), float(np.median([v[s] for s in bassi])),
-                        float(np.median(list(v.values())))))
+        mediane.append((g.year, float(np.median([grezzi[s][0] for s in alti])), float(np.median([grezzi[s][0] for s in bassi])),
+                        float(np.median([x[0] for x in grezzi.values()]))))
+        annuali.append([float(np.mean([grezzi[s][1] == "10-K" for s in L])) for L in (alti, bassi, list(grezzi))])
         ra = [ritorno(rett[s], g, g_dopo) for s in alti]
         rb = [ritorno(rett[s], g, g_dopo) for s in bassi]
         mesi.append((g_dopo, float(np.mean(ra) - np.mean(rb))))
@@ -120,7 +132,7 @@ def calcola(finta: bool = False) -> dict:
     primo = out["costi"].esecuzioni["giorno"].min()
     gg = {kk: rendimenti(vv.valore[vv.valore.index >= primo]) for kk, vv in out.items()}
     return dict(g=gg, out=out, mesi=mesi, cambi=cambi, con_segnale=con_segnale, mediane=mediane, fuori=fuori, senza=senza,
-                simboli=len(simboli))
+                simboli=len(simboli), annuali=np.array(annuali))
 
 
 def main(finta: bool = False):
@@ -133,7 +145,8 @@ def main(finta: bool = False):
     if finta:
         print(f"PROVA LOCALE con il segnale mescolato (non è il risultato): Sharpe {sr(gc):.2f}, senza costi {sr(g['senza costi']):.2f}, "
               f"ordini {len(r.esecuzioni)}, commissioni {r.commissioni:,.0f}; mesi {len(ls)}; con il segnale per mese "
-              f"{c['con_segnale'][:3]}…{c['con_segnale'][-2:]}; fuori {c['fuori']}; senza prezzi {len(c['senza'])}")
+              f"{c['con_segnale'][:3]}…{c['con_segnale'][-2:]}; fuori {c['fuori']}; senza prezzi {len(c['senza'])}; annuali fra comprati, "
+              f"venduti e tutti {c['annuali'].mean(axis=0).round(2).tolist()}")
         return
     spy = comprare_e_tenere("SPY", a, b)
     miscela = carica_serie()["P025_miscela"]
@@ -166,7 +179,9 @@ def main(finta: bool = False):
              f"{np.median(c['con_segnale']):.0f} (minimo {min(c['con_segnale'])}); fuori, sommati sui mesi: {c['fuori']}. Ordini "
              f"{len(r.esecuzioni)}, liquidati {len(r.liquidati)}; commissioni {r.commissioni:,.0f} dollari, scarto {r.costo_scarto:,.0f}.",
              f"* Somiglianza mediana: comprati {med['comprati'].mean():.4f}, venduti {med['venduti'].mean():.4f}; di tutti, per anno: "
-             + " ".join(f"{y}: {x:.4f}" for y, x in per_anno.items()) + ".",
+             + " ".join(f"{y}: {x:.4f}" for y, x in per_anno.items()) + f". Bilanci annuali (10-K) in media fra i comprati "
+             f"{c['annuali'][:, 0].mean():.0%}, fra i venduti {c['annuali'][:, 1].mean():.0%}, fra tutti {c['annuali'][:, 2].mean():.0%} "
+             "(la classifica dentro il tipo: le due quote devono essere vicine).",
              f"* **Comprati meno venduti, il mese dopo, prima dei costi: {ls.mean():+.2%} al mese (t {t_di(ls):.2f})**, mesi positivi "
              f"{(ls > 0).mean():.0%}; prima del 2020 {prima20.mean():+.2%} (t {t_di(prima20):.2f}), dal 2020 {dopo20.mean():+.2%} (t "
              f"{t_di(dopo20):.2f}). Ogni mese cambia il {cambi[:, 0].mean():.0%} dei comprati e il {cambi[:, 1].mean():.0%} dei venduti.", "",

@@ -65,5 +65,20 @@ Da leggere accanto (non cambiano l'esito): comprati meno venduti mese per mese p
 il portafoglio ogni mese; la somiglianza mediana dei comprati e dei venduti; la somiglianza mediana per anno (per vedere il cambio di
 formato del 2019); comprati meno venduti prima e dopo il 2020; quanti membri hanno il segnale; l'anno per anno.
 
+## Aggiunta prima del calcolo (19 novembre 2026, dopo il controllo dei dati, prima di qualsiasi rendimento)
+
+Il controllo delle somiglianze scaricate (733 aziende, 22'490 bilanci, nessuno vuoto, nessuno sotto le 2'000 parole) ha trovato un
+difetto della regola: **i bilanci annuali somigliano all'anno prima molto più dei trimestrali** (10-K: media 0,997, mediana 0,998;
+10-Q: media 0,991, mediana 0,993). Con la classifica unica, da febbraio ad aprile i comprati sarebbero stati il 98-100% bilanci annuali
+e i venduti per l'76-88% trimestrali; in media sui mesi 50% di annuali fra i comprati contro 5% fra i venduti (22% fra tutti). La
+strategia avrebbe misurato **chi ha già depositato il bilancio annuale**, non chi cambia il testo. Si sono guardate solo le somiglianze e
+il tipo dei bilanci, nessun prezzo.
+
+**La correzione** (unica, scritta prima del calcolo): il segnale di ogni titolo è il suo **posto in classifica dentro il suo tipo** di
+bilancio quel mese (i 10-K messi in fila con i 10-K, i 10-Q con i 10-Q): (posto − 0,5) / quanti, fra 0 e 1, con il posto medio a pari
+valore. Poi la scelta è quella di sopra (il 20% più alto comprato, il più basso venduto, al massimo 50, a pari valore in ordine
+alfabetico). Da leggere accanto: la quota dei bilanci annuali fra i comprati, i venduti e tutti (le prime due devono essere vicine). La
+regola con la classifica unica **non si calcola**. Nel conto restano 2 prove.
+
 **Se passa uno dei due esami:** revisore separato, poi il periodo chiuso (dal 2 gennaio 2025 al 30 settembre 2026) **una volta**: la
 famiglia «testi della SEC» non l'ha mai usato.

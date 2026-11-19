@@ -2,6 +2,8 @@
 from collections import Counter
 from datetime import date
 
+import pytest
+
 from stock.dati import testi_bilanci as t
 
 
@@ -30,7 +32,17 @@ def test_precedente_stesso_tipo_fra_9_e_15_mesi():
 
 def test_segnale_della_prova_41_ultimo_bilancio_entro_4_mesi():
     from stock.prove import p041
-    b = [(date(2018, 1, 10), 0.95), (date(2018, 4, 20), 0.99), (date(2018, 8, 1), 0.97)]
-    assert p041.segnale(b, date(2018, 5, 31)) == 0.99
-    assert p041.segnale(b, date(2018, 8, 1)) == 0.99                        # il deposito dello stesso giorno non conta ancora
+    b = [(date(2018, 1, 10), 0.95, "10-K"), (date(2018, 4, 20), 0.99, "10-Q"), (date(2018, 8, 1), 0.97, "10-Q")]
+    assert p041.segnale(b, date(2018, 5, 31)) == (0.99, "10-Q")
+    assert p041.segnale(b, date(2018, 8, 1)) == (0.99, "10-Q")              # il deposito dello stesso giorno non conta ancora
     assert p041.segnale(b, date(2019, 1, 31)) is None                        # l'ultimo è di più di 4 mesi prima
+
+
+def test_classifica_della_prova_41_dentro_il_tipo_di_bilancio():
+    from stock.prove import p041
+    q = p041.in_classifica({"A": (0.999, "10-K"), "B": (0.990, "10-K"), "C": (0.995, "10-Q"), "D": (0.980, "10-Q"),
+                            "E": (0.980, "10-Q"), "F": (0.970, "10-K")})
+    # un 10-K quasi uguale all'anno prima non batte un 10-Q per il solo tipo: ognuno è messo in fila con quelli del suo tipo
+    assert q["A"] == pytest.approx(5 / 6) and q["C"] == pytest.approx(5 / 6) and q["F"] == pytest.approx(1 / 6) and q["B"] == 0.5
+    assert q["D"] == q["E"] == pytest.approx(1 / 3)                          # a pari valore lo stesso posto (medio: 1,5 su 3)
+    assert p041.in_classifica({"X": (0.9, "10-K")}) == {"X": 0.5} and p041.in_classifica({}) == {}
