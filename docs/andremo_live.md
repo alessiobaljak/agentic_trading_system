@@ -823,3 +823,7 @@ resti sotto il minimo.
 (terza volta su quattro dal 17 novembre; scartate in `research/idee/LOG.md`): le idee con un dato nuovo sono quasi finite; le prossime
 verranno soprattutto dai dati che raccogliamo noi in avanti (posizioni di Hyperliquid oltre i tre mesi, verso febbraio 2027; storia più
 lunga dei perpetui su azioni). Prova in avanti del programma 5 e conto a tavolino aggiornati (`research/programma5/STATO.md`).
+**19 novembre, sera**: raccolte delle 12:20, 16:20 e 20:20 regolari, nessuna chiusura nuova. La seconda tornata della prova in avanti del
+programma 5 da domani si lancia a parte (`SALTA_AVANTI2=1`, `research/programma5/avanti/aggiorna.sh`). G1 e ricerca: nessun passo nuovo
+nel pomeriggio (scout già passato alle 08:17). **Capito oggi**: vedi la voce delle 04:40 (gli scarti di un giorno fra demo e paper si
+compensano il giorno dopo).
