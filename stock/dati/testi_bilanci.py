@@ -46,7 +46,13 @@ def _richiesta(url: str) -> requests.Response:
         if attesa > 0:
             time.sleep(attesa)
         _ultimo[0] = time.monotonic()
-        r = requests.get(url, headers=intestazione(), timeout=120)
+        try:
+            r = requests.get(url, headers=intestazione(), timeout=120)
+        except (requests.ConnectionError, requests.Timeout):   # la SEC chiude a volte la connessione: si riprova
+            if n == 4:
+                raise
+            time.sleep(2 ** (n + 2))
+            continue
         if r.status_code in (200, 404):
             return r
         time.sleep(2 ** (n + 1))
