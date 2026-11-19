@@ -17,4 +17,8 @@ python3 -m research.programma5.strumenti.scarico unisci "$TMP"
 # i giorni che mancano nell'archivio pubblico (il 28 ottobre 2026 per tutte le monete) dall'interfaccia pubblica di Binance
 python3 -m research.programma5.strumenti.buchi_archivio_minuti > "$TMP/buchi_archivio_minuti.log" 2>&1 || true
 PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti.py
-PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py
+# la seconda tornata si puo' lanciare a parte (SALTA_AVANTI2=1): dal 18 novembre 2026 scarico, prima e seconda tornata insieme
+# superano il limite di tempo di un comando del giro del mattino (50 minuti) e la seconda va rifatta a mano
+if [ "${SALTA_AVANTI2:-0}" != 1 ]; then
+  PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py
+fi

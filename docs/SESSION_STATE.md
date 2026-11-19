@@ -54,7 +54,10 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   mancanti, file vecchi), le voci rimaste del backlog P32.
 - Idee passate a strategy-scout il 12 novembre: differenze di funding fra borse, base dei future trimestrali, dominanza del Bitcoin.
 - Decisione aperta: la variante di G1 con il tetto del 20% per moneta (prova 152) al revisore e poi nel paper accanto a G1?
-- Ogni mattina alle 04:17: log-bot e stato dalla macchina (prossime richieste 0758 e 0759), voce 8 del piano di G1.
+- Ogni mattina alle 04:17: log-bot e stato dalla macchina (prossime richieste 0762 e 0763), voce 8 del piano di G1.
+- Ogni mattina alle 06:13: `SALTA_AVANTI2=1 bash research/programma5/avanti/aggiorna.sh <scratchpad>/impronte_avanti` e, finito quello,
+  `PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py` come comando a parte (insieme superano i 50 minuti);
+  i commit mentre gira qualcosa in background si fanno senza `git stash` (add dei soli file, poi fetch e merge).
 - Lunedì 23 novembre: riepilogo settimanale, gate2-reconciler (il funding si giudica contro il mercato vero, non contro il demo; la
   quota a commissione piena con 13 giorni a regime), portfolio-allocator.
 - Il contesto di questa conversazione è molto lungo: conviene compattarla.
