@@ -26,3 +26,11 @@ def test_precedente_stesso_tipo_fra_9_e_15_mesi():
     assert t.precedente(b, 4) == 1                                           # 10-Q di maggio con quello di maggio
     assert t.precedente(b, 0) is None
     assert t.precedente(b, 5) is None                                        # il 10-K di 7 mesi prima è troppo vicino
+
+
+def test_segnale_della_prova_41_ultimo_bilancio_entro_4_mesi():
+    from stock.prove import p041
+    b = [(date(2018, 1, 10), 0.95), (date(2018, 4, 20), 0.99), (date(2018, 8, 1), 0.97)]
+    assert p041.segnale(b, date(2018, 5, 31)) == 0.99
+    assert p041.segnale(b, date(2018, 8, 1)) == 0.99                        # il deposito dello stesso giorno non conta ancora
+    assert p041.segnale(b, date(2019, 1, 31)) is None                        # l'ultimo è di più di 4 mesi prima
