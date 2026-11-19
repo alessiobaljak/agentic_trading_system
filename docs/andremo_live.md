@@ -814,3 +814,8 @@ nessuna chiusura nuova. Lo scout delle 12:30 non trova idee forti (`research/ide
 20:17. G1: nessun passo nuovo fino alla lettura del mattino. **Capito oggi**: la prova 162 (funding fra USDT e USDC) chiude un'altra
 strada del guadagno «senza prezzo» su Binance: il funding coperto (161) rende poco, circa +3% l'anno dal 2022, e questa rende quasi
 zero dopo le spese.
+**19 novembre, 04:40 UTC, il dodicesimo ribilancio del demo a 1.000 USDT** (`ops/results/0760`, `0761`): 13 ordini tutti a limite, nessun
+errore nuovo, gli stessi 3 rifiuti più IRYSUSDT che sul demo non c'è. Demo +2,39% dall'8 novembre, paper G1 +3,60%. Il 18 novembre il demo
+recupera 0,51 punti sul paper, quasi tutto lo scarto del 17. Raccolta delle 04:20: 24 fonti su 25. **Capito oggi**: gli scarti di un giorno
+solo fra demo e paper si compensano spesso il giorno dopo; conta la somma su più giorni, che a regime viene dalle monete mancanti e dai
+resti sotto il minimo.

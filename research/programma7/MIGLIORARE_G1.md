@@ -429,3 +429,11 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   11.143,37), vicino al calcolo. Il resto dello scarto del giorno (circa 0,3 punti) **non si spiega con i prezzi del mercato vero**: le
   cause possibili sono i prezzi propri del conto demo (ha libri e prezzi suoi, come il funding) e le ore diverse delle letture (il paper
   scrive l'equity verso le :06 di ogni ora, il demo verso le :35); la riga del 18 restituisce già +0,23. Non è un costo dell'esecuzione.
+* **19 novembre 2026, 04:40 UTC, voce 8, il dodicesimo ribilancio a 1.000 USDT** (`ops/results/0760-19nov-log-ribilancio-1000.md`,
+  `0761-19nov-stato-ribilancio-1000.md`): 13 ordini, **tutti a limite**; 41 variazioni sotto il minimo (8,4% del conto); gli stessi 3
+  rifiutati (EVAAUSDT, UAIUSDT, LITUSDT) e una moneta nuova che sul demo non c'è, **IRYSUSDT** (+0,37% nel paper); nessun errore nuovo nel
+  registro; paper G1, G11 e G1 neutra ribilanciati alle 00:09-00:18, ordini limite del paper 58 eseguiti su 58. Scarto fra posizioni vere e
+  volute 14,0%; esposizione lorda paper 200,0%, demo 198,3%. Equity del demo 1.023,90 (+2,39% dall'8 novembre), G1 nel paper 11.000,82
+  (+3,60%): il demo 1,21 punti sotto (ieri 1,59). **Il 18 novembre il demo fa +0,51 punti sul paper** (−0,99% contro −1,50%): restituisce
+  quasi tutto lo scarto del 17 (−0,62), che quindi veniva in gran parte dalle ore diverse delle letture o dai prezzi propri del demo, come
+  scritto ieri; sui due giorni −0,11 punti. Dal 9 novembre (11 giorni) demo +2,88%, paper +5,12%, −0,20 punti al giorno.
