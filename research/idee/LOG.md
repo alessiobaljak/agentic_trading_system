@@ -128,3 +128,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   (reversal): nessuna voce con quel nome, ma è un indicatore sul prezzo coperto dalle prove di momento e inversione dei programmi 5-6; (4) funding fra contratti
   della stessa moneta in valuta diversa: la 162 (no per le spese dei cambi di lato). Nessun dato nuovo né fatto in avanti nei nostri dati che lo giustifichi:
   non vale abbassare lo Sharpe corretto delle strategie in corso. Nessuna riga di registro.
+
+- 19 novembre 2026 (giro delle 08:17): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido, dopo la prova 162). Controllato: (1) perpetui
+  Binance su azioni, petrolio e oro (TradFi): il weekend è la prova 151 (dati troppo corti, numeri negativi, ricalcolo mensile a tavolino), il trader 1 e
+  l'idea 41 del registro li tengono fuori per i pochi mesi di storia (da giugno 2026); un'altra regola sugli stessi contratti ripeterebbe la stessa
+  mancanza di dati; (2) le scartate dei giri 13-18 novembre (annunci, calendario macro, ora del funding, altre borse, ritorno a breve, Amihud) restano
+  scartate: nessun dato nuovo né fatto in avanti nei nostri dati le cambia; (3) nessun'idea del proprietario aperta non provata. Con 332 prove nel conto,
+  una prova senza un perché forte abbassa lo Sharpe corretto di G1 e delle altre in corso. Nessuna riga di registro.

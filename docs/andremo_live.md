@@ -819,3 +819,7 @@ errore nuovo, gli stessi 3 rifiuti più IRYSUSDT che sul demo non c'è. Demo +2,
 recupera 0,51 punti sul paper, quasi tutto lo scarto del 17. Raccolta delle 04:20: 24 fonti su 25. **Capito oggi**: gli scarti di un giorno
 solo fra demo e paper si compensano spesso il giorno dopo; conta la somma su più giorni, che a regime viene dalle monete mancanti e dai
 resti sotto il minimo.
+**19 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25, nessuna chiusura nuova. Lo scout delle 08:17 non trova idee forti
+(terza volta su quattro dal 17 novembre; scartate in `research/idee/LOG.md`): le idee con un dato nuovo sono quasi finite; le prossime
+verranno soprattutto dai dati che raccogliamo noi in avanti (posizioni di Hyperliquid oltre i tre mesi, verso febbraio 2027; storia più
+lunga dei perpetui su azioni). Prova in avanti del programma 5 e conto a tavolino aggiornati (`research/programma5/STATO.md`).
