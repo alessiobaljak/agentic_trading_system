@@ -295,11 +295,14 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (2021-2024) l'effetto non c'è: +5,7 contro +5,6 punti base al giorno (t 0,01). Capito: (1) la pressione dei dividendi reinvestiti,
   forte nello studio fino al 2018, sull'S&P 500 del 2021-2024 non si vede; (2) **le date di pagamento di Alpaca partono dal 2020**:
   ogni idea che le usa ha solo 4-5 anni. Nel conto: 97.
-* **La prova 41, in corso dal 19 novembre** («lazy prices»: comprate le aziende che non cambiano il testo dei bilanci, vendute quelle
-  che lo cambiano di più; idea I40, studio di Cohen, Malloy e Nguyen): regole, programma e test committati prima del calcolo
-  (`prove/P041_lazy_prices.md`, `prove/p041.py`, `dati/testi_bilanci.py`). Lo scarico dei 10-K e 10-Q dalla SEC va per blocchi da 105
-  minuti (circa 25 secondi per azienda; 285 aziende su 733 al primo blocco) e riprende azienda per azienda; i testi non si salvano, solo
-  le somiglianze. Il programma gira in locale con il segnale mescolato a caso (non è il risultato): con il segnale 200-237 membri al mese.
+* **La prova 41** («lazy prices»: comprate le aziende dell'S&P 500 che non cambiano il testo dei bilanci, vendute quelle che lo
+  cambiano di più; idea I40, studio di Cohen, Malloy e Nguyen): **bocciata** (Sharpe con i costi −0,19 contro 0,84 dello SPY; nella
+  miscela 17% dei campionamenti; `prove/P041_risultati.md`). Comprati meno venduti +0,17% al mese (t 0,79); prima del 2020 +0,44%
+  (t 1,24), dal 2020 +0,02% (t 0,06). Capito: (1) **sull'S&P 500 dopo la pubblicazione dello studio l'effetto non si vede**; (2) i
+  bilanci annuali somigliano all'anno prima più dei trimestrali (0,997 contro 0,991): una classifica unica avrebbe comprato chi ha
+  appena depositato il bilancio annuale, non chi non cambia il testo. Trovato nel controllo dei dati e corretto nelle regole prima del
+  calcolo (classifica dentro il tipo). Strumento nuovo: `dati/testi_bilanci.py` (le somiglianze di 22'490 bilanci 2015-2024 di
+  733 aziende, `prove/dati/P041_somiglianze.csv.gz`; i testi non si salvano). Nel conto: 99.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
