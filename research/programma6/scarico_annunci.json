@@ -1,17 +1,17 @@
 {
  "quotazioni": {
-  "annunci": 2296,
-  "totale_dichiarato": 2296,
-  "sha256": "179e0c5061121319f57b1a58fbcd1231eac936114e526acdfdba57fbc20aeb91",
+  "annunci": 2297,
+  "totale_dichiarato": 2297,
+  "sha256": "2d90083ece08ca552152947987440612d18ac5a8f67c32bd4eabc0d55dcff333",
   "primo": 1500595579000,
-  "ultimo": 1794973527288
+  "ultimo": 1794982524513
  },
  "notizie": {
-  "annunci": 4512,
-  "totale_dichiarato": 4512,
-  "sha256": "a0e1a62048d6c4aac2b3425a75e1743e216ba6167ef33fb907bc502b79bb33cd",
+  "annunci": 4514,
+  "totale_dichiarato": 4514,
+  "sha256": "85bae2b8c9e2d1a919502ed78b83003469a1a8334208fa2b986f7db380432704",
   "primo": 1498975392000,
-  "ultimo": 1794982524513
+  "ultimo": 1795064401906
  },
  "rimozioni": {
   "annunci": 447,
