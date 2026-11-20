@@ -58,3 +58,4 @@ def test_simbolo_del_periodo_iniziato_per_ultimo_entro_un_anno():
     assert a.simbolo_al(p, date(2022, 6, 9)) is None                       # il periodo nuovo inizia lo stesso giorno: non ancora
     assert a.simbolo_al(p, date(2022, 6, 10)) == "META"
     assert a.simbolo_al([], date(2020, 1, 1)) is None
+
