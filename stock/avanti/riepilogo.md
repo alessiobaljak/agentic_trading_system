@@ -1,6 +1,6 @@
 # La misura in avanti — riepilogo
 
-Aggiornato il 2026-11-20 20:55 UTC da `python -m stock.avanti.avanti` (regole in `REGOLE.md`, operazioni in `diario.csv`).
+Aggiornato il 2026-11-20 20:56 UTC da `python -m stock.avanti.avanti` (regole in `REGOLE.md`, operazioni in `diario.csv`).
 
 * Giorni: 9; operazioni: 90 (saltate o non eseguite: 0).
 * In guadagno: 48%.
