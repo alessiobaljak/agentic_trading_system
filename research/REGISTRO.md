@@ -499,3 +499,10 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
 147. ~~**Il funding fra il perpetuo in USDT e quello in USDC della stessa moneta**~~ → prova 162 (no) (strategy-scout, 18 novembre): vendere il contratto che
    paga di più e comprare quello che paga meno, senza rischio sul prezzo; mai provato (`--cerca USDC` = 0); dati gratuiti di Binance dal
    gennaio 2024; regole in `programma7/CENTESIMA.md` → prova 162. Probabilità medio-bassa (lordo piccolo, spese di quattro gambe).
+148. **Il ciclo di Benner** (domanda del proprietario del 20 novembre, con la foto della tabella firmata Samuel Benner 1875: anni di
+   panico, anni di prezzi alti in cui vendere, anni di prezzi bassi in cui comprare, con distanze fisse di 16-18-20, 8-9-10 e 11-9-7 anni).
+   **Non si fa**: è una regola di calendario fissata nell'Ottocento sui prezzi agricoli e del ferro americani, senza un perché che valga
+   per le crypto; i segnali sono pochissimi (per il Bitcoin, dal 2010, un anno «vendi» nel 2016, uno «compra» nel 2023 e uno «vendi» nel
+   2026), quindi un t di 3 è fuori portata; e sulle borse ha sia colpi vicini (vendere nel 2007, comprare nel 1942) sia errori grandi
+   (vendere nel 2016: il Bitcoin passò da circa 400 a circa 19.000 dollari nel 2017). Una prova sulle azioni dal 1871 sarebbe dell'area
+   azioni (`stock/`), non di questa.
