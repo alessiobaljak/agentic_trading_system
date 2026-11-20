@@ -70,7 +70,8 @@ pubblicazione, cioè senza la parte che sale subito fuori seduta, e tiene 20 sed
 
 * **In seduta:** metà dello scarto misurato sulle quotazioni migliori di Alpaca (tutte le borse) per un campione di **500 ingressi in
   seduta** estratti a caso (seme 42), l'ultima quotazione valida prima della fine del minuto dell'ingresso (`stock/dati/scarto.py`); la
-  mediana si applica a tutti gli ingressi in seduta. Per IWM lo scarto misurato delle prove (`dati/ESITO_CONTROLLI_UNIVERSO.md`).
+  mediana si applica a tutti gli ingressi in seduta. Per IWM: metà della mediana dello scarto misurato **negli stessi minuti del
+  campione** (aggiunta del 20 novembre, prima del calcolo: IWM non è in `dati/ESITO_CONTROLLI_UNIVERSO.md`, che le regole citavano).
 * **Alle aste** (apertura e chiusura ufficiali): nessuno scarto.
 * **Slittamento** 2 punti base per lato; commissioni Interactive Brokers «fisso» (0,005 dollari ad azione, minimo 1 dollaro, massimo
   l'1%); prestito di IWM venduto allo scoperto 0,5% l'anno. Versione con tutti i costi raddoppiati.
