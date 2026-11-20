@@ -309,6 +309,13 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   in attesa del proprietario**: il blocco della privacy non lascia più mettere l'indirizzo di contatto nei comandi della sessione, e la
   SEC lo chiede in ogni richiesta; serve il segreto `SEC_CONTATTO` nel repository (il lavoro di GitHub lo legge già). Chiuse senza prova
   le idee I13 (la deriva dopo i risultati nell'S&P 500: mancata sulle 10 grandi e sulle piccole), I29 (completata), I41 (= prova 40).
+* **La prova 43** (il carry delle valute: comprate le 2 valute con il tasso più alto fra sei fondi delle valute, vendute le 2 con
+  il più basso; idea I47): **bocciata** (Sharpe con i costi −0,07; `prove/P043_risultati.md`). Comprati meno venduti +0,02% al mese
+  (t 0,13). Capito: (1) nel 2016-2024 il carry fra le valute dei paesi ricchi è stato **comprare le valute del rischio (dollaro
+  canadese, australiano, sterlina) e vendere i rifugi (franco, euro)**: si muove con le azioni (correlazione 0,42 con lo SPY) e non
+  rende; (2) il grande guadagno sullo yen del 2021-2024 qui non c'è, perché il franco e l'euro avevano tassi più bassi dello yen fino
+  al 2022. Chiusa senza prova l'idea delle aste del Tesoro (I48): lo studio della Fed di New York del 2026 dice che dopo il 2014
+  l'effetto si è indebolito molto. Nel conto: 101.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
