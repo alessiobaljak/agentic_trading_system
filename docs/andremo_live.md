@@ -837,3 +837,9 @@ stop, esposizione variabile) e trova ogni freno ragionevole già provato (prove 
 161): nessuna idea nuova (`research/idee/LOG.md`). Prova in avanti del programma 5: da oggi le due tornate finiscono nel tempo. **Capito
 oggi**: per avere guadagni più regolari non resta un freno di G1 da provare con i nostri dati; restano le misure in avanti (G1 contro G1
 neutra, la miscela con il funding coperto a tavolino) e i dati che raccogliamo noi. Da dire al proprietario nel riepilogo di lunedì.
+**20 novembre, 16:40 UTC, perché G1 non guadagna nel ribasso del 18-19 novembre** (domanda del proprietario;
+`research/programma7/misure_g1/voce12_ribasso_18_19nov.py`): il 18 le monete comprate scendono più di quelle vendute (−2,41% contro
+−1,10%), il 19 le vendute salgono (+1,20%) mentre il Bitcoin scende; una sola moneta piccola venduta, ICNTUSDT, sale del 21% e poi del
+28% e costa da sola circa 1,2 punti in due giorni. Raccolta delle 16:20: 24 fonti su 25. **Capito oggi**: G1 non guadagna nei ribassi in
+quanto tale, ma solo quando le monete vendute scendono più di quelle comprate; le fiammate delle monete piccole vendute sono il suo punto
+debole del 2026.

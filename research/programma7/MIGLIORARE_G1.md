@@ -444,3 +444,12 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   del paper** (ieri 198,3%): con le variazioni sotto il minimo che si accumulano il demo resta più scarico. Equity del demo 1.013,88 (+1,39%
   dall'8 novembre), G1 nel paper 10.887,14 (+2,53%): il demo 1,14 punti sotto (ieri 1,21). Il 19 novembre demo −1,11%, paper −1,13%. Dal 9
   novembre (12 giorni) demo +1,88%, paper +4,04%, −0,18 punti al giorno.
+* **20 novembre 2026, 16:40 UTC, voce 12, perché G1 non guadagna nel ribasso del 18-19 novembre** (domanda del proprietario;
+  `misure_g1/voce12_ribasso_18_19nov.py`, pesi del paper delle letture 0759 e 0761, prezzi mark del mercato vero dalle 00:05 alle 00:05,
+  senza funding e spese). **18 novembre** (Bitcoin −3,0%): il lato comprato scende in media del 2,41%, quello venduto solo dell'1,10%:
+  −1,31 punti (le monete comprate, più grandi, scendono più di quelle vendute). **19 novembre** (Bitcoin −1,3%): il lato comprato è quasi
+  fermo (−0,16%), quello venduto **sale** dell'1,20% mentre il mercato scende: −1,36 punti. Il peso maggiore è di due monete piccole vendute
+  che salgono di colpo: **ICNTUSDT** +20,7% e +28,0% (peso −2,5%: −0,51 e −0,69 punti, −1,2 in due giorni da sola) ed EVAAUSDT +22,5% e
+  +30,5% (−0,20 e −0,28; sul demo non c'è). **Capito**: G1 guadagna nei ribassi solo se le monete vendute scendono più di quelle comprate;
+  questa volta le piccole vendute hanno avuto fiammate al rialzo nonostante il mercato in calo: è lo stesso fatto della voce 12 (nel 2026 il
+  lato venduto perde sulle monete piccole) e della prova 156 (uscire dopo la fiammata non recupera). Nessuna prova nuova.
