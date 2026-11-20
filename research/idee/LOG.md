@@ -135,3 +135,11 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   mancanza di dati; (2) le scartate dei giri 13-18 novembre (annunci, calendario macro, ora del funding, altre borse, ritorno a breve, Amihud) restano
   scartate: nessun dato nuovo né fatto in avanti nei nostri dati le cambia; (3) nessun'idea del proprietario aperta non provata. Con 332 prove nel conto,
   una prova senza un perché forte abbassa lo Sharpe corretto di G1 e delle altre in corso. Nessuna riga di registro.
+
+- 20 novembre 2026 (giro delle 08:17, angolo: il rischio di G1): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Controllato con
+  `--cerca` e grep su `MIGLIORARE_G1.md`: ogni freno ragionevole è già provato. Esposizione secondo la volatilità passata: prova 42 (F6) e 155 (freno DVOL
+  delle opzioni, Moreira e Muir); secondo il carry atteso: F5C (prova 89); secondo il clima del mercato: prova 92; interruttore sulle perdite del conto: 93
+  e 94 (G1-S, G1N-S); tetto per moneta: 61 e 152; minimo di monete per lato: 124; fiammate sul lato venduto: 156 (la perdita sta nel giorno stesso, nessuna
+  regola che agisce dopo la recupera); neutra al mercato: 88; leva: 120 e 158; quota di funding coperto: 160 e 161. Non resta un segnale di rischio con dati
+  nostri, perché economico distinto e non già coperto; un altro freno sarebbe la stessa famiglia di prove con soglia scelta sui dati. `--cerca squeeze` = 0
+  ma è il lato venduto delle fiammate (156). Nessuna riga di registro.

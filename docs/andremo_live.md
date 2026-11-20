@@ -832,3 +832,8 @@ gli stessi rifiuti. Demo +1,39% dall'8 novembre, paper G1 +2,53% (il demo 1,14 p
 (−1,11% e −1,13%). L'esposizione del demo scende al 189,6% (paper 200%) perché le variazioni sotto il minimo arrivano a 47 (8,7% del
 conto). Raccolta delle 04:20: 23 fonti su 25. **Capito oggi**: con 1.000 USDT i resti sotto il minimo non solo spostano le monete, ma
 abbassano anche l'esposizione totale di qualche punto; sul conto vero con la stessa cifra succederebbe lo stesso.
+**20 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 22 fonti su 25, nessuna chiusura nuova. Lo scout guarda il rischio di G1 (freni,
+stop, esposizione variabile) e trova ogni freno ragionevole già provato (prove 42, 61, 88, 89, 92-94, 120, 124, 152, 155, 156, 158, 160,
+161): nessuna idea nuova (`research/idee/LOG.md`). Prova in avanti del programma 5: da oggi le due tornate finiscono nel tempo. **Capito
+oggi**: per avere guadagni più regolari non resta un freno di G1 da provare con i nostri dati; restano le misure in avanti (G1 contro G1
+neutra, la miscela con il funding coperto a tavolino) e i dati che raccogliamo noi. Da dire al proprietario nel riepilogo di lunedì.

@@ -58,6 +58,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Ogni mattina alle 06:13: `SALTA_AVANTI2=1 bash research/programma5/avanti/aggiorna.sh <scratchpad>/impronte_avanti` e, finito quello,
   `PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py` come comando a parte (insieme superano i 50 minuti);
   i commit mentre gira qualcosa in background si fanno senza `git stash` (add dei soli file, poi fetch e merge).
+- Nel riepilogo di lunedì 23 dire al proprietario che la ricerca di idee nuove è quasi ferma: dal 17 al 20 novembre lo scout ha
+  trovato una sola idea (prova 162, no); i freni di G1 sono già tutti provati; le idee nuove verranno dai dati raccolti in avanti
+  (Hyperliquid, notizie, eventi di CoinMarketCap se il proprietario dice sì).
 - Lunedì 23 novembre: riepilogo settimanale, gate2-reconciler (il funding si giudica contro il mercato vero, non contro il demo; la
   quota a commissione piena con 13 giorni a regime), portfolio-allocator.
 - Il contesto di questa conversazione è molto lungo: conviene compattarla.
