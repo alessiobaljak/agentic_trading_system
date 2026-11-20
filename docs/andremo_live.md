@@ -827,3 +827,8 @@ lunga dei perpetui su azioni). Prova in avanti del programma 5 e conto a tavolin
 programma 5 da domani si lancia a parte (`SALTA_AVANTI2=1`, `research/programma5/avanti/aggiorna.sh`). G1 e ricerca: nessun passo nuovo
 nel pomeriggio (scout già passato alle 08:17). **Capito oggi**: vedi la voce delle 04:40 (gli scarti di un giorno fra demo e paper si
 compensano il giorno dopo).
+**20 novembre, 04:40 UTC, il tredicesimo ribilancio del demo a 1.000 USDT** (`ops/results/0762`, `0763`): 7 ordini, nessun errore nuovo,
+gli stessi rifiuti. Demo +1,39% dall'8 novembre, paper G1 +2,53% (il demo 1,14 punti sotto). Il 19 novembre demo e paper quasi uguali
+(−1,11% e −1,13%). L'esposizione del demo scende al 189,6% (paper 200%) perché le variazioni sotto il minimo arrivano a 47 (8,7% del
+conto). Raccolta delle 04:20: 23 fonti su 25. **Capito oggi**: con 1.000 USDT i resti sotto il minimo non solo spostano le monete, ma
+abbassano anche l'esposizione totale di qualche punto; sul conto vero con la stessa cifra succederebbe lo stesso.
