@@ -843,3 +843,8 @@ neutra, la miscela con il funding coperto a tavolino) e i dati che raccogliamo n
 28% e costa da sola circa 1,2 punti in due giorni. Raccolta delle 16:20: 24 fonti su 25. **Capito oggi**: G1 non guadagna nei ribassi in
 quanto tale, ma solo quando le monete vendute scendono più di quelle comprate; le fiammate delle monete piccole vendute sono il suo punto
 debole del 2026.
+**21 novembre, 04:40 UTC, il quattordicesimo ribilancio del demo a 1.000 USDT** (`ops/results/0764`, `0765`): 18 ordini tutti a limite,
+nessun errore nuovo. Il 20 novembre, con il Bitcoin −5,1%, G1 guadagna: demo +1,88%, paper +1,16%; dall'8 novembre demo +3,09%, paper
++3,27% (scarto sceso a 0,18 punti). Fra le 00:05 e le 04:20 il Bitcoin scende di un altro 5%. Costo degli ordini sui 13 giorni a regime:
+68,5% del valore a commissione bassa, 0,0272% medio, 1,36 volte l'assunto. Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: in 13
+giorni il demo ha recuperato quasi tutto lo scarto con il paper; resta il costo delle commissioni, un terzo sopra il modello.

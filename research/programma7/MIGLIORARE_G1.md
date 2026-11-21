@@ -453,3 +453,16 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   +30,5% (−0,20 e −0,28; sul demo non c'è). **Capito**: G1 guadagna nei ribassi solo se le monete vendute scendono più di quelle comprate;
   questa volta le piccole vendute hanno avuto fiammate al rialzo nonostante il mercato in calo: è lo stesso fatto della voce 12 (nel 2026 il
   lato venduto perde sulle monete piccole) e della prova 156 (uscire dopo la fiammata non recupera). Nessuna prova nuova.
+* **21 novembre 2026, 04:40 UTC, voce 8 (quattordicesimo ribilancio a 1.000 USDT) e voce 2 sui 13 giorni a regime**
+  (`ops/results/0764-21nov-log-ribilancio-1000.md`, `0765-21nov-stato-ribilancio-1000.md`). Ribilancio: 18 ordini, **tutti a limite**; 35
+  variazioni sotto il minimo (9,2% del conto); gli stessi rifiuti e IRYSUSDT assente; nessun errore nuovo; paper ordini limite 57 su 57.
+  Equity del demo 1.030,92 (+3,09% dall'8 novembre), G1 nel paper 10.966,34 (+3,27%): **il demo è 0,18 punti sotto** (ieri 1,14): il 20
+  novembre, con il Bitcoin −5,1%, il demo fa +1,88% e il paper +1,16%. Dal 9 novembre (13 giorni) demo +3,59%, paper +4,79%, −0,09 punti al
+  giorno. Esposizione lorda del demo nella lettura delle 04:20: 177,1% contro 200%: non è un problema dell'esecuzione: circa 6 punti sono
+  le monete che mancano al demo (LIT, UAI, EVAA, IRYS), circa 5,5% è il prezzo sceso fra il ribilancio e la lettura (Bitcoin −5,1% fra le
+  00:05 e le 04:20; il demo è letto ai prezzi di adesso, il paper a quelli del ribilancio), il resto i resti sotto il minimo; tutti e due i
+  lati sono all'88,5%. **Voce 2, 13 giorni a regime (9-21 novembre)**, unendo le letture 0736, 0757 e 0765 senza contare due volte gli
+  stessi giorni: circa 3.038 USDT scambiati, **68,5% del valore nel libro (commissione bassa), 31,5% a commissione piena, 0,0272% medio:
+  1,36 volte lo 0,02% assunto** (gli ultimi due giorni 85-89% nel libro). Limite della misura: le esecuzioni sono lette solo per le monete
+  tenute al momento della lettura (il 16 novembre la lettura 0757 dà 689 USDT, la 0765 615 con la stessa commissione), quindi per i giorni
+  più vecchi la quota in % è un po' gonfiata; per ogni giorno vale la lettura più vicina. Il numero va nel confronto settimanale di lunedì.
