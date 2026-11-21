@@ -506,3 +506,23 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    2026), quindi un t di 3 è fuori portata; e sulle borse ha sia colpi vicini (vendere nel 2007, comprare nel 1942) sia errori grandi
    (vendere nel 2016: il Bitcoin passò da circa 400 a circa 19.000 dollari nel 2017). Una prova sulle azioni dal 1871 sarebbe dell'area
    azioni (`stock/`), non di questa.
+149. **Il guardiano di G1: l'intelligenza artificiale legge le monete che G1 sta per vendere** (sessione principale, 21 novembre, dopo la
+   decisione del proprietario di lasciare la ricerca da manuale): ogni mezzanotte un modello linguistico legge le notizie e gli annunci
+   delle monete del lato venduto di G1 e toglie quelle con un evento in arrivo che le può far salire di colpo (quotazione, accordo,
+   premio, ritorno di uno sblocco). Il perché: il punto debole misurato di G1 nel 2026 sono le fiammate delle monete piccole vendute
+   (voce 12 di `programma7/MIGLIORARE_G1.md`; il 18-19 novembre ICNTUSDT +21% e +28% costa da sola circa 1,2 punti) e la prova 156 ha
+   mostrato che uscire dopo la fiammata non recupera: serve accorgersene prima, leggendo testi, cosa che una formula non fa. Si prova solo
+   sui giorni dopo la data di addestramento del modello (prima conosce già com'è andata) e in avanti, accanto a G1 e mai al suo posto.
+   Serve la chiave a consumo del proprietario (in arrivo con la sessione «trading AI»). Prima le regole scritte.
+150. **Le narrazioni scoperte dall'intelligenza artificiale** (sessione principale, 21 novembre): ogni giorno un modello linguistico
+   raggruppa le notizie in narrazioni che nascono da sole dal testo (non i settori fissi di CoinGecko della prova 143) e misura quali
+   crescono e quali si spengono; comprate le monete delle narrazioni che crescono, vendute quelle che si spengono. Dati: il nostro
+   archivio delle notizie dal 30 ottobre e, per i mesi dopo la data di addestramento, un archivio pubblico di notizie con le date
+   (da verificare quale). Dopo la 149.
+151. **La mappa delle liquidazioni di Hyperliquid** (sessione principale, 21 novembre): su Hyperliquid le posizioni dei conti e i loro
+   prezzi di liquidazione sono pubblici, cosa che su nessuna borsa tradizionale esiste; dove si ammassano liquidazioni vicino al prezzo,
+   le vendite o gli acquisti forzati sono prevedibili prima che succedano (diverso dalla prova 112, che guardava le cascate dopo).
+   Dato da raccogliere in avanti (oggi salviamo solo 40 conti e non il prezzo di liquidazione); si prova quando ci sono mesi di dati.
+152. **Il giudice delle balene** (sessione principale, 21 novembre): invece di copiare tutti i grandi conti di Hyperliquid (idea 132),
+   l'intelligenza artificiale giudica conto per conto chi guadagna con costanza e chi per caso, e si segue solo chi regge; dati nostri
+   dal 2 novembre, in avanti.
