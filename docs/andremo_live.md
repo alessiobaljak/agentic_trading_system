@@ -848,3 +848,7 @@ nessun errore nuovo. Il 20 novembre, con il Bitcoin −5,1%, G1 guadagna: demo +
 +3,27% (scarto sceso a 0,18 punti). Fra le 00:05 e le 04:20 il Bitcoin scende di un altro 5%. Costo degli ordini sui 13 giorni a regime:
 68,5% del valore a commissione bassa, 0,0272% medio, 1,36 volte l'assunto. Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: in 13
 giorni il demo ha recuperato quasi tutto lo scarto con il paper; resta il costo delle commissioni, un terzo sopra il modello.
+**21 novembre, 08:30 UTC, giro delle 4 ore**: raccolta e controlli regolari. Strategy-scout **non** è stato chiamato: il proprietario
+ha chiesto che le strade nuove partano solo con il suo via libera (21 novembre: le regole della prova 163 scritte senza via libera sono
+state tolte). In attesa della sua risposta sulla strada proposta (l'arbitraggio vero del funding fra Binance e Hyperliquid, con dati
+gratuiti). Approvata invece la prova gratuita «leggo io le notizie delle monete vendute da G1 ogni mattina, prima dei prezzi», da domani.
