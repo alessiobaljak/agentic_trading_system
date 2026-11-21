@@ -866,3 +866,7 @@ volta, perché i margini delle due borse sono separati. Il guadagno di B viene q
 Bitcoin ed Ether (controllo descrittivo, non una variante): +2,55% e +1,85% l'anno senza liquidazioni, ma nel 2026 nessun segnale.
 Conto delle prove 334. **Capito oggi**: fra due borse lo scarto di funding è grande sulle monete piccole, ma lì i crolli liquidano la
 gamba comprata prima che si possano spostare i soldi; sulle monete grandi il rischio sparisce ma il guadagno è sotto il 3% l'anno.
+**21 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (57 articoli nuovi, 40 conti di Hyperliquid), nessuna chiusura
+di perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (si aspetta la lettura delle 04:17). Ricerca
+nuova: nessuna prova in corso dopo il «no» della 163; strategy-scout non chiamato, perché le strade nuove (Polymarket contro le opzioni,
+le occasioni del conto piccolo) aspettano il via libera del proprietario. **Capito oggi**: niente di nuovo in questo giro.
