@@ -323,6 +323,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   di un giorno (agosto 2024, febbraio 2018) si compra in cima; (2) con un solo episodio buono in 9 anni non si può dire che ci sia un
   vantaggio. Chiusa senza prova l'idea della fine del divieto di vendita dopo le quotazioni (I49): su Alpaca non si potrebbero vendere
   allo scoperto quei titoli, e il prestito costa più del guadagno. Nel conto: 103.
+* **La prova 45** (l'ultima mezz'ora segue la giornata solo nei giorni con la copertura delle opzioni sotto zero, uscita all'asta;
+  idea I52): **passa l'esame per entrare nella miscela** (correlazione 0,04, miscela 1,12 contro 1,08, t 1,53, 94% dei campionamenti;
+  `prove/P045_risultati.md`), bocciata da sola. Il dato della copertura separa davvero i giorni: +7,58 punti base a operazione nei
+  256 giorni sotto zero, +0,05 negli altri 2'004. **In corso: il revisore separato**, poi il periodo chiuso una volta. Sospetti già
+  scritti: il 2020 vale più di metà del guadagno; le prove 31 e 37 avevano passato lo stesso esame e sono cadute alla revisione.
+  Chiusa senza prova l'idea dei fondi a leva su una sola azione (I51). Nel conto: 105.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
