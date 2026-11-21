@@ -50,6 +50,11 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **21 novembre, decisione del proprietario**: niente più ricerca da manuale (`docs/decisioni_del_proprietario.md`); lo scout ha le
+  istruzioni nuove (`.claude/agents/strategy-scout.md`). Area nuova `trader_ai/` con la sua sessione «trading AI» (creata il 21
+  novembre, session_01RPSK4kasjZfRQYXznD4TfF): il modello linguistico che decide, prima a soldi finti simulati, mai sul demo di G1.
+  Qui: le idee che un'intelligenza artificiale può fare (leggere notizie e posizioni dei conti grandi, regole cercate in automatico
+  con dati nascosti), provate solo sui giorni dopo la data di addestramento del modello e in avanti.
 - Da costruire nella ricerca: una funzione unica per l'esame (famiglie), un controllo dei dati a inizio giro (giorni a metà, candele
   mancanti, file vecchi), le voci rimaste del backlog P32.
 - Idee passate a strategy-scout il 12 novembre: differenze di funding fra borse, base dei future trimestrali, dominanza del Bitcoin.
