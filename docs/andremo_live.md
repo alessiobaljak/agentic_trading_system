@@ -870,3 +870,10 @@ gamba comprata prima che si possano spostare i soldi; sulle monete grandi il ris
 di perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (si aspetta la lettura delle 04:17). Ricerca
 nuova: nessuna prova in corso dopo il «no» della 163; strategy-scout non chiamato, perché le strade nuove (Polymarket contro le opzioni,
 le occasioni del conto piccolo) aspettano il via libera del proprietario. **Capito oggi**: niente di nuovo in questo giro.
+**21 novembre, 20:45 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (36 articoli nuovi, 40 conti di Hyperliquid), nessuna chiusura
+di perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase. **G1, voce 14 nuova**: scritte le regole della lettura delle notizie
+delle monete vendute, prima della prima lettura di domani (`research/programma7/misure_g1/VOCE14_REGOLE.md`, foglio preparato da
+`voce14_lettura.py`); è una misura, non cambia G1. Provato lo script sulla lettura «stato» di stamattina (fuori dal repo, non conta):
+delle 30 monete vendute solo 5 hanno articoli nel nostro archivio delle 24 ore (491 articoli), le piccole nessuno. Per questo le regole
+ammettono al più una ricerca sul web per moneta con peso di almeno il 2%. **Capito oggi**: il nostro archivio di 25 siti copre le monete
+grandi, quasi mai quelle piccole dove arrivano le fiammate; per leggerle servono altre fonti (il web, gli annunci delle borse).

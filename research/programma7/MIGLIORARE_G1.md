@@ -58,6 +58,11 @@ separato prima del paper).
    applicato): nei giorni di funding uguale lo short è sceso a 5 monete e una ha pesato il 47,8% (5 febbraio 2024). Prova con le
    regole scritte prima; da decidere prima dei soldi veri.
 
+14. **Le notizie delle monete vendute, lette ogni mattina prima dei prezzi** (aggiunta del 21 novembre, prova gratuita approvata dal
+   proprietario: «Si quella che leggi va bene»; dalla voce 12, le fiammate delle monete piccole vendute): la sessione principale legge
+   ogni mattina le notizie delle monete del lato venduto e scrive quali rischiano di salire, prima dei prezzi; si misura dopo almeno 20
+   mattine. È una misura, non cambia G1. Regole: `misure_g1/VOCE14_REGOLE.md`; foglio di ogni mattina: `misure_g1/voce14_lettura.py`.
+
 *Dal 12 novembre le voci 9-13 le porta avanti strategy-improver, una per giro, quando c'è un passo vero da fare.*
 
 *12 novembre, dopo la revisione di G1 con backtest-auditor (`audits/reports/2026-11-12-G1_CONTO_VERO.md`: PASS tecnico con 4 problemi

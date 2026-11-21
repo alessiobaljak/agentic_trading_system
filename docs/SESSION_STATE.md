@@ -50,6 +50,12 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Ogni mattina dal 22 novembre, giro delle 04:17** (voce 14 di G1, approvata dal proprietario il 21 novembre): appena arriva la
+  risposta «stato», `python3 -m research.programma7.misure_g1.voce14_lettura`, poi si leggono le notizie delle monete vendute (archivio
+  + al più una ricerca sul web per moneta con peso di almeno il 2%), si scrive il giudizio nel foglio `misure_g1/voce14_letture/` PRIMA
+  di guardare i prezzi, e si committa subito (regole `misure_g1/VOCE14_REGOLE.md`). Misura dopo 20 mattine e 20 «sì».
+- 21 novembre: la prova 163 (arbitraggio del funding fra Binance e Hyperliquid) non passa; le altre strade nuove (Polymarket contro
+  le opzioni, le occasioni del conto piccolo) aspettano il via libera del proprietario.
 - **21 novembre, decisione del proprietario**: niente più ricerca da manuale (`docs/decisioni_del_proprietario.md`); lo scout ha le
   istruzioni nuove (`.claude/agents/strategy-scout.md`). Area nuova `trader_ai/` con la sua sessione «trading AI» (creata il 21
   novembre, session_01RPSK4kasjZfRQYXznD4TfF): il modello linguistico che decide, prima a soldi finti simulati, mai sul demo di G1.
