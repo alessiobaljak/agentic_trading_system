@@ -323,6 +323,16 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   di un giorno (agosto 2024, febbraio 2018) si compra in cima; (2) con un solo episodio buono in 9 anni non si può dire che ci sia un
   vantaggio. Chiusa senza prova l'idea della fine del divieto di vendita dopo le quotazioni (I49): su Alpaca non si potrebbero vendere
   allo scoperto quei titoli, e il prestito costa più del guadagno. Nel conto: 103.
+* **La prova 45** (l'ultima mezz'ora segue la giornata solo nei giorni con la copertura delle opzioni sotto zero, uscita all'asta;
+  idea I52): passava l'esame per entrare nella miscela (1,12 contro 1,08, t 1,53, 94% dei campionamenti), ma **FAIL del revisore**
+  (`prove/REVISIONE_P045.md`): i numeri si rifanno uguali con codice e calendario indipendenti, ma metà del guadagno lordo viene dalle
+  18 operazioni di marzo 2020; senza quel mese il t della parte è 0,86. Il periodo chiuso non si apre. Capito: (1) **il dato della
+  copertura separa davvero i giorni** (+7,58 punti base a operazione sotto zero, +0,05 negli altri 2'004; la direzione giusta nel 57%
+  anche senza marzo 2020), e non è solo «giornata agitata» (i giorni agitati con la copertura positiva non rendono); (2) ma il guadagno
+  sta nelle crisi, come nelle prove 37 e 44: idea nuova I53, un esame scritto prima per le parti «da crisi»; (3) il dato di
+  SqueezeMetrics si può controllare solo dal novembre 2021 (11 copie pubbliche identiche), prima può essere stato rifatto; (4) le
+  chiusure giornaliere di Alpaca non sono quelle ufficiali in 13 giorni (10 in marzo 2020), errore ancora nella miscela della prova 25.
+  Chiuse senza prova le idee dei fondi a leva su una sola azione (I51) e dell'uscita all'asta (I8, con il numero della 45). Nel conto: 105.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
