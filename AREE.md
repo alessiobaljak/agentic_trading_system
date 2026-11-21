@@ -9,6 +9,7 @@ legge è `AREE.json`.
 |---|---|---|
 | **crypto** | la sessione delle crypto | tutto quello che non è di un'altra area né in comune: `bot/`, `research/`, `ops/`, `scripts/`, `docs/`, `tests/`, `backtesting/`, `firebase/`, `allocazione/`, `gate2/`, `reviews/`, `audits/` e il resto |
 | **stock** (azioni) | la sessione «trading stock» | `stock/` e la sua scheda in dashboard, `dashboard/app/components/stock/` |
+| **trader_ai** (l'intelligenza artificiale che decide, dal 21 novembre 2026) | la sessione «trading AI» | `trader_ai/` e la sua scheda in dashboard, `dashboard/app/components/trader_ai/` |
 | **in comune** | tutte, con attenzione | `dashboard/` (ogni area tocca la sua scheda e una riga in `dashboard/app/components/aree.ts`), `.claude/`, `.github/`, `AREE.md`, `AREE.json`, `CLAUDE.md`, `README.md`, `.gitignore` |
 
 ## Come funziona il blocco

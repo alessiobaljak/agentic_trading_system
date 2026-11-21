@@ -130,3 +130,21 @@ famiglie e misurala a tavolino». Lo Sharpe corretto dell'esame si calcola conta
 l'asticella del 22-23 ottobre), non le prove una per una; la miscela F5 + M7 + K2 non entra nel bot: si misura a tavolino ogni
 settimana così com'è (`research/programma6/paper/PAPER.md`, riga «F5 + M7 + K2 a rischio uguale»), e se conferma si costruiscono nel
 bot i due pezzi che mancano (K2 e M7), con le revisioni.
+
+## 21 novembre 2026: basta ricerca da manuale, l'intelligenza artificiale che decide in una sessione sua
+Le parole del proprietario: «le strategie in corso lasciale ma per le nuove voglio che abbandoni le ricerche classiche, standard da
+manuale che possono provarli tutti [...] inizia a pensare totalmente fuori dagli schemi come un AI farebbe, provare cose che nessun
+altro avrebbe pensato e provato, non voglio che tu abbia limiti per trovare strategie vincenti (ti faccio un esempio ma se accetti va
+creata un'altra sessione separata, perché non usiamo AI con API di consumo e far fare a lei i trading e decidere quando entrare uscire
+etc?)». Cosa cambia:
+* Le strategie in corso (G1 sul demo; G1, G11, G1 neutra, F5 ed eventi nel paper) restano tutte, come deciso l'8 novembre.
+* La ricerca nuova delle crypto non propone più idee da manuale (fattori pubblicati, indicatori, varianti di strategie note, eventi già
+  battuti): solo idee che un'intelligenza artificiale può fare e un ricercatore classico no, per esempio leggere testi e dati non
+  numerici (notizie, annunci, posizioni dei conti grandi) e trasformarli in decisioni, o cercare regole in modo automatico. Le regole
+  dell'esame non cambiano (soldi finti, regole scritte prima, giudizio di backtest-auditor, conto delle prove): sono ciò che impedisce
+  di ingannarsi.
+* Un modello di intelligenza artificiale chiamato a consumo che decide da solo entrate e uscite è un'area nuova del repository,
+  `trader_ai/`, con la sua sessione («trading AI»), prima solo a soldi finti simulati (nessun ordine sul conto demo di G1). La chiave
+  del servizio la mette il proprietario dove non finisce mai in un commit.
+* Un'idea nuova: il passato **dopo** la data di addestramento del modello è un passato che il modello non conosce, quindi su quei mesi
+  (e in avanti) le sue decisioni si possono provare senza che «sappia già com'è andata»; prima di quella data no.

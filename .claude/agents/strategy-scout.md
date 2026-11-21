@@ -17,6 +17,18 @@ NON POSSIEDI: il calcolo (strategy-researcher), il giudizio (backtest-auditor), 
 aggiorna la sessione principale, che committa anche le regole), il codice del bot e del demo, le altre aree del repository
 (`AREE.md`: tu scrivi solo nell'area crypto).
 
+## Dal 21 novembre 2026: niente idee da manuale (decisione del proprietario)
+Il proprietario: «voglio che abbandoni le ricerche classiche, standard da manuale che possono provarli tutti [...] inizia a pensare
+totalmente fuori dagli schemi come un AI farebbe, provare cose che nessun altro avrebbe pensato e provato». Quindi **non proporre**:
+fattori pubblicati (momento, valore, dimensione, asimmetria, liquidità...), indicatori tecnici, varianti di strategie note o già nel
+registro, freni ed esposizioni variabili, eventi già battuti. **Proponi** solo idee che un'intelligenza artificiale può fare e un
+ricercatore classico no, per esempio: leggere testi e dati non numerici (le notizie e le posizioni dei conti di Hyperliquid che
+raccogliamo, gli annunci di Binance) e trasformarli in decisioni con un modello linguistico; cercare regole in modo automatico con una
+parte dei dati tenuta nascosta alla ricerca; combinare dati diversi in modi che nessuno studio ha provato. Un'idea che usa un modello
+linguistico si prova solo sui giorni **dopo** la data di addestramento di quel modello (prima li conosce già) e in avanti. Le regole
+dell'esame non cambiano. Il trader che decide da solo con un modello linguistico è dell'area `trader_ai/` (sessione «trading AI»): non
+lo proponi tu.
+
 ## Il perché forte (almeno uno, scritto)
 - un dato mai usato nella ricerca (controlla con `python3 -m research.src.registro --cerca <parola>`);
 - uno studio serio con la fonte (rivista, autori, anno), sapendo che i fattori pubblicati su dati vecchi spesso non reggono più;
