@@ -54,6 +54,38 @@ o universo diverso dopo i risultati. Conta **2 prove**. Controlli descrittivi (n
 per volume contro le altre (il «siamo piccoli»); le spese con ordine limite; quante liquidazioni e giorni a rischio; il guadagno senza la
 moneta migliore; la correlazione con G1.
 
+## Chiusura della verifica (21 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTOUNESIMA.md`, 19 punti). **Dove il testo sopra dice diversamente, vale questa
+sezione.** Dove c'era una scelta, si è presa la più prudente.
+1. **Prezzi orari di Hyperliquid** (conserva solo le ultime 5.000 candele: le orarie partono dal 26 aprile 2026): fino al 25 aprile 2026 il
+   controllo del margine e della liquidazione usa il **massimo e il minimo giornaliero** di ogni borsa sulle sue gambe, dal lato peggiore
+   per ciascuna gamba (più severo di un controllo orario); dal 26 aprile 2026 le candele orarie. Il rapporto dice quante liquidazioni
+   vengono da ciascun metodo.
+2. **Prezzi**: il rendimento usa il prezzo scambiato su tutte e due le borse; il mark di Binance serve solo per il margine su Binance (su
+   Hyperliquid il prezzo scambiato fa anche da mark: è un'approssimazione e si scrive).
+3. Apertura, chiusura e rendimento al prezzo di **apertura delle 00:00 UTC** del giorno.
+4. **Capitale 1.000 USDT** (il conto del demo); il trasferimento fra le borse si fa solo se il margine di una borsa si scosta dalla metà di
+   più del **10% del capitale**, con un costo fisso di 1 USDT, ed ha effetto dalla 00:00 del giorno dopo.
+5. Valore delle gambe fisso dalla decisione alla decisione dopo (nessun riequilibrio giornaliero); il capitale di ogni decisione è
+   l'equity di quel momento (si compone alle decisioni).
+6. Prime decisioni: A il 1° luglio 2023 (giugno 2023 a zero), B lunedì 5 giugno 2023.
+7. Una moneta con meno di L giorni interi di funding e prezzi su tutte e due le borse è ferma a quella decisione; un giorno senza prezzi
+   con una posizione aperta: si chiude all'ultimo prezzo disponibile con le spese e il caso si scrive.
+8. **Universo**: le monete abbinate comprese quelle già ritirate da Hyperliquid (`isDelisted`) quando l'interfaccia ne dà lo storico (meno
+   sopravvivenza); quando una moneta smette di avere prezzi vale il punto 7.
+9. Abbinamento: il rapporto fra i prezzi delle due borse il primo giorno comune deve stare fra 0,9 e 1,1 (altrimenti la moneta esce e si
+   scrive).
+10. Orari dei pagamenti con la convenzione di `settantatreesima.funding_hl` (orario meno un minuto); funding positivo = chi è comprato
+    paga chi è venduto, su tutte e due le borse; d e θ in frazione al giorno.
+11. Margine di una borsa = la sua quota di capitale ± guadagni e perdite (anche non realizzati) delle sue gambe ± funding ± spese.
+12. Dopo una liquidazione l'altra gamba si chiude alla **00:00 successiva** (non alla decisione dopo) e la moneta resta ferma fino alla
+    decisione dopo. Giorno a rischio misurato sul valore corrente delle gambe.
+13. Spese per scambio = valore scambiato × (commissione + scarto) su ogni gamba: Binance 0,05% + 0,01-0,02%, Hyperliquid **0,045%**
+    (livello base, fonte: tabella delle commissioni dei perpetui nella documentazione di Hyperliquid) + lo stesso scarto.
+14. Posizioni aperte al 31 ottobre 2026: chiuse all'apertura del 1° novembre con le spese.
+15. Settimane da lunedì a domenica, somma dei netti giornalieri; il 2023 conta da giugno.
+16. «Prime 30 per volume» (controllo descrittivo): volume medio dei 30 giorni prima di ogni decisione su Binance.
+
 ## L'esame (regole approvate dal proprietario il 9 e l'11 novembre)
 Passa se: netto dopo i costi positivo; **ogni anno positivo** (2023 da giugno, 2024, 2025, 2026 fino a ottobre); t almeno 3; Sharpe
 corretto almeno 0,80 con il conto per famiglie (`asticella.corretto_famiglie`, tutte e due le varianti in `nuove`); **nessuna
