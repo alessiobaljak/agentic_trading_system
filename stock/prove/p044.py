@@ -90,7 +90,8 @@ def main():
     rov = segnale(indice_cboe("VIX"), indice_cboe("VIX3M"))
     rov = rov[(rov.index >= date(2015, 12, 1)) & (rov.index <= FINO)]
     giorni = [g for g in cal if g >= DAL]
-    ep = episodi(rov[rov.index >= max(g for g in cal if g < DAL)], [max(g for g in cal if g < DAL)] + giorni)
+    vigilia = max(d for d in rov.index if d < DAL)          # il calendario di Alpaca parte dal 4 gennaio 2016: la vigilia da CBOE
+    ep = episodi(rov[rov.index >= vigilia], [vigilia] + giorni)
     varianti = (("costi", COSTI), ("costi doppi", COSTI.raddoppiati()), ("senza costi", Costi()))
     out = {nome: simula_conto({FONDO: df}, strategia(rov), c, capitale=CAPITALE) for nome, c in varianti}
     gg = {k: rendimenti(v.valore[v.valore.index >= DAL]) for k, v in out.items()}
@@ -130,7 +131,7 @@ def main():
              f"`P044_volatilita_rovesciata.md` (committate prima). Dal {a} al {b}. Nel conto dell'asticella: {len(tutte)} serie.", "",
              f"* Chiusure rovesciate {giorni_dentro} su {len(gc)} giorni; episodi {len(ep)}; ordini {len(r.esecuzioni)}; commissioni "
              f"{r.commissioni:,.0f} dollari, scarto {r.costo_scarto:,.0f}. Segnale del 31 dicembre 2015: "
-             f"{'rovesciata' if bool(rov.get(max(g for g in cal if g < DAL), False)) else 'normale'}.",
+             f"{'rovesciata (ATTENZIONE: il conto parte dal primo giorno, non la segue)' if bool(rov.loc[vigilia]) else 'normale'}.",
              f"* Episodi in guadagno {sum(x[2] > 0 for x in guadagni)} su {len(guadagni)}; i 5 migliori: "
              + "; ".join(fmt(t) for t in guadagni_ord[::-1][:5]) + "; i 5 peggiori: " + "; ".join(fmt(t) for t in guadagni_ord[:5]) + ".",
              f"* Senza il 2020: {senza_2020:+.1%}. Correlazione giornaliera con lo SPY {corr_spy:.2f}.", "",
