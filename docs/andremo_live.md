@@ -858,3 +858,11 @@ Binance e Hyperliquid, via libera del proprietario «procedi») ha le regole ver
 ricercatore sta scaricando lo storico di Hyperliquid. G1: nessun passo nuovo in questo giro (le misure di oggi aspettano la lettura
 delle 04:17 di domani). Strategy-scout non chiamato: strade nuove solo con il via libera del proprietario. **Capito oggi**: niente di
 nuovo in questo giro; si aspetta il risultato della 163.
+**21 novembre, 16:00 UTC, prova 163: l'arbitraggio vero del funding fra Binance e Hyperliquid non passa** (`research/programma7/
+RISULTATI_CENTOUNESIMA.md`): dal 5 giugno 2023 al 31 ottobre 2026, 156 monete, 1.000 USDT. Netto A −9,27% l'anno, B +1,77%; tutte e due
+con 2 liquidazioni su Binance nel 2025 (il crollo del 10 ottobre 2025 entra in tutte e due), Sharpe corretto 0,00. Lo scarto di funding
+c'è (lordo 11,0% e 21,5% l'anno sul valore delle gambe), ma le spese ne mangiano una parte (4,0% e 11,8%) e i crolli una gamba sola alla
+volta, perché i margini delle due borse sono separati. Il guadagno di B viene quasi tutto da una moneta (MAVIA: senza, −14,9%). Solo
+Bitcoin ed Ether (controllo descrittivo, non una variante): +2,55% e +1,85% l'anno senza liquidazioni, ma nel 2026 nessun segnale.
+Conto delle prove 334. **Capito oggi**: fra due borse lo scarto di funding è grande sulle monete piccole, ma lì i crolli liquidano la
+gamba comprata prima che si possano spostare i soldi; sulle monete grandi il rischio sparisce ma il guadagno è sotto il 3% l'anno.

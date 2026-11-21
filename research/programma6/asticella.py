@@ -308,7 +308,7 @@ def serie_programma7() -> dict:
                         (156, "risultati_novantaquattresima"), (157, "risultati_novantacinquesima"),
                         (158, "risultati_novantaseiesima"), (159, "risultati_novantasettesima"),
                         (160, "risultati_novantottesima"), (161, "risultati_novantanovesima"),
-                        (162, "risultati_centesima")):                                          # 154-162: A e B
+                        (162, "risultati_centesima"), (163, "risultati_centounesima")):              # 154-163: A e B
         for v in ("A", "B"):                                                                     # non i controlli di ritardo)
             f = p7 / cartella / f"settimane_{v}.csv.gz"
             if f.exists():

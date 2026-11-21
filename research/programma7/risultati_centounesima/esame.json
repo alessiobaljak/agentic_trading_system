@@ -1,0 +1,520 @@
+{
+ "universo_n": 156,
+ "esclusi": {
+  "ZRO": "rapporto dei prezzi il primo giorno comune 1.584 fuori da 0,9-1,1",
+  "FTT": "rapporto dei prezzi il primo giorno comune 1.253 fuori da 0,9-1,1",
+  "LOOM": "rapporto dei prezzi il primo giorno comune 0.8864 fuori da 0,9-1,1",
+  "BIGTIME": "rapporto dei prezzi il primo giorno comune 1.505 fuori da 0,9-1,1",
+  "ORBS": "rapporto dei prezzi il primo giorno comune 1.43 fuori da 0,9-1,1",
+  "TIA": "rapporto dei prezzi il primo giorno comune 0.7825 fuori da 0,9-1,1",
+  "TON": "rapporto dei prezzi il primo giorno comune 1.204 fuori da 0,9-1,1",
+  "MEME": "rapporto dei prezzi il primo giorno comune 0.8315 fuori da 0,9-1,1",
+  "BADGER": "rapporto dei prezzi il primo giorno comune 0.8648 fuori da 0,9-1,1",
+  "PYTH": "rapporto dei prezzi il primo giorno comune 1.479 fuori da 0,9-1,1",
+  "kBONK": "rapporto dei prezzi il primo giorno comune 1.352 fuori da 0,9-1,1",
+  "SUPER": "rapporto dei prezzi il primo giorno comune 1.128 fuori da 0,9-1,1",
+  "JTO": "rapporto dei prezzi il primo giorno comune 1.231 fuori da 0,9-1,1",
+  "ACE": "rapporto dei prezzi il primo giorno comune 0.8628 fuori da 0,9-1,1",
+  "MANTA": "rapporto dei prezzi il primo giorno comune 1.211 fuori da 0,9-1,1",
+  "ONDO": "rapporto dei prezzi il primo giorno comune 1.152 fuori da 0,9-1,1",
+  "ALT": "rapporto dei prezzi il primo giorno comune 0.8877 fuori da 0,9-1,1",
+  "W": "rapporto dei prezzi il primo giorno comune 0.8136 fuori da 0,9-1,1",
+  "STRK": "rapporto dei prezzi il primo giorno comune 1.112 fuori da 0,9-1,1",
+  "TAO": "rapporto dei prezzi il primo giorno comune 1.217 fuori da 0,9-1,1",
+  "BOME": "rapporto dei prezzi il primo giorno comune 2.192 fuori da 0,9-1,1",
+  "MERL": "rapporto dei prezzi il primo giorno comune 1.162 fuori da 0,9-1,1",
+  "POPCAT": "rapporto dei prezzi il primo giorno comune 1.266 fuori da 0,9-1,1",
+  "REZ": "rapporto dei prezzi il primo giorno comune 0.7833 fuori da 0,9-1,1",
+  "BRETT": "rapporto dei prezzi il primo giorno comune 1.285 fuori da 0,9-1,1",
+  "ZK": "rapporto dei prezzi il primo giorno comune 0.6389 fuori da 0,9-1,1",
+  "GOAT": "rapporto dei prezzi il primo giorno comune 1.18 fuori da 0,9-1,1",
+  "MOODENG": "rapporto dei prezzi il primo giorno comune 1.119 fuori da 0,9-1,1",
+  "GRASS": "rapporto dei prezzi il primo giorno comune 1.205 fuori da 0,9-1,1",
+  "CHILLGUY": "rapporto dei prezzi il primo giorno comune 1.189 fuori da 0,9-1,1",
+  "ME": "rapporto dei prezzi il primo giorno comune 0.8007 fuori da 0,9-1,1",
+  "PENGU": "rapporto dei prezzi il primo giorno comune 0.6543 fuori da 0,9-1,1",
+  "USUAL": "rapporto dei prezzi il primo giorno comune 0.7408 fuori da 0,9-1,1",
+  "BIO": "rapporto dei prezzi il primo giorno comune 0.8746 fuori da 0,9-1,1",
+  "TRUMP": "rapporto dei prezzi il primo giorno comune 2.526 fuori da 0,9-1,1",
+  "ANIME": "rapporto dei prezzi il primo giorno comune 0.8913 fuori da 0,9-1,1",
+  "VINE": "rapporto dei prezzi il primo giorno comune 1.156 fuori da 0,9-1,1",
+  "VVV": "rapporto dei prezzi il primo giorno comune 1.152 fuori da 0,9-1,1",
+  "BERA": "rapporto dei prezzi il primo giorno comune 1.341 fuori da 0,9-1,1",
+  "TST": "rapporto dei prezzi il primo giorno comune 0.8888 fuori da 0,9-1,1",
+  "LAYER": "rapporto dei prezzi il primo giorno comune 0.8214 fuori da 0,9-1,1",
+  "IP": "rapporto dei prezzi il primo giorno comune 0.6106 fuori da 0,9-1,1",
+  "KAITO": "rapporto dei prezzi il primo giorno comune 1.345 fuori da 0,9-1,1",
+  "DOOD": "rapporto dei prezzi il primo giorno comune 0.8261 fuori da 0,9-1,1",
+  "NXPC": "rapporto dei prezzi il primo giorno comune 0.7292 fuori da 0,9-1,1",
+  "SOPH": "rapporto dei prezzi il primo giorno comune 1.321 fuori da 0,9-1,1",
+  "PUMP": "rapporto dei prezzi il primo giorno comune 1.202 fuori da 0,9-1,1",
+  "WLFI": "rapporto dei prezzi il primo giorno comune 0.4621 fuori da 0,9-1,1",
+  "LINEA": "rapporto dei prezzi il primo giorno comune 1.342 fuori da 0,9-1,1",
+  "ASTER": "rapporto dei prezzi il primo giorno comune 1.623 fuori da 0,9-1,1",
+  "2Z": "rapporto dei prezzi il primo giorno comune 1.275 fuori da 0,9-1,1",
+  "MEGA": "rapporto dei prezzi il primo giorno comune 0.8465 fuori da 0,9-1,1",
+  "CC": "rapporto dei prezzi il primo giorno comune 0.6817 fuori da 0,9-1,1",
+  "FOGO": "rapporto dei prezzi il primo giorno comune 0.7284 fuori da 0,9-1,1",
+  "LIT": "rapporto dei prezzi il primo giorno comune 0.1482 fuori da 0,9-1,1",
+  "AZTEC": "rapporto dei prezzi il primo giorno comune 0.8222 fuori da 0,9-1,1",
+  "USELESS": "rapporto dei prezzi il primo giorno comune 0.7595 fuori da 0,9-1,1"
+ },
+ "famiglie": {
+  "serie_nel_mazzo": 285,
+  "famiglie": 199,
+  "in_v": 151,
+  "deviazione_v": 0.6790591147718321
+ },
+ "A": {
+  "numeri": {
+   "giorni": 1245,
+   "annuo_capitale": -0.09269740400269473,
+   "per_anno": {
+    "2023": 0.134225551732802,
+    "2024": 0.07749663070710405,
+    "2025": -0.5148664928291686,
+    "2026": 0.052522596041457426
+   },
+   "funding_per_anno": {
+    "2023": 0.16402260570335744,
+    "2024": 0.12346223027433481,
+    "2025": 0.06970264348044203,
+    "2026": 0.10348436907874214
+   },
+   "spese_per_anno": {
+    "2023": 0.029092597547746287,
+    "2024": 0.046749147057512784,
+    "2025": 0.04109425722663109,
+    "2026": 0.03830335824837501
+   },
+   "lordo_prezzo_per_anno": {
+    "2023": -0.0007044564228091198,
+    "2024": 0.0007835474902820234,
+    "2025": -0.5434748790829793,
+    "2026": -0.0126584147889097
+   },
+   "sharpe_settimane": -0.35344323526227833,
+   "settimane": 172,
+   "t": -0.6428094097107363,
+   "asimmetria": -9.840194643199382,
+   "curtosi": 111.12064882624708,
+   "discesa_settimanale": -0.5519266613897256,
+   "discesa_giornaliera": -0.5520298407760422,
+   "sharpe_365_giorni": -0.3519917979922758,
+   "costo_medio_annuo_capitale": 0.040050809721528316,
+   "funding_annuo": 0.10966476831197634,
+   "lordo_prezzo_annuo": -0.16231136259314272,
+   "giorni_fermi": 67,
+   "monete_medie_in_posizione": 28.724497991967873,
+   "primo_giorno": "2023-06-05",
+   "ultimo_giorno": "2026-10-31",
+   "periodo_esame_dal": "2023-06-26",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 6.011979858876896e-08,
+  "gruppo": [
+   "163 A",
+   "163 B"
+  ],
+  "condizioni": {
+   "netto_positivo": false,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "nessuna_liquidazione": false
+  },
+  "esito": "non passa",
+  "eventi": {
+   "liquidazioni_per_metodo": {
+    "giornaliero": 2,
+    "orario": 0
+   },
+   "liquidazioni_totali": 2,
+   "giorni_a_rischio_per_metodo": {
+    "giornaliero": 2,
+    "orario": 0
+   },
+   "giorni_a_rischio_totali": 2,
+   "primi_giorni_a_rischio": [
+    [
+     "2025-07-11",
+     "giornaliero"
+    ],
+    [
+     "2025-10-10",
+     "giornaliero"
+    ]
+   ],
+   "elenco_liquidazioni": [
+    [
+     "2025-07-11",
+     "Binance",
+     "giornaliero"
+    ],
+    [
+     "2025-10-10",
+     "Binance",
+     "giornaliero"
+    ]
+   ],
+   "trasferimenti": 65,
+   "chiusure_per_buco": 10,
+   "primi_buchi": [
+    [
+     "STRAX",
+     "2024-03-16"
+    ],
+    [
+     "FTM",
+     "2025-01-13"
+    ],
+    [
+     "ILV",
+     "2025-04-05"
+    ],
+    [
+     "RDNT",
+     "2025-04-12"
+    ],
+    [
+     "OMNI",
+     "2025-09-26"
+    ],
+    [
+     "OM",
+     "2026-02-24"
+    ]
+   ],
+   "cambi_lato": 52,
+   "ingressi": 628,
+   "decisioni": 40
+  },
+  "controlli": {
+   "solo_BTC_ETH": {
+    "annuo_capitale": 0.025541707647197084,
+    "per_anno": {
+     "2023": 0.04273488548979045,
+     "2024": 0.05708250822416849,
+     "2025": 0.005295622076325232,
+     "2026": 0.0
+    },
+    "sharpe_settimane": 2.1478723878603585,
+    "t": 3.9063488674495526,
+    "discesa_giornaliera": -0.014244966456872232,
+    "liquidazioni": 0,
+    "giorni_a_rischio": 0,
+    "costo_medio_annuo": 0.010496669218488616,
+    "giorni": 1245
+   },
+   "prime_30_per_volume": {
+    "annuo_capitale": -0.07203667059814844,
+    "per_anno": {
+     "2023": 0.1042501413897355,
+     "2024": 0.10110356390276565,
+     "2025": -0.4204221678031221,
+     "2026": 0.01602632326706612
+    },
+    "sharpe_settimane": -0.30319796301101415,
+    "t": -0.5514280206381091,
+    "discesa_giornaliera": -0.44581243033060314,
+    "liquidazioni": 1,
+    "giorni_a_rischio": 1,
+    "costo_medio_annuo": 0.05643150633056875,
+    "giorni": 1245
+   },
+   "le_altre_senza_le_prime_30": {
+    "annuo_capitale": -0.09428366489443686,
+    "per_anno": {
+     "2023": 0.1888822475800979,
+     "2024": 0.04960053086722256,
+     "2025": -0.526496663671726,
+     "2026": 0.0558192538071779
+    },
+    "sharpe_settimane": -0.34553269630868527,
+    "t": -0.628422463327452,
+    "discesa_giornaliera": -0.5713815633922783,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 3,
+    "costo_medio_annuo": 0.042075445370872246,
+    "giorni": 1245
+   },
+   "spese_ordine_limite": {
+    "annuo_capitale": -0.0833831352584388,
+    "per_anno": {
+     "2023": 0.14056644043654537,
+     "2024": 0.08757629110362211,
+     "2025": -0.5055826204501769,
+     "2026": 0.06300584878933546
+    },
+    "sharpe_settimane": -0.3190676981897557,
+    "t": -0.5802904066870106,
+    "discesa_giornaliera": -0.5481565765377716,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 2,
+    "costo_medio_annuo": 0.03079212970845124,
+    "giorni": 1245
+   },
+   "senza_la_moneta_migliore": {
+    "annuo_capitale": -0.13414018462060454,
+    "per_anno": {
+     "2023": 0.134225551732802,
+     "2024": 0.07723479917038858,
+     "2025": -0.6334845107981754,
+     "2026": 0.025532941540890516
+    },
+    "sharpe_settimane": -0.5099162029423575,
+    "t": -0.9273877689923338,
+    "discesa_giornaliera": -0.5621864094345448,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 2,
+    "costo_medio_annuo": 0.04001610814609694,
+    "giorni": 1245,
+    "moneta": "MAVIA"
+   },
+   "contributo_USDT_top5": {
+    "MAVIA": 123.7834468210924,
+    "kPEPE": 12.889380861724021,
+    "FTM": 11.996670349956746,
+    "DOGE": 9.583779613388042,
+    "CFX": 8.296755133001177
+   },
+   "contributo_USDT_peggiori3": {
+    "ZORA": -40.222192276996665,
+    "HYPER": -100.33534646848344,
+    "OMNI": -107.42565551874249
+   },
+   "G1": {
+    "corr_settimane": -0.19688355506619803,
+    "corr_giorni": -0.14608049694272984,
+    "settimane_comuni": 171
+   },
+   "monete_per_decisione_media": 30.025
+  }
+ },
+ "B": {
+  "numeri": {
+   "giorni": 1245,
+   "annuo_capitale": 0.01767233142342704,
+   "per_anno": {
+    "2023": 0.2894161609572546,
+    "2024": 0.03973767213856751,
+    "2025": -0.17586502197549725,
+    "2026": 0.0357611968404076
+   },
+   "funding_per_anno": {
+    "2023": 0.36078637029083993,
+    "2024": 0.16601637264270933,
+    "2025": 0.20046951391444512,
+    "2026": 0.19153121405488255
+   },
+   "spese_per_anno": {
+    "2023": 0.07398813733806354,
+    "2024": 0.12481369829336529,
+    "2025": 0.12426249823545646,
+    "2026": 0.13076025838397384
+   },
+   "lordo_prezzo_per_anno": {
+    "2023": 0.0026179280044780965,
+    "2024": -0.0014650022107765275,
+    "2025": -0.2520720376544858,
+    "2026": -0.02500975883050109
+   },
+   "sharpe_settimane": 0.0634665539527355,
+   "settimane": 174,
+   "t": 0.11609616404338247,
+   "asimmetria": -0.70373303401242,
+   "curtosi": 62.141726310598834,
+   "discesa_settimanale": -0.5467163980434018,
+   "discesa_giornaliera": -0.5511665502161396,
+   "sharpe_365_giorni": 0.04771384505423322,
+   "costo_medio_annuo_capitale": 0.11753112676388329,
+   "funding_annuo": 0.21519999341346568,
+   "lordo_prezzo_annuo": -0.07999653522615545,
+   "giorni_fermi": 26,
+   "monete_medie_in_posizione": 14.497991967871487,
+   "primo_giorno": "2023-06-05",
+   "ultimo_giorno": "2026-10-31",
+   "periodo_esame_dal": "2023-06-12",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 0.0004913470284616998,
+  "gruppo": [
+   "163 A",
+   "163 B"
+  ],
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "nessuna_liquidazione": false
+  },
+  "esito": "non passa",
+  "eventi": {
+   "liquidazioni_per_metodo": {
+    "giornaliero": 2,
+    "orario": 0
+   },
+   "liquidazioni_totali": 2,
+   "giorni_a_rischio_per_metodo": {
+    "giornaliero": 2,
+    "orario": 0
+   },
+   "giorni_a_rischio_totali": 2,
+   "primi_giorni_a_rischio": [
+    [
+     "2025-10-10",
+     "giornaliero"
+    ],
+    [
+     "2025-11-20",
+     "giornaliero"
+    ]
+   ],
+   "elenco_liquidazioni": [
+    [
+     "2025-10-10",
+     "Binance",
+     "giornaliero"
+    ],
+    [
+     "2025-11-20",
+     "Binance",
+     "giornaliero"
+    ]
+   ],
+   "trasferimenti": 93,
+   "chiusure_per_buco": 7,
+   "primi_buchi": [
+    [
+     "FTM",
+     "2025-01-13"
+    ],
+    [
+     "RDNT",
+     "2025-04-12"
+    ],
+    [
+     "OMNI",
+     "2025-09-26"
+    ],
+    [
+     "OM",
+     "2026-02-24"
+    ],
+    [
+     "MAVIA",
+     "2026-05-06"
+    ],
+    [
+     "ZEREBRO",
+     "2026-05-06"
+    ]
+   ],
+   "cambi_lato": 49,
+   "ingressi": 1239,
+   "decisioni": 178
+  },
+  "controlli": {
+   "solo_BTC_ETH": {
+    "annuo_capitale": 0.01854251489258088,
+    "per_anno": {
+     "2023": 0.06563632861577066,
+     "2024": 0.023500680048190295,
+     "2025": 0.001919323655654003,
+     "2026": 0.0
+    },
+    "sharpe_settimane": 1.6953593918533694,
+    "t": 3.1012353721879444,
+    "discesa_giornaliera": -0.004474932791933894,
+    "liquidazioni": 0,
+    "giorni_a_rischio": 0,
+    "costo_medio_annuo": 0.012879798608509893,
+    "giorni": 1245
+   },
+   "prime_30_per_volume": {
+    "annuo_capitale": -0.01369689495046979,
+    "per_anno": {
+     "2023": 0.2613385654794651,
+     "2024": 0.07116986946268414,
+     "2025": -0.34012362364763193,
+     "2026": 0.08606321527638383
+    },
+    "sharpe_settimane": -0.07473836062762365,
+    "t": -0.13671511111537338,
+    "discesa_giornaliera": -0.33712703230008945,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 7,
+    "costo_medio_annuo": 0.10872040835236382,
+    "giorni": 1245
+   },
+   "le_altre_senza_le_prime_30": {
+    "annuo_capitale": -0.0032883459936072588,
+    "per_anno": {
+     "2023": 0.2984256452415752,
+     "2024": 0.004422219826253993,
+     "2025": -0.21280191329984516,
+     "2026": 0.030561808010732765
+    },
+    "sharpe_settimane": 0.0027650634824753742,
+    "t": 0.0050579910781179465,
+    "discesa_giornaliera": -0.5812199278075778,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 3,
+    "costo_medio_annuo": 0.12327857034114716,
+    "giorni": 1245
+   },
+   "spese_ordine_limite": {
+    "annuo_capitale": 0.06124723679401427,
+    "per_anno": {
+     "2023": 0.314030130937721,
+     "2024": 0.08534416487049154,
+     "2025": -0.12921150109394974,
+     "2026": 0.0862918285142041
+    },
+    "sharpe_settimane": 0.1911957777815031,
+    "t": 0.3497447868093484,
+    "discesa_giornaliera": -0.5401985707975754,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 2,
+    "costo_medio_annuo": 0.07390252494380577,
+    "giorni": 1245
+   },
+   "senza_la_moneta_migliore": {
+    "annuo_capitale": -0.14929991401113218,
+    "per_anno": {
+     "2023": 0.2894161609572546,
+     "2024": 0.044639126758109916,
+     "2025": -0.6815405710812612,
+     "2026": -0.046813811492404205
+    },
+    "sharpe_settimane": -0.5415434107519415,
+    "t": -0.990618030058656,
+    "discesa_giornaliera": -0.596374866408538,
+    "liquidazioni": 2,
+    "giorni_a_rischio": 2,
+    "costo_medio_annuo": 0.1235481233096132,
+    "giorni": 1245,
+    "moneta": "MAVIA"
+   },
+   "contributo_USDT_top5": {
+    "MAVIA": 516.5887470256384,
+    "FTM": 28.31486585587561,
+    "MOVE": 15.777082637139056,
+    "CFX": 13.139992983156292,
+    "APE": 12.947902985946756
+   },
+   "contributo_USDT_peggiori3": {
+    "CAKE": -101.4327971279428,
+    "ZORA": -155.69191018518407,
+    "TNSR": -155.97161694439123
+   },
+   "G1": {
+    "corr_settimane": -0.1452950550653026,
+    "corr_giorni": -0.0927219619313511,
+    "settimane_comuni": 173
+   },
+   "monete_per_decisione_media": 14.567415730337078
+  }
+ }
+}

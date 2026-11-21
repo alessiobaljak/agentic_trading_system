@@ -1,0 +1,1516 @@
+{
+ "monete": 213,
+ "impronte": {
+  "funding": {
+   "file": 6447,
+   "byte": 7013738,
+   "non_trovati_404": 2499,
+   "sha256_unico": "17c7186d97be7a427bc88e9e811d06ff48e3b27ca83a7181121627e4b74541cc"
+  },
+  "d1": {
+   "file": 6652,
+   "byte": 12068785,
+   "non_trovati_404": 2294,
+   "sha256_unico": "aed119b58db2e9eb550b3e9d1d9801178074e43dd1fc3f85ea4bf28cba5e6111"
+  },
+  "mark1h": {
+   "file": 6689,
+   "byte": 106398304,
+   "non_trovati_404": 2257,
+   "sha256_unico": "e773a7ebe5810006c3ea19445135be93c478511ee168d711697413909399f3bf"
+  }
+ },
+ "hl": {
+  "BTC": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ETH": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ATOM": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "MATIC": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 532,
+   "candele_1h": 0
+  },
+  "DYDX": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "SOL": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "AVAX": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "BNB": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "APE": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "OP": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "LTC": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ARB": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "DOGE": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "INJ": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "SUI": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1299,
+   "candele_1h": 5000
+  },
+  "kPEPE": {
+   "funding_righe": 29887,
+   "funding_da": 1683849600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 1297,
+   "candele_1h": 5000
+  },
+  "CRV": {
+   "funding_righe": 29876,
+   "funding_da": 1684166400409,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "LDO": {
+   "funding_righe": 29875,
+   "funding_da": 1684195200447,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "LINK": {
+   "funding_righe": 29868,
+   "funding_da": 1684396800038,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "STX": {
+   "funding_righe": 29868,
+   "funding_da": 1684396800038,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "RNDR": {
+   "funding_righe": 29868,
+   "funding_da": 1684396800038,
+   "funding_a": 1793491200061,
+   "candele_1d": 482,
+   "candele_1h": 0
+  },
+  "CFX": {
+   "funding_righe": 29848,
+   "funding_da": 1684972800233,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "FTM": {
+   "funding_righe": 29848,
+   "funding_da": 1684972800233,
+   "funding_a": 1793491200061,
+   "candele_1d": 657,
+   "candele_1h": 0
+  },
+  "GMX": {
+   "funding_righe": 29848,
+   "funding_da": 1684972800233,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "SNX": {
+   "funding_righe": 29848,
+   "funding_da": 1684972800233,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "XRP": {
+   "funding_righe": 29566,
+   "funding_da": 1687046400182,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "BCH": {
+   "funding_righe": 29275,
+   "funding_da": 1688094000005,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "APT": {
+   "funding_righe": 29275,
+   "funding_da": 1688094000005,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "AAVE": {
+   "funding_righe": 28847,
+   "funding_da": 1689638400105,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "COMP": {
+   "funding_righe": 28847,
+   "funding_da": 1689638400105,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "MKR": {
+   "funding_righe": 28770,
+   "funding_da": 1689915600008,
+   "funding_a": 1793491200061,
+   "candele_1d": 893,
+   "candele_1h": 0
+  },
+  "WLD": {
+   "funding_righe": 28689,
+   "funding_da": 1690207200105,
+   "funding_a": 1793491200061,
+   "candele_1d": 1217,
+   "candele_1h": 5000
+  },
+  "FXS": {
+   "funding_righe": 28538,
+   "funding_da": 1690750800046,
+   "funding_a": 1793491200061,
+   "candele_1d": 1016,
+   "candele_1h": 0
+  },
+  "YGG": {
+   "funding_righe": 28375,
+   "funding_da": 1691337600190,
+   "funding_a": 1793491200061,
+   "candele_1d": 1205,
+   "candele_1h": 5000
+  },
+  "TRX": {
+   "funding_righe": 28375,
+   "funding_da": 1691337600190,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "kSHIB": {
+   "funding_righe": 28248,
+   "funding_da": 1691794800106,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "UNI": {
+   "funding_righe": 28248,
+   "funding_da": 1691794800106,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "SEI": {
+   "funding_righe": 28162,
+   "funding_da": 1692104400148,
+   "funding_a": 1793491200061,
+   "candele_1d": 1195,
+   "candele_1h": 5000
+  },
+  "RUNE": {
+   "funding_righe": 28161,
+   "funding_da": 1692108000709,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "CYBER": {
+   "funding_righe": 27790,
+   "funding_da": 1693447200065,
+   "funding_a": 1793491200061,
+   "candele_1d": 600,
+   "candele_1h": 0
+  },
+  "ZRO": {
+   "funding_righe": 27621,
+   "funding_da": 1694055600082,
+   "funding_a": 1793491200061,
+   "candele_1d": 1172,
+   "candele_1h": 5000
+  },
+  "BLZ": {
+   "funding_righe": 27492,
+   "funding_da": 1694520000186,
+   "funding_a": 1793491200061,
+   "candele_1d": 636,
+   "candele_1h": 0
+  },
+  "DOT": {
+   "funding_righe": 27492,
+   "funding_da": 1694520000186,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "BANANA": {
+   "funding_righe": 27420,
+   "funding_da": 1694779200183,
+   "funding_a": 1793491200061,
+   "candele_1d": 1165,
+   "candele_1h": 5000
+  },
+  "TRB": {
+   "funding_righe": 27381,
+   "funding_da": 1694919600140,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "FTT": {
+   "funding_righe": 27179,
+   "funding_da": 1695646800109,
+   "funding_a": 1793491200061,
+   "candele_1d": 974,
+   "candele_1h": 779
+  },
+  "LOOM": {
+   "funding_righe": 27097,
+   "funding_da": 1695942000120,
+   "funding_a": 1793491200061,
+   "candele_1d": 442,
+   "candele_1h": 0
+  },
+  "OGN": {
+   "funding_righe": 27045,
+   "funding_da": 1696129200018,
+   "funding_a": 1793491200061,
+   "candele_1d": 861,
+   "candele_1h": 0
+  },
+  "RDNT": {
+   "funding_righe": 26997,
+   "funding_da": 1696302000117,
+   "funding_a": 1793491200061,
+   "candele_1d": 738,
+   "candele_1h": 0
+  },
+  "ARK": {
+   "funding_righe": 26914,
+   "funding_da": 1696600800082,
+   "funding_a": 1793491200061,
+   "candele_1d": 1011,
+   "candele_1h": 1523
+  },
+  "BNT": {
+   "funding_righe": 26864,
+   "funding_da": 1696780800057,
+   "funding_a": 1793491200061,
+   "candele_1d": 604,
+   "candele_1h": 0
+  },
+  "BIGTIME": {
+   "funding_righe": 26790,
+   "funding_da": 1697047200118,
+   "funding_a": 1793491200061,
+   "candele_1d": 1138,
+   "candele_1h": 5000
+  },
+  "KAS": {
+   "funding_righe": 26766,
+   "funding_da": 1697133600059,
+   "funding_a": 1793491200061,
+   "candele_1d": 1137,
+   "candele_1h": 5000
+  },
+  "ORBS": {
+   "funding_righe": 26740,
+   "funding_da": 1697227200016,
+   "funding_a": 1793491200061,
+   "candele_1d": 540,
+   "candele_1h": 0
+  },
+  "BLUR": {
+   "funding_righe": 26622,
+   "funding_da": 1697652000137,
+   "funding_a": 1793491200061,
+   "candele_1d": 1304,
+   "candele_1h": 5000
+  },
+  "TIA": {
+   "funding_righe": 26593,
+   "funding_da": 1697756400093,
+   "funding_a": 1793491200061,
+   "candele_1d": 1130,
+   "candele_1h": 5000
+  },
+  "BSV": {
+   "funding_righe": 26588,
+   "funding_da": 1697774400083,
+   "funding_a": 1793491200061,
+   "candele_1d": 1129,
+   "candele_1h": 5000
+  },
+  "ADA": {
+   "funding_righe": 26538,
+   "funding_da": 1697954400056,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "TON": {
+   "funding_righe": 26538,
+   "funding_da": 1697954400056,
+   "funding_a": 1793491200061,
+   "candele_1d": 968,
+   "candele_1h": 1283
+  },
+  "MINA": {
+   "funding_righe": 26481,
+   "funding_da": 1698159600153,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "POLYX": {
+   "funding_righe": 26481,
+   "funding_da": 1698159600153,
+   "funding_a": 1793491200061,
+   "candele_1d": 1125,
+   "candele_1h": 5000
+  },
+  "GAS": {
+   "funding_righe": 26481,
+   "funding_da": 1698159600153,
+   "funding_a": 1793491200061,
+   "candele_1d": 1125,
+   "candele_1h": 5000
+  },
+  "PENDLE": {
+   "funding_righe": 26432,
+   "funding_da": 1698336000046,
+   "funding_a": 1793491200061,
+   "candele_1d": 1213,
+   "candele_1h": 5000
+  },
+  "STG": {
+   "funding_righe": 26432,
+   "funding_da": 1698336000046,
+   "funding_a": 1793491200061,
+   "candele_1d": 861,
+   "candele_1h": 0
+  },
+  "FET": {
+   "funding_righe": 26432,
+   "funding_da": 1698336000046,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "STRAX": {
+   "funding_righe": 26432,
+   "funding_da": 1698336000046,
+   "funding_a": 1793491200061,
+   "candele_1d": 157,
+   "candele_1h": 0
+  },
+  "NEAR": {
+   "funding_righe": 26287,
+   "funding_da": 1698858000031,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "MEME": {
+   "funding_righe": 26241,
+   "funding_da": 1699023600120,
+   "funding_a": 1793491200061,
+   "candele_1d": 1115,
+   "candele_1h": 5000
+  },
+  "ORDI": {
+   "funding_righe": 26143,
+   "funding_da": 1699376400370,
+   "funding_a": 1793491200061,
+   "candele_1d": 1111,
+   "candele_1h": 5000
+  },
+  "BADGER": {
+   "funding_righe": 26097,
+   "funding_da": 1699542000315,
+   "funding_a": 1793491200061,
+   "candele_1d": 520,
+   "candele_1h": 0
+  },
+  "NEO": {
+   "funding_righe": 26097,
+   "funding_da": 1699542000315,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ZEN": {
+   "funding_righe": 26097,
+   "funding_da": 1699542000315,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "FIL": {
+   "funding_righe": 25988,
+   "funding_da": 1699934400431,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "PYTH": {
+   "funding_righe": 25969,
+   "funding_da": 1700002800033,
+   "funding_a": 1793491200061,
+   "candele_1d": 1104,
+   "candele_1h": 5000
+  },
+  "SUSHI": {
+   "funding_righe": 25904,
+   "funding_da": 1700236800047,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ILV": {
+   "funding_righe": 25904,
+   "funding_da": 1700236800047,
+   "funding_a": 1793491200061,
+   "candele_1d": 512,
+   "candele_1h": 0
+  },
+  "IMX": {
+   "funding_righe": 25904,
+   "funding_da": 1700236800047,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "kBONK": {
+   "funding_righe": 25848,
+   "funding_da": 1700438400148,
+   "funding_a": 1793491200061,
+   "candele_1d": 1099,
+   "candele_1h": 5000
+  },
+  "GMT": {
+   "funding_righe": 25686,
+   "funding_da": 1701021600237,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "SUPER": {
+   "funding_righe": 25686,
+   "funding_da": 1701021600237,
+   "funding_a": 1793491200061,
+   "candele_1d": 1092,
+   "candele_1h": 5000
+  },
+  "USTC": {
+   "funding_righe": 25664,
+   "funding_da": 1701100800217,
+   "funding_a": 1793491200061,
+   "candele_1d": 891,
+   "candele_1h": 298
+  },
+  "JUP": {
+   "funding_righe": 25535,
+   "funding_da": 1701565200070,
+   "funding_a": 1793491200061,
+   "candele_1d": 1085,
+   "candele_1h": 5000
+  },
+  "kLUNC": {
+   "funding_righe": 25468,
+   "funding_da": 1701806400334,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "RSR": {
+   "funding_righe": 25468,
+   "funding_da": 1701806400334,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "GALA": {
+   "funding_righe": 25468,
+   "funding_da": 1701806400334,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "JTO": {
+   "funding_righe": 25423,
+   "funding_da": 1701968400024,
+   "funding_a": 1793491200061,
+   "candele_1d": 1081,
+   "candele_1h": 5000
+  },
+  "NTRN": {
+   "funding_righe": 25301,
+   "funding_da": 1702407600063,
+   "funding_a": 1793491200061,
+   "candele_1d": 508,
+   "candele_1h": 0
+  },
+  "ACE": {
+   "funding_righe": 25162,
+   "funding_da": 1702908000021,
+   "funding_a": 1793491200061,
+   "candele_1d": 1070,
+   "candele_1h": 5000
+  },
+  "MAV": {
+   "funding_righe": 25115,
+   "funding_da": 1703077200097,
+   "funding_a": 1793491200061,
+   "candele_1d": 1042,
+   "candele_1h": 298
+  },
+  "WIF": {
+   "funding_righe": 25064,
+   "funding_da": 1703260800182,
+   "funding_a": 1793491200061,
+   "candele_1d": 1066,
+   "candele_1h": 5000
+  },
+  "CAKE": {
+   "funding_righe": 24873,
+   "funding_da": 1703948400061,
+   "funding_a": 1793491200061,
+   "candele_1d": 1116,
+   "candele_1h": 5000
+  },
+  "PEOPLE": {
+   "funding_righe": 24775,
+   "funding_da": 1704301200035,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ENS": {
+   "funding_righe": 24729,
+   "funding_da": 1704466800188,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ETC": {
+   "funding_righe": 24575,
+   "funding_da": 1705021200061,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "XAI": {
+   "funding_righe": 24486,
+   "funding_da": 1705341600091,
+   "funding_a": 1793491200061,
+   "candele_1d": 1048,
+   "candele_1h": 5000
+  },
+  "MANTA": {
+   "funding_righe": 24410,
+   "funding_da": 1705615200307,
+   "funding_a": 1793491200061,
+   "candele_1d": 1039,
+   "candele_1h": 5000
+  },
+  "UMA": {
+   "funding_righe": 24404,
+   "funding_da": 1705636800097,
+   "funding_a": 1793491200061,
+   "candele_1d": 1292,
+   "candele_1h": 5000
+  },
+  "ONDO": {
+   "funding_righe": 24369,
+   "funding_da": 1705762800040,
+   "funding_a": 1793491200061,
+   "candele_1d": 1037,
+   "candele_1h": 5000
+  },
+  "ALT": {
+   "funding_righe": 24249,
+   "funding_da": 1706194800108,
+   "funding_a": 1793491200061,
+   "candele_1d": 1032,
+   "candele_1h": 5000
+  },
+  "ZETA": {
+   "funding_righe": 24071,
+   "funding_da": 1706835600381,
+   "funding_a": 1793491200061,
+   "candele_1d": 1024,
+   "candele_1h": 5000
+  },
+  "DYM": {
+   "funding_righe": 23958,
+   "funding_da": 1707242400264,
+   "funding_a": 1793491200061,
+   "candele_1d": 1020,
+   "candele_1h": 5000
+  },
+  "MAVIA": {
+   "funding_righe": 23953,
+   "funding_da": 1707260400019,
+   "funding_a": 1793491200061,
+   "candele_1d": 820,
+   "candele_1h": 297
+  },
+  "W": {
+   "funding_righe": 23934,
+   "funding_da": 1707328800192,
+   "funding_a": 1793491200061,
+   "candele_1d": 1019,
+   "candele_1h": 5000
+  },
+  "STRK": {
+   "funding_righe": 23769,
+   "funding_da": 1707922800050,
+   "funding_a": 1793491200061,
+   "candele_1d": 1012,
+   "candele_1h": 5000
+  },
+  "PIXEL": {
+   "funding_righe": 23650,
+   "funding_da": 1708351200174,
+   "funding_a": 1793491200061,
+   "candele_1d": 418,
+   "candele_1h": 0
+  },
+  "AI": {
+   "funding_righe": 23650,
+   "funding_da": 1708351200174,
+   "funding_a": 1793491200061,
+   "candele_1d": 460,
+   "candele_1h": 0
+  },
+  "TAO": {
+   "funding_righe": 23650,
+   "funding_da": 1708351200174,
+   "funding_a": 1793491200061,
+   "candele_1d": 1007,
+   "candele_1h": 5000
+  },
+  "AR": {
+   "funding_righe": 23443,
+   "funding_da": 1709096400097,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "MYRO": {
+   "funding_righe": 23287,
+   "funding_da": 1709658000053,
+   "funding_a": 1793491200061,
+   "candele_1d": 390,
+   "candele_1h": 0
+  },
+  "kFLOKI": {
+   "funding_righe": 23136,
+   "funding_da": 1710201600024,
+   "funding_a": 1793491200061,
+   "candele_1d": 1296,
+   "candele_1h": 5000
+  },
+  "BOME": {
+   "funding_righe": 23046,
+   "funding_da": 1710525600168,
+   "funding_a": 1793491200061,
+   "candele_1d": 982,
+   "candele_1h": 5000
+  },
+  "ETHFI": {
+   "funding_righe": 22919,
+   "funding_da": 1710982800191,
+   "funding_a": 1793491200061,
+   "candele_1d": 979,
+   "candele_1h": 5000
+  },
+  "ENA": {
+   "funding_righe": 22618,
+   "funding_da": 1712066400220,
+   "funding_a": 1793491200061,
+   "candele_1d": 964,
+   "candele_1h": 5000
+  },
+  "TNSR": {
+   "funding_righe": 22466,
+   "funding_da": 1712613600272,
+   "funding_a": 1793491200061,
+   "candele_1d": 958,
+   "candele_1h": 5000
+  },
+  "SAGA": {
+   "funding_righe": 22169,
+   "funding_da": 1713682800074,
+   "funding_a": 1793491200061,
+   "candele_1d": 957,
+   "candele_1h": 5000
+  },
+  "MERL": {
+   "funding_righe": 22113,
+   "funding_da": 1713884400010,
+   "funding_a": 1793491200061,
+   "candele_1d": 943,
+   "candele_1h": 5000
+  },
+  "HBAR": {
+   "funding_righe": 22098,
+   "funding_da": 1713938400184,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "POPCAT": {
+   "funding_righe": 22000,
+   "funding_da": 1714291200161,
+   "funding_a": 1793491200061,
+   "candele_1d": 938,
+   "candele_1h": 5000
+  },
+  "OMNI": {
+   "funding_righe": 21981,
+   "funding_da": 1714359600177,
+   "funding_a": 1793491200061,
+   "candele_1d": 527,
+   "candele_1h": 0
+  },
+  "EIGEN": {
+   "funding_righe": 21956,
+   "funding_da": 1714449600010,
+   "funding_a": 1793491200061,
+   "candele_1d": 936,
+   "candele_1h": 5000
+  },
+  "REZ": {
+   "funding_righe": 21947,
+   "funding_da": 1714482000169,
+   "funding_a": 1793491200061,
+   "candele_1d": 936,
+   "candele_1h": 5000
+  },
+  "NOT": {
+   "funding_righe": 21548,
+   "funding_da": 1715918400104,
+   "funding_a": 1793491200061,
+   "candele_1d": 920,
+   "candele_1h": 5000
+  },
+  "TURBO": {
+   "funding_righe": 21200,
+   "funding_da": 1717171200124,
+   "funding_a": 1793491200061,
+   "candele_1d": 906,
+   "candele_1h": 5000
+  },
+  "BRETT": {
+   "funding_righe": 20939,
+   "funding_da": 1718110800088,
+   "funding_a": 1793491200061,
+   "candele_1d": 894,
+   "candele_1h": 5000
+  },
+  "IO": {
+   "funding_righe": 20925,
+   "funding_da": 1718161200066,
+   "funding_a": 1793491200061,
+   "candele_1d": 894,
+   "candele_1h": 5000
+  },
+  "ZK": {
+   "funding_righe": 20916,
+   "funding_da": 1718193600035,
+   "funding_a": 1793491200061,
+   "candele_1d": 893,
+   "candele_1h": 5000
+  },
+  "LISTA": {
+   "funding_righe": 20540,
+   "funding_da": 1719547200108,
+   "funding_a": 1793491200061,
+   "candele_1d": 296,
+   "candele_1h": 0
+  },
+  "MEW": {
+   "funding_righe": 19928,
+   "funding_da": 1721750400045,
+   "funding_a": 1793491200061,
+   "candele_1d": 688,
+   "candele_1h": 295
+  },
+  "RENDER": {
+   "funding_righe": 19741,
+   "funding_da": 1722423600012,
+   "funding_a": 1793491200061,
+   "candele_1d": 849,
+   "candele_1h": 5000
+  },
+  "POL": {
+   "funding_righe": 18594,
+   "funding_da": 1726556400061,
+   "funding_a": 1793491200061,
+   "candele_1d": 800,
+   "candele_1h": 5000
+  },
+  "CATI": {
+   "funding_righe": 18403,
+   "funding_da": 1727244000156,
+   "funding_a": 1793491200061,
+   "candele_1d": 204,
+   "candele_1h": 0
+  },
+  "CELO": {
+   "funding_righe": 18403,
+   "funding_da": 1727244000156,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "HMSTR": {
+   "funding_righe": 18356,
+   "funding_da": 1727413200006,
+   "funding_a": 1793491200061,
+   "candele_1d": 787,
+   "candele_1h": 5000
+  },
+  "SCR": {
+   "funding_righe": 18069,
+   "funding_da": 1728446400049,
+   "funding_a": 1793491200061,
+   "candele_1d": 574,
+   "candele_1h": 295
+  },
+  "NEIROETH": {
+   "funding_righe": 17724,
+   "funding_da": 1729688400095,
+   "funding_a": 1793491200061,
+   "candele_1d": 385,
+   "candele_1h": 0
+  },
+  "GOAT": {
+   "funding_righe": 17724,
+   "funding_da": 1729688400095,
+   "funding_a": 1793491200061,
+   "candele_1d": 760,
+   "candele_1h": 5000
+  },
+  "MOODENG": {
+   "funding_righe": 17679,
+   "funding_da": 1729850400122,
+   "funding_a": 1793491200061,
+   "candele_1d": 758,
+   "candele_1h": 5000
+  },
+  "GRASS": {
+   "funding_righe": 17602,
+   "funding_da": 1730127600092,
+   "funding_a": 1793491200061,
+   "candele_1d": 755,
+   "candele_1h": 5000
+  },
+  "PNUT": {
+   "funding_righe": 17205,
+   "funding_da": 1731556800090,
+   "funding_a": 1793491200061,
+   "candele_1d": 741,
+   "candele_1h": 5000
+  },
+  "XLM": {
+   "funding_righe": 16990,
+   "funding_da": 1732330800022,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "CHILLGUY": {
+   "funding_righe": 16939,
+   "funding_da": 1732514400056,
+   "funding_a": 1793491200061,
+   "candele_1d": 547,
+   "candele_1h": 776
+  },
+  "SAND": {
+   "funding_righe": 16716,
+   "funding_da": 1733317200060,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "IOTA": {
+   "funding_righe": 16716,
+   "funding_da": 1733317200060,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "ALGO": {
+   "funding_righe": 16716,
+   "funding_da": 1733317200060,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "HYPE": {
+   "funding_righe": 16695,
+   "funding_da": 1733392800004,
+   "funding_a": 1793491200061,
+   "candele_1d": 717,
+   "candele_1h": 5000
+  },
+  "ME": {
+   "funding_righe": 16570,
+   "funding_da": 1733842800055,
+   "funding_a": 1793491200061,
+   "candele_1d": 712,
+   "candele_1h": 5000
+  },
+  "MOVE": {
+   "funding_righe": 16556,
+   "funding_da": 1733893200032,
+   "funding_a": 1793491200061,
+   "candele_1d": 713,
+   "candele_1h": 5000
+  },
+  "VIRTUAL": {
+   "funding_righe": 16436,
+   "funding_da": 1734325200134,
+   "funding_a": 1793491200061,
+   "candele_1d": 712,
+   "candele_1h": 5000
+  },
+  "PENGU": {
+   "funding_righe": 16402,
+   "funding_da": 1734447600051,
+   "funding_a": 1793491200061,
+   "candele_1d": 705,
+   "candele_1h": 5000
+  },
+  "USUAL": {
+   "funding_righe": 16376,
+   "funding_da": 1734541200133,
+   "funding_a": 1793491200061,
+   "candele_1d": 704,
+   "candele_1h": 5000
+  },
+  "FARTCOIN": {
+   "funding_righe": 16333,
+   "funding_da": 1734696000134,
+   "funding_a": 1793491200061,
+   "candele_1d": 702,
+   "candele_1h": 5000
+  },
+  "AI16Z": {
+   "funding_righe": 16052,
+   "funding_da": 1735707600170,
+   "funding_a": 1793491200061,
+   "candele_1d": 310,
+   "candele_1h": 0
+  },
+  "AIXBT": {
+   "funding_righe": 16052,
+   "funding_da": 1735707600170,
+   "funding_a": 1793491200061,
+   "candele_1d": 702,
+   "candele_1h": 5000
+  },
+  "ZEREBRO": {
+   "funding_righe": 16019,
+   "funding_da": 1735826400005,
+   "funding_a": 1793491200061,
+   "candele_1d": 489,
+   "candele_1h": 296
+  },
+  "BIO": {
+   "funding_righe": 15995,
+   "funding_da": 1735912800035,
+   "funding_a": 1793491200061,
+   "candele_1d": 688,
+   "candele_1h": 5000
+  },
+  "GRIFFAIN": {
+   "funding_righe": 15907,
+   "funding_da": 1736229600005,
+   "funding_a": 1793491200061,
+   "candele_1d": 689,
+   "candele_1h": 5000
+  },
+  "SPX": {
+   "funding_righe": 15907,
+   "funding_da": 1736229600005,
+   "funding_a": 1793491200061,
+   "candele_1d": 712,
+   "candele_1h": 5000
+  },
+  "S": {
+   "funding_righe": 15665,
+   "funding_da": 1737100800050,
+   "funding_a": 1793491200061,
+   "candele_1d": 675,
+   "candele_1h": 5000
+  },
+  "MORPHO": {
+   "funding_righe": 15664,
+   "funding_da": 1737104400042,
+   "funding_a": 1793491200061,
+   "candele_1d": 725,
+   "candele_1h": 5000
+  },
+  "TRUMP": {
+   "funding_righe": 15643,
+   "funding_da": 1737180000140,
+   "funding_a": 1793491200061,
+   "candele_1d": 673,
+   "candele_1h": 5000
+  },
+  "MELANIA": {
+   "funding_righe": 15600,
+   "funding_da": 1737334800184,
+   "funding_a": 1793491200061,
+   "candele_1d": 671,
+   "candele_1h": 5000
+  },
+  "ANIME": {
+   "funding_righe": 15561,
+   "funding_da": 1737475200106,
+   "funding_a": 1793491200061,
+   "candele_1d": 670,
+   "candele_1h": 5000
+  },
+  "VINE": {
+   "funding_righe": 15513,
+   "funding_da": 1737648000035,
+   "funding_a": 1793491200061,
+   "candele_1d": 581,
+   "candele_1h": 3009
+  },
+  "VVV": {
+   "funding_righe": 15408,
+   "funding_da": 1738026000099,
+   "funding_a": 1793491200061,
+   "candele_1d": 663,
+   "candele_1h": 5000
+  },
+  "BERA": {
+   "funding_righe": 15179,
+   "funding_da": 1738850400048,
+   "funding_a": 1793491200061,
+   "candele_1d": 654,
+   "candele_1h": 5000
+  },
+  "TST": {
+   "funding_righe": 15109,
+   "funding_da": 1739102400016,
+   "funding_a": 1793491200061,
+   "candele_1d": 471,
+   "candele_1h": 776
+  },
+  "LAYER": {
+   "funding_righe": 15057,
+   "funding_da": 1739289600035,
+   "funding_a": 1793491200061,
+   "candele_1d": 649,
+   "candele_1h": 5000
+  },
+  "IP": {
+   "funding_righe": 15015,
+   "funding_da": 1739440800004,
+   "funding_a": 1793491200061,
+   "candele_1d": 502,
+   "candele_1h": 1617
+  },
+  "OM": {
+   "funding_righe": 14937,
+   "funding_da": 1739721600015,
+   "funding_a": 1793491200061,
+   "candele_1d": 742,
+   "candele_1h": 0
+  },
+  "KAITO": {
+   "funding_righe": 14843,
+   "funding_da": 1740060000075,
+   "funding_a": 1793491200061,
+   "candele_1d": 640,
+   "candele_1h": 5000
+  },
+  "NIL": {
+   "funding_righe": 14075,
+   "funding_da": 1742824800065,
+   "funding_a": 1793491200061,
+   "candele_1d": 608,
+   "candele_1h": 5000
+  },
+  "PROMPT": {
+   "funding_righe": 13630,
+   "funding_da": 1744426800069,
+   "funding_a": 1793491200061,
+   "candele_1d": 390,
+   "candele_1h": 296
+  },
+  "BABY": {
+   "funding_righe": 13630,
+   "funding_da": 1744426800069,
+   "funding_a": 1793491200061,
+   "candele_1d": 596,
+   "candele_1h": 5000
+  },
+  "WCT": {
+   "funding_righe": 13546,
+   "funding_da": 1744729200096,
+   "funding_a": 1793491200061,
+   "candele_1d": 586,
+   "candele_1h": 5000
+  },
+  "HYPER": {
+   "funding_righe": 13377,
+   "funding_da": 1745337600048,
+   "funding_a": 1793491200061,
+   "candele_1d": 579,
+   "candele_1h": 5000
+  },
+  "ZORA": {
+   "funding_righe": 13354,
+   "funding_da": 1745420400032,
+   "funding_a": 1793491200061,
+   "candele_1d": 578,
+   "candele_1h": 5000
+  },
+  "INIT": {
+   "funding_righe": 13333,
+   "funding_da": 1745496000015,
+   "funding_a": 1793491200061,
+   "candele_1d": 585,
+   "candele_1h": 5000
+  },
+  "DOOD": {
+   "funding_righe": 12971,
+   "funding_da": 1746799200033,
+   "funding_a": 1793491200061,
+   "candele_1d": 413,
+   "candele_1h": 1520
+  },
+  "NXPC": {
+   "funding_righe": 12832,
+   "funding_da": 1747299600016,
+   "funding_a": 1793491200061,
+   "candele_1d": 556,
+   "candele_1h": 5000
+  },
+  "SOPH": {
+   "funding_righe": 12514,
+   "funding_da": 1748444400044,
+   "funding_a": 1793491200061,
+   "candele_1d": 543,
+   "candele_1h": 5000
+  },
+  "RESOLV": {
+   "funding_righe": 12202,
+   "funding_da": 1749567600028,
+   "funding_a": 1793491200061,
+   "candele_1d": 530,
+   "candele_1h": 5000
+  },
+  "SYRUP": {
+   "funding_righe": 11827,
+   "funding_da": 1750917600042,
+   "funding_a": 1793491200061,
+   "candele_1d": 564,
+   "candele_1h": 5000
+  },
+  "PUMP": {
+   "funding_righe": 11493,
+   "funding_da": 1752120000033,
+   "funding_a": 1793491200061,
+   "candele_1d": 500,
+   "candele_1h": 5000
+  },
+  "PROVE": {
+   "funding_righe": 10845,
+   "funding_da": 1754452800091,
+   "funding_a": 1793491200061,
+   "candele_1d": 474,
+   "candele_1h": 5000
+  },
+  "XPL": {
+   "funding_righe": 10455,
+   "funding_da": 1755856800030,
+   "funding_a": 1793491200061,
+   "candele_1d": 457,
+   "candele_1h": 5000
+  },
+  "WLFI": {
+   "funding_righe": 10430,
+   "funding_da": 1755946800030,
+   "funding_a": 1793491200061,
+   "candele_1d": 456,
+   "candele_1h": 5000
+  },
+  "LINEA": {
+   "funding_righe": 10215,
+   "funding_da": 1756720800070,
+   "funding_a": 1793491200061,
+   "candele_1d": 447,
+   "candele_1h": 5000
+  },
+  "SKY": {
+   "funding_righe": 9835,
+   "funding_da": 1758088800012,
+   "funding_a": 1793491200061,
+   "candele_1d": 439,
+   "candele_1h": 5000
+  },
+  "ASTER": {
+   "funding_righe": 9782,
+   "funding_da": 1758279600063,
+   "funding_a": 1793491200061,
+   "candele_1d": 429,
+   "candele_1h": 5000
+  },
+  "AVNT": {
+   "funding_righe": 9737,
+   "funding_da": 1758441600018,
+   "funding_a": 1793491200061,
+   "candele_1d": 439,
+   "candele_1h": 5000
+  },
+  "STBL": {
+   "funding_righe": 9717,
+   "funding_da": 1758513600033,
+   "funding_a": 1793491200061,
+   "candele_1d": 431,
+   "candele_1h": 5000
+  },
+  "0G": {
+   "funding_righe": 9710,
+   "funding_da": 1758538800090,
+   "funding_a": 1793491200061,
+   "candele_1d": 431,
+   "candele_1h": 5000
+  },
+  "HEMI": {
+   "funding_righe": 9665,
+   "funding_da": 1758700800052,
+   "funding_a": 1793491200061,
+   "candele_1d": 450,
+   "candele_1h": 5000
+  },
+  "2Z": {
+   "funding_righe": 9467,
+   "funding_da": 1759413600020,
+   "funding_a": 1793491200061,
+   "candele_1d": 416,
+   "candele_1h": 5000
+  },
+  "ZEC": {
+   "funding_righe": 9467,
+   "funding_da": 1759413600020,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "MON": {
+   "funding_righe": 9332,
+   "funding_da": 1759899600056,
+   "funding_a": 1793491200061,
+   "candele_1d": 410,
+   "candele_1h": 5000
+  },
+  "MET": {
+   "funding_righe": 9278,
+   "funding_da": 1760094000035,
+   "funding_a": 1793491200061,
+   "candele_1d": 408,
+   "candele_1h": 5000
+  },
+  "MEGA": {
+   "funding_righe": 8985,
+   "funding_da": 1761148800036,
+   "funding_a": 1793491200061,
+   "candele_1d": 396,
+   "candele_1h": 5000
+  },
+  "CC": {
+   "funding_righe": 8772,
+   "funding_da": 1761915600016,
+   "funding_a": 1793491200061,
+   "candele_1d": 387,
+   "candele_1h": 5000
+  },
+  "ICP": {
+   "funding_righe": 8589,
+   "funding_da": 1762574400013,
+   "funding_a": 1793491200061,
+   "candele_1d": 1335,
+   "candele_1h": 5000
+  },
+  "AERO": {
+   "funding_righe": 8514,
+   "funding_da": 1762844400040,
+   "funding_a": 1793491200061,
+   "candele_1d": 718,
+   "candele_1h": 5000
+  },
+  "STABLE": {
+   "funding_righe": 7859,
+   "funding_da": 1765202400056,
+   "funding_a": 1793491200061,
+   "candele_1d": 381,
+   "candele_1h": 5000
+  },
+  "FOGO": {
+   "funding_righe": 7798,
+   "funding_da": 1765422000029,
+   "funding_a": 1793491200061,
+   "candele_1d": 346,
+   "candele_1h": 5000
+  },
+  "LIT": {
+   "funding_righe": 7521,
+   "funding_da": 1766419200031,
+   "funding_a": 1793491200061,
+   "candele_1d": 335,
+   "candele_1h": 5000
+  },
+  "XMR": {
+   "funding_righe": 6952,
+   "funding_da": 1768467600023,
+   "funding_a": 1793491200061,
+   "candele_1d": 1310,
+   "candele_1h": 5000
+  },
+  "AXS": {
+   "funding_righe": 6885,
+   "funding_da": 1768708800062,
+   "funding_a": 1793491200061,
+   "candele_1d": 1307,
+   "candele_1h": 5000
+  },
+  "DASH": {
+   "funding_righe": 6885,
+   "funding_da": 1768708800062,
+   "funding_a": 1793491200061,
+   "candele_1d": 1307,
+   "candele_1h": 5000
+  },
+  "SKR": {
+   "funding_righe": 6790,
+   "funding_da": 1769050800112,
+   "funding_a": 1793491200061,
+   "candele_1d": 304,
+   "candele_1h": 5000
+  },
+  "AZTEC": {
+   "funding_righe": 6280,
+   "funding_da": 1770886800054,
+   "funding_a": 1793491200061,
+   "candele_1d": 283,
+   "candele_1h": 5000
+  },
+  "CHIP": {
+   "funding_righe": 4630,
+   "funding_da": 1776826800005,
+   "funding_a": 1793491200061,
+   "candele_1d": 214,
+   "candele_1h": 5000
+  },
+  "GRAM": {
+   "funding_righe": 2919,
+   "funding_da": 1782986400006,
+   "funding_a": 1793491200061,
+   "candele_1d": 143,
+   "candele_1h": 3415
+  },
+  "PONS": {
+   "funding_righe": 1485,
+   "funding_da": 1788148800052,
+   "funding_a": 1793491200061,
+   "candele_1d": 83,
+   "candele_1h": 1981
+  },
+  "USELESS": {
+   "funding_righe": 1280,
+   "funding_da": 1788886800031,
+   "funding_a": 1793491200061,
+   "candele_1d": 75,
+   "candele_1h": 1776
+  }
+ }
+}
