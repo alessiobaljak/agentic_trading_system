@@ -852,3 +852,9 @@ giorni il demo ha recuperato quasi tutto lo scarto con il paper; resta il costo 
 ha chiesto che le strade nuove partano solo con il suo via libera (21 novembre: le regole della prova 163 scritte senza via libera sono
 state tolte). In attesa della sua risposta sulla strada proposta (l'arbitraggio vero del funding fra Binance e Hyperliquid, con dati
 gratuiti). Approvata invece la prova gratuita «leggo io le notizie delle monete vendute da G1 ogni mattina, prima dei prezzi», da domani.
+**21 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (38 articoli nuovi, 40 conti di Hyperliquid), nessuna chiusura
+di perpetui dopo il 21 ottobre e nessuna moneta nuova su Coinbase. Ricerca nuova: la prova 163 (l'arbitraggio vero del funding fra
+Binance e Hyperliquid, via libera del proprietario «procedi») ha le regole verificate e chiuse (commit 8fe0339) ed è in calcolo: il
+ricercatore sta scaricando lo storico di Hyperliquid. G1: nessun passo nuovo in questo giro (le misure di oggi aspettano la lettura
+delle 04:17 di domani). Strategy-scout non chiamato: strade nuove solo con il via libera del proprietario. **Capito oggi**: niente di
+nuovo in questo giro; si aspetta il risultato della 163.
