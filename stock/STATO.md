@@ -317,6 +317,12 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   rende; (2) il grande guadagno sullo yen del 2021-2024 qui non c'è, perché il franco e l'euro avevano tassi più bassi dello yen fino
   al 2022. Chiusa senza prova l'idea delle aste del Tesoro (I48): lo studio della Fed di New York del 2026 dice che dopo il 2014
   l'effetto si è indebolito molto. Nel conto: 101.
+* **La prova 44** (la volatilità rovesciata: VIXY tenuto solo quando il VIX chiude sopra il VIX a tre mesi; idea I50): **bocciata**
+  (Sharpe con i costi 0,14, perdita massima −66,8%; `prove/P044_risultati.md`). Capito: (1) la parte si muove davvero al contrario
+  della miscela (correlazione −0,37), ma **guadagna solo nelle crisi lunghe**: marzo 2020 +129,5%, senza il 2020 −51,7%; nei crolli
+  di un giorno (agosto 2024, febbraio 2018) si compra in cima; (2) con un solo episodio buono in 9 anni non si può dire che ci sia un
+  vantaggio. Chiusa senza prova l'idea della fine del divieto di vendita dopo le quotazioni (I49): su Alpaca non si potrebbero vendere
+  allo scoperto quei titoli, e il prestito costa più del guadagno. Nel conto: 103.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
