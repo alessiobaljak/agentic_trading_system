@@ -144,6 +144,8 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento del 20 novembre (dati fino al 18 novembre; per la prima volta le due tornate lanciate una dopo l'altra, tutte e due nel
   tempo): M-001c 457 (già bocciata, −0,49% a trade); M-002 3.356 (p 0,37) e M-003 1.427 (p 0,99) non passano; seconda tornata in corso:
   N-001 89 (−2,37%), N-002 146 (+0,04%, p 0,46), N-003 97 (−1,28%).
+  Aggiornamento del 21 novembre (dati fino al 19 novembre): M-001c 457 (già bocciata, −0,49% a trade); M-002 3.373 (p 0,36) e M-003
+  1.436 (p 0,99) non passano; seconda tornata in corso: N-001 91 (−2,16%), N-002 146 (+0,04%, p 0,46), N-003 98 (−1,34%).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
