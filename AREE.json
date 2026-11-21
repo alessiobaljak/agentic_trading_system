@@ -3,11 +3,23 @@
   "aree": {
     "crypto": {
       "descrizione": "Il bot di trading crypto (Binance Futures), la ricerca, la macchina, la memoria degli agenti: tutto quello che non e' di un'altra area ne' in comune",
-      "cartelle": ["*"]
+      "cartelle": [
+        "*"
+      ]
     },
     "stock": {
       "descrizione": "Le azioni (sessione «trading stock»)",
-      "cartelle": ["stock/", "dashboard/app/components/stock/"]
+      "cartelle": [
+        "stock/",
+        "dashboard/app/components/stock/"
+      ]
+    },
+    "trader_ai": {
+      "descrizione": "L'intelligenza artificiale che decide entrate e uscite (sessione «trading AI», dal 21 novembre 2026)",
+      "cartelle": [
+        "trader_ai/",
+        "dashboard/app/components/trader_ai/"
+      ]
     }
   },
   "comuni": [
