@@ -897,3 +897,10 @@ scritte: prevedere le chiusure dei perpetui di Binance (prova 165), le società 
 166), entrambe in verifica; le proposte di governo dei gettoni (idea 157) dallo scout. **Capito oggi**: nella prima lettura, sul
 Bitcoin ci sono 48,7 milioni di posizioni corte con il prezzo di liquidazione entro il +10% e nessuna lunga entro il −10%: dopo il
 crollo i grandi conti sono quasi tutti venduti (lo stesso che si vede nella copia delle balene).
+**22 novembre, 08:45 UTC, giro delle 4 ore**: raccolta 24 fonti su 25, 40 conti copiati, **seconda lettura della mappa delle
+liquidazioni** (600 conti, 2.338 posizioni sopra i 10.000 dollari, 109 secondi); nessuna chiusura nuova, nessuna moneta nuova su Coinbase.
+Ricerca nuova: la prova 166 (le società con le monete in cassa) **non si fa sul passato**: la verifica trova meno di 23 eventi
+indipendenti, il verdetto sarebbe quasi certamente «non conclusivo» (decisione prima di ogni calcolo, riga 166). In verifica le prove
+165 (le chiusure dei perpetui prima dell'annuncio) e 167 (le votazioni dei possessori). G1: nessun passo nuovo in questo giro. **Capito
+oggi**: un fenomeno nuovo (le società di tesoreria, nate nel 2025) ha il perché più forte ma la storia più corta: le idee davvero nuove
+spesso non si possono giudicare sul passato, solo in avanti.
