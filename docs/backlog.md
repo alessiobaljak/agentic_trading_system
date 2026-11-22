@@ -836,3 +836,14 @@ misure delle candidate di `mazzo_asticella.candidate()`). **Proposta, da decider
 approvato l'11 novembre): nel mazzo, per ogni serie, lo Sharpe corretto per le settimane legate (Lo, «The statistics of Sharpe
 ratios», Financial Analysts Journal 2002) al posto di quello semplice; finché non si decide, i numeri corretti dal 15 novembre si
 scrivono con e senza le serie a incasso quasi fisso.
+
+### P35. Le serie salvate di G1, G11 e G1 neutra non coincidono con quelle rifatte oggi, e la F5 del mazzo è quella vecchia — trovata il 22 novembre 2026 (prova 168)
+* **Cosa**: rifacendo G1, G11 e G1 neutra con il codice di oggi, le spese cambiano in 140 settimane su 300 (di norma meno di un decimo di
+  punto) e il netto dell'ultima settimana (28 settembre 2026) fino a 0,73-0,91 punti; G1 rifatta +54,4% l'anno contro +54,1%, Sharpe 1,98
+  contro 1,97, ordini 117.037 contro 117.045 (`research/programma7/RISULTATI_CENTOSESTA.md`, `risultati_centosesta/rifatte.json`). La
+  causa non è stata trovata. In più il mazzo dello Sharpe corretto (`research/programma6/asticella.py`) contiene ancora la F5 della prova 24
+  di prima della correzione del funding del 23 ottobre (`programma6/CONTROLLO_PARITA.md`).
+* **Perché non subito**: le differenze sono piccole e non cambiano nessun esito; trovare la causa chiede di confrontare i due codici
+  settimana per settimana.
+* **Cosa ci si aspetta**: una riga che spiega la differenza (dati aggiornati dell'archivio o una modifica del motore) e, se serve, le serie
+  del mazzo rifatte; lo Sharpe corretto di G1 e delle miscele potrebbe muoversi di qualche centesimo.

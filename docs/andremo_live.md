@@ -925,3 +925,9 @@ notizia ovvia è già nel prezzo quando la si può usare; se c'è un guadagno, s
 (600 conti, 2.352 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. Ricerca nuova: la prova 168 (G1, G11, G1 neutra
 e F5 insieme sullo stesso conto, idea del proprietario) è in calcolo dopo la verifica. G1: nessun passo nuovo in questo giro. **Capito
 oggi**: niente di nuovo in questo giro.
+**22 novembre, 13:30 UTC, prova 168: G1, G11, G1 neutra e F5 insieme sullo stesso conto** (idea del proprietario,
+`research/programma7/RISULTATI_CENTOSESTA.md`): su 300 settimane dal 2021 un portafoglio solo con la media dei pesi fa +55,2% l'anno,
+Sharpe 2,14, discesa −24,9%; G1 da sola sulle stesse settimane +54,1%, Sharpe 1,97, discesa −28,8%. Ogni anno positivo, t 5,13, ma lo
+Sharpe corretto è 0,75 (G1 0,76): per l'esame scritto no. Correlazione con G1 0,98. In avanti dal 31 ottobre (22 giorni) un quarto a
+testa +3,17%, G1 +2,62%. Conto delle prove 338. **Capito oggi**: le quattro sono quasi la stessa strategia; insieme tolgono 3-4 punti
+di discesa senza perdere rendimento, ma non aggiungono un guadagno nuovo.

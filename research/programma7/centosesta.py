@@ -279,7 +279,38 @@ def esegui(log=print) -> dict:
     return out
 
 
+def rifatte(log=print) -> dict:
+    """Controllo descrittivo, senza registrare: G1, G11 e G1N rifatte con il codice di oggi (come entrano in B) contro le serie salvate
+    (che sono del 30 ottobre e usano il pannello di allora). Scrive `risultati_centosesta/rifatte.json`."""
+    pan = sc.pannello()
+    ps = te.pannello_settimane(pan, log=lambda x: None, indicatori_si=False)
+    giorni = np.arange(se.INIZIO, pr.FINE, dtype=np.int64)
+    idx = giorni - pan["t0"]
+    Ud = pr.universo_del_giorno(giorni, ps["lunedi"], ps["U"])
+    sig = ot.sigma_30(pan, idx)
+    R, F = sc.rendimenti(pan)[idx], np.nan_to_num(pan["funding"][idx])
+    costo = sc.costi_moneta(pan["simboli"])
+    btc = pd.Series(ps["R"][:, ps["simboli"].index("BTCUSDT")], index=ps["lunedi"])
+    W1 = vq.pesi_banda(np.where(np.isfinite(sig), -se.funding_7(pan, idx), np.nan), Ud, sig)
+    out = {}
+    for n, Wx in (("G1", W1), ("G11", vq.pesi_banda(np.where(np.isfinite(sig), t13.segnale_fresco(pan, idx, Ud), np.nan), Ud, sig)),
+                  ("G1N", f5n.scala_neutra(W1, f5n.beta_delle_monete(pan, Ud, idx))[0])):
+        g, s, n_tot, _ = conto_giorni(Wx, R, F, giorni, pan["simboli"], costo)
+        e = te.esame(s, btc, inizio=se.INIZIO, anni_pieni=se.ANNI_PIENI)
+        out[n] = {**{k: e["intero"][k] for k in ("sharpe", "annuo", "volatilita", "discesa_max")}, "spese_annue": e["spese_annue"],
+                  "ordini": n_tot, "per_anno": e["per_anno"], "settimana_peggiore": peggiori(s["netto"]),
+                  "giorno_peggiore": peggiori(pd.Series(g["netto"].to_numpy(), index=giorni))}
+        if n == "G1":
+            out["correlazione_B_G1_rifatta"] = float(np.corrcoef(s["netto"], pd.read_csv(RIS / "settimane_B.csv.gz", index_col=0)["netto"])[0, 1])
+    (RIS / "rifatte.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    return out
+
+
 if __name__ == "__main__":
+    import sys
+    if "--rifatte" in sys.argv:
+        print(json.dumps(rifatte(), default=str)[:3000])
+        raise SystemExit
     o = esegui(log=lambda x: print(x[:300], flush=True))
     for v in ("A", "B"):
         e = o["esame"].get(v)
