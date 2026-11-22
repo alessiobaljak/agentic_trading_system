@@ -39,6 +39,25 @@ dà backtest-auditor se promettente. Non spegne e non sostituisce niente.
   girano tutte e quattro; il conto «un quarto a testa» = media dei quattro rendimenti giornalieri, contro G1 da sola. Lo scrive il
   rapporto e si aggiorna nel confronto del lunedì.
 
+## Chiusura della verifica (22 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTOSESTA.md`, 1 punto bloccante). **Dove il testo sopra dice diversamente, vale questa
+sezione.** Dove c'era una scelta, si è presa la più prudente.
+1. **F5 corretta** (punto bloccante): la serie di F5 è `programma6/risultati_controllo_parita/settimane_F5.csv.gz` (dopo la correzione del
+   funding del 23 ottobre, come le altre tre), **a spese di mercato** (più alte di quelle a limite: prudente); la F5 con ordini limite
+   (F9) si scrive solo come controllo descrittivo, non è una variante.
+2. **Periodo**: dal lunedì 4 gennaio 2021 alla settimana che finisce il 4 ottobre 2026 (300 settimane comuni); F5 per B si calcola dalle
+   settimane del 2020 (la banda ha memoria) e si taglia dal 4 gennaio 2021.
+3. **F5 dentro B**: pesi costanti ogni giorno dal lunedì alla domenica, con il piccolo riequilibrio giornaliero pagato (lettura
+   prudente); controllo descrittivo: B fatta con la sola F5 contro la sua serie settimanale.
+4. **Spese di B**: quelle del motore di G1 (`spese_a_limite`) applicate alle variazioni del peso netto, non uno 0,02% fisso.
+5. **Le colonne di A**: la media di ogni colonna delle quattro serie (`monete` sommato), perché l'esame le legge tutte.
+6. **Giorno peggiore**: solo per G1 e per B; per A la settimana peggiore.
+7. **Esito** calcolato con le regole di questa prova (Sharpe corretto 0,80, ogni anno positivo, t da 3), non con la soglia 0,95 di
+   `te.esito`.
+8. **In avanti**: dal 31 ottobre 2026 (prima risposta «stato» con tutte e quattro), per ogni giorno la risposta più vicina alle 04:15 UTC,
+   rendimenti sugli intervalli veri del calendario (il 2-5 novembre come un solo intervallo); niente righe di log.
+9. **Buchi dei dati**: prima del calcolo si scrive se i giorni mancanti dell'archivio cadono nel periodo e su quali monete.
+
 ## Cosa si consegna
 `research/programma7/RISULTATI_CENTOSESTA.md`, serie in `research/programma7/risultati_centosesta/settimane_A.csv.gz` (e
 `settimane_B.csv.gz` se B si fa), colonna `netto`, leggibili da `asticella.py`; script `research/programma7/centosesta.py`; varianti in
