@@ -35,3 +35,18 @@ def test_niente_leva():
 def test_lordo_per_operazione():
     ops = {G[1]: (1, 300.0, 300.0, 303.0), G[2]: (-1, 300.0, 300.0, 297.0)}
     assert list(p045.lordo(ops, {G[1], G[2]})) == pytest.approx([0.01, 0.01])
+
+
+def test_esame_da_crisi_mese_migliore_e_condizioni():
+    from stock.prove import p045b
+    ops = {date(2025, 4, 7): (1, 500.0, 500.0, 510.0), date(2025, 4, 8): (-1, 500.0, 500.0, 505.0),
+           date(2025, 6, 2): (1, 500.0, 500.0, 501.0)}
+    mese, somma, resto = p045b.mese_migliore_tolto(ops)
+    assert mese == "2025-04" and somma == pytest.approx(0.02 - 0.01) and resto == pytest.approx(0.002)
+    poche = np.array([0.001] * 5)
+    assert p045b.esito(poche, np.array([]), 0.1, 0.1, 0.1, 0.0, 1.0, 0.5)[0].startswith("non si può dire")
+    tante = np.array([0.001] * 25)
+    v, c = p045b.esito(tante, np.array([0.0] * 25), 0.01, 0.005, 0.002, 0.1, 1.1, 1.0)
+    assert v == "passa l'esame da crisi" and all(c)
+    v, c = p045b.esito(tante, np.array([0.0] * 25), 0.01, -0.001, 0.002, 0.1, 1.1, 1.0)
+    assert v == "bocciata nel periodo chiuso" and c == [True, False, True, True]
