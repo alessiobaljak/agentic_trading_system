@@ -1,0 +1,3006 @@
+{
+"scelti_il": "2026-11-22 08:09",
+"conti_in_classifica": 46400,
+"conti": [
+{
+"indirizzo": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+"conto": 118414844.69063398,
+"volume_mese": 47059608920.09001
+},
+{
+"indirizzo": "0x87f9cd15f5050a9283b8896300f7c8cf69ece2cf",
+"conto": 117597016.82125998,
+"volume_mese": 24117231045.85
+},
+{
+"indirizzo": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
+"conto": 85511649.261645,
+"volume_mese": 15497818168.62
+},
+{
+"indirizzo": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
+"conto": 78058037.24312599,
+"volume_mese": 6267932639.02
+},
+{
+"indirizzo": "0xe867fbdad3291530e41530301ecb77693850c78e",
+"conto": 66656647.266151,
+"volume_mese": 4255910.21
+},
+{
+"indirizzo": "0xdf954bbe619273a56e0cfa90dad8382195dc7d72",
+"conto": 58858161.639572,
+"volume_mese": 305620839.5400001
+},
+{
+"indirizzo": "0x85ecf584f25db6f146718b86d493e33c5af72052",
+"conto": 58310098.231438026,
+"volume_mese": 49900089356.03001
+},
+{
+"indirizzo": "0x45d26f28196d226497130c4bac709d808fed4029",
+"conto": 55422264.013482,
+"volume_mese": 7134095.07
+},
+{
+"indirizzo": "0x856c35038594767646266bc7fd68dc26480e910d",
+"conto": 53250569.77662299,
+"volume_mese": 2267250914.48
+},
+{
+"indirizzo": "0x03b9a189e2480d1e4c3007080b29f362282130fa",
+"conto": 52180134.794042,
+"volume_mese": 319113593.19
+},
+{
+"indirizzo": "0xf818fa41af44a1b42ba7433f4ec472be40a2c268",
+"conto": 47433954.337963,
+"volume_mese": 153871860.20999998
+},
+{
+"indirizzo": "0x484bc1608211d0604bf70bae72792a56884562f8",
+"conto": 47290489.194482006,
+"volume_mese": 134633861.63
+},
+{
+"indirizzo": "0xff4cd3826ecee12acd4329aada4a2d3419fc463c",
+"conto": 44832197.113342,
+"volume_mese": 12890609170.019999
+},
+{
+"indirizzo": "0xfe7ce058edc7cfcde9ef8262ba51f8d4796ab7ae",
+"conto": 44425305.4256,
+"volume_mese": 466101882.38
+},
+{
+"indirizzo": "0xfc27136e42af1732ddc9ce2605ea9bff1b959d9d",
+"conto": 43532416.833979,
+"volume_mese": 2160263047.24
+},
+{
+"indirizzo": "0x77375a8c9d13bf79afb2a87f1b0ac1dfd5f5bf66",
+"conto": 43448385.479857005,
+"volume_mese": 202257418.37
+},
+{
+"indirizzo": "0x0b8aa35c28b7c6ab18f11dc168f437a8a69fd4f8",
+"conto": 42281100.513228,
+"volume_mese": 1084212516.08
+},
+{
+"indirizzo": "0xcac19662ec88d23fa1c81ac0e8570b0cf2ff26b3",
+"conto": 41284295.806746006,
+"volume_mese": 51321480.24
+},
+{
+"indirizzo": "0x15a4f009bb324a3fb9e36137136b201e3fe0dfdb",
+"conto": 39202477.096475,
+"volume_mese": 169023968.26
+},
+{
+"indirizzo": "0x49e96e255ba418d08e66c35b588e2f2f3766e1d0",
+"conto": 34230000.163549006,
+"volume_mese": 1812622958.8
+},
+{
+"indirizzo": "0x8def9f50456c6c4e37fa5d3d57f108ed23992dae",
+"conto": 33721769.254069,
+"volume_mese": 549456787.1700001
+},
+{
+"indirizzo": "0x13c50dcdee4bbcba71baf578b345cdd35c7928be",
+"conto": 33706430.631685,
+"volume_mese": 4132625.14
+},
+{
+"indirizzo": "0x88560b720239179d7f3f9e49ca934a4861593d7f",
+"conto": 33288105.314887,
+"volume_mese": 4676572.36
+},
+{
+"indirizzo": "0x64b766b07362405a9cc19c2226490f3015929da9",
+"conto": 32559486.836269,
+"volume_mese": 517673450.15
+},
+{
+"indirizzo": "0x024294c53a69c1e6b39810b3fac87385752fffa1",
+"conto": 31383358.636739,
+"volume_mese": 1343972591.77
+},
+{
+"indirizzo": "0xecc846a664e910103c179827dd23fea82cfcd8ce",
+"conto": 31257571.406149,
+"volume_mese": 185864951.08
+},
+{
+"indirizzo": "0x3dc908374e11623d8eb9f07dfc7a2e5e803a54b0",
+"conto": 30397832.135543,
+"volume_mese": 15657570.87
+},
+{
+"indirizzo": "0xb0a55f13d22f66e6d495ac98113841b2326e9540",
+"conto": 30000000.0,
+"volume_mese": 178486092.42
+},
+{
+"indirizzo": "0x156115e100141e9330620c253225cc5ee598a31a",
+"conto": 29967777.742315,
+"volume_mese": 4033214.1
+},
+{
+"indirizzo": "0xf02021e26e0bbfef8ffa2cc9cb64305a8ae465b4",
+"conto": 29771329.542776,
+"volume_mese": 1600530.63
+},
+{
+"indirizzo": "0x7dacca323e44f168494c779bb5e7483c468ef410",
+"conto": 27273719.764225002,
+"volume_mese": 88627114.83
+},
+{
+"indirizzo": "0x8af700ba841f30e0a3fcb0ee4c4a9d223e1efa05",
+"conto": 27192363.213919,
+"volume_mese": 16190525.89
+},
+{
+"indirizzo": "0xb695651daa495f59dd2725c6fe98322d8b51a92d",
+"conto": 26848710.341799,
+"volume_mese": 163376672.49
+},
+{
+"indirizzo": "0xc926ddba8b7617dbc65712f20cf8e1b58b8598d3",
+"conto": 26382757.219874002,
+"volume_mese": 14851682978.55
+},
+{
+"indirizzo": "0xd8c5228c515db3043dfa0c8cd6f22450ee9a99b0",
+"conto": 25870619.993826,
+"volume_mese": 399095088.93
+},
+{
+"indirizzo": "0xf71521e7978560424ff72f4e6e1a1c0abdccdaed",
+"conto": 25679206.756746,
+"volume_mese": 12905517.42
+},
+{
+"indirizzo": "0x399965e15d4e61ec3529cc98b7f7ebb93b733336",
+"conto": 25420157.1915,
+"volume_mese": 35070611759.93999
+},
+{
+"indirizzo": "0xdfd526409007db0d524a62dedaaba7706736d88e",
+"conto": 24884678.303736996,
+"volume_mese": 27094997.14
+},
+{
+"indirizzo": "0xebe126adabe1a8f08d3ce53b45e7cc994ca14070",
+"conto": 24205506.104514997,
+"volume_mese": 287824622.3
+},
+{
+"indirizzo": "0xda3768e9299e1fd81708ec030dac5ea37125f7b5",
+"conto": 23519496.205641,
+"volume_mese": 258469155.12
+},
+{
+"indirizzo": "0x7fdafde5cfb5465924316eced2d3715494c517d1",
+"conto": 23340195.604739,
+"volume_mese": 2110366992.61
+},
+{
+"indirizzo": "0x6555e1cc97d3cba6eaddebbcd7ca51d75771e0b8",
+"conto": 23311612.905873,
+"volume_mese": 6491751.93
+},
+{
+"indirizzo": "0x4ba3979955f52158c0e4e3378b18985475182ce2",
+"conto": 22535257.225412,
+"volume_mese": 83135628.4
+},
+{
+"indirizzo": "0xc26cbb6483229e0d0f9a1cab675271eda535b8f4",
+"conto": 22184460.796393,
+"volume_mese": 97059518.17
+},
+{
+"indirizzo": "0x33b7e8a405bfc66107726ed68019d4d10dcbf0af",
+"conto": 22119768.149421,
+"volume_mese": 20415957.25
+},
+{
+"indirizzo": "0x64a4fbb71858f681f3fa10a42b34180a9a48088d",
+"conto": 18596738.563239004,
+"volume_mese": 244496960.57999998
+},
+{
+"indirizzo": "0x7be1cba648ebe1ab8084244d23f28d68a86480d8",
+"conto": 18475195.888663,
+"volume_mese": 19529029.7
+},
+{
+"indirizzo": "0xb8ebd6ed57f4102be5b1caf60d01dd1c9f270f94",
+"conto": 18326936.615088005,
+"volume_mese": 42215812.22
+},
+{
+"indirizzo": "0x9a80d88c21be60e870d07d852390e92d09223cf2",
+"conto": 18020396.047847,
+"volume_mese": 13591631.88
+},
+{
+"indirizzo": "0x023a3d058020fb76cca98f01b3c48c8938a22355",
+"conto": 17948055.927055,
+"volume_mese": 2070473278.6299999
+},
+{
+"indirizzo": "0x519c721de735f7c9e6146d167852e60d60496a47",
+"conto": 17945557.710461,
+"volume_mese": 143673705.66
+},
+{
+"indirizzo": "0x57dd78cd36e76e2011e8f6dc25cabbaba994494b",
+"conto": 17698020.843013,
+"volume_mese": 2205828374.13
+},
+{
+"indirizzo": "0x10e14ba2d77263543be1bdb2851b0933ddf4f4bd",
+"conto": 17505249.97007,
+"volume_mese": 51178191.56
+},
+{
+"indirizzo": "0xca4903c207a0df58bf37d4bc8bbc5210726f53c8",
+"conto": 17191087.758673,
+"volume_mese": 35595691.5
+},
+{
+"indirizzo": "0x0b8b2560d2a5dd2af7b00e7ac05e6ba979feec31",
+"conto": 17155240.071047,
+"volume_mese": 16108348.92
+},
+{
+"indirizzo": "0xbe19541903f64af97bcf8436f4d15bf3a56b8bd1",
+"conto": 16922293.73235,
+"volume_mese": 5136689.67
+},
+{
+"indirizzo": "0xefba0f56eef05f6a7d614ce519d2e284b46d3583",
+"conto": 16879084.28667,
+"volume_mese": 20010983.38
+},
+{
+"indirizzo": "0x6355f7cf36b24044cd5b089a845113327d0ee58e",
+"conto": 16627756.906967,
+"volume_mese": 3297390259.1400003
+},
+{
+"indirizzo": "0x61ceef212ff4a86933c69fb6aca2fe35d8f2a62b",
+"conto": 16618214.836634,
+"volume_mese": 264866338.23
+},
+{
+"indirizzo": "0x8f3c142fb2126d855ad1ef6c13376c7a687d33a6",
+"conto": 16118719.889334,
+"volume_mese": 55275706.35
+},
+{
+"indirizzo": "0x52a139ec4940ac130b0e50de39da8a696ba6633a",
+"conto": 15895294.834657002,
+"volume_mese": 52550585.599999994
+},
+{
+"indirizzo": "0x0b426cb9d1d25f011042856faf5bbbfd4da9b412",
+"conto": 15220369.405318,
+"volume_mese": 42989560.82
+},
+{
+"indirizzo": "0xcf5343ba750a6e30afbb1dadda08bc78f8c8ee11",
+"conto": 15200430.110317,
+"volume_mese": 5699567.81
+},
+{
+"indirizzo": "0xaf0fdd39e5d92499b0ed9f68693da99c0ec1e92e",
+"conto": 14859299.589927,
+"volume_mese": 31070034.31
+},
+{
+"indirizzo": "0x77eeda199553e33b246e4b4666849b9ad0972902",
+"conto": 14723110.551155,
+"volume_mese": 320436762.45
+},
+{
+"indirizzo": "0xc8b527864ef2ad6dc49de7e99943a3a76ad48891",
+"conto": 14413490.995635,
+"volume_mese": 215708803.63
+},
+{
+"indirizzo": "0xdcac85ecae7148886029c20e661d848a4de99ce2",
+"conto": 14356531.130421,
+"volume_mese": 1406612706.8400002
+},
+{
+"indirizzo": "0xceec48581b3145a575508719f45da07dc57fa7ce",
+"conto": 14273118.014342,
+"volume_mese": 26164666.35
+},
+{
+"indirizzo": "0x4cbd339d9969bf8558af38af46bfd299a80b315f",
+"conto": 13813621.29351,
+"volume_mese": 2326694.5
+},
+{
+"indirizzo": "0xd47587702a91731dc1089b5db0932cf820151a91",
+"conto": 13763866.626872,
+"volume_mese": 7048539.19
+},
+{
+"indirizzo": "0x5c9b84105d63f0c8ed35fd62f66d9b8c6800ce01",
+"conto": 13623892.431164,
+"volume_mese": 4660232025.25
+},
+{
+"indirizzo": "0x089fe537f4b2af55fa990bc64ff4125800bba4f8",
+"conto": 13189561.099767,
+"volume_mese": 5676293.49
+},
+{
+"indirizzo": "0x4d470e0a241c3d7321b4b6c6f23f214db85bfa47",
+"conto": 12964842.437074,
+"volume_mese": 86916332.93
+},
+{
+"indirizzo": "0x92cbb22a9b9fc01da9914c9b39ed904dd61b859c",
+"conto": 12852661.331807,
+"volume_mese": 330950169.93
+},
+{
+"indirizzo": "0x77662182fbcc368f94a1dcfd55cacffc1ec10471",
+"conto": 12852067.462722,
+"volume_mese": 16855457.64
+},
+{
+"indirizzo": "0xe81309ec9b79309e4d108ae3a92d1aa618cd6d74",
+"conto": 12785270.45196,
+"volume_mese": 740518165.14
+},
+{
+"indirizzo": "0x31dea2516beee92135b96f464eeec3cf292a13f2",
+"conto": 12524476.315223,
+"volume_mese": 2334269758.56
+},
+{
+"indirizzo": "0xfb941d2344b72ea9101400392b818173772d0ddf",
+"conto": 12511387.776976,
+"volume_mese": 118275707.5
+},
+{
+"indirizzo": "0x960b6c2c4b1498681b8422eb572a8b3a6aa3f0fc",
+"conto": 12416752.92097,
+"volume_mese": 54450736.92
+},
+{
+"indirizzo": "0xec85bc052ec5b6d6cb2b40f5caa45e39b61a77fe",
+"conto": 12394777.349841,
+"volume_mese": 199144169.94
+},
+{
+"indirizzo": "0x00b43bdee2d3fa676ab06739bf1d52f4bad6591e",
+"conto": 12312022.529763,
+"volume_mese": 4724033.41
+},
+{
+"indirizzo": "0x7839e2f2c375dd2935193f2736167514efff9916",
+"conto": 12178597.920524001,
+"volume_mese": 27254356379.25
+},
+{
+"indirizzo": "0xb23b360c84f33a3aac5fd5a5994f8277658e4852",
+"conto": 12159973.801207,
+"volume_mese": 15888953.6
+},
+{
+"indirizzo": "0xaeaab54bbf65bfd6efed7d2eb68372298e3c2416",
+"conto": 12121139.41085,
+"volume_mese": 380006642.86
+},
+{
+"indirizzo": "0xae6446c95cc4e455e9cf56f28757ab728d88e81e",
+"conto": 12097164.989962,
+"volume_mese": 676582114.79
+},
+{
+"indirizzo": "0x03ef8f736498047c3349bb2c18311d1bb4a79054",
+"conto": 11881074.656846,
+"volume_mese": 7834805.41
+},
+{
+"indirizzo": "0xf02d16a272a842f8bac1d9a9e773aba1933454c6",
+"conto": 11733876.687524,
+"volume_mese": 195444951.75
+},
+{
+"indirizzo": "0xcfe2729438475c5eb9e8e6da6b314a0b9e2d8fb3",
+"conto": 11712038.857571,
+"volume_mese": 59299256.88
+},
+{
+"indirizzo": "0x89c645ecbd07825b194e3b98300eb3497aaba406",
+"conto": 11534948.51289,
+"volume_mese": 247996452.52
+},
+{
+"indirizzo": "0xd260b2216b735277da6771564a01c04856e78321",
+"conto": 11503857.621763,
+"volume_mese": 27042680.9
+},
+{
+"indirizzo": "0xaf75d8829dd663e6a24a9f746ad75764d1becd5c",
+"conto": 11321396.905829,
+"volume_mese": 251483233.35
+},
+{
+"indirizzo": "0x218a65e21eddeece7a9df38c6bbdd89f692b7da2",
+"conto": 11249894.180299,
+"volume_mese": 14924191.46
+},
+{
+"indirizzo": "0x0cc159b29f45c9cc0da41326d7e18e04245bc7cb",
+"conto": 11173380.366627,
+"volume_mese": 241136858.5
+},
+{
+"indirizzo": "0x37b81ab9e3ab04b9e3738e4891621205aaa31fd5",
+"conto": 11142833.393369,
+"volume_mese": 88446476.75
+},
+{
+"indirizzo": "0x0ad9e656d9e6211d0ea1c5462342e1fc94cc4cbf",
+"conto": 11094236.793528,
+"volume_mese": 57490526.39
+},
+{
+"indirizzo": "0xc7d0b62b029d099a1982fbac6e8eb31aadc3e161",
+"conto": 11026500.98579,
+"volume_mese": 21767046.49
+},
+{
+"indirizzo": "0xde8d9e530b0528ffa7b1190f862536c055dd9524",
+"conto": 10995404.635049,
+"volume_mese": 64196722.57
+},
+{
+"indirizzo": "0xeeb56331b6a250fe2dbc123f08bdb87aa9840464",
+"conto": 10917831.582302,
+"volume_mese": 4269598288.5199995
+},
+{
+"indirizzo": "0x9c6a5b4662c722d2c47f43d6c9813cb080ffa4ed",
+"conto": 10915298.611228,
+"volume_mese": 47599367.3
+},
+{
+"indirizzo": "0x585f4fbe2d2a889c286fa71fb81d01f30773f4b1",
+"conto": 10819277.104572,
+"volume_mese": 16010668.2
+},
+{
+"indirizzo": "0x1f250df59a777d61cb8bd043c12970f3afe4f925",
+"conto": 10777476.191266,
+"volume_mese": 5073061749.51
+},
+{
+"indirizzo": "0x325edd95bb016c36027ce3b9f7595af7094a9564",
+"conto": 10751853.427624,
+"volume_mese": 344295755.36
+},
+{
+"indirizzo": "0xb37f083bad343a76361cd8f39afe7ecd6a0a66ca",
+"conto": 10709449.343606,
+"volume_mese": 212441664.09
+},
+{
+"indirizzo": "0x007d76eec0ba411ce873a8819df50dd443d967a0",
+"conto": 10631617.134613,
+"volume_mese": 12101230.22
+},
+{
+"indirizzo": "0x88b2448328f4335ad2a8cac06485c378ebe66fe3",
+"conto": 10584780.950405,
+"volume_mese": 68178132.27
+},
+{
+"indirizzo": "0xc5682e404f3d68ea4b461f0a22dfe8d7155de86a",
+"conto": 10543318.194196,
+"volume_mese": 80929268.91
+},
+{
+"indirizzo": "0x558072bed86151b5f992144785e4c4f8059f9c55",
+"conto": 10532623.850438999,
+"volume_mese": 1443423.18
+},
+{
+"indirizzo": "0x9aa589355bf745db9784c8ef3c646360f11b58af",
+"conto": 10508461.443069,
+"volume_mese": 196337405.69
+},
+{
+"indirizzo": "0x1e37a337ed460039d1b15bd3bc489de789768d5e",
+"conto": 10338423.628319,
+"volume_mese": 50390947.25
+},
+{
+"indirizzo": "0xe2321c8324c1da7b3ba790627d0e4ee444188a23",
+"conto": 10290505.058867,
+"volume_mese": 16822430.84
+},
+{
+"indirizzo": "0x4fd04553468610e5a88a2cffa38e057c954312da",
+"conto": 10120211.658917,
+"volume_mese": 6702337.18
+},
+{
+"indirizzo": "0x9cc10bd3c7e2486c0ae4623e4f7cc3ff143fac56",
+"conto": 9951042.669052,
+"volume_mese": 11444681.89
+},
+{
+"indirizzo": "0x58b27998b4ff896949d5f57466b259e50ee211f3",
+"conto": 9928457.681697,
+"volume_mese": 421405177.18
+},
+{
+"indirizzo": "0x93ab7dbdeb996806454de19c35c8247f4b2511f8",
+"conto": 9840890.821412,
+"volume_mese": 23777607.92
+},
+{
+"indirizzo": "0x9751cec58be43e0e27d57ba49ac3d68ec269a97e",
+"conto": 9753843.030487,
+"volume_mese": 22513757.36
+},
+{
+"indirizzo": "0xd7b19f8aaf5c9619bd5141945a73d2ca74984451",
+"conto": 9455871.027025,
+"volume_mese": 16623506.09
+},
+{
+"indirizzo": "0x462e3f2ce774b4dbba10662a2155e4823d4c820f",
+"conto": 9452774.783902,
+"volume_mese": 4907571.85
+},
+{
+"indirizzo": "0x053fa362f5459cf61037d8b554b5cfb055a7a4d3",
+"conto": 9389052.935608,
+"volume_mese": 46342532.92
+},
+{
+"indirizzo": "0xf517639a8872e756ac98d3c65507d2ebc25cc032",
+"conto": 9386324.923605,
+"volume_mese": 1399577215.96
+},
+{
+"indirizzo": "0x17c3c8fdbcb7d1b240ce08965e09b1fc91cba868",
+"conto": 9326566.692643002,
+"volume_mese": 262100033.79
+},
+{
+"indirizzo": "0xacb66d1996501bcc82a0e7819c9e041599f5efbd",
+"conto": 9229423.273429,
+"volume_mese": 9158737.94
+},
+{
+"indirizzo": "0xb07856ebcb6b37967eaf7c4b4e64dcce28c6de15",
+"conto": 9222525.993611999,
+"volume_mese": 1939985091.93
+},
+{
+"indirizzo": "0xeaad1c358354a51ef09265f1b64d6c562d943c26",
+"conto": 9089811.868666,
+"volume_mese": 45334969.59
+},
+{
+"indirizzo": "0x2fe21fc5130e953b862d4a6048cfd016ecf3974d",
+"conto": 9087411.670097,
+"volume_mese": 5425699.66
+},
+{
+"indirizzo": "0x84abc08c0ea62e687c370154de1f38ea462f4d37",
+"conto": 9038099.200802,
+"volume_mese": 76947228.11
+},
+{
+"indirizzo": "0xa0b7020185b97f496f523c3f769eebcffcc56165",
+"conto": 9034161.533608,
+"volume_mese": 14610879.31
+},
+{
+"indirizzo": "0x6859da14835424957a1e6b397d8026b1d9ff7e1e",
+"conto": 9001262.971052,
+"volume_mese": 38063350.56
+},
+{
+"indirizzo": "0x4c78a97cef589b01bb91dbf893fffa14243d2444",
+"conto": 8999388.802586,
+"volume_mese": 92345136.87
+},
+{
+"indirizzo": "0x74107ccbd2704017c1fb0f5d517207b9d7a74219",
+"conto": 8980720.714087,
+"volume_mese": 2167215.4
+},
+{
+"indirizzo": "0xbf49647d017805fcc576ac10f33a788e636f4258",
+"conto": 8971069.250834,
+"volume_mese": 11646460.12
+},
+{
+"indirizzo": "0xa445a0a15b1d50fa0c4bfe6796d9447e0da5329d",
+"conto": 8943761.364717,
+"volume_mese": 276926852.69
+},
+{
+"indirizzo": "0x469e9a7f624b04c24f0e64edf8d8a277e6bf58a5",
+"conto": 8835853.378706,
+"volume_mese": 732029602.25
+},
+{
+"indirizzo": "0x0bd95475435b36a336853cb001a0eb4ed5f36a5f",
+"conto": 8791485.763269,
+"volume_mese": 44575858.31
+},
+{
+"indirizzo": "0xd14d535a383b065cf2228963a984d0e2477bee1f",
+"conto": 8734072.210388,
+"volume_mese": 15853085.2
+},
+{
+"indirizzo": "0x389bc420bc8d09d463c0afd8674107000dc1a93b",
+"conto": 8716469.425242,
+"volume_mese": 37274111.24
+},
+{
+"indirizzo": "0x47472cd62c99b8b5ce7e84e733515133e9aec0bd",
+"conto": 8658114.626978,
+"volume_mese": 258298833.77
+},
+{
+"indirizzo": "0xe5ac6d42ac6e553a3541b09d322f864f6d7abbe3",
+"conto": 8646300.079839,
+"volume_mese": 13936466.309999999
+},
+{
+"indirizzo": "0xfcf1dd2d209aeb1323dd9a0f2ea65187c84d6c8a",
+"conto": 8606534.950599,
+"volume_mese": 25601757.15
+},
+{
+"indirizzo": "0xaeae3319f670f1f7aa18b42f9d5f3452f4ee69e6",
+"conto": 8595600.137185998,
+"volume_mese": 6411090.9399999995
+},
+{
+"indirizzo": "0xdd53c5297309130ab5fe5623dc905752e3342b13",
+"conto": 8534662.108557,
+"volume_mese": 155290168.46
+},
+{
+"indirizzo": "0xd2b2a8ab7a8c903501f4db4ee45c67522a4511ed",
+"conto": 8472124.861403,
+"volume_mese": 7146166.82
+},
+{
+"indirizzo": "0xa98143608a6846453c88f29506d64a8b85532e65",
+"conto": 8431880.630913,
+"volume_mese": 5953746.92
+},
+{
+"indirizzo": "0x94dac1facdc4afd2614c3119447187b4143bc449",
+"conto": 8412632.152992,
+"volume_mese": 8260836.26
+},
+{
+"indirizzo": "0x8607a7d180de23645db594d90621d837749408d5",
+"conto": 8410278.282822,
+"volume_mese": 13933494.53
+},
+{
+"indirizzo": "0x60a8c761f39696b3b419f31dcda20b405cb685f6",
+"conto": 8392292.500435,
+"volume_mese": 40697032.89
+},
+{
+"indirizzo": "0x9e8b1e51c642f4c8b87c6ba11c53d516a218afc4",
+"conto": 8276212.948335,
+"volume_mese": 150337013.33
+},
+{
+"indirizzo": "0xe2ad376800c2da03d611700ffc1d013090733c8c",
+"conto": 8242619.382745,
+"volume_mese": 170317324.16
+},
+{
+"indirizzo": "0x3ee715560b45733bceee8cbcfb68133bbc56699a",
+"conto": 8206989.135931,
+"volume_mese": 2166479.41
+},
+{
+"indirizzo": "0x25d7472c234111bebb50b8a987b6316629fc6bf6",
+"conto": 8160301.53734,
+"volume_mese": 11840888.31
+},
+{
+"indirizzo": "0x344fef6f7bbc591363a734ffc1282bf4236caf5d",
+"conto": 8120481.921757,
+"volume_mese": 41412233.52
+},
+{
+"indirizzo": "0x807a2e2e469df84b299da5f90f15dda4380daca1",
+"conto": 8034954.649264,
+"volume_mese": 3979832.23
+},
+{
+"indirizzo": "0xe357fa9fecb084f0303ff341b0bc55c89f2bb5ce",
+"conto": 8026934.498332001,
+"volume_mese": 5537212684.08
+},
+{
+"indirizzo": "0x113889a5fb399abc6a2ae1d484c08ceabe677a9f",
+"conto": 7961959.662564,
+"volume_mese": 132657402.05
+},
+{
+"indirizzo": "0xb581d667c53fd8a50bf7ffd817be0e62daa16f4f",
+"conto": 7920557.298181,
+"volume_mese": 9549973.77
+},
+{
+"indirizzo": "0xab961d7c42bbcd454a54b342bd191a8f090219e6",
+"conto": 7865440.967418,
+"volume_mese": 112120373.58
+},
+{
+"indirizzo": "0xebe837cd345469cbc5d6e1fd3d15ee5079ac885f",
+"conto": 7786087.238444,
+"volume_mese": 158779957.45
+},
+{
+"indirizzo": "0xbd334a55db91617545e8d1b09941e036ad8e4200",
+"conto": 7729918.712843,
+"volume_mese": 167259187.34
+},
+{
+"indirizzo": "0xba0898f80da916730912bb2c2a18b8d76bc8985c",
+"conto": 7715506.830024,
+"volume_mese": 1267586.81
+},
+{
+"indirizzo": "0x3fc56e944aa7b1594c85861b2d46a07f82a2c0c1",
+"conto": 7695334.263549,
+"volume_mese": 21597210.97
+},
+{
+"indirizzo": "0x8e096995c3e4a3f0bc5b3ea1cba94de2aa4d70c9",
+"conto": 7614114.47377,
+"volume_mese": 38260626.72
+},
+{
+"indirizzo": "0x015354106478dda69c4aae3c0cf801290b738052",
+"conto": 7540508.053069,
+"volume_mese": 7818904.18
+},
+{
+"indirizzo": "0x7273e009300434fc73495b0e9c72c6df0d515ca3",
+"conto": 7451949.61445,
+"volume_mese": 8464669.77
+},
+{
+"indirizzo": "0xa9ff08af55b24bb5d064d776a078e8a292b8dfe2",
+"conto": 7427613.273651,
+"volume_mese": 1754481.96
+},
+{
+"indirizzo": "0xd3b02d999c681bd8b75f340fa7e078ce9097bf23",
+"conto": 7401220.099148,
+"volume_mese": 19070888.23
+},
+{
+"indirizzo": "0x1249351002268a45594b9c429a328a35e6981488",
+"conto": 7398967.834935,
+"volume_mese": 22995001.74
+},
+{
+"indirizzo": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
+"conto": 7341314.031307,
+"volume_mese": 6847480300.91
+},
+{
+"indirizzo": "0x3bcae23e8c380dab4732e9a159c0456f12d866f3",
+"conto": 7316240.293908,
+"volume_mese": 1698857107.89
+},
+{
+"indirizzo": "0x66799bc69d7a7daaf50b6aa03cd5c6a2df1a9454",
+"conto": 7313331.408911,
+"volume_mese": 34411550.77
+},
+{
+"indirizzo": "0xc298efc4785f2f282838924103509156c9578a9c",
+"conto": 7256979.81702,
+"volume_mese": 195169417.29
+},
+{
+"indirizzo": "0xead5b7d86c681c036c59cd00a0390541061c69f2",
+"conto": 7255784.971713999,
+"volume_mese": 116560114.74000001
+},
+{
+"indirizzo": "0x9db1b9d343ffd38b7109b6a2c21da04fc273a7d1",
+"conto": 7230514.718061999,
+"volume_mese": 6967527.61
+},
+{
+"indirizzo": "0xb1ec7febea4f841d525785955b7fe0e812d6e86a",
+"conto": 7227586.602755,
+"volume_mese": 1136050001.0
+},
+{
+"indirizzo": "0xa0479b2c614cbd03ceab36ae5a6d0822035e553c",
+"conto": 7216172.4723,
+"volume_mese": 38270880.98
+},
+{
+"indirizzo": "0x2e30c32738a28833e3d85189c04895c25ee54cb5",
+"conto": 7215890.206163,
+"volume_mese": 275088860.75
+},
+{
+"indirizzo": "0x7717a7a245d9f950e586822b8c9b46863ed7bd7e",
+"conto": 7169795.498732,
+"volume_mese": 1435198150.9699998
+},
+{
+"indirizzo": "0xf1e79e5cf063073deec9a0d86c178f7cde84d479",
+"conto": 7143371.711820999,
+"volume_mese": 482340733.0799999
+},
+{
+"indirizzo": "0x8ea85cbd59affca28162fc286d5c093dd0f8edbc",
+"conto": 7136213.843843,
+"volume_mese": 13988480.92
+},
+{
+"indirizzo": "0x37582978b1aba3a076d398ef624bf680816aaa39",
+"conto": 7119475.886973,
+"volume_mese": 9096750.05
+},
+{
+"indirizzo": "0x6ba889db7f923622d3548f621ecc2054b80c1817",
+"conto": 7023796.687154001,
+"volume_mese": 1324338130.82
+},
+{
+"indirizzo": "0x4c3d48cbe2186beeafecc6723630ab8eda4117fc",
+"conto": 6996458.781042,
+"volume_mese": 44494535.21
+},
+{
+"indirizzo": "0x65c874d474532f4f5db9ee02f1290f3034e78d73",
+"conto": 6995001.845088,
+"volume_mese": 23890295.91
+},
+{
+"indirizzo": "0x8cc94dc843e1ea7a19805e0cca43001123512b6a",
+"conto": 6969853.957369,
+"volume_mese": 36969561.37
+},
+{
+"indirizzo": "0x8c625ff57d8a4374784c7eff585dfdc42ccec974",
+"conto": 6954613.774429,
+"volume_mese": 29194358540.370003
+},
+{
+"indirizzo": "0xb83de012dba672c76a7dbbbf3e459cb59d7d6e36",
+"conto": 6933227.185283001,
+"volume_mese": 838973177.7
+},
+{
+"indirizzo": "0xbc1bc64be47052fbab69d12fe5da1c3327788d1b",
+"conto": 6925792.752892,
+"volume_mese": 384242198.09
+},
+{
+"indirizzo": "0x6d7823cd5c3d9dcd63e6a8021b475e0c7c94b291",
+"conto": 6822691.003469,
+"volume_mese": 4334176.11
+},
+{
+"indirizzo": "0xe187055ff406f8cdf59fbae53ec20d4ecd9b771d",
+"conto": 6771669.82716,
+"volume_mese": 20167041.97
+},
+{
+"indirizzo": "0x029bf0485e2d10bece043bd6b27caf486ee4acc3",
+"conto": 6728041.990393,
+"volume_mese": 46781926.4
+},
+{
+"indirizzo": "0x5647249079e257329ecb6f46ed41821d3c69e7de",
+"conto": 6725100.271621,
+"volume_mese": 56961478.43
+},
+{
+"indirizzo": "0xba5d9cc840745aeeeeedac5712e32f13ab8ea352",
+"conto": 6721602.052961,
+"volume_mese": 25096643.0
+},
+{
+"indirizzo": "0x936cf4fb95c30ce83f658b5bbb247e4bb381bb0f",
+"conto": 6613729.717839,
+"volume_mese": 462754925.57
+},
+{
+"indirizzo": "0xf7772737dd6e90bfbfd6b1f966a0021452cea894",
+"conto": 6549726.482709,
+"volume_mese": 217991502.34
+},
+{
+"indirizzo": "0x8fec806c9e94ff7ab2af3d7e4875c2381413f98e",
+"conto": 6523195.75486,
+"volume_mese": 2018632.88
+},
+{
+"indirizzo": "0xeb3648865b1471996e5f65ae845f9eb9226b9a02",
+"conto": 6512761.619992,
+"volume_mese": 7902338.3
+},
+{
+"indirizzo": "0x55f519cf9e15f52f0f64988b68d1c1c7fb1c8983",
+"conto": 6510695.410399,
+"volume_mese": 6121712.14
+},
+{
+"indirizzo": "0x4be688f2f0c472fa33accf5576e81c68a99bf18f",
+"conto": 6503884.5276730005,
+"volume_mese": 22208292.029999997
+},
+{
+"indirizzo": "0xd1dd6d99c5fb5d31ff52eacce5046c7158859e85",
+"conto": 6491031.381396,
+"volume_mese": 221377955.36
+},
+{
+"indirizzo": "0x381fe486d87c7f2633c777f1b5be3105a2a51744",
+"conto": 6408233.750267,
+"volume_mese": 21974366.32
+},
+{
+"indirizzo": "0x668cec05549105e5b05bcc779a43186735d7ea2e",
+"conto": 6393430.627486,
+"volume_mese": 33120746.37
+},
+{
+"indirizzo": "0x79ec68d35878cedf61a4363b40ec30b89698bcad",
+"conto": 6332541.956325,
+"volume_mese": 39553590.24
+},
+{
+"indirizzo": "0x77746ff04a7014752ab12d81d531aa5e50775343",
+"conto": 6302260.959588,
+"volume_mese": 7741687.08
+},
+{
+"indirizzo": "0xf02d028ffeddc120a3ec59602a6617303ca55eb3",
+"conto": 6247715.400074,
+"volume_mese": 33211768.39
+},
+{
+"indirizzo": "0x5b5d51203a0f9079f8aeb098a6523a13f298c060",
+"conto": 6245776.249904,
+"volume_mese": 837050692.77
+},
+{
+"indirizzo": "0xcf90cfecf74e631feea816d02e757c0c8e895c0e",
+"conto": 6214033.141714,
+"volume_mese": 18454871.65
+},
+{
+"indirizzo": "0x06a745f3ad5a71bd3ad65b4103c0ac210b581c75",
+"conto": 6211087.960557,
+"volume_mese": 136086000.94
+},
+{
+"indirizzo": "0xaf297dec752c909092a117a932a8ca4aaaff9795",
+"conto": 6207819.143943,
+"volume_mese": 3981580.71
+},
+{
+"indirizzo": "0xdf9ea6ec3b7109935ccb4fb267e15ac1fb077ab1",
+"conto": 6111825.324177001,
+"volume_mese": 17264710168.86001
+},
+{
+"indirizzo": "0x9321d8117e73b0c79035f0e87debcfd8dbb1d75a",
+"conto": 6095577.512654,
+"volume_mese": 643135548.97
+},
+{
+"indirizzo": "0xb3e475368ed0fa0ad23c04de0423d48a0758806f",
+"conto": 6039354.242534,
+"volume_mese": 8137910.72
+},
+{
+"indirizzo": "0x874226b22939904f436ff0434e1fd0ab257c8427",
+"conto": 5984292.479296,
+"volume_mese": 549653521.53
+},
+{
+"indirizzo": "0x51a04fc0b977d4d453c60f70d43119a3023a3543",
+"conto": 5959787.628037,
+"volume_mese": 98227918.85
+},
+{
+"indirizzo": "0x65a093e4f2ee1063ea9d97f4bc30453b3dce23af",
+"conto": 5954110.555246,
+"volume_mese": 132923088.45
+},
+{
+"indirizzo": "0x1e771e1b95c86491299d6e2a5c3b3842d03b552e",
+"conto": 5953212.792206,
+"volume_mese": 6268088.98
+},
+{
+"indirizzo": "0x72655b3926db3afbe914a53b0604905af7ce11a5",
+"conto": 5947916.575789,
+"volume_mese": 246425568.05
+},
+{
+"indirizzo": "0xc63a0f0db2c9604283172e83bd035902e0f0a3cd",
+"conto": 5931719.519446,
+"volume_mese": 30291272.41
+},
+{
+"indirizzo": "0x152e41f0b83e6cad4b5dc730c1d6279b7d67c9dc",
+"conto": 5858198.458801,
+"volume_mese": 556198670.68
+},
+{
+"indirizzo": "0x757df2c060ec6c7ba898fa6570aa98c1f46294ba",
+"conto": 5851621.731245001,
+"volume_mese": 19250383.02
+},
+{
+"indirizzo": "0xc617388f5c19a56044b3121021ccd68621884607",
+"conto": 5851283.731705,
+"volume_mese": 2979245.98
+},
+{
+"indirizzo": "0x11ec60c4ea23c182fda02616c375ffa0a7e424d0",
+"conto": 5803616.09928,
+"volume_mese": 2743935.88
+},
+{
+"indirizzo": "0x90dbb196cacf24bd212b377a0dd62eaad5e8151b",
+"conto": 5790375.184164,
+"volume_mese": 319594358.74
+},
+{
+"indirizzo": "0x8c830d21e41ad688dbf1727ae4425573849daf41",
+"conto": 5698624.001371,
+"volume_mese": 17248236.14
+},
+{
+"indirizzo": "0x8f8d2d2565bfb10608a7ce64b48e2aea7875a344",
+"conto": 5688911.026826,
+"volume_mese": 17419594.02
+},
+{
+"indirizzo": "0xdc519874071cca5457fdf8b3c31760ac1ca16ef7",
+"conto": 5630519.826572,
+"volume_mese": 303528307.73
+},
+{
+"indirizzo": "0x345e9d43c865d6ba40d2e38194e0ff881b9c292c",
+"conto": 5575887.651796,
+"volume_mese": 784696368.55
+},
+{
+"indirizzo": "0xb4a9964201c213af0c9c7f62af561813c9a2f1f7",
+"conto": 5565096.593688,
+"volume_mese": 13545382.21
+},
+{
+"indirizzo": "0x6910c590d8503a1f3ef5ea9b64a5d7c7f3b5feda",
+"conto": 5559884.61389,
+"volume_mese": 11036344.9
+},
+{
+"indirizzo": "0xd6e56265890b76413d1d527eb9b75e334c0c5b42",
+"conto": 5506183.462302,
+"volume_mese": 32185429.47
+},
+{
+"indirizzo": "0x3893ad86b711ee70e8931640f1a4f6b2039374e0",
+"conto": 5500702.8058589995,
+"volume_mese": 44273976.5
+},
+{
+"indirizzo": "0x2d23b731e5f04996a2dfdbe434c7d922afdb5e00",
+"conto": 5473809.521984001,
+"volume_mese": 292199269.55
+},
+{
+"indirizzo": "0xd507eeef2152d54b8c00cba499340f7b7a59c948",
+"conto": 5412324.646742,
+"volume_mese": 15404252.41
+},
+{
+"indirizzo": "0xe02e420ec55b4e03924d77c7b342c012541ba2d3",
+"conto": 5388337.33699,
+"volume_mese": 133592657.51
+},
+{
+"indirizzo": "0x07fd993f0fa3a185f7207adccd29f7a87404689d",
+"conto": 5388204.602967,
+"volume_mese": 72178251.73
+},
+{
+"indirizzo": "0xbd1c84113c6deb5044be0c2221f9e9403811ff0e",
+"conto": 5382622.142006,
+"volume_mese": 5037236.66
+},
+{
+"indirizzo": "0xee7ada00c9e5f654c8f8ea0f355a1f3c50942732",
+"conto": 5375620.709801,
+"volume_mese": 11620410.29
+},
+{
+"indirizzo": "0xf1419f352846b723720424dc8bda9e80342ea01d",
+"conto": 5355462.754747,
+"volume_mese": 13050852.04
+},
+{
+"indirizzo": "0x31b1ecf848443472e34d204a134812d86ab01434",
+"conto": 5348166.447751,
+"volume_mese": 38305707.67
+},
+{
+"indirizzo": "0x62adeb9ae6a4b53bd874334538e73ea4493b5f3b",
+"conto": 5336868.718477,
+"volume_mese": 25368436.09
+},
+{
+"indirizzo": "0x920fa68300c8aa95c4563e0daf79a0b0e51f0cfe",
+"conto": 5313366.872415,
+"volume_mese": 21080007.61
+},
+{
+"indirizzo": "0x26ae45a9972e48bea4e22be17a848c41804e2b51",
+"conto": 5271146.08353,
+"volume_mese": 24083387.57
+},
+{
+"indirizzo": "0x09d63d136a0a98960cee7835d2f794a89ea71697",
+"conto": 5263356.548863,
+"volume_mese": 8906846.29
+},
+{
+"indirizzo": "0xcafe9392d902f6f517b1573371923ebf7ffa7b3b",
+"conto": 5245382.37207,
+"volume_mese": 8561241.43
+},
+{
+"indirizzo": "0x747932275df815ae819944e57ebb5b3e115ad68b",
+"conto": 5232425.121443,
+"volume_mese": 2423610.26
+},
+{
+"indirizzo": "0xb4eac34db4f9d1270d078495d367cb2e587cf6e8",
+"conto": 5199807.420771,
+"volume_mese": 21178455.25
+},
+{
+"indirizzo": "0xfd4224606069dd88fec92093a27591008263fda5",
+"conto": 5183837.600579,
+"volume_mese": 295583940.14
+},
+{
+"indirizzo": "0xda26ab2a88881523ce002477fdee2f4ac9eb572a",
+"conto": 5155239.374285,
+"volume_mese": 102531799.45
+},
+{
+"indirizzo": "0x1116b5fcc070945062e8879841c29807db373d0d",
+"conto": 5137299.262455,
+"volume_mese": 113334760.82
+},
+{
+"indirizzo": "0x71038a3e5fd46ba4ca5edc81339a4d1e9e493104",
+"conto": 5134265.817084,
+"volume_mese": 49631157.18
+},
+{
+"indirizzo": "0x5f64c8c5c5d0811130c3a314bcf2c791aa6e6452",
+"conto": 5128409.594202,
+"volume_mese": 123039096.55
+},
+{
+"indirizzo": "0x005844b2ffb2e122cf4244be7dbcb4f84924907c",
+"conto": 5091083.907325,
+"volume_mese": 21211278.67
+},
+{
+"indirizzo": "0xfce053a5e461683454bf37ad66d20344c0e3f4c0",
+"conto": 5082837.818596,
+"volume_mese": 20593621.44
+},
+{
+"indirizzo": "0x779e5e469d5de3a13e563f736ffcf47ebe5584c5",
+"conto": 5068501.60044,
+"volume_mese": 4588525.03
+},
+{
+"indirizzo": "0x1e6db0fdf1a0f6edb78753184eb0fe5485c2eef2",
+"conto": 5063020.330854,
+"volume_mese": 1077224.43
+},
+{
+"indirizzo": "0x939f95036d2e7b6d7419ec072bf9d967352204d2",
+"conto": 5057461.8946,
+"volume_mese": 260551738.75
+},
+{
+"indirizzo": "0x28473085ba4aa761eb541914f50a75dd685cd47b",
+"conto": 5055125.956194,
+"volume_mese": 239068055.47
+},
+{
+"indirizzo": "0x9b28837deb55b014f7a37f2812d6ec042ce87ca1",
+"conto": 5045946.177154,
+"volume_mese": 9118298.21
+},
+{
+"indirizzo": "0x2aee33ab6a330d1307c0c77088c528ed2cdddd07",
+"conto": 5034278.737351,
+"volume_mese": 24828224.64
+},
+{
+"indirizzo": "0x8c18976ab33e10e1b87b8ade1a679311cfe67f43",
+"conto": 5017173.242607,
+"volume_mese": 2227333.57
+},
+{
+"indirizzo": "0x47a127f496d001f187ac65fc24852274dc51d080",
+"conto": 5005467.06823,
+"volume_mese": 9669669.34
+},
+{
+"indirizzo": "0xb33b01c9821a99d3d4ec14b1c9a2197524b9af97",
+"conto": 4978711.511573,
+"volume_mese": 25419177.76
+},
+{
+"indirizzo": "0xf54ac7966dad594dc4952b3eccc8f77cd77fde92",
+"conto": 4967131.613866,
+"volume_mese": 69940590.76
+},
+{
+"indirizzo": "0x364a45829e8ce2940d8cff911076d8dec40b2e73",
+"conto": 4954609.831649,
+"volume_mese": 24967053.0
+},
+{
+"indirizzo": "0x53f8f390fd4f70941c5d160a964f6893c8dbceff",
+"conto": 4913779.011559,
+"volume_mese": 8661330.74
+},
+{
+"indirizzo": "0xf4a3c6c39424208803feff01d7f3c809cb88fd1c",
+"conto": 4911631.783187,
+"volume_mese": 3080033.15
+},
+{
+"indirizzo": "0x051c2e6d49cf82ebc47f08f9b85800f94fc9693c",
+"conto": 4908562.034001,
+"volume_mese": 51413948.13
+},
+{
+"indirizzo": "0xe86b057f5eb764c9738d6b0d38170befd0723664",
+"conto": 4889691.030375,
+"volume_mese": 362918066.66
+},
+{
+"indirizzo": "0xf129e9c78fcdbf02051f87ea0333c121825a1125",
+"conto": 4882546.165662,
+"volume_mese": 598430548.6
+},
+{
+"indirizzo": "0xb829fd12a23c88e0f1eb85238799f8fd400a3a81",
+"conto": 4879167.108426,
+"volume_mese": 141028642.08
+},
+{
+"indirizzo": "0x0a776abbaae0e2161d0e131f57e605efbea4b99b",
+"conto": 4851530.040123999,
+"volume_mese": 43531308.089999996
+},
+{
+"indirizzo": "0x8dc440b31a8953ec8e0ee780dc5f15dd6e30c031",
+"conto": 4838713.619047,
+"volume_mese": 270039108.21000004
+},
+{
+"indirizzo": "0x4fe1b11b9eb2c9b7c09d2aca403da18eb9792548",
+"conto": 4838507.886605,
+"volume_mese": 46146256.45
+},
+{
+"indirizzo": "0xb4caaff781251594911cc76aec61cef46ba00894",
+"conto": 4836728.591430002,
+"volume_mese": 3851722.0
+},
+{
+"indirizzo": "0x7540f18cc1c6ec4d0fcc162d78d666f43afee358",
+"conto": 4800418.757907,
+"volume_mese": 3937768.68
+},
+{
+"indirizzo": "0xda744273f80b22412417f7cfe0503f3d721f987d",
+"conto": 4769566.668744,
+"volume_mese": 20578992.45
+},
+{
+"indirizzo": "0x880ac484a1743862989a441d6d867238c7aa311c",
+"conto": 4733793.869565,
+"volume_mese": 177042450.04
+},
+{
+"indirizzo": "0x4f12b217aa59e6d3e1f91ca2dc96f9543576618b",
+"conto": 4694303.450727,
+"volume_mese": 1531243.42
+},
+{
+"indirizzo": "0xdcb45a8992c3cea077c3d631ee92572f64778858",
+"conto": 4680811.610808,
+"volume_mese": 800409029.69
+},
+{
+"indirizzo": "0x2b61e63b11295c0a1dda2875ac3af00669732f6c",
+"conto": 4657399.851131,
+"volume_mese": 14720872.58
+},
+{
+"indirizzo": "0x47a761bb9e970ac93cb571c4614c4ca643714e4f",
+"conto": 4656498.813032,
+"volume_mese": 13165706.09
+},
+{
+"indirizzo": "0x5f94a51948d2376ad34a6fadfa2544e651b74b96",
+"conto": 4630154.291935,
+"volume_mese": 6626207.6
+},
+{
+"indirizzo": "0x523852be2db1a76a0e088ecbff32e849544054e5",
+"conto": 4597635.018187,
+"volume_mese": 507416449.82
+},
+{
+"indirizzo": "0xeee0d806e4f0a427277433d6b580619918770b53",
+"conto": 4592648.035894,
+"volume_mese": 8305433.9
+},
+{
+"indirizzo": "0x7e23ead98212f5476768cf51b5dd76da34a35a5a",
+"conto": 4564020.611577,
+"volume_mese": 11044224.23
+},
+{
+"indirizzo": "0xd6e1a6f7bb47aca69aaa511210227d40926ff256",
+"conto": 4556251.2545179995,
+"volume_mese": 510867812.15
+},
+{
+"indirizzo": "0x6ab3af472fd676fdde0a13f6736b0ac64356bb06",
+"conto": 4549241.54999,
+"volume_mese": 224538847.03999996
+},
+{
+"indirizzo": "0x970ca5d7a03bc0ba304997ea709464bbfb662a93",
+"conto": 4547505.176827,
+"volume_mese": 27926446.29
+},
+{
+"indirizzo": "0x8c028b7c65d86d9721874c87819c6196e6cdb73f",
+"conto": 4507342.796213,
+"volume_mese": 4502718.88
+},
+{
+"indirizzo": "0x051748895c6ed4fab50828bebe8e62e665134d23",
+"conto": 4506266.837644,
+"volume_mese": 41271784.59
+},
+{
+"indirizzo": "0x8bcf7a888c66f635ac4a2caf42a8dd12a3b20b14",
+"conto": 4481297.867328,
+"volume_mese": 57008847.56
+},
+{
+"indirizzo": "0x413c2724b62975c18b1415650f998a8f0a67886c",
+"conto": 4473195.785648,
+"volume_mese": 101435582.27
+},
+{
+"indirizzo": "0x92ae4209e3a5760903aff0c423312392eb3f86a8",
+"conto": 4465015.943605,
+"volume_mese": 25476439.34
+},
+{
+"indirizzo": "0x2d99fe0f36c1aebd28a1a2c0e82e8ca13c2ea351",
+"conto": 4401428.863874,
+"volume_mese": 11959761.93
+},
+{
+"indirizzo": "0x89720b1831fd8457ea9026f5ffb476ed6d35e6bd",
+"conto": 4399242.087429,
+"volume_mese": 1427853.51
+},
+{
+"indirizzo": "0xd620aadabaa20d2af700853c4504028cba7c3333",
+"conto": 4393652.860949,
+"volume_mese": 14450586.49
+},
+{
+"indirizzo": "0x0c5d0549a1f7ad185286a08bfc10f8e9a1c936b3",
+"conto": 4391757.651624,
+"volume_mese": 5966379.46
+},
+{
+"indirizzo": "0x91a9cadcd7e36cbe8ff604cb634307d7b7643f70",
+"conto": 4390662.180772,
+"volume_mese": 2463611.2
+},
+{
+"indirizzo": "0x4fe53e953f1ff4454d144cb6f4fee3f2ca9363fe",
+"conto": 4372848.836139,
+"volume_mese": 4950949.53
+},
+{
+"indirizzo": "0x9475e4bfdfadb5cf4ce7cf805044c0db5a8a6f8e",
+"conto": 4317634.674397,
+"volume_mese": 32107970.11
+},
+{
+"indirizzo": "0x0fd6f65d35cf13ae51795036d0ae9af42f3cbcb4",
+"conto": 4298658.769723,
+"volume_mese": 55878264.87
+},
+{
+"indirizzo": "0x4e23288cee4960f9f962195c22948e4bc7ae20c3",
+"conto": 4297242.081908,
+"volume_mese": 2882401097.14
+},
+{
+"indirizzo": "0x7bfee91193d9df2ac0bfe90191d40f23c773c060",
+"conto": 4223729.459497,
+"volume_mese": 383921674.72
+},
+{
+"indirizzo": "0x6df99d59cdada18ade521e05edd5e6a2ec91b734",
+"conto": 4199134.027722,
+"volume_mese": 13640147.02
+},
+{
+"indirizzo": "0x0c684f333a7e120bce61383da670bbb0157e82d0",
+"conto": 4176512.706858,
+"volume_mese": 76252934.14
+},
+{
+"indirizzo": "0x0748e296e5a350ec36c8487a1cea406e1b57d4b2",
+"conto": 4106797.413239,
+"volume_mese": 20608119.4
+},
+{
+"indirizzo": "0x8b3fdac749d04382f375f5cddc4e7dc3a78bc6cd",
+"conto": 4059505.094242,
+"volume_mese": 22207720.15
+},
+{
+"indirizzo": "0x7eb9026d0183942458bd4660371c3cc0a2df3beb",
+"conto": 4038928.57589,
+"volume_mese": 236976703.62
+},
+{
+"indirizzo": "0x862dd8e68f30693e3d3c9daa42a440bc6d2a1f0c",
+"conto": 4003563.4176930003,
+"volume_mese": 2035687065.38
+},
+{
+"indirizzo": "0x958380861f6f28c8cfc13da3e72968eaed5a5c7b",
+"conto": 3982876.45989,
+"volume_mese": 10207956.63
+},
+{
+"indirizzo": "0x2057d4f2b6ea957b63371980775b0a5505a438f0",
+"conto": 3930804.109643,
+"volume_mese": 3469621.54
+},
+{
+"indirizzo": "0x5bc43f38c2ddcd85857f218674cd384f172c3b0c",
+"conto": 3886394.803138,
+"volume_mese": 13653060.86
+},
+{
+"indirizzo": "0x9bbf17b0298ba2d8ac62c17530c92bd4577ae490",
+"conto": 3881372.4971,
+"volume_mese": 15944228.0
+},
+{
+"indirizzo": "0x888e000c78b8f1aada5b3c99f880794907b76d77",
+"conto": 3872637.672653,
+"volume_mese": 40368933.16
+},
+{
+"indirizzo": "0x3eb6bed67d046fbffb8ada21167e592f3fef5470",
+"conto": 3837316.307371,
+"volume_mese": 104078141.36
+},
+{
+"indirizzo": "0x654016a8c9fcf0c4cb7ed6078aba21f7f399f7b7",
+"conto": 3834054.610675,
+"volume_mese": 29631202.63
+},
+{
+"indirizzo": "0xf7f8baf2197adf0c7e1725721f14ce1d53fd770c",
+"conto": 3827556.425702,
+"volume_mese": 640686586.25
+},
+{
+"indirizzo": "0xf2500dbc34617daf22b5186a1bfb9f5f3a33ae13",
+"conto": 3817209.891362,
+"volume_mese": 23362533.89
+},
+{
+"indirizzo": "0xf29c6bc1147a841519b382459a6d7a373c6b9971",
+"conto": 3810879.100342,
+"volume_mese": 279095284.38
+},
+{
+"indirizzo": "0x09dccb6f33b986987457d33db6801b74d2a2c094",
+"conto": 3806123.708143,
+"volume_mese": 7928643.38
+},
+{
+"indirizzo": "0x36f5e448c9cf0032551e58919cf4eabefcd742c1",
+"conto": 3803839.235225,
+"volume_mese": 3132935.0100000002
+},
+{
+"indirizzo": "0xb0026ca48937bd18c5941c05decab68b0fcced8a",
+"conto": 3788666.779822,
+"volume_mese": 7188388.0
+},
+{
+"indirizzo": "0x5ad96a3986b9d2cfab1d39c68002edd17263f5ef",
+"conto": 3784412.400385,
+"volume_mese": 130718630.72
+},
+{
+"indirizzo": "0x3c83dbcda8d9fbefb75181f40d51205648defc7d",
+"conto": 3770417.012905,
+"volume_mese": 1287551.25
+},
+{
+"indirizzo": "0xe2823659be02e0f48a4660e4da008b5e1abfdf29",
+"conto": 3756319.481781,
+"volume_mese": 14411921.58
+},
+{
+"indirizzo": "0x7cb324d0c19424c6c699a5b161fdadb2ef52de99",
+"conto": 3747942.856394,
+"volume_mese": 1202038.65
+},
+{
+"indirizzo": "0x2025137a136bea7446deba681cbfc7cf1970840e",
+"conto": 3747345.557472,
+"volume_mese": 93160090.38
+},
+{
+"indirizzo": "0x7accb9f26d396749c58a8a004bc1e41999c6f76c",
+"conto": 3740267.824176,
+"volume_mese": 1514842.25
+},
+{
+"indirizzo": "0x28cee4465f95720cb8464d56faea656751119040",
+"conto": 3710751.967941,
+"volume_mese": 5462407.9
+},
+{
+"indirizzo": "0x1c9e242d85fc0e4376ad1ea56143b9fdf9f61017",
+"conto": 3708384.528286,
+"volume_mese": 3821438.44
+},
+{
+"indirizzo": "0xb632c6580173a16154f17cdafc6eb27e95cf73b7",
+"conto": 3678499.022441,
+"volume_mese": 90757413.62
+},
+{
+"indirizzo": "0xea97a31c67c47c38736d594a62ae07f6e25a370b",
+"conto": 3677527.458344,
+"volume_mese": 11428626.43
+},
+{
+"indirizzo": "0xe83b5e3644b50e802a25b34b38b91a061a0d3ca8",
+"conto": 3671393.328686,
+"volume_mese": 62224990.16
+},
+{
+"indirizzo": "0x4e28dee6193035725e993860bf8838d4e5326a9c",
+"conto": 3620376.932445,
+"volume_mese": 446859580.92999995
+},
+{
+"indirizzo": "0x9ffdf919da72213588f7517598394cc5535bce40",
+"conto": 3607676.58831,
+"volume_mese": 203021578.4
+},
+{
+"indirizzo": "0x3f35bbc704ac31f777dbb30a742834cdbeb33fcd",
+"conto": 3598242.750712,
+"volume_mese": 3675628.97
+},
+{
+"indirizzo": "0xa9de65e6e288fa6ff806692c2464582efce3e049",
+"conto": 3593159.260045,
+"volume_mese": 14655603.19
+},
+{
+"indirizzo": "0xfd6a531508649697c6e133adcb82efcd0c737737",
+"conto": 3590774.847241,
+"volume_mese": 16889497.25
+},
+{
+"indirizzo": "0x72774e2fe1992d5da8c6e9cef73fd2ab980c0b98",
+"conto": 3583887.021535,
+"volume_mese": 122064867.96
+},
+{
+"indirizzo": "0x68bd85dc5c94a5511e959d299617eb19cd26c298",
+"conto": 3579292.431033,
+"volume_mese": 1034990672.16
+},
+{
+"indirizzo": "0xa237f4cc7bbc930fd531b1a36f31e54f778fc431",
+"conto": 3566410.613955,
+"volume_mese": 75625788.82
+},
+{
+"indirizzo": "0x9eec98d048d06d9cd75318fffa3f3960e081daab",
+"conto": 3565357.564528,
+"volume_mese": 36110611.89
+},
+{
+"indirizzo": "0xf27ebb91ea420f73b59b205ac7e0b77a90ec8f3c",
+"conto": 3548286.711601,
+"volume_mese": 1514436515.61
+},
+{
+"indirizzo": "0xd70832ce681c2dabaf7ba90357229a27ac3b206a",
+"conto": 3544750.692826,
+"volume_mese": 3644966.44
+},
+{
+"indirizzo": "0xd9012a0c82242b04ee09e45e98b24903f982d975",
+"conto": 3542689.6758749997,
+"volume_mese": 170853483.06
+},
+{
+"indirizzo": "0x7f1950ce02f9f60634ba39b81844911a6c2f05bf",
+"conto": 3538548.57931,
+"volume_mese": 417648753.84000003
+},
+{
+"indirizzo": "0x5a72a5f89b44473a33136a7c3253c519c474eec4",
+"conto": 3538046.747633,
+"volume_mese": 9446722.22
+},
+{
+"indirizzo": "0x5c26dfc723e7a1da7b6c3bd5cbd72716d09425c2",
+"conto": 3489529.71689,
+"volume_mese": 59976098.67
+},
+{
+"indirizzo": "0xf0ae4d359f07fb630a5bcb197ac3beaba4cc2f74",
+"conto": 3448952.78354,
+"volume_mese": 15453248.16
+},
+{
+"indirizzo": "0xf382f419448b471da26225c4f849bb240be5578c",
+"conto": 3434735.1653770003,
+"volume_mese": 514070513.55
+},
+{
+"indirizzo": "0xf58b673c1633ccef0ac58263cdc95ed80f817fc7",
+"conto": 3434711.8608359997,
+"volume_mese": 1273179351.82
+},
+{
+"indirizzo": "0xe330ac756dabf22466317a01f5d1e9baa00e77a1",
+"conto": 3429541.8064,
+"volume_mese": 69326307.99
+},
+{
+"indirizzo": "0xbbcb0c0aef0b28125af2f719f81d6a5b76f56f30",
+"conto": 3409640.4899810003,
+"volume_mese": 27249442.47
+},
+{
+"indirizzo": "0x81196517de1d77ebc8a1951c3ea1a103e732479c",
+"conto": 3389399.552595,
+"volume_mese": 34725031.78
+},
+{
+"indirizzo": "0xd21d931890d27b6e7e2e668f27931e17698e90f1",
+"conto": 3373487.189999,
+"volume_mese": 68781885.33
+},
+{
+"indirizzo": "0xa6a1140c06c35619038823f58a54f25eb33c29eb",
+"conto": 3357869.7583970004,
+"volume_mese": 250722348.37999997
+},
+{
+"indirizzo": "0x6c93641c0a049a171bf80b34d639c51c31b259a4",
+"conto": 3355840.12932,
+"volume_mese": 9424197.36
+},
+{
+"indirizzo": "0x83b60765df7af084b81bfa5245fee7fdc172e049",
+"conto": 3312246.612351,
+"volume_mese": 192461579.34
+},
+{
+"indirizzo": "0x2fcb6898d5a0623de19c3691904927685014c4d8",
+"conto": 3292461.913485,
+"volume_mese": 6971007.54
+},
+{
+"indirizzo": "0xbfc79c444c41a74516bf31237ebf586a231480b4",
+"conto": 3292377.100564,
+"volume_mese": 15673584.75
+},
+{
+"indirizzo": "0x692e75cb2638a36e8b4c0e9541d365a6daa384c1",
+"conto": 3290139.138554,
+"volume_mese": 29134979.52
+},
+{
+"indirizzo": "0x9dead8fffcbf130e7658f672d2c081d91178d617",
+"conto": 3288796.612667,
+"volume_mese": 201646383.79
+},
+{
+"indirizzo": "0xcc3a4101c91bc2a44fbc68bbc0cea027472c6c9a",
+"conto": 3274816.638767,
+"volume_mese": 1731449.45
+},
+{
+"indirizzo": "0xb221a0f172694ddbb7883c7fe37459cc25f0a406",
+"conto": 3257733.390811,
+"volume_mese": 2239201.32
+},
+{
+"indirizzo": "0xc7f94fb3b3ba614b9b2bf80697ab5a31917005a2",
+"conto": 3239153.066148,
+"volume_mese": 4020139.61
+},
+{
+"indirizzo": "0x4eef0d714e13c23dbfb9c8aa4fd678d0d942b8e2",
+"conto": 3230463.302096,
+"volume_mese": 11266717.99
+},
+{
+"indirizzo": "0x010461c14e146ac35fe42271bdc1134ee31c703a",
+"conto": 3215228.721678,
+"volume_mese": 321500848.97
+},
+{
+"indirizzo": "0x9c062c0575c30a3b7614d0c6ea8de67faab00560",
+"conto": 3203275.532717,
+"volume_mese": 178632761.92
+},
+{
+"indirizzo": "0x8bae3527e5a33fa0cf184f37bc112d071463ab6d",
+"conto": 3198956.299763,
+"volume_mese": 20745776.6
+},
+{
+"indirizzo": "0xec7f9f5b31b8f5da6ac6c0973bbd496e16f9df39",
+"conto": 3163907.516452,
+"volume_mese": 13533513.42
+},
+{
+"indirizzo": "0xa11ba9a2e0df1367b203d04840ef18a0262e16d5",
+"conto": 3157155.079111,
+"volume_mese": 3009042.35
+},
+{
+"indirizzo": "0xf929122994e177079c924631ba13fb280f5cd1f9",
+"conto": 3123668.383266,
+"volume_mese": 34802080.27
+},
+{
+"indirizzo": "0x71dfc07de32c2ebf1c4801f4b1c9e40b76d4a23d",
+"conto": 3118912.073639,
+"volume_mese": 1841695.79
+},
+{
+"indirizzo": "0x837686cfda8a79adfb8465d39240c54166bf9a1e",
+"conto": 3117357.167997,
+"volume_mese": 3029298.9
+},
+{
+"indirizzo": "0x9a0825ca6c4c577a1202a8fae3b8f044c1d5711d",
+"conto": 3112974.343705,
+"volume_mese": 20181873.43
+},
+{
+"indirizzo": "0x8802fdc33b133d36dbd70b774443bf40e89f0d93",
+"conto": 3101192.02736,
+"volume_mese": 1498722.66
+},
+{
+"indirizzo": "0x6c00ba1a0840b99dfb4f6d1bc7a68cd462a21261",
+"conto": 3093859.04219,
+"volume_mese": 56201965.04
+},
+{
+"indirizzo": "0xf64c86a778b4a398a0e08565e2a77c91c88ce895",
+"conto": 3078550.2666309997,
+"volume_mese": 42725631.79
+},
+{
+"indirizzo": "0x8ed318c5eefd8c9b15b6ee351734c8a350b2f23a",
+"conto": 3077617.6568340003,
+"volume_mese": 76700961.47
+},
+{
+"indirizzo": "0x0fdf85b9286b9708abe1904faff5e78ad184a315",
+"conto": 3069131.931592,
+"volume_mese": 1336892.55
+},
+{
+"indirizzo": "0xe9ec1d90652e13521623fb048f1c77883c597859",
+"conto": 3066563.2603510004,
+"volume_mese": 32256574.08
+},
+{
+"indirizzo": "0x98265c164a55b7b348bc3c4ab0bf109e047fed8a",
+"conto": 3045605.180981,
+"volume_mese": 1767616.86
+},
+{
+"indirizzo": "0x1886d6d9b05f11e9db19ba6f84811bb80d4c6582",
+"conto": 3036898.136756,
+"volume_mese": 6986014.29
+},
+{
+"indirizzo": "0x5559da6ec434c5723d0ce9c4da7f29e3f8a3d43b",
+"conto": 3027155.39653,
+"volume_mese": 67047286.47
+},
+{
+"indirizzo": "0xe71cbf47fff309813bcea54f3ecf49a5f129264d",
+"conto": 3021437.9893579995,
+"volume_mese": 13267567.110000001
+},
+{
+"indirizzo": "0x2b3349ff0c4cf96f7df87fd5f3d583ee625733f7",
+"conto": 3015059.4197679996,
+"volume_mese": 6077643.08
+},
+{
+"indirizzo": "0x31ca8395cf837de08b24da3f660e77761dfb974b",
+"conto": 3006089.911775,
+"volume_mese": 345920435.16
+},
+{
+"indirizzo": "0x5f11538753417d898f16604aabb2ba1ab6d7e2d6",
+"conto": 3000829.773761,
+"volume_mese": 4939195.04
+},
+{
+"indirizzo": "0x23660ecd75a5f09972728d53a6dc570e9f85d50d",
+"conto": 3000648.052977,
+"volume_mese": 5119368.22
+},
+{
+"indirizzo": "0x77435010f5e34e2fa04f5ce7d49e57a8bd8de4fe",
+"conto": 2998884.004713,
+"volume_mese": 51312503.37
+},
+{
+"indirizzo": "0x9a991732cd4cf14712b07fbeb8c5d87de90dd21a",
+"conto": 2996461.795121,
+"volume_mese": 54586794.79
+},
+{
+"indirizzo": "0xfa41e63b1cba0b42bed3995b5a696411b5bf820a",
+"conto": 2992101.044396,
+"volume_mese": 75011171.57
+},
+{
+"indirizzo": "0xa5ee12ffed6a53622c11ea5f678ccea19b8b243f",
+"conto": 2986848.550234,
+"volume_mese": 379644096.26000005
+},
+{
+"indirizzo": "0x707c049276cbed4436dc9b63295e94132d37081d",
+"conto": 2973493.6435209997,
+"volume_mese": 186188711.45999998
+},
+{
+"indirizzo": "0xf4c5a38d5436284d9da7d098fcfe1fe9037e9a65",
+"conto": 2965451.052338,
+"volume_mese": 19430767.37
+},
+{
+"indirizzo": "0x3119a5bf3ce136b2ea82969a26e5f570c0319209",
+"conto": 2964495.475938,
+"volume_mese": 3751832.45
+},
+{
+"indirizzo": "0x169ba96d963e77a87dbe58922ecdcdd0f0cf3315",
+"conto": 2950021.53739,
+"volume_mese": 15347226.35
+},
+{
+"indirizzo": "0x1cfbe10106c1beb61d9679207ab767244fbd85c7",
+"conto": 2944587.516402,
+"volume_mese": 2463069.81
+},
+{
+"indirizzo": "0x6ea486a3426563e23023125f18867117878f0ea7",
+"conto": 2917835.365114,
+"volume_mese": 17388617.34
+},
+{
+"indirizzo": "0xd4c1f7e8d876c4749228d515473d36f919583d1d",
+"conto": 2911419.546808,
+"volume_mese": 849732887.18
+},
+{
+"indirizzo": "0xe86351e0f69bd808def36e7bb2f9107443838bb8",
+"conto": 2906522.12763,
+"volume_mese": 386042735.29
+},
+{
+"indirizzo": "0xf47237079aeec748370d5ac827747f490e8f5d8b",
+"conto": 2894184.985084,
+"volume_mese": 3429964.69
+},
+{
+"indirizzo": "0x6891ed9ee6a9d0649ffac2bcee814e6899a0e075",
+"conto": 2888873.819282,
+"volume_mese": 9622102.59
+},
+{
+"indirizzo": "0x8d60964b5a2ec8811f2937d17f56315a146b7d72",
+"conto": 2858657.192066,
+"volume_mese": 27185504.82
+},
+{
+"indirizzo": "0x97f8219e401f07752a60ddb0a75efda96d1389d9",
+"conto": 2849094.850121,
+"volume_mese": 21158592.81
+},
+{
+"indirizzo": "0x34c6d41c5f78f7ccdf1b05ef7cb7c868ac5a6b0c",
+"conto": 2847925.270117,
+"volume_mese": 1581783.9000000001
+},
+{
+"indirizzo": "0x708f713637e28c014705fec1bab002992f53d4ea",
+"conto": 2796806.128852,
+"volume_mese": 16966483.94
+},
+{
+"indirizzo": "0x61387d7e85508811de339276e013e0517f3782ad",
+"conto": 2754320.8541489993,
+"volume_mese": 321279502.23
+},
+{
+"indirizzo": "0x183d0567c33e7591c22540e45d2f74730b42a0ca",
+"conto": 2729457.455746,
+"volume_mese": 14332066.7
+},
+{
+"indirizzo": "0x99466e1f59811cce3f71a8fa8bf3430ec367f6b9",
+"conto": 2728462.86635,
+"volume_mese": 19911472.47
+},
+{
+"indirizzo": "0xd09dfae7d956e672f669f83163d89c334aa50044",
+"conto": 2707835.809694,
+"volume_mese": 17427521.33
+},
+{
+"indirizzo": "0x6e25e5d971bda9799f7a5242f4720b5b3f939200",
+"conto": 2694213.217419,
+"volume_mese": 1791255.23
+},
+{
+"indirizzo": "0xfffa6fc6acc3dbe04b175862376f1c5ff88cf9c1",
+"conto": 2679548.1513159997,
+"volume_mese": 1353984.94
+},
+{
+"indirizzo": "0x7d54a6772903c4f45f05c9b4e89f1dd2a0f52794",
+"conto": 2673471.829758,
+"volume_mese": 8844804.61
+},
+{
+"indirizzo": "0x017ac6dd39a622b7fcd65f45fbae171f1561104c",
+"conto": 2670080.1823770003,
+"volume_mese": 75891296.24
+},
+{
+"indirizzo": "0xcc76b68ad97dc2516bdbb27d0e04c363037a28a4",
+"conto": 2665371.656196,
+"volume_mese": 134532036.74
+},
+{
+"indirizzo": "0xac26cf5f3c46b5e102048c65b977d2551b72a9c7",
+"conto": 2655128.592253,
+"volume_mese": 2111828.42
+},
+{
+"indirizzo": "0xb7dbd6012313c5f7d5fada7eb1213de2030970c4",
+"conto": 2653411.401888,
+"volume_mese": 17090157.15
+},
+{
+"indirizzo": "0x42fd5648cf21c158d15e4f58785760755b3f6623",
+"conto": 2650930.9274759996,
+"volume_mese": 127944441.97
+},
+{
+"indirizzo": "0x86ae16701f28d2ff2d3e0b3c4be4e8b5d6f7cc92",
+"conto": 2624353.801489,
+"volume_mese": 21341876.14
+},
+{
+"indirizzo": "0x9836e286fbf4f71998827d4bd6ea3b470c26457e",
+"conto": 2623238.685506,
+"volume_mese": 17099308.77
+},
+{
+"indirizzo": "0x83d66b34c20d177c035edef859bf6bcbb174afeb",
+"conto": 2618036.76612,
+"volume_mese": 11733083.51
+},
+{
+"indirizzo": "0x138bda71236352d996b903b090f09fdb25f442d7",
+"conto": 2609632.821274,
+"volume_mese": 4093690.49
+},
+{
+"indirizzo": "0x4a96036fb1529561fa3eeeb2781fad2d4f25500e",
+"conto": 2567705.356128,
+"volume_mese": 15877070.86
+},
+{
+"indirizzo": "0x77ee3604adbdefa66a817b3cf776412a6613a018",
+"conto": 2553423.873149,
+"volume_mese": 142352819.91
+},
+{
+"indirizzo": "0xafe4b3fb69024f240dce32270dede23c85154a21",
+"conto": 2547026.023982,
+"volume_mese": 65526058.59
+},
+{
+"indirizzo": "0x7345985dd7e2c521a0ba97929aea93614627d58e",
+"conto": 2531499.491549,
+"volume_mese": 61762533.01
+},
+{
+"indirizzo": "0xdc7be236c4b1ee77d16758451a198275ec9839b6",
+"conto": 2523637.9484099997,
+"volume_mese": 1856932.51
+},
+{
+"indirizzo": "0x19251ef4717b94a68dea3e6f39b9fa4b10ed8069",
+"conto": 2516950.65821,
+"volume_mese": 5013361.3
+},
+{
+"indirizzo": "0xaac091f502a773498fb9336f41500fd13098245b",
+"conto": 2515215.551937,
+"volume_mese": 16517502.76
+},
+{
+"indirizzo": "0xdc1a840dbf28f046074c4343a731dfbd96f3fd28",
+"conto": 2502497.430946,
+"volume_mese": 12014189.88
+},
+{
+"indirizzo": "0x94b227df8fe384dfa9273334c72e5efbf934599e",
+"conto": 2500399.510639,
+"volume_mese": 8646310.33
+},
+{
+"indirizzo": "0x4da577b56741299e2c3fcdfa3ffa41a771b80abe",
+"conto": 2488949.201625,
+"volume_mese": 101810612.13
+},
+{
+"indirizzo": "0x7a6d5fc57f6906f337c48fe2763c3a501304f79c",
+"conto": 2485864.484485,
+"volume_mese": 15132521.6
+},
+{
+"indirizzo": "0x4941903e504321615f51c77e5399cf23db6a84d6",
+"conto": 2469571.479681,
+"volume_mese": 14041785.46
+},
+{
+"indirizzo": "0x1bf629cd9f4dbcc9fca616ccf7a19891007f5bfa",
+"conto": 2468081.687694,
+"volume_mese": 7901882.89
+},
+{
+"indirizzo": "0xb1505ad1a4c7755e0eb236aa2f4327bfc3474768",
+"conto": 2462462.062183,
+"volume_mese": 9128073.64
+},
+{
+"indirizzo": "0x5d2c2bd98f10616771d7b5124ad2090ba72aa43c",
+"conto": 2452946.608076,
+"volume_mese": 4251884.77
+},
+{
+"indirizzo": "0x04889bbfa46fcf754ba06b1ca6d3e83265dcd87d",
+"conto": 2443971.745244,
+"volume_mese": 1327715028.87
+},
+{
+"indirizzo": "0x65101959816bff7ee581998d2139440f2616cda4",
+"conto": 2435755.110836,
+"volume_mese": 51752274.06
+},
+{
+"indirizzo": "0x30693306e11a65fd29234c1411362cbb2ae8011a",
+"conto": 2433940.661156,
+"volume_mese": 2486514.62
+},
+{
+"indirizzo": "0xd978850b844b0d5f4fd1de9d7a1aace6aa782fd9",
+"conto": 2433784.142214,
+"volume_mese": 3000275.41
+},
+{
+"indirizzo": "0xd9e7a8ea48fb62cc9bdb2a4a7befbc2675824aff",
+"conto": 2411764.854422,
+"volume_mese": 2912698.05
+},
+{
+"indirizzo": "0x265eac78fb57495674227c93065d67abe6f97f70",
+"conto": 2404038.942261,
+"volume_mese": 16506497.32
+},
+{
+"indirizzo": "0x3e516cf3c9d4f29fae6c1324c2414dc872fc9c09",
+"conto": 2366030.102271,
+"volume_mese": 4267725.29
+},
+{
+"indirizzo": "0x578897d11febe9c1866f96210efa1a96d375f20b",
+"conto": 2344693.711744,
+"volume_mese": 3319827.19
+},
+{
+"indirizzo": "0x5986347c1d0133d02d307f08bb1efd44c2eb89d9",
+"conto": 2344629.492449,
+"volume_mese": 356405317.85
+},
+{
+"indirizzo": "0xfed48bed01c65792bb969fcfb9240211f4ee769f",
+"conto": 2344130.044274,
+"volume_mese": 45357177.25
+},
+{
+"indirizzo": "0x6041f881358c71d64bc9253c9ba0391df69f7d98",
+"conto": 2343713.405694,
+"volume_mese": 9008972.46
+},
+{
+"indirizzo": "0xf191539a2c4ba0af951438bb6abfa0625c7df2ef",
+"conto": 2342591.950162,
+"volume_mese": 2671905.4
+},
+{
+"indirizzo": "0xa0f2e2f7b3ab58e3e52b74f08d94ae52778d46df",
+"conto": 2342136.745587,
+"volume_mese": 5686821.800000001
+},
+{
+"indirizzo": "0x3773257803cafa8e48dde50867f6f3723be9a3a6",
+"conto": 2333433.597917,
+"volume_mese": 1245937.89
+},
+{
+"indirizzo": "0xa1a2401268b976cb46c35550f2b2428908dd53cb",
+"conto": 2333124.5249700006,
+"volume_mese": 3745592.13
+},
+{
+"indirizzo": "0x778a089374cf94f372958ad26a0b7cc397c0236d",
+"conto": 2331578.366747,
+"volume_mese": 7262073.8100000005
+},
+{
+"indirizzo": "0xd223626a37fdd7f3aa0727edebcf1b94d2e5ae69",
+"conto": 2321457.642682,
+"volume_mese": 174879932.03
+},
+{
+"indirizzo": "0x525232cb6ed5030d2b052b36bfc0baec96986ee3",
+"conto": 2320586.809219,
+"volume_mese": 1504549.2
+},
+{
+"indirizzo": "0xc179e03922afe8fa9533d3f896338b9fb87ce0c8",
+"conto": 2308942.504297,
+"volume_mese": 2558860770.08
+},
+{
+"indirizzo": "0x217a1b7f4f8cdd0dc8e2f734477683642646edaa",
+"conto": 2307984.088222,
+"volume_mese": 1812208.76
+},
+{
+"indirizzo": "0x6788e111b25a244e7168847fe19bb1456a8398d4",
+"conto": 2306244.706668,
+"volume_mese": 10513021.22
+},
+{
+"indirizzo": "0x4ff9b58ed112bf3df108d1d62bd95e7352ef38d3",
+"conto": 2288676.680357,
+"volume_mese": 11950528.37
+},
+{
+"indirizzo": "0x4c2a1ec71baec30074f4c4a246367bc028a35001",
+"conto": 2283175.421908,
+"volume_mese": 1314884.34
+},
+{
+"indirizzo": "0x5d2f4460ac3514ada79f5d9838916e508ab39bb7",
+"conto": 2282113.520364,
+"volume_mese": 25805367.55
+},
+{
+"indirizzo": "0x5e13d5cedbddd7237f659947ce64bec1294e2607",
+"conto": 2277409.93792,
+"volume_mese": 13063519.92
+},
+{
+"indirizzo": "0xe08cf3478e06b33d15c41a3a2a7fd306443cb879",
+"conto": 2276856.6591890003,
+"volume_mese": 68213991.47000001
+},
+{
+"indirizzo": "0x7df034b39420cb594128b3428c501dae8176ceb3",
+"conto": 2273128.7481539994,
+"volume_mese": 31504451.03
+},
+{
+"indirizzo": "0xf5079c84c34051d7c4cd87494fda534fe7ecdf6d",
+"conto": 2272057.396926,
+"volume_mese": 14129168.79
+},
+{
+"indirizzo": "0xaa8253fb249498d0b6c31106539aaea0c76b9556",
+"conto": 2264311.136678,
+"volume_mese": 17102274.22
+},
+{
+"indirizzo": "0xcb15941180ed7cff8b3547117eca6b78cbdeaf9c",
+"conto": 2258586.8570830007,
+"volume_mese": 29466637.359999996
+},
+{
+"indirizzo": "0xaea8e3bd369217cc6e3e6abddf0da318fba8e59b",
+"conto": 2251673.433011,
+"volume_mese": 11208511.02
+},
+{
+"indirizzo": "0x1338a67b37aeaf796357d78501a0c3695c51c48e",
+"conto": 2246661.20144,
+"volume_mese": 15298707.65
+},
+{
+"indirizzo": "0xa0643168db9a89c8db1b4343a12d4dca295cdef6",
+"conto": 2245409.861442,
+"volume_mese": 129258123.03999999
+},
+{
+"indirizzo": "0xe42460abf9dccfb0bd82903d04e97ef025fb0e55",
+"conto": 2244174.44592,
+"volume_mese": 6075401.04
+},
+{
+"indirizzo": "0xfb1898bb5955fdd11704e397104c6a0e0725eb17",
+"conto": 2232826.415294,
+"volume_mese": 18633336.86
+},
+{
+"indirizzo": "0x23b4564f88b0173243fbc6282e62088dbeb53651",
+"conto": 2231012.864821,
+"volume_mese": 12735841.92
+},
+{
+"indirizzo": "0x357453b3d5aa2a70adf1d8f8a7eec5aa46787227",
+"conto": 2227208.657943,
+"volume_mese": 1694738.05
+},
+{
+"indirizzo": "0x15b989222088b5a00d1283e8c2bbbe9cc7bd4b30",
+"conto": 2223110.244827,
+"volume_mese": 6136226.74
+},
+{
+"indirizzo": "0x9e2cbb5d800181c1ef21b25010dc4ea80eeb5508",
+"conto": 2217646.793171,
+"volume_mese": 911521944.31
+},
+{
+"indirizzo": "0xab81fef97356d57cd30f8ceb15285b988682c608",
+"conto": 2202265.699626,
+"volume_mese": 251383881.02
+},
+{
+"indirizzo": "0xb6ca5d1ed0ca4bf8444c9dee2d068a9f4c5e2e92",
+"conto": 2200418.326143,
+"volume_mese": 62668615.29
+},
+{
+"indirizzo": "0x866d4903b256ce7e7caac46a91e83128bb0fd6e1",
+"conto": 2197390.577678,
+"volume_mese": 9180440.92
+},
+{
+"indirizzo": "0xfc079a49e371976f559bea0cd1c1f87a5f5b9464",
+"conto": 2189895.643563,
+"volume_mese": 39067278.48
+},
+{
+"indirizzo": "0x770493a14c49ea81192b5191a536f0530041311b",
+"conto": 2184364.652521,
+"volume_mese": 4792986.84
+},
+{
+"indirizzo": "0x123dbca6a27005a3c4ce10cb66ee8ece8fc13bff",
+"conto": 2184141.783558,
+"volume_mese": 34930043.15
+},
+{
+"indirizzo": "0xab04d040dec929a204298d44701476968b238b69",
+"conto": 2183471.8876540004,
+"volume_mese": 492678032.81
+},
+{
+"indirizzo": "0x091159a8106b077c13e89bc09701117e8b5f129a",
+"conto": 2178737.034219,
+"volume_mese": 138349305.1
+},
+{
+"indirizzo": "0xab5e6f394951c28ab1873007e373202689cdbec3",
+"conto": 2174507.010037,
+"volume_mese": 90921494.46
+},
+{
+"indirizzo": "0x47f5a6397b79deaaca5c456503e7c1a49357b942",
+"conto": 2173510.303437,
+"volume_mese": 6692017.87
+},
+{
+"indirizzo": "0xc3ed57a7a8fa374af47eba5dd713bc2946f800dd",
+"conto": 2172757.277481,
+"volume_mese": 835552973.31
+},
+{
+"indirizzo": "0xdbe0780a5c5a0e3b345101bbc01ac2218196d6d5",
+"conto": 2164057.265945,
+"volume_mese": 4861869.97
+},
+{
+"indirizzo": "0x79cc76364b5fb263a25bd52930e3d9788fcfeea8",
+"conto": 2159646.307698,
+"volume_mese": 6060593.03
+},
+{
+"indirizzo": "0x666073af75b8d2e6e9efea414db566494e61aafe",
+"conto": 2146589.935838,
+"volume_mese": 8951824.17
+},
+{
+"indirizzo": "0x59629e23c52a0d7c092436870ef2db1dc382ddf8",
+"conto": 2139130.61571,
+"volume_mese": 135528885.19
+},
+{
+"indirizzo": "0xed48b856556a69c7c40229c9c4c829b909257c9b",
+"conto": 2135313.172354,
+"volume_mese": 42365947.77
+},
+{
+"indirizzo": "0xa4432d4902f6289ae8de646d5a37d0602b1ef553",
+"conto": 2115638.970939,
+"volume_mese": 4259957.13
+},
+{
+"indirizzo": "0x28bbaaa5b431ed61ea6a9b3394f76616e00cfca6",
+"conto": 2103440.971121,
+"volume_mese": 36265661.11
+},
+{
+"indirizzo": "0x0871deb34bfd2052b1c10dc4f6c0912a2a47e927",
+"conto": 2101604.849507,
+"volume_mese": 169134896.74
+},
+{
+"indirizzo": "0x9b89b84179fb680d97c7b2ea80ad2e88e0811869",
+"conto": 2099279.785625,
+"volume_mese": 677198037.37
+},
+{
+"indirizzo": "0xdcb0b5e41d6ed4dd834316d4177d73452014f983",
+"conto": 2097560.7390040006,
+"volume_mese": 190239255.49
+},
+{
+"indirizzo": "0x8fb5c6f3c336033deeedbb54ad95e96453c9eaa4",
+"conto": 2093908.6884309999,
+"volume_mese": 37480467.32
+},
+{
+"indirizzo": "0xd7eb3e84a7da39016d9893e261e8b3e76099d47b",
+"conto": 2093512.619729,
+"volume_mese": 120816918.44
+},
+{
+"indirizzo": "0x98e073b579fd483eac8f10d5bd0b32c8c3bbd7e0",
+"conto": 2093149.142499,
+"volume_mese": 45559568.11
+},
+{
+"indirizzo": "0x6463f53d916cb7741a05a2c11aebdbd7324342f5",
+"conto": 2092222.496535,
+"volume_mese": 155660674.85
+},
+{
+"indirizzo": "0x36784a2d9d952e6d4fd6abfa25aea218a5ceb209",
+"conto": 2089989.845105,
+"volume_mese": 95499169.87
+},
+{
+"indirizzo": "0x202db88213dec0f8994284f2d85e41e3ff479219",
+"conto": 2072462.971848,
+"volume_mese": 16425919.51
+},
+{
+"indirizzo": "0x27c9fa86c91b84ddfa15de58c482ff662498d65d",
+"conto": 2071077.61192,
+"volume_mese": 323017414.8
+},
+{
+"indirizzo": "0xf704ebc79aee732265c7c986fea50a9c01ab7f8d",
+"conto": 2070958.41039,
+"volume_mese": 2556624.51
+},
+{
+"indirizzo": "0x39c3492e9171872eac6a99d9c0b6dbae5d4ae959",
+"conto": 2065659.520487,
+"volume_mese": 121599090.49
+},
+{
+"indirizzo": "0x6adbdaae3f9fa8761b83aef4aeb0bf1352a451be",
+"conto": 2063248.133827,
+"volume_mese": 48325293.8
+},
+{
+"indirizzo": "0xe912cac1a6641004a8803687ee7699227fdb0550",
+"conto": 2060824.381895,
+"volume_mese": 19689693.71
+},
+{
+"indirizzo": "0x436c9c7c0eb3611565591eedee51ad149b76b3d1",
+"conto": 2058506.614697,
+"volume_mese": 8676286.11
+},
+{
+"indirizzo": "0xdd97539fe9a912166f037d81dcf35b3f0ce5c610",
+"conto": 2057682.047444,
+"volume_mese": 8628468.52
+},
+{
+"indirizzo": "0xd8d5b0f7219aed171efb5ae2ac3b9941206f7349",
+"conto": 2057600.74907,
+"volume_mese": 12081454.12
+},
+{
+"indirizzo": "0x3eea372582e72f1d189ce02e7a65968015622a01",
+"conto": 2055040.619567,
+"volume_mese": 7889072.37
+},
+{
+"indirizzo": "0xa6bb3be3e0a8217f43588fc4e3de380533f8022c",
+"conto": 2052123.284204,
+"volume_mese": 2055792.18
+},
+{
+"indirizzo": "0xf00bb08f7d1d04a9415408c939c02410fc6791b1",
+"conto": 2020046.927811,
+"volume_mese": 14191469.71
+},
+{
+"indirizzo": "0xfcb01354e18ca1cc0eee89ca3459ef84daa2e0b6",
+"conto": 2018566.4691380002,
+"volume_mese": 2069986.15
+},
+{
+"indirizzo": "0xb82359e0fdf3095dd8471df3f3c26aba5b369763",
+"conto": 2017528.766219,
+"volume_mese": 34345095.39
+},
+{
+"indirizzo": "0xfb8720d7b7d09b6fd44291a3bf1ed805e50b833b",
+"conto": 2014199.487369,
+"volume_mese": 25603681.86
+},
+{
+"indirizzo": "0x99f1f11a8106117b245f7a046414d31ed08d2bc6",
+"conto": 2010631.712833,
+"volume_mese": 365428445.79
+},
+{
+"indirizzo": "0x7cf9f878942489b7a1725d628a9e59fb1b38ab27",
+"conto": 2008537.388005,
+"volume_mese": 4172634.99
+},
+{
+"indirizzo": "0x14b96ee58172ad811059aa346515e944a6dbdf3a",
+"conto": 2005241.65156,
+"volume_mese": 13990979.2
+},
+{
+"indirizzo": "0x9e3205ad8b1b8cbdd1aa289d34c4c44d40e4a093",
+"conto": 2001911.121761,
+"volume_mese": 1153775.89
+},
+{
+"indirizzo": "0x6706bedf7d075bb6e9b34f3f2cd1b372e483cdeb",
+"conto": 1995046.010835,
+"volume_mese": 101099185.56
+},
+{
+"indirizzo": "0x84e835ffbc14b8628e0d2d8d35a1b204bb7c7537",
+"conto": 1991122.764927,
+"volume_mese": 16233365.58
+},
+{
+"indirizzo": "0xff2c13a2d71a4d3b70f4086dc17b4aa6c075efde",
+"conto": 1988557.832033,
+"volume_mese": 6183472.35
+},
+{
+"indirizzo": "0x09714a3282fca963a8da97c72a4226bdcec3814d",
+"conto": 1988293.343107,
+"volume_mese": 1637086.48
+},
+{
+"indirizzo": "0x08bf75d17046412ae08c95b6106993f714487872",
+"conto": 1984984.750184,
+"volume_mese": 4326378.57
+},
+{
+"indirizzo": "0x9a043abe4f2141a49a9427aef1db1c0b16795f29",
+"conto": 1981894.565177,
+"volume_mese": 1400078.36
+},
+{
+"indirizzo": "0xc2b14fde015fe4da3a238aa0e6fb7365af32760b",
+"conto": 1977273.525725,
+"volume_mese": 7574525.47
+},
+{
+"indirizzo": "0x615d54d75193c93f28166adcf7b615d5d47b4dbe",
+"conto": 1972828.300798,
+"volume_mese": 2665783.24
+},
+{
+"indirizzo": "0x5ccaf678b74464fac20f6cae8cbaa9b402010c45",
+"conto": 1966673.058423,
+"volume_mese": 13526927.46
+},
+{
+"indirizzo": "0xd7081680a136132ec6cc1007e63aeb0ebcd825b5",
+"conto": 1965310.456395,
+"volume_mese": 1662222.9400000002
+},
+{
+"indirizzo": "0x7ea90af38397575a372e36bdc0f5970fb512fc7f",
+"conto": 1957964.562381,
+"volume_mese": 15987489.6
+},
+{
+"indirizzo": "0x3acb8826f5cf639bd1a89e4b5f8b02312efdef8e",
+"conto": 1956114.880406,
+"volume_mese": 5115961.92
+},
+{
+"indirizzo": "0x3f3e305c4ad49271ebda489dd43d2c8f027d2d41",
+"conto": 1954796.66783,
+"volume_mese": 1614916.69
+},
+{
+"indirizzo": "0xc5f033a47dde827133850ced50009c3802c989ba",
+"conto": 1953342.875383,
+"volume_mese": 1052201.69
+},
+{
+"indirizzo": "0x95dd806ffa5d1e46cf85537425bd0f9835cd43f7",
+"conto": 1952871.894597,
+"volume_mese": 6901124.95
+},
+{
+"indirizzo": "0xe091330c53b971ed4e886f902f18e8544a8d6705",
+"conto": 1945372.491318,
+"volume_mese": 57696043.96
+},
+{
+"indirizzo": "0x39be8fad61f5fa0cdfa2fc97c30a59833f58705d",
+"conto": 1941384.291726,
+"volume_mese": 2015457.6
+},
+{
+"indirizzo": "0xa8cde6a19789e4d7964ce0e3da14aa29291d7275",
+"conto": 1939016.987577,
+"volume_mese": 6510300.44
+},
+{
+"indirizzo": "0x069ad3d4dd1ca686ef78d065fbc6208fdcede58d",
+"conto": 1934956.474099,
+"volume_mese": 36275041.87
+},
+{
+"indirizzo": "0x29de2668d0c8a5879ebb2f6afbec1c6f485a3e93",
+"conto": 1928532.31544,
+"volume_mese": 105527836.64
+},
+{
+"indirizzo": "0xb885ed57cd16985f347d26f13a79dc4abd2e3c54",
+"conto": 1925852.394579,
+"volume_mese": 21783238.38
+},
+{
+"indirizzo": "0x482b0f4dad512fe086e121882a81e34c374acae4",
+"conto": 1925580.464493,
+"volume_mese": 110457797.32
+},
+{
+"indirizzo": "0xd320d8420c35035581c754305582511bf45d099a",
+"conto": 1924421.535488,
+"volume_mese": 26222052.43
+},
+{
+"indirizzo": "0x4da9d66b2b2bdc560c9d33b304779d728e956b5c",
+"conto": 1922002.473556,
+"volume_mese": 23945505.75
+},
+{
+"indirizzo": "0x8dea9139b0e84d5cc2933072f5ba43c2b043f6db",
+"conto": 1917783.92459,
+"volume_mese": 2152275.33
+},
+{
+"indirizzo": "0x63d417a577b50c96f4f09148d4e4d70950db0522",
+"conto": 1914546.47743,
+"volume_mese": 16898696.11
+},
+{
+"indirizzo": "0x73ce82fb75868af2a687e9889fcf058dd1cf8ce9",
+"conto": 1910715.079826,
+"volume_mese": 4476562.05
+},
+{
+"indirizzo": "0x28233e5edddfc9f71f0cecf58ca98f6a2ca11f43",
+"conto": 1902112.386217,
+"volume_mese": 2251591.65
+},
+{
+"indirizzo": "0xf5a523b171032c060d49c39fbf2e9bec473e1286",
+"conto": 1897326.839105,
+"volume_mese": 97070181.57
+},
+{
+"indirizzo": "0xe31501c472d557bfa145ce105d325fb2dd4cb867",
+"conto": 1894707.673578,
+"volume_mese": 689632108.7
+},
+{
+"indirizzo": "0xd71a6221e12e9f0c6169f2bc027b640ac4b0f35e",
+"conto": 1882195.850078,
+"volume_mese": 46006673.69
+},
+{
+"indirizzo": "0x75d2ba3da5a598ea48d499bc172fb6b4713229a3",
+"conto": 1864360.496193,
+"volume_mese": 4884148.99
+},
+{
+"indirizzo": "0xb0f094c9e85a0ee7b89214a3a67efbc131022cc0",
+"conto": 1847432.389229,
+"volume_mese": 46301150.19
+},
+{
+"indirizzo": "0xd5a23c7ffcaadab250b40292e6d3c1c0074ac89b",
+"conto": 1842195.282003,
+"volume_mese": 1146486.46
+},
+{
+"indirizzo": "0xbc433ba7c34752448c5361e5ed3038628a1753b0",
+"conto": 1835221.137159,
+"volume_mese": 2797502.91
+},
+{
+"indirizzo": "0x025c62433ecf89ed45edf7f41bf05318204d0b2b",
+"conto": 1829648.588544,
+"volume_mese": 19607355.54
+},
+{
+"indirizzo": "0x179db4350f26f28ef52f5ed8aa9ee1c530500966",
+"conto": 1819541.800686,
+"volume_mese": 4413555.46
+},
+{
+"indirizzo": "0x50d42b3a114f693146ab035f93548451f92a545d",
+"conto": 1814326.706059,
+"volume_mese": 19979068.46
+},
+{
+"indirizzo": "0xeadc152ac1014ace57c6b353f89adf5faffe9d55",
+"conto": 1806802.162945,
+"volume_mese": 45240761.89
+},
+{
+"indirizzo": "0x5b43b7162694de766c164202df0f0c716e4292ab",
+"conto": 1806649.019978,
+"volume_mese": 10832250.07
+},
+{
+"indirizzo": "0xd487e26c62ed8c28ce3cc70b5791e501c2934982",
+"conto": 1806261.779456,
+"volume_mese": 22271694.74
+},
+{
+"indirizzo": "0x175e7023e8dc93d0c044852685ac33e856b577b4",
+"conto": 1804751.960331,
+"volume_mese": 1105981.33
+},
+{
+"indirizzo": "0xa38f19c4ccbcfd64cff676d72c436f7e6239dccf",
+"conto": 1803888.4780620001,
+"volume_mese": 425827582.16
+},
+{
+"indirizzo": "0x810cc4084a961173963e5fec9249203abaf31de1",
+"conto": 1802945.276874,
+"volume_mese": 25920788.86
+},
+{
+"indirizzo": "0x48f108b921f5b79d730ec5a952d49a540273359c",
+"conto": 1802438.545115,
+"volume_mese": 1253234.13
+},
+{
+"indirizzo": "0xe16e9578b019151e2ab3e2ec0a27a84b6f5e6ab4",
+"conto": 1794432.267763,
+"volume_mese": 277607018.52
+},
+{
+"indirizzo": "0x3d89bcea338f35edfaeb313b1c713978c6dceb14",
+"conto": 1792925.493437,
+"volume_mese": 36569828.3
+},
+{
+"indirizzo": "0x780825f3f0ad6799e304fb843387934c1fa06e70",
+"conto": 1791071.046877,
+"volume_mese": 49200975.93
+},
+{
+"indirizzo": "0xfd28ee5ea23a5542db41cccc9cda49bd370434f4",
+"conto": 1785872.484,
+"volume_mese": 2879302.78
+},
+{
+"indirizzo": "0x41f9ae0b64a0ec4adc788ee5c82d4b824f839017",
+"conto": 1784957.718308,
+"volume_mese": 2683996.17
+},
+{
+"indirizzo": "0x369daedbefcb30b82154338c8fd613a70c60d251",
+"conto": 1784575.6446210002,
+"volume_mese": 6767900.07
+},
+{
+"indirizzo": "0xd65ac35cd234c8718b876ab304fa56c8995e387f",
+"conto": 1780795.401125,
+"volume_mese": 40282808.32
+},
+{
+"indirizzo": "0x6da2ccb2682fffd3df132948165dd78d6159f6fd",
+"conto": 1778930.301694,
+"volume_mese": 1101967.78
+},
+{
+"indirizzo": "0x09969138013fdfae9438fbd705515f047f8a0ba6",
+"conto": 1772162.233133,
+"volume_mese": 1690375.14
+},
+{
+"indirizzo": "0x9c41c478adb3772b2e6ad9acbd17ecbed9a988e6",
+"conto": 1769802.181391,
+"volume_mese": 3907870.21
+},
+{
+"indirizzo": "0xd7a712a13a1d13f176eb7d54ddcc8c578866ee9a",
+"conto": 1760980.48303,
+"volume_mese": 4018124.84
+},
+{
+"indirizzo": "0x05b5a0ae689c17cad8155932782a5c29426abe75",
+"conto": 1759551.887811,
+"volume_mese": 231910152.42000002
+},
+{
+"indirizzo": "0xf71ab4e4172730ed096b832f37982942935c7215",
+"conto": 1754260.0889990001,
+"volume_mese": 1564402926.21
+},
+{
+"indirizzo": "0x2f3a2494bffb79438e9b64543505718e95eec386",
+"conto": 1750067.712972,
+"volume_mese": 4451142.16
+},
+{
+"indirizzo": "0x29754d7a9f9f344327158e2d01508efa415bd558",
+"conto": 1742346.063061,
+"volume_mese": 1247535.81
+},
+{
+"indirizzo": "0x563bf0731cf71ad7cea05b9c48a802d8c53e7dc4",
+"conto": 1737538.614478,
+"volume_mese": 118322236.05
+},
+{
+"indirizzo": "0x5099c7fba238d1cdf2c02693a079c5d2059b6479",
+"conto": 1737020.143687,
+"volume_mese": 3999149.12
+},
+{
+"indirizzo": "0xf0afb3f0a2e63eabe2d55ebe3e05671ebe0c6312",
+"conto": 1733661.39383,
+"volume_mese": 28180058.9
+},
+{
+"indirizzo": "0xbe3f79ae0ab3294aaa3230c1155e912c05b6a55b",
+"conto": 1725130.478828,
+"volume_mese": 47510971.17
+},
+{
+"indirizzo": "0x7583b5364597736a6a72c4ba61ede0a4a37ef4de",
+"conto": 1720888.056102,
+"volume_mese": 10832928.58
+},
+{
+"indirizzo": "0x065da657bfff70cc76fe9a38f81fbb5536c6d8a0",
+"conto": 1720381.73229,
+"volume_mese": 8773352.09
+},
+{
+"indirizzo": "0x622fc18a3f1a616a331b96e4c17f1b457feb5c6f",
+"conto": 1712563.834398,
+"volume_mese": 4977627.92
+},
+{
+"indirizzo": "0x51f63885534cb494f4592a0311551f369bff2b39",
+"conto": 1709855.002034,
+"volume_mese": 76204706.69
+},
+{
+"indirizzo": "0xce508465b243216fcf372d3146fd62e8f7a7b8e2",
+"conto": 1704215.038771,
+"volume_mese": 2159359.41
+},
+{
+"indirizzo": "0xd852e3a7a2abca6aecd0fa39147851ae96eba5d7",
+"conto": 1700747.188812,
+"volume_mese": 68122414.16
+},
+{
+"indirizzo": "0xbbdcac586b62ca6434a0682a9fbf01627026dec4",
+"conto": 1700164.099113,
+"volume_mese": 2083867.21
+},
+{
+"indirizzo": "0x0ce048fe42c170e41740ee392e187f19515f339d",
+"conto": 1697235.378739,
+"volume_mese": 15062694.75
+},
+{
+"indirizzo": "0xb6aef9cfb465011493c9978d2efebaf5abd166be",
+"conto": 1696783.656092,
+"volume_mese": 9531346.7
+},
+{
+"indirizzo": "0x5f1ee054f9e7c00ee76a924710756a88ce6c320e",
+"conto": 1696525.198358,
+"volume_mese": 16672522.33
+},
+{
+"indirizzo": "0x37f2af56f635c108aa1324402c17ec0e9e3ee9af",
+"conto": 1696054.5695359998,
+"volume_mese": 11871458.7
+},
+{
+"indirizzo": "0x781e95fdc049433565cf8e05265361b8402196b7",
+"conto": 1692715.891221,
+"volume_mese": 12935190.85
+},
+{
+"indirizzo": "0x82b56f288a9aad6c3d60c2c290e1c4d17419d688",
+"conto": 1691454.517318,
+"volume_mese": 5411955.14
+},
+{
+"indirizzo": "0x11a91e6ce09ffdcc4e288657abd94ff606e688ec",
+"conto": 1688823.833618,
+"volume_mese": 1312591.07
+},
+{
+"indirizzo": "0xfc98b6ec7f59ea13354bae6171a9120692fb8777",
+"conto": 1685590.212502,
+"volume_mese": 244104755.32
+},
+{
+"indirizzo": "0xcb8297d9f77cdf1b2e7dcb32c3a7b28ca2b185b7",
+"conto": 1679493.724916,
+"volume_mese": 4426104.36
+},
+{
+"indirizzo": "0x160398a0b95383a9155081b16f9e32e18861408b",
+"conto": 1668910.831608,
+"volume_mese": 8462201.72
+}
+]
+}

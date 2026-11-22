@@ -237,6 +237,11 @@ def esegui(log=print) -> dict:
         th.esegui(ora, log)
     except Exception as ex:  # noqa: BLE001
         log(f"[trader] Hyperliquid non letto ({ex})")
+    try:                                          # idea 151: la mappa delle liquidazioni di Hyperliquid (trader_copiati/LIQUIDAZIONI.md)
+        from research.trader_copiati import liquidazioni as tl
+        tl.esegui(ora, log)
+    except Exception as ex:  # noqa: BLE001
+        log(f"[liquidazioni] Hyperliquid non letto ({ex})")
     log(f"[notizie] {ora.strftime('%Y-%m-%d %H:%M')} UTC: {len(nuovi)} articoli nuovi da {risposte} fonti su {len(FONTI)}; "
         f"piene: {', '.join(x[0] for x in giro if x[3]) or 'nessuna'}; monete di tendenza su CoinGecko: {n_tendenze}")
     return {"nuovi": len(nuovi), "fonti_che_rispondono": risposte, "tendenze": n_tendenze}
