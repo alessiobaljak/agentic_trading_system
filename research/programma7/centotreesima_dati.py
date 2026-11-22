@@ -60,7 +60,7 @@ def fase_elenca() -> None:
 
 
 def _scarica(chiave: str):
-    s = chiave.split("/")[4]
+    s = chiave.split("/")[5]
     nome = chiave.rsplit("/", 1)[1]
     f = DATI / s / nome
     ok = f.with_suffix(".zip.ok")
@@ -83,8 +83,8 @@ def _scarica(chiave: str):
 
 def fase_scarica(minuti: float) -> None:
     fine = time.time() + 60 * minuti
-    da_fare = [k for k in lavori() if not ((DATI / k.split("/")[4] / k.rsplit("/", 1)[1]).exists()
-                                           and (DATI / k.split("/")[4] / k.rsplit("/", 1)[1]).with_suffix(".zip.ok").exists())]
+    da_fare = [k for k in lavori() if not ((DATI / k.split("/")[5] / k.rsplit("/", 1)[1]).exists()
+                                           and (DATI / k.split("/")[5] / k.rsplit("/", 1)[1]).with_suffix(".zip.ok").exists())]
     print(f"da scaricare ancora {len(da_fare)}", flush=True)
     fatti = errori = 0
     with ThreadPoolExecutor(max_workers=16) as ex:

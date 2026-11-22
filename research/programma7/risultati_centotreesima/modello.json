@@ -1,0 +1,123 @@
+{
+ "universo_simboli": 913,
+ "eventi_nel_file": 87,
+ "eventi_senza_dati_nel_nostro_archivio": [],
+ "senza_funding_nel_pannello": 171,
+ "annunci_per_anno": {
+  "2022": 12,
+  "2024": 19,
+  "2025": 27,
+  "2026": 29
+ },
+ "annunci_prima_del_7_maggio_2024": 20,
+ "contratti_con_volume_oltre_7_giorni_dopo_la_chiusura": [
+  {
+   "simbolo": "BLZUSDT",
+   "giorni_con_volume": 844,
+   "ultimo_giorno": "2024-12-23"
+  },
+  {
+   "simbolo": "CTKUSDT",
+   "giorni_con_volume": 550,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "CVCUSDT",
+   "giorni_con_volume": 534,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "CVXUSDT",
+   "giorni_con_volume": 466,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "ICPUSDT",
+   "giorni_con_volume": 1496,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "MAVIAUSDT",
+   "giorni_con_volume": 585,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "MDTUSDT",
+   "giorni_con_volume": 11,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "OMGUSDT",
+   "giorni_con_volume": 39,
+   "ultimo_giorno": "2025-01-31"
+  },
+  {
+   "simbolo": "SLPUSDT",
+   "giorni_con_volume": 466,
+   "ultimo_giorno": "2026-10-31"
+  },
+  {
+   "simbolo": "TLMUSDT",
+   "giorni_con_volume": 1312,
+   "ultimo_giorno": "2026-10-31"
+  }
+ ],
+ "modello": {
+  "A": {
+   "decisioni": 29,
+   "decisioni_con_modello": 29,
+   "prima_decisione": "2024-06-01",
+   "chiusi_validi_alla_prima": 23,
+   "ultimo_modello_coef_volume": -4.00791614895703,
+   "ultimo_modello_coef_calo": 0.6142318966485417,
+   "decisioni_con_coef_volume_negativo": 29,
+   "decisioni_con_coef_calo_negativo": 3,
+   "cambi_di_segno_fra_decisioni": 2,
+   "precisione_prime_N_45_giorni": 0.0,
+   "frequenza_di_base_45_giorni": 0.007750416952810753,
+   "precisione_prime_N_90_giorni": 0.015384615384615385,
+   "frequenza_di_base_90_giorni": 0.016459627329192546,
+   "primo_5pct_precisione_45": 0.02099236641221374,
+   "primo_5pct_quota_delle_chiusure_45": 0.13924050632911392,
+   "primo_5pct_monete_totali": 524,
+   "conteggi_selezione": {
+    "n": 135,
+    "chiusi45": 0,
+    "chiusi90": 2,
+    "n90": 130,
+    "base45": 79,
+    "base90": 159,
+    "elig45": 10193,
+    "elig90": 9660
+   }
+  },
+  "B": {
+   "decisioni": 129,
+   "decisioni_con_modello": 129,
+   "prima_decisione": "2024-05-13",
+   "chiusi_validi_alla_prima": 23,
+   "ultimo_modello_coef_volume": -3.9602535793199705,
+   "ultimo_modello_coef_calo": 0.564307233452553,
+   "decisioni_con_coef_volume_negativo": 129,
+   "decisioni_con_coef_calo_negativo": 13,
+   "cambi_di_segno_fra_decisioni": 2,
+   "precisione_prime_N_45_giorni": 0.019327731092436976,
+   "frequenza_di_base_45_giorni": 0.00795348215479214,
+   "precisione_prime_N_90_giorni": 0.03214285714285714,
+   "frequenza_di_base_90_giorni": 0.016917430300673296,
+   "primo_5pct_precisione_45": 0.023881893182805036,
+   "primo_5pct_quota_delle_chiusure_45": 0.15406162464985995,
+   "primo_5pct_monete_totali": 2303,
+   "conteggi_selezione": {
+    "n": 1190,
+    "chiusi45": 23,
+    "chiusi90": 36,
+    "n90": 1120,
+    "base45": 357,
+    "base90": 696,
+    "elig45": 44886,
+    "elig90": 41141
+   }
+  }
+ }
+}

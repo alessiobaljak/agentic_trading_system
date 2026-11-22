@@ -1,0 +1,700 @@
+{
+ "BNXUSDT": {
+  "giorni_mancanti_interni": 26,
+  "primi_giorni": [
+   "2022-04-17",
+   "2022-06-09",
+   "2022-08-10",
+   "2022-08-11",
+   "2022-08-12",
+   "2023-02-01",
+   "2023-02-02",
+   "2023-02-03"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "FILUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "FLMUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "FLOWUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "FTMUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "GMTUSDT": {
+  "giorni_mancanti_interni": 2,
+  "primi_giorni": [
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "GRTUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "GTCUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "HBARUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "HOTUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ICPUSDT": {
+  "giorni_mancanti_interni": 26,
+  "primi_giorni": [
+   "2022-09-01",
+   "2022-09-02",
+   "2022-09-03",
+   "2022-09-04",
+   "2022-09-05",
+   "2022-09-06",
+   "2022-09-07",
+   "2022-09-08"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "IMXUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "IOTAUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "KNCUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "KSMUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "LINAUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "LITUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "LRCUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "LTCUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "LUNAUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "MANAUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "MASKUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "MDTUSDT": {
+  "giorni_mancanti_interni": 8,
+  "primi_giorni": [
+   "2026-10-13",
+   "2026-10-14",
+   "2026-10-15",
+   "2026-10-16",
+   "2026-10-17",
+   "2026-10-18",
+   "2026-10-19",
+   "2026-10-20"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "MKRUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "NEARUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "OCEANUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "OGNUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "OMGUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ONEUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "PEOPLEUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "RLCUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ROSEUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "RSRUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "RVNUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "SANDUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "SKLUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "SOLUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "STORJUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "SUSHIUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "TLMUSDT": {
+  "giorni_mancanti_interni": 29,
+  "primi_giorni": [
+   "2023-03-01",
+   "2023-03-02",
+   "2023-03-03",
+   "2023-03-04",
+   "2023-03-05",
+   "2023-03-06",
+   "2023-03-07",
+   "2023-03-08"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "TRBUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "TRXUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "UNFIUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "VETUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "WAVESUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "XEMUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "XLMUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "XRPUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "YFIIUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "YFIUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ZECUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ZENUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ },
+ "ZILUSDT": {
+  "giorni_mancanti_interni": 5,
+  "primi_giorni": [
+   "2022-02-26",
+   "2022-02-27",
+   "2022-02-28",
+   "2022-04-01",
+   "2022-04-02"
+  ],
+  "duplicati": 0,
+  "mesi_mancanti_interni": [],
+  "fuori_mezzanotte": 0
+ }
+}

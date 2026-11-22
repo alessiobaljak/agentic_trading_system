@@ -1,0 +1,419 @@
+{
+ "modello_gia_scritto": true,
+ "famiglie": {
+  "serie_nel_mazzo": 287,
+  "famiglie": 200,
+  "in_v": 152,
+  "deviazione_v": 0.6773468233413139
+ },
+ "A": {
+  "numeri": {
+   "giorni": 883,
+   "annuo_capitale": 0.05671406219825535,
+   "per_anno": {
+    "2024": 0.26365973117010866,
+    "2025": 0.3387053810024437,
+    "2026": -0.42753990005011744
+   },
+   "funding_per_anno": {
+    "2024": -0.05948239445639828,
+    "2025": -0.0010971899960123942,
+    "2026": -0.006934675744089169
+   },
+   "spese_per_anno": {
+    "2024": 0.01563565416243151,
+    "2025": 0.015904898703631307,
+    "2026": 0.018131765157351966
+   },
+   "lordo_prezzo_per_anno": {
+    "2024": 0.3387777797889383,
+    "2025": 0.35570746970208755,
+    "2026": -0.4024734591486764
+   },
+   "settimane_per_anno": {
+    "2024": 32,
+    "2025": 52,
+    "2026": 43
+   },
+   "sharpe_settimane": 0.19292901502729176,
+   "settimane": 124,
+   "t": 0.29792484209966447,
+   "asimmetria": -0.3064297269300891,
+   "curtosi": 5.194426990550343,
+   "discesa_giornaliera": -0.43359463225445716,
+   "discesa_settimanale": -0.5830441536139732,
+   "sharpe_365_giorni": 0.11960554947984375,
+   "costo_medio_annuo_capitale": 0.016606313279072218,
+   "funding_annuo": -0.017256906215647638,
+   "lordo_prezzo_annuo": 0.09057728169297523,
+   "netto_medio_settimanale": 0.001087666946267911,
+   "primo_giorno": "2024-06-01",
+   "ultimo_giorno": "2026-10-31",
+   "periodo_esame_dal": "2024-05-27",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 0.0050444528538661024,
+  "gruppo": [
+   "centotreesima_A",
+   "centotreesima_B"
+  ],
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "meglio_della_selezione_a_caso_p95": false
+  },
+  "controlli": {
+   "selezione_a_caso": {
+    "media_casuale": 0.004080944264386189,
+    "p5": -0.0026021155005379886,
+    "p50": 0.004091228447267043,
+    "p95": 0.010695798907694289,
+    "p99": 0.013725832122702565,
+    "reale": 0.001087666946267911,
+    "quota_estrazioni_sotto_il_reale": 0.226,
+    "reale_sopra_p95": false
+   },
+   "scarto_0_04": {
+    "annuo_capitale": 0.053180854228253534,
+    "per_anno": {
+     "2024": 0.2604513983114611,
+     "2025": 0.33518606095791287,
+     "2026": -0.4313184776471807
+    },
+    "sharpe_settimane": 0.18546146525165558,
+    "t": 0.2863933024426405,
+    "costo_medio_annuo": 0.020139521249073988,
+    "discesa_giornaliera": -0.4368234005854098
+   },
+   "ordine_limite_0_02": {
+    "annuo_capitale": 0.06413391684529104,
+    "per_anno": {
+     "2024": 0.27067547503666256,
+     "2025": 0.34577800034312667,
+     "2026": -0.4194186618707073
+    },
+    "sharpe_settimane": 0.2085125666677931,
+    "t": 0.32198927409394784,
+    "costo_medio_annuo": 0.009186458632036551,
+    "discesa_giornaliera": -0.4267719205477185
+   },
+   "senza_contratti_con_volume_dopo_la_chiusura": {
+    "annuo_capitale": 0.4920650074723601,
+    "per_anno": {
+     "2024": 0.5637481410635578,
+     "2025": 0.9323452775999481,
+     "2026": -0.0870221280048961
+    },
+    "sharpe_settimane": 1.1924201312763696,
+    "t": 1.84135900593656,
+    "costo_medio_annuo": 0.015347346606183103,
+    "discesa_giornaliera": -0.16776377725340952
+   },
+   "abc": {
+    "netto_per_classe": {
+     "C": 137.75795296433512
+    },
+    "funding_per_classe": {
+     "C": -41.747529283333876
+    },
+    "netto_per_classe_anno": {
+     "2024": {
+      "C": 154.32624853010398
+     },
+     "2025": {
+      "C": 338.7017100849909
+     },
+     "2026": {
+      "C": -355.2700056507598
+     }
+    },
+    "totale_usdt": 137.75795296433512,
+    "quota_per_classe": {
+     "C": 1.0
+    }
+   },
+   "abc_senza_5_migliori": {
+    "netto_per_classe": {
+     "C": -429.42089249954995
+    },
+    "funding_per_classe": {
+     "C": -50.92381043092877
+    },
+    "netto_per_classe_anno": {
+     "2024": {
+      "C": 73.45886077040538
+     },
+     "2025": {
+      "C": 94.52328953141857
+     },
+     "2026": {
+      "C": -597.4030428013739
+     }
+    },
+    "totale_usdt": -429.42089249954995,
+    "quota_per_classe": {
+     "C": null
+    },
+    "monete": [
+     "DFUSDT",
+     "NTRNUSDT",
+     "FORTHUSDT",
+     "LOKAUSDT",
+     "HFTUSDT"
+    ]
+   },
+   "contributo_top5_usdt": {
+    "DFUSDT": 138.43760652592388,
+    "NTRNUSDT": 125.63465354195311,
+    "FORTHUSDT": 115.64992125476539,
+    "LOKAUSDT": 106.58927638154387,
+    "HFTUSDT": 80.86738775969873
+   },
+   "contributo_peggiori3_usdt": {
+    "VELODROMEUSDT": -87.57830514645538,
+    "KOMAUSDT": -89.42737630914229,
+    "SCRTUSDT": -134.16448168732953
+   },
+   "durata_media_giorni": 26.641379310344828,
+   "uscite_per_tipo": {
+    "prot": 34,
+    "ann": 0,
+    "manca": 0,
+    "ann_subito": 0
+   },
+   "non_aperte_per_prezzo_mancante": 0,
+   "monete_per_decisione_media": 5.0,
+   "monete_senza_funding_nel_pannello_selezionate": 25,
+   "posizioni_totali": 145,
+   "posizioni_rimaste_dalla_decisione_prima": 44,
+   "G1": {
+    "corr_settimane": 0.2627741954896208,
+    "settimane_comuni": 123
+   }
+  },
+  "anni_validi": [
+   2024,
+   2025,
+   2026
+  ],
+  "esito_parziale": "non passa",
+  "parte_B_maggioranza": false,
+  "esito": "non passa"
+ },
+ "B": {
+  "numeri": {
+   "giorni": 902,
+   "annuo_capitale": 0.20657777458126905,
+   "per_anno": {
+    "2024": 0.10411285853124923,
+    "2025": 0.8353513879872517,
+    "2026": -0.46983026309481357
+   },
+   "funding_per_anno": {
+    "2024": -0.019656346022792048,
+    "2025": -0.008367770969132642,
+    "2026": -0.013020459428047465
+   },
+   "spese_per_anno": {
+    "2024": 0.028428847931892053,
+    "2025": 0.027392950571484883,
+    "2026": 0.02927201506631899
+   },
+   "lordo_prezzo_per_anno": {
+    "2024": 0.15219805248593327,
+    "2025": 0.8711121095278693,
+    "2026": -0.4275377886004472
+   },
+   "settimane_per_anno": {
+    "2024": 34,
+    "2025": 52,
+    "2026": 43
+   },
+   "sharpe_settimane": 0.48162293825894836,
+   "settimane": 126,
+   "t": 0.7497056151327901,
+   "asimmetria": 0.041259005498921454,
+   "curtosi": 2.9547693216149384,
+   "discesa_giornaliera": -0.3443421488540971,
+   "discesa_settimanale": -0.5229387511778467,
+   "sharpe_365_giorni": 0.42542797144605937,
+   "costo_medio_annuo_capitale": 0.02829383714732129,
+   "funding_annuo": -0.012851867730787572,
+   "lordo_prezzo_annuo": 0.2477234794593779,
+   "netto_medio_settimanale": 0.003961765539914749,
+   "primo_giorno": "2024-05-13",
+   "ultimo_giorno": "2026-10-31",
+   "periodo_esame_dal": "2024-05-13",
+   "periodo_esame_al": "2026-10-05"
+  },
+  "sharpe_corretto": 0.015456174968862962,
+  "gruppo": [
+   "centotreesima_A",
+   "centotreesima_B"
+  ],
+  "condizioni": {
+   "netto_positivo": true,
+   "ogni_anno_positivo": false,
+   "t_almeno_3": false,
+   "sharpe_corretto_almeno_0_80": false,
+   "meglio_della_selezione_a_caso_p95": false
+  },
+  "controlli": {
+   "selezione_a_caso": {
+    "media_casuale": 0.0025145532776659307,
+    "p5": -0.0024343758354216424,
+    "p50": 0.0024384274519779793,
+    "p95": 0.007613986974558028,
+    "p99": 0.009759685654148397,
+    "reale": 0.003961765539914749,
+    "quota_estrazioni_sotto_il_reale": 0.699,
+    "reale_sopra_p95": false
+   },
+   "scarto_0_04": {
+    "annuo_capitale": 0.199969607155406,
+    "per_anno": {
+     "2024": 0.09785265942007404,
+     "2025": 0.8287723009649888,
+     "2026": -0.47674004553592736
+    },
+    "sharpe_settimane": 0.46855337481607434,
+    "t": 0.7293612246935026,
+    "costo_medio_annuo": 0.03490200457318432,
+    "discesa_giornaliera": -0.34836980352494107
+   },
+   "ordine_limite_0_02": {
+    "annuo_capitale": 0.21907265129846387,
+    "per_anno": {
+     "2024": 0.11676223271940148,
+     "2025": 0.8474030915174284,
+     "2026": -0.45692170117193265
+    },
+    "sharpe_settimane": 0.5063363565106916,
+    "t": 0.7881751043548659,
+    "costo_medio_annuo": 0.0157989604301264,
+    "discesa_giornaliera": -0.33685996954471675
+   },
+   "senza_contratti_con_volume_dopo_la_chiusura": {
+    "annuo_capitale": 0.35671047772898584,
+    "per_anno": {
+     "2024": 0.11534260166114944,
+     "2025": 0.8858314521745063,
+     "2026": -0.09358702407630728
+    },
+    "sharpe_settimane": 0.8499731523127866,
+    "t": 1.3230882384974838,
+    "costo_medio_annuo": 0.025631550329855556,
+    "discesa_giornaliera": -0.3300072921942522
+   },
+   "abc": {
+    "netto_per_classe": {
+     "C": 397.8781903454676,
+     "B": 114.42557874164044,
+     "A": -1.2213909617457392
+    },
+    "funding_per_classe": {
+     "C": -33.915724538377994,
+     "B": 1.234774529108845,
+     "A": 0.9209919457885654
+    },
+    "netto_per_classe_anno": {
+     "2024": {
+      "C": 66.31711753373835
+     },
+     "2025": {
+      "C": 771.5225881243881,
+      "B": 63.50754357707964
+     },
+     "2026": {
+      "C": -439.9615153126589,
+      "A": -1.2213909617457392,
+      "B": 50.918035164560806
+     }
+    },
+    "totale_usdt": 511.08237812536237,
+    "quota_per_classe": {
+     "C": 0.7785010937079753,
+     "B": 0.22388871860804643,
+     "A": -0.002389812316021874
+    }
+   },
+   "abc_senza_5_migliori": {
+    "netto_per_classe": {
+     "C": -120.11488865161454,
+     "B": 114.42557874164044,
+     "A": -1.2213909617457392
+    },
+    "funding_per_classe": {
+     "C": -24.247223638259413,
+     "B": 1.234774529108845,
+     "A": 0.9209919457885654
+    },
+    "netto_per_classe_anno": {
+     "2024": {
+      "C": 40.178157304104495
+     },
+     "2025": {
+      "C": 371.92506787720885,
+      "B": 63.50754357707964
+     },
+     "2026": {
+      "C": -532.2181138329279,
+      "A": -1.2213909617457392,
+      "B": 50.918035164560806
+     }
+    },
+    "totale_usdt": -6.910700871719839,
+    "quota_per_classe": {
+     "C": null,
+     "B": null,
+     "A": null
+    },
+    "monete": [
+     "NKNUSDT",
+     "NULSUSDT",
+     "DFUSDT",
+     "OXTUSDT",
+     "LOKAUSDT"
+    ]
+   },
+   "contributo_top5_usdt": {
+    "NKNUSDT": 146.39151335605396,
+    "NULSUSDT": 104.09784390286892,
+    "DFUSDT": 97.61335746460044,
+    "OXTUSDT": 92.22117310773805,
+    "LOKAUSDT": 77.66919116582409
+   },
+   "contributo_peggiori3_usdt": {
+    "BMTUSDT": -78.05704177560774,
+    "FIOUSDT": -79.57964646022954,
+    "BRUSDT": -99.1263906125457
+   },
+   "durata_media_giorni": 6.830232558139535,
+   "uscite_per_tipo": {
+    "prot": 76,
+    "ann": 3,
+    "manca": 0,
+    "ann_subito": 0
+   },
+   "non_aperte_per_prezzo_mancante": 0,
+   "monete_per_decisione_media": 10.0,
+   "monete_senza_funding_nel_pannello_selezionate": 165,
+   "posizioni_totali": 1290,
+   "posizioni_rimaste_dalla_decisione_prima": 927,
+   "G1": {
+    "corr_settimane": 0.2187336710352425,
+    "settimane_comuni": 125
+   }
+  },
+  "anni_validi": [
+   2024,
+   2025,
+   2026
+  ],
+  "esito_parziale": "non passa",
+  "parte_B_maggioranza": false,
+  "esito": "non passa"
+ }
+}

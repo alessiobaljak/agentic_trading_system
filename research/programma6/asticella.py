@@ -308,7 +308,8 @@ def serie_programma7() -> dict:
                         (156, "risultati_novantaquattresima"), (157, "risultati_novantacinquesima"),
                         (158, "risultati_novantaseiesima"), (159, "risultati_novantasettesima"),
                         (160, "risultati_novantottesima"), (161, "risultati_novantanovesima"),
-                        (162, "risultati_centesima"), (163, "risultati_centounesima")):              # 154-163: A e B
+                        (162, "risultati_centesima"), (163, "risultati_centounesima"),
+                        (165, "risultati_centotreesima")):                                      # 154-165: A e B
         for v in ("A", "B"):                                                                     # non i controlli di ritardo)
             f = p7 / cartella / f"settimane_{v}.csv.gz"
             if f.exists():
@@ -331,6 +332,7 @@ def serie_programma7() -> dict:
 FUORI_DAL_MAZZO = {
     "programma6/risultati_cinquantesima": "prova 50: conferma, il registro non la conta (fuori come le conferme 7, 22, 27, 38)",
     "programma7/risultati_quarantaquattresima": "prova 106: conferma, il registro non la conta",
+    "programma7/risultati_centocinquesima": "prova 167: campione troppo piccolo (26 eventi), nessun rendimento calcolato, non entra nel conto",
 }
 
 # Le varianti che il registro conta e che non sono nel mazzo delle serie, con il perche' (il test confronta il registro con il

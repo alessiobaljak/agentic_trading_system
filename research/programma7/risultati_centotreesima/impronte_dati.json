@@ -1,0 +1,4576 @@
+{
+ "file_attesi": 21226,
+ "simboli": 915,
+ "simboli_con_file": 913,
+ "file_presenti": 21226,
+ "senza_ok": 0,
+ "sha256_unico": "8d1f13ed72d8c3b1cadbfb5f8eff7a18e0c6a3fdad8feaa2a61dbddcc13044a8",
+ "per_simbolo": {
+  "0GUSDT": {
+   "file": 14,
+   "primo": "0GUSDT-1d-2025-09.zip",
+   "ultimo": "0GUSDT-1d-2026-10.zip"
+  },
+  "1000000BOBUSDT": {
+   "file": 17,
+   "primo": "1000000BOBUSDT-1d-2025-06.zip",
+   "ultimo": "1000000BOBUSDT-1d-2026-10.zip"
+  },
+  "1000000MOGUSDT": {
+   "file": 24,
+   "primo": "1000000MOGUSDT-1d-2024-11.zip",
+   "ultimo": "1000000MOGUSDT-1d-2026-10.zip"
+  },
+  "1000BONKUSDT": {
+   "file": 36,
+   "primo": "1000BONKUSDT-1d-2023-11.zip",
+   "ultimo": "1000BONKUSDT-1d-2026-10.zip"
+  },
+  "1000BTTCUSDT": {
+   "file": 4,
+   "primo": "1000BTTCUSDT-1d-2022-01.zip",
+   "ultimo": "1000BTTCUSDT-1d-2022-04.zip"
+  },
+  "1000CATUSDT": {
+   "file": 25,
+   "primo": "1000CATUSDT-1d-2024-10.zip",
+   "ultimo": "1000CATUSDT-1d-2026-10.zip"
+  },
+  "1000CHEEMSUSDT": {
+   "file": 24,
+   "primo": "1000CHEEMSUSDT-1d-2024-11.zip",
+   "ultimo": "1000CHEEMSUSDT-1d-2026-10.zip"
+  },
+  "1000FLOKIUSDT": {
+   "file": 42,
+   "primo": "1000FLOKIUSDT-1d-2023-05.zip",
+   "ultimo": "1000FLOKIUSDT-1d-2026-10.zip"
+  },
+  "1000LUNCUSDT": {
+   "file": 50,
+   "primo": "1000LUNCUSDT-1d-2022-09.zip",
+   "ultimo": "1000LUNCUSDT-1d-2026-10.zip"
+  },
+  "1000PEPEUSDT": {
+   "file": 42,
+   "primo": "1000PEPEUSDT-1d-2023-05.zip",
+   "ultimo": "1000PEPEUSDT-1d-2026-10.zip"
+  },
+  "1000RATSUSDT": {
+   "file": 35,
+   "primo": "1000RATSUSDT-1d-2023-12.zip",
+   "ultimo": "1000RATSUSDT-1d-2026-10.zip"
+  },
+  "1000SATSUSDT": {
+   "file": 35,
+   "primo": "1000SATSUSDT-1d-2023-12.zip",
+   "ultimo": "1000SATSUSDT-1d-2026-10.zip"
+  },
+  "1000SHIBUSDT": {
+   "file": 59,
+   "primo": "1000SHIBUSDT-1d-2021-12.zip",
+   "ultimo": "1000SHIBUSDT-1d-2026-10.zip"
+  },
+  "1000WHYUSDT": {
+   "file": 24,
+   "primo": "1000WHYUSDT-1d-2024-11.zip",
+   "ultimo": "1000WHYUSDT-1d-2026-10.zip"
+  },
+  "1000XECUSDT": {
+   "file": 59,
+   "primo": "1000XECUSDT-1d-2021-12.zip",
+   "ultimo": "1000XECUSDT-1d-2026-10.zip"
+  },
+  "1000XUSDT": {
+   "file": 24,
+   "primo": "1000XUSDT-1d-2024-11.zip",
+   "ultimo": "1000XUSDT-1d-2026-10.zip"
+  },
+  "1INCHUSDT": {
+   "file": 59,
+   "primo": "1INCHUSDT-1d-2021-12.zip",
+   "ultimo": "1INCHUSDT-1d-2026-10.zip"
+  },
+  "1MBABYDOGEUSDT": {
+   "file": 26,
+   "primo": "1MBABYDOGEUSDT-1d-2024-09.zip",
+   "ultimo": "1MBABYDOGEUSDT-1d-2026-10.zip"
+  },
+  "2ZUSDT": {
+   "file": 13,
+   "primo": "2ZUSDT-1d-2025-10.zip",
+   "ultimo": "2ZUSDT-1d-2026-10.zip"
+  },
+  "42USDT": {
+   "file": 13,
+   "primo": "42USDT-1d-2025-10.zip",
+   "ultimo": "42USDT-1d-2026-10.zip"
+  },
+  "4USDT": {
+   "file": 13,
+   "primo": "4USDT-1d-2025-10.zip",
+   "ultimo": "4USDT-1d-2026-10.zip"
+  },
+  "A2ZUSDT": {
+   "file": 16,
+   "primo": "A2ZUSDT-1d-2025-07.zip",
+   "ultimo": "A2ZUSDT-1d-2026-10.zip"
+  },
+  "AAOIUSDT": {
+   "file": 5,
+   "primo": "AAOIUSDT-1d-2026-06.zip",
+   "ultimo": "AAOIUSDT-1d-2026-10.zip"
+  },
+  "AAPLUSDT": {
+   "file": 7,
+   "primo": "AAPLUSDT-1d-2026-04.zip",
+   "ultimo": "AAPLUSDT-1d-2026-10.zip"
+  },
+  "AAVEUSDT": {
+   "file": 59,
+   "primo": "AAVEUSDT-1d-2021-12.zip",
+   "ultimo": "AAVEUSDT-1d-2026-10.zip"
+  },
+  "ABBVUSDT": {
+   "file": 1,
+   "primo": "ABBVUSDT-1d-2026-10.zip",
+   "ultimo": "ABBVUSDT-1d-2026-10.zip"
+  },
+  "ACEUSDT": {
+   "file": 35,
+   "primo": "ACEUSDT-1d-2023-12.zip",
+   "ultimo": "ACEUSDT-1d-2026-10.zip"
+  },
+  "ACHUSDT": {
+   "file": 45,
+   "primo": "ACHUSDT-1d-2023-02.zip",
+   "ultimo": "ACHUSDT-1d-2026-10.zip"
+  },
+  "ACNUSDT": {
+   "file": 2,
+   "primo": "ACNUSDT-1d-2026-09.zip",
+   "ultimo": "ACNUSDT-1d-2026-10.zip"
+  },
+  "ACTUSDT": {
+   "file": 24,
+   "primo": "ACTUSDT-1d-2024-11.zip",
+   "ultimo": "ACTUSDT-1d-2026-10.zip"
+  },
+  "ACUUSDT": {
+   "file": 10,
+   "primo": "ACUUSDT-1d-2026-01.zip",
+   "ultimo": "ACUUSDT-1d-2026-10.zip"
+  },
+  "ACXUSDT": {
+   "file": 23,
+   "primo": "ACXUSDT-1d-2024-12.zip",
+   "ultimo": "ACXUSDT-1d-2026-10.zip"
+  },
+  "ADAUSDT": {
+   "file": 59,
+   "primo": "ADAUSDT-1d-2021-12.zip",
+   "ultimo": "ADAUSDT-1d-2026-10.zip"
+  },
+  "ADBEUSDT": {
+   "file": 5,
+   "primo": "ADBEUSDT-1d-2026-06.zip",
+   "ultimo": "ADBEUSDT-1d-2026-10.zip"
+  },
+  "AERGOUSDT": {
+   "file": 22,
+   "primo": "AERGOUSDT-1d-2024-09.zip",
+   "ultimo": "AERGOUSDT-1d-2026-06.zip"
+  },
+  "AEROUSDT": {
+   "file": 23,
+   "primo": "AEROUSDT-1d-2024-12.zip",
+   "ultimo": "AEROUSDT-1d-2026-10.zip"
+  },
+  "AEVOUSDT": {
+   "file": 32,
+   "primo": "AEVOUSDT-1d-2024-03.zip",
+   "ultimo": "AEVOUSDT-1d-2026-10.zip"
+  },
+  "AGIXUSDT": {
+   "file": 45,
+   "primo": "AGIXUSDT-1d-2023-02.zip",
+   "ultimo": "AGIXUSDT-1d-2026-10.zip"
+  },
+  "AGLDUSDT": {
+   "file": 40,
+   "primo": "AGLDUSDT-1d-2023-07.zip",
+   "ultimo": "AGLDUSDT-1d-2026-10.zip"
+  },
+  "AGPUUSDT": {
+   "file": 2,
+   "primo": "AGPUUSDT-1d-2026-09.zip",
+   "ultimo": "AGPUUSDT-1d-2026-10.zip"
+  },
+  "AGTUSDT": {
+   "file": 18,
+   "primo": "AGTUSDT-1d-2025-05.zip",
+   "ultimo": "AGTUSDT-1d-2026-10.zip"
+  },
+  "AI16ZUSDT": {
+   "file": 22,
+   "primo": "AI16ZUSDT-1d-2025-01.zip",
+   "ultimo": "AI16ZUSDT-1d-2026-10.zip"
+  },
+  "AIAUSDT": {
+   "file": 14,
+   "primo": "AIAUSDT-1d-2025-09.zip",
+   "ultimo": "AIAUSDT-1d-2026-10.zip"
+  },
+  "AIGENSYNUSDT": {
+   "file": 7,
+   "primo": "AIGENSYNUSDT-1d-2026-04.zip",
+   "ultimo": "AIGENSYNUSDT-1d-2026-10.zip"
+  },
+  "AINUSDT": {
+   "file": 16,
+   "primo": "AINUSDT-1d-2025-07.zip",
+   "ultimo": "AINUSDT-1d-2026-10.zip"
+  },
+  "AIOTUSDT": {
+   "file": 19,
+   "primo": "AIOTUSDT-1d-2025-04.zip",
+   "ultimo": "AIOTUSDT-1d-2026-10.zip"
+  },
+  "AIOUSDT": {
+   "file": 15,
+   "primo": "AIOUSDT-1d-2025-08.zip",
+   "ultimo": "AIOUSDT-1d-2026-10.zip"
+  },
+  "AIUSDT": {
+   "file": 34,
+   "primo": "AIUSDT-1d-2024-01.zip",
+   "ultimo": "AIUSDT-1d-2026-10.zip"
+  },
+  "AIXBTUSDT": {
+   "file": 23,
+   "primo": "AIXBTUSDT-1d-2024-12.zip",
+   "ultimo": "AIXBTUSDT-1d-2026-10.zip"
+  },
+  "AKAMUSDT": {
+   "file": 1,
+   "primo": "AKAMUSDT-1d-2026-10.zip",
+   "ultimo": "AKAMUSDT-1d-2026-10.zip"
+  },
+  "AKEUSDT": {
+   "file": 14,
+   "primo": "AKEUSDT-1d-2025-09.zip",
+   "ultimo": "AKEUSDT-1d-2026-10.zip"
+  },
+  "AKROUSDT": {
+   "file": 6,
+   "primo": "AKROUSDT-1d-2021-12.zip",
+   "ultimo": "AKROUSDT-1d-2022-05.zip"
+  },
+  "AKTUSDT": {
+   "file": 24,
+   "primo": "AKTUSDT-1d-2024-11.zip",
+   "ultimo": "AKTUSDT-1d-2026-10.zip"
+  },
+  "ALABUSDT": {
+   "file": 5,
+   "primo": "ALABUSDT-1d-2026-06.zip",
+   "ultimo": "ALABUSDT-1d-2026-10.zip"
+  },
+  "ALCHUSDT": {
+   "file": 22,
+   "primo": "ALCHUSDT-1d-2025-01.zip",
+   "ultimo": "ALCHUSDT-1d-2026-10.zip"
+  },
+  "ALGOUSDT": {
+   "file": 59,
+   "primo": "ALGOUSDT-1d-2021-12.zip",
+   "ultimo": "ALGOUSDT-1d-2026-10.zip"
+  },
+  "ALICEUSDT": {
+   "file": 59,
+   "primo": "ALICEUSDT-1d-2021-12.zip",
+   "ultimo": "ALICEUSDT-1d-2026-10.zip"
+  },
+  "ALLOUSDT": {
+   "file": 12,
+   "primo": "ALLOUSDT-1d-2025-11.zip",
+   "ultimo": "ALLOUSDT-1d-2026-10.zip"
+  },
+  "ALLUSDT": {
+   "file": 15,
+   "primo": "ALLUSDT-1d-2025-08.zip",
+   "ultimo": "ALLUSDT-1d-2026-10.zip"
+  },
+  "ALPACAUSDT": {
+   "file": 27,
+   "primo": "ALPACAUSDT-1d-2024-08.zip",
+   "ultimo": "ALPACAUSDT-1d-2026-10.zip"
+  },
+  "ALPHAUSDT": {
+   "file": 59,
+   "primo": "ALPHAUSDT-1d-2021-12.zip",
+   "ultimo": "ALPHAUSDT-1d-2026-10.zip"
+  },
+  "ALPINEUSDT": {
+   "file": 18,
+   "primo": "ALPINEUSDT-1d-2025-05.zip",
+   "ultimo": "ALPINEUSDT-1d-2026-10.zip"
+  },
+  "ALTUSDT": {
+   "file": 34,
+   "primo": "ALTUSDT-1d-2024-01.zip",
+   "ultimo": "ALTUSDT-1d-2026-10.zip"
+  },
+  "AMATUSDT": {
+   "file": 5,
+   "primo": "AMATUSDT-1d-2026-06.zip",
+   "ultimo": "AMATUSDT-1d-2026-10.zip"
+  },
+  "AMBUSDT": {
+   "file": 44,
+   "primo": "AMBUSDT-1d-2023-03.zip",
+   "ultimo": "AMBUSDT-1d-2026-10.zip"
+  },
+  "AMCUSDT": {
+   "file": 2,
+   "primo": "AMCUSDT-1d-2026-09.zip",
+   "ultimo": "AMCUSDT-1d-2026-10.zip"
+  },
+  "AMDUSDT": {
+   "file": 6,
+   "primo": "AMDUSDT-1d-2026-05.zip",
+   "ultimo": "AMDUSDT-1d-2026-10.zip"
+  },
+  "AMGNUSDT": {
+   "file": 1,
+   "primo": "AMGNUSDT-1d-2026-10.zip",
+   "ultimo": "AMGNUSDT-1d-2026-10.zip"
+  },
+  "AMZNUSDT": {
+   "file": 9,
+   "primo": "AMZNUSDT-1d-2026-02.zip",
+   "ultimo": "AMZNUSDT-1d-2026-10.zip"
+  },
+  "ANCUSDT": {
+   "file": 3,
+   "primo": "ANCUSDT-1d-2022-03.zip",
+   "ultimo": "ANCUSDT-1d-2022-05.zip"
+  },
+  "ANETUSDT": {
+   "file": 2,
+   "primo": "ANETUSDT-1d-2026-09.zip",
+   "ultimo": "ANETUSDT-1d-2026-10.zip"
+  },
+  "ANIMEUSDT": {
+   "file": 22,
+   "primo": "ANIMEUSDT-1d-2025-01.zip",
+   "ultimo": "ANIMEUSDT-1d-2026-10.zip"
+  },
+  "ANKRUSDT": {
+   "file": 59,
+   "primo": "ANKRUSDT-1d-2021-12.zip",
+   "ultimo": "ANKRUSDT-1d-2026-10.zip"
+  },
+  "ANTHROPICUSDT": {
+   "file": 5,
+   "primo": "ANTHROPICUSDT-1d-2026-06.zip",
+   "ultimo": "ANTHROPICUSDT-1d-2026-10.zip"
+  },
+  "ANTUSDT": {
+   "file": 30,
+   "primo": "ANTUSDT-1d-2021-12.zip",
+   "ultimo": "ANTUSDT-1d-2024-05.zip"
+  },
+  "APEUSDT": {
+   "file": 56,
+   "primo": "APEUSDT-1d-2022-03.zip",
+   "ultimo": "APEUSDT-1d-2026-10.zip"
+  },
+  "API3USDT": {
+   "file": 57,
+   "primo": "API3USDT-1d-2022-02.zip",
+   "ultimo": "API3USDT-1d-2026-10.zip"
+  },
+  "APLDUSDT": {
+   "file": 2,
+   "primo": "APLDUSDT-1d-2026-09.zip",
+   "ultimo": "APLDUSDT-1d-2026-10.zip"
+  },
+  "APPUSDT": {
+   "file": 4,
+   "primo": "APPUSDT-1d-2026-07.zip",
+   "ultimo": "APPUSDT-1d-2026-10.zip"
+  },
+  "APRUSDT": {
+   "file": 13,
+   "primo": "APRUSDT-1d-2025-10.zip",
+   "ultimo": "APRUSDT-1d-2026-10.zip"
+  },
+  "APTUSDT": {
+   "file": 49,
+   "primo": "APTUSDT-1d-2022-10.zip",
+   "ultimo": "APTUSDT-1d-2026-10.zip"
+  },
+  "ARBUSDT": {
+   "file": 44,
+   "primo": "ARBUSDT-1d-2023-03.zip",
+   "ultimo": "ARBUSDT-1d-2026-10.zip"
+  },
+  "ARCUSDT": {
+   "file": 22,
+   "primo": "ARCUSDT-1d-2025-01.zip",
+   "ultimo": "ARCUSDT-1d-2026-10.zip"
+  },
+  "ARIAUSDT": {
+   "file": 14,
+   "primo": "ARIAUSDT-1d-2025-09.zip",
+   "ultimo": "ARIAUSDT-1d-2026-10.zip"
+  },
+  "ARKMUSDT": {
+   "file": 40,
+   "primo": "ARKMUSDT-1d-2023-07.zip",
+   "ultimo": "ARKMUSDT-1d-2026-10.zip"
+  },
+  "ARKUSDT": {
+   "file": 38,
+   "primo": "ARKUSDT-1d-2023-09.zip",
+   "ultimo": "ARKUSDT-1d-2026-10.zip"
+  },
+  "ARMUSDT": {
+   "file": 6,
+   "primo": "ARMUSDT-1d-2026-05.zip",
+   "ultimo": "ARMUSDT-1d-2026-10.zip"
+  },
+  "ARPAUSDT": {
+   "file": 59,
+   "primo": "ARPAUSDT-1d-2021-12.zip",
+   "ultimo": "ARPAUSDT-1d-2026-10.zip"
+  },
+  "ARUSDT": {
+   "file": 59,
+   "primo": "ARUSDT-1d-2021-12.zip",
+   "ultimo": "ARUSDT-1d-2026-10.zip"
+  },
+  "ARXUSDT": {
+   "file": 5,
+   "primo": "ARXUSDT-1d-2026-06.zip",
+   "ultimo": "ARXUSDT-1d-2026-10.zip"
+  },
+  "ASMLUSDT": {
+   "file": 5,
+   "primo": "ASMLUSDT-1d-2026-06.zip",
+   "ultimo": "ASMLUSDT-1d-2026-10.zip"
+  },
+  "ASRUSDT": {
+   "file": 18,
+   "primo": "ASRUSDT-1d-2025-05.zip",
+   "ultimo": "ASRUSDT-1d-2026-10.zip"
+  },
+  "ASTERUSDT": {
+   "file": 14,
+   "primo": "ASTERUSDT-1d-2025-09.zip",
+   "ultimo": "ASTERUSDT-1d-2026-10.zip"
+  },
+  "ASTRUSDT": {
+   "file": 45,
+   "primo": "ASTRUSDT-1d-2023-02.zip",
+   "ultimo": "ASTRUSDT-1d-2026-10.zip"
+  },
+  "ASTSUSDT": {
+   "file": 5,
+   "primo": "ASTSUSDT-1d-2026-06.zip",
+   "ultimo": "ASTSUSDT-1d-2026-10.zip"
+  },
+  "ATAUSDT": {
+   "file": 59,
+   "primo": "ATAUSDT-1d-2021-12.zip",
+   "ultimo": "ATAUSDT-1d-2026-10.zip"
+  },
+  "ATHUSDT": {
+   "file": 19,
+   "primo": "ATHUSDT-1d-2025-04.zip",
+   "ultimo": "ATHUSDT-1d-2026-10.zip"
+  },
+  "ATOMUSDT": {
+   "file": 59,
+   "primo": "ATOMUSDT-1d-2021-12.zip",
+   "ultimo": "ATOMUSDT-1d-2026-10.zip"
+  },
+  "ATUSDT": {
+   "file": 13,
+   "primo": "ATUSDT-1d-2025-10.zip",
+   "ultimo": "ATUSDT-1d-2026-10.zip"
+  },
+  "AUCTIONUSDT": {
+   "file": 35,
+   "primo": "AUCTIONUSDT-1d-2023-12.zip",
+   "ultimo": "AUCTIONUSDT-1d-2026-10.zip"
+  },
+  "AUDIOUSDT": {
+   "file": 30,
+   "primo": "AUDIOUSDT-1d-2021-12.zip",
+   "ultimo": "AUDIOUSDT-1d-2024-05.zip"
+  },
+  "AUSDT": {
+   "file": 18,
+   "primo": "AUSDT-1d-2025-05.zip",
+   "ultimo": "AUSDT-1d-2026-10.zip"
+  },
+  "AVAAIUSDT": {
+   "file": 22,
+   "primo": "AVAAIUSDT-1d-2025-01.zip",
+   "ultimo": "AVAAIUSDT-1d-2026-10.zip"
+  },
+  "AVAUSDT": {
+   "file": 23,
+   "primo": "AVAUSDT-1d-2024-12.zip",
+   "ultimo": "AVAUSDT-1d-2026-10.zip"
+  },
+  "AVAXUSDT": {
+   "file": 59,
+   "primo": "AVAXUSDT-1d-2021-12.zip",
+   "ultimo": "AVAXUSDT-1d-2026-10.zip"
+  },
+  "AVGOUSDT": {
+   "file": 7,
+   "primo": "AVGOUSDT-1d-2026-04.zip",
+   "ultimo": "AVGOUSDT-1d-2026-10.zip"
+  },
+  "AVNTUSDT": {
+   "file": 14,
+   "primo": "AVNTUSDT-1d-2025-09.zip",
+   "ultimo": "AVNTUSDT-1d-2026-10.zip"
+  },
+  "AWEUSDT": {
+   "file": 18,
+   "primo": "AWEUSDT-1d-2025-05.zip",
+   "ultimo": "AWEUSDT-1d-2026-10.zip"
+  },
+  "AXLUSDT": {
+   "file": 32,
+   "primo": "AXLUSDT-1d-2024-03.zip",
+   "ultimo": "AXLUSDT-1d-2026-10.zip"
+  },
+  "AXSUSDT": {
+   "file": 59,
+   "primo": "AXSUSDT-1d-2021-12.zip",
+   "ultimo": "AXSUSDT-1d-2026-10.zip"
+  },
+  "AXTIUSDT": {
+   "file": 5,
+   "primo": "AXTIUSDT-1d-2026-06.zip",
+   "ultimo": "AXTIUSDT-1d-2026-10.zip"
+  },
+  "AZTECUSDT": {
+   "file": 9,
+   "primo": "AZTECUSDT-1d-2026-02.zip",
+   "ultimo": "AZTECUSDT-1d-2026-10.zip"
+  },
+  "B2USDT": {
+   "file": 18,
+   "primo": "B2USDT-1d-2025-05.zip",
+   "ultimo": "B2USDT-1d-2026-10.zip"
+  },
+  "B3USDT": {
+   "file": 21,
+   "primo": "B3USDT-1d-2025-02.zip",
+   "ultimo": "B3USDT-1d-2026-10.zip"
+  },
+  "BABAUSDT": {
+   "file": 7,
+   "primo": "BABAUSDT-1d-2026-04.zip",
+   "ultimo": "BABAUSDT-1d-2026-10.zip"
+  },
+  "BABYUSDT": {
+   "file": 19,
+   "primo": "BABYUSDT-1d-2025-04.zip",
+   "ultimo": "BABYUSDT-1d-2026-10.zip"
+  },
+  "BACUSDT": {
+   "file": 1,
+   "primo": "BACUSDT-1d-2026-10.zip",
+   "ultimo": "BACUSDT-1d-2026-10.zip"
+  },
+  "BADGERUSDT": {
+   "file": 36,
+   "primo": "BADGERUSDT-1d-2023-11.zip",
+   "ultimo": "BADGERUSDT-1d-2026-10.zip"
+  },
+  "BAKEUSDT": {
+   "file": 59,
+   "primo": "BAKEUSDT-1d-2021-12.zip",
+   "ultimo": "BAKEUSDT-1d-2026-10.zip"
+  },
+  "BALUSDT": {
+   "file": 59,
+   "primo": "BALUSDT-1d-2021-12.zip",
+   "ultimo": "BALUSDT-1d-2026-10.zip"
+  },
+  "BANANAS31USDT": {
+   "file": 20,
+   "primo": "BANANAS31USDT-1d-2025-03.zip",
+   "ultimo": "BANANAS31USDT-1d-2026-10.zip"
+  },
+  "BANANAUSDT": {
+   "file": 27,
+   "primo": "BANANAUSDT-1d-2024-08.zip",
+   "ultimo": "BANANAUSDT-1d-2026-10.zip"
+  },
+  "BANDUSDT": {
+   "file": 59,
+   "primo": "BANDUSDT-1d-2021-12.zip",
+   "ultimo": "BANDUSDT-1d-2026-10.zip"
+  },
+  "BANKUSDT": {
+   "file": 19,
+   "primo": "BANKUSDT-1d-2025-04.zip",
+   "ultimo": "BANKUSDT-1d-2026-10.zip"
+  },
+  "BANUSDT": {
+   "file": 24,
+   "primo": "BANUSDT-1d-2024-11.zip",
+   "ultimo": "BANUSDT-1d-2026-10.zip"
+  },
+  "BARDUSDT": {
+   "file": 14,
+   "primo": "BARDUSDT-1d-2025-09.zip",
+   "ultimo": "BARDUSDT-1d-2026-10.zip"
+  },
+  "BASEDUSDT": {
+   "file": 8,
+   "primo": "BASEDUSDT-1d-2026-03.zip",
+   "ultimo": "BASEDUSDT-1d-2026-10.zip"
+  },
+  "BASUSDT": {
+   "file": 15,
+   "primo": "BASUSDT-1d-2025-08.zip",
+   "ultimo": "BASUSDT-1d-2026-10.zip"
+  },
+  "BATUSDT": {
+   "file": 59,
+   "primo": "BATUSDT-1d-2021-12.zip",
+   "ultimo": "BATUSDT-1d-2026-10.zip"
+  },
+  "BBUSDT": {
+   "file": 30,
+   "primo": "BBUSDT-1d-2024-05.zip",
+   "ultimo": "BBUSDT-1d-2026-10.zip"
+  },
+  "BBXUSDT": {
+   "file": 5,
+   "primo": "BBXUSDT-1d-2026-06.zip",
+   "ultimo": "BBXUSDT-1d-2026-10.zip"
+  },
+  "BCHUSDT": {
+   "file": 59,
+   "primo": "BCHUSDT-1d-2021-12.zip",
+   "ultimo": "BCHUSDT-1d-2026-10.zip"
+  },
+  "BDXNUSDT": {
+   "file": 10,
+   "primo": "BDXNUSDT-1d-2025-06.zip",
+   "ultimo": "BDXNUSDT-1d-2026-03.zip"
+  },
+  "BEAMXUSDT": {
+   "file": 36,
+   "primo": "BEAMXUSDT-1d-2023-11.zip",
+   "ultimo": "BEAMXUSDT-1d-2026-10.zip"
+  },
+  "BEATUSDT": {
+   "file": 12,
+   "primo": "BEATUSDT-1d-2025-11.zip",
+   "ultimo": "BEATUSDT-1d-2026-10.zip"
+  },
+  "BELUSDT": {
+   "file": 59,
+   "primo": "BELUSDT-1d-2021-12.zip",
+   "ultimo": "BELUSDT-1d-2026-10.zip"
+  },
+  "BERAUSDT": {
+   "file": 21,
+   "primo": "BERAUSDT-1d-2025-02.zip",
+   "ultimo": "BERAUSDT-1d-2026-10.zip"
+  },
+  "BEUSDT": {
+   "file": 6,
+   "primo": "BEUSDT-1d-2026-05.zip",
+   "ultimo": "BEUSDT-1d-2026-10.zip"
+  },
+  "BICOUSDT": {
+   "file": 38,
+   "primo": "BICOUSDT-1d-2023-09.zip",
+   "ultimo": "BICOUSDT-1d-2026-10.zip"
+  },
+  "BIDUSDT": {
+   "file": 20,
+   "primo": "BIDUSDT-1d-2025-03.zip",
+   "ultimo": "BIDUSDT-1d-2026-10.zip"
+  },
+  "BIGTIMEUSDT": {
+   "file": 37,
+   "primo": "BIGTIMEUSDT-1d-2023-10.zip",
+   "ultimo": "BIGTIMEUSDT-1d-2026-10.zip"
+  },
+  "BILLUSDT": {
+   "file": 6,
+   "primo": "BILLUSDT-1d-2026-05.zip",
+   "ultimo": "BILLUSDT-1d-2026-10.zip"
+  },
+  "BIOUSDT": {
+   "file": 22,
+   "primo": "BIOUSDT-1d-2025-01.zip",
+   "ultimo": "BIOUSDT-1d-2026-10.zip"
+  },
+  "BIRBUSDT": {
+   "file": 10,
+   "primo": "BIRBUSDT-1d-2026-01.zip",
+   "ultimo": "BIRBUSDT-1d-2026-10.zip"
+  },
+  "BITOUSDT": {
+   "file": 4,
+   "primo": "BITOUSDT-1d-2026-07.zip",
+   "ultimo": "BITOUSDT-1d-2026-10.zip"
+  },
+  "BLESSUSDT": {
+   "file": 14,
+   "primo": "BLESSUSDT-1d-2025-09.zip",
+   "ultimo": "BLESSUSDT-1d-2026-10.zip"
+  },
+  "BLUAIUSDT": {
+   "file": 13,
+   "primo": "BLUAIUSDT-1d-2025-10.zip",
+   "ultimo": "BLUAIUSDT-1d-2026-10.zip"
+  },
+  "BLUEBIRDUSDT": {
+   "file": 19,
+   "primo": "BLUEBIRDUSDT-1d-2022-11.zip",
+   "ultimo": "BLUEBIRDUSDT-1d-2024-05.zip"
+  },
+  "BLURUSDT": {
+   "file": 43,
+   "primo": "BLURUSDT-1d-2023-04.zip",
+   "ultimo": "BLURUSDT-1d-2026-10.zip"
+  },
+  "BLZUSDT": {
+   "file": 59,
+   "primo": "BLZUSDT-1d-2021-12.zip",
+   "ultimo": "BLZUSDT-1d-2026-10.zip"
+  },
+  "BMNRUSDT": {
+   "file": 5,
+   "primo": "BMNRUSDT-1d-2026-06.zip",
+   "ultimo": "BMNRUSDT-1d-2026-10.zip"
+  },
+  "BMTUSDT": {
+   "file": 20,
+   "primo": "BMTUSDT-1d-2025-03.zip",
+   "ultimo": "BMTUSDT-1d-2026-10.zip"
+  },
+  "BNBUSDT": {
+   "file": 59,
+   "primo": "BNBUSDT-1d-2021-12.zip",
+   "ultimo": "BNBUSDT-1d-2026-10.zip"
+  },
+  "BNCUSDT": {
+   "file": 4,
+   "primo": "BNCUSDT-1d-2026-07.zip",
+   "ultimo": "BNCUSDT-1d-2026-10.zip"
+  },
+  "BNTUSDT": {
+   "file": 39,
+   "primo": "BNTUSDT-1d-2023-08.zip",
+   "ultimo": "BNTUSDT-1d-2026-10.zip"
+  },
+  "BNXUSDT": {
+   "file": 55,
+   "primo": "BNXUSDT-1d-2022-04.zip",
+   "ultimo": "BNXUSDT-1d-2026-10.zip"
+  },
+  "BOBUSDT": {
+   "file": 12,
+   "primo": "BOBUSDT-1d-2025-11.zip",
+   "ultimo": "BOBUSDT-1d-2026-10.zip"
+  },
+  "BOMEUSDT": {
+   "file": 32,
+   "primo": "BOMEUSDT-1d-2024-03.zip",
+   "ultimo": "BOMEUSDT-1d-2026-10.zip"
+  },
+  "BONDUSDT": {
+   "file": 37,
+   "primo": "BONDUSDT-1d-2023-10.zip",
+   "ultimo": "BONDUSDT-1d-2026-10.zip"
+  },
+  "BOTUSDT": {
+   "file": 4,
+   "primo": "BOTUSDT-1d-2026-07.zip",
+   "ultimo": "BOTUSDT-1d-2026-10.zip"
+  },
+  "BRETTUSDT": {
+   "file": 27,
+   "primo": "BRETTUSDT-1d-2024-08.zip",
+   "ultimo": "BRETTUSDT-1d-2026-10.zip"
+  },
+  "BREVUSDT": {
+   "file": 11,
+   "primo": "BREVUSDT-1d-2025-12.zip",
+   "ultimo": "BREVUSDT-1d-2026-10.zip"
+  },
+  "BRKBUSDT": {
+   "file": 6,
+   "primo": "BRKBUSDT-1d-2026-05.zip",
+   "ultimo": "BRKBUSDT-1d-2026-10.zip"
+  },
+  "BROCCOLI714USDT": {
+   "file": 20,
+   "primo": "BROCCOLI714USDT-1d-2025-03.zip",
+   "ultimo": "BROCCOLI714USDT-1d-2026-10.zip"
+  },
+  "BROCCOLIF3BUSDT": {
+   "file": 20,
+   "primo": "BROCCOLIF3BUSDT-1d-2025-03.zip",
+   "ultimo": "BROCCOLIF3BUSDT-1d-2026-10.zip"
+  },
+  "BRUSDT": {
+   "file": 20,
+   "primo": "BRUSDT-1d-2025-03.zip",
+   "ultimo": "BRUSDT-1d-2026-10.zip"
+  },
+  "BSBUSDT": {
+   "file": 8,
+   "primo": "BSBUSDT-1d-2026-03.zip",
+   "ultimo": "BSBUSDT-1d-2026-10.zip"
+  },
+  "BSPUSDT": {
+   "file": 4,
+   "primo": "BSPUSDT-1d-2026-07.zip",
+   "ultimo": "BSPUSDT-1d-2026-10.zip"
+  },
+  "BSVUSDT": {
+   "file": 37,
+   "primo": "BSVUSDT-1d-2023-10.zip",
+   "ultimo": "BSVUSDT-1d-2026-10.zip"
+  },
+  "BSWUSDT": {
+   "file": 26,
+   "primo": "BSWUSDT-1d-2024-09.zip",
+   "ultimo": "BSWUSDT-1d-2026-10.zip"
+  },
+  "BTCDOMUSDT": {
+   "file": 59,
+   "primo": "BTCDOMUSDT-1d-2021-12.zip",
+   "ultimo": "BTCDOMUSDT-1d-2026-10.zip"
+  },
+  "BTCSTUSDT": {
+   "file": 55,
+   "primo": "BTCSTUSDT-1d-2021-12.zip",
+   "ultimo": "BTCSTUSDT-1d-2026-06.zip"
+  },
+  "BTCUSDT": {
+   "file": 59,
+   "primo": "BTCUSDT-1d-2021-12.zip",
+   "ultimo": "BTCUSDT-1d-2026-10.zip"
+  },
+  "BTRUSDT": {
+   "file": 15,
+   "primo": "BTRUSDT-1d-2025-08.zip",
+   "ultimo": "BTRUSDT-1d-2026-10.zip"
+  },
+  "BTSUSDT": {
+   "file": 30,
+   "primo": "BTSUSDT-1d-2021-12.zip",
+   "ultimo": "BTSUSDT-1d-2024-05.zip"
+  },
+  "BTTUSDT": {
+   "file": 2,
+   "primo": "BTTUSDT-1d-2021-12.zip",
+   "ultimo": "BTTUSDT-1d-2022-01.zip"
+  },
+  "BTWUSDT": {
+   "file": 5,
+   "primo": "BTWUSDT-1d-2026-06.zip",
+   "ultimo": "BTWUSDT-1d-2026-10.zip"
+  },
+  "BULLAUSDT": {
+   "file": 16,
+   "primo": "BULLAUSDT-1d-2025-07.zip",
+   "ultimo": "BULLAUSDT-1d-2026-10.zip"
+  },
+  "BWETUSDT": {
+   "file": 2,
+   "primo": "BWETUSDT-1d-2026-09.zip",
+   "ultimo": "BWETUSDT-1d-2026-10.zip"
+  },
+  "BXUSDT": {
+   "file": 5,
+   "primo": "BXUSDT-1d-2026-06.zip",
+   "ultimo": "BXUSDT-1d-2026-10.zip"
+  },
+  "BYDUSDT": {
+   "file": 2,
+   "primo": "BYDUSDT-1d-2026-09.zip",
+   "ultimo": "BYDUSDT-1d-2026-10.zip"
+  },
+  "BZRXUSDT": {
+   "file": 1,
+   "primo": "BZRXUSDT-1d-2021-12.zip",
+   "ultimo": "BZRXUSDT-1d-2021-12.zip"
+  },
+  "BZUSDT": {
+   "file": 7,
+   "primo": "BZUSDT-1d-2026-04.zip",
+   "ultimo": "BZUSDT-1d-2026-10.zip"
+  },
+  "C98USDT": {
+   "file": 59,
+   "primo": "C98USDT-1d-2021-12.zip",
+   "ultimo": "C98USDT-1d-2026-10.zip"
+  },
+  "CAKEUSDT": {
+   "file": 36,
+   "primo": "CAKEUSDT-1d-2023-11.zip",
+   "ultimo": "CAKEUSDT-1d-2026-10.zip"
+  },
+  "CAPUSDT": {
+   "file": 5,
+   "primo": "CAPUSDT-1d-2026-06.zip",
+   "ultimo": "CAPUSDT-1d-2026-10.zip"
+  },
+  "CARVUSDT": {
+   "file": 15,
+   "primo": "CARVUSDT-1d-2025-08.zip",
+   "ultimo": "CARVUSDT-1d-2026-10.zip"
+  },
+  "CATIUSDT": {
+   "file": 26,
+   "primo": "CATIUSDT-1d-2024-09.zip",
+   "ultimo": "CATIUSDT-1d-2026-10.zip"
+  },
+  "CATUSDT": {
+   "file": 4,
+   "primo": "CATUSDT-1d-2026-07.zip",
+   "ultimo": "CATUSDT-1d-2026-10.zip"
+  },
+  "CBRSUSDT": {
+   "file": 6,
+   "primo": "CBRSUSDT-1d-2026-05.zip",
+   "ultimo": "CBRSUSDT-1d-2026-10.zip"
+  },
+  "CCUSDT": {
+   "file": 13,
+   "primo": "CCUSDT-1d-2025-10.zip",
+   "ultimo": "CCUSDT-1d-2026-10.zip"
+  },
+  "CEGUSDT": {
+   "file": 1,
+   "primo": "CEGUSDT-1d-2026-10.zip",
+   "ultimo": "CEGUSDT-1d-2026-10.zip"
+  },
+  "CELOUSDT": {
+   "file": 59,
+   "primo": "CELOUSDT-1d-2021-12.zip",
+   "ultimo": "CELOUSDT-1d-2026-10.zip"
+  },
+  "CELRUSDT": {
+   "file": 59,
+   "primo": "CELRUSDT-1d-2021-12.zip",
+   "ultimo": "CELRUSDT-1d-2026-10.zip"
+  },
+  "CETUSUSDT": {
+   "file": 24,
+   "primo": "CETUSUSDT-1d-2024-11.zip",
+   "ultimo": "CETUSUSDT-1d-2026-10.zip"
+  },
+  "CFGUSDT": {
+   "file": 8,
+   "primo": "CFGUSDT-1d-2026-03.zip",
+   "ultimo": "CFGUSDT-1d-2026-10.zip"
+  },
+  "CFXUSDT": {
+   "file": 45,
+   "primo": "CFXUSDT-1d-2023-02.zip",
+   "ultimo": "CFXUSDT-1d-2026-10.zip"
+  },
+  "CGPTUSDT": {
+   "file": 23,
+   "primo": "CGPTUSDT-1d-2024-12.zip",
+   "ultimo": "CGPTUSDT-1d-2026-10.zip"
+  },
+  "CHESSUSDT": {
+   "file": 27,
+   "primo": "CHESSUSDT-1d-2024-08.zip",
+   "ultimo": "CHESSUSDT-1d-2026-10.zip"
+  },
+  "CHILLGUYUSDT": {
+   "file": 24,
+   "primo": "CHILLGUYUSDT-1d-2024-11.zip",
+   "ultimo": "CHILLGUYUSDT-1d-2026-10.zip"
+  },
+  "CHIPUSDT": {
+   "file": 7,
+   "primo": "CHIPUSDT-1d-2026-04.zip",
+   "ultimo": "CHIPUSDT-1d-2026-10.zip"
+  },
+  "CHRUSDT": {
+   "file": 59,
+   "primo": "CHRUSDT-1d-2021-12.zip",
+   "ultimo": "CHRUSDT-1d-2026-10.zip"
+  },
+  "CHZUSDT": {
+   "file": 59,
+   "primo": "CHZUSDT-1d-2021-12.zip",
+   "ultimo": "CHZUSDT-1d-2026-10.zip"
+  },
+  "CIENUSDT": {
+   "file": 5,
+   "primo": "CIENUSDT-1d-2026-06.zip",
+   "ultimo": "CIENUSDT-1d-2026-10.zip"
+  },
+  "CKBUSDT": {
+   "file": 45,
+   "primo": "CKBUSDT-1d-2023-02.zip",
+   "ultimo": "CKBUSDT-1d-2026-10.zip"
+  },
+  "CLANKERUSDT": {
+   "file": 12,
+   "primo": "CLANKERUSDT-1d-2025-11.zip",
+   "ultimo": "CLANKERUSDT-1d-2026-10.zip"
+  },
+  "CLOUSDT": {
+   "file": 13,
+   "primo": "CLOUSDT-1d-2025-10.zip",
+   "ultimo": "CLOUSDT-1d-2026-10.zip"
+  },
+  "CLUSDT": {
+   "file": 7,
+   "primo": "CLUSDT-1d-2026-04.zip",
+   "ultimo": "CLUSDT-1d-2026-10.zip"
+  },
+  "COAIUSDT": {
+   "file": 14,
+   "primo": "COAIUSDT-1d-2025-09.zip",
+   "ultimo": "COAIUSDT-1d-2026-10.zip"
+  },
+  "COCOSUSDT": {
+   "file": 16,
+   "primo": "COCOSUSDT-1d-2023-02.zip",
+   "ultimo": "COCOSUSDT-1d-2024-05.zip"
+  },
+  "COHRUSDT": {
+   "file": 6,
+   "primo": "COHRUSDT-1d-2026-05.zip",
+   "ultimo": "COHRUSDT-1d-2026-10.zip"
+  },
+  "COINUSDT": {
+   "file": 9,
+   "primo": "COINUSDT-1d-2026-02.zip",
+   "ultimo": "COINUSDT-1d-2026-10.zip"
+  },
+  "COLLECTUSDT": {
+   "file": 11,
+   "primo": "COLLECTUSDT-1d-2025-12.zip",
+   "ultimo": "COLLECTUSDT-1d-2026-10.zip"
+  },
+  "COMBOUSDT": {
+   "file": 41,
+   "primo": "COMBOUSDT-1d-2023-06.zip",
+   "ultimo": "COMBOUSDT-1d-2026-10.zip"
+  },
+  "COMMONUSDT": {
+   "file": 13,
+   "primo": "COMMONUSDT-1d-2025-10.zip",
+   "ultimo": "COMMONUSDT-1d-2026-10.zip"
+  },
+  "COMPUSDT": {
+   "file": 59,
+   "primo": "COMPUSDT-1d-2021-12.zip",
+   "ultimo": "COMPUSDT-1d-2026-10.zip"
+  },
+  "COOKIEUSDT": {
+   "file": 22,
+   "primo": "COOKIEUSDT-1d-2025-01.zip",
+   "ultimo": "COOKIEUSDT-1d-2026-10.zip"
+  },
+  "COPPERUSDT": {
+   "file": 8,
+   "primo": "COPPERUSDT-1d-2026-03.zip",
+   "ultimo": "COPPERUSDT-1d-2026-10.zip"
+  },
+  "COSTUSDT": {
+   "file": 5,
+   "primo": "COSTUSDT-1d-2026-06.zip",
+   "ultimo": "COSTUSDT-1d-2026-10.zip"
+  },
+  "COSUSDT": {
+   "file": 26,
+   "primo": "COSUSDT-1d-2024-09.zip",
+   "ultimo": "COSUSDT-1d-2026-10.zip"
+  },
+  "COTIUSDT": {
+   "file": 59,
+   "primo": "COTIUSDT-1d-2021-12.zip",
+   "ultimo": "COTIUSDT-1d-2026-10.zip"
+  },
+  "COWUSDT": {
+   "file": 24,
+   "primo": "COWUSDT-1d-2024-11.zip",
+   "ultimo": "COWUSDT-1d-2026-10.zip"
+  },
+  "CRCLUSDT": {
+   "file": 9,
+   "primo": "CRCLUSDT-1d-2026-02.zip",
+   "ultimo": "CRCLUSDT-1d-2026-10.zip"
+  },
+  "CRDOUSDT": {
+   "file": 5,
+   "primo": "CRDOUSDT-1d-2026-06.zip",
+   "ultimo": "CRDOUSDT-1d-2026-10.zip"
+  },
+  "CRMLUSDT": {
+   "file": 2,
+   "primo": "CRMLUSDT-1d-2026-09.zip",
+   "ultimo": "CRMLUSDT-1d-2026-10.zip"
+  },
+  "CRMUSDT": {
+   "file": 5,
+   "primo": "CRMUSDT-1d-2026-06.zip",
+   "ultimo": "CRMUSDT-1d-2026-10.zip"
+  },
+  "CROSSUSDT": {
+   "file": 16,
+   "primo": "CROSSUSDT-1d-2025-07.zip",
+   "ultimo": "CROSSUSDT-1d-2026-10.zip"
+  },
+  "CRVUSDT": {
+   "file": 59,
+   "primo": "CRVUSDT-1d-2021-12.zip",
+   "ultimo": "CRVUSDT-1d-2026-10.zip"
+  },
+  "CRWDUSDT": {
+   "file": 5,
+   "primo": "CRWDUSDT-1d-2026-06.zip",
+   "ultimo": "CRWDUSDT-1d-2026-10.zip"
+  },
+  "CRWVUSDT": {
+   "file": 6,
+   "primo": "CRWVUSDT-1d-2026-05.zip",
+   "ultimo": "CRWVUSDT-1d-2026-10.zip"
+  },
+  "CSCOUSDT": {
+   "file": 6,
+   "primo": "CSCOUSDT-1d-2026-05.zip",
+   "ultimo": "CSCOUSDT-1d-2026-10.zip"
+  },
+  "CSOPSAMSUNG2LUSDT": {
+   "file": 3,
+   "primo": "CSOPSAMSUNG2LUSDT-1d-2026-08.zip",
+   "ultimo": "CSOPSAMSUNG2LUSDT-1d-2026-10.zip"
+  },
+  "CSOPSKHYNIX2LUSDT": {
+   "file": 3,
+   "primo": "CSOPSKHYNIX2LUSDT-1d-2026-08.zip",
+   "ultimo": "CSOPSKHYNIX2LUSDT-1d-2026-10.zip"
+  },
+  "CTKUSDT": {
+   "file": 59,
+   "primo": "CTKUSDT-1d-2021-12.zip",
+   "ultimo": "CTKUSDT-1d-2026-10.zip"
+  },
+  "CTRUSDT": {
+   "file": 6,
+   "primo": "CTRUSDT-1d-2026-05.zip",
+   "ultimo": "CTRUSDT-1d-2026-10.zip"
+  },
+  "CTSIUSDT": {
+   "file": 59,
+   "primo": "CTSIUSDT-1d-2021-12.zip",
+   "ultimo": "CTSIUSDT-1d-2026-10.zip"
+  },
+  "CTUSDT": {
+   "file": 1,
+   "primo": "CTUSDT-1d-2026-10.zip",
+   "ultimo": "CTUSDT-1d-2026-10.zip"
+  },
+  "CUDISUSDT": {
+   "file": 15,
+   "primo": "CUDISUSDT-1d-2025-08.zip",
+   "ultimo": "CUDISUSDT-1d-2026-10.zip"
+  },
+  "CUSDT": {
+   "file": 16,
+   "primo": "CUSDT-1d-2025-07.zip",
+   "ultimo": "CUSDT-1d-2026-10.zip"
+  },
+  "CVCUSDT": {
+   "file": 59,
+   "primo": "CVCUSDT-1d-2021-12.zip",
+   "ultimo": "CVCUSDT-1d-2026-10.zip"
+  },
+  "CVNAUSDT": {
+   "file": 2,
+   "primo": "CVNAUSDT-1d-2026-09.zip",
+   "ultimo": "CVNAUSDT-1d-2026-10.zip"
+  },
+  "CVXUSDT": {
+   "file": 50,
+   "primo": "CVXUSDT-1d-2022-09.zip",
+   "ultimo": "CVXUSDT-1d-2026-10.zip"
+  },
+  "CXMTUSDT": {
+   "file": 3,
+   "primo": "CXMTUSDT-1d-2026-08.zip",
+   "ultimo": "CXMTUSDT-1d-2026-10.zip"
+  },
+  "CYBERUSDT": {
+   "file": 39,
+   "primo": "CYBERUSDT-1d-2023-08.zip",
+   "ultimo": "CYBERUSDT-1d-2026-10.zip"
+  },
+  "CYPHUSDT": {
+   "file": 2,
+   "primo": "CYPHUSDT-1d-2026-09.zip",
+   "ultimo": "CYPHUSDT-1d-2026-10.zip"
+  },
+  "CYSUSDT": {
+   "file": 11,
+   "primo": "CYSUSDT-1d-2025-12.zip",
+   "ultimo": "CYSUSDT-1d-2026-10.zip"
+  },
+  "DAMUSDT": {
+   "file": 15,
+   "primo": "DAMUSDT-1d-2025-08.zip",
+   "ultimo": "DAMUSDT-1d-2026-10.zip"
+  },
+  "DARUSDT": {
+   "file": 55,
+   "primo": "DARUSDT-1d-2022-04.zip",
+   "ultimo": "DARUSDT-1d-2026-10.zip"
+  },
+  "DASHUSDT": {
+   "file": 59,
+   "primo": "DASHUSDT-1d-2021-12.zip",
+   "ultimo": "DASHUSDT-1d-2026-10.zip"
+  },
+  "DATAIPUSDT": {
+   "file": 4,
+   "primo": "DATAIPUSDT-1d-2026-07.zip",
+   "ultimo": "DATAIPUSDT-1d-2026-10.zip"
+  },
+  "DDOGUSDT": {
+   "file": 2,
+   "primo": "DDOGUSDT-1d-2026-09.zip",
+   "ultimo": "DDOGUSDT-1d-2026-10.zip"
+  },
+  "DEEPUSDT": {
+   "file": 19,
+   "primo": "DEEPUSDT-1d-2025-04.zip",
+   "ultimo": "DEEPUSDT-1d-2026-10.zip"
+  },
+  "DEFIUSDT": {
+   "file": 59,
+   "primo": "DEFIUSDT-1d-2021-12.zip",
+   "ultimo": "DEFIUSDT-1d-2026-10.zip"
+  },
+  "DEGENUSDT": {
+   "file": 24,
+   "primo": "DEGENUSDT-1d-2024-11.zip",
+   "ultimo": "DEGENUSDT-1d-2026-10.zip"
+  },
+  "DEGOUSDT": {
+   "file": 23,
+   "primo": "DEGOUSDT-1d-2024-12.zip",
+   "ultimo": "DEGOUSDT-1d-2026-10.zip"
+  },
+  "DELLUSDT": {
+   "file": 5,
+   "primo": "DELLUSDT-1d-2026-06.zip",
+   "ultimo": "DELLUSDT-1d-2026-10.zip"
+  },
+  "DENTUSDT": {
+   "file": 59,
+   "primo": "DENTUSDT-1d-2021-12.zip",
+   "ultimo": "DENTUSDT-1d-2026-10.zip"
+  },
+  "DEXEUSDT": {
+   "file": 23,
+   "primo": "DEXEUSDT-1d-2024-12.zip",
+   "ultimo": "DEXEUSDT-1d-2026-10.zip"
+  },
+  "DFUSDT": {
+   "file": 23,
+   "primo": "DFUSDT-1d-2024-12.zip",
+   "ultimo": "DFUSDT-1d-2026-10.zip"
+  },
+  "DGBUSDT": {
+   "file": 59,
+   "primo": "DGBUSDT-1d-2021-12.zip",
+   "ultimo": "DGBUSDT-1d-2026-10.zip"
+  },
+  "DIAUSDT": {
+   "file": 25,
+   "primo": "DIAUSDT-1d-2024-10.zip",
+   "ultimo": "DIAUSDT-1d-2026-10.zip"
+  },
+  "DISUSDT": {
+   "file": 6,
+   "primo": "DISUSDT-1d-2026-05.zip",
+   "ultimo": "DISUSDT-1d-2026-10.zip"
+  },
+  "DJTUSDT": {
+   "file": 3,
+   "primo": "DJTUSDT-1d-2026-08.zip",
+   "ultimo": "DJTUSDT-1d-2026-10.zip"
+  },
+  "DKNGUSDT": {
+   "file": 5,
+   "primo": "DKNGUSDT-1d-2026-06.zip",
+   "ultimo": "DKNGUSDT-1d-2026-10.zip"
+  },
+  "DMCUSDT": {
+   "file": 17,
+   "primo": "DMCUSDT-1d-2025-06.zip",
+   "ultimo": "DMCUSDT-1d-2026-10.zip"
+  },
+  "DODOUSDT": {
+   "file": 6,
+   "primo": "DODOUSDT-1d-2021-12.zip",
+   "ultimo": "DODOUSDT-1d-2022-05.zip"
+  },
+  "DODOXUSDT": {
+   "file": 39,
+   "primo": "DODOXUSDT-1d-2023-08.zip",
+   "ultimo": "DODOXUSDT-1d-2026-10.zip"
+  },
+  "DOGEUSDT": {
+   "file": 59,
+   "primo": "DOGEUSDT-1d-2021-12.zip",
+   "ultimo": "DOGEUSDT-1d-2026-10.zip"
+  },
+  "DOGSUSDT": {
+   "file": 27,
+   "primo": "DOGSUSDT-1d-2024-08.zip",
+   "ultimo": "DOGSUSDT-1d-2026-10.zip"
+  },
+  "DOLOUSDT": {
+   "file": 18,
+   "primo": "DOLOUSDT-1d-2025-05.zip",
+   "ultimo": "DOLOUSDT-1d-2026-10.zip"
+  },
+  "DOODUSDT": {
+   "file": 18,
+   "primo": "DOODUSDT-1d-2025-05.zip",
+   "ultimo": "DOODUSDT-1d-2026-10.zip"
+  },
+  "DOSUSDT": {
+   "file": 3,
+   "primo": "DOSUSDT-1d-2026-08.zip",
+   "ultimo": "DOSUSDT-1d-2026-10.zip"
+  },
+  "DOTUSDT": {
+   "file": 59,
+   "primo": "DOTUSDT-1d-2021-12.zip",
+   "ultimo": "DOTUSDT-1d-2026-10.zip"
+  },
+  "DRAMUSDT": {
+   "file": 6,
+   "primo": "DRAMUSDT-1d-2026-05.zip",
+   "ultimo": "DRAMUSDT-1d-2026-10.zip"
+  },
+  "DRIFTUSDT": {
+   "file": 24,
+   "primo": "DRIFTUSDT-1d-2024-11.zip",
+   "ultimo": "DRIFTUSDT-1d-2026-10.zip"
+  },
+  "DUSDT": {
+   "file": 22,
+   "primo": "DUSDT-1d-2025-01.zip",
+   "ultimo": "DUSDT-1d-2026-10.zip"
+  },
+  "DUSKUSDT": {
+   "file": 58,
+   "primo": "DUSKUSDT-1d-2022-01.zip",
+   "ultimo": "DUSKUSDT-1d-2026-10.zip"
+  },
+  "DYDXUSDT": {
+   "file": 59,
+   "primo": "DYDXUSDT-1d-2021-12.zip",
+   "ultimo": "DYDXUSDT-1d-2026-10.zip"
+  },
+  "DYMUSDT": {
+   "file": 33,
+   "primo": "DYMUSDT-1d-2024-02.zip",
+   "ultimo": "DYMUSDT-1d-2026-10.zip"
+  },
+  "EBAYUSDT": {
+   "file": 5,
+   "primo": "EBAYUSDT-1d-2026-06.zip",
+   "ultimo": "EBAYUSDT-1d-2026-10.zip"
+  },
+  "EDENUSDT": {
+   "file": 14,
+   "primo": "EDENUSDT-1d-2025-09.zip",
+   "ultimo": "EDENUSDT-1d-2026-10.zip"
+  },
+  "EDGEUSDT": {
+   "file": 8,
+   "primo": "EDGEUSDT-1d-2026-03.zip",
+   "ultimo": "EDGEUSDT-1d-2026-10.zip"
+  },
+  "EDUUSDT": {
+   "file": 43,
+   "primo": "EDUUSDT-1d-2023-04.zip",
+   "ultimo": "EDUUSDT-1d-2026-10.zip"
+  },
+  "EGLDUSDT": {
+   "file": 59,
+   "primo": "EGLDUSDT-1d-2021-12.zip",
+   "ultimo": "EGLDUSDT-1d-2026-10.zip"
+  },
+  "EIDOUSDT": {
+   "file": 1,
+   "primo": "EIDOUSDT-1d-2026-10.zip",
+   "ultimo": "EIDOUSDT-1d-2026-10.zip"
+  },
+  "EIGENUSDT": {
+   "file": 25,
+   "primo": "EIGENUSDT-1d-2024-10.zip",
+   "ultimo": "EIGENUSDT-1d-2026-10.zip"
+  },
+  "ELSAUSDT": {
+   "file": 10,
+   "primo": "ELSAUSDT-1d-2026-01.zip",
+   "ultimo": "ELSAUSDT-1d-2026-10.zip"
+  },
+  "ENAUSDT": {
+   "file": 31,
+   "primo": "ENAUSDT-1d-2024-04.zip",
+   "ultimo": "ENAUSDT-1d-2026-10.zip"
+  },
+  "ENJUSDT": {
+   "file": 59,
+   "primo": "ENJUSDT-1d-2021-12.zip",
+   "ultimo": "ENJUSDT-1d-2026-10.zip"
+  },
+  "ENSOUSDT": {
+   "file": 13,
+   "primo": "ENSOUSDT-1d-2025-10.zip",
+   "ultimo": "ENSOUSDT-1d-2026-10.zip"
+  },
+  "ENSUSDT": {
+   "file": 59,
+   "primo": "ENSUSDT-1d-2021-12.zip",
+   "ultimo": "ENSUSDT-1d-2026-10.zip"
+  },
+  "EOSUSDT": {
+   "file": 42,
+   "primo": "EOSUSDT-1d-2021-12.zip",
+   "ultimo": "EOSUSDT-1d-2025-05.zip"
+  },
+  "EPICUSDT": {
+   "file": 20,
+   "primo": "EPICUSDT-1d-2025-03.zip",
+   "ultimo": "EPICUSDT-1d-2026-10.zip"
+  },
+  "EPTUSDT": {
+   "file": 19,
+   "primo": "EPTUSDT-1d-2025-04.zip",
+   "ultimo": "EPTUSDT-1d-2026-10.zip"
+  },
+  "EQTUSDT": {
+   "file": 1,
+   "primo": "EQTUSDT-1d-2026-10.zip",
+   "ultimo": "EQTUSDT-1d-2026-10.zip"
+  },
+  "ERAUSDT": {
+   "file": 16,
+   "primo": "ERAUSDT-1d-2025-07.zip",
+   "ultimo": "ERAUSDT-1d-2026-10.zip"
+  },
+  "ESPORTSUSDT": {
+   "file": 16,
+   "primo": "ESPORTSUSDT-1d-2025-07.zip",
+   "ultimo": "ESPORTSUSDT-1d-2026-10.zip"
+  },
+  "ESPUSDT": {
+   "file": 9,
+   "primo": "ESPUSDT-1d-2026-02.zip",
+   "ultimo": "ESPUSDT-1d-2026-10.zip"
+  },
+  "ETCUSDT": {
+   "file": 59,
+   "primo": "ETCUSDT-1d-2021-12.zip",
+   "ultimo": "ETCUSDT-1d-2026-10.zip"
+  },
+  "ETHFIUSDT": {
+   "file": 32,
+   "primo": "ETHFIUSDT-1d-2024-03.zip",
+   "ultimo": "ETHFIUSDT-1d-2026-10.zip"
+  },
+  "ETHUSDT": {
+   "file": 59,
+   "primo": "ETHUSDT-1d-2021-12.zip",
+   "ultimo": "ETHUSDT-1d-2026-10.zip"
+  },
+  "ETHWUSDT": {
+   "file": 36,
+   "primo": "ETHWUSDT-1d-2023-11.zip",
+   "ultimo": "ETHWUSDT-1d-2026-10.zip"
+  },
+  "EULUSDT": {
+   "file": 13,
+   "primo": "EULUSDT-1d-2025-10.zip",
+   "ultimo": "EULUSDT-1d-2026-10.zip"
+  },
+  "EVAAUSDT": {
+   "file": 13,
+   "primo": "EVAAUSDT-1d-2025-10.zip",
+   "ultimo": "EVAAUSDT-1d-2026-10.zip"
+  },
+  "EWJUSDT": {
+   "file": 8,
+   "primo": "EWJUSDT-1d-2026-03.zip",
+   "ultimo": "EWJUSDT-1d-2026-10.zip"
+  },
+  "EWTUSDT": {
+   "file": 5,
+   "primo": "EWTUSDT-1d-2026-06.zip",
+   "ultimo": "EWTUSDT-1d-2026-10.zip"
+  },
+  "EWYUSDT": {
+   "file": 8,
+   "primo": "EWYUSDT-1d-2026-03.zip",
+   "ultimo": "EWYUSDT-1d-2026-10.zip"
+  },
+  "EWZSUSDT": {
+   "file": 1,
+   "primo": "EWZSUSDT-1d-2026-10.zip",
+   "ultimo": "EWZSUSDT-1d-2026-10.zip"
+  },
+  "EWZUSDT": {
+   "file": 5,
+   "primo": "EWZUSDT-1d-2026-06.zip",
+   "ultimo": "EWZUSDT-1d-2026-10.zip"
+  },
+  "FARTCOINUSDT": {
+   "file": 23,
+   "primo": "FARTCOINUSDT-1d-2024-12.zip",
+   "ultimo": "FARTCOINUSDT-1d-2026-10.zip"
+  },
+  "FETUSDT": {
+   "file": 46,
+   "primo": "FETUSDT-1d-2023-01.zip",
+   "ultimo": "FETUSDT-1d-2026-10.zip"
+  },
+  "FFUSDT": {
+   "file": 14,
+   "primo": "FFUSDT-1d-2025-09.zip",
+   "ultimo": "FFUSDT-1d-2026-10.zip"
+  },
+  "FHEUSDT": {
+   "file": 19,
+   "primo": "FHEUSDT-1d-2025-04.zip",
+   "ultimo": "FHEUSDT-1d-2026-10.zip"
+  },
+  "FIDAUSDT": {
+   "file": 26,
+   "primo": "FIDAUSDT-1d-2024-09.zip",
+   "ultimo": "FIDAUSDT-1d-2026-10.zip"
+  },
+  "FIGHTUSDT": {
+   "file": 10,
+   "primo": "FIGHTUSDT-1d-2026-01.zip",
+   "ultimo": "FIGHTUSDT-1d-2026-10.zip"
+  },
+  "FILUSDT": {
+   "file": 59,
+   "primo": "FILUSDT-1d-2021-12.zip",
+   "ultimo": "FILUSDT-1d-2026-10.zip"
+  },
+  "FIOUSDT": {
+   "file": 26,
+   "primo": "FIOUSDT-1d-2024-09.zip",
+   "ultimo": "FIOUSDT-1d-2026-10.zip"
+  },
+  "FISUSDT": {
+   "file": 19,
+   "primo": "FISUSDT-1d-2025-04.zip",
+   "ultimo": "FISUSDT-1d-2026-10.zip"
+  },
+  "FLEXUSDT": {
+   "file": 4,
+   "primo": "FLEXUSDT-1d-2026-07.zip",
+   "ultimo": "FLEXUSDT-1d-2026-10.zip"
+  },
+  "FLMUSDT": {
+   "file": 59,
+   "primo": "FLMUSDT-1d-2021-12.zip",
+   "ultimo": "FLMUSDT-1d-2026-10.zip"
+  },
+  "FLNCUSDT": {
+   "file": 6,
+   "primo": "FLNCUSDT-1d-2026-05.zip",
+   "ultimo": "FLNCUSDT-1d-2026-10.zip"
+  },
+  "FLOCKUSDT": {
+   "file": 14,
+   "primo": "FLOCKUSDT-1d-2025-09.zip",
+   "ultimo": "FLOCKUSDT-1d-2026-10.zip"
+  },
+  "FLOWUSDT": {
+   "file": 57,
+   "primo": "FLOWUSDT-1d-2022-02.zip",
+   "ultimo": "FLOWUSDT-1d-2026-10.zip"
+  },
+  "FLUIDUSDT": {
+   "file": 14,
+   "primo": "FLUIDUSDT-1d-2025-09.zip",
+   "ultimo": "FLUIDUSDT-1d-2026-10.zip"
+  },
+  "FLUXUSDT": {
+   "file": 26,
+   "primo": "FLUXUSDT-1d-2024-09.zip",
+   "ultimo": "FLUXUSDT-1d-2026-10.zip"
+  },
+  "FOGOUSDT": {
+   "file": 10,
+   "primo": "FOGOUSDT-1d-2026-01.zip",
+   "ultimo": "FOGOUSDT-1d-2026-10.zip"
+  },
+  "FOLKSUSDT": {
+   "file": 12,
+   "primo": "FOLKSUSDT-1d-2025-11.zip",
+   "ultimo": "FOLKSUSDT-1d-2026-10.zip"
+  },
+  "FOOTBALLUSDT": {
+   "file": 21,
+   "primo": "FOOTBALLUSDT-1d-2022-09.zip",
+   "ultimo": "FOOTBALLUSDT-1d-2024-05.zip"
+  },
+  "FORMUSDT": {
+   "file": 20,
+   "primo": "FORMUSDT-1d-2025-03.zip",
+   "ultimo": "FORMUSDT-1d-2026-10.zip"
+  },
+  "FORTHUSDT": {
+   "file": 19,
+   "primo": "FORTHUSDT-1d-2025-04.zip",
+   "ultimo": "FORTHUSDT-1d-2026-10.zip"
+  },
+  "FRAXUSDT": {
+   "file": 10,
+   "primo": "FRAXUSDT-1d-2026-01.zip",
+   "ultimo": "FRAXUSDT-1d-2026-10.zip"
+  },
+  "FRONTUSDT": {
+   "file": 13,
+   "primo": "FRONTUSDT-1d-2023-09.zip",
+   "ultimo": "FRONTUSDT-1d-2024-09.zip"
+  },
+  "FTMUSDT": {
+   "file": 59,
+   "primo": "FTMUSDT-1d-2021-12.zip",
+   "ultimo": "FTMUSDT-1d-2026-10.zip"
+  },
+  "FTTUSDT": {
+   "file": 55,
+   "primo": "FTTUSDT-1d-2022-04.zip",
+   "ultimo": "FTTUSDT-1d-2026-10.zip"
+  },
+  "FUNUSDT": {
+   "file": 20,
+   "primo": "FUNUSDT-1d-2025-03.zip",
+   "ultimo": "FUNUSDT-1d-2026-10.zip"
+  },
+  "FUSDT": {
+   "file": 17,
+   "primo": "FUSDT-1d-2025-06.zip",
+   "ultimo": "FUSDT-1d-2026-10.zip"
+  },
+  "FWDIUSDT": {
+   "file": 4,
+   "primo": "FWDIUSDT-1d-2026-07.zip",
+   "ultimo": "FWDIUSDT-1d-2026-10.zip"
+  },
+  "FXSUSDT": {
+   "file": 46,
+   "primo": "FXSUSDT-1d-2023-01.zip",
+   "ultimo": "FXSUSDT-1d-2026-10.zip"
+  },
+  "GALAUSDT": {
+   "file": 59,
+   "primo": "GALAUSDT-1d-2021-12.zip",
+   "ultimo": "GALAUSDT-1d-2026-10.zip"
+  },
+  "GALUSDT": {
+   "file": 27,
+   "primo": "GALUSDT-1d-2022-05.zip",
+   "ultimo": "GALUSDT-1d-2024-07.zip"
+  },
+  "GASUSDT": {
+   "file": 37,
+   "primo": "GASUSDT-1d-2023-10.zip",
+   "ultimo": "GASUSDT-1d-2026-10.zip"
+  },
+  "GDXUSDT": {
+   "file": 3,
+   "primo": "GDXUSDT-1d-2026-08.zip",
+   "ultimo": "GDXUSDT-1d-2026-10.zip"
+  },
+  "GENIUSUSDT": {
+   "file": 7,
+   "primo": "GENIUSUSDT-1d-2026-04.zip",
+   "ultimo": "GENIUSUSDT-1d-2026-10.zip"
+  },
+  "GEVUSDT": {
+   "file": 4,
+   "primo": "GEVUSDT-1d-2026-07.zip",
+   "ultimo": "GEVUSDT-1d-2026-10.zip"
+  },
+  "GHSTUSDT": {
+   "file": 26,
+   "primo": "GHSTUSDT-1d-2024-09.zip",
+   "ultimo": "GHSTUSDT-1d-2026-10.zip"
+  },
+  "GIGADEVUSDT": {
+   "file": 3,
+   "primo": "GIGADEVUSDT-1d-2026-08.zip",
+   "ultimo": "GIGADEVUSDT-1d-2026-10.zip"
+  },
+  "GIGGLEUSDT": {
+   "file": 13,
+   "primo": "GIGGLEUSDT-1d-2025-10.zip",
+   "ultimo": "GIGGLEUSDT-1d-2026-10.zip"
+  },
+  "GLMRUSDT": {
+   "file": 38,
+   "primo": "GLMRUSDT-1d-2023-09.zip",
+   "ultimo": "GLMRUSDT-1d-2026-10.zip"
+  },
+  "GLMUSDT": {
+   "file": 33,
+   "primo": "GLMUSDT-1d-2024-02.zip",
+   "ultimo": "GLMUSDT-1d-2026-10.zip"
+  },
+  "GLWUSDT": {
+   "file": 5,
+   "primo": "GLWUSDT-1d-2026-06.zip",
+   "ultimo": "GLWUSDT-1d-2026-10.zip"
+  },
+  "GMEUSDT": {
+   "file": 5,
+   "primo": "GMEUSDT-1d-2026-06.zip",
+   "ultimo": "GMEUSDT-1d-2026-10.zip"
+  },
+  "GMTUSDT": {
+   "file": 56,
+   "primo": "GMTUSDT-1d-2022-03.zip",
+   "ultimo": "GMTUSDT-1d-2026-10.zip"
+  },
+  "GMXUSDT": {
+   "file": 45,
+   "primo": "GMXUSDT-1d-2023-02.zip",
+   "ultimo": "GMXUSDT-1d-2026-10.zip"
+  },
+  "GOATUSDT": {
+   "file": 25,
+   "primo": "GOATUSDT-1d-2024-10.zip",
+   "ultimo": "GOATUSDT-1d-2026-10.zip"
+  },
+  "GOOGLUSDT": {
+   "file": 8,
+   "primo": "GOOGLUSDT-1d-2026-03.zip",
+   "ultimo": "GOOGLUSDT-1d-2026-10.zip"
+  },
+  "GPROUSDT": {
+   "file": 2,
+   "primo": "GPROUSDT-1d-2026-09.zip",
+   "ultimo": "GPROUSDT-1d-2026-10.zip"
+  },
+  "GPSUSDT": {
+   "file": 21,
+   "primo": "GPSUSDT-1d-2025-02.zip",
+   "ultimo": "GPSUSDT-1d-2026-10.zip"
+  },
+  "GRAMUSDT": {
+   "file": 4,
+   "primo": "GRAMUSDT-1d-2026-07.zip",
+   "ultimo": "GRAMUSDT-1d-2026-10.zip"
+  },
+  "GRASSUSDT": {
+   "file": 24,
+   "primo": "GRASSUSDT-1d-2024-11.zip",
+   "ultimo": "GRASSUSDT-1d-2026-10.zip"
+  },
+  "GRIFFAINUSDT": {
+   "file": 22,
+   "primo": "GRIFFAINUSDT-1d-2025-01.zip",
+   "ultimo": "GRIFFAINUSDT-1d-2026-10.zip"
+  },
+  "GRTUSDT": {
+   "file": 59,
+   "primo": "GRTUSDT-1d-2021-12.zip",
+   "ultimo": "GRTUSDT-1d-2026-10.zip"
+  },
+  "GRVTUSDT": {
+   "file": 4,
+   "primo": "GRVTUSDT-1d-2026-07.zip",
+   "ultimo": "GRVTUSDT-1d-2026-10.zip"
+  },
+  "GSUSDT": {
+   "file": 4,
+   "primo": "GSUSDT-1d-2026-07.zip",
+   "ultimo": "GSUSDT-1d-2026-10.zip"
+  },
+  "GTCUSDT": {
+   "file": 59,
+   "primo": "GTCUSDT-1d-2021-12.zip",
+   "ultimo": "GTCUSDT-1d-2026-10.zip"
+  },
+  "GTLBUSDT": {
+   "file": 2,
+   "primo": "GTLBUSDT-1d-2026-09.zip",
+   "ultimo": "GTLBUSDT-1d-2026-10.zip"
+  },
+  "GUAUSDT": {
+   "file": 11,
+   "primo": "GUAUSDT-1d-2025-12.zip",
+   "ultimo": "GUAUSDT-1d-2026-10.zip"
+  },
+  "GUNUSDT": {
+   "file": 20,
+   "primo": "GUNUSDT-1d-2025-03.zip",
+   "ultimo": "GUNUSDT-1d-2026-10.zip"
+  },
+  "GUSDT": {
+   "file": 27,
+   "primo": "GUSDT-1d-2024-08.zip",
+   "ultimo": "GUSDT-1d-2026-10.zip"
+  },
+  "GWEIUSDT": {
+   "file": 10,
+   "primo": "GWEIUSDT-1d-2026-01.zip",
+   "ultimo": "GWEIUSDT-1d-2026-10.zip"
+  },
+  "HAEDALUSDT": {
+   "file": 18,
+   "primo": "HAEDALUSDT-1d-2025-05.zip",
+   "ultimo": "HAEDALUSDT-1d-2026-10.zip"
+  },
+  "HANAUSDT": {
+   "file": 14,
+   "primo": "HANAUSDT-1d-2025-09.zip",
+   "ultimo": "HANAUSDT-1d-2026-10.zip"
+  },
+  "HANMIUSDT": {
+   "file": 3,
+   "primo": "HANMIUSDT-1d-2026-08.zip",
+   "ultimo": "HANMIUSDT-1d-2026-10.zip"
+  },
+  "HBARUSDT": {
+   "file": 59,
+   "primo": "HBARUSDT-1d-2021-12.zip",
+   "ultimo": "HBARUSDT-1d-2026-10.zip"
+  },
+  "HDUSDT": {
+   "file": 6,
+   "primo": "HDUSDT-1d-2026-05.zip",
+   "ultimo": "HDUSDT-1d-2026-10.zip"
+  },
+  "HEIUSDT": {
+   "file": 21,
+   "primo": "HEIUSDT-1d-2025-02.zip",
+   "ultimo": "HEIUSDT-1d-2026-10.zip"
+  },
+  "HEMIUSDT": {
+   "file": 15,
+   "primo": "HEMIUSDT-1d-2025-08.zip",
+   "ultimo": "HEMIUSDT-1d-2026-10.zip"
+  },
+  "HFTUSDT": {
+   "file": 43,
+   "primo": "HFTUSDT-1d-2023-04.zip",
+   "ultimo": "HFTUSDT-1d-2026-10.zip"
+  },
+  "HIFIUSDT": {
+   "file": 38,
+   "primo": "HIFIUSDT-1d-2023-09.zip",
+   "ultimo": "HIFIUSDT-1d-2026-10.zip"
+  },
+  "HIGHUSDT": {
+   "file": 45,
+   "primo": "HIGHUSDT-1d-2023-02.zip",
+   "ultimo": "HIGHUSDT-1d-2026-10.zip"
+  },
+  "HIMSUSDT": {
+   "file": 5,
+   "primo": "HIMSUSDT-1d-2026-06.zip",
+   "ultimo": "HIMSUSDT-1d-2026-10.zip"
+  },
+  "HIPPOUSDT": {
+   "file": 24,
+   "primo": "HIPPOUSDT-1d-2024-11.zip",
+   "ultimo": "HIPPOUSDT-1d-2026-10.zip"
+  },
+  "HIVEUSDT": {
+   "file": 23,
+   "primo": "HIVEUSDT-1d-2024-12.zip",
+   "ultimo": "HIVEUSDT-1d-2026-10.zip"
+  },
+  "HK0625USDT": {
+   "file": 2,
+   "primo": "HK0625USDT-1d-2026-09.zip",
+   "ultimo": "HK0625USDT-1d-2026-10.zip"
+  },
+  "HK0700USDT": {
+   "file": 4,
+   "primo": "HK0700USDT-1d-2026-07.zip",
+   "ultimo": "HK0700USDT-1d-2026-10.zip"
+  },
+  "HK0992USDT": {
+   "file": 2,
+   "primo": "HK0992USDT-1d-2026-09.zip",
+   "ultimo": "HK0992USDT-1d-2026-10.zip"
+  },
+  "HK1810USDT": {
+   "file": 4,
+   "primo": "HK1810USDT-1d-2026-07.zip",
+   "ultimo": "HK1810USDT-1d-2026-10.zip"
+  },
+  "HMSTRUSDT": {
+   "file": 26,
+   "primo": "HMSTRUSDT-1d-2024-09.zip",
+   "ultimo": "HMSTRUSDT-1d-2026-10.zip"
+  },
+  "HNTUSDT": {
+   "file": 30,
+   "primo": "HNTUSDT-1d-2021-12.zip",
+   "ultimo": "HNTUSDT-1d-2024-05.zip"
+  },
+  "HOLOUSDT": {
+   "file": 14,
+   "primo": "HOLOUSDT-1d-2025-09.zip",
+   "ultimo": "HOLOUSDT-1d-2026-10.zip"
+  },
+  "HOMEUSDT": {
+   "file": 17,
+   "primo": "HOMEUSDT-1d-2025-06.zip",
+   "ultimo": "HOMEUSDT-1d-2026-10.zip"
+  },
+  "HOODUSDT": {
+   "file": 9,
+   "primo": "HOODUSDT-1d-2026-02.zip",
+   "ultimo": "HOODUSDT-1d-2026-10.zip"
+  },
+  "HOOKUSDT": {
+   "file": 46,
+   "primo": "HOOKUSDT-1d-2023-01.zip",
+   "ultimo": "HOOKUSDT-1d-2026-10.zip"
+  },
+  "HOTUSDT": {
+   "file": 59,
+   "primo": "HOTUSDT-1d-2021-12.zip",
+   "ultimo": "HOTUSDT-1d-2026-10.zip"
+  },
+  "HPEUSDT": {
+   "file": 5,
+   "primo": "HPEUSDT-1d-2026-06.zip",
+   "ultimo": "HPEUSDT-1d-2026-10.zip"
+  },
+  "HUMAUSDT": {
+   "file": 18,
+   "primo": "HUMAUSDT-1d-2025-05.zip",
+   "ultimo": "HUMAUSDT-1d-2026-10.zip"
+  },
+  "HUSDT": {
+   "file": 17,
+   "primo": "HUSDT-1d-2025-06.zip",
+   "ultimo": "HUSDT-1d-2026-10.zip"
+  },
+  "HUTUSDT": {
+   "file": 2,
+   "primo": "HUTUSDT-1d-2026-09.zip",
+   "ultimo": "HUTUSDT-1d-2026-10.zip"
+  },
+  "HYPERUSDT": {
+   "file": 19,
+   "primo": "HYPERUSDT-1d-2025-04.zip",
+   "ultimo": "HYPERUSDT-1d-2026-10.zip"
+  },
+  "HYPEUSDT": {
+   "file": 18,
+   "primo": "HYPEUSDT-1d-2025-05.zip",
+   "ultimo": "HYPEUSDT-1d-2026-10.zip"
+  },
+  "HYUNDAIUSDT": {
+   "file": 5,
+   "primo": "HYUNDAIUSDT-1d-2026-06.zip",
+   "ultimo": "HYUNDAIUSDT-1d-2026-10.zip"
+  },
+  "IBKRUSDT": {
+   "file": 1,
+   "primo": "IBKRUSDT-1d-2026-10.zip",
+   "ultimo": "IBKRUSDT-1d-2026-10.zip"
+  },
+  "IBMUSDT": {
+   "file": 5,
+   "primo": "IBMUSDT-1d-2026-06.zip",
+   "ultimo": "IBMUSDT-1d-2026-10.zip"
+  },
+  "ICNTUSDT": {
+   "file": 16,
+   "primo": "ICNTUSDT-1d-2025-07.zip",
+   "ultimo": "ICNTUSDT-1d-2026-10.zip"
+  },
+  "ICPUSDT": {
+   "file": 59,
+   "primo": "ICPUSDT-1d-2021-12.zip",
+   "ultimo": "ICPUSDT-1d-2026-10.zip"
+  },
+  "ICXUSDT": {
+   "file": 59,
+   "primo": "ICXUSDT-1d-2021-12.zip",
+   "ultimo": "ICXUSDT-1d-2026-10.zip"
+  },
+  "IDEXUSDT": {
+   "file": 42,
+   "primo": "IDEXUSDT-1d-2023-05.zip",
+   "ultimo": "IDEXUSDT-1d-2026-10.zip"
+  },
+  "IDOLUSDT": {
+   "file": 16,
+   "primo": "IDOLUSDT-1d-2025-07.zip",
+   "ultimo": "IDOLUSDT-1d-2026-10.zip"
+  },
+  "IDUSDT": {
+   "file": 44,
+   "primo": "IDUSDT-1d-2023-03.zip",
+   "ultimo": "IDUSDT-1d-2026-10.zip"
+  },
+  "ILVUSDT": {
+   "file": 36,
+   "primo": "ILVUSDT-1d-2023-11.zip",
+   "ultimo": "ILVUSDT-1d-2026-10.zip"
+  },
+  "IMXUSDT": {
+   "file": 57,
+   "primo": "IMXUSDT-1d-2022-02.zip",
+   "ultimo": "IMXUSDT-1d-2026-10.zip"
+  },
+  "INITUSDT": {
+   "file": 19,
+   "primo": "INITUSDT-1d-2025-04.zip",
+   "ultimo": "INITUSDT-1d-2026-10.zip"
+  },
+  "INJUSDT": {
+   "file": 51,
+   "primo": "INJUSDT-1d-2022-08.zip",
+   "ultimo": "INJUSDT-1d-2026-10.zip"
+  },
+  "INTCUSDT": {
+   "file": 9,
+   "primo": "INTCUSDT-1d-2026-02.zip",
+   "ultimo": "INTCUSDT-1d-2026-10.zip"
+  },
+  "INTWUSDT": {
+   "file": 4,
+   "primo": "INTWUSDT-1d-2026-07.zip",
+   "ultimo": "INTWUSDT-1d-2026-10.zip"
+  },
+  "INUSDT": {
+   "file": 15,
+   "primo": "INUSDT-1d-2025-08.zip",
+   "ultimo": "INUSDT-1d-2026-10.zip"
+  },
+  "INXUSDT": {
+   "file": 10,
+   "primo": "INXUSDT-1d-2026-01.zip",
+   "ultimo": "INXUSDT-1d-2026-10.zip"
+  },
+  "IONQUSDT": {
+   "file": 3,
+   "primo": "IONQUSDT-1d-2026-08.zip",
+   "ultimo": "IONQUSDT-1d-2026-10.zip"
+  },
+  "IOSTUSDT": {
+   "file": 59,
+   "primo": "IOSTUSDT-1d-2021-12.zip",
+   "ultimo": "IOSTUSDT-1d-2026-10.zip"
+  },
+  "IOTAUSDT": {
+   "file": 59,
+   "primo": "IOTAUSDT-1d-2021-12.zip",
+   "ultimo": "IOTAUSDT-1d-2026-10.zip"
+  },
+  "IOTXUSDT": {
+   "file": 59,
+   "primo": "IOTXUSDT-1d-2021-12.zip",
+   "ultimo": "IOTXUSDT-1d-2026-10.zip"
+  },
+  "IOUSDT": {
+   "file": 29,
+   "primo": "IOUSDT-1d-2024-06.zip",
+   "ultimo": "IOUSDT-1d-2026-10.zip"
+  },
+  "IPUSDT": {
+   "file": 21,
+   "primo": "IPUSDT-1d-2025-02.zip",
+   "ultimo": "IPUSDT-1d-2026-10.zip"
+  },
+  "IRENUSDT": {
+   "file": 5,
+   "primo": "IRENUSDT-1d-2026-06.zip",
+   "ultimo": "IRENUSDT-1d-2026-10.zip"
+  },
+  "IRUSDT": {
+   "file": 11,
+   "primo": "IRUSDT-1d-2025-12.zip",
+   "ultimo": "IRUSDT-1d-2026-10.zip"
+  },
+  "IRYSUSDT": {
+   "file": 12,
+   "primo": "IRYSUSDT-1d-2025-11.zip",
+   "ultimo": "IRYSUSDT-1d-2026-10.zip"
+  },
+  "IWMUSDT": {
+   "file": 5,
+   "primo": "IWMUSDT-1d-2026-06.zip",
+   "ultimo": "IWMUSDT-1d-2026-10.zip"
+  },
+  "JASMYUSDT": {
+   "file": 55,
+   "primo": "JASMYUSDT-1d-2022-04.zip",
+   "ultimo": "JASMYUSDT-1d-2026-10.zip"
+  },
+  "JCTUSDT": {
+   "file": 12,
+   "primo": "JCTUSDT-1d-2025-11.zip",
+   "ultimo": "JCTUSDT-1d-2026-10.zip"
+  },
+  "JELLYJELLYUSDT": {
+   "file": 20,
+   "primo": "JELLYJELLYUSDT-1d-2025-03.zip",
+   "ultimo": "JELLYJELLYUSDT-1d-2026-10.zip"
+  },
+  "JOEUSDT": {
+   "file": 44,
+   "primo": "JOEUSDT-1d-2023-03.zip",
+   "ultimo": "JOEUSDT-1d-2026-10.zip"
+  },
+  "JPMUSDT": {
+   "file": 6,
+   "primo": "JPMUSDT-1d-2026-05.zip",
+   "ultimo": "JPMUSDT-1d-2026-10.zip"
+  },
+  "JSTUSDT": {
+   "file": 19,
+   "primo": "JSTUSDT-1d-2025-04.zip",
+   "ultimo": "JSTUSDT-1d-2026-10.zip"
+  },
+  "JTOUSDT": {
+   "file": 35,
+   "primo": "JTOUSDT-1d-2023-12.zip",
+   "ultimo": "JTOUSDT-1d-2026-10.zip"
+  },
+  "JUPUSDT": {
+   "file": 34,
+   "primo": "JUPUSDT-1d-2024-01.zip",
+   "ultimo": "JUPUSDT-1d-2026-10.zip"
+  },
+  "KAIAUSDT": {
+   "file": 23,
+   "primo": "KAIAUSDT-1d-2024-12.zip",
+   "ultimo": "KAIAUSDT-1d-2026-10.zip"
+  },
+  "KAITOUSDT": {
+   "file": 21,
+   "primo": "KAITOUSDT-1d-2025-02.zip",
+   "ultimo": "KAITOUSDT-1d-2026-10.zip"
+  },
+  "KASUSDT": {
+   "file": 36,
+   "primo": "KASUSDT-1d-2023-11.zip",
+   "ultimo": "KASUSDT-1d-2026-10.zip"
+  },
+  "KATUSDT": {
+   "file": 8,
+   "primo": "KATUSDT-1d-2026-03.zip",
+   "ultimo": "KATUSDT-1d-2026-10.zip"
+  },
+  "KAVAUSDT": {
+   "file": 59,
+   "primo": "KAVAUSDT-1d-2021-12.zip",
+   "ultimo": "KAVAUSDT-1d-2026-10.zip"
+  },
+  "KDAUSDT": {
+   "file": 26,
+   "primo": "KDAUSDT-1d-2024-09.zip",
+   "ultimo": "KDAUSDT-1d-2026-10.zip"
+  },
+  "KEEPUSDT": {
+   "file": 3,
+   "primo": "KEEPUSDT-1d-2021-12.zip",
+   "ultimo": "KEEPUSDT-1d-2022-02.zip"
+  },
+  "KERNELUSDT": {
+   "file": 19,
+   "primo": "KERNELUSDT-1d-2025-04.zip",
+   "ultimo": "KERNELUSDT-1d-2026-10.zip"
+  },
+  "KEYUSDT": {
+   "file": 42,
+   "primo": "KEYUSDT-1d-2023-05.zip",
+   "ultimo": "KEYUSDT-1d-2026-10.zip"
+  },
+  "KGENUSDT": {
+   "file": 13,
+   "primo": "KGENUSDT-1d-2025-10.zip",
+   "ultimo": "KGENUSDT-1d-2026-10.zip"
+  },
+  "KITEUSDT": {
+   "file": 13,
+   "primo": "KITEUSDT-1d-2025-10.zip",
+   "ultimo": "KITEUSDT-1d-2026-10.zip"
+  },
+  "KLACUSDT": {
+   "file": 5,
+   "primo": "KLACUSDT-1d-2026-06.zip",
+   "ultimo": "KLACUSDT-1d-2026-10.zip"
+  },
+  "KLAYUSDT": {
+   "file": 59,
+   "primo": "KLAYUSDT-1d-2021-12.zip",
+   "ultimo": "KLAYUSDT-1d-2026-10.zip"
+  },
+  "KMNOUSDT": {
+   "file": 23,
+   "primo": "KMNOUSDT-1d-2024-12.zip",
+   "ultimo": "KMNOUSDT-1d-2026-10.zip"
+  },
+  "KNCUSDT": {
+   "file": 59,
+   "primo": "KNCUSDT-1d-2021-12.zip",
+   "ultimo": "KNCUSDT-1d-2026-10.zip"
+  },
+  "KODEX200USDT": {
+   "file": 3,
+   "primo": "KODEX200USDT-1d-2026-08.zip",
+   "ultimo": "KODEX200USDT-1d-2026-10.zip"
+  },
+  "KOMAUSDT": {
+   "file": 23,
+   "primo": "KOMAUSDT-1d-2024-12.zip",
+   "ultimo": "KOMAUSDT-1d-2026-10.zip"
+  },
+  "KORUUSDT": {
+   "file": 5,
+   "primo": "KORUUSDT-1d-2026-06.zip",
+   "ultimo": "KORUUSDT-1d-2026-10.zip"
+  },
+  "KOUSDT": {
+   "file": 3,
+   "primo": "KOUSDT-1d-2026-08.zip",
+   "ultimo": "KOUSDT-1d-2026-10.zip"
+  },
+  "KSMUSDT": {
+   "file": 59,
+   "primo": "KSMUSDT-1d-2021-12.zip",
+   "ultimo": "KSMUSDT-1d-2026-10.zip"
+  },
+  "KSTRUSDT": {
+   "file": 4,
+   "primo": "KSTRUSDT-1d-2026-07.zip",
+   "ultimo": "KSTRUSDT-1d-2026-10.zip"
+  },
+  "KUAISHOUUSDT": {
+   "file": 3,
+   "primo": "KUAISHOUUSDT-1d-2026-08.zip",
+   "ultimo": "KUAISHOUUSDT-1d-2026-10.zip"
+  },
+  "LABUSDT": {
+   "file": 13,
+   "primo": "LABUSDT-1d-2025-10.zip",
+   "ultimo": "LABUSDT-1d-2026-10.zip"
+  },
+  "LAUSDT": {
+   "file": 17,
+   "primo": "LAUSDT-1d-2025-06.zip",
+   "ultimo": "LAUSDT-1d-2026-10.zip"
+  },
+  "LAYERUSDT": {
+   "file": 21,
+   "primo": "LAYERUSDT-1d-2025-02.zip",
+   "ultimo": "LAYERUSDT-1d-2026-10.zip"
+  },
+  "LDOUSDT": {
+   "file": 50,
+   "primo": "LDOUSDT-1d-2022-09.zip",
+   "ultimo": "LDOUSDT-1d-2026-10.zip"
+  },
+  "LEVERUSDT": {
+   "file": 44,
+   "primo": "LEVERUSDT-1d-2023-03.zip",
+   "ultimo": "LEVERUSDT-1d-2026-10.zip"
+  },
+  "LGELECTRONICSUSDT": {
+   "file": 3,
+   "primo": "LGELECTRONICSUSDT-1d-2026-08.zip",
+   "ultimo": "LGELECTRONICSUSDT-1d-2026-10.zip"
+  },
+  "LIGHTUSDT": {
+   "file": 14,
+   "primo": "LIGHTUSDT-1d-2025-09.zip",
+   "ultimo": "LIGHTUSDT-1d-2026-10.zip"
+  },
+  "LINAUSDT": {
+   "file": 59,
+   "primo": "LINAUSDT-1d-2021-12.zip",
+   "ultimo": "LINAUSDT-1d-2026-10.zip"
+  },
+  "LINEAUSDT": {
+   "file": 14,
+   "primo": "LINEAUSDT-1d-2025-09.zip",
+   "ultimo": "LINEAUSDT-1d-2026-10.zip"
+  },
+  "LINKUSDT": {
+   "file": 59,
+   "primo": "LINKUSDT-1d-2021-12.zip",
+   "ultimo": "LINKUSDT-1d-2026-10.zip"
+  },
+  "LISTAUSDT": {
+   "file": 29,
+   "primo": "LISTAUSDT-1d-2024-06.zip",
+   "ultimo": "LISTAUSDT-1d-2026-10.zip"
+  },
+  "LITEUSDT": {
+   "file": 6,
+   "primo": "LITEUSDT-1d-2026-05.zip",
+   "ultimo": "LITEUSDT-1d-2026-10.zip"
+  },
+  "LITUSDT": {
+   "file": 59,
+   "primo": "LITUSDT-1d-2021-12.zip",
+   "ultimo": "LITUSDT-1d-2026-10.zip"
+  },
+  "LLYUSDT": {
+   "file": 5,
+   "primo": "LLYUSDT-1d-2026-06.zip",
+   "ultimo": "LLYUSDT-1d-2026-10.zip"
+  },
+  "LOKAUSDT": {
+   "file": 26,
+   "primo": "LOKAUSDT-1d-2024-09.zip",
+   "ultimo": "LOKAUSDT-1d-2026-10.zip"
+  },
+  "LOOMUSDT": {
+   "file": 37,
+   "primo": "LOOMUSDT-1d-2023-10.zip",
+   "ultimo": "LOOMUSDT-1d-2026-10.zip"
+  },
+  "LPTUSDT": {
+   "file": 59,
+   "primo": "LPTUSDT-1d-2021-12.zip",
+   "ultimo": "LPTUSDT-1d-2026-10.zip"
+  },
+  "LQTYUSDT": {
+   "file": 44,
+   "primo": "LQTYUSDT-1d-2023-03.zip",
+   "ultimo": "LQTYUSDT-1d-2026-10.zip"
+  },
+  "LRCUSDT": {
+   "file": 59,
+   "primo": "LRCUSDT-1d-2021-12.zip",
+   "ultimo": "LRCUSDT-1d-2026-10.zip"
+  },
+  "LRCXUSDT": {
+   "file": 5,
+   "primo": "LRCXUSDT-1d-2026-06.zip",
+   "ultimo": "LRCXUSDT-1d-2026-10.zip"
+  },
+  "LSKUSDT": {
+   "file": 34,
+   "primo": "LSKUSDT-1d-2024-01.zip",
+   "ultimo": "LSKUSDT-1d-2026-10.zip"
+  },
+  "LTCUSDT": {
+   "file": 59,
+   "primo": "LTCUSDT-1d-2021-12.zip",
+   "ultimo": "LTCUSDT-1d-2026-10.zip"
+  },
+  "LUMIAUSDT": {
+   "file": 23,
+   "primo": "LUMIAUSDT-1d-2024-12.zip",
+   "ultimo": "LUMIAUSDT-1d-2026-10.zip"
+  },
+  "LUNA2USDT": {
+   "file": 50,
+   "primo": "LUNA2USDT-1d-2022-09.zip",
+   "ultimo": "LUNA2USDT-1d-2026-10.zip"
+  },
+  "LUNAUSDT": {
+   "file": 6,
+   "primo": "LUNAUSDT-1d-2021-12.zip",
+   "ultimo": "LUNAUSDT-1d-2022-05.zip"
+  },
+  "LYNUSDT": {
+   "file": 13,
+   "primo": "LYNUSDT-1d-2025-10.zip",
+   "ultimo": "LYNUSDT-1d-2026-10.zip"
+  },
+  "LYTEUSDT": {
+   "file": 3,
+   "primo": "LYTEUSDT-1d-2026-08.zip",
+   "ultimo": "LYTEUSDT-1d-2026-10.zip"
+  },
+  "MAGICUSDT": {
+   "file": 46,
+   "primo": "MAGICUSDT-1d-2023-01.zip",
+   "ultimo": "MAGICUSDT-1d-2026-10.zip"
+  },
+  "MAGMAUSDT": {
+   "file": 11,
+   "primo": "MAGMAUSDT-1d-2025-12.zip",
+   "ultimo": "MAGMAUSDT-1d-2026-10.zip"
+  },
+  "MANAUSDT": {
+   "file": 59,
+   "primo": "MANAUSDT-1d-2021-12.zip",
+   "ultimo": "MANAUSDT-1d-2026-10.zip"
+  },
+  "MANTAUSDT": {
+   "file": 34,
+   "primo": "MANTAUSDT-1d-2024-01.zip",
+   "ultimo": "MANTAUSDT-1d-2026-10.zip"
+  },
+  "MANTRAUSDT": {
+   "file": 8,
+   "primo": "MANTRAUSDT-1d-2026-03.zip",
+   "ultimo": "MANTRAUSDT-1d-2026-10.zip"
+  },
+  "MARAUSDT": {
+   "file": 3,
+   "primo": "MARAUSDT-1d-2026-08.zip",
+   "ultimo": "MARAUSDT-1d-2026-10.zip"
+  },
+  "MARSCOINUSDT": {
+   "file": 2,
+   "primo": "MARSCOINUSDT-1d-2026-09.zip",
+   "ultimo": "MARSCOINUSDT-1d-2026-10.zip"
+  },
+  "MASKUSDT": {
+   "file": 59,
+   "primo": "MASKUSDT-1d-2021-12.zip",
+   "ultimo": "MASKUSDT-1d-2026-10.zip"
+  },
+  "MATICUSDT": {
+   "file": 34,
+   "primo": "MATICUSDT-1d-2021-12.zip",
+   "ultimo": "MATICUSDT-1d-2024-09.zip"
+  },
+  "MAVIAUSDT": {
+   "file": 33,
+   "primo": "MAVIAUSDT-1d-2024-02.zip",
+   "ultimo": "MAVIAUSDT-1d-2026-10.zip"
+  },
+  "MAVUSDT": {
+   "file": 41,
+   "primo": "MAVUSDT-1d-2023-06.zip",
+   "ultimo": "MAVUSDT-1d-2026-10.zip"
+  },
+  "MBLUSDT": {
+   "file": 7,
+   "primo": "MBLUSDT-1d-2023-11.zip",
+   "ultimo": "MBLUSDT-1d-2024-05.zip"
+  },
+  "MBOXUSDT": {
+   "file": 27,
+   "primo": "MBOXUSDT-1d-2024-08.zip",
+   "ultimo": "MBOXUSDT-1d-2026-10.zip"
+  },
+  "MCDUSDT": {
+   "file": 1,
+   "primo": "MCDUSDT-1d-2026-10.zip",
+   "ultimo": "MCDUSDT-1d-2026-10.zip"
+  },
+  "MDBUSDT": {
+   "file": 2,
+   "primo": "MDBUSDT-1d-2026-09.zip",
+   "ultimo": "MDBUSDT-1d-2026-10.zip"
+  },
+  "MDTUSDT": {
+   "file": 41,
+   "primo": "MDTUSDT-1d-2023-06.zip",
+   "ultimo": "MDTUSDT-1d-2026-10.zip"
+  },
+  "MEGAUSDT": {
+   "file": 10,
+   "primo": "MEGAUSDT-1d-2026-01.zip",
+   "ultimo": "MEGAUSDT-1d-2026-10.zip"
+  },
+  "MEITUANUSDT": {
+   "file": 3,
+   "primo": "MEITUANUSDT-1d-2026-08.zip",
+   "ultimo": "MEITUANUSDT-1d-2026-10.zip"
+  },
+  "MELANIAUSDT": {
+   "file": 22,
+   "primo": "MELANIAUSDT-1d-2025-01.zip",
+   "ultimo": "MELANIAUSDT-1d-2026-10.zip"
+  },
+  "MELIUSDT": {
+   "file": 1,
+   "primo": "MELIUSDT-1d-2026-10.zip",
+   "ultimo": "MELIUSDT-1d-2026-10.zip"
+  },
+  "MEMEFIUSDT": {
+   "file": 19,
+   "primo": "MEMEFIUSDT-1d-2025-04.zip",
+   "ultimo": "MEMEFIUSDT-1d-2026-10.zip"
+  },
+  "MEMEUSDT": {
+   "file": 36,
+   "primo": "MEMEUSDT-1d-2023-11.zip",
+   "ultimo": "MEMEUSDT-1d-2026-10.zip"
+  },
+  "MERLUSDT": {
+   "file": 18,
+   "primo": "MERLUSDT-1d-2025-05.zip",
+   "ultimo": "MERLUSDT-1d-2026-10.zip"
+  },
+  "METAUSDT": {
+   "file": 8,
+   "primo": "METAUSDT-1d-2026-03.zip",
+   "ultimo": "METAUSDT-1d-2026-10.zip"
+  },
+  "METISUSDT": {
+   "file": 32,
+   "primo": "METISUSDT-1d-2024-03.zip",
+   "ultimo": "METISUSDT-1d-2026-10.zip"
+  },
+  "METUSDT": {
+   "file": 13,
+   "primo": "METUSDT-1d-2025-10.zip",
+   "ultimo": "METUSDT-1d-2026-10.zip"
+  },
+  "MEUSDT": {
+   "file": 23,
+   "primo": "MEUSDT-1d-2024-12.zip",
+   "ultimo": "MEUSDT-1d-2026-10.zip"
+  },
+  "MEWUSDT": {
+   "file": 29,
+   "primo": "MEWUSDT-1d-2024-06.zip",
+   "ultimo": "MEWUSDT-1d-2026-10.zip"
+  },
+  "MILKUSDT": {
+   "file": 18,
+   "primo": "MILKUSDT-1d-2025-05.zip",
+   "ultimo": "MILKUSDT-1d-2026-10.zip"
+  },
+  "MINAUSDT": {
+   "file": 45,
+   "primo": "MINAUSDT-1d-2023-02.zip",
+   "ultimo": "MINAUSDT-1d-2026-10.zip"
+  },
+  "MINIMAXUSDT": {
+   "file": 4,
+   "primo": "MINIMAXUSDT-1d-2026-07.zip",
+   "ultimo": "MINIMAXUSDT-1d-2026-10.zip"
+  },
+  "MIRAUSDT": {
+   "file": 14,
+   "primo": "MIRAUSDT-1d-2025-09.zip",
+   "ultimo": "MIRAUSDT-1d-2026-10.zip"
+  },
+  "MITOUSDT": {
+   "file": 15,
+   "primo": "MITOUSDT-1d-2025-08.zip",
+   "ultimo": "MITOUSDT-1d-2026-10.zip"
+  },
+  "MKRUSDT": {
+   "file": 59,
+   "primo": "MKRUSDT-1d-2021-12.zip",
+   "ultimo": "MKRUSDT-1d-2026-10.zip"
+  },
+  "MLNUSDT": {
+   "file": 20,
+   "primo": "MLNUSDT-1d-2025-03.zip",
+   "ultimo": "MLNUSDT-1d-2026-10.zip"
+  },
+  "MMTUSDT": {
+   "file": 12,
+   "primo": "MMTUSDT-1d-2025-11.zip",
+   "ultimo": "MMTUSDT-1d-2026-10.zip"
+  },
+  "MOCAUSDT": {
+   "file": 23,
+   "primo": "MOCAUSDT-1d-2024-12.zip",
+   "ultimo": "MOCAUSDT-1d-2026-10.zip"
+  },
+  "MONUSDT": {
+   "file": 13,
+   "primo": "MONUSDT-1d-2025-10.zip",
+   "ultimo": "MONUSDT-1d-2026-10.zip"
+  },
+  "MOODENGUSDT": {
+   "file": 25,
+   "primo": "MOODENGUSDT-1d-2024-10.zip",
+   "ultimo": "MOODENGUSDT-1d-2026-10.zip"
+  },
+  "MOONSHOTUSDT": {
+   "file": 2,
+   "primo": "MOONSHOTUSDT-1d-2026-09.zip",
+   "ultimo": "MOONSHOTUSDT-1d-2026-10.zip"
+  },
+  "MORPHOUSDT": {
+   "file": 24,
+   "primo": "MORPHOUSDT-1d-2024-11.zip",
+   "ultimo": "MORPHOUSDT-1d-2026-10.zip"
+  },
+  "MOVEUSDT": {
+   "file": 23,
+   "primo": "MOVEUSDT-1d-2024-12.zip",
+   "ultimo": "MOVEUSDT-1d-2026-10.zip"
+  },
+  "MOVRUSDT": {
+   "file": 35,
+   "primo": "MOVRUSDT-1d-2023-12.zip",
+   "ultimo": "MOVRUSDT-1d-2026-10.zip"
+  },
+  "MPUSDT": {
+   "file": 2,
+   "primo": "MPUSDT-1d-2026-09.zip",
+   "ultimo": "MPUSDT-1d-2026-10.zip"
+  },
+  "MRKUSDT": {
+   "file": 3,
+   "primo": "MRKUSDT-1d-2026-08.zip",
+   "ultimo": "MRKUSDT-1d-2026-10.zip"
+  },
+  "MRNAUSDT": {
+   "file": 3,
+   "primo": "MRNAUSDT-1d-2026-08.zip",
+   "ultimo": "MRNAUSDT-1d-2026-10.zip"
+  },
+  "MRVLUSDT": {
+   "file": 6,
+   "primo": "MRVLUSDT-1d-2026-05.zip",
+   "ultimo": "MRVLUSDT-1d-2026-10.zip"
+  },
+  "MSFTUSDT": {
+   "file": 7,
+   "primo": "MSFTUSDT-1d-2026-04.zip",
+   "ultimo": "MSFTUSDT-1d-2026-10.zip"
+  },
+  "MSTRUSDT": {
+   "file": 9,
+   "primo": "MSTRUSDT-1d-2026-02.zip",
+   "ultimo": "MSTRUSDT-1d-2026-10.zip"
+  },
+  "MSTUUSDT": {
+   "file": 1,
+   "primo": "MSTUUSDT-1d-2026-10.zip",
+   "ultimo": "MSTUUSDT-1d-2026-10.zip"
+  },
+  "MTLUSDT": {
+   "file": 59,
+   "primo": "MTLUSDT-1d-2021-12.zip",
+   "ultimo": "MTLUSDT-1d-2026-10.zip"
+  },
+  "MUBARAKUSDT": {
+   "file": 20,
+   "primo": "MUBARAKUSDT-1d-2025-03.zip",
+   "ultimo": "MUBARAKUSDT-1d-2026-10.zip"
+  },
+  "MUSDT": {
+   "file": 16,
+   "primo": "MUSDT-1d-2025-07.zip",
+   "ultimo": "MUSDT-1d-2026-10.zip"
+  },
+  "MUUSDT": {
+   "file": 7,
+   "primo": "MUUSDT-1d-2026-04.zip",
+   "ultimo": "MUUSDT-1d-2026-10.zip"
+  },
+  "MUUUSDT": {
+   "file": 4,
+   "primo": "MUUUSDT-1d-2026-07.zip",
+   "ultimo": "MUUUSDT-1d-2026-10.zip"
+  },
+  "MVLLUSDT": {
+   "file": 5,
+   "primo": "MVLLUSDT-1d-2026-06.zip",
+   "ultimo": "MVLLUSDT-1d-2026-10.zip"
+  },
+  "MYROUSDT": {
+   "file": 32,
+   "primo": "MYROUSDT-1d-2024-03.zip",
+   "ultimo": "MYROUSDT-1d-2026-10.zip"
+  },
+  "MYXUSDT": {
+   "file": 17,
+   "primo": "MYXUSDT-1d-2025-06.zip",
+   "ultimo": "MYXUSDT-1d-2026-10.zip"
+  },
+  "NAORISUSDT": {
+   "file": 16,
+   "primo": "NAORISUSDT-1d-2025-07.zip",
+   "ultimo": "NAORISUSDT-1d-2026-10.zip"
+  },
+  "NATGASUSDT": {
+   "file": 7,
+   "primo": "NATGASUSDT-1d-2026-04.zip",
+   "ultimo": "NATGASUSDT-1d-2026-10.zip"
+  },
+  "NAVERUSDT": {
+   "file": 3,
+   "primo": "NAVERUSDT-1d-2026-08.zip",
+   "ultimo": "NAVERUSDT-1d-2026-10.zip"
+  },
+  "NBISUSDT": {
+   "file": 6,
+   "primo": "NBISUSDT-1d-2026-05.zip",
+   "ultimo": "NBISUSDT-1d-2026-10.zip"
+  },
+  "NEARUSDT": {
+   "file": 59,
+   "primo": "NEARUSDT-1d-2021-12.zip",
+   "ultimo": "NEARUSDT-1d-2026-10.zip"
+  },
+  "NEIROETHUSDT": {
+   "file": 26,
+   "primo": "NEIROETHUSDT-1d-2024-09.zip",
+   "ultimo": "NEIROETHUSDT-1d-2026-10.zip"
+  },
+  "NEIROUSDT": {
+   "file": 26,
+   "primo": "NEIROUSDT-1d-2024-09.zip",
+   "ultimo": "NEIROUSDT-1d-2026-10.zip"
+  },
+  "NEOUSDT": {
+   "file": 59,
+   "primo": "NEOUSDT-1d-2021-12.zip",
+   "ultimo": "NEOUSDT-1d-2026-10.zip"
+  },
+  "NETUSDT": {
+   "file": 3,
+   "primo": "NETUSDT-1d-2026-08.zip",
+   "ultimo": "NETUSDT-1d-2026-10.zip"
+  },
+  "NEWTUSDT": {
+   "file": 17,
+   "primo": "NEWTUSDT-1d-2025-06.zip",
+   "ultimo": "NEWTUSDT-1d-2026-10.zip"
+  },
+  "NFLXUSDT": {
+   "file": 5,
+   "primo": "NFLXUSDT-1d-2026-06.zip",
+   "ultimo": "NFLXUSDT-1d-2026-10.zip"
+  },
+  "NFPUSDT": {
+   "file": 35,
+   "primo": "NFPUSDT-1d-2023-12.zip",
+   "ultimo": "NFPUSDT-1d-2026-10.zip"
+  },
+  "NIGHTUSDT": {
+   "file": 11,
+   "primo": "NIGHTUSDT-1d-2025-12.zip",
+   "ultimo": "NIGHTUSDT-1d-2026-10.zip"
+  },
+  "NILUSDT": {
+   "file": 20,
+   "primo": "NILUSDT-1d-2025-03.zip",
+   "ultimo": "NILUSDT-1d-2026-10.zip"
+  },
+  "NKEUSDT": {
+   "file": 2,
+   "primo": "NKEUSDT-1d-2026-09.zip",
+   "ultimo": "NKEUSDT-1d-2026-10.zip"
+  },
+  "NKNUSDT": {
+   "file": 59,
+   "primo": "NKNUSDT-1d-2021-12.zip",
+   "ultimo": "NKNUSDT-1d-2026-10.zip"
+  },
+  "NMRUSDT": {
+   "file": 41,
+   "primo": "NMRUSDT-1d-2023-06.zip",
+   "ultimo": "NMRUSDT-1d-2026-10.zip"
+  },
+  "NOKUSDT": {
+   "file": 5,
+   "primo": "NOKUSDT-1d-2026-06.zip",
+   "ultimo": "NOKUSDT-1d-2026-10.zip"
+  },
+  "NOMUSDT": {
+   "file": 13,
+   "primo": "NOMUSDT-1d-2025-10.zip",
+   "ultimo": "NOMUSDT-1d-2026-10.zip"
+  },
+  "NOTUSDT": {
+   "file": 30,
+   "primo": "NOTUSDT-1d-2024-05.zip",
+   "ultimo": "NOTUSDT-1d-2026-10.zip"
+  },
+  "NOWUSDT": {
+   "file": 5,
+   "primo": "NOWUSDT-1d-2026-06.zip",
+   "ultimo": "NOWUSDT-1d-2026-10.zip"
+  },
+  "NTRNUSDT": {
+   "file": 36,
+   "primo": "NTRNUSDT-1d-2023-11.zip",
+   "ultimo": "NTRNUSDT-1d-2026-10.zip"
+  },
+  "NULSUSDT": {
+   "file": 27,
+   "primo": "NULSUSDT-1d-2024-08.zip",
+   "ultimo": "NULSUSDT-1d-2026-10.zip"
+  },
+  "NUUSDT": {
+   "file": 3,
+   "primo": "NUUSDT-1d-2021-12.zip",
+   "ultimo": "NUUSDT-1d-2022-02.zip"
+  },
+  "NVDAUSDT": {
+   "file": 8,
+   "primo": "NVDAUSDT-1d-2026-03.zip",
+   "ultimo": "NVDAUSDT-1d-2026-10.zip"
+  },
+  "NVDLUSDT": {
+   "file": 2,
+   "primo": "NVDLUSDT-1d-2026-09.zip",
+   "ultimo": "NVDLUSDT-1d-2026-10.zip"
+  },
+  "NVOUSDT": {
+   "file": 5,
+   "primo": "NVOUSDT-1d-2026-06.zip",
+   "ultimo": "NVOUSDT-1d-2026-10.zip"
+  },
+  "NXPCUSDT": {
+   "file": 18,
+   "primo": "NXPCUSDT-1d-2025-05.zip",
+   "ultimo": "NXPCUSDT-1d-2026-10.zip"
+  },
+  "OBOLUSDT": {
+   "file": 18,
+   "primo": "OBOLUSDT-1d-2025-05.zip",
+   "ultimo": "OBOLUSDT-1d-2026-10.zip"
+  },
+  "OCEANUSDT": {
+   "file": 59,
+   "primo": "OCEANUSDT-1d-2021-12.zip",
+   "ultimo": "OCEANUSDT-1d-2026-10.zip"
+  },
+  "OGNUSDT": {
+   "file": 59,
+   "primo": "OGNUSDT-1d-2021-12.zip",
+   "ultimo": "OGNUSDT-1d-2026-10.zip"
+  },
+  "OGUSDT": {
+   "file": 18,
+   "primo": "OGUSDT-1d-2025-05.zip",
+   "ultimo": "OGUSDT-1d-2026-10.zip"
+  },
+  "OKLOUSDT": {
+   "file": 2,
+   "primo": "OKLOUSDT-1d-2026-09.zip",
+   "ultimo": "OKLOUSDT-1d-2026-10.zip"
+  },
+  "OLUSDT": {
+   "file": 17,
+   "primo": "OLUSDT-1d-2025-06.zip",
+   "ultimo": "OLUSDT-1d-2026-10.zip"
+  },
+  "OMGUSDT": {
+   "file": 59,
+   "primo": "OMGUSDT-1d-2021-12.zip",
+   "ultimo": "OMGUSDT-1d-2026-10.zip"
+  },
+  "OMNIUSDT": {
+   "file": 31,
+   "primo": "OMNIUSDT-1d-2024-04.zip",
+   "ultimo": "OMNIUSDT-1d-2026-10.zip"
+  },
+  "OMUSDT": {
+   "file": 33,
+   "primo": "OMUSDT-1d-2024-02.zip",
+   "ultimo": "OMUSDT-1d-2026-10.zip"
+  },
+  "ONDOUSDT": {
+   "file": 34,
+   "primo": "ONDOUSDT-1d-2024-01.zip",
+   "ultimo": "ONDOUSDT-1d-2026-10.zip"
+  },
+  "ONDSUSDT": {
+   "file": 5,
+   "primo": "ONDSUSDT-1d-2026-06.zip",
+   "ultimo": "ONDSUSDT-1d-2026-10.zip"
+  },
+  "ONEUSDT": {
+   "file": 59,
+   "primo": "ONEUSDT-1d-2021-12.zip",
+   "ultimo": "ONEUSDT-1d-2026-10.zip"
+  },
+  "ONGUSDT": {
+   "file": 36,
+   "primo": "ONGUSDT-1d-2023-11.zip",
+   "ultimo": "ONGUSDT-1d-2026-10.zip"
+  },
+  "ONTUSDT": {
+   "file": 59,
+   "primo": "ONTUSDT-1d-2021-12.zip",
+   "ultimo": "ONTUSDT-1d-2026-10.zip"
+  },
+  "ONUSDT": {
+   "file": 13,
+   "primo": "ONUSDT-1d-2025-10.zip",
+   "ultimo": "ONUSDT-1d-2026-10.zip"
+  },
+  "OPENAIUSDT": {
+   "file": 6,
+   "primo": "OPENAIUSDT-1d-2026-05.zip",
+   "ultimo": "OPENAIUSDT-1d-2026-10.zip"
+  },
+  "OPENUSDT": {
+   "file": 14,
+   "primo": "OPENUSDT-1d-2025-09.zip",
+   "ultimo": "OPENUSDT-1d-2026-10.zip"
+  },
+  "OPGUSDT": {
+   "file": 7,
+   "primo": "OPGUSDT-1d-2026-04.zip",
+   "ultimo": "OPGUSDT-1d-2026-10.zip"
+  },
+  "OPNUSDT": {
+   "file": 9,
+   "primo": "OPNUSDT-1d-2026-02.zip",
+   "ultimo": "OPNUSDT-1d-2026-10.zip"
+  },
+  "OPUSDT": {
+   "file": 53,
+   "primo": "OPUSDT-1d-2022-06.zip",
+   "ultimo": "OPUSDT-1d-2026-10.zip"
+  },
+  "ORBSUSDT": {
+   "file": 37,
+   "primo": "ORBSUSDT-1d-2023-10.zip",
+   "ultimo": "ORBSUSDT-1d-2026-10.zip"
+  },
+  "ORCAUSDT": {
+   "file": 23,
+   "primo": "ORCAUSDT-1d-2024-12.zip",
+   "ultimo": "ORCAUSDT-1d-2026-10.zip"
+  },
+  "ORCLUSDT": {
+   "file": 6,
+   "primo": "ORCLUSDT-1d-2026-05.zip",
+   "ultimo": "ORCLUSDT-1d-2026-10.zip"
+  },
+  "ORDERUSDT": {
+   "file": 14,
+   "primo": "ORDERUSDT-1d-2025-09.zip",
+   "ultimo": "ORDERUSDT-1d-2026-10.zip"
+  },
+  "ORDIUSDT": {
+   "file": 36,
+   "primo": "ORDIUSDT-1d-2023-11.zip",
+   "ultimo": "ORDIUSDT-1d-2026-10.zip"
+  },
+  "OURAUSDT": {
+   "file": 2,
+   "primo": "OURAUSDT-1d-2026-09.zip",
+   "ultimo": "OURAUSDT-1d-2026-10.zip"
+  },
+  "OUSDT": {
+   "file": 5,
+   "primo": "OUSDT-1d-2026-06.zip",
+   "ultimo": "OUSDT-1d-2026-10.zip"
+  },
+  "OXTUSDT": {
+   "file": 39,
+   "primo": "OXTUSDT-1d-2023-08.zip",
+   "ultimo": "OXTUSDT-1d-2026-10.zip"
+  },
+  "OXYUSDT": {
+   "file": 1,
+   "primo": "OXYUSDT-1d-2026-10.zip",
+   "ultimo": "OXYUSDT-1d-2026-10.zip"
+  },
+  "PANWUSDT": {
+   "file": 4,
+   "primo": "PANWUSDT-1d-2026-07.zip",
+   "ultimo": "PANWUSDT-1d-2026-10.zip"
+  },
+  "PARTIUSDT": {
+   "file": 20,
+   "primo": "PARTIUSDT-1d-2025-03.zip",
+   "ultimo": "PARTIUSDT-1d-2026-10.zip"
+  },
+  "PATHUSDT": {
+   "file": 2,
+   "primo": "PATHUSDT-1d-2026-09.zip",
+   "ultimo": "PATHUSDT-1d-2026-10.zip"
+  },
+  "PAXGUSDT": {
+   "file": 20,
+   "primo": "PAXGUSDT-1d-2025-03.zip",
+   "ultimo": "PAXGUSDT-1d-2026-10.zip"
+  },
+  "PAYPUSDT": {
+   "file": 8,
+   "primo": "PAYPUSDT-1d-2026-03.zip",
+   "ultimo": "PAYPUSDT-1d-2026-10.zip"
+  },
+  "PDDUSDT": {
+   "file": 3,
+   "primo": "PDDUSDT-1d-2026-08.zip",
+   "ultimo": "PDDUSDT-1d-2026-10.zip"
+  },
+  "PENDLEUSDT": {
+   "file": 40,
+   "primo": "PENDLEUSDT-1d-2023-07.zip",
+   "ultimo": "PENDLEUSDT-1d-2026-10.zip"
+  },
+  "PENGUSDT": {
+   "file": 4,
+   "primo": "PENGUSDT-1d-2026-07.zip",
+   "ultimo": "PENGUSDT-1d-2026-10.zip"
+  },
+  "PENGUUSDT": {
+   "file": 23,
+   "primo": "PENGUUSDT-1d-2024-12.zip",
+   "ultimo": "PENGUUSDT-1d-2026-10.zip"
+  },
+  "PEOPLEUSDT": {
+   "file": 59,
+   "primo": "PEOPLEUSDT-1d-2021-12.zip",
+   "ultimo": "PEOPLEUSDT-1d-2026-10.zip"
+  },
+  "PERPUSDT": {
+   "file": 44,
+   "primo": "PERPUSDT-1d-2023-03.zip",
+   "ultimo": "PERPUSDT-1d-2026-10.zip"
+  },
+  "PFEUSDT": {
+   "file": 1,
+   "primo": "PFEUSDT-1d-2026-10.zip",
+   "ultimo": "PFEUSDT-1d-2026-10.zip"
+  },
+  "PHAROSUSDT": {
+   "file": 6,
+   "primo": "PHAROSUSDT-1d-2026-05.zip",
+   "ultimo": "PHAROSUSDT-1d-2026-10.zip"
+  },
+  "PHAUSDT": {
+   "file": 23,
+   "primo": "PHAUSDT-1d-2024-12.zip",
+   "ultimo": "PHAUSDT-1d-2026-10.zip"
+  },
+  "PHBUSDT": {
+   "file": 45,
+   "primo": "PHBUSDT-1d-2023-02.zip",
+   "ultimo": "PHBUSDT-1d-2026-10.zip"
+  },
+  "PIEVERSEUSDT": {
+   "file": 12,
+   "primo": "PIEVERSEUSDT-1d-2025-11.zip",
+   "ultimo": "PIEVERSEUSDT-1d-2026-10.zip"
+  },
+  "PIPPINUSDT": {
+   "file": 22,
+   "primo": "PIPPINUSDT-1d-2025-01.zip",
+   "ultimo": "PIPPINUSDT-1d-2026-10.zip"
+  },
+  "PIXELUSDT": {
+   "file": 33,
+   "primo": "PIXELUSDT-1d-2024-02.zip",
+   "ultimo": "PIXELUSDT-1d-2026-10.zip"
+  },
+  "PLAYUSDT": {
+   "file": 16,
+   "primo": "PLAYUSDT-1d-2025-07.zip",
+   "ultimo": "PLAYUSDT-1d-2026-10.zip"
+  },
+  "PLTRUSDT": {
+   "file": 9,
+   "primo": "PLTRUSDT-1d-2026-02.zip",
+   "ultimo": "PLTRUSDT-1d-2026-10.zip"
+  },
+  "PLUMEUSDT": {
+   "file": 20,
+   "primo": "PLUMEUSDT-1d-2025-03.zip",
+   "ultimo": "PLUMEUSDT-1d-2026-10.zip"
+  },
+  "PNUTUSDT": {
+   "file": 24,
+   "primo": "PNUTUSDT-1d-2024-11.zip",
+   "ultimo": "PNUTUSDT-1d-2026-10.zip"
+  },
+  "POLUSDT": {
+   "file": 26,
+   "primo": "POLUSDT-1d-2024-09.zip",
+   "ultimo": "POLUSDT-1d-2026-10.zip"
+  },
+  "POLYXUSDT": {
+   "file": 37,
+   "primo": "POLYXUSDT-1d-2023-10.zip",
+   "ultimo": "POLYXUSDT-1d-2026-10.zip"
+  },
+  "PONKEUSDT": {
+   "file": 24,
+   "primo": "PONKEUSDT-1d-2024-11.zip",
+   "ultimo": "PONKEUSDT-1d-2026-10.zip"
+  },
+  "PONSUSDT": {
+   "file": 2,
+   "primo": "PONSUSDT-1d-2026-09.zip",
+   "ultimo": "PONSUSDT-1d-2026-10.zip"
+  },
+  "POPCATUSDT": {
+   "file": 27,
+   "primo": "POPCATUSDT-1d-2024-08.zip",
+   "ultimo": "POPCATUSDT-1d-2026-10.zip"
+  },
+  "POPMARTUSDT": {
+   "file": 4,
+   "primo": "POPMARTUSDT-1d-2026-07.zip",
+   "ultimo": "POPMARTUSDT-1d-2026-10.zip"
+  },
+  "PORT3USDT": {
+   "file": 17,
+   "primo": "PORT3USDT-1d-2025-06.zip",
+   "ultimo": "PORT3USDT-1d-2026-10.zip"
+  },
+  "PORTALUSDT": {
+   "file": 33,
+   "primo": "PORTALUSDT-1d-2024-02.zip",
+   "ultimo": "PORTALUSDT-1d-2026-10.zip"
+  },
+  "POWERUSDT": {
+   "file": 11,
+   "primo": "POWERUSDT-1d-2025-12.zip",
+   "ultimo": "POWERUSDT-1d-2026-10.zip"
+  },
+  "POWRUSDT": {
+   "file": 37,
+   "primo": "POWRUSDT-1d-2023-10.zip",
+   "ultimo": "POWRUSDT-1d-2026-10.zip"
+  },
+  "PREDICTUSDT": {
+   "file": 1,
+   "primo": "PREDICTUSDT-1d-2026-10.zip",
+   "ultimo": "PREDICTUSDT-1d-2026-10.zip"
+  },
+  "PRLUSDT": {
+   "file": 7,
+   "primo": "PRLUSDT-1d-2026-04.zip",
+   "ultimo": "PRLUSDT-1d-2026-10.zip"
+  },
+  "PROMPTUSDT": {
+   "file": 19,
+   "primo": "PROMPTUSDT-1d-2025-04.zip",
+   "ultimo": "PROMPTUSDT-1d-2026-10.zip"
+  },
+  "PROMUSDT": {
+   "file": 22,
+   "primo": "PROMUSDT-1d-2025-01.zip",
+   "ultimo": "PROMUSDT-1d-2026-10.zip"
+  },
+  "PROVEUSDT": {
+   "file": 15,
+   "primo": "PROVEUSDT-1d-2025-08.zip",
+   "ultimo": "PROVEUSDT-1d-2026-10.zip"
+  },
+  "PTBUSDT": {
+   "file": 14,
+   "primo": "PTBUSDT-1d-2025-09.zip",
+   "ultimo": "PTBUSDT-1d-2026-10.zip"
+  },
+  "PUFFERUSDT": {
+   "file": 17,
+   "primo": "PUFFERUSDT-1d-2025-06.zip",
+   "ultimo": "PUFFERUSDT-1d-2026-10.zip"
+  },
+  "PUMPBTCUSDT": {
+   "file": 17,
+   "primo": "PUMPBTCUSDT-1d-2025-06.zip",
+   "ultimo": "PUMPBTCUSDT-1d-2026-10.zip"
+  },
+  "PUMPUSDT": {
+   "file": 19,
+   "primo": "PUMPUSDT-1d-2025-04.zip",
+   "ultimo": "PUMPUSDT-1d-2026-10.zip"
+  },
+  "PUNDIXUSDT": {
+   "file": 19,
+   "primo": "PUNDIXUSDT-1d-2025-04.zip",
+   "ultimo": "PUNDIXUSDT-1d-2026-10.zip"
+  },
+  "PYPLUSDT": {
+   "file": 4,
+   "primo": "PYPLUSDT-1d-2026-07.zip",
+   "ultimo": "PYPLUSDT-1d-2026-10.zip"
+  },
+  "PYTHUSDT": {
+   "file": 36,
+   "primo": "PYTHUSDT-1d-2023-11.zip",
+   "ultimo": "PYTHUSDT-1d-2026-10.zip"
+  },
+  "QCOMUSDT": {
+   "file": 6,
+   "primo": "QCOMUSDT-1d-2026-05.zip",
+   "ultimo": "QCOMUSDT-1d-2026-10.zip"
+  },
+  "QNTUSDT": {
+   "file": 49,
+   "primo": "QNTUSDT-1d-2022-10.zip",
+   "ultimo": "QNTUSDT-1d-2026-10.zip"
+  },
+  "QNTXUSDT": {
+   "file": 6,
+   "primo": "QNTXUSDT-1d-2026-05.zip",
+   "ultimo": "QNTXUSDT-1d-2026-10.zip"
+  },
+  "QQQUSDT": {
+   "file": 7,
+   "primo": "QQQUSDT-1d-2026-04.zip",
+   "ultimo": "QQQUSDT-1d-2026-10.zip"
+  },
+  "QTUMUSDT": {
+   "file": 59,
+   "primo": "QTUMUSDT-1d-2021-12.zip",
+   "ultimo": "QTUMUSDT-1d-2026-10.zip"
+  },
+  "QUICKUSDT": {
+   "file": 26,
+   "primo": "QUICKUSDT-1d-2024-09.zip",
+   "ultimo": "QUICKUSDT-1d-2026-10.zip"
+  },
+  "QUSDT": {
+   "file": 14,
+   "primo": "QUSDT-1d-2025-09.zip",
+   "ultimo": "QUSDT-1d-2026-10.zip"
+  },
+  "RADUSDT": {
+   "file": 42,
+   "primo": "RADUSDT-1d-2023-05.zip",
+   "ultimo": "RADUSDT-1d-2026-10.zip"
+  },
+  "RAMUSDT": {
+   "file": 3,
+   "primo": "RAMUSDT-1d-2026-08.zip",
+   "ultimo": "RAMUSDT-1d-2026-10.zip"
+  },
+  "RAREUSDT": {
+   "file": 27,
+   "primo": "RAREUSDT-1d-2024-08.zip",
+   "ultimo": "RAREUSDT-1d-2026-10.zip"
+  },
+  "RAVEUSDT": {
+   "file": 11,
+   "primo": "RAVEUSDT-1d-2025-12.zip",
+   "ultimo": "RAVEUSDT-1d-2026-10.zip"
+  },
+  "RAYSOLUSDT": {
+   "file": 23,
+   "primo": "RAYSOLUSDT-1d-2024-12.zip",
+   "ultimo": "RAYSOLUSDT-1d-2026-10.zip"
+  },
+  "RAYUSDT": {
+   "file": 59,
+   "primo": "RAYUSDT-1d-2021-12.zip",
+   "ultimo": "RAYUSDT-1d-2026-10.zip"
+  },
+  "RDDTUSDT": {
+   "file": 3,
+   "primo": "RDDTUSDT-1d-2026-08.zip",
+   "ultimo": "RDDTUSDT-1d-2026-10.zip"
+  },
+  "RDNTUSDT": {
+   "file": 43,
+   "primo": "RDNTUSDT-1d-2023-04.zip",
+   "ultimo": "RDNTUSDT-1d-2026-10.zip"
+  },
+  "RDWUSDT": {
+   "file": 1,
+   "primo": "RDWUSDT-1d-2026-10.zip",
+   "ultimo": "RDWUSDT-1d-2026-10.zip"
+  },
+  "RECALLUSDT": {
+   "file": 13,
+   "primo": "RECALLUSDT-1d-2025-10.zip",
+   "ultimo": "RECALLUSDT-1d-2026-10.zip"
+  },
+  "REDUSDT": {
+   "file": 20,
+   "primo": "REDUSDT-1d-2025-03.zip",
+   "ultimo": "REDUSDT-1d-2026-10.zip"
+  },
+  "REEFUSDT": {
+   "file": 59,
+   "primo": "REEFUSDT-1d-2021-12.zip",
+   "ultimo": "REEFUSDT-1d-2026-10.zip"
+  },
+  "REIUSDT": {
+   "file": 26,
+   "primo": "REIUSDT-1d-2024-09.zip",
+   "ultimo": "REIUSDT-1d-2026-10.zip"
+  },
+  "RENDERUSDT": {
+   "file": 28,
+   "primo": "RENDERUSDT-1d-2024-07.zip",
+   "ultimo": "RENDERUSDT-1d-2026-10.zip"
+  },
+  "RENUSDT": {
+   "file": 59,
+   "primo": "RENUSDT-1d-2021-12.zip",
+   "ultimo": "RENUSDT-1d-2026-10.zip"
+  },
+  "RESOLVUSDT": {
+   "file": 17,
+   "primo": "RESOLVUSDT-1d-2025-06.zip",
+   "ultimo": "RESOLVUSDT-1d-2026-10.zip"
+  },
+  "REUSDT": {
+   "file": 5,
+   "primo": "REUSDT-1d-2026-06.zip",
+   "ultimo": "REUSDT-1d-2026-10.zip"
+  },
+  "REZUSDT": {
+   "file": 31,
+   "primo": "REZUSDT-1d-2024-04.zip",
+   "ultimo": "REZUSDT-1d-2026-10.zip"
+  },
+  "RIFUSDT": {
+   "file": 37,
+   "primo": "RIFUSDT-1d-2023-10.zip",
+   "ultimo": "RIFUSDT-1d-2026-10.zip"
+  },
+  "RIVERUSDT": {
+   "file": 13,
+   "primo": "RIVERUSDT-1d-2025-10.zip",
+   "ultimo": "RIVERUSDT-1d-2026-10.zip"
+  },
+  "RIVNUSDT": {
+   "file": 5,
+   "primo": "RIVNUSDT-1d-2026-06.zip",
+   "ultimo": "RIVNUSDT-1d-2026-10.zip"
+  },
+  "RKLBUSDT": {
+   "file": 6,
+   "primo": "RKLBUSDT-1d-2026-05.zip",
+   "ultimo": "RKLBUSDT-1d-2026-10.zip"
+  },
+  "RLCUSDT": {
+   "file": 59,
+   "primo": "RLCUSDT-1d-2021-12.zip",
+   "ultimo": "RLCUSDT-1d-2026-10.zip"
+  },
+  "RLSUSDT": {
+   "file": 11,
+   "primo": "RLSUSDT-1d-2025-12.zip",
+   "ultimo": "RLSUSDT-1d-2026-10.zip"
+  },
+  "RNDRUSDT": {
+   "file": 18,
+   "primo": "RNDRUSDT-1d-2023-02.zip",
+   "ultimo": "RNDRUSDT-1d-2024-07.zip"
+  },
+  "ROBOUSDT": {
+   "file": 9,
+   "primo": "ROBOUSDT-1d-2026-02.zip",
+   "ultimo": "ROBOUSDT-1d-2026-10.zip"
+  },
+  "RONINUSDT": {
+   "file": 33,
+   "primo": "RONINUSDT-1d-2024-02.zip",
+   "ultimo": "RONINUSDT-1d-2026-10.zip"
+  },
+  "ROSEUSDT": {
+   "file": 59,
+   "primo": "ROSEUSDT-1d-2021-12.zip",
+   "ultimo": "ROSEUSDT-1d-2026-10.zip"
+  },
+  "RPLUSDT": {
+   "file": 26,
+   "primo": "RPLUSDT-1d-2024-09.zip",
+   "ultimo": "RPLUSDT-1d-2026-10.zip"
+  },
+  "RSRUSDT": {
+   "file": 59,
+   "primo": "RSRUSDT-1d-2021-12.zip",
+   "ultimo": "RSRUSDT-1d-2026-10.zip"
+  },
+  "RUMUSDT": {
+   "file": 2,
+   "primo": "RUMUSDT-1d-2026-09.zip",
+   "ultimo": "RUMUSDT-1d-2026-10.zip"
+  },
+  "RUNEUSDT": {
+   "file": 59,
+   "primo": "RUNEUSDT-1d-2021-12.zip",
+   "ultimo": "RUNEUSDT-1d-2026-10.zip"
+  },
+  "RVNUSDT": {
+   "file": 59,
+   "primo": "RVNUSDT-1d-2021-12.zip",
+   "ultimo": "RVNUSDT-1d-2026-10.zip"
+  },
+  "RVVUSDT": {
+   "file": 13,
+   "primo": "RVVUSDT-1d-2025-10.zip",
+   "ultimo": "RVVUSDT-1d-2026-10.zip"
+  },
+  "SAFEUSDT": {
+   "file": 25,
+   "primo": "SAFEUSDT-1d-2024-10.zip",
+   "ultimo": "SAFEUSDT-1d-2026-10.zip"
+  },
+  "SAGAUSDT": {
+   "file": 31,
+   "primo": "SAGAUSDT-1d-2024-04.zip",
+   "ultimo": "SAGAUSDT-1d-2026-10.zip"
+  },
+  "SAHARAUSDT": {
+   "file": 17,
+   "primo": "SAHARAUSDT-1d-2025-06.zip",
+   "ultimo": "SAHARAUSDT-1d-2026-10.zip"
+  },
+  "SAMSUNGEMUSDT": {
+   "file": 3,
+   "primo": "SAMSUNGEMUSDT-1d-2026-08.zip",
+   "ultimo": "SAMSUNGEMUSDT-1d-2026-10.zip"
+  },
+  "SAMSUNGUSDT": {
+   "file": 5,
+   "primo": "SAMSUNGUSDT-1d-2026-06.zip",
+   "ultimo": "SAMSUNGUSDT-1d-2026-10.zip"
+  },
+  "SANDUSDT": {
+   "file": 59,
+   "primo": "SANDUSDT-1d-2021-12.zip",
+   "ultimo": "SANDUSDT-1d-2026-10.zip"
+  },
+  "SANTOSUSDT": {
+   "file": 25,
+   "primo": "SANTOSUSDT-1d-2024-10.zip",
+   "ultimo": "SANTOSUSDT-1d-2026-10.zip"
+  },
+  "SAPIENUSDT": {
+   "file": 15,
+   "primo": "SAPIENUSDT-1d-2025-08.zip",
+   "ultimo": "SAPIENUSDT-1d-2026-10.zip"
+  },
+  "SCRTUSDT": {
+   "file": 24,
+   "primo": "SCRTUSDT-1d-2024-11.zip",
+   "ultimo": "SCRTUSDT-1d-2026-10.zip"
+  },
+  "SCRUSDT": {
+   "file": 25,
+   "primo": "SCRUSDT-1d-2024-10.zip",
+   "ultimo": "SCRUSDT-1d-2026-10.zip"
+  },
+  "SCUSDT": {
+   "file": 59,
+   "primo": "SCUSDT-1d-2021-12.zip",
+   "ultimo": "SCUSDT-1d-2026-10.zip"
+  },
+  "SECZUSDT": {
+   "file": 2,
+   "primo": "SECZUSDT-1d-2026-09.zip",
+   "ultimo": "SECZUSDT-1d-2026-10.zip"
+  },
+  "SEIUSDT": {
+   "file": 39,
+   "primo": "SEIUSDT-1d-2023-08.zip",
+   "ultimo": "SEIUSDT-1d-2026-10.zip"
+  },
+  "SENTUSDT": {
+   "file": 12,
+   "primo": "SENTUSDT-1d-2025-11.zip",
+   "ultimo": "SENTUSDT-1d-2026-10.zip"
+  },
+  "SFPUSDT": {
+   "file": 59,
+   "primo": "SFPUSDT-1d-2021-12.zip",
+   "ultimo": "SFPUSDT-1d-2026-10.zip"
+  },
+  "SHAZUSDT": {
+   "file": 4,
+   "primo": "SHAZUSDT-1d-2026-07.zip",
+   "ultimo": "SHAZUSDT-1d-2026-10.zip"
+  },
+  "SHELLUSDT": {
+   "file": 21,
+   "primo": "SHELLUSDT-1d-2025-02.zip",
+   "ultimo": "SHELLUSDT-1d-2026-10.zip"
+  },
+  "SHOPUSDT": {
+   "file": 3,
+   "primo": "SHOPUSDT-1d-2026-08.zip",
+   "ultimo": "SHOPUSDT-1d-2026-10.zip"
+  },
+  "SIGNUSDT": {
+   "file": 19,
+   "primo": "SIGNUSDT-1d-2025-04.zip",
+   "ultimo": "SIGNUSDT-1d-2026-10.zip"
+  },
+  "SIRENUSDT": {
+   "file": 20,
+   "primo": "SIRENUSDT-1d-2025-03.zip",
+   "ultimo": "SIRENUSDT-1d-2026-10.zip"
+  },
+  "SKATEUSDT": {
+   "file": 17,
+   "primo": "SKATEUSDT-1d-2025-06.zip",
+   "ultimo": "SKATEUSDT-1d-2026-10.zip"
+  },
+  "SKDDUSDT": {
+   "file": 3,
+   "primo": "SKDDUSDT-1d-2026-08.zip",
+   "ultimo": "SKDDUSDT-1d-2026-10.zip"
+  },
+  "SKHYNIXUSDT": {
+   "file": 5,
+   "primo": "SKHYNIXUSDT-1d-2026-06.zip",
+   "ultimo": "SKHYNIXUSDT-1d-2026-10.zip"
+  },
+  "SKHYUSDT": {
+   "file": 4,
+   "primo": "SKHYUSDT-1d-2026-07.zip",
+   "ultimo": "SKHYUSDT-1d-2026-10.zip"
+  },
+  "SKLUSDT": {
+   "file": 59,
+   "primo": "SKLUSDT-1d-2021-12.zip",
+   "ultimo": "SKLUSDT-1d-2026-10.zip"
+  },
+  "SKRUSDT": {
+   "file": 10,
+   "primo": "SKRUSDT-1d-2026-01.zip",
+   "ultimo": "SKRUSDT-1d-2026-10.zip"
+  },
+  "SKUUUSDT": {
+   "file": 3,
+   "primo": "SKUUUSDT-1d-2026-08.zip",
+   "ultimo": "SKUUUSDT-1d-2026-10.zip"
+  },
+  "SKYAIUSDT": {
+   "file": 18,
+   "primo": "SKYAIUSDT-1d-2025-05.zip",
+   "ultimo": "SKYAIUSDT-1d-2026-10.zip"
+  },
+  "SKYUSDT": {
+   "file": 14,
+   "primo": "SKYUSDT-1d-2025-09.zip",
+   "ultimo": "SKYUSDT-1d-2026-10.zip"
+  },
+  "SLERFUSDT": {
+   "file": 24,
+   "primo": "SLERFUSDT-1d-2024-11.zip",
+   "ultimo": "SLERFUSDT-1d-2026-10.zip"
+  },
+  "SLPUSDT": {
+   "file": 37,
+   "primo": "SLPUSDT-1d-2023-10.zip",
+   "ultimo": "SLPUSDT-1d-2026-10.zip"
+  },
+  "SLXUSDT": {
+   "file": 5,
+   "primo": "SLXUSDT-1d-2026-06.zip",
+   "ultimo": "SLXUSDT-1d-2026-10.zip"
+  },
+  "SMCIUSDT": {
+   "file": 5,
+   "primo": "SMCIUSDT-1d-2026-06.zip",
+   "ultimo": "SMCIUSDT-1d-2026-10.zip"
+  },
+  "SMHUSDT": {
+   "file": 4,
+   "primo": "SMHUSDT-1d-2026-07.zip",
+   "ultimo": "SMHUSDT-1d-2026-10.zip"
+  },
+  "SMRUSDT": {
+   "file": 1,
+   "primo": "SMRUSDT-1d-2026-10.zip",
+   "ultimo": "SMRUSDT-1d-2026-10.zip"
+  },
+  "SNDKUSDT": {
+   "file": 7,
+   "primo": "SNDKUSDT-1d-2026-04.zip",
+   "ultimo": "SNDKUSDT-1d-2026-10.zip"
+  },
+  "SNOWUSDT": {
+   "file": 4,
+   "primo": "SNOWUSDT-1d-2026-07.zip",
+   "ultimo": "SNOWUSDT-1d-2026-10.zip"
+  },
+  "SNPSUSDT": {
+   "file": 1,
+   "primo": "SNPSUSDT-1d-2026-10.zip",
+   "ultimo": "SNPSUSDT-1d-2026-10.zip"
+  },
+  "SNTUSDT": {
+   "file": 36,
+   "primo": "SNTUSDT-1d-2023-11.zip",
+   "ultimo": "SNTUSDT-1d-2026-10.zip"
+  },
+  "SNXUSDT": {
+   "file": 59,
+   "primo": "SNXUSDT-1d-2021-12.zip",
+   "ultimo": "SNXUSDT-1d-2026-10.zip"
+  },
+  "SNXXUSDT": {
+   "file": 4,
+   "primo": "SNXXUSDT-1d-2026-07.zip",
+   "ultimo": "SNXXUSDT-1d-2026-10.zip"
+  },
+  "SOFIUSDT": {
+   "file": 4,
+   "primo": "SOFIUSDT-1d-2026-07.zip",
+   "ultimo": "SOFIUSDT-1d-2026-10.zip"
+  },
+  "SOLUSDT": {
+   "file": 59,
+   "primo": "SOLUSDT-1d-2021-12.zip",
+   "ultimo": "SOLUSDT-1d-2026-10.zip"
+  },
+  "SOLVUSDT": {
+   "file": 22,
+   "primo": "SOLVUSDT-1d-2025-01.zip",
+   "ultimo": "SOLVUSDT-1d-2026-10.zip"
+  },
+  "SOMIUSDT": {
+   "file": 15,
+   "primo": "SOMIUSDT-1d-2025-08.zip",
+   "ultimo": "SOMIUSDT-1d-2026-10.zip"
+  },
+  "SONICUSDT": {
+   "file": 22,
+   "primo": "SONICUSDT-1d-2025-01.zip",
+   "ultimo": "SONICUSDT-1d-2026-10.zip"
+  },
+  "SONYUSDT": {
+   "file": 5,
+   "primo": "SONYUSDT-1d-2026-06.zip",
+   "ultimo": "SONYUSDT-1d-2026-10.zip"
+  },
+  "SOONUSDT": {
+   "file": 18,
+   "primo": "SOONUSDT-1d-2025-05.zip",
+   "ultimo": "SOONUSDT-1d-2026-10.zip"
+  },
+  "SOPHUSDT": {
+   "file": 18,
+   "primo": "SOPHUSDT-1d-2025-05.zip",
+   "ultimo": "SOPHUSDT-1d-2026-10.zip"
+  },
+  "SOXLUSDT": {
+   "file": 6,
+   "primo": "SOXLUSDT-1d-2026-05.zip",
+   "ultimo": "SOXLUSDT-1d-2026-10.zip"
+  },
+  "SOXSUSDT": {
+   "file": 4,
+   "primo": "SOXSUSDT-1d-2026-07.zip",
+   "ultimo": "SOXSUSDT-1d-2026-10.zip"
+  },
+  "SPACEUSDT": {
+   "file": 10,
+   "primo": "SPACEUSDT-1d-2026-01.zip",
+   "ultimo": "SPACEUSDT-1d-2026-10.zip"
+  },
+  "SPCXUSDT": {
+   "file": 6,
+   "primo": "SPCXUSDT-1d-2026-05.zip",
+   "ultimo": "SPCXUSDT-1d-2026-10.zip"
+  },
+  "SPELLUSDT": {
+   "file": 50,
+   "primo": "SPELLUSDT-1d-2022-09.zip",
+   "ultimo": "SPELLUSDT-1d-2026-10.zip"
+  },
+  "SPKUSDT": {
+   "file": 17,
+   "primo": "SPKUSDT-1d-2025-06.zip",
+   "ultimo": "SPKUSDT-1d-2026-10.zip"
+  },
+  "SPORTFUNUSDT": {
+   "file": 10,
+   "primo": "SPORTFUNUSDT-1d-2026-01.zip",
+   "ultimo": "SPORTFUNUSDT-1d-2026-10.zip"
+  },
+  "SPXUSDT": {
+   "file": 23,
+   "primo": "SPXUSDT-1d-2024-12.zip",
+   "ultimo": "SPXUSDT-1d-2026-10.zip"
+  },
+  "SPYUSDT": {
+   "file": 7,
+   "primo": "SPYUSDT-1d-2026-04.zip",
+   "ultimo": "SPYUSDT-1d-2026-10.zip"
+  },
+  "SQDUSDT": {
+   "file": 17,
+   "primo": "SQDUSDT-1d-2025-06.zip",
+   "ultimo": "SQDUSDT-1d-2026-10.zip"
+  },
+  "SQQQUSDT": {
+   "file": 5,
+   "primo": "SQQQUSDT-1d-2026-06.zip",
+   "ultimo": "SQQQUSDT-1d-2026-10.zip"
+  },
+  "SRMUSDT": {
+   "file": 30,
+   "primo": "SRMUSDT-1d-2021-12.zip",
+   "ultimo": "SRMUSDT-1d-2024-05.zip"
+  },
+  "SSVUSDT": {
+   "file": 45,
+   "primo": "SSVUSDT-1d-2023-02.zip",
+   "ultimo": "SSVUSDT-1d-2026-10.zip"
+  },
+  "STABLEUSDT": {
+   "file": 12,
+   "primo": "STABLEUSDT-1d-2025-11.zip",
+   "ultimo": "STABLEUSDT-1d-2026-10.zip"
+  },
+  "STARUSDT": {
+   "file": 6,
+   "primo": "STARUSDT-1d-2026-05.zip",
+   "ultimo": "STARUSDT-1d-2026-10.zip"
+  },
+  "STBLUSDT": {
+   "file": 14,
+   "primo": "STBLUSDT-1d-2025-09.zip",
+   "ultimo": "STBLUSDT-1d-2026-10.zip"
+  },
+  "STEEMUSDT": {
+   "file": 36,
+   "primo": "STEEMUSDT-1d-2023-11.zip",
+   "ultimo": "STEEMUSDT-1d-2026-10.zip"
+  },
+  "STGUSDT": {
+   "file": 51,
+   "primo": "STGUSDT-1d-2022-08.zip",
+   "ultimo": "STGUSDT-1d-2026-10.zip"
+  },
+  "STMUSDT": {
+   "file": 1,
+   "primo": "STMUSDT-1d-2026-10.zip",
+   "ultimo": "STMUSDT-1d-2026-10.zip"
+  },
+  "STMXUSDT": {
+   "file": 59,
+   "primo": "STMXUSDT-1d-2021-12.zip",
+   "ultimo": "STMXUSDT-1d-2026-10.zip"
+  },
+  "STORJUSDT": {
+   "file": 59,
+   "primo": "STORJUSDT-1d-2021-12.zip",
+   "ultimo": "STORJUSDT-1d-2026-10.zip"
+  },
+  "STOUSDT": {
+   "file": 19,
+   "primo": "STOUSDT-1d-2025-04.zip",
+   "ultimo": "STOUSDT-1d-2026-10.zip"
+  },
+  "STPTUSDT": {
+   "file": 37,
+   "primo": "STPTUSDT-1d-2023-10.zip",
+   "ultimo": "STPTUSDT-1d-2026-10.zip"
+  },
+  "STRAXUSDT": {
+   "file": 37,
+   "primo": "STRAXUSDT-1d-2023-10.zip",
+   "ultimo": "STRAXUSDT-1d-2026-10.zip"
+  },
+  "STRCUSDT": {
+   "file": 4,
+   "primo": "STRCUSDT-1d-2026-07.zip",
+   "ultimo": "STRCUSDT-1d-2026-10.zip"
+  },
+  "STRKUSDT": {
+   "file": 33,
+   "primo": "STRKUSDT-1d-2024-02.zip",
+   "ultimo": "STRKUSDT-1d-2026-10.zip"
+  },
+  "STXUSDT": {
+   "file": 45,
+   "primo": "STXUSDT-1d-2023-02.zip",
+   "ultimo": "STXUSDT-1d-2026-10.zip"
+  },
+  "STXXUSDT": {
+   "file": 5,
+   "primo": "STXXUSDT-1d-2026-06.zip",
+   "ultimo": "STXXUSDT-1d-2026-10.zip"
+  },
+  "SUIUSDT": {
+   "file": 42,
+   "primo": "SUIUSDT-1d-2023-05.zip",
+   "ultimo": "SUIUSDT-1d-2026-10.zip"
+  },
+  "SUNUSDT": {
+   "file": 27,
+   "primo": "SUNUSDT-1d-2024-08.zip",
+   "ultimo": "SUNUSDT-1d-2026-10.zip"
+  },
+  "SUPERUSDT": {
+   "file": 36,
+   "primo": "SUPERUSDT-1d-2023-11.zip",
+   "ultimo": "SUPERUSDT-1d-2026-10.zip"
+  },
+  "SUSDT": {
+   "file": 22,
+   "primo": "SUSDT-1d-2025-01.zip",
+   "ultimo": "SUSDT-1d-2026-10.zip"
+  },
+  "SUSHIUSDT": {
+   "file": 59,
+   "primo": "SUSHIUSDT-1d-2021-12.zip",
+   "ultimo": "SUSHIUSDT-1d-2026-10.zip"
+  },
+  "SWARMSUSDT": {
+   "file": 22,
+   "primo": "SWARMSUSDT-1d-2025-01.zip",
+   "ultimo": "SWARMSUSDT-1d-2026-10.zip"
+  },
+  "SWELLUSDT": {
+   "file": 24,
+   "primo": "SWELLUSDT-1d-2024-11.zip",
+   "ultimo": "SWELLUSDT-1d-2026-10.zip"
+  },
+  "SXPUSDT": {
+   "file": 54,
+   "primo": "SXPUSDT-1d-2021-12.zip",
+   "ultimo": "SXPUSDT-1d-2026-05.zip"
+  },
+  "SXTUSDT": {
+   "file": 18,
+   "primo": "SXTUSDT-1d-2025-05.zip",
+   "ultimo": "SXTUSDT-1d-2026-10.zip"
+  },
+  "SYNUSDT": {
+   "file": 27,
+   "primo": "SYNUSDT-1d-2024-08.zip",
+   "ultimo": "SYNUSDT-1d-2026-10.zip"
+  },
+  "SYRUPUSDT": {
+   "file": 18,
+   "primo": "SYRUPUSDT-1d-2025-05.zip",
+   "ultimo": "SYRUPUSDT-1d-2026-10.zip"
+  },
+  "SYSUSDT": {
+   "file": 27,
+   "primo": "SYSUSDT-1d-2024-08.zip",
+   "ultimo": "SYSUSDT-1d-2026-10.zip"
+  },
+  "TACUSDT": {
+   "file": 16,
+   "primo": "TACUSDT-1d-2025-07.zip",
+   "ultimo": "TACUSDT-1d-2026-10.zip"
+  },
+  "TAGUSDT": {
+   "file": 16,
+   "primo": "TAGUSDT-1d-2025-07.zip",
+   "ultimo": "TAGUSDT-1d-2026-10.zip"
+  },
+  "TAIKOUSDT": {
+   "file": 17,
+   "primo": "TAIKOUSDT-1d-2025-06.zip",
+   "ultimo": "TAIKOUSDT-1d-2026-10.zip"
+  },
+  "TAKEUSDT": {
+   "file": 14,
+   "primo": "TAKEUSDT-1d-2025-09.zip",
+   "ultimo": "TAKEUSDT-1d-2026-10.zip"
+  },
+  "TANSSIUSDT": {
+   "file": 16,
+   "primo": "TANSSIUSDT-1d-2025-07.zip",
+   "ultimo": "TANSSIUSDT-1d-2026-10.zip"
+  },
+  "TAOUSDT": {
+   "file": 31,
+   "primo": "TAOUSDT-1d-2024-04.zip",
+   "ultimo": "TAOUSDT-1d-2026-10.zip"
+  },
+  "TAUSDT": {
+   "file": 16,
+   "primo": "TAUSDT-1d-2025-07.zip",
+   "ultimo": "TAUSDT-1d-2026-10.zip"
+  },
+  "TBTUSDT": {
+   "file": 4,
+   "primo": "TBTUSDT-1d-2026-07.zip",
+   "ultimo": "TBTUSDT-1d-2026-10.zip"
+  },
+  "TEAMUSDT": {
+   "file": 2,
+   "primo": "TEAMUSDT-1d-2026-09.zip",
+   "ultimo": "TEAMUSDT-1d-2026-10.zip"
+  },
+  "TEMUSDT": {
+   "file": 3,
+   "primo": "TEMUSDT-1d-2026-08.zip",
+   "ultimo": "TEMUSDT-1d-2026-10.zip"
+  },
+  "TENCENTUSDT": {
+   "file": 4,
+   "primo": "TENCENTUSDT-1d-2026-07.zip",
+   "ultimo": "TENCENTUSDT-1d-2026-10.zip"
+  },
+  "TERUSDT": {
+   "file": 4,
+   "primo": "TERUSDT-1d-2026-07.zip",
+   "ultimo": "TERUSDT-1d-2026-10.zip"
+  },
+  "THETAUSDT": {
+   "file": 59,
+   "primo": "THETAUSDT-1d-2021-12.zip",
+   "ultimo": "THETAUSDT-1d-2026-10.zip"
+  },
+  "THEUSDT": {
+   "file": 24,
+   "primo": "THEUSDT-1d-2024-11.zip",
+   "ultimo": "THEUSDT-1d-2026-10.zip"
+  },
+  "TIAUSDT": {
+   "file": 37,
+   "primo": "TIAUSDT-1d-2023-10.zip",
+   "ultimo": "TIAUSDT-1d-2026-10.zip"
+  },
+  "TLMUSDT": {
+   "file": 59,
+   "primo": "TLMUSDT-1d-2021-12.zip",
+   "ultimo": "TLMUSDT-1d-2026-10.zip"
+  },
+  "TMFUSDT": {
+   "file": 4,
+   "primo": "TMFUSDT-1d-2026-07.zip",
+   "ultimo": "TMFUSDT-1d-2026-10.zip"
+  },
+  "TNSRUSDT": {
+   "file": 31,
+   "primo": "TNSRUSDT-1d-2024-04.zip",
+   "ultimo": "TNSRUSDT-1d-2026-10.zip"
+  },
+  "TOKENUSDT": {
+   "file": 36,
+   "primo": "TOKENUSDT-1d-2023-11.zip",
+   "ultimo": "TOKENUSDT-1d-2026-10.zip"
+  },
+  "TOMOUSDT": {
+   "file": 30,
+   "primo": "TOMOUSDT-1d-2021-12.zip",
+   "ultimo": "TOMOUSDT-1d-2024-05.zip"
+  },
+  "TONUSDT": {
+   "file": 32,
+   "primo": "TONUSDT-1d-2024-03.zip",
+   "ultimo": "TONUSDT-1d-2026-10.zip"
+  },
+  "TOSHIUSDT": {
+   "file": 14,
+   "primo": "TOSHIUSDT-1d-2025-09.zip",
+   "ultimo": "TOSHIUSDT-1d-2026-10.zip"
+  },
+  "TOWNSUSDT": {
+   "file": 15,
+   "primo": "TOWNSUSDT-1d-2025-08.zip",
+   "ultimo": "TOWNSUSDT-1d-2026-10.zip"
+  },
+  "TQQQUSDT": {
+   "file": 5,
+   "primo": "TQQQUSDT-1d-2026-06.zip",
+   "ultimo": "TQQQUSDT-1d-2026-10.zip"
+  },
+  "TRADOORUSDT": {
+   "file": 14,
+   "primo": "TRADOORUSDT-1d-2025-09.zip",
+   "ultimo": "TRADOORUSDT-1d-2026-10.zip"
+  },
+  "TRBUSDT": {
+   "file": 59,
+   "primo": "TRBUSDT-1d-2021-12.zip",
+   "ultimo": "TRBUSDT-1d-2026-10.zip"
+  },
+  "TREEUSDT": {
+   "file": 16,
+   "primo": "TREEUSDT-1d-2025-07.zip",
+   "ultimo": "TREEUSDT-1d-2026-10.zip"
+  },
+  "TRIAUSDT": {
+   "file": 9,
+   "primo": "TRIAUSDT-1d-2026-02.zip",
+   "ultimo": "TRIAUSDT-1d-2026-10.zip"
+  },
+  "TROYUSDT": {
+   "file": 25,
+   "primo": "TROYUSDT-1d-2024-10.zip",
+   "ultimo": "TROYUSDT-1d-2026-10.zip"
+  },
+  "TRUMPUSDT": {
+   "file": 22,
+   "primo": "TRUMPUSDT-1d-2025-01.zip",
+   "ultimo": "TRUMPUSDT-1d-2026-10.zip"
+  },
+  "TRUSTUSDT": {
+   "file": 12,
+   "primo": "TRUSTUSDT-1d-2025-11.zip",
+   "ultimo": "TRUSTUSDT-1d-2026-10.zip"
+  },
+  "TRUTHUSDT": {
+   "file": 13,
+   "primo": "TRUTHUSDT-1d-2025-10.zip",
+   "ultimo": "TRUTHUSDT-1d-2026-10.zip"
+  },
+  "TRUUSDT": {
+   "file": 44,
+   "primo": "TRUUSDT-1d-2023-03.zip",
+   "ultimo": "TRUUSDT-1d-2026-10.zip"
+  },
+  "TRXUSDT": {
+   "file": 59,
+   "primo": "TRXUSDT-1d-2021-12.zip",
+   "ultimo": "TRXUSDT-1d-2026-10.zip"
+  },
+  "TSLAUSDT": {
+   "file": 10,
+   "primo": "TSLAUSDT-1d-2026-01.zip",
+   "ultimo": "TSLAUSDT-1d-2026-10.zip"
+  },
+  "TSLLUSDT": {
+   "file": 2,
+   "primo": "TSLLUSDT-1d-2026-09.zip",
+   "ultimo": "TSLLUSDT-1d-2026-10.zip"
+  },
+  "TSMUSDT": {
+   "file": 7,
+   "primo": "TSMUSDT-1d-2026-04.zip",
+   "ultimo": "TSMUSDT-1d-2026-10.zip"
+  },
+  "TSTUSDT": {
+   "file": 21,
+   "primo": "TSTUSDT-1d-2025-02.zip",
+   "ultimo": "TSTUSDT-1d-2026-10.zip"
+  },
+  "TTWOUSDT": {
+   "file": 4,
+   "primo": "TTWOUSDT-1d-2026-07.zip",
+   "ultimo": "TTWOUSDT-1d-2026-10.zip"
+  },
+  "TURBOUSDT": {
+   "file": 30,
+   "primo": "TURBOUSDT-1d-2024-05.zip",
+   "ultimo": "TURBOUSDT-1d-2026-10.zip"
+  },
+  "TURTLEUSDT": {
+   "file": 13,
+   "primo": "TURTLEUSDT-1d-2025-10.zip",
+   "ultimo": "TURTLEUSDT-1d-2026-10.zip"
+  },
+  "TUTUSDT": {
+   "file": 20,
+   "primo": "TUTUSDT-1d-2025-03.zip",
+   "ultimo": "TUTUSDT-1d-2026-10.zip"
+  },
+  "TWSTUSDT": {
+   "file": 2,
+   "primo": "TWSTUSDT-1d-2026-09.zip",
+   "ultimo": "TWSTUSDT-1d-2026-10.zip"
+  },
+  "TWTUSDT": {
+   "file": 36,
+   "primo": "TWTUSDT-1d-2023-11.zip",
+   "ultimo": "TWTUSDT-1d-2026-10.zip"
+  },
+  "TXNUSDT": {
+   "file": 4,
+   "primo": "TXNUSDT-1d-2026-07.zip",
+   "ultimo": "TXNUSDT-1d-2026-10.zip"
+  },
+  "TZAUSDT": {
+   "file": 4,
+   "primo": "TZAUSDT-1d-2026-07.zip",
+   "ultimo": "TZAUSDT-1d-2026-10.zip"
+  },
+  "UAIUSDT": {
+   "file": 12,
+   "primo": "UAIUSDT-1d-2025-11.zip",
+   "ultimo": "UAIUSDT-1d-2026-10.zip"
+  },
+  "UBERUSDT": {
+   "file": 6,
+   "primo": "UBERUSDT-1d-2026-05.zip",
+   "ultimo": "UBERUSDT-1d-2026-10.zip"
+  },
+  "UBUSDT": {
+   "file": 14,
+   "primo": "UBUSDT-1d-2025-09.zip",
+   "ultimo": "UBUSDT-1d-2026-10.zip"
+  },
+  "UMAUSDT": {
+   "file": 42,
+   "primo": "UMAUSDT-1d-2023-05.zip",
+   "ultimo": "UMAUSDT-1d-2026-10.zip"
+  },
+  "UNFIUSDT": {
+   "file": 59,
+   "primo": "UNFIUSDT-1d-2021-12.zip",
+   "ultimo": "UNFIUSDT-1d-2026-10.zip"
+  },
+  "UNHUSDT": {
+   "file": 2,
+   "primo": "UNHUSDT-1d-2026-09.zip",
+   "ultimo": "UNHUSDT-1d-2026-10.zip"
+  },
+  "UNITREEUSDT": {
+   "file": 3,
+   "primo": "UNITREEUSDT-1d-2026-08.zip",
+   "ultimo": "UNITREEUSDT-1d-2026-10.zip"
+  },
+  "UNIUSDT": {
+   "file": 59,
+   "primo": "UNIUSDT-1d-2021-12.zip",
+   "ultimo": "UNIUSDT-1d-2026-10.zip"
+  },
+  "URNMUSDT": {
+   "file": 5,
+   "primo": "URNMUSDT-1d-2026-06.zip",
+   "ultimo": "URNMUSDT-1d-2026-10.zip"
+  },
+  "USARUSDT": {
+   "file": 6,
+   "primo": "USARUSDT-1d-2026-05.zip",
+   "ultimo": "USARUSDT-1d-2026-10.zip"
+  },
+  "USDBRLUSDT": {
+   "file": 2,
+   "primo": "USDBRLUSDT-1d-2026-09.zip",
+   "ultimo": "USDBRLUSDT-1d-2026-10.zip"
+  },
+  "USDEXUSDT": {
+   "file": 1,
+   "primo": "USDEXUSDT-1d-2026-10.zip",
+   "ultimo": "USDEXUSDT-1d-2026-10.zip"
+  },
+  "USELESSUSDT": {
+   "file": 15,
+   "primo": "USELESSUSDT-1d-2025-08.zip",
+   "ultimo": "USELESSUSDT-1d-2026-10.zip"
+  },
+  "USTCUSDT": {
+   "file": 36,
+   "primo": "USTCUSDT-1d-2023-11.zip",
+   "ultimo": "USTCUSDT-1d-2026-10.zip"
+  },
+  "USUALUSDT": {
+   "file": 23,
+   "primo": "USUALUSDT-1d-2024-12.zip",
+   "ultimo": "USUALUSDT-1d-2026-10.zip"
+  },
+  "USUSDT": {
+   "file": 11,
+   "primo": "USUSDT-1d-2025-12.zip",
+   "ultimo": "USUSDT-1d-2026-10.zip"
+  },
+  "UVXYUSDT": {
+   "file": 5,
+   "primo": "UVXYUSDT-1d-2026-06.zip",
+   "ultimo": "UVXYUSDT-1d-2026-10.zip"
+  },
+  "UXLINKUSDT": {
+   "file": 26,
+   "primo": "UXLINKUSDT-1d-2024-09.zip",
+   "ultimo": "UXLINKUSDT-1d-2026-10.zip"
+  },
+  "VANAUSDT": {
+   "file": 23,
+   "primo": "VANAUSDT-1d-2024-12.zip",
+   "ultimo": "VANAUSDT-1d-2026-10.zip"
+  },
+  "VANRYUSDT": {
+   "file": 32,
+   "primo": "VANRYUSDT-1d-2024-03.zip",
+   "ultimo": "VANRYUSDT-1d-2026-10.zip"
+  },
+  "VELODROMEUSDT": {
+   "file": 23,
+   "primo": "VELODROMEUSDT-1d-2024-12.zip",
+   "ultimo": "VELODROMEUSDT-1d-2026-10.zip"
+  },
+  "VELVETUSDT": {
+   "file": 16,
+   "primo": "VELVETUSDT-1d-2025-07.zip",
+   "ultimo": "VELVETUSDT-1d-2026-10.zip"
+  },
+  "VETUSDT": {
+   "file": 59,
+   "primo": "VETUSDT-1d-2021-12.zip",
+   "ultimo": "VETUSDT-1d-2026-10.zip"
+  },
+  "VFYUSDT": {
+   "file": 14,
+   "primo": "VFYUSDT-1d-2025-09.zip",
+   "ultimo": "VFYUSDT-1d-2026-10.zip"
+  },
+  "VICUSDT": {
+   "file": 20,
+   "primo": "VICUSDT-1d-2025-03.zip",
+   "ultimo": "VICUSDT-1d-2026-10.zip"
+  },
+  "VIDTUSDT": {
+   "file": 27,
+   "primo": "VIDTUSDT-1d-2024-08.zip",
+   "ultimo": "VIDTUSDT-1d-2026-10.zip"
+  },
+  "VINEUSDT": {
+   "file": 22,
+   "primo": "VINEUSDT-1d-2025-01.zip",
+   "ultimo": "VINEUSDT-1d-2026-10.zip"
+  },
+  "VIRTUALUSDT": {
+   "file": 23,
+   "primo": "VIRTUALUSDT-1d-2024-12.zip",
+   "ultimo": "VIRTUALUSDT-1d-2026-10.zip"
+  },
+  "VKTXUSDT": {
+   "file": 1,
+   "primo": "VKTXUSDT-1d-2026-10.zip",
+   "ultimo": "VKTXUSDT-1d-2026-10.zip"
+  },
+  "VOXELUSDT": {
+   "file": 27,
+   "primo": "VOXELUSDT-1d-2024-08.zip",
+   "ultimo": "VOXELUSDT-1d-2026-10.zip"
+  },
+  "VRTUSDT": {
+   "file": 4,
+   "primo": "VRTUSDT-1d-2026-07.zip",
+   "ultimo": "VRTUSDT-1d-2026-10.zip"
+  },
+  "VSTUSDT": {
+   "file": 3,
+   "primo": "VSTUSDT-1d-2026-08.zip",
+   "ultimo": "VSTUSDT-1d-2026-10.zip"
+  },
+  "VTHOUSDT": {
+   "file": 22,
+   "primo": "VTHOUSDT-1d-2025-01.zip",
+   "ultimo": "VTHOUSDT-1d-2026-10.zip"
+  },
+  "VUSDT": {
+   "file": 6,
+   "primo": "VUSDT-1d-2026-05.zip",
+   "ultimo": "VUSDT-1d-2026-10.zip"
+  },
+  "VVVUSDT": {
+   "file": 22,
+   "primo": "VVVUSDT-1d-2025-01.zip",
+   "ultimo": "VVVUSDT-1d-2026-10.zip"
+  },
+  "WALUSDT": {
+   "file": 20,
+   "primo": "WALUSDT-1d-2025-03.zip",
+   "ultimo": "WALUSDT-1d-2026-10.zip"
+  },
+  "WAVESUSDT": {
+   "file": 59,
+   "primo": "WAVESUSDT-1d-2021-12.zip",
+   "ultimo": "WAVESUSDT-1d-2026-10.zip"
+  },
+  "WAXPUSDT": {
+   "file": 37,
+   "primo": "WAXPUSDT-1d-2023-10.zip",
+   "ultimo": "WAXPUSDT-1d-2026-10.zip"
+  },
+  "WCTUSDT": {
+   "file": 19,
+   "primo": "WCTUSDT-1d-2025-04.zip",
+   "ultimo": "WCTUSDT-1d-2026-10.zip"
+  },
+  "WDCUSDT": {
+   "file": 6,
+   "primo": "WDCUSDT-1d-2026-05.zip",
+   "ultimo": "WDCUSDT-1d-2026-10.zip"
+  },
+  "WENUSDT": {
+   "file": 4,
+   "primo": "WENUSDT-1d-2026-07.zip",
+   "ultimo": "WENUSDT-1d-2026-10.zip"
+  },
+  "WETUSDT": {
+   "file": 11,
+   "primo": "WETUSDT-1d-2025-12.zip",
+   "ultimo": "WETUSDT-1d-2026-10.zip"
+  },
+  "WIFUSDT": {
+   "file": 34,
+   "primo": "WIFUSDT-1d-2024-01.zip",
+   "ultimo": "WIFUSDT-1d-2026-10.zip"
+  },
+  "WLDUSDT": {
+   "file": 40,
+   "primo": "WLDUSDT-1d-2023-07.zip",
+   "ultimo": "WLDUSDT-1d-2026-10.zip"
+  },
+  "WLFIUSDT": {
+   "file": 15,
+   "primo": "WLFIUSDT-1d-2025-08.zip",
+   "ultimo": "WLFIUSDT-1d-2026-10.zip"
+  },
+  "WMTUSDT": {
+   "file": 6,
+   "primo": "WMTUSDT-1d-2026-05.zip",
+   "ultimo": "WMTUSDT-1d-2026-10.zip"
+  },
+  "WOOUSDT": {
+   "file": 55,
+   "primo": "WOOUSDT-1d-2022-04.zip",
+   "ultimo": "WOOUSDT-1d-2026-10.zip"
+  },
+  "WUSDT": {
+   "file": 31,
+   "primo": "WUSDT-1d-2024-04.zip",
+   "ultimo": "WUSDT-1d-2026-10.zip"
+  },
+  "XAGUSDT": {
+   "file": 10,
+   "primo": "XAGUSDT-1d-2026-01.zip",
+   "ultimo": "XAGUSDT-1d-2026-10.zip"
+  },
+  "XAIUSDT": {
+   "file": 34,
+   "primo": "XAIUSDT-1d-2024-01.zip",
+   "ultimo": "XAIUSDT-1d-2026-10.zip"
+  },
+  "XANUSDT": {
+   "file": 14,
+   "primo": "XANUSDT-1d-2025-09.zip",
+   "ultimo": "XANUSDT-1d-2026-10.zip"
+  },
+  "XAUTUSDT": {
+   "file": 8,
+   "primo": "XAUTUSDT-1d-2026-03.zip",
+   "ultimo": "XAUTUSDT-1d-2026-10.zip"
+  },
+  "XAUUSDT": {
+   "file": 11,
+   "primo": "XAUUSDT-1d-2025-12.zip",
+   "ultimo": "XAUUSDT-1d-2026-10.zip"
+  },
+  "XBIUSDT": {
+   "file": 4,
+   "primo": "XBIUSDT-1d-2026-07.zip",
+   "ultimo": "XBIUSDT-1d-2026-10.zip"
+  },
+  "XCNUSDT": {
+   "file": 19,
+   "primo": "XCNUSDT-1d-2025-04.zip",
+   "ultimo": "XCNUSDT-1d-2026-10.zip"
+  },
+  "XEMUSDT": {
+   "file": 59,
+   "primo": "XEMUSDT-1d-2021-12.zip",
+   "ultimo": "XEMUSDT-1d-2026-10.zip"
+  },
+  "XLEUSDT": {
+   "file": 5,
+   "primo": "XLEUSDT-1d-2026-06.zip",
+   "ultimo": "XLEUSDT-1d-2026-10.zip"
+  },
+  "XLMUSDT": {
+   "file": 59,
+   "primo": "XLMUSDT-1d-2021-12.zip",
+   "ultimo": "XLMUSDT-1d-2026-10.zip"
+  },
+  "XMRUSDT": {
+   "file": 59,
+   "primo": "XMRUSDT-1d-2021-12.zip",
+   "ultimo": "XMRUSDT-1d-2026-10.zip"
+  },
+  "XNYUSDT": {
+   "file": 15,
+   "primo": "XNYUSDT-1d-2025-08.zip",
+   "ultimo": "XNYUSDT-1d-2026-10.zip"
+  },
+  "XOMUSDT": {
+   "file": 2,
+   "primo": "XOMUSDT-1d-2026-09.zip",
+   "ultimo": "XOMUSDT-1d-2026-10.zip"
+  },
+  "XPDUSDT": {
+   "file": 10,
+   "primo": "XPDUSDT-1d-2026-01.zip",
+   "ultimo": "XPDUSDT-1d-2026-10.zip"
+  },
+  "XPINUSDT": {
+   "file": 14,
+   "primo": "XPINUSDT-1d-2025-09.zip",
+   "ultimo": "XPINUSDT-1d-2026-10.zip"
+  },
+  "XPLUSDT": {
+   "file": 15,
+   "primo": "XPLUSDT-1d-2025-08.zip",
+   "ultimo": "XPLUSDT-1d-2026-10.zip"
+  },
+  "XPTUSDT": {
+   "file": 10,
+   "primo": "XPTUSDT-1d-2026-01.zip",
+   "ultimo": "XPTUSDT-1d-2026-10.zip"
+  },
+  "XRPUSDT": {
+   "file": 59,
+   "primo": "XRPUSDT-1d-2021-12.zip",
+   "ultimo": "XRPUSDT-1d-2026-10.zip"
+  },
+  "XTZUSDT": {
+   "file": 59,
+   "primo": "XTZUSDT-1d-2021-12.zip",
+   "ultimo": "XTZUSDT-1d-2026-10.zip"
+  },
+  "XVGUSDT": {
+   "file": 40,
+   "primo": "XVGUSDT-1d-2023-07.zip",
+   "ultimo": "XVGUSDT-1d-2026-10.zip"
+  },
+  "XVSUSDT": {
+   "file": 43,
+   "primo": "XVSUSDT-1d-2023-04.zip",
+   "ultimo": "XVSUSDT-1d-2026-10.zip"
+  },
+  "YALAUSDT": {
+   "file": 15,
+   "primo": "YALAUSDT-1d-2025-08.zip",
+   "ultimo": "YALAUSDT-1d-2026-10.zip"
+  },
+  "YBUSDT": {
+   "file": 13,
+   "primo": "YBUSDT-1d-2025-10.zip",
+   "ultimo": "YBUSDT-1d-2026-10.zip"
+  },
+  "YFIIUSDT": {
+   "file": 5,
+   "primo": "YFIIUSDT-1d-2021-12.zip",
+   "ultimo": "YFIIUSDT-1d-2022-04.zip"
+  },
+  "YFIUSDT": {
+   "file": 59,
+   "primo": "YFIUSDT-1d-2021-12.zip",
+   "ultimo": "YFIUSDT-1d-2026-10.zip"
+  },
+  "YGGUSDT": {
+   "file": 39,
+   "primo": "YGGUSDT-1d-2023-08.zip",
+   "ultimo": "YGGUSDT-1d-2026-10.zip"
+  },
+  "ZAMAUSDT": {
+   "file": 10,
+   "primo": "ZAMAUSDT-1d-2026-01.zip",
+   "ultimo": "ZAMAUSDT-1d-2026-10.zip"
+  },
+  "ZBTUSDT": {
+   "file": 13,
+   "primo": "ZBTUSDT-1d-2025-10.zip",
+   "ultimo": "ZBTUSDT-1d-2026-10.zip"
+  },
+  "ZCSHUSDT": {
+   "file": 1,
+   "primo": "ZCSHUSDT-1d-2026-10.zip",
+   "ultimo": "ZCSHUSDT-1d-2026-10.zip"
+  },
+  "ZECUSDT": {
+   "file": 59,
+   "primo": "ZECUSDT-1d-2021-12.zip",
+   "ultimo": "ZECUSDT-1d-2026-10.zip"
+  },
+  "ZENUSDT": {
+   "file": 59,
+   "primo": "ZENUSDT-1d-2021-12.zip",
+   "ultimo": "ZENUSDT-1d-2026-10.zip"
+  },
+  "ZEREBROUSDT": {
+   "file": 22,
+   "primo": "ZEREBROUSDT-1d-2025-01.zip",
+   "ultimo": "ZEREBROUSDT-1d-2026-10.zip"
+  },
+  "ZESTUSDT": {
+   "file": 5,
+   "primo": "ZESTUSDT-1d-2026-06.zip",
+   "ultimo": "ZESTUSDT-1d-2026-10.zip"
+  },
+  "ZETAUSDT": {
+   "file": 33,
+   "primo": "ZETAUSDT-1d-2024-02.zip",
+   "ultimo": "ZETAUSDT-1d-2026-10.zip"
+  },
+  "ZHIPUUSDT": {
+   "file": 4,
+   "primo": "ZHIPUUSDT-1d-2026-07.zip",
+   "ultimo": "ZHIPUUSDT-1d-2026-10.zip"
+  },
+  "ZHONGJIUSDT": {
+   "file": 3,
+   "primo": "ZHONGJIUSDT-1d-2026-08.zip",
+   "ultimo": "ZHONGJIUSDT-1d-2026-10.zip"
+  },
+  "ZILUSDT": {
+   "file": 59,
+   "primo": "ZILUSDT-1d-2021-12.zip",
+   "ultimo": "ZILUSDT-1d-2026-10.zip"
+  },
+  "ZKCUSDT": {
+   "file": 14,
+   "primo": "ZKCUSDT-1d-2025-09.zip",
+   "ultimo": "ZKCUSDT-1d-2026-10.zip"
+  },
+  "ZKJUSDT": {
+   "file": 18,
+   "primo": "ZKJUSDT-1d-2025-05.zip",
+   "ultimo": "ZKJUSDT-1d-2026-10.zip"
+  },
+  "ZKPUSDT": {
+   "file": 11,
+   "primo": "ZKPUSDT-1d-2025-12.zip",
+   "ultimo": "ZKPUSDT-1d-2026-10.zip"
+  },
+  "ZKUSDT": {
+   "file": 29,
+   "primo": "ZKUSDT-1d-2024-06.zip",
+   "ultimo": "ZKUSDT-1d-2026-10.zip"
+  },
+  "ZMUSDT": {
+   "file": 5,
+   "primo": "ZMUSDT-1d-2026-06.zip",
+   "ultimo": "ZMUSDT-1d-2026-10.zip"
+  },
+  "ZORAUSDT": {
+   "file": 16,
+   "primo": "ZORAUSDT-1d-2025-07.zip",
+   "ultimo": "ZORAUSDT-1d-2026-10.zip"
+  },
+  "ZRCUSDT": {
+   "file": 16,
+   "primo": "ZRCUSDT-1d-2025-07.zip",
+   "ultimo": "ZRCUSDT-1d-2026-10.zip"
+  },
+  "ZROUSDT": {
+   "file": 29,
+   "primo": "ZROUSDT-1d-2024-06.zip",
+   "ultimo": "ZROUSDT-1d-2026-10.zip"
+  },
+  "ZRXUSDT": {
+   "file": 59,
+   "primo": "ZRXUSDT-1d-2021-12.zip",
+   "ultimo": "ZRXUSDT-1d-2026-10.zip"
+  },
+  "ZSUSDT": {
+   "file": 2,
+   "primo": "ZSUSDT-1d-2026-09.zip",
+   "ultimo": "ZSUSDT-1d-2026-10.zip"
+  }
+ },
+ "simboli_con_buchi": 53
+}

@@ -909,3 +909,9 @@ spesso non si possono giudicare sul passato, solo in avanti.
 (spazi ufficiali verificati, approvate, perpetuo esistente, 30 giorni fra due eventi) restano 26 eventi in sei anni; sotto i 40 la prova si
 ferma prima di caricare i prezzi e non entra nel conto. **Capito oggi**: i voti che spostano soldi ai possessori sono rari sulle monete con
 il perpetuo di Binance (una manciata l'anno): l'idea è giusta ma il mercato è troppo piccolo per una regola sul passato.
+**22 novembre, 11:30 UTC, prova 165: prevedere le chiusure dei perpetui di Binance prima dell'annuncio non passa**
+(`research/programma7/RISULTATI_CENTOTREESIMA.md`): A +5,67% l'anno, B +20,66%, ma il 2026 perde il 43% e il 47%, t 0,30 e 0,75,
+Sharpe corretto 0,005 e 0,015, sotto le scelte a caso. Il guadagno non viene dalle chiusure (A: nessuna posizione poi annunciata; B: 22%
+dopo l'annuncio, 0% prima): la regola vende semplicemente le monete poco scambiate, che nel 2024-2025 scendono e nel 2026 salgono. Conto
+delle prove 336. **Capito oggi**: con il solo volume non si riconosce in anticipo quale contratto Binance chiuderà; le chiusure sono poche
+(87 in cinque anni) e i contratti poco scambiati che restano vivi sono molti di più.

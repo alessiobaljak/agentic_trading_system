@@ -273,7 +273,7 @@ class Costi:
 def periodo_moneta(d: Dati, c: int, D: int, E: int, Pe: float, V: float, rate: np.ndarray, cache: dict) -> dict:
     """Una moneta in short dall'apertura del giorno D (indice) fino alla decisione dopo E (o all'uscita prima), con la sua parte di
     Bitcoin long. Entrata all'apertura D; prezzo di entrata della protezione Pe."""
-    chiave = (c, D, E, Pe, id(rate))
+    chiave = (c, D, E, Pe, V, id(rate))
     if chiave in cache:
         return cache[chiave]
     b = d.btc
