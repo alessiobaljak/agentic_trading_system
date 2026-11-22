@@ -91,6 +91,28 @@ FAIL sul valore.
 4. Alcuni voti sono ratifiche di cose già annunciate nei forum (il mercato sa prima): il rialzo, se c'è, può stare prima dell'entrata.
 5. Le scelte e i nomi delle opzioni di Snapshot non sono uniformi: il punto 2 della regola scarta quelli ambigui; il rapporto dice quanti.
 
+## Chiusura della verifica (22 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTOCINQUESIMA.md`, 14 punti, 2 bloccanti). **Dove il testo sopra dice diversamente,
+vale questa sezione.** Dove c'era una scelta, si è presa la più prudente e senza giudizi a mano.
+1. **Spazi ufficiali, con un criterio meccanico** (punti 1 e 2 bloccanti; il controllo con il campo `coingecko` è abolito): uno spazio
+   entra solo se in Snapshot ha `verified` vero e `flagged` falso **e** il suo nome (`name`, senza distinzione di maiuscole) contiene la
+   sigla del gettone o il nome della moneta nell'elenco dei nomi di `research/notizie/nomi_2026-11.json` (per le monete fuori elenco,
+   solo la sigla). Gli spazi con sigla di una stablecoin (USDT, USDC, DAI, BUSD, FDUSD, TUSD, USDE, FRAX, LUSD) o di BTC, ETH, BNB, SOL,
+   MATIC, POL, AVAX, ARB, OP, FTM escono sempre, salvo che il nome contenga il nome della moneta (per esempio «Arbitrum DAO» per ARB).
+   Nessun elenco a mano. L'elenco degli spazi che entrano e di quelli che escono, con il motivo, si scrive nel rapporto prima dei risultati.
+2. **Parole del titolo** (punto 3): parole intere, senza distinzione di maiuscole («burn» non vale dentro un'altra parola); escono i titoli
+   con una di queste parole: pause, stop, end, halt, cancel, reduce, suspend, remove, terminate, deprecate. Nient'altro si toglie, né prima
+   né dopo i risultati.
+3. **Approvato** (punto 7): la scelta con il punteggio più alto deve cominciare con «Yes», «For», «Approve», «Accept», «In favor» (senza
+   distinzione di maiuscole); altrimenti la proposta esce.
+4. **I 30 giorni** (punto 6): si contano dalla fine del voto dell'ultimo evento tenuto della stessa moneta; un evento scartato non
+   riavvia il conto.
+5. **Il t e gli anni** (punto 12): sulle serie settimanali di tutte le settimane del periodo (quelle senza posizione valgono zero), come
+   nelle prove 157-163, dopo `periodo()` di `asticella`.
+6. Punti 4, 5, 8-11, 13 e 14: valgono le correzioni scritte nel rapporto di verifica, punto per punto, così come sono.
+7. Sotto i **40 eventi** dopo tutti i filtri l'esito è «campione troppo piccolo» e la prova non entra nel conto (non si calcola nessun
+   rendimento); il conto degli eventi si fa e si scrive prima di caricare i prezzi.
+
 ## Cosa si consegna
 `research/programma7/RISULTATI_CENTOCINQUESIMA.md`, serie in `research/programma7/risultati_centocinquesima/` (giornaliere e settimanali
 nette, leggibili da `asticella.py`), script `research/programma7/centocinquesima.py` e uno per i dati
