@@ -86,8 +86,15 @@ def elenco_cartelle(prefisso: str) -> list[str]:
     nomi, marker = [], ""
     while True:
         url = f"{S3}?delimiter=/&prefix={prefisso}" + (f"&marker={marker}" if marker else "")
-        with urllib.request.urlopen(url, timeout=90) as f:
-            root = ET.fromstring(f.read())
+        for tent in range(6):
+            try:
+                with urllib.request.urlopen(url, timeout=90) as f:
+                    root = ET.fromstring(f.read())
+                break
+            except Exception:  # noqa: BLE001
+                if tent == 5:
+                    raise
+                time.sleep(2 * (tent + 1))
         ns = {"s": "http://s3.amazonaws.com/doc/2006-03-01/"}
         pref = [e.text for e in root.findall("s:CommonPrefixes/s:Prefix", ns)]
         chiavi = [e.text for e in root.findall("s:Contents/s:Key", ns)]
