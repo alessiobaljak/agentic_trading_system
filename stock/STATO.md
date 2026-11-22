@@ -31,6 +31,10 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 
 ## Cosa aspetta il proprietario
 
+0. **(22 novembre) Aprire o no il periodo chiuso per la prova 45**, con l'esame «da crisi» scritto prima
+   (`prove/P045b_esame_da_crisi.md`): il revisore ha confermato il segnale ma ha bocciato perché il guadagno sta in marzo 2020; il
+   2025-2026 sarebbe il secondo episodio, con il dato della copertura pubblicato in tempo reale. Una sola apertura, conta una prova.
+   **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti).
 1. **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
    farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
    conto di paper trading: lì c'è il **nome utente del demo**, diverso da quello del conto vero, e conviene dargli una password sua
