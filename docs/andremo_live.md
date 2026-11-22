@@ -921,3 +921,7 @@ la reazione ci sarà dopo»): scritte le regole della lettura dei fatti gravi de
 chiusure +7,89% su 77, Coinbase +4,03% su 104, vinte il 57-67%); nelle azioni la sessione «trading stock» trova oggi che dopo le
 dimissioni del capo il calo arriva prima di poter entrare (−1,17%, t −3,02) e dopo, in media, niente su 243 casi. **Capito oggi**: la
 notizia ovvia è già nel prezzo quando la si può usare; se c'è un guadagno, sta nel riconoscere i casi che continuano per giorni.
+**22 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (45 articoli nuovi), 40 conti copiati, mappa delle liquidazioni
+(600 conti, 2.352 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. Ricerca nuova: la prova 168 (G1, G11, G1 neutra
+e F5 insieme sullo stesso conto, idea del proprietario) è in calcolo dopo la verifica. G1: nessun passo nuovo in questo giro. **Capito
+oggi**: niente di nuovo in questo giro.
