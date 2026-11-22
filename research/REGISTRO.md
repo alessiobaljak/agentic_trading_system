@@ -556,3 +556,10 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    date); il voto che passa cambia quanto vale tenere il gettone, e i forum li leggono in pochi. Una regola semplice si prova sul passato;
    la lettura dei testi con l'intelligenza artificiale solo dopo la data di addestramento e in avanti. Regole: strategy-scout. → prova 167:
    **campione troppo piccolo** (26 eventi in sei anni, riga 167).
+158. **I fatti gravi del giorno prima, letti ogni mattina** (idea del proprietario del 22 novembre: «non si tratta di predire prima
+   [...] ma sai benissimo la reazione ci sarà dopo gli annunci, dopo gli articoli»; «Scrivi la regola e procedi da domani»): ogni
+   mattina la sessione principale legge le notizie delle 24 ore prima su tutte le monete con il perpetuo, segna quelle con un fatto
+   che continuerà a muovere il prezzo nei giorni dopo, con direzione e forza, prima dei prezzi; si misura a 1, 3 e 7 giorni contro il
+   Bitcoin dopo 40 casi. Il perché: le regole fisse dopo la notizia (prove 105, 107, 146; dimissioni dei capi nelle azioni, prova 46 di
+   `stock/REGISTRO.md`) guadagnano poco o niente perché il mercato prezza subito i casi ovvi; il valore sta nel distinguere caso per
+   caso. Misura in avanti dal 23 novembre, fuori dal conto finché non diventa una strategia (`research/notizie/FATTI_GRAVI.md`).

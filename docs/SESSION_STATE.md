@@ -50,6 +50,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Ogni mattina dal 23 novembre, giro delle 04:17, anche i fatti gravi** (idea 158, il proprietario: «Scrivi la regola e procedi
+  da domani»): `python3 -m research.notizie.fatti_gravi`, si leggono i titoli, si segnano i casi con direzione, forza, ore e perché
+  PRIMA dei prezzi, si committa subito (regole `research/notizie/FATTI_GRAVI.md`). Misura dopo 40 casi.
 - **Ogni mattina dal 22 novembre, giro delle 04:17** (voce 14 di G1, approvata dal proprietario il 21 novembre): appena arriva la
   risposta «stato», `python3 -m research.programma7.misure_g1.voce14_lettura`, poi si leggono le notizie delle monete vendute (archivio
   + al più una ricerca sul web per moneta con peso di almeno il 2%), si scrive il giudizio nel foglio `misure_g1/voce14_letture/` PRIMA

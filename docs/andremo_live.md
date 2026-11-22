@@ -915,3 +915,9 @@ Sharpe corretto 0,005 e 0,015, sotto le scelte a caso. Il guadagno non viene dal
 dopo l'annuncio, 0% prima): la regola vende semplicemente le monete poco scambiate, che nel 2024-2025 scendono e nel 2026 salgono. Conto
 delle prove 336. **Capito oggi**: con il solo volume non si riconosce in anticipo quale contratto Binance chiuderà; le chiusure sono poche
 (87 in cinque anni) e i contratti poco scambiati che restano vivi sono molti di più.
+**22 novembre, 14:30 UTC, la reazione dopo la notizia** (domanda del proprietario: «non si tratta di predire prima [...] ma sai benissimo
+la reazione ci sarà dopo»): scritte le regole della lettura dei fatti gravi del giorno prima (`research/notizie/FATTI_GRAVI.md`, idea
+158), prima lettura domattina. Il perché viene dai numeri: le regole fisse dopo la notizia guadagnano poco (attacchi +3,94% su 28 casi,
+chiusure +7,89% su 77, Coinbase +4,03% su 104, vinte il 57-67%); nelle azioni la sessione «trading stock» trova oggi che dopo le
+dimissioni del capo il calo arriva prima di poter entrare (−1,17%, t −3,02) e dopo, in media, niente su 243 casi. **Capito oggi**: la
+notizia ovvia è già nel prezzo quando la si può usare; se c'è un guadagno, sta nel riconoscere i casi che continuano per giorni.
