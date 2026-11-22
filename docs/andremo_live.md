@@ -888,3 +888,12 @@ notizie delle 31 monete vendute, salvata alle 04:22:56 prima di qualunque prezzo
 nulla di specifico, 21 ricerche sul web senza notizie datate nelle 48 ore). Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: per
 le monete piccole vendute da G1 le notizie del giorno quasi non esistono nelle fonti pubbliche che leggiamo; se le fiammate hanno una
 causa, sta altrove (annunci delle borse, canali dei progetti) o non si legge prima.
+**22 novembre, 08:45 UTC, decisione del proprietario: le idee nuove si provano da sole** («perché aspetti il mio via libera, le idee le
+devi provare in automatico»; `docs/decisioni_del_proprietario.md`). Partite insieme: (1) le monete che arrivano nei portafogli delle borse
+prima della quotazione (prova 164): **non eseguibile gratis**, lo storico dei trasferimenti chiede una chiave (Etherscan, solo Ethereum)
+o un servizio a pagamento; (2) la mappa delle liquidazioni di Hyperliquid: **raccolta partita** a ogni giro, 600 conti, prima lettura
+2.337 posizioni sopra i 10.000 dollari per 2,82 miliardi (`research/trader_copiati/LIQUIDAZIONI.md`). Idee nuove in coda e regole
+scritte: prevedere le chiusure dei perpetui di Binance (prova 165), le società con le monete in cassa che valgono meno di loro (prova
+166), entrambe in verifica; le proposte di governo dei gettoni (idea 157) dallo scout. **Capito oggi**: nella prima lettura, sul
+Bitcoin ci sono 48,7 milioni di posizioni corte con il prezzo di liquidazione entro il +10% e nessuna lunga entro il −10%: dopo il
+crollo i grandi conti sono quasi tutti venduti (lo stesso che si vede nella copia delle balene).
