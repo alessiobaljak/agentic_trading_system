@@ -931,3 +931,7 @@ Sharpe 2,14, discesa −24,9%; G1 da sola sulle stesse settimane +54,1%, Sharpe 
 Sharpe corretto è 0,75 (G1 0,76): per l'esame scritto no. Correlazione con G1 0,98. In avanti dal 31 ottobre (22 giorni) un quarto a
 testa +3,17%, G1 +2,62%. Conto delle prove 338. **Capito oggi**: le quattro sono quasi la stessa strategia; insieme tolgono 3-4 punti
 di discesa senza perdere rendimento, ma non aggiungono un guadagno nuovo.
+**22 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (40 articoli nuovi), 40 conti copiati, mappa delle liquidazioni
+(600 conti, 2.349 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. Coda della ricerca senza prove pronte (164-168
+chiuse oggi): strategy-scout cerca una o due idee «fatto → chi è costretto a comprare o vendere dopo», con dati gratuiti e almeno 60
+eventi. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
