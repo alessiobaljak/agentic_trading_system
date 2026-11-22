@@ -904,3 +904,8 @@ indipendenti, il verdetto sarebbe quasi certamente «non conclusivo» (decisione
 165 (le chiusure dei perpetui prima dell'annuncio) e 167 (le votazioni dei possessori). G1: nessun passo nuovo in questo giro. **Capito
 oggi**: un fenomeno nuovo (le società di tesoreria, nate nel 2025) ha il perché più forte ma la storia più corta: le idee davvero nuove
 spesso non si possono giudicare sul passato, solo in avanti.
+**22 novembre, 10:30 UTC, prova 167 (le votazioni dei possessori che spostano soldi a chi tiene il gettone): campione troppo piccolo**
+(`research/programma7/RISULTATI_CENTOCINQUESIMA.md`): dalle 1.599 proposte di Snapshot con le parole fissate, dopo i filtri scritti prima
+(spazi ufficiali verificati, approvate, perpetuo esistente, 30 giorni fra due eventi) restano 26 eventi in sei anni; sotto i 40 la prova si
+ferma prima di caricare i prezzi e non entra nel conto. **Capito oggi**: i voti che spostano soldi ai possessori sono rari sulle monete con
+il perpetuo di Binance (una manciata l'anno): l'idea è giusta ma il mercato è troppo piccolo per una regola sul passato.

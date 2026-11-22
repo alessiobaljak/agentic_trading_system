@@ -1,0 +1,262 @@
+[
+ {
+  "id": "QmVnsMXvSG84x3u2iYZ3nGWeXU4pRcfuKWwXnyjpD9j6To",
+  "spazio": "uniswapgovernance.eth",
+  "perpetuo": "UNIUSDT",
+  "titolo": "Turning on the fee switch for V2",
+  "fine": "2021-07-25 10:00",
+  "entrata": "2021-07-26",
+  "mese_primo_perp": "2020-09",
+  "scelta": "Yes, lets do it!"
+ },
+ {
+  "id": "0x043e3e4b29d792026916df33a0b9758e041a175d4b858848c64727d01aadb1f7",
+  "spazio": "balancer.eth",
+  "perpetuo": "BALUSDT",
+  "titolo": "Protocol revenue sharing for pool creators",
+  "fine": "2022-02-18 14:00",
+  "entrata": "2022-02-19",
+  "mese_primo_perp": "2020-09",
+  "scelta": "Yes, let's do it."
+ },
+ {
+  "id": "0x4dd49ee723a7e506c6c6c15c8eabc8a7057f3f0760e44ed2f475d42203c4e3e8",
+  "spazio": "uniswapgovernance.eth",
+  "perpetuo": "UNIUSDT",
+  "titolo": "Temp Check: \"Fee switch\" activation for ETH/USDC & USDC/USDT",
+  "fine": "2022-07-21 16:00",
+  "entrata": "2022-07-22",
+  "mese_primo_perp": "2020-09",
+  "scelta": "Yes"
+ },
+ {
+  "id": "0x29a37ab71ce03a5e167fd012c363e72088bd0554d2b25c99f3373fa7cceb7124",
+  "spazio": "balancer.eth",
+  "perpetuo": "BALUSDT",
+  "titolo": "[BIP-32] Funding Proposal for Daoism Systems: PROTOCOL REVENUE SHARING FOR POOL & FACTORY CREATORS",
+  "fine": "2022-07-24 17:15",
+  "entrata": "2022-07-25",
+  "mese_primo_perp": "2020-09",
+  "scelta": "Yes, let's do it"
+ },
+ {
+  "id": "0xf5540d84b6289010daa887e3779a50b26457daa0334b7905540ec110f9cb2c9c",
+  "spazio": "cvx.eth",
+  "perpetuo": "CVXUSDT",
+  "titolo": "[Frax] [FIP - 207] Authorize matching FRAX from the FXS buyback fund with Frax's ARB airdrop to create ARB-FRAX liquidity ",
+  "fine": "2023-04-04 18:42",
+  "entrata": "2023-04-05",
+  "mese_primo_perp": "2022-09",
+  "scelta": "For"
+ },
+ {
+  "id": "0xda972700a6d646e50845b56e0c2f168d428c5659db785bcbf2bfdb956950f03e",
+  "spazio": "dao.spaceid.eth",
+  "perpetuo": "IDUSDT",
+  "titolo": " [IDP3] Proposed Purchase and Burn of ID Tokens",
+  "fine": "2023-06-26 13:20",
+  "entrata": "2023-06-27",
+  "mese_primo_perp": "2023-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0xa10a3acad1642b46263e4c24dc2cb4b2085f32f7c707ffc16cfadcc5a19b6b7e",
+  "spazio": "trustwallet",
+  "perpetuo": "TWTUSDT",
+  "titolo": "Proposal to Burn Locked TWTs for Enhanced Capitalization",
+  "fine": "2023-11-17 14:33",
+  "entrata": "2023-11-18",
+  "mese_primo_perp": "2023-11",
+  "scelta": "Yes"
+ },
+ {
+  "id": "0xec8b0fd54d2be2ae59d8598a719daf91d55cf79247a2dad01b4806915dca7002",
+  "spazio": "floki-inu.eth",
+  "perpetuo": "1000FLOKIUSDT",
+  "titolo": "PROPOSAL: BURN 190,918,585,431.84 FLOKI TOKENS ",
+  "fine": "2024-03-02 10:29",
+  "entrata": "2024-03-03",
+  "mese_primo_perp": "2023-05",
+  "scelta": "YES, BURN THE TOKENS."
+ },
+ {
+  "id": "0xeb0cad899fbf88b71e20171c771c1b71b8b90dcb3ce2da80a5b12dc38107506b",
+  "spazio": "floki-inu.eth",
+  "perpetuo": "1000FLOKIUSDT",
+  "titolo": "PROPOSAL: BURN 15,246,000,000 $FLOKI TOKENS",
+  "fine": "2024-05-15 19:12",
+  "entrata": "2024-05-16",
+  "mese_primo_perp": "2023-05",
+  "scelta": "YES, I VOTE IN FAVOR"
+ },
+ {
+  "id": "0x287dffb9a390857c846c4b98c70b825ad740d5b3566ae786f23041b1ce72c428",
+  "spazio": "etherfi-dao.eth",
+  "perpetuo": "ETHFIUSDT",
+  "titolo": "ETHFI DAO Proposal: ETHFI Buyback and Liquidity Pool Seeding",
+  "fine": "2024-06-24 18:38",
+  "entrata": "2024-06-25",
+  "mese_primo_perp": "2024-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0x34828455477fa97975c8b7210a54ee54f6b68d0e1cfccb583c97fe5b91a7a0ca",
+  "spazio": "etherfi-dao.eth",
+  "perpetuo": "ETHFIUSDT",
+  "titolo": "ETHFI DAO Proposal: Increase to Buyback and LP Seeding Allocation",
+  "fine": "2024-08-12 22:22",
+  "entrata": "2024-08-13",
+  "mese_primo_perp": "2024-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0xf376c8ef077a281c7f5a0d1b4d03de32c666025835a2dd21e5516e6f93b0ea6f",
+  "spazio": "quickvote.eth",
+  "perpetuo": "QUICKUSDT",
+  "titolo": "The Trial of Fire: 100% QUICK Burn",
+  "fine": "2024-09-09 11:30",
+  "entrata": "2024-09-10",
+  "mese_primo_perp": "2024-09",
+  "scelta": "Yes: 3 Months"
+ },
+ {
+  "id": "0x3e8a9ad0cd5c2fb7bab2a4a6b452524d66af253f82596d8ae2dc6bb30d4d61a6",
+  "spazio": "synapseprotocol.eth",
+  "perpetuo": "SYNUSDT",
+  "titolo": "[SIP - 41] – Buyback 3.5 million USD worth of $SYN over 3 months",
+  "fine": "2024-12-13 18:02",
+  "entrata": "2024-12-14",
+  "mese_primo_perp": "2024-08",
+  "scelta": "For"
+ },
+ {
+  "id": "0x9f7d33d74c655159f3771f725f2323f96ea99b7770f88d2001b3a442d585de9e",
+  "spazio": "cvx.eth",
+  "perpetuo": "CVXUSDT",
+  "titolo": "[FXN] FIP 09 - bFXN Buyback and Lock Program",
+  "fine": "2025-02-08 13:00",
+  "entrata": "2025-02-09",
+  "mese_primo_perp": "2022-09",
+  "scelta": "For"
+ },
+ {
+  "id": "0xee99816979788d4d6440fac429e391530dd1d3906076474e38caa391d6d653bd",
+  "spazio": "quickvote.eth",
+  "perpetuo": "QUICKUSDT",
+  "titolo": "Additional Extension of the 100% QUICK Burn 'Trial of Fire'",
+  "fine": "2025-04-08 15:00",
+  "entrata": "2025-04-09",
+  "mese_primo_perp": "2024-09",
+  "scelta": "For"
+ },
+ {
+  "id": "0x6a9bdf1bb43b3e38f7313247464360ab3c637dd54f45c99dfaa085539c0dc693",
+  "spazio": "etherfi-dao.eth",
+  "perpetuo": "ETHFIUSDT",
+  "titolo": "#11 Ether.fi DAO Proposal - Withdrawal Revenue Buyback Program",
+  "fine": "2025-04-29 23:17",
+  "entrata": "2025-04-30",
+  "mese_primo_perp": "2024-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0x2a7ef78fe45261c05ec8a86852b3e04a3fdf59187856d6a1bb38d32e39162be5",
+  "spazio": "rbn.eth",
+  "perpetuo": "AEVOUSDT",
+  "titolo": "AGP-2: Surplus Revenue Buyback Policy",
+  "fine": "2025-05-03 16:00",
+  "entrata": "2025-05-04",
+  "mese_primo_perp": "2024-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0xb8f03ad2dd2988a6d2e89a1adbebc52c7a62b284ea493008752c71b7f00b3386",
+  "spazio": "venus-xvs.eth",
+  "perpetuo": "XVSUSDT",
+  "titolo": "Proposal: BNB Afterburn – Allocating 25% of Venus BNB Chain Revenue to BNB Burn.",
+  "fine": "2025-06-14 18:03",
+  "entrata": "2025-06-15",
+  "mese_primo_perp": "2023-04",
+  "scelta": "For: Proceed to VIP."
+ },
+ {
+  "id": "0xdb92580e04ca8d688404a689a99579294715bd9ab858cc9b7ba637599720a6ff",
+  "spazio": "listavote.eth",
+  "perpetuo": "LISTAUSDT",
+  "titolo": "LIP 021 - LISTA Deflationary Initiative: 20% Token Burn & Tokenomics Optimization",
+  "fine": "2025-08-14 09:03",
+  "entrata": "2025-08-15",
+  "mese_primo_perp": "2024-06",
+  "scelta": "YES"
+ },
+ {
+  "id": "0x21cb61f1d9256335e656d2a63d8ac0ceddb1313ad490c95b713bbef9e313fda2",
+  "spazio": "worldlibertyfinancial.com",
+  "perpetuo": "WLFIUSDT",
+  "titolo": "Proposal: Use 100% of WLFI Treasury Liquidity Fees for Buyback & Burn",
+  "fine": "2025-09-18 19:27",
+  "entrata": "2025-09-19",
+  "mese_primo_perp": "2025-08",
+  "scelta": "FOR"
+ },
+ {
+  "id": "0xe5b64c773d23c92e62092a713b14cc72a98a46c923e36cf885455118854337b0",
+  "spazio": "etherfi-dao.eth",
+  "perpetuo": "ETHFIUSDT",
+  "titolo": "Ether.Fi DAO Proposal: Treasury Deployment for ETHFI Buy-Back Program",
+  "fine": "2025-11-03 21:57",
+  "entrata": "2025-11-04",
+  "mese_primo_perp": "2024-03",
+  "scelta": "For"
+ },
+ {
+  "id": "0x357d730275a8b8dfd24af1d9c0b86acc19ffc1cb827fd43a3fcfa0952803615a",
+  "spazio": "uxlinkcommunity.eth",
+  "perpetuo": "UXLINKUSDT",
+  "titolo": "Governance Proposal: Unlocking UXLINK’s True Value & Monthly Buyback",
+  "fine": "2025-12-27 06:32",
+  "entrata": "2025-12-28",
+  "mese_primo_perp": "2024-09",
+  "scelta": "For"
+ },
+ {
+  "id": "0xe1f47bd04001269432d2e74e76b79747e1458e90b0e3b2cdee7be6495d96e056",
+  "spazio": "aavedao.eth",
+  "perpetuo": "AAVEUSDT",
+  "titolo": "[ARFC] Buyback Program - Budget Adjustment",
+  "fine": "2026-03-15 14:36",
+  "entrata": "2026-03-16",
+  "mese_primo_perp": "2020-10",
+  "scelta": "For"
+ },
+ {
+  "id": "0x8c6dcd025ead393ed4588d6028038f1e2b97c31aff8d419689191484c69ed670",
+  "spazio": "quickvote.eth",
+  "perpetuo": "QUICKUSDT",
+  "titolo": "Burn 20M QUICK from QuickSwap’s Community Treasury",
+  "fine": "2026-07-03 16:00",
+  "entrata": "2026-07-04",
+  "mese_primo_perp": "2024-09",
+  "scelta": "Yes"
+ },
+ {
+  "id": "0xcb6b9ed95bf0c64b6101ff7d3a770af86e07701d8419b541cf91a6894022f2a3",
+  "spazio": "ethenagovernance.eth",
+  "perpetuo": "ENAUSDT",
+  "titolo": "ENA Fee Switch",
+  "fine": "2026-09-02 13:59",
+  "entrata": "2026-09-03",
+  "mese_primo_perp": "2024-04",
+  "scelta": "For"
+ },
+ {
+  "id": "0xa5d326424f026ada8b589e662898998fd14a83256ac679ef3dacac05e91384ee",
+  "spazio": "balancer.eth",
+  "perpetuo": "BALUSDT",
+  "titolo": "[BIP-934] Burn the 10M BEETS held by the Balancer DAO on Sonic",
+  "fine": "2026-10-27 18:00",
+  "entrata": "2026-10-28",
+  "mese_primo_perp": "2020-09",
+  "scelta": "Yes, let's do it"
+ }
+]

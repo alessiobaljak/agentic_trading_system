@@ -1,0 +1,8412 @@
+[
+ {
+  "spazio": "$scale.eth",
+  "nome": "Baby DragonX Adventure $SCALE",
+  "sigla": "SCALE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "0.robonomics.eth",
+  "nome": "Aira holders ",
+  "sigla": "AIR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "004861.eth",
+  "nome": "BLOCK NETWORK",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "030266.eth",
+  "nome": "Derivative collection",
+  "sigla": "USDC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "USDCUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "0vtv0.eth",
+  "nome": "FIREvoting WEB3",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "0x32123.eth",
+  "nome": "APE BITCOIN",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "0xirenedao.eth",
+  "nome": "IreneDAO",
+  "sigla": "IRENE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "1.robonomics.eth",
+  "nome": "Aira ID holders",
+  "sigla": "AIRA ID",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "10b57e6da0.eth",
+  "nome": "lobsterdao",
+  "sigla": "LOBS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "1l888.eth",
+  "nome": "Token G7 DAO",
+  "sigla": "✺G7DA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "2soheil.eth",
+  "nome": "2soheil",
+  "sigla": "2SOH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "37465811.eth",
+  "nome": "bnb cb",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "3thosdao.eth",
+  "nome": "ethos",
+  "sigla": "3TH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "5021314.eth",
+  "nome": "ONE PIECE",
+  "sigla": "OP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "OPUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "521918.eth",
+  "nome": "ScottDAO",
+  "sigla": "ETH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ETHUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "541651.eth",
+  "nome": "DigitalFrontiers DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "667588.eth",
+  "nome": "667588",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "721nftdao.eth",
+  "nome": "Club721 DAO",
+  "sigla": "721DAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "a3sprotocol.eth",
+  "nome": "A3S Protocol",
+  "sigla": "A3S",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aavedao.eth",
+  "nome": "Aave DAO",
+  "sigla": "AAVE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "AAVEUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "aavegotchi-dao.eth",
+  "nome": "Aavegotchi",
+  "sigla": "GHST",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "GHSTUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "abachi.eth",
+  "nome": "Abachi",
+  "sigla": "ABI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "abracadabrabymerlinthemagician.eth",
+  "nome": "Magic Internet Money",
+  "sigla": "SPELL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "SPELLUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "acryptos",
+  "nome": "ACryptoS",
+  "sigla": "ACS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "adex.eth",
+  "nome": "heyAura",
+  "sigla": "ADX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "adv3nture.eth",
+  "nome": "Adv3nturers",
+  "sigla": "GEM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "agentandr00.eth",
+  "nome": "Deep State",
+  "sigla": "FEDS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "agentbill.eth",
+  "nome": "Agent Bill The DeSci Guy",
+  "sigla": "BILLNYE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aggregatedfinance.eth",
+  "nome": "Aggregated Finance",
+  "sigla": "AGFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aggris2.eth",
+  "nome": "PulseX",
+  "sigla": "PULSEX VOTING",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aggris88.eth",
+  "nome": "PulseXV2B",
+  "sigla": "PLSX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "agilitydao.eth",
+  "nome": "Agility DAO",
+  "sigla": "AGI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ai-mutants.eth",
+  "nome": "AI Mutants Club",
+  "sigla": "AI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "AIUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "ainetwork.eth",
+  "nome": "AI Network",
+  "sigla": "AIN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "AINUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "aiprotocolinstitute.eth",
+  "nome": "AI Protocol",
+  "sigla": "ALI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "airdaofoundation.eth",
+  "nome": "AirDAO",
+  "sigla": "AMB",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "AMBUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "aitechio.eth",
+  "nome": "AITECH",
+  "sigla": "AITECH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "akiratoken.eth",
+  "nome": "AkiraDAO",
+  "sigla": "AKIRA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aladdindao.eth",
+  "nome": "AladdinDAO",
+  "sigla": "XALD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "alchemixstakers.eth",
+  "nome": "Alchemix",
+  "sigla": "ALCX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "alexec.eth",
+  "nome": "AlexDAO",
+  "sigla": "PEOPLE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "PEOPLEUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "alpacafinance.eth",
+  "nome": "Alpaca Finance",
+  "sigla": "XALPACA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "alphagov.eth",
+  "nome": "Alpha DAO",
+  "sigla": "ALPHA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ALPHAUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "alphakekai.eth",
+  "nome": "Alphakek AI",
+  "sigla": "AIKEK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "alphrdao.eth",
+  "nome": "Alphr DAO",
+  "sigla": "ALPHR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "altava-bagc.eth",
+  "nome": "ALTAVA-BAGC",
+  "sigla": "READY TO BAGC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ambire.eth",
+  "nome": "Ambire Wallet",
+  "sigla": "$WALLET WEIGHT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "anatadao.eth",
+  "nome": "Anata",
+  "sigla": "ANATA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "anglegovernance.eth",
+  "nome": "Angle Protocol",
+  "sigla": "ANGLE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "anifi.eth",
+  "nome": "AniFi World",
+  "sigla": "ANIFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "apeswap-finance.eth",
+  "nome": "ApeBond",
+  "sigla": "VEABOND",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "apolloxdao.eth",
+  "nome": "ApolloX",
+  "sigla": "APX POWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "apriltoken.eth",
+  "nome": "April",
+  "sigla": "APRIL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "arbdogeaidao.eth",
+  "nome": "ArbDogeAI DAO",
+  "sigla": "AICODE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "arcadedaoxyz.eth",
+  "nome": "ArcadeDAO",
+  "sigla": "ARCD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "archerdao.eth",
+  "nome": "Archer DAO",
+  "sigla": "ARCH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "argocoin.eth",
+  "nome": "Devolved AI",
+  "sigla": "AGC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ari10governance.eth",
+  "nome": "Ari10",
+  "sigla": "ARI10",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "arrebol.eth",
+  "nome": "Peak DAO",
+  "sigla": "WFTM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "arthswap-.eth",
+  "nome": "ArthSwap",
+  "sigla": "ARSW",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "atlantachain.eth",
+  "nome": "AtlantaChain DAO",
+  "sigla": "ABCD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "atsnftvote.eth",
+  "nome": "Great Apes (Grapes)",
+  "sigla": "GREAT APES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "atticc.eth",
+  "nome": "Atticc Labs",
+  "sigla": "EARLY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "atxdao.eth",
+  "nome": "ATX DAO",
+  "sigla": "ATX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aurafinance.eth",
+  "nome": "Aura Finance",
+  "sigla": "VLAURA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "auxo.eth",
+  "nome": "Auxo DAO",
+  "sigla": "ARV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "averagesnapshot.eth",
+  "nome": "Average Punks",
+  "sigla": "AVP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "aviator-dao.eth",
+  "nome": "Airfox DAO",
+  "sigla": "AFX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "babydao.eth",
+  "nome": "BABYDAO (BabyBoo Proposals)",
+  "sigla": "BABYBOO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "babydogevote.eth",
+  "nome": "Baby Doge",
+  "sigla": "BABYDOGE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "1MBABYDOGEUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "babykraken.eth",
+  "nome": "BabyKraken",
+  "sigla": "KRAKBABY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "badgov.eth",
+  "nome": "ARCH AI",
+  "sigla": "STKARCHAI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bake",
+  "nome": "BAKE",
+  "sigla": "BAKEVOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "balancer.eth",
+  "nome": "Balancer",
+  "sigla": "BAL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "BALUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "bancornetwork.eth",
+  "nome": "Bancor",
+  "sigla": "VBNT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "baovotes.eth",
+  "nome": "baovotes.eth",
+  "sigla": "VEBAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "basegold.eth",
+  "nome": "BaseGold_BG DAO",
+  "sigla": "BG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "beanstalkfarms.eth",
+  "nome": "Beanstalk Farms",
+  "sigla": "STALK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "beefydao.eth",
+  "nome": "Beefy",
+  "sigla": "BIFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "beets.eth",
+  "nome": "Beets",
+  "sigla": "MABEETS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "behsideyou.eth",
+  "nome": "hfgttt",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "belshazzardao.eth",
+  "nome": "Belshazzar DAO",
+  "sigla": "MAGIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MAGICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "benddao.eth",
+  "nome": "BendDAO",
+  "sigla": "VEBEND",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bentfinance.eth",
+  "nome": "Bent Finance",
+  "sigla": "WEBENT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "berluskoni.eth",
+  "nome": "Berluskoni.eth",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bestfork.eth",
+  "nome": "Volta Club",
+  "sigla": "VOLTA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bfrfinance.eth",
+  "nome": "Buffer Finance🐙",
+  "sigla": "BFR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bgk.eth",
+  "nome": "Bubblegum DAO",
+  "sigla": "BGK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bharat1.eth",
+  "nome": "Cryptolaws",
+  "sigla": "CTK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "CTKUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "bigjuicyparlays.eth",
+  "nome": "Bookiebot daO",
+  "sigla": "BB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "BBUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "bitcoinmaverick.eth",
+  "nome": "CryptoQuasar",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bitonium.eth",
+  "nome": "Bitonium",
+  "sigla": "ONI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "blid.eth",
+  "nome": "Bolide",
+  "sigla": "BLID",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "block-land.eth",
+  "nome": "BlockLand DAO",
+  "sigla": "LAND",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "blockchainminers.eth",
+  "nome": "Blockchain Miners Club",
+  "sigla": "VOTES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "blocks-dao.eth",
+  "nome": "BLOCKS DAO",
+  "sigla": "BLOCKS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "blockzerolabs.eth",
+  "nome": "Blockzero Labs",
+  "sigla": "XIO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bloody",
+  "nome": "BLOODY",
+  "sigla": "BLOODY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bluekirbytoken.eth",
+  "nome": "Blue Kirby",
+  "sigla": "BLUE KIRBY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bmxonbase.eth",
+  "nome": "BMX",
+  "sigla": "BMX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bobainu.eth",
+  "nome": "Boba Cat",
+  "sigla": "PSPS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bobrdao.eth",
+  "nome": "CURVEBOBR",
+  "sigla": "BOBRCRV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bombtoken.eth",
+  "nome": "BOMB Token",
+  "sigla": "BOMB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bone.shib",
+  "nome": "Bone DAO",
+  "sigla": "VEBONE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "botto.eth",
+  "nome": "Botto",
+  "sigla": "BOTTO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "braindancedao.eth",
+  "nome": "BrainDanceDAO",
+  "sigla": "BD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "breederdao-admin.eth",
+  "nome": "BreederDAO",
+  "sigla": "SBREED",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "brightunion.eth",
+  "nome": "Bright Union",
+  "sigla": "BRIGHT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bsc.bzx.eth",
+  "nome": "bZx on Binance Smart Chain",
+  "sigla": "BGOV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bsc.hyperjumpdao.eth",
+  "nome": "HyperJump - BSC",
+  "sigla": "HYPERVOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bskt.eth",
+  "nome": "Alvara Protocol",
+  "sigla": "VEALVA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "buckswap.eth",
+  "nome": "Buckswap.io",
+  "sigla": "BUCKS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "burnitproject.eth",
+  "nome": "BurnIt",
+  "sigla": "BRN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "buzzedbears.eth",
+  "nome": "Buzzed Bear Plazza",
+  "sigla": "BEAR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "bwkj88.eth",
+  "nome": "Socialfi DAO",
+  "sigla": "DJFC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cafeswapfinance.eth",
+  "nome": "CafeSwap.Finance",
+  "sigla": "BREW",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cakepiexyz.eth",
+  "nome": "Cakepie",
+  "sigla": "VLCKP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cakevote.eth",
+  "nome": "PancakeSwap",
+  "sigla": "CAKEVOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "calabara.eth",
+  "nome": "calabara",
+  "sigla": "ETH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ETHUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "canefox.eth",
+  "nome": "canefox matic",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "carbonswap.eth",
+  "nome": "Carbonswap",
+  "sigla": "SUSUPOWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "catcoinmamatest.eth",
+  "nome": "Catcoin Mama Test",
+  "sigla": "CATSMAMA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cdao-official.eth",
+  "nome": "cDAO",
+  "sigla": "CDAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ceekar.eth",
+  "nome": "xDai",
+  "sigla": "XDAI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cexymelons.eth",
+  "nome": "Melon Community",
+  "sigla": "MELON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chad-index.eth",
+  "nome": "Chad Index",
+  "sigla": "CHAD INDEX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chaingers.eth",
+  "nome": "Chainge DAO",
+  "sigla": "VXCHNG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chaingov.eth",
+  "nome": "Onyx XCN DAO",
+  "sigla": "XCN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "XCNUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "chaingptai.eth",
+  "nome": "ChainGPT AI",
+  "sigla": "CGPT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "CGPTUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "charged.eth",
+  "nome": "Charged Particles",
+  "sigla": "IONX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cheersup.eth",
+  "nome": "Cheers UP",
+  "sigla": "CHEERS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chenliang14578520.eth",
+  "nome": "freedom",
+  "sigla": "FREE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chillrx.eth",
+  "nome": "CHILL RX ",
+  "sigla": "CLRX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "chimpclub.eth",
+  "nome": "Chimp Club",
+  "sigla": "CHIMP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "choccyswap.eth",
+  "nome": "ChoccySwap",
+  "sigla": "CCY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cmp.bestfork.eth",
+  "nome": "Volta Club CMP",
+  "sigla": "VOLTA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cnddao.eth",
+  "nome": "CND DAO",
+  "sigla": "CND",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cndl.eth",
+  "nome": "Candle",
+  "sigla": "CNDL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cocokek.eth",
+  "nome": "NexoNest",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "coffeejunkieclub.eth",
+  "nome": "Coffee Junkie Club",
+  "sigla": "CJC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "coffinfinance.eth",
+  "nome": "Coffin Finance",
+  "sigla": "XCOFFIN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cofix",
+  "nome": "CoFiX",
+  "sigla": "COFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "coinagemedia.eth",
+  "nome": "Coinage",
+  "sigla": "VOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "coinchance.eth",
+  "nome": "wearein",
+  "sigla": "ING",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "common-wealth.eth",
+  "nome": "WLTH",
+  "sigla": "",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "commudao.eth",
+  "nome": "CommuDAO",
+  "sigla": "STCMD-LP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "community.ilv-gov.eth",
+  "nome": "Community Sub Council",
+  "sigla": "ILV-NFT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "community.nexusmutual.eth",
+  "nome": "Nexus Mutual DAO",
+  "sigla": "NXM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "compgov.eth",
+  "nome": "Compound Governance",
+  "sigla": "COMP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "COMPUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "concentratordao.eth",
+  "nome": "Concentrator",
+  "sigla": "ASDCRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "conkme.eth",
+  "nome": "CONK",
+  "sigla": "CONK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "coolingcoge.eth",
+  "nome": "Voice DAO",
+  "sigla": "ETH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ETHUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "cosmoseeker.eth",
+  "nome": "Blackhole DAO",
+  "sigla": "WSTKBOL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "covalenthq.eth",
+  "nome": "Covalent",
+  "sigla": "CXT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cover-protocol.eth",
+  "nome": "Cover Protocol",
+  "sigla": "COVER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cow.eth",
+  "nome": "CoW DAO",
+  "sigla": "VCOW",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "crazydick.eth",
+  "nome": "Crazy",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cre8r.eth",
+  "nome": "CRE8R DAO",
+  "sigla": "$CRE8R",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cream-finance.eth",
+  "nome": "Cream Finance",
+  "sigla": "ICECREAM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "creama.eth",
+  "nome": "Creama",
+  "sigla": "CREAMA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "creed",
+  "nome": "CREED",
+  "sigla": "CREED",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cronachef.eth",
+  "nome": "CronaSwap",
+  "sigla": "VECRONA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "crypto-corgis.eth",
+  "nome": "Crypto Corgis",
+  "sigla": "CORGI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "crypto4ac.eth",
+  "nome": "C4C DAO",
+  "sigla": "C4C",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptobond.eth",
+  "nome": "SYNC Network",
+  "sigla": "CBONDS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptoex1.eth",
+  "nome": "ChainCrafters",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptogptorg.eth",
+  "nome": "CryptoGPT",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptokek.eth",
+  "nome": "Cryptokek.com - ETH VOTING ",
+  "sigla": "KEK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptokekftm.eth",
+  "nome": "Cryptokek.com - FTM VOTING ",
+  "sigla": "KEK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptomods.eth",
+  "nome": "Moons Governance",
+  "sigla": "MOON",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptoweb3dao.eth",
+  "nome": "CryptoWeb3 DAO",
+  "sigla": "CW3",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cryptoyyds.eth",
+  "nome": "Calabash Brothers",
+  "sigla": "HUWA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "crystl.eth",
+  "nome": "Crystl Finance",
+  "sigla": "CRYSTL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "csixdao.eth",
+  "nome": "Carbon Browser",
+  "sigla": "CSIX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "csubdao-official.eth",
+  "nome": "cDAO SubDAO",
+  "sigla": "CDAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cult-dao.eth",
+  "nome": "wearecultdao",
+  "sigla": "DCULT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cult.skullys.eth",
+  "nome": "Cult",
+  "sigla": "CULT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cultdaoart.eth",
+  "nome": "CultDAO.art",
+  "sigla": "CULT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "curve.eth",
+  "nome": "Curve Finance",
+  "sigla": "CRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "CRVUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "cvg-finance.eth",
+  "nome": "Convergence DAO",
+  "sigla": "CVG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cvldao.eth",
+  "nome": "Civilization Network",
+  "sigla": "CVL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cvx.eth",
+  "nome": "Convex Finance",
+  "sigla": "CVX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "CVXUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "cybertime.eth",
+  "nome": "CyberTime Finance",
+  "sigla": "CTF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "cyphertrust.eth",
+  "nome": "CypherTrust",
+  "sigla": "TRUST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "TRUSTUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "czpegs.eth",
+  "nome": "CZpegs",
+  "sigla": "CZSHARES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "d1nero.eth",
+  "nome": "CryptoK DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dago.eth",
+  "nome": "MPRO Lab DAGO",
+  "sigla": "DAGO VPOWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dao.connext.eth",
+  "nome": "Everclear",
+  "sigla": "NEXT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dao.spaceid.eth",
+  "nome": "SPACE ID DAO",
+  "sigla": "ID",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "IDUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "daobim.eth",
+  "nome": "BIM",
+  "sigla": "BIM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "daobubblefong.eth",
+  "nome": "BubbleFongDAO",
+  "sigla": "BBF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "daocovenantchild.eth",
+  "nome": "CovenantChildDAO",
+  "sigla": "COVN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "daowiz.eth",
+  "nome": "WIZ Protocol",
+  "sigla": "WIZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dapang.eth",
+  "nome": "MATIC",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "dapang1.eth",
+  "nome": "pylygon1",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "dashleague.eth",
+  "nome": "DashLeague Game",
+  "sigla": "DLNFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dcip.eth",
+  "nome": "DCIP",
+  "sigla": "DCIP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "deathwishmeta.eth",
+  "nome": "DEATHWISH NFT",
+  "sigla": "DWVOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "decentralgames.eth",
+  "nome": "Bag.win",
+  "sigla": "BAG",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "decubategov.eth",
+  "nome": "Decubate.com",
+  "sigla": "DCB",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "deepernetwork.eth",
+  "nome": "gitcoin passport",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "defi.app",
+  "nome": "Defi App",
+  "sigla": "VOTING POWER",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "defiall.eth",
+  "nome": "JOJO",
+  "sigla": "JJ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "defiat",
+  "nome": "DeFiat",
+  "sigla": "DFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "defidon$.eth",
+  "nome": "NFA token",
+  "sigla": "NFA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "defrostfinance.eth",
+  "nome": "Defrost Finance",
+  "sigla": "MELT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "degentokenfinance.eth",
+  "nome": "DGNZ Voting Page",
+  "sigla": "ADGNZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "degenzdao.eth",
+  "nome": "DegenzDAO",
+  "sigla": "DEGENZREGENZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dendragon.eth",
+  "nome": "Den Signing Snapshot Votes",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "deri.eth",
+  "nome": "Deri Protocol",
+  "sigla": "DERI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "derify.eth",
+  "nome": "Derify Protocol",
+  "sigla": "EDRF",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "derivexyz.eth",
+  "nome": "Derive",
+  "sigla": "DRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "developers.robonomics.eth",
+  "nome": "Robonomics Town Hall 2022",
+  "sigla": "XRT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dforcenet.eth",
+  "nome": "dForce",
+  "sigla": "DF",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "DFUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "diadao.eth",
+  "nome": "DIA",
+  "sigla": "DIA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "DIAUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "digitalrevenues.eth",
+  "nome": "Digital Revenues",
+  "sigla": "DRN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dinero.xyz",
+  "nome": "Dinero",
+  "sigla": "DINERO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dinobabies.eth",
+  "nome": "Dino Babies in Space",
+  "sigla": "DINOEGGS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dividao.eth",
+  "nome": "Divi DAO",
+  "sigla": "DIVI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dodobird.eth",
+  "nome": "DODO",
+  "sigla": "DODO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "DODOUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "doedevelopment.eth",
+  "nome": "Test DAO KDOE ",
+  "sigla": "DOE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dogami-allies.eth",
+  "nome": "DOGAMÍ A.L.L.I.E.S",
+  "sigla": "DOGA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "doge-whale.eth",
+  "nome": "dogewhale",
+  "sigla": "DOGEWHALE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dogelondao.eth",
+  "nome": "Dogelon DAO",
+  "sigla": "ELON",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dogiracommunity.eth",
+  "nome": "Dogira Community Governance",
+  "sigla": "DOGIRA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dollar-protocol",
+  "nome": "Dollar Protocol",
+  "sigla": "SHARE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "doodles.eth",
+  "nome": "Doodles",
+  "sigla": "DOODLE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "doorknock.eth",
+  "nome": "DoorDAO",
+  "sigla": "DOOR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dopaminedaoavax.eth",
+  "nome": "dopaminedaoavax",
+  "sigla": "DOPAMINE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dopedao.eth",
+  "nome": "DopeDAO",
+  "sigla": "DOPE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dopeshibas.eth",
+  "nome": "Dope Shibas DAO",
+  "sigla": "DOPESHIBA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dpet.eth",
+  "nome": "My DeFi Pet BSC",
+  "sigla": "DPET",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dpetkai.eth",
+  "nome": "My DeFi Pet Kardia",
+  "sigla": "DPET",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dropsdev.eth",
+  "nome": "DropSwap ",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dsbswap.eth",
+  "nome": "DSBSwap",
+  "sigla": "DSB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "duckies-dao.eth",
+  "nome": "Yellow Duckies",
+  "sigla": "DUCKIES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dunnahoe.eth",
+  "nome": "Lee Maud",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "dzoo.eth",
+  "nome": "DegenZoo",
+  "sigla": "DZOO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "earnnetwork.eth",
+  "nome": "EARN Network (EARN$ Legacy)",
+  "sigla": "EARN$",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "easynodepro.eth",
+  "nome": "EasyNodePro.com Voting",
+  "sigla": "ENP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ebisusbay.eth",
+  "nome": "Ebisu's Bay",
+  "sigla": "MITAMA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "echelonassembly.eth",
+  "nome": "Echelon Assembly",
+  "sigla": "PRIME",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "eigenpiexyz.eth",
+  "nome": "Eigenpie",
+  "sigla": "VLEGP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "elda-rune.eth",
+  "nome": "Eldarune",
+  "sigla": "ELDA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "electronicwinecompany.eth",
+  "nome": "Evinco Winery DAO",
+  "sigla": "EVINCO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "elevex.eth",
+  "nome": "Elevex",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "emergencedao.eth",
+  "nome": "Emergence DAO",
+  "sigla": "EMG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "enternft.eth",
+  "nome": "Enter",
+  "sigla": "NFTART",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "equaldao.eth",
+  "nome": "=DAO",
+  "sigla": "EQPS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "equationdao.eth",
+  "nome": "EquationDAO",
+  "sigla": "VEEQU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "equationdaotest.eth",
+  "nome": "EquationDAO-Testnet",
+  "sigla": "VEEQU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "equilibriafi.eth",
+  "nome": "Equilibria Finance",
+  "sigla": "VP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "erable-dao.eth",
+  "nome": "erable°",
+  "sigla": "$ERA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "erc1559.eth",
+  "nome": "EIP-1559",
+  "sigla": "GAS",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "GASUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "eternalcrowns-test.eth",
+  "nome": "Eternal Crown Collective - Test",
+  "sigla": "ECC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "eth11k.eth",
+  "nome": "BitMystic1",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "eth6888.eth",
+  "nome": "lovebnbdao",
+  "sigla": "BNB",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "BNBUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "ethenagovernance.eth",
+  "nome": "Ethena",
+  "sigla": "ENA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "ENAUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "etherfi-dao.eth",
+  "nome": "ether.fi",
+  "sigla": "ETHFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "ETHFIUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "ethtraderdao.eth",
+  "nome": "Donut DAO",
+  "sigla": "DONUT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "everipediaiq.eth",
+  "nome": "IQ",
+  "sigla": "IQ",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "evermoon.eth",
+  "nome": "Evermoon",
+  "sigla": "EVERTEST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "evolutionland.eth",
+  "nome": "Evolution Land",
+  "sigla": "POWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "POWERUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "evolutionlandeden.eth",
+  "nome": "Evolution Land Eden",
+  "sigla": "EVO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "exeedmedao.eth",
+  "nome": "Exeedme",
+  "sigla": "XED",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "expansiondao.eth",
+  "nome": "ExpansionDAO",
+  "sigla": "XPUNK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "extradao.eth",
+  "nome": "Extra Finance",
+  "sigla": "VEEXTRA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fakeworms.eth",
+  "nome": "FakeWorms Studio",
+  "sigla": "KITTEN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fangjing.eth",
+  "nome": "gei gei",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fantohmdao.eth",
+  "nome": "FHM DAO",
+  "sigla": "SFHM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "faradao.eth",
+  "nome": "vote.faraland.io",
+  "sigla": "FARA POINT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fastfoodfamily.eth",
+  "nome": "Fast Food Frens",
+  "sigla": "$FFF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fbomb-mclb-maxi.eth",
+  "nome": "MillenniumClub DAO",
+  "sigla": "MCLB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fduckcoin.eth",
+  "nome": "FDuckCoin",
+  "sigla": "FDUCKS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fduckdao.eth",
+  "nome": "FashionDuck DAO",
+  "sigla": "FDS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "feetpix.eth",
+  "nome": "FEETPIX DAO",
+  "sigla": "FEET",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fei.eth",
+  "nome": "Fei",
+  "sigla": "TRIBE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "filswan.eth",
+  "nome": "FilSwan",
+  "sigla": "SWAN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fine-tune.eth",
+  "nome": "oneras",
+  "sigla": "B-BRN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fingerprints.eth",
+  "nome": "Fingerprints DAO",
+  "sigla": "PRINTS/VG",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "finnexus",
+  "nome": "FinNexus",
+  "sigla": "FNX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fishfight.eth",
+  "nome": "FishFight.app DAO",
+  "sigla": "FISH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "floki-inu.eth",
+  "nome": "Floki",
+  "sigla": "FLOKI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "1000FLOKIUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "flokigpt.eth",
+  "nome": "Floki GPT",
+  "sigla": "FGPT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "floordao.eth",
+  "nome": "FloorDAO",
+  "sigla": "FLOOR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "flotilla.eth",
+  "nome": "Flotilla Protocol",
+  "sigla": "FLOTILLA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fomodao.eth",
+  "nome": "FomoDAO",
+  "sigla": "ASH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fortressdao.eth",
+  "nome": "Fortress DAO",
+  "sigla": "SFORT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "foulko.eth",
+  "nome": "Foulko",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "founderallocationfcc.eth",
+  "nome": "Fvck Cancel Culture",
+  "sigla": "FCC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "foundersdao.eth",
+  "nome": "Founders DAO",
+  "sigla": "PVFD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "foxswap.one",
+  "nome": "FoxSwap",
+  "sigla": "XFOX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fractiontoken.eth",
+  "nome": "Fraction Token",
+  "sigla": "FRACTION",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "frax.eth",
+  "nome": "Frax",
+  "sigla": "VEFXS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "freedombtz.eth",
+  "nome": "Bitazza",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "frogfortest.eth",
+  "nome": "FrogTestSwap",
+  "sigla": "LYCHEE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "frognationdao.eth",
+  "nome": "Frog Nation DAO",
+  "sigla": "SFRG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "frogsoup.eth",
+  "nome": "Frog Soup",
+  "sigla": "TOAD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ftm.hyperjumpdao.eth",
+  "nome": "HyperJump - Fantom Chain",
+  "sigla": "HYPERVOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fuse.eth",
+  "nome": "Rari Capital DAO",
+  "sigla": "TRIBE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "fxn.eth",
+  "nome": "f(x) Protocol",
+  "sigla": "VEFXN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gains-network.eth",
+  "nome": "Gains Network",
+  "sigla": "GNS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "galleondao.eth",
+  "nome": "Galleon",
+  "sigla": "DBL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gameswiftdao.eth",
+  "nome": "GameSwift DAO",
+  "sigla": "GSWIFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gearbox.eth",
+  "nome": "Gearbox",
+  "sigla": "GEAR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "genart-dao.eth",
+  "nome": "GEN.ART",
+  "sigla": "GENART",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "genesis-dao.hopr.eth",
+  "nome": "HOPR Genesis DAO",
+  "sigla": "GHOP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "genomesdao.eth",
+  "nome": "GenomesDAO",
+  "sigla": "GENOME VOTES",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gerryl.eth",
+  "nome": "Berton Congreve",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "getkicksdao.eth",
+  "nome": "GetKicks",
+  "sigla": "KICKS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "getprimal.eth",
+  "nome": "Get PRIMAL",
+  "sigla": "STPRIMAL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "getshilld.eth",
+  "nome": "SHILLD DAO",
+  "sigla": "SHILLD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "getverse.eth",
+  "nome": "Verse",
+  "sigla": "VERSE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ghoststreasury.eth",
+  "nome": "GhostsProject",
+  "sigla": "GHOSTS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "glidefinance.eth",
+  "nome": "Glide Finance",
+  "sigla": "GLIDE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "glmrapes.eth",
+  "nome": "GLMR APES",
+  "sigla": "GLMA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gmfamdao.eth",
+  "nome": "GMFAM",
+  "sigla": "GMFAM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gmrcenter.eth",
+  "nome": "GAMER",
+  "sigla": "GMR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gmx.eth",
+  "nome": "GMX",
+  "sigla": "GMX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "GMXUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "gnomeville.eth",
+  "nome": "GnomeDAO",
+  "sigla": "GNO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gnosis.eth",
+  "nome": "GnosisDAO",
+  "sigla": "GNO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "goatprotocol.eth",
+  "nome": "Goat Protocol",
+  "sigla": "GOA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "goblinroyalz.eth",
+  "nome": "Goblin Royalz Court",
+  "sigla": "DUNGEON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "goldeninutokendao.eth",
+  "nome": "Golden Inu Token",
+  "sigla": "GOLDEN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "goopsnapshot.eth",
+  "nome": "GOOP TROOP",
+  "sigla": "GOOP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gotchivault.eth",
+  "nome": "Gotchi Vault",
+  "sigla": "VLT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gov.exa.eth",
+  "nome": "Exactly Protocol",
+  "sigla": "EXA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "governance.qredo.eth",
+  "nome": "Open Custody Protocol (x Qredo)",
+  "sigla": "OPEN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "OPENUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "grantsdao.eth",
+  "nome": "Synthetis Grants Council",
+  "sigla": "SNX-GCT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "grovefinance.eth",
+  "nome": "Grove",
+  "sigla": "GROVE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "guiser-rev.eth",
+  "nome": "Guiser DAO",
+  "sigla": "STGUISEFLEX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "gutihernández.eth",
+  "nome": "gutihernández",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hadeswap.eth",
+  "nome": "Hades Swap",
+  "sigla": "DRACHMA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hakka.eth",
+  "nome": "Hakka Finance",
+  "sigla": "HAKKA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "harmony-mainnet.eth",
+  "nome": "Harmony Mainnet",
+  "sigla": "ONE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "ONEUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "harvestfi.eth",
+  "nome": "Harvest Finance",
+  "sigla": "FARM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hashflowdao-temp.eth",
+  "nome": "Hashflow - Temperature Checks",
+  "sigla": "VEHFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hashflowdao.eth",
+  "nome": "Hashflow",
+  "sigla": "VEHFT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hatsdao.eth",
+  "nome": "Hats.finance",
+  "sigla": "HAT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "headlesschaos.eth",
+  "nome": "CHAOS",
+  "sigla": "CHAOS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hectordao.eth",
+  "nome": "Hector Network",
+  "sigla": "HEC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "heeltoken.eth",
+  "nome": "Good Dog Foundation (HEEL Token)",
+  "sigla": "HEEL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "helios-hlx.eth",
+  "nome": "Helios",
+  "sigla": "HLX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hoedao.eth",
+  "nome": "HoeDAO",
+  "sigla": "HOE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hoichitoken.eth",
+  "nome": "Hoichi",
+  "sigla": "HOICHI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "honkdeployer.eth",
+  "nome": "HONK",
+  "sigla": "HONK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hordapp.eth",
+  "nome": "Hord",
+  "sigla": "HORD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hordgov.eth",
+  "nome": "Hord",
+  "sigla": "HORD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hubble.farmgod.eth",
+  "nome": "Hubble Mission Control",
+  "sigla": "XHUBBLE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hvax.eth",
+  "nome": "Event Horizon",
+  "sigla": "HVAXVC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "hypergptdao.eth",
+  "nome": "HyperGPT",
+  "sigla": "HGPT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "iamjazz.eth",
+  "nome": "Nic Wong",
+  "sigla": "CBC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ibs.eth",
+  "nome": "PotsMoneyDao",
+  "sigla": "VIBS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "icebrk.eth",
+  "nome": "Icebreak-R",
+  "sigla": "ICEBRK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "icedao.eth",
+  "nome": "ICE DAO",
+  "sigla": "GLAZE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ideation.shapeshiftdao.eth",
+  "nome": "ShapeShift Ideation",
+  "sigla": "FOX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "idrissxyz.eth",
+  "nome": "IDRISS",
+  "sigla": "IDRISS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "iftip.eth",
+  "nome": "IFTip",
+  "sigla": "IFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "iggold.eth",
+  "nome": "IGGalaxy ",
+  "sigla": "IGVOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ilv-gov.eth",
+  "nome": "Illuvium Main Council",
+  "sigla": "ILV-NFT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "impermax.eth",
+  "nome": "Impermax Finance",
+  "sigla": "IBEX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "impossiblefinance.eth",
+  "nome": "Impossible Finance",
+  "sigla": "IF",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "imsara.eth",
+  "nome": "DEP BURN",
+  "sigla": "DEP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "infinex.eth",
+  "nome": "Infinex",
+  "sigla": "INX COUNCIL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "infinitetrading.eth",
+  "nome": "ITP DAO",
+  "sigla": "ITP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "inumaki.eth",
+  "nome": "Inumaki",
+  "sigla": "DAWG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "iotex.eth",
+  "nome": "IoTeX Network",
+  "sigla": "IOTX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "IOTXUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "isanchez.eth",
+  "nome": "Dominic Joyce",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "itokenpocket.eth",
+  "nome": "TokenPocket",
+  "sigla": "XTPT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "jadeprotocol.eth",
+  "nome": "Jade Protocol DAO",
+  "sigla": "SJADE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "jbdao.eth",
+  "nome": "JuiceboxDAO",
+  "sigla": "JBX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "jpeg’d.eth",
+  "nome": "JPEG’d",
+  "sigla": "JPEG",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "julswap.eth",
+  "nome": "JulSwap",
+  "sigla": "JULD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "justsomedao.eth",
+  "nome": "JustSomeDAO",
+  "sigla": "ABC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "k9safe.eth",
+  "nome": "K9 Finance DAO",
+  "sigla": "KNINE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kalomdar.eth",
+  "nome": "LInea nFTS",
+  "sigla": "ZPAY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kanqingzi0415.eth",
+  "nome": "BASE NFT",
+  "sigla": "BASEINTRODUCED",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "karastar.eth",
+  "nome": "KaraStar DAO",
+  "sigla": "KARA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "karastarumy.eth",
+  "nome": "Pre-KARASTAR ",
+  "sigla": "UMY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "karrat.eth",
+  "nome": "KARRATco",
+  "sigla": "KARRAT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "katanap.eth",
+  "nome": "Katanap",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "katmonstarz.eth",
+  "nome": "Katmonstarz Fam",
+  "sigla": "KM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kibbledao.eth",
+  "nome": "Kibble DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kishutoken.eth",
+  "nome": "KISHU INU",
+  "sigla": "KISHU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kmon.eth",
+  "nome": "KMON",
+  "sigla": "KMON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "knoxedge.eth",
+  "nome": "KnoxDAO",
+  "sigla": "KNOX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kogecoin.eth",
+  "nome": "KogeCoin",
+  "sigla": "KOGECOIN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kongsdao.eth",
+  "nome": "K.I.N.G. DAO",
+  "sigla": "K.I.N.G.",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "krewdefi.eth",
+  "nome": "KLAP Finance",
+  "sigla": "KLAP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kukad223.eth",
+  "nome": "Taiko",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kumatokens.eth",
+  "nome": "KUMA DAO",
+  "sigla": "KUMA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kupayfinance.eth",
+  "nome": "KuPay",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kusgov.eth",
+  "nome": "KuSwap v3",
+  "sigla": "VEKUS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "kwenta.eth",
+  "nome": "Kwenta",
+  "sigla": "KCNFT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lab.pro",
+  "nome": "LAB",
+  "sigla": "",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "landlorddao.eth",
+  "nome": "LandlordDao",
+  "sigla": "LLD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "landshare.eth",
+  "nome": "Landshare Holdings LLC",
+  "sigla": "LSRWA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "landxdao.eth",
+  "nome": "LandX Finance",
+  "sigla": "LNDX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "laolitou1234.eth",
+  "nome": "Laolitou",
+  "sigla": "V_V",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "layer2dao.org",
+  "nome": "Layer2DAO",
+  "sigla": "XL2DAO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lbm.eth",
+  "nome": "Libertum",
+  "sigla": "LBM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ldt.eth",
+  "nome": "LENDOO",
+  "sigla": "GLDT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "leaguedao.eth",
+  "nome": "LeagueDAO",
+  "sigla": "LEAG",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "leagueoflils.eth",
+  "nome": "League of Lils",
+  "sigla": "LIL NOUNS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lens.changliuchuan.eth",
+  "nome": "Matic CN",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "levva.eth",
+  "nome": "Levva",
+  "sigla": "LVVA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "levx.eth",
+  "nome": "OhGeez DAO",
+  "sigla": "THANO$",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "levyathan.eth",
+  "nome": "Levyathan",
+  "sigla": "LEV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lex",
+  "nome": "LexDAO Collective",
+  "sigla": "LEX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lgcryptounicorns.eth",
+  "nome": "Crypto Unicorns",
+  "sigla": "SCU",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "liddao.eth",
+  "nome": "Lid Dao",
+  "sigla": "LID DAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lido-snapshot.eth",
+  "nome": "Lido",
+  "sigla": "LDO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "LDOUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "lifeitme.eth",
+  "nome": "Lifetime",
+  "sigla": "LFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lightningmcqueef.eth",
+  "nome": "scammer get scammed",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "linscription.eth",
+  "nome": "Lins20",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "liquiddriver.eth",
+  "nome": "Liquid Driver",
+  "sigla": "XLQDR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "liquidityarmoriondirective.eth",
+  "nome": "Liquidity Arm Orion Directive",
+  "sigla": "ORD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "listavote.eth",
+  "nome": "ListaDao",
+  "sigla": "LISTA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "LISTAUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "littleghosts.eth",
+  "nome": "Phantasma",
+  "sigla": "VP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "locus-finance.eth",
+  "nome": "Locus.Finance",
+  "sigla": "STLOCUS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "loopfuse.eth",
+  "nome": "LoopFuse DAO",
+  "sigla": "LFD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "loot-dao.eth",
+  "nome": "Loot Owners",
+  "sigla": "LOOT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lordglmr.eth",
+  "nome": "TFA DAO",
+  "sigla": "TFA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "loserchick.eth",
+  "nome": "LoserChick",
+  "sigla": "VCHICKNFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lsdx.eth",
+  "nome": "LSDx Finance",
+  "sigla": "VELSD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lthememecoindao.eth",
+  "nome": "Lthememecoin",
+  "sigla": "L",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "luckymaneki.eth",
+  "nome": "Lucky Maneki",
+  "sigla": "LMK",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lunadoge.eth",
+  "nome": "LunaDoge",
+  "sigla": "LOGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lyra.eth",
+  "nome": "Lyra",
+  "sigla": "STKLYRA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "lyttle.eth",
+  "nome": "lyttle",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "magic-cube.eth",
+  "nome": "Magic PowerDAO",
+  "sigla": "MGP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "magicappstore.eth",
+  "nome": "Magic Square",
+  "sigla": "SQRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "magnetdao.eth",
+  "nome": "Magnet DAO",
+  "sigla": "MAG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "magpiexyz.eth",
+  "nome": "Magpie",
+  "sigla": "VLMGP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "maha.eth",
+  "nome": "maha.xyz",
+  "sigla": "MAHAX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mantra-dao",
+  "nome": "MANTRA DAO",
+  "sigla": "OM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "OMUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "mapledao.eth",
+  "nome": "Maple Finance",
+  "sigla": "SYRUP, STSYRUP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "marginswap.eth",
+  "nome": "Marginswap",
+  "sigla": "MFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "marven955.eth",
+  "nome": "marven955",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "maticcoin.eth",
+  "nome": "Maticcoin",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "mbxvote.eth",
+  "nome": "MARBLEX",
+  "sigla": "MBX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "meandcrypto.eth",
+  "nome": "Test",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "merchminter.eth",
+  "nome": "MerchMinter",
+  "sigla": "MRCHR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "meridian-foundation.eth",
+  "nome": "Meridian Foundation",
+  "sigla": "MST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "meritcircle.eth",
+  "nome": "Merit Circle",
+  "sigla": "BEAM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "merlinswap-gov.eth",
+  "nome": "MerlinSwap",
+  "sigla": "ESMP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metaapesgame.eth",
+  "nome": "MetaApesGame",
+  "sigla": "PEEL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metagamehub.eth",
+  "nome": "THE HUB",
+  "sigla": "MGH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metastreetdao.eth",
+  "nome": "MetaStreet DAO",
+  "sigla": "MSD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metatrekkers.eth",
+  "nome": "MetaTrekkers",
+  "sigla": "MT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "meter-mainnet.eth",
+  "nome": "Meter Governance MTRG",
+  "sigla": "MTRG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metfi.io",
+  "nome": "MetFi DAO",
+  "sigla": "METFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "metronome.eth",
+  "nome": "Metronome DAO",
+  "sigla": "ESMET",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mimo-polygon.eth",
+  "nome": "MIMO Polygon",
+  "sigla": "MIMO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mintface.eth",
+  "nome": "MintFaced",
+  "sigla": "MINT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mndvault.eth",
+  "nome": "mnd",
+  "sigla": "MND",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "modadao.eth",
+  "nome": "MODA DAO",
+  "sigla": "MODA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mojicrypto1960.eth",
+  "nome": "mojicrypto1960",
+  "sigla": "ETH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ETHUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "mollars.eth",
+  "nome": "Mollars Token",
+  "sigla": "MOLLARS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "moltxio.eth",
+  "nome": "MOLTX",
+  "sigla": "VP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "moon-vault.eth",
+  "nome": "Moon Vault",
+  "sigla": "MOON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "moonbeans.eth",
+  "nome": "MoonBeans",
+  "sigla": "BEANS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "moonbots.eth",
+  "nome": "MoonBots",
+  "sigla": "BOTS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "moonrat.eth",
+  "nome": "moonrat.finance",
+  "sigla": "SMRAT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "morenmoney.eth",
+  "nome": "KOIL ",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "morphose.eth",
+  "nome": "Morphose",
+  "sigla": "MORPH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "morsedao.eth",
+  "nome": "Morse DAO",
+  "sigla": "MORSE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mossite.eth",
+  "nome": "mossite.eth",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mostafap07.eth",
+  "nome": "nftdao",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mozaicfinance.eth",
+  "nome": "Mozaic",
+  "sigla": "XMOZ",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mrgasburner.eth",
+  "nome": "GasBurning society",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mstablegovernance.eth",
+  "nome": "mStable",
+  "sigla": "VMTA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mstableprotocoldao.eth",
+  "nome": "mStable Protocol DAO",
+  "sigla": "MPD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mtsnft.eth",
+  "nome": "MtsNFT",
+  "sigla": "MTSNFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "muhdao.eth",
+  "nome": "MuhDAO",
+  "sigla": "DNA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "muitofinance.eth",
+  "nome": "Muito Finance ",
+  "sigla": "VEMUTO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "multiplierfinance.eth",
+  "nome": "Multiplier Finance MXX",
+  "sigla": "MXX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "munificent.⎛⏃⎞.eth",
+  "nome": "Munificent - (Pre) Dao",
+  "sigla": "⎛⏃⎞",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "musedao.eth",
+  "nome": "Muse DAO",
+  "sigla": "MUSE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "mutantsdao.eth",
+  "nome": "MutantCats DAO",
+  "sigla": "MUTCATS ",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nemesisdao.eth",
+  "nome": "Nemesis DAO",
+  "sigla": "SNMS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nestprotocols.eth",
+  "nome": "NEST",
+  "sigla": "NEST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "newinu.eth",
+  "nome": "New Guinea Singing Dog Inu",
+  "sigla": "NEWINU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nextypedao.eth",
+  "nome": "NEXTYPE_DAO",
+  "sigla": "VNT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nftfinance.eth",
+  "nome": "DAO-Fi",
+  "sigla": "NFTF",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nftprosecutor.eth",
+  "nome": "Crypto Hive",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nftreasure.eth",
+  "nome": "NFTREASURE",
+  "sigla": "NFPOWR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nguyenvodanh76.eth",
+  "nome": "nguyenvodanh76",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "nice",
+  "nome": "NICEE",
+  "sigla": "NICE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "niebin.eth",
+  "nome": "August Sander 10K collection",
+  "sigla": "AS10K",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "niubiswap.eth",
+  "nome": "NiubiSwap",
+  "sigla": "NIU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nodegame.eth",
+  "nome": "Node Game",
+  "sigla": "POWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "POWERUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "notapecoin.eth",
+  "nome": "NotApeCoin DAAO",
+  "sigla": "NOTAPE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "notional.eth",
+  "nome": "Notional Finance",
+  "sigla": "NOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "notmexen.eth",
+  "nome": "Notmexen",
+  "sigla": "MGN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "nova-dao.eth",
+  "nome": "Nova DAO",
+  "sigla": "NOVA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "novanetwork.eth",
+  "nome": "Nova Network Inc.",
+  "sigla": "SNT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "SNTUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "nuklai.eth",
+  "nome": "Nuklai",
+  "sigla": "GNAI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "oldbtcdeployer.eth",
+  "nome": "Bitcoin DAO",
+  "sigla": "BC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "olympusdao.eth",
+  "nome": "OlympusDAO",
+  "sigla": "OHM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "omnuum.eth",
+  "nome": "Omnuum",
+  "sigla": "OG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "OGUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "omt.eth",
+  "nome": "Onion Mixer",
+  "sigla": "VOMT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ondefinance.eth",
+  "nome": "Onde Finance",
+  "sigla": "ONDENFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "onyxmovement.eth",
+  "nome": "Onyx Movement",
+  "sigla": "ONYX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "opchads.eth",
+  "nome": "OP Chads $OPC",
+  "sigla": "OPC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "optiswappro.eth",
+  "nome": "HOGE Zone",
+  "sigla": "HOGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "orbapp.eth",
+  "nome": "Orb",
+  "sigla": "VOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "orbiterone.eth",
+  "nome": "Orbiter One",
+  "sigla": "IWB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "orbs-network.eth",
+  "nome": "Orbs",
+  "sigla": "ORBS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ORBSUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "orderlygov.eth",
+  "nome": "Orderly",
+  "sigla": "STAKED ORDER",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ordermonopoly.eth",
+  "nome": "WETH_DAO",
+  "sigla": "WETH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "origingov.eth",
+  "nome": "Origin Protocol",
+  "sigla": "XOGN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "otoex.eth",
+  "nome": "OTO Dao",
+  "sigla": "OTO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "otterclam.eth",
+  "nome": "OtterClam",
+  "sigla": "MATIC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "sigla sempre fuori (stablecoin o grande moneta) e nome della moneta assente"
+ },
+ {
+  "spazio": "ousdgov.eth",
+  "nome": "Legacy Governance (OGV)",
+  "sigla": "VEOGV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pacoca.eth",
+  "nome": "Pacoca.io",
+  "sigla": "PACOCA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pajake.eth",
+  "nome": "okta",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pancakebunny.eth",
+  "nome": "Bunny",
+  "sigla": "BUNNY",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "panda-dao.eth",
+  "nome": "PandaDAO",
+  "sigla": "PANDA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pandayield.eth",
+  "nome": "PandaYield",
+  "sigla": "BBOO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "paragonscouncil.eth",
+  "nome": "Paragons Unified Council",
+  "sigla": "PDAOCOUNCIL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "paragonstreasurycouncil.eth",
+  "nome": "ParagonsDAO Treasury Council",
+  "sigla": "PDAOTREASURY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "parallel-protocol.eth",
+  "nome": "Parallel",
+  "sigla": "SPRL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "paraswap-dao.eth",
+  "nome": "Velora DAO",
+  "sigla": "VLR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pathvote.eth",
+  "nome": "PathDAO",
+  "sigla": "PATH",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "PATHUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "payrue",
+  "nome": "PayRue",
+  "sigla": "PROPEL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "peanutdao.eth",
+  "nome": "Peanut.Trade ",
+  "sigla": "NUX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pearprotocol.eth",
+  "nome": "Pear Protocol",
+  "sigla": "STPEAR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pegs.eth",
+  "nome": "pegs",
+  "sigla": "PEGS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pegscash.eth",
+  "nome": "pegscash",
+  "sigla": "PEGS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pennymoon.eth",
+  "nome": "PennyMoon",
+  "sigla": "PENNY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "penpiexyz.eth",
+  "nome": "Penpie",
+  "sigla": "VLPNP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pepepoo.eth",
+  "nome": "PEPO DAO",
+  "sigla": "PEPO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "piedao.eth",
+  "nome": "PieDAO",
+  "sigla": "VEDOUGH",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "piggybankdao.eth",
+  "nome": "PiggyBankDAO",
+  "sigla": "SPB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "piggycdao.eth",
+  "nome": "PiggyCoin DAO",
+  "sigla": "$PIGGYC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "piggydao.eth",
+  "nome": "PiggyCDao",
+  "sigla": "$PIGGYC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pip.palvote.eth",
+  "nome": "Paladin - PIP",
+  "sigla": "HPAL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pippi.eth",
+  "nome": "PippiSwap",
+  "sigla": "XPIPI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "planckcatdao.eth",
+  "nome": "Overlay Protocol",
+  "sigla": "VOTING RIGHT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "planetfinance.eth",
+  "nome": "Planet",
+  "sigla": "AQUA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "plantswap.eth",
+  "nome": "Plantswap",
+  "sigla": "PLANT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "plearn.eth",
+  "nome": "Plearn",
+  "sigla": "PLN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "plutus-dao.eth",
+  "nome": "Plutus",
+  "sigla": "XPLUTUS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pnounsdao.eth",
+  "nome": "pNounsDAO",
+  "sigla": "PNOUNS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "poh.eth",
+  "nome": "Proof Of Humanity",
+  "sigla": "VOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "poktdao.eth",
+  "nome": "POKT Network",
+  "sigla": "POKTDAO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "polycatfi.eth",
+  "nome": "Polycat Finance",
+  "sigla": "FISH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "polydoge.eth",
+  "nome": "PolyDoge",
+  "sigla": "POLYDOGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "polygondaoo.eth",
+  "nome": "polygon",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "polygoon.eth",
+  "nome": "Polygoon",
+  "sigla": "GOON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "poolpool.pooltogether.eth",
+  "nome": "Pool Pool",
+  "sigla": "PPOOL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "poolzdao.eth",
+  "nome": "Poolz Finance ",
+  "sigla": "POOLX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "popartcats.eth",
+  "nome": "Pop Cats",
+  "sigla": "CATS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "positionex.eth",
+  "nome": "Position Exchange",
+  "sigla": "POSI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pptokendao.eth",
+  "nome": "Phoenix Protocol",
+  "sigla": "PP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ppyaa.eth",
+  "nome": "PaoPao",
+  "sigla": "DEV",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "premia.eth",
+  "nome": "Premia",
+  "sigla": "PREMIA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pria",
+  "nome": "PRIA",
+  "sigla": "PRIA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "primexyz.eth",
+  "nome": "PrimeDAO",
+  "sigla": "PRIMEDAO VOTES",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "primooceandao.eth",
+  "nome": "Primo DAO",
+  "sigla": "PRIMO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "propchaindao.eth",
+  "nome": "Propchain DAO",
+  "sigla": "PROPC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "protectoratexyz.eth",
+  "nome": "Protectorate Protocol",
+  "sigla": "XPRTC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pstakefinance.eth",
+  "nome": "pSTAKE Finance",
+  "sigla": "PSTAKE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pumpbtcxyz.eth",
+  "nome": "PumpBTC",
+  "sigla": "VEPUMP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pylonecosystem.eth",
+  "nome": "Pylon Ecosystem",
+  "sigla": "PETN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "pyme.eth",
+  "nome": "PymeDAO",
+  "sigla": "PYME",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "qatardev.eth",
+  "nome": "Qatarcoin",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "qbt-finance.eth",
+  "nome": "Qubit",
+  "sigla": "QBT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "qian-eth",
+  "nome": "QIAN(ETH)",
+  "sigla": "KUN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "qidao.eth",
+  "nome": "Qi Dao | Mai.Finance",
+  "sigla": "AVEQI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "quasarswap.eth",
+  "nome": "QuasarSwap.ETH",
+  "sigla": "VOTES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "quickvote.eth",
+  "nome": "QuickSwap",
+  "sigla": "QUICK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "QUICKUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "raccoonmafianft.eth",
+  "nome": "Raccoon Mafia",
+  "sigla": "RM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "radaofi.eth",
+  "nome": "RaDAO",
+  "sigla": "RA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "radiantcapital.eth",
+  "nome": "Radiant Capital",
+  "sigla": "RDNT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "RDNTUSDT",
+  "esito": "ESCE",
+  "motivo": "il nome dello spazio non contiene sigla ne' nome della moneta"
+ },
+ {
+  "spazio": "radpiexyz.eth",
+  "nome": "Radpie",
+  "sigla": "VLRDP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ragetrade.eth",
+  "nome": "Rage Trade",
+  "sigla": "RAGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "raidentest.eth",
+  "nome": "Raiden DAO",
+  "sigla": "RDAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rallygov.eth",
+  "nome": "Rally",
+  "sigla": "RLY",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rarible.eth",
+  "nome": "Rarible Protocol DAO",
+  "sigla": "RARI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rbls.eth",
+  "nome": "Rebel Bots",
+  "sigla": "RBLS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rbn.eth",
+  "nome": "Aevo",
+  "sigla": "AEVO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "AEVOUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "realitymetaverse.eth",
+  "nome": "Reality Metaverse",
+  "sigla": "RMV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "reidar.eth",
+  "nome": "Reidar",
+  "sigla": "RDR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rejuveai.eth",
+  "nome": "Rejuve.AI",
+  "sigla": "RJV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "remix-dao.eth",
+  "nome": "REMIX! DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ren-project.eth",
+  "nome": "Ren Project",
+  "sigla": "REN-DN*",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "renzogovernance.eth",
+  "nome": "Renzo Protocol",
+  "sigla": "REZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "REZUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "researchhub.eth",
+  "nome": "ResearchHub Foundation",
+  "sigla": "RSC",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "reserveprotocol.eth",
+  "nome": "Reserve",
+  "sigla": "VOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "retrodevdrop.eth",
+  "nome": "RetroDev Drop Swap",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rfrmdao.eth",
+  "nome": "Reform DAO",
+  "sigla": "ERFRM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rgov.eth",
+  "nome": "Rena",
+  "sigla": "RGOV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "richa0xc.eth",
+  "nome": "Next Generation Village",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "richdaomoney.eth",
+  "nome": "RICH DAO",
+  "sigla": "GRICH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ricochet.eth",
+  "nome": "Ricochet Exchange",
+  "sigla": "RIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rigelprotocoldao.eth",
+  "nome": "RigelDao",
+  "sigla": "RGP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ritoo.eth",
+  "nome": "ritoo",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rohitmehra.eth",
+  "nome": "Rohit mehra ",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rohki.eth",
+  "nome": "RŌHKI",
+  "sigla": "ROHKI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rook.eth",
+  "nome": "Rook",
+  "sigla": "ROOK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rot",
+  "nome": "Rotten Swap",
+  "sigla": "ROT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rouldao.eth",
+  "nome": "The Roul DAO",
+  "sigla": "ROULER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rpcnft.eth",
+  "nome": "Ready Player Cat",
+  "sigla": "RPC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rulerprotocol.eth",
+  "nome": "Ruler Protocol",
+  "sigla": "RULER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rvrsprotocol.eth",
+  "nome": "Reverse Protocol",
+  "sigla": "RVRS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "rwg.eth",
+  "nome": "Real World Gaming",
+  "sigla": "RAWPASS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ryiunity.eth",
+  "nome": "RYI Unity",
+  "sigla": "UV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "safeking.eth",
+  "nome": "Actor DAO",
+  "sigla": "AD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "saffronfinance.eth",
+  "nome": "saffron.finance",
+  "sigla": "SFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sake",
+  "nome": "SAKEVOTER",
+  "sigla": "SAKE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "samurailegends.eth",
+  "nome": "Samurai Legends",
+  "sigla": "SMG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sandclockdao.eth",
+  "nome": "Sandclock",
+  "sigla": "QUARTZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "satori.lol",
+  "nome": "Wiz Nouns ",
+  "sigla": "WIZ",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "satoshipanda.eth",
+  "nome": "Satoshi Panda",
+  "sigla": "SPNFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "satoshiswapvote.eth",
+  "nome": "SatoshiSwap",
+  "sigla": "SWAP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sav3",
+  "nome": "SAV3",
+  "sigla": "SAV3",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "saynotorug.eth",
+  "nome": "RuGenerous DAO",
+  "sigla": "RUG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdangle.eth",
+  "nome": "Stake DAO ANGLE",
+  "sigla": "SDANGLE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdbal.eth",
+  "nome": "Stake DAO BAL",
+  "sigla": "SDBAL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdcrv-gov.eth",
+  "nome": "sdCRV-Governance",
+  "sigla": "SDCRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdcrv.eth",
+  "nome": "Stake DAO CRV",
+  "sigla": "SDCRV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdfxn.eth",
+  "nome": "sdFXN",
+  "sigla": "SDFXN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sdfxs.eth",
+  "nome": "Stake DAO FXS",
+  "sigla": "WORKING-SDFXS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "seachaintoken.xyz",
+  "nome": "SeaChain",
+  "sigla": "SEACHAIN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "senditall.eth",
+  "nome": "JacksWiths",
+  "sigla": "LQDR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sfasdklfjasodkfjhjh.eth",
+  "nome": "Pika",
+  "sigla": "USDC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "USDCUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "shadowpakt.storymode.eth",
+  "nome": "Shadowpakt",
+  "sigla": "⚫️",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shapeshiftdao.eth",
+  "nome": "ShapeShift",
+  "sigla": "FOX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sharedstake.eth",
+  "nome": "SharedStake",
+  "sigla": "VESGT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sharkdao.eth",
+  "nome": "SharkDAO",
+  "sigla": "SHARK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sharkstreet.eth",
+  "nome": "SharknaDao",
+  "sigla": "SHARKNADAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shiba-swap.eth",
+  "nome": "Shiba Inu Ecosystem",
+  "sigla": "SHIB OR TBONE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shibadogepound.eth",
+  "nome": "ShibaDogePound DAO",
+  "sigla": "SHIBDOGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shibby.eth",
+  "nome": "Shibby Finance",
+  "sigla": "SHIBBY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shibvinci.eth",
+  "nome": "ShibVinci",
+  "sigla": "SHIV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shoppingio.eth",
+  "nome": "SPI Governance",
+  "sigla": "GSPI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shreddingsassy.eth",
+  "nome": "Shredding Sassy",
+  "sigla": "SASSY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shroomz.eth",
+  "nome": "shroomDAO",
+  "sigla": "SHROOMDAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "shuajj.eth",
+  "nome": "dAbacus Test on Rinkeby",
+  "sigla": "ABAR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sicxaaa.eth",
+  "nome": "Sicxa",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sidusheroesdao.eth",
+  "nome": "Sidus Heroes | Sidus Pad",
+  "sigla": "SENATE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "silofinance.eth",
+  "nome": "Silo",
+  "sigla": "SILO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "singularityblockchain.eth",
+  "nome": "SophonDAO",
+  "sigla": "SOPHON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "siriusfinance.eth",
+  "nome": "Sirius Finance",
+  "sigla": "VESRS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "skale.eth",
+  "nome": "SKALE DAO",
+  "sigla": "SKL",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "SKLUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "skebcoindao.eth",
+  "nome": "Skeb Coin",
+  "sigla": "STSKB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "skvlldao.eth",
+  "nome": "SkvllpvnkzDAO",
+  "sigla": "SKVLLZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "slamtoken.eth",
+  "nome": "SLAM Token",
+  "sigla": "SLAM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "smokeysmiles.eth",
+  "nome": "Smokey Smiles Protocol",
+  "sigla": "DAOSMILES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "snap.dexe.network",
+  "nome": "DAO DeXe Treasury",
+  "sigla": "DEXE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "DEXEUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "snapshot.dcl.eth",
+  "nome": "Decentraland",
+  "sigla": "VP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "snapshot.rupaya.eth",
+  "nome": "Rupaya",
+  "sigla": "RUPX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "snxgov.eth",
+  "nome": "Synthetix SCCP/SIP",
+  "sigla": "SNX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "SNXUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "solos.eth",
+  "nome": "SOLOS",
+  "sigla": "SOLOS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sonnefi.eth",
+  "nome": "Sonne Finance",
+  "sigla": "SONNE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "soonfoundation.eth",
+  "nome": "SOON DAO",
+  "sigla": "SOON",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "SOONUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "spacefi-io.eth",
+  "nome": "SpaceFi",
+  "sigla": "XSTAR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "spacommunity.eth",
+  "nome": "Spartacus Community",
+  "sigla": "SSPA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sparkyinu.eth",
+  "nome": "Sparky Inu DAO",
+  "sigla": "SPARKY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "spartadexfoundation.eth",
+  "nome": "SpartaDex DAO",
+  "sigla": "SSPARTA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "speraxdao.eth",
+  "nome": "Sperax DAO",
+  "sigla": "VESPA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "splitworld.eth",
+  "nome": "SplitWorld",
+  "sigla": "SPLT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "spookyswap.eth",
+  "nome": "SpookySwap",
+  "sigla": "SPOOKYVOTES",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "spore-engineering.eth",
+  "nome": "Spore Engineering",
+  "sigla": "SPORE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sportx.eth",
+  "nome": "SX.bet",
+  "sigla": "WSX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stabilize-governance.eth",
+  "nome": "Stabilize",
+  "sigla": "STBZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stackedtoadzdao.eth",
+  "nome": "StackedToadz",
+  "sigla": "STAKED TOAD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "staderdao.eth",
+  "nome": "Stader",
+  "sigla": "SD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stakedao.eth",
+  "nome": "Stake DAO",
+  "sigla": "VLSDT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "starcatcherscommunity.eth",
+  "nome": "Starcatchers Community",
+  "sigla": "STARC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "starheroes.eth",
+  "nome": "StarHeroes DAO",
+  "sigla": "STAR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "STARUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "starseeds-dao.eth",
+  "nome": "StarSeeds DAO",
+  "sigla": "STARSEEDS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stfxgovernance.eth",
+  "nome": "STFX",
+  "sigla": "STFX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stoboxweb3.eth",
+  "nome": "Stobox DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "streamix.eth",
+  "nome": "Streamix",
+  "sigla": "MIXS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "streamr.eth",
+  "nome": "Streamr",
+  "sigla": "DATA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stukutz.eth",
+  "nome": "Voter MCoy",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "stupidmonkeysnft.eth",
+  "nome": "StupidMonkeys",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "subavatoken.eth",
+  "nome": "SubavaToken",
+  "sigla": "SUBAVA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "subeth.eth",
+  "nome": "PolySub DAO",
+  "sigla": "PSUB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "subzer01.eth",
+  "nome": "TokenDAO",
+  "sigla": "TKN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "sushigov.eth",
+  "nome": "Sushi",
+  "sigla": "SUSHIPOWAH",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "suzuverse-dao.eth",
+  "nome": "SUZUVERSE DAO ",
+  "sigla": "XSGT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "svc001.eth",
+  "nome": "Stacker Ventures Fund 1",
+  "sigla": "SVC001",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "svs.eth",
+  "nome": "Sneaky Vampire Syndicate",
+  "sigla": "SVS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "swarm-com.eth",
+  "nome": "Swarm",
+  "sigla": "SMT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "swiftfinance.eth",
+  "nome": "Swift Finance",
+  "sigla": "SWIFT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "swingbydao.eth",
+  "nome": "Swingby DAO",
+  "sigla": "VSWINGBY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "symbiosisdao.eth",
+  "nome": "Symbiosis DAO",
+  "sigla": "VESIS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "symmio.eth",
+  "nome": "Symmio Foundation",
+  "sigla": "SYMM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "synapse-governance.eth",
+  "nome": "Hypercall",
+  "sigla": "SYN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "SYNUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "synapseprotocol.eth",
+  "nome": "Synapse Protocol",
+  "sigla": "SYN",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "SYNUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "t1victory.eth",
+  "nome": "AlonzoHelferty DAO",
+  "sigla": "ENS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ENSUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "tacoswap.eth",
+  "nome": "Tacoswap",
+  "sigla": "ETACO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "takeme.eth",
+  "nome": "Take Me",
+  "sigla": "MEME",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MEMEUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "talentok.eth",
+  "nome": "Talento DAO",
+  "sigla": "AIDOGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "taopad.eth",
+  "nome": "TaoPad",
+  "sigla": "TPAD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tapfantasymetaverse.eth",
+  "nome": "Tap Fantasy",
+  "sigla": "TAP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tempusgov.eth",
+  "nome": "Tempus",
+  "sigla": "TEMP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tetu.eth",
+  "nome": "Tetu.io",
+  "sigla": "VETETU",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thalesgov.eth",
+  "nome": "Overtime Governance",
+  "sigla": "TC-NFT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "the300coin.eth",
+  "nome": "THREE HUNDRED",
+  "sigla": "THND",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "theapegalaxy.eth",
+  "nome": "Ape Galaxy",
+  "sigla": "GG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thecookislands.eth",
+  "nome": "HeaslipIsaiah",
+  "sigla": "RHC-DEFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thegirlsofarmament.eth",
+  "nome": "The Girls of Armament: GENE_SIS",
+  "sigla": "GENESIS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thegrandbanks.eth",
+  "nome": "The Grand Banks",
+  "sigla": "GRANDPOWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thehamily.eth",
+  "nome": "The Hamily",
+  "sigla": "HAMS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thehashes.eth",
+  "nome": "Hashes",
+  "sigla": "HASH",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "theheaddao.eth",
+  "nome": "Head Dao",
+  "sigla": "HEAD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thelanddaonft.eth",
+  "nome": "TheLandSafe Treasury",
+  "sigla": "LAND",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thelanddaoprop.eth",
+  "nome": "TheLandSafe Proposals",
+  "sigla": "LAND",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thelunarsociety.eth",
+  "nome": "Moonbirds Lunar Society",
+  "sigla": "🌙",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "themis-labs.eth",
+  "nome": "Themis Protocol",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thenodeprotocol.eth",
+  "nome": "The Node Protocol",
+  "sigla": "THENODE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "theopendao.eth",
+  "nome": "OpenDAO",
+  "sigla": "SOSVP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "theuniversityoftokyo.eth",
+  "nome": "LeonardSeagrav1",
+  "sigla": "RHC-DEFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "theuplift.eth",
+  "nome": "The Uplift DAO",
+  "sigla": "UDT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thorfinancial.eth",
+  "nome": "Thor Financial",
+  "sigla": "NODES",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thorswapcommunity.eth",
+  "nome": "THORSwap Community",
+  "sigla": "THOR",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thrivefi.eth",
+  "nome": "Thriving",
+  "sigla": "DOJO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "thundercorelabs.eth",
+  "nome": "ThunderCore Mainnet",
+  "sigla": "TT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tianb85c.eth",
+  "nome": "tiantian",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tikudefi.eth",
+  "nome": "TIKU DeFi",
+  "sigla": "TIKU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "timelyrain.eth",
+  "nome": "Timelyrain",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tinvdao.eth",
+  "nome": "The Industry Network ",
+  "sigla": "TINV",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tinygames.eth",
+  "nome": "Tiny World",
+  "sigla": "VETINC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tinykiss.eth",
+  "nome": "Z Protocol.xyz",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tippity.eth",
+  "nome": "VOLT INU",
+  "sigla": "VOLT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tipsycoin.eth",
+  "nome": "TipsyCoin",
+  "sigla": "$TIPSY",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "titanisourdoge.eth",
+  "nome": "TITANDAO",
+  "sigla": "CUBAN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tititiofficial.eth",
+  "nome": "TiTiTi",
+  "sigla": "TI PASS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tlabsnft.eth",
+  "nome": "Tlabs",
+  "sigla": "TLABS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tlx.eth",
+  "nome": "TLX",
+  "sigla": "TC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "toadswapdao.eth",
+  "nome": "ToadSwap",
+  "sigla": "TOAD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "toast",
+  "nome": "Toast.finance",
+  "sigla": "HOUSE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "togetherstrong.eth",
+  "nome": "APE DAO",
+  "sigla": "APED",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tokenlon.eth",
+  "nome": "Tokenlon",
+  "sigla": "LON",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tokennationgroup.eth",
+  "nome": "TokeNNatioN Group",
+  "sigla": "VOTOS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "toxicskullsclubvoting.eth",
+  "nome": "Toxic Skulls Club",
+  "sigla": "TSC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tradingarmoriondirective.eth",
+  "nome": "Trading Arm Orion Directive",
+  "sigla": "ORD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tranche.eth",
+  "nome": "Tranche Finance",
+  "sigla": "SLICE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "transactrafinance.eth",
+  "nome": "Transactra Finance",
+  "sigla": "TRSCT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "treehousefi.eth",
+  "nome": "Treehouse DAO",
+  "sigla": "VETREE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "trippleg.eth",
+  "nome": "Trippleg.eth",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "trubadger.eth",
+  "nome": "TruBadger",
+  "sigla": "TRUBGR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "truefi-dao.eth",
+  "nome": "TrueFi DAO",
+  "sigla": "STKTRU",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "truflation.eth",
+  "nome": "TRUF.NETWORK",
+  "sigla": "VETRUF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "trustwallet",
+  "nome": "Trust Wallet",
+  "sigla": "TWT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "TWTUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "truth-network.eth",
+  "nome": "Truth Network",
+  "sigla": "",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "tsudoge.eth",
+  "nome": "TSUDOGE DAO",
+  "sigla": "TSUDO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ttraek.eth",
+  "nome": "Burna",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "twilightdao.eth",
+  "nome": "Twilight Dao",
+  "sigla": "TLD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "udeline.eth",
+  "nome": "EldonVoegeli CLUB",
+  "sigla": "POSP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ultravioletadao.eth",
+  "nome": "Ultravioleta DAO",
+  "sigla": "UVD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "uma.eth",
+  "nome": "UMA Protocol",
+  "sigla": "UMA",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "UMAUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "umbnetwork.eth",
+  "nome": "Umbrella Network",
+  "sigla": "UMB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "umerge.eth",
+  "nome": "uMerge DAO on Units Network",
+  "sigla": "",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "undeadpastelnft.eth",
+  "nome": "Undead Pastel Club",
+  "sigla": "UPC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "unidexapp.eth",
+  "nome": "UniDex Exchange",
+  "sigla": "MOLTEN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "unipilot.eth",
+  "nome": "A51 Finance",
+  "sigla": "A51",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "uniswapgovernance.eth",
+  "nome": "Uniswap",
+  "sigla": "UNI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "UNIUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "unlock-protocol.eth",
+  "nome": "Unlock Protocol",
+  "sigla": "UDT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "unslashed.eth",
+  "nome": "Unslashed Finance",
+  "sigla": "USF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "upsidedao.eth",
+  "nome": "UpsideD∀O",
+  "sigla": "D∀O",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "usdaogov.eth",
+  "nome": "USDAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "usdfidao.eth",
+  "nome": "USDFI DAO",
+  "sigla": "USDFI-VOTING",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "usebraintrust.eth",
+  "nome": "Braintrust",
+  "sigla": "BTRST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "usualmoney.eth",
+  "nome": "Usual",
+  "sigla": "USUVOTE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "uxlinkcommunity.eth",
+  "nome": "UXLINK DAO",
+  "sigla": "UXLINK",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "UXLINKUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "v-empire.eth",
+  "nome": "vEmpire DDAO",
+  "sigla": "VEMP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "v2-multiplierfinance.eth",
+  "nome": "Multiplier V2",
+  "sigla": "STAKEDBMXX ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "validao.eth",
+  "nome": "ValiDAO",
+  "sigla": "VDO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vapornodes.eth",
+  "nome": "VaporFi Labs",
+  "sigla": "VNODE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vaultcraft-snapshot.eth",
+  "nome": "VaultCraft",
+  "sigla": "VCX",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "veclev.eth",
+  "nome": "CLever",
+  "sigla": "VECLEV",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vedaogov.eth",
+  "nome": "veDao",
+  "sigla": "WEVE",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "veedao.eth",
+  "nome": "VeeDao",
+  "sigla": "FRIENDS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "velocimeter.eth",
+  "nome": "FVM",
+  "sigla": "VOTINGPOWER",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "venus-xvs.eth",
+  "nome": "Venus Protocol",
+  "sigla": "XVS",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "XVSUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "vestadao.eth",
+  "nome": "VestaDAO",
+  "sigla": "VDAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vmex.eth",
+  "nome": "VMEX Finance",
+  "sigla": "VEVMEX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "voltagefinance.eth",
+  "nome": "Voltage Finance",
+  "sigla": "VOLT",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vote-perp.eth",
+  "nome": "Perpetual Protocol",
+  "sigla": "PERP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "PERPUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "vote.defi3dot0.eth",
+  "nome": "DeFi 3.0",
+  "sigla": "D3FI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vote.mcdex.eth",
+  "nome": "MCDEX",
+  "sigla": "MCB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vote.solarmoon.eth",
+  "nome": "Solar Moon Crypto",
+  "sigla": "SOLAR",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vote.theborg.eth",
+  "nome": "BORG Collective",
+  "sigla": "BORG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "vsp.eth",
+  "nome": "Vesper Finance",
+  "sigla": "VSP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wagdiesnapshot.eth",
+  "nome": "Wagdie Community Votes",
+  "sigla": "WAGDIE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wakandainu.eth",
+  "nome": "Wakanda Inu Ecosystem",
+  "sigla": "WKD-INU",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wangzian.eth",
+  "nome": "wangzian",
+  "sigla": "SUSHI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "SUSHIUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "wastedworld.eth",
+  "nome": "Wasted Whales DAO",
+  "sigla": "WW",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wearyapeyc.eth",
+  "nome": "Weary Ape Yacht Club",
+  "sigla": "REIN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "web3campio.eth",
+  "nome": "Web3Camp",
+  "sigla": "3P",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "weirdpunks.eth",
+  "nome": "Weird Punks",
+  "sigla": "WEIRD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wenvote.eth",
+  "nome": "WEN DAO",
+  "sigla": "WEN",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "WENUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "whexy.eth",
+  "nome": "Whale Exploder Ecosystem Dao",
+  "sigla": "WEED",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "whitedev.eth",
+  "nome": "White",
+  "sigla": "WHITE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "whitelist1.eth",
+  "nome": "Whitelist",
+  "sigla": "WHITELIST",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "wlitidao.eth",
+  "nome": "Wolf Works DAO",
+  "sigla": "WLD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "WLDUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "woofswap.shib",
+  "nome": "WoofSwap",
+  "sigla": "",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "worldlibertyfinancial.com",
+  "nome": "World Liberty Financial",
+  "sigla": "WLFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": "WLFIUSDT",
+  "esito": "ENTRA",
+  "motivo": ""
+ },
+ {
+  "spazio": "wrldtakeovernft.eth",
+  "nome": "MetaTrustDAO",
+  "sigla": "MTD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "x7finance.eth",
+  "nome": "X7 Finance",
+  "sigla": "X7DAO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xborg.eth",
+  "nome": "XBorg",
+  "sigla": "XBORG",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xcomb.eth",
+  "nome": "Combine.finance",
+  "sigla": "XCOMB",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xcult.skullys.eth",
+  "nome": "xCult",
+  "sigla": "XCULT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xenshib.eth",
+  "nome": "xenshib",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "xole.eth",
+  "nome": "OpenLeverage",
+  "sigla": "OLE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xpnetworkvote.eth",
+  "nome": "XP.NETWORK",
+  "sigla": "XPNET",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xsp.eth",
+  "nome": "XSwap Protocol",
+  "sigla": "XSP",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xwg.eth",
+  "nome": "X World Games",
+  "sigla": "XWG",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xxtka.eth",
+  "nome": "xToken",
+  "sigla": "XXTKA",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "xyjk.eth",
+  "nome": "xyjk",
+  "sigla": "CHEERS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "y2k-finance.eth",
+  "nome": "Y2K Finance",
+  "sigla": "VOTE WEIGHT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "yam.eth",
+  "nome": "Yam",
+  "sigla": "YAM",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "yearn",
+  "nome": "yearn.finance (archive)",
+  "sigla": "YFI",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "YFIUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "yggspl.eth",
+  "nome": "YGG Splinterlands",
+  "sigla": "YGGSPL",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "yieldarmoriondirective.eth",
+  "nome": "Yield Arm Orion Directive",
+  "sigla": "ORD",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "yiliangpeng.eth",
+  "nome": "HubertSchumuck DAO",
+  "sigla": "MERGE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "ymen",
+  "nome": "Y-Men",
+  "sigla": "MUTANT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "yubai.eth",
+  "nome": "people",
+  "sigla": "ENS",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "ENSUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "zamm.eth",
+  "nome": "ZAMM",
+  "sigla": "ZAMM",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zcoreclub.eth",
+  "nome": "ZCore Network",
+  "sigla": "ZCRAI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zerobasedao.eth",
+  "nome": "ZEROBASE DAO",
+  "sigla": "ZB VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zerogoki.eth",
+  "nome": "Zerogoki",
+  "sigla": "REI+ZUSD",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zeroliquid.eth",
+  "nome": "ZeroLiquid",
+  "sigla": "ZERO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zibar.eth",
+  "nome": "The Baby DragonX Governance Nest",
+  "sigla": "BDX",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zicodao.eth",
+  "nome": "Zico DAO",
+  "sigla": "ZICO",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zkapedao.eth",
+  "nome": "zkApes DAO",
+  "sigla": "VOTE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zkrairflying.eth",
+  "nome": "Londonfly",
+  "sigla": "USDC",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "USDCUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "zkswapfinance.eth",
+  "nome": "zkSwap Finance",
+  "sigla": "YZF",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zombiezdao.eth",
+  "nome": "Crypto Zombiez DAO",
+  "sigla": "ZOMBIE",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zyfai.eth",
+  "nome": "ZyFAI DAO",
+  "sigla": "STZFI",
+  "verificato": true,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "zys888.eth",
+  "nome": "MATIC 2021",
+  "sigla": "MATIC",
+  "verificato": false,
+  "segnalato": true,
+  "perpetuo": "MATICUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ },
+ {
+  "spazio": "zzz-finance",
+  "nome": "ZZZ.Finance",
+  "sigla": "ZZZ",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "中国华润有限公司.eth",
+  "nome": "ETO",
+  "sigla": "ETO",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "国美控股集团有限公司.eth",
+  "nome": "ADP",
+  "sigla": "ADP",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": null,
+  "esito": "ESCE",
+  "motivo": "sigla senza perpetuo nell'archivio"
+ },
+ {
+  "spazio": "海尔集团公司.eth",
+  "nome": "CAT",
+  "sigla": "CAT",
+  "verificato": false,
+  "segnalato": false,
+  "perpetuo": "1000CATUSDT",
+  "esito": "ESCE",
+  "motivo": "non verificato"
+ }
+]

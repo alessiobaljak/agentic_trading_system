@@ -110,7 +110,7 @@ def perpetui() -> dict[str, str]:
     if f.exists():
         return json.loads(f.read_text())
     simboli = [x.rstrip("/").split("/")[-1] for x in elenco_cartelle("data/futures/um/monthly/klines/")]
-    simboli = [s for s in simboli if s.endswith("USDT") and "_" not in s]
+    simboli = [s for s in simboli if s.endswith("USDT") and "_" not in s and s.isascii()]
     primo = {s: mesi_di(s)[0] for s in simboli}
     base: dict[str, str] = {}
     for s in simboli:
