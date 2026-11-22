@@ -29,7 +29,8 @@ seduta). Contano come **2 prove** (la strategia da sola, e la miscela con lei).
     fired, terminated, departs / departure / departing, exits / exiting, leaves / leaving / to leave;
   * **non** un pensionamento: niente «retire», «retires», «retiring», «retirement»; **non** un ex capo: niente «former CEO»,
     «ex-CEO»;
-  * la notizia ha **al massimo 3 simboli**, e uno di questi è un membro dell'S&P 500 quel giorno (`dati/P028_membri.csv.gz`);
+  * la notizia ha **al massimo 3 simboli**, e **esattamente uno** di questi è un membro dell'S&P 500 quel giorno
+    (`dati/P028_membri.csv.gz`); con due o più membri la notizia resta fuori e si conta (chiusa prima del calcolo, 22 novembre);
   * per azienda conta **la prima notizia**; le altre nei 60 giorni dopo non contano.
 * **I prezzi:** barre al giorno di Alpaca con i dividendi e i frazionamenti (simbolo di allora, come le prove 31-41); lo SPY.
 
@@ -64,7 +65,8 @@ blocchi di 20 giorni.
 **La risposta alla domanda del proprietario** (da leggere, è il motivo della prova): per tutti gli annunci, il titolo meno lo SPY
 **dall'ingresso a 1, 5, 10 e 20 sedute**, media, mediana, t e quota in calo; lo stesso **dalla chiusura prima dell'annuncio
 all'ingresso** (quanto era già successo); il guadagno senza il caso più grande; gli annunci con «effective immediately» nel testo a
-parte; quante notizie scelte per anno e un campione di 20 titoli di notizie scelte (per vedere quanto è sporca la scelta).
+parte; quante notizie scelte per anno e **quante per ogni parola trovata** (per vedere quanto è sporca la scelta; i titoli delle
+notizie non si pubblicano, sono coperti da licenza: correzione del 22 novembre, prima del calcolo).
 
 **Se passa uno dei due esami:** revisore separato, poi il periodo chiuso (dal 2 gennaio 2025 al 30 settembre 2026) una volta: la
 famiglia «notizie sulle persone» non l'ha mai usato.
