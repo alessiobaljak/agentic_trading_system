@@ -881,3 +881,10 @@ grandi, quasi mai quelle piccole dove arrivano le fiammate; per leggerle servono
 di perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase. G1: la prima lettura delle notizie delle monete vendute (voce 14) è
 nel giro delle 04:17. Ricerca nuova: nessuna prova in corso; le strade nuove aspettano il via libera del proprietario. **Capito oggi**:
 niente di nuovo in questo giro.
+**22 novembre, 04:30 UTC, il quindicesimo ribilancio del demo a 1.000 USDT e la prima lettura delle notizie** (`ops/results/0766`,
+`0767`; `research/programma7/misure_g1/voce14_letture/2026-11-22.md`): solo 4 ordini, tutti a limite, gli stessi rifiuti, nessun errore
+nuovo. Il 21 novembre G1 perde il 3,1% (demo −3,13%, paper −3,07%): dall'8 novembre demo +0,81%, paper +1,22%. Prima lettura delle
+notizie delle 31 monete vendute, salvata alle 04:22:56 prima di qualunque prezzo di oggi: nessuna a rischio di salire (nell'archivio
+nulla di specifico, 21 ricerche sul web senza notizie datate nelle 48 ore). Raccolta delle 04:20: 25 fonti su 25. **Capito oggi**: per
+le monete piccole vendute da G1 le notizie del giorno quasi non esistono nelle fonti pubbliche che leggiamo; se le fiammate hanno una
+causa, sta altrove (annunci delle borse, canali dei progetti) o non si legge prima.

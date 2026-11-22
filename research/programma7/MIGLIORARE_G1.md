@@ -471,3 +471,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   1,36 volte lo 0,02% assunto** (gli ultimi due giorni 85-89% nel libro). Limite della misura: le esecuzioni sono lette solo per le monete
   tenute al momento della lettura (il 16 novembre la lettura 0757 dà 689 USDT, la 0765 615 con la stessa commissione), quindi per i giorni
   più vecchi la quota in % è un po' gonfiata; per ogni giorno vale la lettura più vicina. Il numero va nel confronto settimanale di lunedì.
+* **22 novembre 2026, 04:25 UTC, voce 8 (quindicesimo ribilancio a 1.000 USDT)** (`ops/results/0766-22nov-log-ribilancio-1000.md`,
+  `0767-22nov-stato-ribilancio-1000.md`). Ribilancio: solo **4 ordini, tutti a limite** (i pesi cambiano poco: 49 variazioni sotto il
+  minimo, 9,2% del conto); gli stessi 3 rifiuti (EVAA e UAI per il margine, LIT chiusa all'apertura sul demo) e IRYSUSDT assente; nessun
+  errore nuovo; paper ordini limite 57 su 57. Il 21 novembre G1 perde: demo −3,13%, paper −3,07%. Equity del demo 1.008,08 (+0,81%
+  dall'8 novembre), G1 nel paper 10.748,97 (+1,22% dalla stessa base di ieri, 10.619): **il demo è 0,41 punti sotto** (ieri 0,18). Dal 9
+  novembre (14 giorni, tabella dello stato) demo +1,29%, paper +2,72%, −0,10 punti al giorno. Esposizione lorda del demo 193,3% contro
+  200%, scarto fra posizioni vere e volute 14,4% del conto (LIT −3,4%). Stop del conto a 688,73 USDT, oggi −4,86% dal massimo.
+* **22 novembre 2026, 04:23 UTC, voce 14, prima lettura** (`misure_g1/voce14_letture/2026-11-22.md`, commit 5dc34bd, prima dei prezzi):
+  31 monete vendute; nell'archivio articoli solo per Monero (in realtà su XMR1, un altro gettone) e Hyperliquid (il ribasso generale);
+  21 ricerche sul web (una per moneta con peso di almeno il 2%): nessuna notizia valida nelle 48 ore. **Nessuna moneta «sì».** Limite
+  scritto: la ricerca sul web dà riassunti di pagine automatiche, spesso senza data; le notizie delle ultime 48 ore possono mancare.
