@@ -31,9 +31,10 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 
 ## Cosa aspetta il proprietario
 
-0. **(22 novembre) Aprire o no il periodo chiuso per la prova 45**, con l'esame «da crisi» scritto prima
-   (`prove/P045b_esame_da_crisi.md`): il revisore ha confermato il segnale ma ha bocciato perché il guadagno sta in marzo 2020; il
-   2025-2026 sarebbe il secondo episodio, con il dato della copertura pubblicato in tempo reale. Una sola apertura, conta una prova.
+0. **(22 novembre) La prova 45 sul demo, come misura in avanti?** L'esame sul periodo chiuso (prova 45b) dice «non si può
+   dire»: 18 operazioni, sotto il minimo di 20, ma tutte e quattro le condizioni vere (+14,44 punti base a operazione contro −1,61
+   negli altri giorni). Solo il demo può dire di più; serve l'ok del proprietario e un controllo giornaliero che il dato di
+   SqueezeMetrics esca prima delle 15:30.
    **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti).
 1. **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
    farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
@@ -342,6 +343,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   arriva prima che si possa entrare** (−1,17% rispetto allo SPY dalla chiusura prima dell'annuncio alla chiusura del giorno dopo, t
   −3,02), **dopo in media non succede niente** (−0,15% a 20 sedute, t −0,19): il 60% continua a scendere un po', gli altri rimbalzano.
   Nvidia (novembre 2026, −24% in sei sedute dopo l'annuncio, con il QQQ a −11,6%) è stata l'eccezione. Nel conto: 107.
+* **La prova 45b** (l'esame da crisi della prova 45 sul periodo chiuso, lanciato il 22 novembre): **non si può dire**
+  (`prove/P045b_risultati.md`): 18 operazioni (il minimo scritto prima era 20); +14,44 punti base a operazione nei giorni sotto zero
+  contro −1,61 negli altri; con i costi +2,31% in 21 mesi, Sharpe 0,80; aprile 2025 fa quasi tutto (+230,9 punti base su +259,9).
+  Capito: nel 2025-2026 la copertura è sotto zero solo nel 4% dei giorni (11% nel 2016-2024); la direzione del segnale tiene anche
+  fuori dal campione, ma i casi sono troppo pochi per una prova. Nel conto: 108.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
