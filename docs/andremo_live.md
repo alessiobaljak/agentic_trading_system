@@ -877,3 +877,7 @@ delle monete vendute, prima della prima lettura di domani (`research/programma7/
 delle 30 monete vendute solo 5 hanno articoli nel nostro archivio delle 24 ore (491 articoli), le piccole nessuno. Per questo le regole
 ammettono al più una ricerca sul web per moneta con peso di almeno il 2%. **Capito oggi**: il nostro archivio di 25 siti copre le monete
 grandi, quasi mai quelle piccole dove arrivano le fiammate; per leggerle servono altre fonti (il web, gli annunci delle borse).
+**22 novembre, 00:25 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (27 articoli nuovi, 40 conti di Hyperliquid), nessuna chiusura
+di perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase. G1: la prima lettura delle notizie delle monete vendute (voce 14) è
+nel giro delle 04:17. Ricerca nuova: nessuna prova in corso; le strade nuove aspettano il via libera del proprietario. **Capito oggi**:
+niente di nuovo in questo giro.
