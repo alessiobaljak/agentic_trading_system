@@ -337,6 +337,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   SqueezeMetrics si può controllare solo dal novembre 2021 (11 copie pubbliche identiche), prima può essere stato rifatto; (4) le
   chiusure giornaliere di Alpaca non sono quelle ufficiali in 13 giorni (10 in marzo 2020), errore ancora nella miscela della prova 25.
   Chiuse senza prova le idee dei fondi a leva su una sola azione (I51) e dell'uscita all'asta (I8, con il numero della 45). Nel conto: 105.
+* **La prova 46** (le dimissioni del capo, idea del proprietario del 22 novembre: vendere allo scoperto il giorno dopo l'annuncio,
+  coperti con lo SPY, per 20 sedute): **bocciata** (`prove/P046_risultati.md`). Capito, su 243 casi dell'S&P 500 dal 2016: **il calo
+  arriva prima che si possa entrare** (−1,17% rispetto allo SPY dalla chiusura prima dell'annuncio alla chiusura del giorno dopo, t
+  −3,02), **dopo in media non succede niente** (−0,15% a 20 sedute, t −0,19): il 60% continua a scendere un po', gli altri rimbalzano.
+  Nvidia (novembre 2026, −24% in sei sedute dopo l'annuncio, con il QQQ a −11,6%) è stata l'eccezione. Nel conto: 107.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS

@@ -4,7 +4,7 @@ Regole scritte il 19 novembre 2026 **prima di qualsiasi calcolo** e prima di sca
 `REGISTRO.md`, dalla ricerca su GitHub, `IDEE_DA_GITHUB.md`, N6). Si conoscevano le prove 1-41: in particolare la 36 (il vantaggio di un
 deposito alla SEC vive fra la pubblicazione e l'apertura dopo, dove lo scarto è grande), il controllo P036b (dopo la chiusura lo scarto
 pagato davvero è di circa 20 punti base per lato sulle grandi), la 27 e la 34 (le aziende piccole: filtri e costi). Contano come **2
-prove** (la strategia da sola, e la miscela con lei): 107 nel conto (le prove 43, 44 e 45 sono state calcolate prima).
+prove** (la strategia da sola, e la miscela con lei): 109 nel conto (le prove 43, 44, 45 e 46 sono state calcolate prima).
 
 ## Perché dovrebbe funzionare
 
