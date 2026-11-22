@@ -941,3 +941,7 @@ eventi. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
 2023, effetto piccolo), i cambi di contratto dei gettoni (meno di 20 eventi) e i dimezzamenti delle altre monete (meno di 10). **Capito
 oggi**: le conseguenze meccaniche con una data fissa e tanti casi sono quasi tutte già note e piccole; i fatti con conseguenze grandi
 sono rari, e per quelli la strada è la lettura caso per caso in avanti.
+**22 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (40 articoli nuovi), 40 conti copiati, mappa delle liquidazioni
+(600 conti, 2.341 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (le due letture delle
+notizie partono alle 04:17). Ricerca: nessuna prova pronta; lo scout del pomeriggio non ha trovato un'idea da provare (idea 159 scartata).
+**Capito oggi**: niente di nuovo in questo giro.
