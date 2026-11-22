@@ -102,6 +102,29 @@ a schermo al massimo 20 righe. Nessuna chiamata a servizi a pagamento. Prima del
 (le ambiguità si chiudono e si ricommittano) e fra i punti: l'esistenza dei dati dei contratti già chiusi, la data di partenza delle
 decisioni, il tempo di rifare il modello a ogni decisione (sono poche righe: nessun problema atteso).
 
+## Chiusura della verifica (22 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTOTREESIMA.md`, 19 punti, 2 bloccanti). **Dove il testo sopra dice diversamente, vale
+questa sezione.** Dove c'era una scelta, si è presa la più prudente.
+1. **Niente interesse aperto** (punto 1 bloccante): lo scarico giornaliero dei `metrics` di tutti i perpetui dal dicembre 2021 sarebbe di
+   circa un milione di file e non si fa. I numeri del modello diventano **due**, misurati sulle candele giornaliere: (a) il volume medio
+   in USDT dei 30 giorni interi prima del giorno, (c) il rapporto fra il volume medio dei 30 giorni e quello dei 60 giorni prima (giorni
+   D−90…D−31), ciascuno in classifica fra i contratti vivi quel giorno. Il controllo di coerenza vale per i due versi (ci si aspetta
+   volume basso e in calo per i contratti chiusi). È autorizzato un solo script nuovo per i dati, `programma7/centotreesima_dati.py`
+   (sul modello di `novantanovesima_dati.py`): candele giornaliere mensili di `data.binance.vision` per tutti i perpetui in USDT
+   dell'archivio, compresi i chiusi, dal dicembre 2021 al 31 ottobre 2026, con impronte e buchi nella cartella dei risultati.
+2. **Chiuso e vivo** (punto 2 bloccante): un contratto è «annunciato» dall'ora dell'annuncio `h_e` e chiuso dall'ora di chiusura `h_u`
+   di `revisione_107/eventi_finale.csv` (87 contratti, la fonte vale più dei numeri 85 e 3/21/29/32 scritti sopra); dopo `h_e` non dà più
+   righe al modello e non si sceglie, dopo `h_u` non ha dati anche se l'archivio continua. Prima del calcolo si scrive l'elenco dei
+   contratti con volume positivo oltre 7 giorni dopo `h_u` (ICP, TLM, SC, CVC, BLZ e gli altri) e i risultati si danno anche senza di loro.
+3. Punti 3-5 e 8-15, 17-19: valgono le correzioni scritte nel rapporto di verifica, punto per punto, così come sono (il momento di ogni
+   passo; le etichette su tutte le coppie contratto-giorno con t+45 ≤ D−1; la classifica del giorno; `LogisticRegression(penalty='l2',
+   C=1.0, solver='lbfgs')`; i contratti chiusi validi; meno di N monete; protezione al massimo giornaliero, uscita a 1,30 × 1,01; uscita
+   per annuncio con i rinvii; prezzo e funding; il controllo A/B/C; spese e chiusura al 1° novembre 2026; settimane da lunedì).
+4. **Capitale fisso** di 1.000 USDT, senza comporre, come nelle prove 157-163 (punto 11).
+5. **Prime decisioni** (punto 7): A il 1° giugno 2024, B lunedì 13 maggio 2024; i mesi prima a zero.
+6. **La selezione a caso** (punto 16): **ciascuna variante** sopra il **suo** 95° percentile di 1.000 scelte a caso con la stessa regola
+   di tenuta e di uscita.
+
 ## Punti ancora dubbi (da chiudere nella verifica, non dopo i risultati)
 1. I contratti chiusi hanno candele e `metrics` fino alla chiusura? (sopravvivenza: senza, il modello non ha esempi.)
 2. L'universo vivo ogni giorno va ricostruito dal pannello giornaliero e dalle date di quotazione, includendo i contratti poi chiusi.
