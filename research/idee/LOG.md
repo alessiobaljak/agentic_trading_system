@@ -143,3 +143,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   regola che agisce dopo la recupera); neutra al mercato: 88; leva: 120 e 158; quota di funding coperto: 160 e 161. Non resta un segnale di rischio con dati
   nostri, perché economico distinto e non già coperto; un altro freno sarebbe la stessa famiglia di prove con soglia scelta sui dati. `--cerca squeeze` = 0
   ma è il lato venduto delle fiammate (156). Nessuna riga di registro.
+
+- 22 novembre 2026 (strategy-scout, angolo: fatto datato + obbligo): proposta 1 idea, regole scritte: `programma7/CENTOSETTIMA.md` (prova 169, idea 158): la
+  scadenza delle opzioni di Deribit alle 08:00 UTC (i market maker chiudono la copertura): corto nell'ora prima, lungo nelle due ore dopo su Bitcoin ed Ether;
+  circa 305 venerdì e 70 ultimi venerdì per moneta dal 2021; fonte: API pubblica di Deribit (prova fatta) e candele orarie di Binance; studio su Finance Research
+  Letters 2021-2023 (letto solo da un riassunto). Probabilità bassa (quattro scambi, circa 0,24%). Scartate: ETF a leva (ribilanciamento di fine giornata: storico
+  dal giugno 2023, effetto piccolo, in giornata), cambi di contratto dei gettoni (meno di 20 eventi), dimezzamenti di altre monete (meno di 10), liquidazioni
+  (già la 112). Nessuna riga di registro.

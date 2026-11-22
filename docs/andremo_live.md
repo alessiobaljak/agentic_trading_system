@@ -935,3 +935,9 @@ di discesa senza perdere rendimento, ma non aggiungono un guadagno nuovo.
 (600 conti, 2.349 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. Coda della ricerca senza prove pronte (164-168
 chiuse oggi): strategy-scout cerca una o due idee «fatto → chi è costretto a comprare o vendere dopo», con dati gratuiti e almeno 60
 eventi. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
+**22 novembre, 17:30 UTC, idea nuova dello scout scartata prima del calcolo**: la scadenza delle opzioni di Deribit il venerdì alle 08:00
+(idea 159; regole in `research/programma7/CENTOSETTIMA.md`) non si fa: viene da uno studio pubblicato (da manuale per la decisione del
+21 novembre) e quattro scambi costano circa lo 0,24% per un movimento di poche ore. Scartate dallo scout anche gli ETF a leva (storia dal
+2023, effetto piccolo), i cambi di contratto dei gettoni (meno di 20 eventi) e i dimezzamenti delle altre monete (meno di 10). **Capito
+oggi**: le conseguenze meccaniche con una data fissa e tanti casi sono quasi tutte già note e piccole; i fatti con conseguenze grandi
+sono rari, e per quelli la strada è la lettura caso per caso in avanti.

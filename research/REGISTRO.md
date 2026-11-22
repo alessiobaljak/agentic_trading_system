@@ -564,3 +564,8 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    Bitcoin dopo 40 casi. Il perché: le regole fisse dopo la notizia (prove 105, 107, 146; dimissioni dei capi nelle azioni, prova 46 di
    `stock/REGISTRO.md`) guadagnano poco o niente perché il mercato prezza subito i casi ovvi; il valore sta nel distinguere caso per
    caso. Misura in avanti dal 23 novembre, fuori dal conto finché non diventa una strategia (`research/notizie/FATTI_GRAVI.md`).
+159. **La scadenza delle opzioni di Deribit il venerdì alle 08:00 UTC** (strategy-scout, 22 novembre; regole scritte in
+   `programma7/CENTOSETTIMA.md`): corto sul perpetuo di Bitcoin ed Ether alle 07:00, lungo alle 08:00, chiuso alle 10:00, perché chi
+   vende le opzioni chiude la copertura all'ora della scadenza. **Non si fa** (sessione principale, 22 novembre, prima di ogni calcolo):
+   l'effetto viene da uno studio pubblicato sul 2021-2023 (un fattore già scritto, da manuale per la decisione del 21 novembre); la
+   coppia corto-lungo costa quattro scambi, circa 0,24%, per un movimento di poche ore che lo scout stesso giudica poco probabile.
