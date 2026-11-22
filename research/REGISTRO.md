@@ -524,9 +524,28 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
    prezzi di liquidazione sono pubblici, cosa che su nessuna borsa tradizionale esiste; dove si ammassano liquidazioni vicino al prezzo,
    le vendite o gli acquisti forzati sono prevedibili prima che succedano (diverso dalla prova 112, che guardava le cascate dopo).
    Dato da raccogliere in avanti (oggi salviamo solo 40 conti e non il prezzo di liquidazione); si prova quando ci sono mesi di dati.
+   **22 novembre**: il proprietario «fai 1 e 2 insieme»: la raccolta parte (regole in `research/trader_copiati/LIQUIDAZIONI.md`).
 152. **Il giudice delle balene** (sessione principale, 21 novembre): invece di copiare tutti i grandi conti di Hyperliquid (idea 132),
    l'intelligenza artificiale giudica conto per conto chi guadagna con costanza e chi per caso, e si segue solo chi regge; dati nostri
    dal 2 novembre, in avanti.
 153. ~~**L'arbitraggio vero del funding fra Binance e Hyperliquid**~~ → prova 163 (proposta della sessione principale del 21 novembre,
    via libera del proprietario: «procedi»): due gambe opposte sulla stessa moneta, una per borsa; le prove 135 e 137 avevano usato lo
    scarto solo come segnale su Binance, la 162 dentro la stessa borsa. **Esito (21 novembre): no** (riga 163).
+154. **Le monete che arrivano nei portafogli delle borse prima della quotazione** (sessione principale, 22 novembre; il proprietario:
+   «fai 1 e 2 insieme»): per quotare una moneta una borsa deve prima riceverla nei suoi portafogli, e i trasferimenti sono pubblici sulla
+   catena, spesso ore o giorni prima dell'annuncio; l'annuncio fa salire la moneta anche sul perpetuo di Binance. Comprare il perpetuo
+   quando un portafoglio noto di una grande borsa riceve per la prima volta una moneta che quella borsa non quota. Si prova sul passato,
+   se lo storico dei trasferimenti si legge gratis e senza registrazione. Regole: strategy-scout.
+155. **Le società che tengono una moneta in cassa e valgono meno di lei** (sessione principale, 22 novembre): dal 2025 aziende quotate in
+   borsa comprano gettoni (Ether, Solana, Hyperliquid, BNB e altri) con i soldi dei loro azionisti; quando l'azione vale meno delle monete
+   in cassa non possono più raccogliere soldi e alcune vendono monete o ricomprano azioni: una vendita forzata nuova, che prima del 2025
+   non esisteva. Vendere il perpetuo della moneta quando le sue società scendono sotto il valore della cassa. Dati: prezzi delle azioni e
+   monete in cassa dichiarate (fonti pubbliche gratuite da verificare). Regole: strategy-scout.
+156. **Prevedere le chiusure dei perpetui di Binance prima dell'annuncio** (sessione principale, 22 novembre): le prove 105 e 107 vendono
+   dopo l'annuncio di chiusura; qui si cerca di arrivare prima, perché Binance chiude i contratti con poco scambio e poco interesse aperto
+   per settimane: vendere contro il Bitcoin le monete che somigliano di più a quelle chiuse in passato, prima che l'annuncio arrivi. Dati
+   in casa (85 annunci datati della 107, i numeri giornalieri dei contratti). Regole: strategy-scout.
+157. **Le proposte di governo dei gettoni che spostano soldi ai possessori** (sessione principale, 22 novembre): riacquisti, quota delle
+   commissioni ai possessori, distruzione di monete votati dai possessori (Snapshot e i forum dei progetti, archivi pubblici con le
+   date); il voto che passa cambia quanto vale tenere il gettone, e i forum li leggono in pochi. Una regola semplice si prova sul passato;
+   la lettura dei testi con l'intelligenza artificiale solo dopo la data di addestramento e in avanti. Regole: strategy-scout.

@@ -57,6 +57,9 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   la ricerca nuova delle crypto non propone più idee da manuale; un'intelligenza artificiale chiamata a consumo che decide entrate e
   uscite è un'area a sé (`trader_ai/`, sessione «trading AI», prima a soldi finti simulati). Le strategie in corso restano; le regole
   dell'esame non cambiano (`docs/decisioni_del_proprietario.md`).
+* **22 novembre**: «perché aspetti il mio via libera, le idee le devi provare in automatico»: le idee nuove si provano da sole con il
+  flusso di sempre; si aspetta il proprietario solo per spese, registrazioni a servizi esterni, demo, soldi veri, riavvi e spegnimenti, e
+  quando fa una domanda (prima si risponde).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

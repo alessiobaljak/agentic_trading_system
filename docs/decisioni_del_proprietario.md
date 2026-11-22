@@ -148,3 +148,17 @@ etc?)». Cosa cambia:
   del servizio la mette il proprietario dove non finisce mai in un commit.
 * Un'idea nuova: il passato **dopo** la data di addestramento del modello è un passato che il modello non conosce, quindi su quei mesi
   (e in avanti) le sue decisioni si possono provare senza che «sappia già com'è andata»; prima di quella data no.
+
+
+## 22 novembre 2026: le idee nuove si provano da sole, senza aspettare il via libera
+Le parole del proprietario, dopo la proposta di quattro strade nuove: «Fai 1 e 2 insieme ... mi stai dicendo che hai trovato solo questi
+giusti? Niente altro? Con tutti i dati a cui hai accesso non sei riuscito a pensare altro? Poi perché aspetti il mio via libera, le
+idee le devi provare in automatico». Cosa cambia:
+* Le idee nuove (con un perché forte, non da manuale) si scrivono, si verificano e si provano **senza chiedere il via libera**, con il
+  flusso di sempre: regole scritte prima, strategy-researcher, backtest-auditor, conto delle prove.
+* Il proprietario si aspetta solo per: spese a consumo (chiavi a pagamento) e registrazioni a servizi esterni, demo, soldi veri, ogni
+  riavvio che tocca gli ordini, lo spegnimento di una strategia in corso. E quando il proprietario **fa una domanda**, prima si
+  risponde e non si comincia niente di nuovo nello stesso giro (la lezione del 21 novembre, quando le regole della prova del guardiano
+  sono state scritte mentre lui chiedeva altro).
+* Si cercano più idee, usando tutti i dati gratuiti a cui la sessione arriva (Binance, Hyperliquid, la catena, le notizie, le borse
+  azionarie come dato, i mercati delle previsioni), non una o due alla volta quando la coda è vuota.
