@@ -847,3 +847,6 @@ scrivono con e senza le serie a incasso quasi fisso.
   settimana per settimana.
 * **Cosa ci si aspetta**: una riga che spiega la differenza (dati aggiornati dell'archivio o una modifica del motore) e, se serve, le serie
   del mazzo rifatte; lo Sharpe corretto di G1 e delle miscele potrebbe muoversi di qualche centesimo.
+* **23 novembre 2026, P34 in parte chiusa dal proprietario** («Sì scrivilo», `docs/decisioni_del_proprietario.md`): lo sconto per le
+  prove si applica una volta sola, quando una strategia viene scelta (G1: prova 57, 0,945); dopo conta la conferma in avanti. Resta
+  aperta la parte tecnica (la correzione per le settimane legate delle serie a incasso quasi fisso, e la F5 vecchia nel mazzo, P35).

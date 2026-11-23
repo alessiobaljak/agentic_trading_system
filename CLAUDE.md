@@ -60,6 +60,9 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
 * **22 novembre**: «perché aspetti il mio via libera, le idee le devi provare in automatico»: le idee nuove si provano da sole con il
   flusso di sempre; si aspetta il proprietario solo per spese, registrazioni a servizi esterni, demo, soldi veri, riavvi e spegnimenti, e
   quando fa una domanda (prima si risponde).
+* **23 novembre**: «Sì scrivilo»: il «Sharpe corretto» è una **probabilità che non sia fortuna** (soglia 0,80); ogni strategia si
+  giudica con lo sconto per le prove **una volta sola, quando viene scelta** (G1: prova 57, 0,945), poi solo in avanti; le prove nuove con
+  il conto di oggi (`research/programma6/ANALISI_SHARPE_CORRETTO.md`).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

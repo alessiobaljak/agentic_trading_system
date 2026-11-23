@@ -162,3 +162,18 @@ idee le devi provare in automatico». Cosa cambia:
   sono state scritte mentre lui chiedeva altro).
 * Si cercano più idee, usando tutti i dati gratuiti a cui la sessione arriva (Binance, Hyperliquid, la catena, le notizie, le borse
   azionarie come dato, i mercati delle previsioni), non una o due alla volta quando la coda è vuota.
+
+
+## 23 novembre 2026: lo sconto per le prove si applica una volta sola, quando una strategia viene scelta
+Le parole del proprietario: «come cazzo è possibile che lo Sharpe venga influenzato dalle prove che facciamo [...] fai un'analisi e
+dimmi se è veramente così» e, dopo l'analisi (`research/programma6/ANALISI_SHARPE_CORRETTO.md`), «Sì scrivilo». Cosa cambia:
+* Il numero che chiamavamo «Sharpe corretto» (`terza.sharpe_corretto`, il Deflated Sharpe Ratio di Bailey e López de Prado) è una
+  **probabilità** fra 0 e 1, non uno Sharpe: quanto è probabile che la strategia non sia la migliore fra tante per fortuna. Con il
+  proprietario si chiama **«probabilità che non sia fortuna»**; la soglia resta **0,80** (9 novembre), con il conto per famiglie
+  (11 novembre).
+* **Ogni strategia si giudica con lo sconto una volta sola**, con N = le famiglie di prove fatte **fino a quando è stata scelta**; da lì
+  in poi si giudica **in avanti** (paper, demo, confronto settimanale di gate2-reconciler), non di nuovo con lo sconto di oggi.
+* **G1**: scelta alla prova 57, probabilità **0,945** contando le prove fino alla 57 (`allocazione/reports/2026-11-16.md`; 0,84 con la
+  dispersione delle prove di oggi): sopra 0,80. Il numero non si ricalcola più a ogni prova nuova.
+* Le prove nuove si giudicano con N di oggi, come prima: per loro lo sconto pieno è giusto, perché vengono scelte fra tutte.
+* Una variante di una strategia in corso (per esempio G11, G1 neutra, le miscele) è una prova nuova: N di quando viene provata.

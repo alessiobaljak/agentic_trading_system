@@ -24,7 +24,7 @@ un'analisi e dimmi se è veramente così».
 3. **Il nome confonde**: «Sharpe corretto» fa pensare a uno Sharpe; è una probabilità. La soglia 0,80 (prima 0,95) è una soglia di
    probabilità.
 
-## Proposta (da decidere con il proprietario, cambia il metodo dell'11 novembre)
+## Proposta, approvata dal proprietario il 23 novembre («Sì scrivilo»; `docs/decisioni_del_proprietario.md`)
 * Ogni strategia si giudica **una volta**, con N = le famiglie di prove fatte fino a quando è stata scelta; poi si giudica **in avanti**
   (paper, demo e confronto settimanale), non di nuovo con lo sconto di oggi.
 * Le prove nuove si giudicano con N di oggi, come adesso.
