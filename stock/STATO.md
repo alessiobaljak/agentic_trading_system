@@ -348,6 +348,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   contro −1,61 negli altri; con i costi +2,31% in 21 mesi, Sharpe 0,80; aprile 2025 fa quasi tutto (+230,9 punti base su +259,9).
   Capito: nel 2025-2026 la copertura è sotto zero solo nel 4% dei giorni (11% nel 2016-2024); la direzione del segnale tiene anche
   fuori dal campione, ma i casi sono troppo pochi per una prova. Nel conto: 108.
+* **La prova 47** (la prima candela da 15 minuti sullo SPY solo nei giorni con la copertura delle opzioni sotto zero): **bocciata**
+  (`prove/P047_risultati.md`): −4,30 punti base al giorno prima dei costi, 183 stop su 251 ingressi. Capito: **la copertura negativa
+  aiuta la fine della giornata (prova 45), non l'inizio**: nei giorni agitati la candela d'apertura viene smentita e lo stop all'altro
+  estremo scatta tre volte su quattro. È la stessa regola del demo sulle azioni: nei giorni agitati di novembre (19 novembre, 8 stop su
+  10) succede lo stesso. Nel conto: 110.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
