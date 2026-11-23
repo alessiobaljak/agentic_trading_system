@@ -482,3 +482,13 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   31 monete vendute; nell'archivio articoli solo per Monero (in realtà su XMR1, un altro gettone) e Hyperliquid (il ribasso generale);
   21 ricerche sul web (una per moneta con peso di almeno il 2%): nessuna notizia valida nelle 48 ore. **Nessuna moneta «sì».** Limite
   scritto: la ricerca sul web dà riassunti di pagine automatiche, spesso senza data; le notizie delle ultime 48 ore possono mancare.
+* **23 novembre 2026, 04:25 UTC, voce 8 (sedicesimo ribilancio a 1.000 USDT)** (`ops/results/0768-23nov-log-ribilancio-1000.md`,
+  `0769-23nov-stato-ribilancio-1000.md`). Ribilancio: 27 ordini, **tutti a limite**; 31 variazioni sotto il minimo (7,0% del conto);
+  rifiutati EVAA, LIT, UAI e, nuova, PIEVERSE (non c'è sul demo, lo stesso errore di EVAA); IRYSUSDT assente; nessun errore nuovo nel
+  registro (solo le richieste dell'interesse aperto per contratti chiusi). Il 22 novembre demo −2,09%, paper −1,33% (il demo 0,76 punti
+  sotto); oggi fino alle 04:18 demo −0,26%, paper −0,78%. Equity del demo 975,30 (−2,47% dall'8 novembre), G1 nel paper 10.442,08. **Dal 9
+  novembre (15 giorni) demo −2,00%, paper −0,22%**: −0,12 punti al giorno, oscillazione 0,59. Esposizione del demo 190,6% contro 200%,
+  scarto fra posizioni vere e volute 16,5% del conto. Stop del conto a 688,73 USDT, oggi −7,95% dal massimo.
+* **23 novembre 2026, 04:22 UTC, voce 14, seconda lettura** (`misure_g1/voce14_letture/2026-11-23.md`, commit 470afc4, prima dei prezzi):
+  29 vendute; articoli solo per XMR, HYPE, VVV e PIEVERSE, tutti sul rimbalzo dopo il crollo di sabato (movimenti di prezzo, non fatti);
+  18 ricerche sul web senza notizie datate. **Nessuna moneta «sì».**

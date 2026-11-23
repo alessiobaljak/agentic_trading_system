@@ -949,3 +949,11 @@ notizie partono alle 04:17). Ricerca: nessuna prova pronta; lo scout del pomerig
 Hyperliquid (migliori del mese, balene e i 600 della mappa delle liquidazioni); mappa: 600 conti, 2.341 posizioni. Nessuna chiusura nuova,
 nessuna moneta nuova su Coinbase. G1: nessun passo nuovo in questo giro (alle 04:17 il ribilancio, le due letture delle notizie e poi il
 confronto settimanale). **Capito oggi**: niente di nuovo in questo giro.
+**23 novembre, 04:30 UTC, il sedicesimo ribilancio del demo e le due letture del mattino** (`ops/results/0768`, `0769`): 27 ordini tutti a
+limite, una moneta in più rifiutata perché manca sul demo (PIEVERSE). Dall'8 novembre demo −2,47%; dal 9 novembre demo −2,00%, paper
+−0,22% (il demo 1,8 punti sotto in 15 giorni, −0,12 al giorno). Prima lettura dei fatti gravi (`research/notizie/fatti_gravi/2026-11-23.md`,
+commit 55e0176 alle 04:20, prima dei prezzi): **ACE giù forza 2** (ponte svuotato, squadra che chiede di fermare gli scambi), **CYBER giù
+forza 1** (monete coniate senza permesso, Upbit e Bithumb fermano i trasferimenti), **APT su forza 1** (scelta da PayPal per la sua moneta
+stabile); due collegamenti completati a mano, corretti sotto con l'ora. Monete vendute da G1: nessuna a rischio di salire. Raccolta delle
+04:20: vedi sopra. **Capito oggi**: in una sola notte le notizie danno tre casi di fatti propri con una direzione chiara; il nostro archivio
+li prende tutti (le ricerche sul web, due mattine su due, non aggiungono niente).
