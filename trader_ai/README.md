@@ -34,7 +34,7 @@ con l'obiettivo di 50 USDT al giorno, poi si ferma fino a mezzanotte UTC. Chiama
 2. Da fare: lettura dei dati di Binance, `conto_demo.py` (ordini, stop e obiettivo sul conto demo suo), il programma che gira ogni
    minuto, l'installazione sulla macchina (sul modello di `stock/avanti/vps/`).
 3. live-path-reviewer, conto demo e chiavi del proprietario, ok del proprietario al primo avvio.
-4. Numeri ogni lunedì; scheda in dashboard dopo le prime due settimane.
+4. Resoconto ogni giorno a mezzanotte UTC; diario di ogni decisione durante il giorno; scheda in dashboard.
 
 Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto
 misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti, per questo il trader gira sulla macchina.

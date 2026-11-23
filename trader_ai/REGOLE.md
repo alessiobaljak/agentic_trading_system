@@ -75,12 +75,14 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 ## 7. Spese e misura
 * Le spese sono quelle vere del conto demo (commissioni, funding, prezzo eseguito). Il costo delle chiamate si sottrae dal risultato
   come se 1 dollaro valesse 1 USDT.
-* Ogni lunedì al proprietario: quanti giorni ha raggiunto i 50, quanto ha guadagnato o perso al netto di tutto, quante operazioni e con
-  che risultato, quante volte ha cambiato approccio e con che effetto, quanto sono costate le chiamate, la discesa massima del conto.
-  In più (solo misura, nessuna istruzione al modello): la leva e il margine medi delle aperture fatte quando il guadagno del giorno era
-  sotto zero, contro quelle fatte quando era sopra.
-  Confronto con il solo BTC tenuto negli stessi giorni. Non si confronta con le strategie dell'altra sessione dentro il trader (il
-  modello non le vede mai); il confronto, se il proprietario lo vuole, lo fa la sessione nei resoconti.
+* **Ogni giorno a mezzanotte UTC**, alla fine del giorno del trader (il proprietario, 23 novembre: «perché devo vederlo il lunedì,
+  qual è la scelta dietro questo giorno?»; il lunedì veniva dalla decisione del 1° novembre per le strategie dell'altra sessione, non
+  da questo trader): obiettivo raggiunto o no e a che ora; le operazioni del giorno con entrata, uscita, leva, risultato e il motivo
+  scritto dal modello; quante volte ha cambiato approccio; quanto sono costate le chiamate; il conto e la discesa massima dall'inizio;
+  il solo BTC tenuto negli stessi giorni. Solo misura, nessuna istruzione al modello: anche la leva e il margine medi delle aperture
+  fatte con il giorno in perdita contro quelle con il giorno in guadagno.
+* **Durante il giorno** ogni decisione va subito nel diario sulla macchina (`trader_ai/avanti/`), nel repository una volta all'ora;
+  più avanti in una scheda della dashboard.
 * Soldi veri: mai senza la richiesta esplicita del proprietario.
 
 ## 8. Prima dell'avvio
