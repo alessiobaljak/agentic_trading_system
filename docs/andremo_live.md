@@ -957,3 +957,11 @@ forza 1** (monete coniate senza permesso, Upbit e Bithumb fermano i trasferiment
 stabile); due collegamenti completati a mano, corretti sotto con l'ora. Monete vendute da G1: nessuna a rischio di salire. Raccolta delle
 04:20: vedi sopra. **Capito oggi**: in una sola notte le notizie danno tre casi di fatti propri con una direzione chiara; il nostro archivio
 li prende tutti (le ricerche sul web, due mattine su due, non aggiungono niente).
+**23 novembre, 07:30 UTC, riepilogo settimanale al proprietario** (fonti: `ops/results/0746` e `0769`, `gate2/reports/2026-11-23-G1.md`,
+`allocazione/reports/2026-11-23.md`, `research/programma6/paper/PAPER.md`, `research/trader_copiati/HYPERLIQUID_CONTO.md`): settimana dal 16
+al 23 novembre (letture delle 04:18) G1 nel paper −5,99%, G11 −6,55%, G1 neutra −5,33%, F5 −1,24%, eventi fermi; demo −5,42%. Il crollo di
+sabato a 55.000 e il rimbalzo di domenica: le monete piccole vendute salgono (VVV, XMR, PIEVERSE negli articoli; attribuzione non ancora
+misurata). Allocatore: tieni. Le monete rifiutate dal demo (LIT, EVAA, UAI, IRYS, PIEVERSE, JCT) sul mercato vero di Binance sono tutte
+aperte e scambiabili (`exchangeInfo`, «TRADING»): lo scarto del demo per le monete mancanti sul conto vero non ci sarebbe. **Capito oggi**:
+la settimana peggiore di G1 da quando è nel paper viene dal rimbalzo dopo un crollo, il caso che la misura sul passato indicava come il suo
+punto debole (mercato su, monete piccole vendute che salgono).
