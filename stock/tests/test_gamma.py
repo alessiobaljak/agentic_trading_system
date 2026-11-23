@@ -29,8 +29,8 @@ def test_cosa_fare_a_ogni_ora():
     t = lambda h: pd.Timestamp(f"2026-11-24 {h}", tz=NY)
     sed = {"apertura": t("09:30"), "chiusura": t("16:00")}
     f = ga.cosa_fare
-    assert f(t("08:40"), sed, False, False, False).startswith("niente: troppo presto")   # più di 5 ore e 20 prima delle 15:30
-    assert f(t("10:40"), sed, False, False, False) == "entra"               # in anticipo: aspetta le 15:30
+    assert f(t("10:40"), sed, False, False, False).startswith("niente: troppo presto")   # più di 4 ore e 30 prima delle 15:30
+    assert f(t("11:05"), sed, False, False, False) == "entra"               # in anticipo: aspetta le 15:30
     assert f(t("15:34"), sed, False, False, False) == "entra"
     assert f(t("15:36"), sed, False, False, False) == "tardi"               # più di 5 minuti dopo: il giorno si salta
     assert f(t("16:05"), sed, False, False, False) == "tardi"               # nessun avvio in tempo: si scrive
@@ -102,3 +102,91 @@ def test_conto_a_tre_il_guadagno_della_prova_45_non_va_alla_miscela():
     assert g == pytest.approx(100_250 + 96_000 - 59_800 - 35_880)          # +200 + 120 ancora aperti
     candela, miscela = conto.valori(100_880.0 + 320, aperte, diario, stato, oggi="2026-11-24", esecuzioni_oggi=es, diario_gamma=dg)
     assert candela == pytest.approx(100_600.0) and miscela == pytest.approx(100_030.0)   # le vendite di VOO non sono della candela
+
+
+# ---- i percorsi degli ordini, con un conto finto e un orologio finto (nessun collegamento ad Alpaca) ------------------------------
+
+class ContoFinto:
+    def __init__(self, monkeypatch, ora, qty, stati_asta):
+        from stock.avanti import avanti as av
+        self.ora = pd.Timestamp(f"2026-11-24 {ora}", tz=NY)
+        self.qty, self.stati_asta, self.chiamate, self.giorni, self.aperti = qty, list(stati_asta), [], {}, []
+        monkeypatch.setattr(av, "ny_adesso", lambda: self.ora)
+        monkeypatch.setattr(ga.time, "sleep", self.dormi)
+        monkeypatch.setattr(av, "_richiesta", self.richiesta)
+        monkeypatch.setattr(ga, "scrivi_giorno", lambda d: self.giorni.__setitem__(d["giorno"], dict(d)))
+        monkeypatch.setattr(ga, "leggi_giorno", lambda g: dict(self.giorni[g]) if g in self.giorni else None)
+        monkeypatch.setattr(ga, "scrivi_diario", lambda g: self.chiamate.append(("diario", g)) or "diario")
+        monkeypatch.setattr(ga, "pubblica", lambda *a, **k: "plancia")
+
+    def dormi(self, s):
+        self.ora += pd.Timedelta(seconds=float(s))
+
+    def stato(self):
+        # gli stati dell'asta in ordine di tempo: [(ora, stato), ...]
+        attuale = None
+        for quando, s in self.stati_asta:
+            if self.ora >= pd.Timestamp(f"2026-11-24 {quando}", tz=NY):
+                attuale = s
+        return attuale
+
+    def richiesta(self, metodo, percorso, **kw):
+        self.chiamate.append((metodo, percorso, kw.get("json")))
+        if metodo == "GET" and percorso == "/v2/positions":
+            return [{"symbol": "VOO", "qty": str(self.qty)}] if self.qty else []
+        if metodo == "GET" and percorso.startswith("/v2/orders/"):
+            return {"status": self.stato()}
+        if metodo == "GET" and percorso == "/v2/orders":
+            return list(self.aperti)
+        if metodo == "DELETE" and percorso == "/v2/positions/VOO":
+            self.qty = 0
+            return {"id": "M"}
+        if metodo == "POST" and percorso == "/v2/orders":
+            corpo = kw["json"]
+            if corpo.get("time_in_force") == "cls":
+                self.stati_asta.append((f"{self.ora:%H:%M:%S}", "accepted"))
+                return {"id": corpo["client_order_id"], "status": "accepted"}
+            return {"id": "FO", "status": "accepted"}
+        if metodo == "DELETE":
+            return {}
+        raise AssertionError(f"chiamata non prevista: {metodo} {percorso}")
+
+
+SEDUTA = {"giorno": date(2026, 11, 24), "apertura": pd.Timestamp("2026-11-24 09:30", tz=NY),
+          "chiusura": pd.Timestamp("2026-11-24 16:00", tz=NY)}
+
+
+def test_asta_scaduta_dopo_le_15_50_si_esce_a_mercato_2_minuti_prima(monkeypatch):
+    c = ContoFinto(monkeypatch, "15:51:00", -160, [("00:00", "expired")])
+    c.giorni["2026-11-24"] = {"giorno": "2026-11-24", "id_ingresso": "A", "lato": "sell", "id_asta": "B"}
+    assert ga.segui(SEDUTA) == "diario"
+    uscite = [x for x in c.chiamate if x[0] == "DELETE" and x[1] == "/v2/positions/VOO"]
+    assert len(uscite) == 1                                         # una sola uscita, a mercato
+    assert not [x for x in c.chiamate if x[0] == "POST"]             # dopo le 15:50 l'asta non si rimanda
+    assert "uscita a mercato" in c.giorni["2026-11-24"]["nota"] and c.giorni["2026-11-24"]["uscite"] == {"M": "mercato"}
+
+
+def test_asta_cancellata_prima_delle_15_50_si_rimanda_e_si_esce_all_asta(monkeypatch):
+    c = ContoFinto(monkeypatch, "15:31:00", 160, [("15:30:05", "accepted"), ("15:40:00", "canceled")])
+
+    def chiudi_all_asta(s):
+        ContoFinto.dormi(c, s)
+        if c.ora >= pd.Timestamp("2026-11-24 16:00:01", tz=NY):
+            c.qty = 0
+            c.stati_asta.append(("16:00:01", "filled"))
+    monkeypatch.setattr(ga.time, "sleep", chiudi_all_asta)
+    c.giorni["2026-11-24"] = {"giorno": "2026-11-24", "id_ingresso": "A", "lato": "buy", "id_asta": "B", "tentativi_asta": 1}
+    assert ga.segui(SEDUTA) == "diario"
+    rimandate = [x for x in c.chiamate if x[0] == "POST" and x[2]["time_in_force"] == "cls"]
+    assert len(rimandate) == 1 and rimandate[0][2]["client_order_id"] == "gamma-2026-11-24-asta-2"
+    assert not [x for x in c.chiamate if x[0] == "DELETE" and x[1] == "/v2/positions/VOO"]   # nessuna uscita a mercato
+
+
+def test_fuori_orario_non_manda_un_secondo_ordine_se_l_asta_resta_aperta(monkeypatch):
+    from stock.dati import alpaca
+    c = ContoFinto(monkeypatch, "16:03:00", 160, [("00:00", "accepted")])
+    c.aperti = [{"id": "B", "symbol": "VOO", "client_order_id": "gamma-2026-11-24-asta-1", "status": "accepted"}]
+    c.giorni["2026-11-24"] = {"giorno": "2026-11-24", "id_ingresso": "A", "lato": "buy", "id_asta": "B"}
+    with pytest.raises(alpaca.ErroreAlpaca, match="ancora aperti"):
+        ga.fuori_orario("2026-11-24")
+    assert not [x for x in c.chiamate if x[0] == "POST"]             # mai due uscite insieme
