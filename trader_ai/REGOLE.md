@@ -35,7 +35,9 @@ l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **50 USDT dalla
   fanno circa 5-7 dollari, cioè **il tetto può finire prima di sera**. La misura vera dei primi giorni si scrive qui.
 
 ## 4. Cosa riceve
-1. **Istruzioni fisse** (`trader_ai/istruzioni.md`): l'obiettivo del giorno, i limiti della sezione 6, le spese, il formato della risposta.
+1. **Istruzioni fisse** (`trader_ai/istruzioni.md`), corte e **senza consigli di strategia** (il proprietario, 23 novembre: «non capisco
+   perché devi dare al modello istruzioni così dettagliate [...] è un agente live AI, legge, interpreta e si adatta sul momento trade
+   dopo trade, con l'obiettivo giornaliero di max 50»): l'obiettivo, le regole meccaniche della sezione 6, le spese, il formato.
 2. **I dati della moneta**: candele chiuse da 5 minuti (ultime 4 ore), da 15 minuti (ultime 12 ore), da 30 minuti (ultime 24 ore), con
    per ogni intervallo gli indicatori calcolati dal codice sull'ultima candela chiusa (medie esponenziali a 9, 21 e 50, RSI a 14,
    MACD 12-26-9, bande di Bollinger 20-2, ATR a 14, VWAP del giorno, volume rispetto alla media di 20); il prezzo attuale, il funding
@@ -75,10 +77,8 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
   come se 1 dollaro valesse 1 USDT.
 * Ogni lunedì al proprietario: quanti giorni ha raggiunto i 50, quanto ha guadagnato o perso al netto di tutto, quante operazioni e con
   che risultato, quante volte ha cambiato approccio e con che effetto, quanto sono costate le chiamate, la discesa massima del conto.
-  **In più, la prova di una previsione della sessione** (23 novembre, il proprietario: «chi ha detto che il modello deve alzare il
-  rischio per recuperare?»): la leva e il margine medi delle aperture fatte quando il guadagno del giorno era sotto zero, contro quelle
-  fatte quando era sopra. Le istruzioni gli dicono di non alzarli per recuperare; se salgono lo stesso, la previsione era giusta e si
-  corregge; se non salgono, era sbagliata.
+  In più (solo misura, nessuna istruzione al modello): la leva e il margine medi delle aperture fatte quando il guadagno del giorno era
+  sotto zero, contro quelle fatte quando era sopra.
   Confronto con il solo BTC tenuto negli stessi giorni. Non si confronta con le strategie dell'altra sessione dentro il trader (il
   modello non le vede mai); il confronto, se il proprietario lo vuole, lo fa la sessione nei resoconti.
 * Soldi veri: mai senza la richiesta esplicita del proprietario.

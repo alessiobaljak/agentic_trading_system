@@ -174,7 +174,7 @@ def test_messaggio_dice_obiettivo_memoria_e_scarto():
                            "come": "stop", "risultato": -27.8, "approccio": "rottura"}], "rottura", ["nota"], "leva 50")
     system, utente = costruisci(ORA, "candela", 4.2, "BTCUSDT", {"5m": _candele(60), "15m": _candele(60, 15),
                                 "30m": _candele(60, 30)}, {"prezzo": 130.0, "funding": 0.0001}, conto(conto=1020), mem)
-    assert "50 USDT" in system and "cambia" in system.lower()
+    assert "50 USDT" in system and "adatti" in system
     assert "mancano 30.00" in utente and "SCARTATA" in utente and "rottura" in utente and "4.20 dollari" in utente
     assert all(f"candele {x}" in utente for x in ("5m", "15m", "30m"))
 
