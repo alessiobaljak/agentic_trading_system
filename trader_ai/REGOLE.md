@@ -17,8 +17,11 @@ vuole essere svegliato. Il codice controlla i limiti e manda gli ordini **solo s
   Nessuno strumento: niente web, niente codice; solo il messaggio che gli diamo.
 * **Tetto: 5 dollari al giorno** (giorno UTC), contati dal codice sui token dichiarati da ogni risposta ai prezzi ufficiali (4 dollari al
   milione in entrata, 20 in uscita, cache come da listino). Il proprietario ha detto 5 euro: 5 dollari restano sotto finché l'euro vale
-  più del dollaro, senza dipendere da un cambio. Quando il budget rimasto non basta per una chiamata, nessuna chiamata fino alla mezzanotte
-  UTC; le posizioni restano protette dagli stop già piazzati sul conto.
+  più del dollaro, senza dipendere da un cambio. **Prima di ogni chiamata** il codice calcola il costo più alto possibile (tutto il
+  messaggio al prezzo più caro dell'entrata, contando 2 caratteri per token, più una risposta lunga quanto il massimo di 12.000 token):
+  se non sta nel budget rimasto, non chiama. Così il tetto non si sfora nemmeno con l'ultima chiamata del giorno (test
+  `trader_ai/tests/test_trader_ai.py`). Nessuna chiamata fino alla mezzanotte UTC; le posizioni restano protette dagli stop già piazzati sul conto.
+  Nessun ripiego automatico su un altro modello in caso di rifiuto: il modello l'ha scelto il proprietario.
 * **Il modello vede a ogni chiamata quanto budget gli resta oggi**: decide lui se spenderlo guardando spesso o tenerlo per i momenti
   movimentati.
 * **Stima, non misura**: una chiamata costa circa 10-15 centesimi (circa 20.000 token in entrata con la panoramica, circa 3.000 in

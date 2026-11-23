@@ -1,0 +1,5 @@
+# Ambiente Python separato per il trader AI sulla macchina (RICHIESTE_CRYPTO.md): il bot ha anthropic==0.49.0, che non ha
+# messages.parse né output_config. Versioni provate nella sessione «trading AI» il 23 novembre 2026.
+anthropic==2.12.0
+pydantic==2.13.5
+requests
