@@ -65,7 +65,7 @@ jobs:
         run: |
           git config user.name "azioni-gamma"
           git config user.email "noreply@anthropic.com"
-          git add stock/avanti/gamma_diario.csv stock/avanti/gamma_giorni 2>/dev/null || true
+          for f in stock/avanti/gamma_diario.csv stock/avanti/gamma_giorni; do if [ -e "$f" ]; then git add "$f"; fi; done
           if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
           git commit -m "stock: prova 45 sul demo, ${{ steps.accesa.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
           for i in 1 2 3 4; do

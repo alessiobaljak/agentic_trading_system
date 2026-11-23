@@ -33,10 +33,15 @@ misura può restare ferma per settimane: un giudizio richiede anni, salvo un per
 4. **L'ingresso:** a mercato, appena chiusa la barra del segnale (di solito alle 15:30:0x). Se il programma arriva più di **5 minuti**
    dopo, il giorno si salta e si scrive («avvio in ritardo»). Mai un ingresso più tardi.
 5. **L'uscita:** un ordine **alla chiusura** (asta di chiusura), mandato subito dopo l'ingresso (Alpaca li accetta fino alle 15:50).
-   * Se Alpaca rifiuta l'ordine alla chiusura: chiusura a mercato 5 minuti prima della fine della seduta, scritta come «mercato».
-   * Se dopo la chiusura la posizione è ancora aperta: chiusura fuori orario con un ordine limite, come fa la prima candela, scritta
-     come «fuori orario».
-   * Nessuna posizione resta aperta di notte.
+   * Fino a 2 minuti dalla fine il programma ricontrolla l'ordine ogni 30 secondi. Se Alpaca lo rifiuta, lo cancella o lo fa scadere,
+     lo rimanda finché lo accetta (al massimo 3 volte, fino alle 15:50); se non si può, **chiusura a mercato 2 minuti prima della
+     fine**, scritta come «mercato».
+   * Dopo la chiusura si aspetta che l'ordine alla chiusura sia finito (fino a 7 minuti). Se la posizione è ancora aperta: chiusura
+     fuori orario con un ordine limite, come fa la prima candela, scritta come «fuori orario». Prima si cancellano gli ordini su VOO
+     ancora aperti; se uno resta, nessun ordine nuovo (due uscite insieme raddoppierebbero) e il lavoro si ferma con un errore.
+   * Nessuna posizione resta aperta di notte. **Da sapere:** sul conto demo gli ordini all'asta d'apertura della miscela del 12
+     novembre sono scaduti senza esecuzione (`MISCELA.md`). Se anche quelli alla chiusura non si eseguono, lo dirà la prima
+     operazione: l'uscita sarà allora fuori orario, si scriverà qui, e l'uscita si cambierà (con una misura nuova).
 6. **Quanto:** un **capitale virtuale suo di 100'000 dollari**, come la miscela. La quantità è il 98% del capitale virtuale (100'000 più
    i guadagni fin lì) diviso per l'ultimo prezzo di VOO alla decisione; azioni intere, niente leva sul capitale virtuale.
 7. **Le chiusure anticipate:** si opera come nella prova, con il calendario di Alpaca: l'ingresso è mezz'ora prima della chiusura.
@@ -61,7 +66,7 @@ misura può restare ferma per settimane: un giudizio richiede anni, salvo un per
 
 `python -m stock.avanti.gamma auto` (lavoro di GitHub `.github/workflows/azioni_gamma.yml`, acceso solo se esiste
 `stock/avanti/gamma_accesa`). Chi avvia non deve essere puntuale: il programma guarda l'orologio di New York e aspetta l'ora
-dell'ingresso fino a 5 ore e 20 minuti prima. Un avvio in ritardo non entra mai fuori regola. Gli avvii vengono dagli orari di GitHub
+dell'ingresso fino a 4 ore e 30 minuti prima (un lavoro di GitHub dura al massimo 350 minuti). Un avvio in ritardo non entra mai fuori regola. Gli avvii vengono dagli orari di GitHub
 e dalla routine della sessione «trading stock» delle 13:30 di New York.
 
 ## Le deviazioni dalle regole (scritte quando succedono)

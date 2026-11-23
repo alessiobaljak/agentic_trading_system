@@ -144,13 +144,22 @@ def registra(giorno: str) -> str:
     df = leggi_valori()
     if giorno in set(df["giorno"].astype(str)):
         return f"valori del {giorno} già scritti"
+    # prima gli ordini aperti della prova 45 (l'asta di chiusura), POI il conto: senza ordini aperti nessuna esecuzione può cadere fra
+    # una lettura e l'altra, e i valori scritti una volta sola restano coerenti
+    from stock.avanti import avanti as av
+    if any(della_gamma(o["symbol"]) for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500})):
+        return f"valori del {giorno} non scritti: la prova 45 ha ancora ordini aperti"
     v = adesso()
     if v["posizioni_candela"]:
         return f"valori del {giorno} non scritti: la prima candela ha ancora posizioni"
+    if v["posizioni_gamma"]:
+        return f"valori del {giorno} non scritti: la prova 45 ha ancora posizioni"
     riga = {"giorno": giorno, "conto": round(v["conto"], 2), "prima_candela": round(v["candela"], 2),
-            "miscela": round(v["miscela"], 2) if v["miscela"] is not None else "", "gamma": round(v["gamma"], 2)}
+            "miscela": round(v["miscela"], 2) if v["miscela"] is not None else "",
+            "gamma": round(v["gamma"], 2) if DIARIO_GAMMA.exists() else ""}      # vuota finché la prova 45 non è partita
     pd.concat([df, pd.DataFrame([riga], columns=COLONNE)], ignore_index=True).to_csv(VALORI, index=False)
-    return f"valori del {giorno}: prima candela {riga['prima_candela']}, miscela {riga['miscela'] or '—'}"
+    return (f"valori del {giorno}: prima candela {riga['prima_candela']}, miscela {riga['miscela'] or '—'}, "
+            f"prova 45 {riga['gamma'] or '—'}")
 
 
 def giorni(colonna: str) -> dict[str, float]:

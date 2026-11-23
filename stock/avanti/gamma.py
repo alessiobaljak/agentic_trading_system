@@ -36,11 +36,15 @@ PRIMA_DELLA_CHIUSURA = pd.Timedelta(minutes=30)
 RITARDO_MASSIMO = pd.Timedelta(minutes=5)
 ATTESA_BARRA = pd.Timedelta(seconds=60)
 LIMITE_ASTA = pd.Timedelta(minutes=10)          # Alpaca accetta gli ordini alla chiusura fino a 10 minuti prima della fine
-USCITA_A_MERCATO = pd.Timedelta(minutes=5)
+USCITA_A_MERCATO = pd.Timedelta(minutes=2)
+TENTATIVI_ASTA = 3
+# il lavoro di GitHub dura al massimo 350 minuti: attesa (4 ore e 30) + mezz'ora fino alla chiusura + 7 minuti dopo stanno sotto
+ATTESA_MASSIMA = pd.Timedelta(hours=4, minutes=30)
 DOPO_LA_CHIUSURA = pd.Timedelta(minutes=2)
 DIX_URL = "https://squeezemetrics.com/monitor/static/DIX.csv"
 ID = "gamma"
 MORTI = {"canceled", "pending_cancel", "expired", "rejected", "done_for_day", "replaced", "pending_replace", "suspended"}
+VIVI = {"new", "accepted", "pending_new", "accepted_for_bidding", "held", "partially_filled", "calculated"}
 COLONNE = ["giorno", "simbolo", "copertura_del", "copertura", "r", "lato", "quantita", "ingresso", "ora_ingresso", "scarto_ingresso_pb",
            "uscita_prezzo", "ora_uscita", "uscita", "guadagno", "proporzione", "commissione_ib", "nota"]
 
@@ -85,7 +89,7 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, deciso_oggi: bool, posi
             return "fuori_orario"
         return "niente: posizione di un altro giorno, adesso non si può chiudere"
     if not deciso_oggi:
-        if adesso < ingresso - av.ATTESA_MASSIMA:
+        if adesso < ingresso - ATTESA_MASSIMA:
             return "niente: troppo presto per l'ingresso"
         return "entra" if adesso <= ingresso + RITARDO_MASSIMO else "tardi"
     if posizione:
@@ -212,7 +216,7 @@ def manda(corpo: dict) -> dict | None:
     try:
         return av._richiesta("POST", "/v2/orders", json=corpo)
     except alpaca.ErroreAlpaca as e:
-        gia = av._ordine_per_nome(corpo["client_order_id"])
+        gia = _ordine_per_nome(corpo["client_order_id"])
         if gia is not None and gia.get("status") not in MORTI:
             return gia
         print(f"ordine {corpo['client_order_id']} rifiutato: {str(e)[:160]}", flush=True)
@@ -263,6 +267,8 @@ def entra(oggi: dict, ieri: dict) -> str:
         return decidi_senza_ordine(dec, "saltato: c'è già una posizione su VOO, va guardata a mano")
     prezzo = ultimo_prezzo(TITOLO)
     q = quantita(capitale(), prezzo)
+    if av.ny_adesso() > ingresso + RITARDO_MASSIMO:      # l'ora si ricontrolla subito prima dell'ordine
+        return decidi_senza_ordine(dec, f"saltato: troppo tardi per l'ingresso ({av.ny_adesso():%H:%M:%S})")
     nome = f"gamma-{giorno}-in"
     o = manda({"symbol": TITOLO, "qty": str(q), "side": lato, "type": "market", "time_in_force": "day", "client_order_id": nome})
     if o is None:
@@ -291,76 +297,174 @@ def entra(oggi: dict, ieri: dict) -> str:
     return segui(oggi)
 
 
+def _ordine_per_nome(nome: str) -> dict | None:
+    """L'ordine con questo nome, o None se Alpaca risponde che non esiste (404). Un errore di rete o di Alpaca NON vale «non esiste»:
+    ferma il giro (se no un ingresso di oggi verrebbe preso per una posizione di un altro giorno)."""
+    for n in range(3):
+        try:
+            return av._richiesta("GET", "/v2/orders:by_client_order_id", params={"client_order_id": nome})
+        except alpaca.ErroreAlpaca as e:
+            if str(e).startswith("404"):
+                return None
+            if n == 2:
+                raise
+            time.sleep(3)
+    return None
+
+
+def stato_asta(dec: dict) -> str | None:
+    """Lo stato dell'ultimo ordine alla chiusura mandato per il giorno, o None se non ce n'è."""
+    if not dec.get("id_asta"):
+        return None
+    return av._richiesta("GET", f"/v2/orders/{dec['id_asta']}").get("status")
+
+
+def _nota(dec: dict, testo: str) -> None:
+    if testo not in (dec.get("nota") or ""):
+        dec["nota"] = "; ".join(x for x in (dec.get("nota"), testo) if x)
+    scrivi_giorno(dec)
+
+
+def _aspetta(fino: pd.Timestamp) -> None:
+    attesa = (fino - av.ny_adesso()).total_seconds()
+    if attesa > 0:
+        time.sleep(attesa)
+
+
 def _manda_asta(giorno: str, q: float, dec: dict) -> bool:
-    nome = f"gamma-{giorno}-asta"
+    """Manda l'ordine alla chiusura con un nome nuovo a ogni tentativo (al massimo 3 per giorno)."""
+    n = int(dec.get("tentativi_asta", 0)) + 1
+    if n > TENTATIVI_ASTA:
+        return False
+    dec["tentativi_asta"] = n
+    nome = f"gamma-{giorno}-asta-{n}"
     o = manda({"symbol": TITOLO, "qty": str(int(abs(q))), "side": "sell" if q > 0 else "buy", "type": "market",
                "time_in_force": "cls", "client_order_id": nome})
     if o is None:
+        scrivi_giorno(dec)
         return False
-    dec["id_asta"] = o["id"]
+    dec["id_asta"], dec["nome_asta"] = o["id"], nome
     scrivi_giorno(dec)
     return True
 
 
+def esci_a_mercato(dec: dict, perche: str) -> None:
+    o = av._richiesta("DELETE", f"/v2/positions/{TITOLO}")
+    dec.setdefault("uscite", {})[o.get("id", "")] = "mercato"
+    _nota(dec, perche)
+
+
 def segui(oggi: dict) -> str:
-    """Con la posizione aperta: l'ordine alla chiusura (se manca), o a mercato 5 minuti prima della fine se Alpaca lo rifiuta; poi
-    dopo la chiusura il controllo, la chiusura fuori orario se serve, e il diario."""
+    """Con la posizione aperta, fino a 2 minuti dalla fine della seduta: l'ordine alla chiusura dev'essere vivo. Se manca, è stato
+    rifiutato, cancellato o è scaduto, si rimanda finché Alpaca li accetta (10 minuti prima della fine); se non si può, a 2 minuti
+    dalla fine si esce a mercato. Dopo la chiusura si aspetta che l'asta sia finita, poi il controllo e il diario."""
     giorno = oggi["giorno"].isoformat()
     dec = leggi_giorno(giorno) or {"giorno": giorno}
-    asta = av._ordine_per_nome(f"gamma-{giorno}-asta")
-    viva = asta is not None and asta.get("status") not in MORTI
-    if asta is not None and asta.get("status") == "filled":
-        viva = True
-    if not viva and av.ny_adesso() < oggi["chiusura"] - LIMITE_ASTA:
+    chiusura = oggi["chiusura"]
+    a_mercato = chiusura - USCITA_A_MERCATO
+    while av.ny_adesso() < a_mercato:
         q = posizione()
-        viva = q == 0 or _manda_asta(giorno, q, dec)
-    if not viva:
-        fine = oggi["chiusura"] - USCITA_A_MERCATO
-        attesa = (fine - av.ny_adesso()).total_seconds()
-        if attesa > 0:
-            time.sleep(attesa)
-        if av.ny_adesso() < oggi["chiusura"] - pd.Timedelta(seconds=45) and posizione() != 0:
-            o = av._richiesta("DELETE", f"/v2/positions/{TITOLO}")
-            dec.setdefault("uscite", {})[o.get("id", "")] = "mercato"
-            dec["nota"] = "; ".join(x for x in (dec.get("nota"), "ordine alla chiusura rifiutato: uscita a mercato") if x)
-            scrivi_giorno(dec)
-    attesa = (oggi["chiusura"] + DOPO_LA_CHIUSURA - av.ny_adesso()).total_seconds()
-    if attesa > 0:
-        time.sleep(attesa)
+        if q == 0:
+            break
+        stato = stato_asta(dec)
+        viva = stato in VIVI or stato == "filled"
+        if not viva and not (av.ny_adesso() < chiusura - LIMITE_ASTA and _manda_asta(giorno, q, dec)):
+            _nota(dec, f"ordine alla chiusura {stato or 'non accettato'}: uscita a mercato")
+            _aspetta(a_mercato)
+            break
+        time.sleep(min(30.0, max(1.0, (a_mercato - av.ny_adesso()).total_seconds())))
+    if posizione() != 0 and av.ny_adesso() < chiusura - pd.Timedelta(seconds=45) and stato_asta(dec) not in VIVI | {"filled"}:
+        esci_a_mercato(dec, "uscita a mercato 2 minuti prima della fine")
+    _aspetta(chiusura + DOPO_LA_CHIUSURA)
+    return dopo_la_chiusura(oggi, dec)
+
+
+def dopo_la_chiusura(oggi: dict, dec: dict) -> str:
+    """A seduta finita: si aspetta che l'ordine alla chiusura sia finito (fino a 7 minuti dopo la fine), poi, se VOO è ancora aperta,
+    la chiusura fuori orario; infine il diario."""
+    giorno = oggi["giorno"].isoformat()
+    fine = oggi["chiusura"] + pd.Timedelta(minutes=7)
+    while stato_asta(dec) in VIVI and av.ny_adesso() < fine:
+        time.sleep(15)
     if posizione() != 0:
         return fuori_orario(giorno)
     return scrivi_diario(giorno)
 
 
-def fuori_orario(giorno: str) -> str:
-    """Emergenza: chiude VOO dopo la seduta (o prima dell'apertura) con un ordine limite valido fuori orario, al prezzo dell'ultimo
-    scambio peggiorato dello 0,5% perché si esegua; se dopo un minuto è ancora aperta, l'errore ferma il giro e avvisa."""
-    dec = leggi_giorno(giorno) or {"giorno": giorno}
+def _cancella_ordini_gamma() -> None:
+    """Cancella gli ordini aperti di VOO e controlla che siano spariti: se ne resta uno, il giro si ferma PRIMA di mandarne un altro
+    (due uscite insieme raddoppierebbero la vendita)."""
     for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}):
         if conto.della_gamma(o["symbol"]):
             try:
                 av._richiesta("DELETE", f"/v2/orders/{o['id']}")
             except alpaca.ErroreAlpaca:
                 pass
-    time.sleep(5)
+    for _ in range(10):
+        time.sleep(3)
+        restano = [o for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500})
+                   if conto.della_gamma(o["symbol"])]
+        if not restano:
+            return
+    raise alpaca.ErroreAlpaca("prova 45: ordini su VOO ancora aperti, niente ordine fuori orario: " + ", ".join(
+        f"{o.get('client_order_id')} ({o.get('status')})" for o in restano))
+
+
+def _ordine_fuori_orario(q: float) -> dict:
+    ultimo = ultimo_prezzo(TITOLO)
+    limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
+    return av._richiesta("POST", "/v2/orders", json={"symbol": TITOLO, "qty": str(int(abs(q))), "side": "sell" if q > 0 else "buy",
+                                                    "type": "limit", "limit_price": f"{limite:.2f}", "time_in_force": "day",
+                                                    "extended_hours": True})
+
+
+def fuori_orario(giorno: str) -> str:
+    """Emergenza: chiude VOO dopo la seduta con un ordine limite valido fuori orario, al prezzo dell'ultimo scambio peggiorato dello
+    0,5% perché si esegua; se dopo un minuto è ancora aperta, l'errore ferma il giro e avvisa."""
+    dec = leggi_giorno(giorno) or {"giorno": giorno}
+    _cancella_ordini_gamma()
     q = posizione()
     if q != 0:
-        ultimo = ultimo_prezzo(TITOLO)
-        limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
-        o = av._richiesta("POST", "/v2/orders", json={"symbol": TITOLO, "qty": str(int(abs(q))), "side": "sell" if q > 0 else "buy",
-                                                      "type": "limit", "limit_price": f"{limite:.2f}", "time_in_force": "day",
-                                                      "extended_hours": True})
-        if dec.get("id_ingresso"):
-            dec.setdefault("uscite", {})[o["id"]] = "fuori orario"
-            dec["nota"] = "; ".join(x for x in (dec.get("nota"), "chiusa fuori orario") if x)
-            scrivi_giorno(dec)
+        o = _ordine_fuori_orario(q)
+        dec.setdefault("uscite", {})[o["id"]] = "fuori orario"
+        _nota(dec, "chiusa fuori orario")
         time.sleep(60)
     rimasta = posizione()
-    esito = scrivi_diario(giorno) if dec.get("id_ingresso") else f"{giorno}: chiusa una posizione rimasta da un altro giorno"
-    print(pubblica({"posizioni_aperte_gamma": {"ora": int(time.time()), "testo": f"VOO ancora aperta: {rimasta:g}"}} if rimasta else None))
+    esito = scrivi_diario(giorno)
+    print(pubblica({"ora": int(time.time()), "testo": f"VOO ancora aperta: {rimasta:g}"} if rimasta else None))
     if rimasta:
         raise alpaca.ErroreAlpaca(f"prova 45: POSIZIONE ANCORA APERTA su {TITOLO} ({rimasta:g}) dopo la chiusura fuori orario ({esito})")
     return f"chiusa fuori orario; {esito}"
+
+
+def chiudi_rimasta(oggi_iso: str, in_seduta: bool) -> str:
+    """Una posizione su VOO rimasta da un giorno prima (non deve succedere: c'erano l'asta, l'uscita a mercato e quella fuori orario).
+    Si chiude subito (a mercato in seduta, con un ordine limite fuori orario prima o dopo), si completa la riga del giorno
+    dell'ingresso con questa uscita, e si scrive una riga di oggi che lo dice (così la contabilità non conta l'uscita due volte)."""
+    _cancella_ordini_gamma()
+    q = posizione()
+    if q == 0:
+        return "niente: la posizione non c'è più"
+    o = av._richiesta("DELETE", f"/v2/positions/{TITOLO}") if in_seduta else _ordine_fuori_orario(q)
+    time.sleep(60)
+    prima = [json.loads(f.read_text()) for f in sorted(GIORNI.glob("*.json")) if f.stem < oggi_iso]
+    orig = next((d for d in reversed(prima) if d.get("id_ingresso")), None)
+    if orig is not None:
+        orig.setdefault("uscite", {})[o.get("id", "")] = "giorno dopo"
+        orig["nota"] = "; ".join(x for x in (orig.get("nota"), f"chiusa il {oggi_iso}") if x)
+        scrivi_giorno(orig)
+        es = av.esecuzioni_del_giorno(orig["giorno"]) + [e for e in av.esecuzioni_del_giorno(oggi_iso) if e["order_id"] == o.get("id")]
+        annota(riga_operazione(orig["giorno"], orig, es))
+    d = pd.read_csv(DIARIO) if DIARIO.exists() else pd.DataFrame(columns=COLONNE)
+    if oggi_iso not in set(d["giorno"].astype(str)):
+        annota({"giorno": oggi_iso, "simbolo": TITOLO,
+                "nota": f"chiusa la posizione rimasta del {orig['giorno'] if orig else 'giorno prima'}"})
+    rimasta = posizione()
+    print(pubblica({"ora": int(time.time()), "testo": f"VOO rimasta da un altro giorno, ancora aperta: {rimasta:g}"}
+                   if rimasta else None))
+    if rimasta:
+        raise alpaca.ErroreAlpaca(f"prova 45: POSIZIONE RIMASTA su {TITOLO} ancora aperta ({rimasta:g})")
+    return f"chiusa una posizione su VOO rimasta da un altro giorno ({-q:+g})"
 
 
 def scrivi_diario(giorno: str) -> str:
@@ -387,20 +491,43 @@ def tardi(oggi: dict, ieri: dict) -> str:
     return decidi_senza_ordine(dec, f"saltato: avvio in ritardo ({av.ny_adesso():%H:%M} di New York)")
 
 
+def ricostruisci(giorno: str) -> bool:
+    """Se il file del giorno manca (un giro morto prima di salvarlo) ma Alpaca ha l'ingresso di oggi, lo riscrive da lì, con
+    l'ultimo ordine alla chiusura: così il giro dopo non prende l'operazione per un giorno saltato."""
+    o = _ordine_per_nome(f"gamma-{giorno}-in")
+    if o is None:
+        return False
+    dec = {"giorno": giorno, "id_ingresso": o["id"], "lato": o["side"], "inviato": av._ora_ny(o.get("submitted_at")),
+           "nota": "ricostruito da Alpaca"}
+    for n in range(1, TENTATIVI_ASTA + 1):
+        a = _ordine_per_nome(f"gamma-{giorno}-asta-{n}")
+        if a is None:
+            break
+        dec.update({"id_asta": a["id"], "nome_asta": f"gamma-{giorno}-asta-{n}", "tentativi_asta": n})
+    scrivi_giorno(dec)
+    return True
+
+
+def diario_scritto(giorno: str) -> bool:
+    """La riga del giorno c'è ed è completa: con un ingresso, solo se ha la quantità (una riga «chiusa la posizione rimasta» no)."""
+    if not DIARIO.exists():
+        return False
+    d = pd.read_csv(DIARIO)
+    righe = d[d["giorno"].astype(str) == giorno]
+    if righe.empty:
+        return False
+    dec = leggi_giorno(giorno) or {}
+    return not dec.get("id_ingresso") or righe["quantita"].notna().any()
+
+
 def auto() -> str:
     adesso = av.ny_adesso()
     tutte = sedute()
     oggi = next((s for s in tutte if s["giorno"] == adesso.date()), None)
     giorno = adesso.date().isoformat()
     pos = posizione() != 0
-    deciso = leggi_giorno(giorno) is not None
-    if not deciso and pos:
-        o = av._ordine_per_nome(f"gamma-{giorno}-in")      # il file del giorno manca ma l'ordine di oggi c'è (un giro morto a metà)
-        if o is not None:
-            scrivi_giorno({"giorno": giorno, "id_ingresso": o["id"], "lato": o["side"], "nota": "ricostruito da Alpaca"})
-            deciso = True
-    scritto = DIARIO.exists() and giorno in set(pd.read_csv(DIARIO)["giorno"].astype(str))
-    azione = cosa_fare(adesso, oggi, deciso, pos, scritto)
+    deciso = leggi_giorno(giorno) is not None or (oggi is not None and ricostruisci(giorno))
+    azione = cosa_fare(adesso, oggi, deciso, pos, diario_scritto(giorno))
     print(f"{adesso:%Y-%m-%d %H:%M:%S} di New York: {azione}", flush=True)
     prima = [s for s in tutte if s["giorno"] < adesso.date()]
     if azione in ("entra", "tardi") and not prima:
@@ -412,11 +539,9 @@ def auto() -> str:
     if azione == "segui":
         return segui(oggi)
     if azione == "chiudi_subito":
-        av._richiesta("DELETE", f"/v2/positions/{TITOLO}")
-        time.sleep(10)
-        raise alpaca.ErroreAlpaca(f"prova 45: chiusa a mercato una posizione su {TITOLO} rimasta da un altro giorno: va guardato")
+        return chiudi_rimasta(giorno, in_seduta=True)
     if azione == "fuori_orario":
-        return fuori_orario(giorno if deciso else "altro giorno")
+        return fuori_orario(giorno) if deciso else chiudi_rimasta(giorno, in_seduta=False)
     if azione == "diario":
         return scrivi_diario(giorno)
     return azione
@@ -424,7 +549,8 @@ def auto() -> str:
 
 # ---- la Plancia e i controlli ---------------------------------------------------------------------------------------
 
-def pubblica(allarmi: dict | None = None) -> str:
+def pubblica(allarme: dict | None = None) -> str:
+    """Pubblica la prova 45 sulla Plancia; `allarme` ({ora, testo}) se VOO è rimasta aperta, None lo azzera."""
     try:
         from stock.avanti import plancia
         v = conto.adesso()
@@ -441,9 +567,7 @@ def pubblica(allarmi: dict | None = None) -> str:
              "pesi": {plancia.chiave(p["symbol"]): round(float(p["market_value"]) / valore, 4) for p in v["posizioni_gamma"]} or None,
              "giorni": conto.giorni("gamma") or None, "primo_giorno_dal_capitale": True,
              "operazioni": plancia.operazioni_recenti(fatte) or None}
-        agg = {"battito": int(time.time()), f"strategie/{ID}": s}
-        if allarmi is not None:
-            agg["allarmi/posizioni_aperte_gamma"] = allarmi.get("posizioni_aperte_gamma")
+        agg = {"battito": int(time.time()), f"strategie/{ID}": s, "allarmi/posizioni_aperte_gamma": allarme}
         errore = plancia.scrivi(agg)
         return errore or f"Plancia: pubblicata la prova 45 (valore {valore:,.2f} dollari)"
     except Exception as e:  # noqa: BLE001 — la Plancia non deve mai fermare gli ordini
@@ -460,6 +584,7 @@ def controlla() -> str:
     date_ = [r["date"] for r in csv.DictReader(io.StringIO(t))]
     righe.append(f"copertura di SqueezeMetrics: {len(date_)} giorni, l'ultimo il {date_[-1]} (il valore non si stampa)")
     righe.append(f"posizione su {TITOLO} adesso: {posizione():g}; capitale virtuale della prova 45: {capitale():,.2f}")
+    righe.append(f"un nome d'ordine che non esiste: {_ordine_per_nome('gamma-controllo-nome-che-non-esiste')} (deve essere None)")
     return "\n".join(righe)
 
 
