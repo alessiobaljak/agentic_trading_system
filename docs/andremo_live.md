@@ -989,3 +989,9 @@ macchina accanto al bot senza codice nell'area delle crypto, come le azioni.
 qualche articolo di quella fonte può mancare), mappa delle liquidazioni (600 conti, 2.321 posizioni); nessuna chiusura nuova, nessuna
 moneta nuova su Coinbase. Trading AI: la sua sessione ha preso la risposta (voci 1 e 2 chiuse) e lavora allo script di installazione.
 G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
+**23 novembre, 20:30 UTC, giro delle 4 ore e F5 contro G1** (domanda del proprietario): sulle letture dello stato dal 16 al 23 novembre F5
+−1,24% (giorno peggiore −1,26%), G1 nel paper −5,99% (−2,86%), demo −5,42%; sul passato (300 settimane, prova 168) quasi pari: F5 +55,4%
+l'anno, Sharpe 1,88, settimane positive 61%, settimana peggiore −14,7%, spese 4,9%; G1 +54,1%, 1,97, 59%, −9,4%, 6,5%; correlazione
+0,80. Raccolta delle 20:19: 24 fonti su 25 (133 articoli). Trading AI: la sua sessione è alla versione 3 delle regole, con le scelte del
+proprietario (moneta e intervalli suoi, obiettivo 50 USDT al giorno, leva fino a 10), sempre sul demo suo. **Capito oggi**: in una
+settimana di crollo e rimbalzo decidere solo il lunedì ha perso molto meno che decidere ogni giorno; sul passato le due cose si equivalgono.

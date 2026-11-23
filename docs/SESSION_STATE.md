@@ -50,6 +50,10 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Ogni lunedì, F5 accanto a G1** (domanda del proprietario del 23 novembre: «perché F5 non è meglio di G1?»): nel riepilogo e
+  nel confronto settimanale la settimana di F5 e di G1 sulle stesse letture dello stato (16-23 novembre: F5 −1,2%, G1 −6,0%); sul
+  passato sono pari (300 settimane: F5 +55,4% l'anno, Sharpe 1,88; G1 +54,1%, 1,97). Se il proprietario sceglie F5 per il conto
+  piccolo, il codice del conto vero va adattato (stesso motore, decisione il lunedì) e rivisto da live-path-reviewer.
 - **Trading AI sul demo suo** (decisione del 23 novembre): la sessione «trading AI» (session_01RPSK4kasjZfRQYXznD4TfF, riaperta)
   scrive il codice in `trader_ai/`; **a ogni giro leggere `trader_ai/RICHIESTE_CRYPTO.md`**: il collegamento sulla macchina (modulo nel
   bot o servizio, chiavi del secondo conto demo) lo scrive questa sessione, poi live-path-reviewer e l'ok del proprietario al primo avvio.
