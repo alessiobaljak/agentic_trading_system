@@ -285,27 +285,33 @@ class Trader:
         """La posizione aperta deve avere il suo stop sul conto. Se manca: con il prezzo già oltre lo stop si chiude a mercato,
         altrimenti si rimette (e si rimette anche l'obiettivo, se c'era)."""
         a = st["aperta"]
+        tick = self.c.filtri()["passo_prezzo"]
         stop_ok = any(str(o.get("clientAlgoId", "")).startswith("tais") for o in condizionati)
         if stop_ok:
+            self._obiettivo_sul_conto(a, pos, condizionati, tick, ora)
             return
         stop = a.get("stop")
         lungo = pos["lato"] == "lungo"
         if not stop or (prezzo <= stop if lungo else prezzo >= stop):
             self._chiudi_ora(st, pos, prezzo, ora, "chiusa: senza stop valido sul conto")
             return
-        tick = self.c.filtri()["passo_prezzo"]
         try:
             self.c.condizionato(pos["lato"], "STOP_MARKET", arrotonda(stop, tick), self._cid(ora, "s"))
         except Exception as e:  # noqa: BLE001 - lo stop non si mette: la posizione non resta scoperta
             self.evento(ora, "stop rifiutato: chiudo a mercato", errore=str(e)[:200])
             self._chiudi_ora(st, pos, prezzo, ora, "chiusa: stop rifiutato da Binance")
             return
+        self.evento(ora, "stop rimesso sul conto", stop=stop)
+        self._obiettivo_sul_conto(a, pos, condizionati, tick, ora)
+
+    def _obiettivo_sul_conto(self, a: dict, pos: dict, condizionati: list, tick: float, ora: datetime) -> None:
         if a.get("obiettivo") and not any(str(o.get("clientAlgoId", "")).startswith("tait") for o in condizionati):
             try:
                 self.c.condizionato(pos["lato"], "TAKE_PROFIT_MARKET", arrotonda(a["obiettivo"], tick), self._cid(ora, "t"))
+                self.evento(ora, "obiettivo messo sul conto", obiettivo=a["obiettivo"])
             except Exception as e:  # noqa: BLE001
-                self.evento(ora, "obiettivo non rimesso", errore=str(e)[:200])
-        self.evento(ora, "stop rimesso sul conto", stop=stop)
+                a["obiettivo"] = None                  # non si riprova a ogni passo; il modello lo vede nel conto
+                self.evento(ora, "obiettivo rifiutato", errore=str(e)[:200])
 
     def _esegui(self, st: dict, r, pos: Optional[dict], s: dict, ora: datetime) -> None:
         if self.fermo_a_mano():
@@ -334,8 +340,20 @@ class Trader:
                             "conto_prima": s["conto"], "margine": r.margine_usdt, "in_attesa": limite, "inviata": not limite}
             self.salva(st)
             self.c.prepara(leva)
+            if self.fermo_a_mano():
+                st["aperta"] = None
+                raise RuntimeError("il proprietario ha fermato il trader")
             esito = self.c.apri(lato, q, cid, "LIMIT" if limite else "MARKET", arrotonda(rif, tick) if limite else None)
             st["aperta"].pop("inviata", None)
+            if self.fermo_a_mano():                    # «chiudi» è arrivato mentre l'ordine partiva: si richiude subito
+                if limite:
+                    self.c.annulla_tutto()
+                    st["aperta"] = None
+                else:
+                    st["aperta"]["entrata"] = float(esito.get("avgPrice") or 0) or prezzo
+                    self._chiudi_ora(st, {"lato": lato, "quantita": float(esito.get("executedQty") or q)}, prezzo, ora,
+                                     "chiusa a mano dal proprietario")
+                raise RuntimeError("il proprietario ha fermato il trader mentre l'ordine partiva: richiuso")
             if limite:                                 # stop subito: scatta solo quando la posizione c'è (da provare sul demo)
                 try:
                     self.c.condizionato(lato, "STOP_MARKET", arrotonda(r.stop_prezzo, tick), self._cid(ora, "s"))
@@ -369,16 +387,17 @@ class Trader:
                 self._registra_chiusura(st, a, self.c.saldo()["conto"], prezzo, ora)
         elif r.azione == "modifica":
             a = st.get("aperta") or {}
-            condizionati = [o for o in self.c.ordini_tutti() if o["_algo"]] if pos is not None else []
+            condizionati = [o for o in self.c.ordini_tutti() if o["_algo"]]
+            # con l'ordine limite in attesa la posizione non c'è ancora, ma stop e obiettivo sul conto sì
+            bersaglio = pos if pos is not None else {"lato": a["lato"], "quantita": a["quantita"], "in_attesa": True}
             for campo, tipo, sigla, valore in (("stop", "STOP_MARKET", "s", r.stop_prezzo),
                                                ("obiettivo", "TAKE_PROFIT_MARKET", "t", r.obiettivo_prezzo)):
                 if valore is None:
                     continue
-                if pos is not None:
-                    vecchi = [o for o in condizionati if str(o.get("clientAlgoId", "")).startswith("tai" + sigla)]
-                    self._sostituisci(st, a, pos, prezzo, ora, campo, tipo, sigla, valore, vecchi, tick)
-                    if st.get("aperta") is None:       # chiusa perché nessuno stop è stato accettato
-                        return
+                vecchi = [o for o in condizionati if str(o.get("clientAlgoId", "")).startswith("tai" + sigla)]
+                self._sostituisci(st, a, bersaglio, prezzo, ora, campo, tipo, sigla, valore, vecchi, tick)
+                if st.get("aperta") is None:           # chiusa (o limite annullato) perché nessuno stop è stato accettato
+                    return
                 a[campo] = valore
             self.evento(ora, "modificata", stop=a.get("stop"), obiettivo=a.get("obiettivo"))
 
@@ -408,13 +427,20 @@ class Trader:
         except Exception as e:  # noqa: BLE001
             errore = str(e)[:200]
         vecchio = a.get(campo)
+        rimesso = False
         if vecchio:
             try:
                 metti(vecchio)
-                raise RuntimeError(f"{campo} nuovo rifiutato, rimesso il vecchio: {errore}")
-            except RuntimeError as e2:
-                if "rimesso il vecchio" in str(e2):
-                    raise
+                rimesso = True
+            except Exception:  # noqa: BLE001 - qualunque errore: si passa alla chiusura
+                pass
+        if rimesso:
+            raise RuntimeError(f"{campo} nuovo rifiutato, rimesso il vecchio: {errore}")
+        if campo == "stop" and pos.get("in_attesa"):
+            self.evento(ora, "nessuno stop accettato: annullo l'ordine limite", errore=errore)
+            self.c.annulla_tutto()
+            st["aperta"] = None
+            return
         if campo == "stop":
             self.evento(ora, "nessuno stop accettato: chiudo a mercato", errore=errore)
             self._chiudi_ora(st, pos, prezzo, ora, "chiusa: stop rifiutato da Binance")
@@ -451,6 +477,11 @@ class Trader:
                 self.salva(st)
         except TimeoutError:
             print("[trader_ai] chiuso e fermo; lo stato si aggiornerà al passo dopo (il blocco era occupato)")
+        # un ordine partito nei secondi fra il controllo del fermo e l'invio: si rilegge e si richiude
+        rimasta = next(({k: v for k, v in p.items() if k != "simbolo"} for p in self.c.posizioni_simbolo()), None)
+        if rimasta is not None or any(nostro(o) for o in self.c.ordini_simbolo()):
+            self.c.chiudi(rimasta, self._cid(self.ora(), "x"))
+            print("[trader_ai] trovata e richiusa un'operazione partita durante il comando")
 
     def riparti(self) -> None:
         self.f_fermo.unlink(missing_ok=True)

@@ -428,3 +428,70 @@ def test_modifica_con_tutti_i_nuovi_rifiutati_rimette_il_vecchio(tmp_path):
     o.t = T0 + timedelta(minutes=15)
     tr.passo()
     assert c.pos is not None and stop_sul_conto(c) == [88000.0] and "rimesso il vecchio" in tr.carica()["ultimo_scarto"]
+
+
+# --- terza revisione: 126, 127, 128 ---------------------------------------------------------------------------------
+
+def obiettivi_sul_conto(c):
+    return [o["prezzo"] for o in c.algo if o["tipo"] == "TAKE_PROFIT_MARKET"]
+
+
+def test_limite_eseguito_riceve_anche_l_obiettivo(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", tipo_ordine="limite", prezzo_limite=89500, **APRI)])
+    tr.passo()
+    assert stop_sul_conto(c) == [88000.0]
+    c.normali = []
+    c.pos = {"lato": "lungo", "quantita": 0.005, "entrata": 89500.0, "leva": 5, "liquidazione": None}
+    o.t = T0 + timedelta(minutes=1)
+    tr.passo()
+    assert stop_sul_conto(c) == [88000.0] and obiettivi_sul_conto(c) == [92000.0]
+
+
+def test_modifica_con_limite_in_attesa_cambia_lo_stop_sul_conto(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", tipo_ordine="limite", prezzo_limite=89500, **APRI),
+                                           risposta("modifica", stop_prezzo=88500)])
+    tr.passo()
+    o.t = T0 + timedelta(minutes=15)
+    tr.passo()
+    assert stop_sul_conto(c) == [88500.0] and tr.carica()["aperta"]["stop"] == 88500
+
+
+def test_fermo_arrivato_durante_l_invio_richiude_subito(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **APRI)])
+    vero_apri = c.apri
+
+    def apri_e_ferma(*a, **k):
+        esito = vero_apri(*a, **k)
+        tr.f_fermo.write_text("x")                              # «chiudi» arriva mentre l'ordine parte
+        return esito
+    c.apri = apri_e_ferma
+    tr.passo()
+    assert c.pos is None and c.chiusure == 1 and tr.carica()["aperta"] is None
+
+
+def test_salvataggio_con_git_vero_niente_scorte_e_dati_spinti(tmp_path):
+    import subprocess
+    from pathlib import Path
+    salva = Path(__file__).resolve().parents[1] / "vps" / "salva.sh"
+    ramo = "claude/brave-albattani-1b12fv"
+    g = lambda *a, cwd=None: subprocess.run(["git", *a], cwd=cwd, check=True, capture_output=True, text=True).stdout
+    origine, dati, altro = tmp_path / "o.git", tmp_path / "dati", tmp_path / "altro"
+    g("init", "-q", "--bare", "-b", ramo, str(origine))
+    g("clone", "-q", str(origine), str(altro))
+    for cartella in (altro,):
+        g("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "--allow-empty", "-m", "inizio", cwd=cartella)
+        g("push", "-q", "origin", f"HEAD:{ramo}", cwd=cartella)
+    g("clone", "-q", "-b", ramo, str(origine), str(dati))
+    (altro / "codice.txt").write_text("commit di un'altra sessione")
+    g("add", ".", cwd=altro)
+    g("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "altro", cwd=altro)
+    g("push", "-q", "origin", f"HEAD:{ramo}", cwd=altro)
+    av = dati / "trader_ai" / "avanti"
+    av.mkdir(parents=True)
+    (av / "stato.json").write_text('{"aperta": {"lato": "lungo"}}')
+    r = subprocess.run(["bash", str(salva), str(dati)], capture_output=True, text=True, env={"PATH": "/usr/bin:/bin",
+                       "HOME": str(tmp_path), "GIT_TERMINAL_PROMPT": "0"})
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert g("stash", "list", cwd=dati) == ""
+    assert "trader_ai/avanti/stato.json" in g("ls-tree", "-r", "--name-only", ramo, cwd=str(origine))
+    assert (av / "stato.json").read_text() == '{"aperta": {"lato": "lungo"}}'
