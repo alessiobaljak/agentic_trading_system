@@ -43,8 +43,9 @@ ATTESA_MASSIMA = pd.Timedelta(hours=4, minutes=30)
 DOPO_LA_CHIUSURA = pd.Timedelta(minutes=2)
 DIX_URL = "https://squeezemetrics.com/monitor/static/DIX.csv"
 ID = "gamma"
+PRIMO_GIORNO = date(2026, 11, 24)                # la misura parte il 24 novembre 2026 (GAMMA.md): prima niente, nemmeno le righe
 MORTI = {"canceled", "pending_cancel", "expired", "rejected", "done_for_day", "replaced", "pending_replace", "suspended"}
-VIVI = {"new", "accepted", "pending_new", "accepted_for_bidding", "held", "partially_filled", "calculated"}
+VIVI = {"new", "accepted", "pending_new", "accepted_for_bidding", "held", "partially_filled", "calculated", "stopped"}
 COLONNE = ["giorno", "simbolo", "copertura_del", "copertura", "r", "lato", "quantita", "ingresso", "ora_ingresso", "scarto_ingresso_pb",
            "uscita_prezzo", "ora_uscita", "uscita", "guadagno", "proporzione", "commissione_ib", "nota"]
 
@@ -78,6 +79,8 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, deciso_oggi: bool, posi
     """Cosa fare a quest'ora: «entra», «tardi», «segui», «chiudi_subito», «fuori_orario», «diario» o «niente: perché»."""
     if seduta is None:
         return "niente: oggi la borsa è chiusa" + (" (c'è una posizione: si chiude al prossimo giorno di borsa)" if posizione else "")
+    if adesso.date() < PRIMO_GIORNO and not posizione:
+        return f"niente: la misura parte il {PRIMO_GIORNO}"
     apertura, chiusura = seduta["apertura"], seduta["chiusura"]
     ingresso = chiusura - PRIMA_DELLA_CHIUSURA
     mattina, sera = apertura.normalize() + pd.Timedelta(hours=4), apertura.normalize() + pd.Timedelta(hours=20)
@@ -364,16 +367,19 @@ def segui(oggi: dict) -> str:
     a_mercato = chiusura - USCITA_A_MERCATO
     while av.ny_adesso() < a_mercato:
         q = posizione()
-        if q == 0:
-            break
-        stato = stato_asta(dec)
-        viva = stato in VIVI or stato == "filled"
-        if not viva and not (av.ny_adesso() < chiusura - LIMITE_ASTA and _manda_asta(giorno, q, dec)):
-            _nota(dec, f"ordine alla chiusura {stato or 'non accettato'}: uscita a mercato")
-            _aspetta(a_mercato)
-            break
+        # una posizione che non si vede ancora (Alpaca la mostra con un attimo di ritardo dopo l'esecuzione) non vuol dire chiusa:
+        # si riguarda al giro dopo, mai un'uscita prima delle 15:58
+        if q != 0:
+            stato = stato_asta(dec)
+            viva = stato in VIVI or stato == "filled"
+            if not viva and not (av.ny_adesso() < chiusura - LIMITE_ASTA and _manda_asta(giorno, q, dec)):
+                _nota(dec, f"ordine alla chiusura {stato or 'non accettato'}: uscita a mercato")
+                _aspetta(a_mercato)
+                break
         time.sleep(min(30.0, max(1.0, (a_mercato - av.ny_adesso()).total_seconds())))
-    if posizione() != 0 and av.ny_adesso() < chiusura - pd.Timedelta(seconds=45) and stato_asta(dec) not in VIVI | {"filled"}:
+    adesso = av.ny_adesso()
+    if (a_mercato - pd.Timedelta(seconds=5) <= adesso < chiusura - pd.Timedelta(seconds=45) and posizione() != 0
+            and stato_asta(dec) not in VIVI | {"filled"}):
         esci_a_mercato(dec, "uscita a mercato 2 minuti prima della fine")
     _aspetta(chiusura + DOPO_LA_CHIUSURA)
     return dopo_la_chiusura(oggi, dec)
@@ -447,13 +453,17 @@ def chiudi_rimasta(oggi_iso: str, in_seduta: bool) -> str:
         return "niente: la posizione non c'è più"
     o = av._richiesta("DELETE", f"/v2/positions/{TITOLO}") if in_seduta else _ordine_fuori_orario(q)
     time.sleep(60)
+    # il giorno dell'ingresso: l'ultimo con un ingresso dello stesso lato della posizione rimasta
+    lato = "buy" if q > 0 else "sell"
     prima = [json.loads(f.read_text()) for f in sorted(GIORNI.glob("*.json")) if f.stem < oggi_iso]
-    orig = next((d for d in reversed(prima) if d.get("id_ingresso")), None)
+    orig = next((d for d in reversed(prima) if d.get("id_ingresso") and d.get("lato") == lato), None)
     if orig is not None:
         orig.setdefault("uscite", {})[o.get("id", "")] = "giorno dopo"
         orig["nota"] = "; ".join(x for x in (orig.get("nota"), f"chiusa il {oggi_iso}") if x)
         scrivi_giorno(orig)
-        es = av.esecuzioni_del_giorno(orig["giorno"]) + [e for e in av.esecuzioni_del_giorno(oggi_iso) if e["order_id"] == o.get("id")]
+        # tutte le uscite del giorno dopo segnate per questo ingresso (anche quelle di un giro prima), non solo quella di adesso
+        es = av.esecuzioni_del_giorno(orig["giorno"]) + [e for e in av.esecuzioni_del_giorno(oggi_iso)
+                                                          if e["order_id"] in orig["uscite"]]
         annota(riga_operazione(orig["giorno"], orig, es))
     d = pd.read_csv(DIARIO) if DIARIO.exists() else pd.DataFrame(columns=COLONNE)
     if oggi_iso not in set(d["giorno"].astype(str)):

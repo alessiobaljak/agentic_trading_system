@@ -5,8 +5,8 @@ name: azioni-gamma
 # di chiusura. Stesso conto demo della prima candela e della miscela, stessi segreti, titolo e capitale virtuale suoi
 # (stock/avanti/conto.py).
 #
-# CHI AVVIA NON DEVE ESSERE PUNTUALE: ogni avvio lancia «auto», che guarda l'orologio di New York e aspetta l'ingresso fino a 5 ore e
-# 20 minuti prima; un avvio in ritardo non entra mai fuori regola. Avvii: questi orari (UTC; d'inverno 8:40-14:40 e 16:10-17:10 di New
+# CHI AVVIA NON DEVE ESSERE PUNTUALE: ogni avvio lancia «auto», che guarda l'orologio di New York e aspetta l'ingresso fino a 4 ore e
+# 30 minuti prima (il lavoro dura al massimo 350 minuti); un avvio in ritardo non entra mai fuori regola. Avvii: questi orari (UTC; d'inverno 8:40-14:40 e 16:10-17:10 di New
 # York) e la routine della sessione «trading stock» delle 13:30 di New York. Gli orari girano solo se esiste stock/avanti/gamma_accesa.
 on:
   schedule:

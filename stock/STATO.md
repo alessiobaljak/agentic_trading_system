@@ -362,7 +362,9 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   divide in tre (`conto.py`: la prima candela non chiude né cancella più VOO, il guadagno di VOO non va alla miscela). Controllo in
   sola lettura del 23 novembre su GitHub: VOO vendibile allo scoperto e facile da prendere in prestito, conto attivo (moltiplicatore
   4), il dato di SqueezeMetrics si scarica. **Da sapere:** nel 2025-2026 la copertura è stata sotto zero solo nel 4% dei giorni; un
-  giudizio può richiedere anni. Da fare: l'installazione sul server (`stock/avanti/vps/`) non ha ancora il timer della prova 45.
+  giudizio può richiedere anni. Revisione separata del codice degli ordini: approvata dopo le correzioni (`stock/avanti/REVISIONE_GAMMA.md`).
+  Da fare prima di installare il server (`stock/avanti/vps/`): aggiungere il timer della prova 45; una copia vecchia del codice sul
+  server chiuderebbe VOO alle 15:55. Da sapere dalla prima operazione: se il demo esegue gli ordini all'asta di chiusura.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS

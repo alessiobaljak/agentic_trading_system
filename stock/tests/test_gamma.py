@@ -190,3 +190,35 @@ def test_fuori_orario_non_manda_un_secondo_ordine_se_l_asta_resta_aperta(monkeyp
     with pytest.raises(alpaca.ErroreAlpaca, match="ancora aperti"):
         ga.fuori_orario("2026-11-24")
     assert not [x for x in c.chiamate if x[0] == "POST"]             # mai due uscite insieme
+
+
+def test_posizione_vista_in_ritardo_non_fa_uscire_a_mercato_alle_15_30(monkeypatch):
+    c = ContoFinto(monkeypatch, "15:30:05", 160, [])
+    letture = {"n": 0}
+    vera = c.richiesta
+
+    def in_ritardo(metodo, percorso, **kw):
+        if metodo == "GET" and percorso == "/v2/positions":
+            letture["n"] += 1
+            if letture["n"] == 1:                                    # la prima lettura dopo l'ingresso: ancora vuota
+                return []
+        return vera(metodo, percorso, **kw)
+
+    def chiudi_all_asta(s):
+        ContoFinto.dormi(c, s)
+        if c.ora >= pd.Timestamp("2026-11-24 16:00:01", tz=NY) and c.stati_asta:
+            c.qty = 0
+            c.stati_asta.append(("16:00:01", "filled"))
+    from stock.avanti import avanti as av
+    monkeypatch.setattr(av, "_richiesta", in_ritardo)
+    monkeypatch.setattr(ga.time, "sleep", chiudi_all_asta)
+    c.giorni["2026-11-24"] = {"giorno": "2026-11-24", "id_ingresso": "A", "lato": "buy"}
+    assert ga.segui(SEDUTA) == "diario"
+    assert [x[2]["time_in_force"] for x in c.chiamate if x[0] == "POST"] == ["cls"]            # l'asta, mandata al giro dopo
+    assert not [x for x in c.chiamate if x[0] == "DELETE" and x[1] == "/v2/positions/VOO"]   # nessuna uscita a mercato
+
+
+def test_prima_della_partenza_niente():
+    t = pd.Timestamp("2026-11-23 17:10", tz=NY)
+    sed = {"apertura": pd.Timestamp("2026-11-23 09:30", tz=NY), "chiusura": pd.Timestamp("2026-11-23 16:00", tz=NY)}
+    assert ga.cosa_fare(t, sed, False, False, False).startswith("niente: la misura parte")
