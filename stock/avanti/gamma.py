@@ -43,6 +43,7 @@ ATTESA_MASSIMA = pd.Timedelta(hours=4, minutes=30)
 DOPO_LA_CHIUSURA = pd.Timedelta(minutes=2)
 DIX_URL = "https://squeezemetrics.com/monitor/static/DIX.csv"
 ID = "gamma"
+PRIMO_GIORNO = date(2026, 11, 24)                # la misura parte il 24 novembre 2026 (GAMMA.md): prima niente, nemmeno le righe
 MORTI = {"canceled", "pending_cancel", "expired", "rejected", "done_for_day", "replaced", "pending_replace", "suspended"}
 VIVI = {"new", "accepted", "pending_new", "accepted_for_bidding", "held", "partially_filled", "calculated", "stopped"}
 COLONNE = ["giorno", "simbolo", "copertura_del", "copertura", "r", "lato", "quantita", "ingresso", "ora_ingresso", "scarto_ingresso_pb",
@@ -78,6 +79,8 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, deciso_oggi: bool, posi
     """Cosa fare a quest'ora: «entra», «tardi», «segui», «chiudi_subito», «fuori_orario», «diario» o «niente: perché»."""
     if seduta is None:
         return "niente: oggi la borsa è chiusa" + (" (c'è una posizione: si chiude al prossimo giorno di borsa)" if posizione else "")
+    if adesso.date() < PRIMO_GIORNO and not posizione:
+        return f"niente: la misura parte il {PRIMO_GIORNO}"
     apertura, chiusura = seduta["apertura"], seduta["chiusura"]
     ingresso = chiusura - PRIMA_DELLA_CHIUSURA
     mattina, sera = apertura.normalize() + pd.Timedelta(hours=4), apertura.normalize() + pd.Timedelta(hours=20)

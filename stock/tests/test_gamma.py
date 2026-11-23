@@ -216,3 +216,9 @@ def test_posizione_vista_in_ritardo_non_fa_uscire_a_mercato_alle_15_30(monkeypat
     assert ga.segui(SEDUTA) == "diario"
     assert [x[2]["time_in_force"] for x in c.chiamate if x[0] == "POST"] == ["cls"]            # l'asta, mandata al giro dopo
     assert not [x for x in c.chiamate if x[0] == "DELETE" and x[1] == "/v2/positions/VOO"]   # nessuna uscita a mercato
+
+
+def test_prima_della_partenza_niente():
+    t = pd.Timestamp("2026-11-23 17:10", tz=NY)
+    sed = {"apertura": pd.Timestamp("2026-11-23 09:30", tz=NY), "chiusura": pd.Timestamp("2026-11-23 16:00", tz=NY)}
+    assert ga.cosa_fare(t, sed, False, False, False).startswith("niente: la misura parte")
