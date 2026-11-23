@@ -50,6 +50,10 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Trading AI sul demo suo** (decisione del 23 novembre): la sessione «trading AI» (session_01RPSK4kasjZfRQYXznD4TfF, riaperta)
+  scrive il codice in `trader_ai/`; **a ogni giro leggere `trader_ai/RICHIESTE_CRYPTO.md`**: il collegamento sulla macchina (modulo nel
+  bot o servizio, chiavi del secondo conto demo) lo scrive questa sessione, poi live-path-reviewer e l'ok del proprietario al primo avvio.
+  La chiave del modello sulla macchina funziona (`ops/results/0770`, 23 novembre); il conto demo nuovo e le sue chiavi li crea il proprietario.
 - **Ogni mattina dal 23 novembre, giro delle 04:17, anche i fatti gravi** (idea 158, il proprietario: «Scrivi la regola e procedi
   da domani»): `python3 -m research.notizie.fatti_gravi`, si leggono i titoli, si segnano i casi con direzione, forza, ore e perché
   PRIMA dei prezzi, si committa subito (regole `research/notizie/FATTI_GRAVI.md`). Misura dopo 40 casi.

@@ -965,3 +965,7 @@ misurata). Allocatore: tieni. Le monete rifiutate dal demo (LIT, EVAA, UAI, IRYS
 aperte e scambiabili (`exchangeInfo`, «TRADING»): lo scarto del demo per le monete mancanti sul conto vero non ci sarebbe. **Capito oggi**:
 la settimana peggiore di G1 da quando è nel paper viene dal rimbalzo dopo un crollo, il caso che la misura sul passato indicava come il suo
 punto debole (mercato su, monete piccole vendute che salgono).
+**23 novembre, 08:00 UTC, il trading AI riparte** (decisione del proprietario: conto demo suo da 1.000 USDT, Opus 5.5, 5 euro al giorno):
+sessione «trading AI» riaperta e compito mandato con un messaggio programmato; la chiave del modello sulla macchina funziona
+(`ops/results/0770-23nov-chiave-del-modello.md`; il vecchio livello AI spende oggi circa 0,01 dollari a settimana). Il conto demo nuovo e le
+sue chiavi li crea il proprietario. **Capito oggi**: la macchina ha già tutto per chiamare il modello; manca solo il conto demo separato.
