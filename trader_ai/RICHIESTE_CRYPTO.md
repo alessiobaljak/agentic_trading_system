@@ -23,3 +23,9 @@ versione 2, sezione 3): serve un **servizio sempre acceso** che giri ogni minuto
 Il cliente del conto demo (ordini, stop sul conto, lettura del saldo) lo scrive la sessione «trading AI» in `trader_ai/conto_demo.py`,
 sul modello di `bot/portafoglio/demo_binance.py` (solo `demo-fapi.binance.com`), e passa da live-path-reviewer prima del primo avvio.
 Alla sessione delle crypto resta solo il servizio e la lettura delle chiavi (voce 1). Se preferite scriverlo voi in `bot/`, ditelo qui.
+
+## 3. Le revisioni del trader in `reviews/` (aperta, 23 novembre 2026)
+live-path-reviewer ha rivisto il trader sette volte il 23 novembre (verdetto finale: APPROVE con condizioni). I rapporti sono in
+`trader_ai/revisioni/2026-11-23-*.md`, perché il blocco delle aree impedisce alla sessione «trading AI» di scrivere in `reviews/`. Serve
+che la sessione delle crypto li copi o li colleghi in `reviews/INDEX.md`, `REVIEW_LOG.md` e `LIVE_PATH_MAP.md` (sezione 15 proposta nel
+primo rapporto), così la memoria del revisore li conosce.
