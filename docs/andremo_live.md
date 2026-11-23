@@ -969,3 +969,8 @@ punto debole (mercato su, monete piccole vendute che salgono).
 sessione «trading AI» riaperta e compito mandato con un messaggio programmato; la chiave del modello sulla macchina funziona
 (`ops/results/0770-23nov-chiave-del-modello.md`; il vecchio livello AI spende oggi circa 0,01 dollari a settimana). Il conto demo nuovo e le
 sue chiavi li crea il proprietario. **Capito oggi**: la macchina ha già tutto per chiamare il modello; manca solo il conto demo separato.
+**23 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (36 articoli nuovi), mappa delle liquidazioni (600 conti, 2.342
+posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: strategy-improver misura sul passato cosa fanno i due lati di G1
+nei giorni dopo un crollo del Bitcoin (la lezione della settimana, voce 12; solo misura). Ricerca: nessuna prova pronta; lo scout del
+pomeriggio di ieri non ha dato idee da provare, oggi il passo è sulla debolezza vista in avanti. Trading AI: in attesa del lavoro della
+sua sessione e del conto demo del proprietario.
