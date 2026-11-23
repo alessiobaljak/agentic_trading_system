@@ -30,10 +30,12 @@ risultato oscilla, non chi è bravo.
 ## Il piano (versione 3, 23 novembre 2026; le regole sono in `REGOLE.md`)
 Il proprietario sceglie la moneta (BTC) e gli intervalli (5, 15, 30 minuti); il modello decide entrata, leva, stop, obiettivo e uscita,
 con l'obiettivo di 50 USDT al giorno, poi si ferma fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al giorno.
-1. Fatto: decisione, limiti, tetto, obiettivo, indicatori, messaggio, memoria per cambiare approccio, test con il modello finto.
-2. Da fare: lettura dei dati di Binance, `conto_demo.py` (ordini, stop e obiettivo sul conto demo suo), il programma che gira ogni
-   minuto, l'installazione sulla macchina (sul modello di `stock/avanti/vps/`).
-3. live-path-reviewer, conto demo e chiavi del proprietario, ok del proprietario al primo avvio.
+1. Fatto: decisione, limiti, tetto, obiettivo, indicatori, messaggio, memoria, collegamento al conto demo suo (`conto_demo.py`), il
+   programma che gira ogni 30 secondi (`avvio.py`), l'installazione sulla macchina (`vps/installa.sh`, `vps/salva.sh`); test con conto
+   e modello finti. Revisioni del percorso degli ordini in `revisioni/`.
+2. Prima dell'avvio: conto demo separato da quello di G1 e chiavi del proprietario, installazione, prova a mano sul demo (punti nella
+   seconda revisione), ok del proprietario, `installa.sh avvia`.
+3. Comandi sulla macchina: `installa.sh stato | ferma | chiudi | riparti | chiavi | togli`.
 4. Resoconto ogni giorno a mezzanotte UTC; diario di ogni decisione durante il giorno; scheda in dashboard.
 
 Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto

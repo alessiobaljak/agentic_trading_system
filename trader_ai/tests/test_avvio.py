@@ -36,6 +36,12 @@ class ContoFinto:
         mie = [{"simbolo": "BTCUSDT", **self.pos}] if self.pos else []
         return mie + self.altri
 
+    def posizioni_simbolo(self):
+        return [p for p in self.posizioni_tutte() if p["simbolo"] == "BTCUSDT"]
+
+    def ordini_simbolo(self):
+        return [o for o in self.ordini_tutti() if o.get("symbol") == "BTCUSDT"]
+
     def ordini_tutti(self):
         return [{**o, "_algo": False} for o in self.normali] + [{**o, "_algo": True} for o in self.algo]
 
@@ -244,8 +250,8 @@ def test_modifica_con_stop_nuovo_rifiutato_chiude(tmp_path):
 def test_ordine_limite_in_attesa_poi_eseguito_riceve_lo_stop(tmp_path):
     tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", tipo_ordine="limite", prezzo_limite=89500, **APRI)])
     tr.passo()
-    assert c.pos is None and not c.algo and tr.carica()["aperta"]["in_attesa"]
-    c.normali = []
+    assert c.pos is None and stop_sul_conto(c) == [88000.0] and tr.carica()["aperta"]["in_attesa"]   # stop subito
+    c.algo, c.normali = [], []                                  # se il demo non lo tiene senza posizione, lo rimette la protezione
     c.pos = {"lato": "lungo", "quantita": 0.005, "entrata": 89500.0, "leva": 5, "liquidazione": None}
     o.t = T0 + timedelta(minutes=1)
     tr.passo()
@@ -359,3 +365,66 @@ def test_troppe_richieste_pausa_senza_altre_richieste():
 def test_arrotonda_per_difetto():
     assert arrotonda(0.0056789, 0.001) == 0.005
     assert arrotonda(88000.07, 0.1) == 88000.0
+
+
+# --- seconda revisione: 115, 116, 118 -------------------------------------------------------------------------------
+
+def test_chiudi_a_mano_con_chiusura_fallita_il_fermo_resta(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **APRI)])
+    tr.passo()
+
+    def rifiuta(pos, cid):
+        raise RuntimeError("429")
+    c.chiudi = rifiuta
+    with pytest.raises(SystemExit, match="NON"):
+        tr.chiudi_tutto_e_ferma()
+    assert tr.fermo_a_mano()
+    o.t = T0 + timedelta(minutes=30)
+    tr.passo()
+    assert len(chiamate) == 1 and len(c.ordini) == 1            # fermo: niente chiamate, niente ordini
+
+
+def test_fermo_scritto_mentre_il_modello_pensa_nessun_ordine(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [])
+
+    def modello(system, utente):
+        tr.f_fermo.write_text("x")                              # «chiudi» arriva durante la chiamata
+        return Esito(risposta("apri_lungo", **APRI), "ok", {"input_tokens": 10})
+    tr.chiama = modello
+    tr.passo()
+    assert not c.ordini and "fermato" in tr.carica()["ultimo_scarto"]
+
+
+def test_risposta_persa_ma_ordine_eseguito_diventa_nostra(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **APRI)])
+    vero_apri = c.apri
+
+    def apri_e_perdi(*a, **k):
+        vero_apri(*a, **k)
+        raise RuntimeError("rete: risposta persa")
+    c.apri = apri_e_perdi
+    tr.passo()
+    assert c.pos is not None and not c.algo                     # aperta, ma senza stop
+    o.t = T0 + timedelta(minutes=1)
+    tr.passo()
+    a = tr.carica()["aperta"]
+    assert "inviata" not in a and stop_sul_conto(c) == [88000.0]
+    c.pos, c.algo, c.prezzo, c.conto = None, [], 88000.0, 990.0
+    o.t = T0 + timedelta(minutes=2)
+    tr.passo()
+    assert tr.carica()["operazioni"][-1]["come"] == "stop"       # la chiusura entra nella memoria
+
+
+def test_modifica_con_tutti_i_nuovi_rifiutati_rimette_il_vecchio(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **APRI), risposta("modifica", stop_prezzo=89500)])
+    tr.passo()
+    vero = c.condizionato
+
+    def solo_il_vecchio(lato, tipo, prezzo, cid):
+        if prezzo == 89500.0:
+            raise RuntimeError("rifiutato")
+        return vero(lato, tipo, prezzo, cid)
+    c.condizionato = solo_il_vecchio
+    o.t = T0 + timedelta(minutes=15)
+    tr.passo()
+    assert c.pos is not None and stop_sul_conto(c) == [88000.0] and "rimesso il vecchio" in tr.carica()["ultimo_scarto"]

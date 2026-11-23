@@ -52,9 +52,18 @@ def mezzanotte_dopo(ora: datetime) -> datetime:
 
 
 @contextmanager
-def bloccato(percorso: Path = BLOCCO):
+def bloccato(percorso: Path = BLOCCO, attesa_s: Optional[float] = None):
+    """Il blocco condiviso con vps/salva.sh. Con `attesa_s` si rinuncia dopo quel tempo (TimeoutError)."""
     with open(percorso, "a") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
+        inizio = time.monotonic()
+        while True:
+            try:
+                fcntl.flock(f, fcntl.LOCK_EX | (fcntl.LOCK_NB if attesa_s is not None else 0))
+                break
+            except BlockingIOError:
+                if time.monotonic() - inizio > attesa_s:
+                    raise TimeoutError("blocco occupato") from None
+                time.sleep(0.5)
         try:
             yield
         finally:
@@ -68,6 +77,9 @@ class Trader:
         self.f_stato = self.cartella / "stato.json"
         self.diario = self.cartella / "diario.jsonl"
         self.budget = Budget(self.cartella / "spesa.json")
+        #: il fermo a mano: un file scritto da «chiudi» senza aspettare il blocco, letto a inizio passo e prima di ogni ordine
+        self.f_fermo = self.cartella / "fermo"
+        self._ultimo_controllo_completo = 0.0
 
     # --- stato -----------------------------------------------------------------------------------------------------
     def carica(self) -> Optional[dict]:
@@ -87,13 +99,16 @@ class Trader:
         with open(self.diario, "a") as f:
             f.write(json.dumps({"ora": ora.isoformat(), "evento": cosa, **altro}, ensure_ascii=False) + "\n")
 
+    def fermo_a_mano(self) -> bool:
+        return self.f_fermo.exists()
+
     def _cid(self, ora: datetime, tipo: str) -> str:
         return f"tai{tipo}{int(ora.timestamp() * 1000)}"
 
     # --- il conto è suo? -------------------------------------------------------------------------------------------
-    def estraneo(self, st: Optional[dict], posizioni: list, ordini: list) -> Optional[str]:
-        """Il motivo per cui il conto non sembra solo del trader, o None."""
-        if self.c.modo_doppio():
+    def estraneo(self, st: Optional[dict], posizioni: list, ordini: list, modo: bool = True) -> Optional[str]:
+        """Il motivo per cui il conto non sembra solo del trader, o None. `modo`: controlla anche la modalità di posizione."""
+        if modo and self.c.modo_doppio():
             return "il conto è nella modalità a due posizioni (serve quella a una posizione)"
         altri = sorted({p["simbolo"] for p in posizioni if p["simbolo"] != self.c.simbolo}
                        | {o.get("symbol") for o in ordini if o.get("symbol") != self.c.simbolo})
@@ -109,9 +124,17 @@ class Trader:
     # --- un passo --------------------------------------------------------------------------------------------------
     def passo(self) -> None:
         ora = self.ora()
+        if self.fermo_a_mano():
+            return
         st = self.carica()
-        posizioni, ordini = self.c.posizioni_tutte(), self.c.ordini_tutti()
-        motivo_estraneo = self.estraneo(st, posizioni, ordini)
+        # il controllo completo del conto (tutti i simboli e la modalità) costa richieste pesanti: ogni 5 minuti e prima di ogni
+        # ordine; negli altri passi solo il simbolo del trader (revisione del 23 novembre 2026, problema 120)
+        completo = time.monotonic() - self._ultimo_controllo_completo >= 300 or st is None
+        posizioni, ordini = (self.c.posizioni_tutte(), self.c.ordini_tutti()) if completo else \
+            (self.c.posizioni_simbolo(), self.c.ordini_simbolo())
+        motivo_estraneo = self.estraneo(st, posizioni, ordini, modo=completo)
+        if completo and not motivo_estraneo:
+            self._ultimo_controllo_completo = time.monotonic()
         if motivo_estraneo:
             st = st or {"operazioni": [], "note": [], "oi": []}
             if st.get("estraneo") != motivo_estraneo:
@@ -123,9 +146,6 @@ class Trader:
             st = {"operazioni": [], "note": [], "oi": []}
             self.evento(ora, "primo avvio su un conto pulito")
         st["estraneo"] = None
-        if st.get("fermo_manuale"):
-            self.salva(st)
-            return
         s = self.c.saldo()
         m = self.c.mercato()
         prezzo = m["prezzo"]
@@ -140,6 +160,9 @@ class Trader:
 
         chiusa = None
         a = st.get("aperta")
+        if a and pos is not None and a.get("inviata"):                     # risposta persa ma ordine eseguito: è nostra
+            a.pop("inviata", None)
+            self.evento(ora, "apertura eseguita anche se la risposta si era persa")
         if a and pos is None and a.get("inviata"):                         # ordine a mercato mai eseguito (risposta persa o rifiuto)
             if not any(o.get("clientOrderId") == a.get("cid") for o in ordini):
                 st["aperta"] = a = None
@@ -285,6 +308,11 @@ class Trader:
         self.evento(ora, "stop rimesso sul conto", stop=stop)
 
     def _esegui(self, st: dict, r, pos: Optional[dict], s: dict, ora: datetime) -> None:
+        if self.fermo_a_mano():
+            raise RuntimeError("il proprietario ha fermato il trader")
+        motivo = self.estraneo(st, self.c.posizioni_tutte(), self.c.ordini_tutti(), modo=False)
+        if motivo:
+            raise RuntimeError(f"il conto non è solo del trader: {motivo}")
         f = self.c.filtri()
         tick = f["passo_prezzo"]
         prezzo = self.c.mercato()["prezzo"]                       # il prezzo è cambiato mentre il modello pensava
@@ -308,6 +336,11 @@ class Trader:
             self.c.prepara(leva)
             esito = self.c.apri(lato, q, cid, "LIMIT" if limite else "MARKET", arrotonda(rif, tick) if limite else None)
             st["aperta"].pop("inviata", None)
+            if limite:                                 # stop subito: scatta solo quando la posizione c'è (da provare sul demo)
+                try:
+                    self.c.condizionato(lato, "STOP_MARKET", arrotonda(r.stop_prezzo, tick), self._cid(ora, "s"))
+                except Exception as e:  # noqa: BLE001 - lo metterà la protezione appena l'ordine è eseguito
+                    self.evento(ora, "stop dell'ordine limite non accettato prima dell'esecuzione", errore=str(e)[:200])
             if not limite:
                 st["aperta"]["entrata"] = float(esito.get("avgPrice") or 0) or prezzo
                 nuova = {"lato": lato, "quantita": float(esito.get("executedQty") or q)}
@@ -342,43 +375,86 @@ class Trader:
                 if valore is None:
                     continue
                 if pos is not None:
-                    # Binance può rifiutare un secondo ordine «chiudi tutto» sullo stesso lato: si toglie il vecchio e si mette
-                    # il nuovo; se lo stop nuovo è rifiutato, la posizione si chiude (mai scoperta)
-                    for o in condizionati:
-                        if str(o.get("clientAlgoId", "")).startswith("tai" + sigla):
-                            self.c.annulla_condizionato(o)
-                    try:
-                        self.c.condizionato(pos["lato"], tipo, arrotonda(valore, tick), self._cid(ora, sigla))
-                    except Exception as e:  # noqa: BLE001
-                        if campo == "stop":
-                            self.evento(ora, "stop nuovo rifiutato: chiudo a mercato", errore=str(e)[:200])
-                            self._chiudi_ora(st, pos, prezzo, ora, "chiusa: stop nuovo rifiutato da Binance")
-                            raise RuntimeError(f"stop nuovo rifiutato, operazione chiusa: {str(e)[:150]}") from None
-                        a["obiettivo"] = None
-                        raise
+                    vecchi = [o for o in condizionati if str(o.get("clientAlgoId", "")).startswith("tai" + sigla)]
+                    self._sostituisci(st, a, pos, prezzo, ora, campo, tipo, sigla, valore, vecchi, tick)
+                    if st.get("aperta") is None:       # chiusa perché nessuno stop è stato accettato
+                        return
                 a[campo] = valore
             self.evento(ora, "modificata", stop=a.get("stop"), obiettivo=a.get("obiettivo"))
 
-    def chiudi_tutto_e_ferma(self) -> None:
+    def _sostituisci(self, st, a, pos, prezzo, ora, campo, tipo, sigla, valore, vecchi, tick) -> None:
+        """Mette il nuovo stop (o obiettivo) senza lasciare mai la posizione scoperta: prima il nuovo accanto al vecchio; se Binance
+        lo rifiuta, si toglie il vecchio e si riprova il nuovo; se ancora no, si rimette il vecchio; se nemmeno quello, per uno
+        stop si chiude a mercato (revisione del 23 novembre 2026, problemi 99 e 118)."""
+        def metti(prezzo_ordine):
+            self.c.condizionato(pos["lato"], tipo, arrotonda(prezzo_ordine, tick), self._cid(ora, sigla))
+        try:
+            metti(valore)
+            messo = True
+        except Exception:  # noqa: BLE001
+            messo = False
+        if messo:
+            for o in vecchi:
+                try:
+                    self.c.annulla_condizionato(o)
+                except Exception as e:  # noqa: BLE001 - resta un ordine in più, più stretto o più largo: si scrive
+                    self.evento(ora, f"{campo} vecchio non annullato", errore=str(e)[:200])
+            return
+        for o in vecchi:
+            self.c.annulla_condizionato(o)
+        try:
+            metti(valore)
+            return
+        except Exception as e:  # noqa: BLE001
+            errore = str(e)[:200]
+        vecchio = a.get(campo)
+        if vecchio:
+            try:
+                metti(vecchio)
+                raise RuntimeError(f"{campo} nuovo rifiutato, rimesso il vecchio: {errore}")
+            except RuntimeError as e2:
+                if "rimesso il vecchio" in str(e2):
+                    raise
+        if campo == "stop":
+            self.evento(ora, "nessuno stop accettato: chiudo a mercato", errore=errore)
+            self._chiudi_ora(st, pos, prezzo, ora, "chiusa: stop rifiutato da Binance")
+            return
+        a["obiettivo"] = None
+        raise RuntimeError(f"obiettivo rifiutato: {errore}")
+
+    def chiudi_tutto_e_ferma(self, attesa_blocco_s: float = 30.0) -> None:
+        """Il fermo si scrive SUBITO (file, senza blocco): il programma non apre più niente da quel momento, anche se la chiusura
+        fallisce. Poi la chiusura su Binance, poi lo stato (con il blocco, al massimo `attesa_blocco_s`)."""
         ora = self.ora()
-        st = self.carica() or {"operazioni": [], "note": [], "oi": []}
-        posizioni = self.c.posizioni_tutte()
+        self.cartella.mkdir(parents=True, exist_ok=True)
+        tmp = self.f_fermo.with_suffix(".tmp")
+        tmp.write_text(ora.isoformat())
+        tmp.replace(self.f_fermo)
+        posizioni, ordini = self.c.posizioni_tutte(), self.c.ordini_tutti()
+        st = self.carica()
+        motivo = self.estraneo(st, posizioni, ordini, modo=False)
+        if motivo:
+            raise SystemExit(f"fermo scritto, ma il conto non è solo del trader ({motivo}): non chiudo niente, guarda il conto")
         pos = next(({k: v for k, v in p.items() if k != "simbolo"} for p in posizioni if p["simbolo"] == self.c.simbolo), None)
-        if st.get("estraneo"):
-            raise SystemExit(f"il conto non è solo del trader ({st['estraneo']}): non chiudo niente")
-        self.c.chiudi(pos, self._cid(ora, "x"))
-        if st.get("aperta") and pos is not None:
-            st["aperta"]["chiusa_da"] = "chiusa a mano dal proprietario"
-            self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora)
-        st["aperta"], st["fermo_manuale"] = None, True
-        self.evento(ora, "chiuso tutto a mano; fermo finché non arriva «riparti»")
-        self.salva(st)
+        try:
+            self.c.chiudi(pos, self._cid(ora, "x"))
+        except Exception as e:  # noqa: BLE001
+            raise SystemExit(f"fermo scritto, ma la chiusura NON è riuscita: {str(e)[:200]}; riprova tra poco") from None
+        try:
+            with bloccato(BLOCCO, attesa_blocco_s):
+                st = self.carica() or {"operazioni": [], "note": [], "oi": []}
+                if st.get("aperta") and pos is not None:
+                    st["aperta"]["chiusa_da"] = "chiusa a mano dal proprietario"
+                    self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora)
+                st["aperta"] = None
+                self.evento(ora, "chiuso tutto a mano; fermo finché non arriva «riparti»")
+                self.salva(st)
+        except TimeoutError:
+            print("[trader_ai] chiuso e fermo; lo stato si aggiornerà al passo dopo (il blocco era occupato)")
 
     def riparti(self) -> None:
-        st = self.carica() or {"operazioni": [], "note": [], "oi": []}
-        st["fermo_manuale"] = False
+        self.f_fermo.unlink(missing_ok=True)
         self.evento(self.ora(), "riparti")
-        self.salva(st)
 
     def resoconto(self, st: dict, giorno: str) -> Path:
         ops = [o for o in st["operazioni"] if o["chiusa"].startswith(giorno)]
@@ -424,8 +500,7 @@ def main(argv: list) -> int:
         return 0
     trader = Trader(conto, lambda *_: None)
     if comando in ("chiudi", "riparti"):
-        with bloccato():
-            trader.chiudi_tutto_e_ferma() if comando == "chiudi" else trader.riparti()
+        trader.chiudi_tutto_e_ferma() if comando == "chiudi" else trader.riparti()
         print(f"[trader_ai] {comando}: fatto")
         return 0
     if comando != "gira":

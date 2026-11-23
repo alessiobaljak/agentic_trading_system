@@ -163,14 +163,27 @@ class ContoDemo:
 
     def posizioni_tutte(self) -> list:
         """Tutte le posizioni aperte del conto, su qualunque simbolo."""
+        return self._posizioni({})
+
+    def _posizioni(self, parametri: dict) -> list:
         out = []
-        for p in self.chiedi("GET", "/fapi/v2/positionRisk", firmata=True):
+        for p in self.chiedi("GET", "/fapi/v2/positionRisk", parametri, firmata=True):
             q = float(p["positionAmt"])
             if q != 0:
                 liq = float(p.get("liquidationPrice") or 0)
                 out.append({"simbolo": p["symbol"], "lato": "lungo" if q > 0 else "corto", "quantita": abs(q),
                             "entrata": float(p["entryPrice"]), "leva": float(p.get("leverage") or 1), "liquidazione": liq or None})
         return out
+
+    def posizioni_simbolo(self) -> list:
+        """Le posizioni sul solo simbolo del trader (richiesta leggera, per i passi senza controllo completo)."""
+        return [p for p in self._posizioni({"symbol": self.simbolo})]
+
+    def ordini_simbolo(self) -> list:
+        normali = self.chiedi("GET", "/fapi/v1/openOrders", {"symbol": self.simbolo}, firmata=True)
+        algo = self.chiedi("GET", "/fapi/v1/openAlgoOrders", {"symbol": self.simbolo}, firmata=True)
+        algo = algo if isinstance(algo, list) else algo.get("orders", [])
+        return [{**o, "_algo": False} for o in normali] + [{**o, "_algo": True} for o in algo]
 
     def ordini_tutti(self) -> list:
         """Tutti gli ordini aperti del conto (normali e condizionati), su qualunque simbolo."""
