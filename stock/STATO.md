@@ -353,6 +353,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   aiuta la fine della giornata (prova 45), non l'inizio**: nei giorni agitati la candela d'apertura viene smentita e lo stop all'altro
   estremo scatta tre volte su quattro. È la stessa regola del demo sulle azioni: nei giorni agitati di novembre (19 novembre, 8 stop su
   10) succede lo stesso. Nel conto: 110.
+* **La prova 48** (tenere lo SPY solo nella settimana della scadenza mensile delle opzioni; Stivers e Sun 2013): **bocciata**
+  (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
+  **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
+  come prima. Nel conto: 112.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
