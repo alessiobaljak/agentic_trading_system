@@ -27,15 +27,14 @@ Alpha Arena (Nof1, dal 17-19 ottobre al 3-4 novembre 2025): sei modelli con 10.0
 per circa 17 giorni; solo due in guadagno (Qwen 3 Max +22%, DeepSeek), GPT-5 circa −63%. Periodo breve: dice soprattutto quanto il
 risultato oscilla, non chi è bravo.
 
-## Il piano (versione 2, 23 novembre 2026; le regole sono in `REGOLE.md`)
-Il modello sceglie da solo monete, momenti, entrate e uscite; il codice fissa solo limiti di rischio, tetto di spesa (5 al giorno) e dati.
-1. Codice e test con un modello finto: panoramica di tutti i perpetui, dettaglio delle monete scelte, schema della risposta, limiti
-   fissi, sveglia (tempo scelto dal modello e allarmi di prezzo), conto del budget, diario.
-2. live-path-reviewer sul codice che manda ordini; il collegamento sulla macchina lo scrive la sessione delle crypto
-   (`RICHIESTE_CRYPTO.md`); il conto demo nuovo e le chiavi li crea il proprietario; ok del proprietario al primo avvio.
-3. Numeri ogni lunedì; scheda in dashboard (`dashboard/app/components/trader_ai/`) dopo le prime due settimane.
-4. Nessuna prova sul passato (costerebbe circa 700 dollari: `REGOLE.md`, sezione 8), salvo richiesta del proprietario.
+## Il piano (versione 3, 23 novembre 2026; le regole sono in `REGOLE.md`)
+Il proprietario sceglie la moneta (BTC) e gli intervalli (5, 15, 30 minuti); il modello decide entrata, leva, stop, obiettivo e uscita,
+con l'obiettivo di 50 USDT al giorno, poi si ferma fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al giorno.
+1. Fatto: decisione, limiti, tetto, obiettivo, indicatori, messaggio, memoria per cambiare approccio, test con il modello finto.
+2. Da fare: lettura dei dati di Binance, `conto_demo.py` (ordini, stop e obiettivo sul conto demo suo), il programma che gira ogni
+   minuto, l'installazione sulla macchina (sul modello di `stock/avanti/vps/`).
+3. live-path-reviewer, conto demo e chiavi del proprietario, ok del proprietario al primo avvio.
+4. Numeri ogni lunedì; scheda in dashboard dopo le prime due settimane.
 
-La versione 1 (ogni 4 ore, 12 monete fisse, solo simulata su GitHub Actions) è stata scartata prima di ogni chiamata: frequenza e monete
-erano esempi del messaggio di avvio, non richieste del proprietario. Da quella versione resta un fatto misurato: `fapi.binance.com`
-risponde 451 dai server degli Stati Uniti (sessioni cloud, GitHub Actions), per questo il trader gira sulla macchina.
+Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto
+misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti, per questo il trader gira sulla macchina.

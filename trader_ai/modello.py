@@ -8,10 +8,10 @@ from __future__ import annotations
 import os
 import random
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 from trader_ai.costi import MAX_TOKENS, MODELLO
-from trader_ai.schema import Allarme, Decisione, Risposta
+from trader_ai.schema import Risposta
 
 
 @dataclass
@@ -59,25 +59,19 @@ def chiama(client, system: str, utente: str, max_tokens: int = MAX_TOKENS) -> Es
 
 
 class ModelloFinto:
-    """Risponde a caso dentro lo schema, a volte con numeri fuori limite: serve a provare che il codice li scarta."""
+    """Risponde a caso dentro lo schema, a volte con numeri fuori regola: serve a provare che il codice li scarta."""
 
     def __init__(self, seme: int = 0):
         self.rng = random.Random(seme)
 
-    def chiama(self, monete: List[str], prezzi: dict, in_portafoglio: List[str]) -> Esito:
+    def chiama(self, prezzo: float, ha_posizione: bool) -> Esito:
         rng = self.rng
-        decisioni = []
-        for m in rng.sample(monete, k=min(len(monete), rng.randint(0, 3))):
-            p = prezzi[m]
-            lungo = rng.random() < 0.5
-            stop = p * (1 - rng.uniform(0.001, 0.4)) if lungo else p * (1 + rng.uniform(0.001, 0.4))
-            decisioni.append(Decisione(moneta=m, azione="apri_lungo" if lungo else "apri_corto",
-                                       quota_conto=rng.choice([0.05, 0.1, 0.2, 0.5]), leva=rng.choice([1, 2, 3, 10]),
-                                       stop_prezzo=stop, motivo="prova del modello finto"))
-        for m in in_portafoglio:
-            if rng.random() < 0.3:
-                decisioni.append(Decisione(moneta=m, azione="chiudi", motivo="prova del modello finto"))
-        allarmi = [Allarme(moneta=m, sopra=prezzi[m] * 1.03) for m in rng.sample(monete, k=min(2, len(monete)))]
-        risposta = Risposta(decisioni=decisioni, segui=monete[:5], prossimo_controllo_minuti=rng.choice([1, 30, 240, 5000]),
-                            allarmi=allarmi, diario="modello finto")
-        return Esito(risposta, "ok", {"input_tokens": 20000, "output_tokens": 3000})
+        azioni = ["aspetta", "chiudi", "modifica"] if ha_posizione else ["aspetta", "apri_lungo", "apri_corto", "chiudi"]
+        azione = rng.choice(azioni)
+        leva = rng.choice([1, 3, 5, 10, 20])
+        lungo = azione == "apri_lungo"
+        dist = rng.uniform(0.001, 0.2)
+        stop = prezzo * (1 - dist if lungo else 1 + dist)
+        r = Risposta(azione=azione, margine_usdt=rng.choice([5, 50, 200, 5000]), leva=leva, stop_prezzo=stop,
+                     approccio="prova del modello finto", cambio_approccio=rng.random() < 0.1, diario="modello finto")
+        return Esito(r, "ok", {"input_tokens": 6000, "output_tokens": 2000})

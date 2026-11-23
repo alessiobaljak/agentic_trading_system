@@ -1,0 +1,5 @@
+{
+ "moneta": "BTCUSDT",
+ "intervalli": ["5m", "15m", "30m"],
+ "nota": "La moneta la sceglie il proprietario (23 novembre 2026, «la moneta la scelgo io, esempio BTC»); intervalli fissi 5, 15, 30 minuti."
+}

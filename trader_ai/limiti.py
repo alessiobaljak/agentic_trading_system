@@ -1,153 +1,98 @@
-"""I limiti fissi del trader AI (REGOLE.md, sezione 6): il modello propone, questo codice decide.
+"""I limiti nel codice (REGOLE.md, versione 3, sezione 6): pochi, per scelta del proprietario («non ci sono limiti nella demo»).
 
-Ogni decisione fuori limite si scarta con il suo motivo; le altre dello stesso giro vanno avanti. I numeri sono una proposta
-della sessione «trading AI» (23 novembre 2026): li cambia solo il proprietario.
+Restano: leva fino a 10, margine non oltre il disponibile, una sola operazione alla volta, stop obbligatorio dalla parte giusta e
+prima della liquidazione, obiettivo del giorno di 50 USDT dopo il quale ci si ferma fino a mezzanotte UTC.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Optional
 
-from trader_ai.schema import Decisione
+from trader_ai.schema import Risposta
 
-MARGINE_MAX_QUOTA = 0.20        # margine di una posizione, come frazione del conto
-LEVA_MAX = 3.0
-ESPOSIZIONE_MAX_VOLTE = 2.0     # valore di tutte le posizioni / conto
-POSIZIONI_MAX = 8
-VOLUME_MIN_24H = 20_000_000     # USDT scambiati nelle 24 ore
-STOP_MIN, STOP_MAX = 0.005, 0.25  # distanza dello stop dal prezzo
-ORDINE_MIN_USDT = 20.0
-PERDITA_GIORNO_MAX = 0.10       # dalla mezzanotte UTC: chiude tutto, niente aperture fino a mezzanotte
-PERDITA_MAX = 0.35              # dal massimo del conto: chiude tutto e si ferma
+OBIETTIVO_GIORNO_USDT = 50.0
+LEVA_MAX = 10.0
+#: Valore minimo di un ordine; per BTCUSDT Binance chiede 100 USDT (da confermare sul conto demo con le regole del simbolo).
+ORDINE_MIN_VALORE = 100.0
+#: Lo stop deve stare prima della liquidazione: con leva L la liquidazione arriva poco prima di un movimento di 1/L contro;
+#: si tiene un margine del 10% (stop entro 0,9/L dal prezzo) se il conto non dà il prezzo di liquidazione.
+MARGINE_LIQUIDAZIONE = 0.9
 
 
 @dataclass
 class Posizione:
-    moneta: str
-    lato: str            # "lungo" o "corto"
-    quantita: float      # sempre positiva
+    lato: str                        # «lungo» o «corto»
+    quantita: float
     entrata: float
+    leva: float
     stop: float
     obiettivo: Optional[float] = None
+    liquidazione: Optional[float] = None
 
 
 @dataclass
-class Portafoglio:
-    conto: float                      # saldo più guadagni e perdite aperti, in USDT
+class Conto:
+    conto: float                     # saldo più risultato aperto, USDT
+    disponibile: float               # margine libero, USDT
     conto_mezzanotte: float
-    massimo_conto: float
-    posizioni: Dict[str, Posizione] = field(default_factory=dict)
-    fermo: bool = False               # perdita massima raggiunta: riparte solo con l'ok del proprietario
+    posizione: Optional[Posizione] = None
 
 
-def stato_rischio(p: Portafoglio) -> Optional[str]:
-    """«fermo» (perdita massima dal massimo), «blocco_giorno» (perdita del giorno) o None."""
-    if p.fermo or (p.massimo_conto > 0 and p.conto <= p.massimo_conto * (1 - PERDITA_MAX)):
-        return "fermo"
-    if p.conto_mezzanotte > 0 and p.conto <= p.conto_mezzanotte * (1 - PERDITA_GIORNO_MAX):
-        return "blocco_giorno"
-    return None
+def obiettivo_raggiunto(c: Conto) -> bool:
+    return c.conto >= c.conto_mezzanotte + OBIETTIVO_GIORNO_USDT
 
 
-def _esposizione(posizioni: Dict[str, Posizione], prezzi: Dict[str, float]) -> float:
-    return sum(abs(x.quantita) * prezzi.get(m, x.entrata) for m, x in posizioni.items())
-
-
-def controlla(decisioni: List[Decisione], p: Portafoglio, prezzi: Dict[str, float],
-              volumi_24h: Dict[str, float]) -> Tuple[List[Decisione], List[Tuple[Decisione, str]]]:
-    """Divide le decisioni in accettate e scartate (con il motivo). Le aperture accettate contano subito per i limiti
-    delle decisioni che seguono nello stesso giro."""
-    accettate: List[Decisione] = []
-    scartate: List[Tuple[Decisione, str]] = []
-    rischio = stato_rischio(p)
-    posizioni = dict(p.posizioni)
-    gia_toccate: set = set()
-
-    for d in decisioni:
-        m = d.moneta.strip().upper()
-        d = d.model_copy(update={"moneta": m})
-        prezzo = prezzi.get(m)
-        motivo = None
-        if prezzo is None or prezzo <= 0:
-            motivo = "moneta non quotata"
-        elif m in gia_toccate:
-            motivo = "seconda decisione sulla stessa moneta nello stesso giro"
-        elif d.azione in ("apri_lungo", "apri_corto"):
-            motivo = _controlla_apertura(d, prezzo, p.conto, posizioni, prezzi, volumi_24h.get(m, 0.0), rischio)
-            if motivo is None:
-                q = d.quota_conto * d.leva * p.conto / prezzo
-                posizioni[m] = Posizione(m, "lungo" if d.azione == "apri_lungo" else "corto", q, prezzo, d.stop_prezzo)
-        else:
-            motivo = _controlla_su_posizione(d, posizioni.get(m), prezzo)
-        if motivo:
-            scartate.append((d, motivo))
-        else:
-            accettate.append(d)
-            gia_toccate.add(m)
-    return accettate, scartate
-
-
-def _distanza_stop_ok(lato: str, prezzo: float, stop: Optional[float]) -> Optional[str]:
+def _stop_ok(lato: str, prezzo: float, stop: Optional[float], leva: float, liquidazione: Optional[float]) -> Optional[str]:
     if stop is None or stop <= 0:
         return "manca lo stop"
     if lato == "lungo" and stop >= prezzo or lato == "corto" and stop <= prezzo:
         return "stop dalla parte sbagliata del prezzo"
-    dist = abs(prezzo - stop) / prezzo
-    if dist < STOP_MIN or dist > STOP_MAX:
-        return f"stop a {dist:.2%} dal prezzo, fuori da {STOP_MIN:.1%}-{STOP_MAX:.0%}"
+    if liquidazione:
+        oltre = stop <= liquidazione if lato == "lungo" else stop >= liquidazione
+        if oltre:
+            return f"stop oltre il prezzo di liquidazione {liquidazione:g}"
+    elif abs(prezzo - stop) / prezzo > MARGINE_LIQUIDAZIONE / leva:
+        return f"stop troppo lontano per la leva {leva:g}: arriverebbe prima la liquidazione"
     return None
 
 
-def _controlla_apertura(d: Decisione, prezzo: float, conto: float, posizioni: Dict[str, Posizione],
-                        prezzi: Dict[str, float], volume: float, rischio: Optional[str]) -> Optional[str]:
-    if rischio:
-        return f"aperture bloccate ({rischio})"
-    if d.moneta in posizioni:
-        return "c'è già una posizione su questa moneta"
-    if len(posizioni) >= POSIZIONI_MAX:
-        return f"già {POSIZIONI_MAX} posizioni aperte"
-    if volume < VOLUME_MIN_24H:
-        return f"volume delle 24 ore {volume / 1e6:.1f} milioni, sotto {VOLUME_MIN_24H / 1e6:.0f}"
-    if d.quota_conto is None or not 0 < d.quota_conto <= MARGINE_MAX_QUOTA:
-        return f"quota del conto {d.quota_conto} fuori da 0-{MARGINE_MAX_QUOTA}"
-    if d.leva is None or not 1 <= d.leva <= LEVA_MAX:
-        return f"leva {d.leva} fuori da 1-{LEVA_MAX:g}"
-    valore = d.quota_conto * d.leva * conto
-    if valore < ORDINE_MIN_USDT:
-        return f"ordine da {valore:.2f} USDT, sotto il minimo di {ORDINE_MIN_USDT:g}"
-    if _esposizione(posizioni, prezzi) + valore > ESPOSIZIONE_MAX_VOLTE * conto:
-        return f"l'esposizione totale supererebbe {ESPOSIZIONE_MAX_VOLTE:g} volte il conto"
-    lato = "lungo" if d.azione == "apri_lungo" else "corto"
-    motivo = _distanza_stop_ok(lato, prezzo, d.stop_prezzo)
-    if motivo:
-        return motivo
-    if d.obiettivo_prezzo is not None and (
-            lato == "lungo" and d.obiettivo_prezzo <= prezzo or lato == "corto" and d.obiettivo_prezzo >= prezzo):
+def _obiettivo_ok(lato: str, prezzo: float, obiettivo: Optional[float]) -> Optional[str]:
+    if obiettivo is not None and (lato == "lungo" and obiettivo <= prezzo or lato == "corto" and obiettivo >= prezzo):
         return "obiettivo dalla parte sbagliata del prezzo"
-    if d.tipo_ordine == "limite" and (d.prezzo_limite is None or d.prezzo_limite <= 0):
-        return "ordine limite senza prezzo"
     return None
 
 
-def _controlla_su_posizione(d: Decisione, pos: Optional[Posizione], prezzo: float) -> Optional[str]:
-    if pos is None:
-        return "nessuna posizione su questa moneta"
-    if d.azione == "chiudi":
+def controlla(r: Risposta, c: Conto, prezzo: float) -> Optional[str]:
+    """None se la decisione si può eseguire, altrimenti il motivo dello scarto."""
+    if r.azione == "aspetta":
         return None
-    if d.azione == "riduci":
-        if d.quota_conto is None or not 0 < d.quota_conto < 1:
-            return "riduci vuole una frazione fra 0 e 1 (esclusi)"
+    if r.azione in ("apri_lungo", "apri_corto"):
+        if c.posizione is not None:
+            return "c'è già un'operazione aperta: prima chiudi"
+        if r.leva is None or not 1 <= r.leva <= LEVA_MAX:
+            return f"leva {r.leva} fuori da 1-{LEVA_MAX:g}"
+        if r.margine_usdt is None or r.margine_usdt <= 0:
+            return "manca il margine"
+        if r.margine_usdt > c.disponibile:
+            return f"margine {r.margine_usdt:.2f} oltre il disponibile {c.disponibile:.2f}"
+        if r.margine_usdt * r.leva < ORDINE_MIN_VALORE:
+            return f"valore {r.margine_usdt * r.leva:.2f} USDT sotto il minimo di {ORDINE_MIN_VALORE:g}"
+        lato = "lungo" if r.azione == "apri_lungo" else "corto"
+        rif = r.prezzo_limite if r.tipo_ordine == "limite" else prezzo
+        if r.tipo_ordine == "limite" and (rif is None or rif <= 0):
+            return "ordine limite senza prezzo"
+        return _stop_ok(lato, rif, r.stop_prezzo, r.leva, None) or _obiettivo_ok(lato, rif, r.obiettivo_prezzo)
+    p = c.posizione
+    if p is None:
+        return "nessuna operazione aperta"
+    if r.azione == "chiudi":
         return None
-    if d.azione == "sposta_stop":
-        motivo = _distanza_stop_ok(pos.lato, prezzo, d.stop_prezzo)
-        if motivo:
-            return motivo
-        piu_stretto = d.stop_prezzo > pos.stop if pos.lato == "lungo" else d.stop_prezzo < pos.stop
-        return None if piu_stretto else "lo stop si può solo stringere, mai allargare"
-    if d.azione == "metti_obiettivo":
-        o = d.obiettivo_prezzo
-        if o is None or pos.lato == "lungo" and o <= prezzo or pos.lato == "corto" and o >= prezzo:
-            return "obiettivo mancante o dalla parte sbagliata del prezzo"
-        return None
+    if r.azione == "modifica":
+        if r.stop_prezzo is None and r.obiettivo_prezzo is None:
+            return "modifica senza stop né obiettivo"
+        if r.stop_prezzo is not None:
+            motivo = _stop_ok(p.lato, prezzo, r.stop_prezzo, p.leva, p.liquidazione)
+            if motivo:
+                return motivo
+        return _obiettivo_ok(p.lato, prezzo, r.obiettivo_prezzo)
     return "azione sconosciuta"

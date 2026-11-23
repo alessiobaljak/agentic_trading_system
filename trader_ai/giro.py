@@ -1,40 +1,36 @@
-"""Un giro di decisione: controllo del rischio, del tetto di spesa, chiamata, controllo dei limiti, diario.
+"""Un giro di decisione (REGOLE.md, versione 3): obiettivo del giorno, tetto di spesa, chiamata, controllo, diario.
 
-Qui non si mandano ordini: il giro ritorna le decisioni accettate (o «chiudi tutto»); gli ordini sul conto demo suo li manda il
-collegamento con la macchina, rivisto da live-path-reviewer (REGOLE.md, sezione 9).
+Qui non si mandano ordini: il giro ritorna la decisione accettata (o «obiettivo»: chiudere tutto e fermarsi fino a mezzanotte);
+gli ordini sul conto demo suo li manda `conto_demo.py`, rivisto da live-path-reviewer prima del primo avvio.
 """
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Optional
 
 from trader_ai.costi import Budget, costo_dollari
-from trader_ai.limiti import Portafoglio, controlla, stato_rischio
+from trader_ai.limiti import Conto, controlla, obiettivo_raggiunto
 from trader_ai.modello import Esito
-from trader_ai.schema import Decisione
+from trader_ai.schema import Risposta
 
 
 @dataclass
 class Risultato:
-    stato: str                                  # «ok», «chiudi_tutto», «tetto», o lo stato dell'esito del modello
+    stato: str                       # «ok», «obiettivo», «tetto», o lo stato dell'esito del modello
     esito: Optional[Esito] = None
-    accettate: List[Decisione] = field(default_factory=list)
-    scartate: List[Tuple[Decisione, str]] = field(default_factory=list)
+    accettata: Optional[Risposta] = None
+    scarto: Optional[str] = None
     costo: float = 0.0
 
 
-def decidi(ora: datetime, motivo: str, budget: Budget, port: Portafoglio, prezzi: Dict[str, float],
-           volumi_24h: Dict[str, float], chiama_modello: Callable[[], Esito], costo_massimo: float,
-           diario: Optional[Path] = None) -> Risultato:
+def decidi(ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: float, chiama_modello: Callable[[], Esito],
+           costo_massimo: float, diario: Optional[Path] = None) -> Risultato:
     """`costo_massimo`: il costo più alto possibile della chiamata (`costi.costo_massimo` sul messaggio già costruito)."""
-    rischio = stato_rischio(port)
-    if rischio and port.posizioni:
-        ris = Risultato("chiudi_tutto")          # perdita del giorno o massima: si chiude senza chiedere al modello
-    elif rischio:
-        ris = Risultato(rischio)                 # già tutto chiuso: nessuna chiamata (costerebbe senza poter aprire)
+    if obiettivo_raggiunto(conto):
+        ris = Risultato("obiettivo")                     # chiudere tutto, niente chiamate fino a mezzanotte UTC
     elif not budget.puo_chiamare(ora, costo_massimo):
         ris = Risultato("tetto")
     else:
@@ -43,26 +39,25 @@ def decidi(ora: datetime, motivo: str, budget: Budget, port: Portafoglio, prezzi
         budget.registra(ora, costo)
         ris = Risultato(esito.stato, esito, costo=costo)
         if esito.risposta is not None:
-            ris.accettate, ris.scartate = controlla(esito.risposta.decisioni, port, prezzi, volumi_24h)
+            ris.scarto = controlla(esito.risposta, conto, prezzo)
+            if ris.scarto is None:
+                ris.accettata = esito.risposta
     if diario is not None:
-        scrivi_diario(diario, ora, motivo, budget, ris)
+        scrivi_diario(diario, ora, motivo, budget, conto, prezzo, ris)
     return ris
 
 
-def scrivi_diario(percorso: Path, ora: datetime, motivo: str, budget: Budget, ris: Risultato) -> None:
-    riga = {
-        "ora": ora.isoformat(), "motivo": motivo, "stato": ris.stato, "costo": round(ris.costo, 4),
-        "speso_oggi": round(budget.speso(ora), 4),
-        "accettate": [d.model_dump(exclude_none=True) for d in ris.accettate],
-        "scartate": [{**d.model_dump(exclude_none=True), "scarto": m} for d, m in ris.scartate],
-    }
+def scrivi_diario(percorso: Path, ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: float,
+                  ris: Risultato) -> None:
+    riga = {"ora": ora.isoformat(), "motivo": motivo, "stato": ris.stato, "prezzo": prezzo, "conto": round(conto.conto, 2),
+            "guadagno_giorno": round(conto.conto - conto.conto_mezzanotte, 2), "costo": round(ris.costo, 4),
+            "speso_oggi": round(budget.speso(ora), 4)}
     if ris.esito is not None:
         riga["usage"] = ris.esito.usage
         riga["dettaglio"] = ris.esito.dettaglio
         if ris.esito.risposta is not None:
-            r = ris.esito.risposta
-            riga.update(diario=r.diario, prossimo=r.prossimo_controllo_minuti, segui=r.segui,
-                        allarmi=[a.model_dump(exclude_none=True) for a in r.allarmi])
+            riga["risposta"] = ris.esito.risposta.model_dump(exclude_none=True)
+            riga["scarto"] = ris.scarto
     percorso.parent.mkdir(parents=True, exist_ok=True)
     with open(percorso, "a") as f:
         f.write(json.dumps(riga, ensure_ascii=False) + "\n")
