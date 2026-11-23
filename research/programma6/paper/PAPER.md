@@ -1,6 +1,6 @@
 # Programma 6 — il paper delle candidate
 
-Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-11-20**; funding stimato dall'indice del premio dal 2026-10-01 (si ricalcola quando l'archivio pubblica il file del mese).
+Regole in `REGOLE.md` (scritte il 19 ottobre 2026, prima dei dati nuovi). Dati fino al **2026-11-21**; funding stimato dall'indice del premio dal 2026-10-01 (si ricalcola quando l'archivio pubblica il file del mese).
 Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C1). Verdetto a 52 e 104 settimane, mai prima.
 
 | Candidata | Periodi nel periodo P | Rendimento totale | Sharpe da quando è partita |
@@ -20,11 +20,11 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 | M7 + M8 a rischio uguale (informazione) | 3 | +4.37% | 3.58 |
 | F5 + M7 + K2 a rischio uguale (informazione) | 3 | +4.78% | 14.56 |
 | EWIL (informazione, dal 2 novembre) | 2 | -2.81% | -5.98 |
-| HLI (informazione, dal 2 novembre) | 18 | -9.81% | -11.15 |
-| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 18 | +5.96% | 6.96 |
-| DXI (informazione, dal 2 novembre) | 18 | +3.00% | 1.94 |
-| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 18 | +6.58% | 7.58 |
-| A1 | 32 | -1.67% | -4.46 |
+| HLI (informazione, dal 2 novembre) | 19 | -10.38% | -11.54 |
+| G1 sulle stesse monete di HLI (informazione, dal 2 novembre) | 19 | +6.19% | 7.04 |
+| DXI (informazione, dal 2 novembre) | 19 | +4.56% | 2.74 |
+| G1 sulle stesse monete di DXI (informazione, dal 2 novembre) | 19 | +7.28% | 8.12 |
+| A1 | 33 | -1.67% | -4.39 |
 
 ## Le posizioni di adesso
 
@@ -34,7 +34,7 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 * **M1**, ultima settimana calcolata (dal 2026-11-09; quella in corso si calcola a settimana chiusa): long AAVEUSDT 4.3%, ADAUSDT 5.3%, AVAXUSDT 5.3%, BCHUSDT 5.0%, DOGEUSDT 6.6%, DOTUSDT 5.1%, ETHUSDT 6.4%, FARTCOINUSDT 3.9%, FETUSDT 3.5%, FILUSDT 3.4%, GALAUSDT 4.4%, ICPUSDT 4.0%, LINKUSDT 4.8%, SOLUSDT 7.1%, SUIUSDT 4.5%, TRXUSDT 6.7%, WIFUSDT 4.5%, XLMUSDT 5.5%, XRPUSDT 6.4%, ZECUSDT 3.3%; short 1000PEPEUSDT -12.7%, AGTUSDT -2.0%, AINUSDT -1.9%, AKEUSDT -2.4%, APRUSDT -3.5%, ARIAUSDT -4.3%, BIRBUSDT -5.2%, BMTUSDT -4.0%, ERAUSDT -8.2%, GTCUSDT -4.1%, HUMAUSDT -7.4%, ICNTUSDT -5.2%, INITUSDT -5.8%, IRYSUSDT -1.2%, JCTUSDT -0.9%, LSKUSDT -7.4%, MAGMAUSDT -4.0%, QNTUSDT -13.9%, QUSDT -1.1%, USUSDT -4.9%.
 * **F2**, settimana dal 2026-11-16: long 1000BONKUSDT, ADAUSDT, AEROUSDT, AKEUSDT, APTUSDT, ARBUSDT, BIRBUSDT, BMTUSDT, ERAUSDT, GTCUSDT, HUMAUSDT, INITUSDT, JUPUSDT, LSKUSDT, OPUSDT, SANDUSDT, SEIUSDT, TRUMPUSDT, TRXUSDT, WLDUSDT; short AGTUSDT, AINUSDT, APRUSDT, ARIAUSDT, BEAMXUSDT, BEATUSDT, BNBUSDT, BRUSDT, BULLAUSDT, EVAAUSDT, GRASSUSDT, IDOLUSDT, JCTUSDT, MAGMAUSDT, ONUSDT, QUSDT, UAIUSDT, USELESSUSDT, WLFIUSDT, XMRUSDT.
 * **C1**, ultima settimana calcolata (dal 2026-11-09): long 1000PEPEUSDT, AAVEUSDT, ARBUSDT, ARIAUSDT, BIRBUSDT, ERAUSDT, ICNTUSDT, INJUSDT, JCTUSDT, LITUSDT, POLUSDT, QNTUSDT, RAYSOLUSDT, RENDERUSDT, STXUSDT, TRXUSDT, UNIUSDT, XMRUSDT, ZAMAUSDT, ZECUSDT; short AGTUSDT, AKEUSDT, ATOMUSDT, BATUSDT, BCHUSDT, CHIPUSDT, ENAUSDT, FETUSDT, GRASSUSDT, GTCUSDT, HUMAUSDT, INITUSDT, MAGMAUSDT, PUMPUSDT, QUSDT, TRUMPUSDT, USUSDT, WLDUSDT, XPLUSDT, ZKUSDT.
-* **A1**, pesi decisi alla chiusura del 2026-11-20 (frazione del capitale): HYPEUSDT 0.2%.
+* **A1**, pesi decisi alla chiusura del 2026-11-21 (frazione del capitale): HYPEUSDT 0.2%.
 
 **E4** (a eventi, dal 21 ottobre; si vedono quando esce il file mensile del funding): 1 eventi, media a 7 giorni +58.10%.
 
