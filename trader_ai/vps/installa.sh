@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
 # ============================================================================
-# Installa sulla macchina il TRADER AI (conto demo SUO di Binance, soldi finti), separato dal bot: una copia sua del repository in
-# /opt/trader-ai, un ambiente Python suo, le chiavi in un file suo (/etc/trader-ai.env, solo root), un servizio sempre acceso
-# (trader-ai.service) e un timer che ogni ora salva stato e diario nel repository. Non tocca il bot, i suoi servizi né il suo .env
+# Installa sulla macchina il TRADER AI (conto demo SUO di Binance, soldi finti), separato dal bot: il CODICE in /opt/trader-ai (si
+# aggiorna solo rilanciando questo script, mai da solo: revisione del 23 novembre 2026, problema 98), i DATI in un'altra copia del
+# repository, /opt/trader-ai-dati (stato, diario, resoconti, salvati ogni ora), un ambiente Python suo, le chiavi in un file suo
+# (/etc/trader-ai.env, solo root), un servizio sempre acceso (trader-ai.service) e il timer del salvataggio. Non tocca il bot, i suoi servizi né il suo .env
 # (lo legge soltanto, per copiare la chiave del modello e controllare che le chiavi nuove non siano quelle di un altro conto).
 #
 # Da lanciare da root, dentro la cartella del repository che c'è già sulla macchina (/root/agentic_trading_system):
-#     bash trader_ai/vps/installa.sh            installa (chiede le due chiavi del conto demo nuovo); NON avvia
+#     bash trader_ai/vps/installa.sh            installa o aggiorna il codice (chiede le chiavi la prima volta); NON avvia
 #     bash trader_ai/vps/installa.sh avvia      avvia il trader (solo dopo l'ok del proprietario)
 #     bash trader_ai/vps/installa.sh ferma      lo ferma (le posizioni aperte restano con stop e obiettivo sul conto)
+#     bash trader_ai/vps/installa.sh chiudi     chiude posizione e ordini del trader e lo tiene fermo finché non arriva «riparti»
+#     bash trader_ai/vps/installa.sh riparti
 #     bash trader_ai/vps/installa.sh stato      stato del servizio e ultime righe del registro
 #     bash trader_ai/vps/installa.sh chiavi     reinserisce le due chiavi del conto demo
 #     bash trader_ai/vps/installa.sh togli      toglie servizio e timer (restano /opt/trader-ai e /etc/trader-ai.env)
 # ============================================================================
 set -euo pipefail
 DEST=/opt/trader-ai
+DATI=/opt/trader-ai-dati
 ENVF=/etc/trader-ai.env
 RAMO=claude/brave-albattani-1b12fv
 QUI="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -22,7 +26,8 @@ ENV_BOT="$QUI/.env"
 
 valore() {   # valore di una variabile in un file .env, senza stamparlo (toglie le virgolette)
   [ -f "$2" ] || return 0
-  grep -m1 -E "^$1=" "$2" 2>/dev/null | cut -d= -f2- | sed -e 's/^["'\'']//' -e 's/["'\'']$//' || true
+  grep -m1 -E "^[[:space:]]*(export[[:space:]]+)?$1[[:space:]]*=" "$2" 2>/dev/null | cut -d= -f2- \
+    | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^["'\'']//' -e 's/["'\'']$//' || true
 }
 
 chiedi_chiavi() {
@@ -65,6 +70,9 @@ case "${1:-installa}" in
     journalctl -u trader-ai.service -n 30 --no-pager || true; exit 0 ;;
   chiavi)
     chiedi_chiavi; exit 0 ;;
+  chiudi|riparti)
+    ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.avvio "$1" )
+    exit $? ;;
   togli)
     systemctl disable --now trader-ai.service trader-ai-salva.timer 2>/dev/null || true
     rm -f /etc/systemd/system/trader-ai.service /etc/systemd/system/trader-ai-salva.{service,timer}
@@ -79,8 +87,14 @@ if [ ! -d "$DEST/.git" ]; then
   git clone -q --branch "$RAMO" "$(git -C "$QUI" remote get-url origin)" "$DEST"
   echo "[trader-ai] copia del repository in $DEST"
 else
-  git -C "$DEST" pull -q --rebase --autostash origin "$RAMO" || echo "[trader-ai] aggiornamento della copia non riuscito"
+  git -C "$DEST" pull -q --ff-only origin "$RAMO" || { echo "[trader-ai] aggiornamento del codice non riuscito: mi fermo"; exit 1; }
+  echo "[trader-ai] codice aggiornato (servirà «ferma» e «avvia» perché il servizio lo usi)"
 fi
+if [ ! -d "$DATI/.git" ]; then
+  git clone -q --branch "$RAMO" "$(git -C "$QUI" remote get-url origin)" "$DATI"
+  echo "[trader-ai] copia per i dati in $DATI"
+fi
+echo "[trader-ai] codice al commit $(git -C "$DEST" rev-parse --short HEAD)"
 python3 -m venv "$DEST/.venv"
 "$DEST/.venv/bin/pip" install -q --upgrade pip
 "$DEST/.venv/bin/pip" install -q -r "$DEST/trader_ai/requirements.txt"
@@ -99,6 +113,7 @@ Type=simple
 WorkingDirectory=$DEST
 EnvironmentFile=$ENVF
 Environment=PYTHONUNBUFFERED=1
+Environment=TRADER_AI_DATI=$DATI/trader_ai/avanti
 ExecStart=$DEST/.venv/bin/python -m trader_ai.avvio gira
 Restart=always
 RestartSec=30
@@ -115,11 +130,11 @@ Description=Trader AI: stato e diario nel repository
 
 [Service]
 Type=oneshot
-WorkingDirectory=$DEST
+WorkingDirectory=$DATI
 Environment=HOME=$HOME
 Environment=GIT_TERMINAL_PROMPT=0
 Nice=10
-ExecStart=/usr/bin/env bash $DEST/trader_ai/vps/salva.sh
+ExecStart=/usr/bin/env bash $DEST/trader_ai/vps/salva.sh $DATI
 UNIT
 
 cat > /etc/systemd/system/trader-ai-salva.timer <<UNIT
@@ -136,6 +151,6 @@ UNIT
 
 systemctl daemon-reload
 echo "[trader-ai] prova del collegamento al conto demo (nessun ordine, nessuna chiamata al modello):"
-( set -a; . "$ENVF"; set +a; cd "$DEST" && .venv/bin/python -m trader_ai.avvio controlla ) \
+( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.avvio controlla ) \
   || echo "[trader-ai] ATTENZIONE: il collegamento non va, controlla le chiavi (installa.sh chiavi)"
 echo "[trader-ai] installato ma NON avviato. Per avviarlo, dopo l'ok: bash trader_ai/vps/installa.sh avvia"

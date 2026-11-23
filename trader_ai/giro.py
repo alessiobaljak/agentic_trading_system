@@ -34,9 +34,13 @@ def decidi(ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: flo
     elif not budget.puo_chiamare(ora, costo_massimo):
         ris = Risultato("tetto")
     else:
+        budget.registra(ora, costo_massimo)            # prima della chiamata: il costo più alto possibile
         esito = chiama_modello()
-        costo = costo_dollari(esito.usage) if esito.usage else 0.0
-        budget.registra(ora, costo)
+        # dopo: si corregge con il costo vero solo se la risposta dichiara i token; senza (risposta non valida, tagliata, errore,
+        # tempo scaduto) resta contato il massimo, perché la chiamata può essere stata pagata comunque
+        costo = costo_dollari(esito.usage) if esito.usage else costo_massimo
+        if esito.usage:
+            budget.registra(ora, costo - costo_massimo)
         ris = Risultato(esito.stato, esito, costo=costo)
         if esito.risposta is not None:
             ris.scarto = controlla(esito.risposta, conto, prezzo)

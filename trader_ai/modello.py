@@ -1,7 +1,7 @@
 """La chiamata al modello (REGOLE.md, sezioni 2 e 5) e il modello finto per i test.
 
 Nessun ripiego su altri modelli: il modello l'ha scelto il proprietario (23 novembre 2026). Rifiuto, risposta fuori schema,
-risposta tagliata o errore del servizio: nessuna operazione nuova, la sveglia riprova fra 30 minuti.
+risposta tagliata o errore del servizio: nessuna operazione nuova; si riprova alla candela da 15 minuti dopo.
 """
 from __future__ import annotations
 
@@ -27,7 +27,9 @@ def crea_client():
     import anthropic
 
     ws = (os.environ.get("ANTHROPIC_WORKSPACE_ID") or "").strip()  # chiavi d'organizzazione: vedi bot/ai/client.py
-    return anthropic.Anthropic(timeout=300.0, default_headers={"anthropic-workspace-id": ws} if ws else None)
+    # max_retries=0: ogni tentativo si paga; il tetto conta una chiamata per giro, quindi l'SDK non deve riprovare da solo
+    return anthropic.Anthropic(timeout=300.0, max_retries=0,
+                               default_headers={"anthropic-workspace-id": ws} if ws else None)
 
 
 def chiama(client, system: str, utente: str, max_tokens: int = MAX_TOKENS) -> Esito:

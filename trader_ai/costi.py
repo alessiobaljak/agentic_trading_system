@@ -75,4 +75,6 @@ class Budget:
         dati[g] = round(float(dati.get(g, 0.0)) + dollari, 6)
         p = Path(self.percorso)
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(json.dumps(dati, indent=1, sort_keys=True))
+        tmp = p.with_suffix(".tmp")
+        tmp.write_text(json.dumps(dati, indent=1, sort_keys=True))
+        tmp.replace(p)
