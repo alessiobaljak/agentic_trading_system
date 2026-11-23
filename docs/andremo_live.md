@@ -974,3 +974,8 @@ posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: strate
 nei giorni dopo un crollo del Bitcoin (la lezione della settimana, voce 12; solo misura). Ricerca: nessuna prova pronta; lo scout del
 pomeriggio di ieri non ha dato idee da provare, oggi il passo è sulla debolezza vista in avanti. Trading AI: in attesa del lavoro della
 sua sessione e del conto demo del proprietario.
+**23 novembre, 09:30 UTC, G1 nei giorni dopo un crollo del Bitcoin** (voce 12, solo misura, `research/programma7/misure_g1/voce12_rimbalzi.md`):
+26 crolli dal 2021 (Bitcoin giù almeno del 10% in 3 giorni, regola scritta prima). Nei 7 giorni dopo il lato venduto di G1 guadagna +2,6
+punti (normale +0,05), il comprato perde −2,8 (normale +0,95), G1 intero −0,16 contro +1,01 normale; l'errore è grande quanto la media e le
+monete piccole vendute non perdono di più. **Capito oggi**: la perdita della settimana (le piccole vendute che salgono nel rimbalzo) non è il
+comportamento tipico di G1 dopo un crollo; resta un caso in avanti, e nessuna regola sul lato venduto ha un perché.
