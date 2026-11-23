@@ -985,3 +985,7 @@ Trading AI: la sua sessione ha scritto il codice con i test e una richiesta (`tr
 detto che il modello sceglie da solo quando essere richiamato (non ogni 4 ore). Risposta in `docs/risposte_trading_ai.md`: un servizio
 suo installato una volta dal proprietario come quello delle azioni, senza toccare il bot. **Capito oggi**: il trading AI può stare sulla
 macchina accanto al bot senza codice nell'area delle crypto, come le azioni.
+**23 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 23 fonti su 25 (188 articoli nuovi in 4 ore; CryptoBriefing piena su due pagine:
+qualche articolo di quella fonte può mancare), mappa delle liquidazioni (600 conti, 2.321 posizioni); nessuna chiusura nuova, nessuna
+moneta nuova su Coinbase. Trading AI: la sua sessione ha preso la risposta (voci 1 e 2 chiuse) e lavora allo script di installazione.
+G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
