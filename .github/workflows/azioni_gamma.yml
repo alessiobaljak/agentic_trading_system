@@ -1,0 +1,75 @@
+name: azioni-gamma
+
+# La prova 45 sul conto demo (stock/avanti/GAMMA.md; decisione del proprietario del 23 novembre 2026): nei giorni con la copertura
+# delle opzioni del giorno prima sotto zero, VOO mezz'ora prima della chiusura nella direzione della giornata dello SPY, uscita all'asta
+# di chiusura. Stesso conto demo della prima candela e della miscela, stessi segreti, titolo e capitale virtuale suoi
+# (stock/avanti/conto.py).
+#
+# CHI AVVIA NON DEVE ESSERE PUNTUALE: ogni avvio lancia «auto», che guarda l'orologio di New York e aspetta l'ingresso fino a 5 ore e
+# 20 minuti prima; un avvio in ritardo non entra mai fuori regola. Avvii: questi orari (UTC; d'inverno 8:40-14:40 e 16:10-17:10 di New
+# York) e la routine della sessione «trading stock» delle 13:30 di New York. Gli orari girano solo se esiste stock/avanti/gamma_accesa.
+on:
+  schedule:
+    - cron: "40 13,15,17,18,19 * * 1-5"
+    - cron: "10 21,22 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      comando:
+        description: "auto | controlla | ordini | plancia"
+        required: true
+        default: auto
+
+permissions:
+  contents: write
+
+concurrency:
+  group: azioni-gamma
+  cancel-in-progress: false
+
+jobs:
+  gamma:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/brave-albattani-1b12fv
+      - name: Accesa?
+        id: accesa
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.comando }}" != "auto" ]; then
+            echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
+          elif [ ! -f stock/avanti/gamma_accesa ]; then
+            echo "comando=" >> "$GITHUB_OUTPUT"; echo "spenta: manca stock/avanti/gamma_accesa"
+          else
+            echo "comando=auto" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.accesa.outputs.comando != ''
+        with:
+          python-version: "3.12"
+      - run: pip install pandas numpy requests
+        if: steps.accesa.outputs.comando != ''
+      - name: Prova 45
+        if: steps.accesa.outputs.comando != ''
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          AZIONI_FIREBASE_URL: ${{ secrets.AZIONI_FIREBASE_URL }}
+          AZIONI_FIREBASE_API_KEY: ${{ secrets.AZIONI_FIREBASE_API_KEY }}
+          AZIONI_FIREBASE_EMAIL: ${{ secrets.AZIONI_FIREBASE_EMAIL }}
+          AZIONI_FIREBASE_PASSWORD: ${{ secrets.AZIONI_FIREBASE_PASSWORD }}
+        run: python -m stock.avanti.gamma "${{ steps.accesa.outputs.comando }}"
+      - name: Salva lo stato nel repository
+        if: always() && steps.accesa.outputs.comando != ''
+        run: |
+          git config user.name "azioni-gamma"
+          git config user.email "noreply@anthropic.com"
+          git add stock/avanti/gamma_diario.csv stock/avanti/gamma_giorni 2>/dev/null || true
+          if git diff --cached --quiet; then echo "niente da salvare"; exit 0; fi
+          git commit -m "stock: prova 45 sul demo, ${{ steps.accesa.outputs.comando }} del $(date -u +%F) (GitHub) [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase origin claude/brave-albattani-1b12fv && git push origin HEAD:claude/brave-albattani-1b12fv && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
