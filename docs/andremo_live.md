@@ -979,3 +979,9 @@ sua sessione e del conto demo del proprietario.
 punti (normale +0,05), il comprato perde −2,8 (normale +0,95), G1 intero −0,16 contro +1,01 normale; l'errore è grande quanto la media e le
 monete piccole vendute non perdono di più. **Capito oggi**: la perdita della settimana (le piccole vendute che salgono nel rimbalzo) non è il
 comportamento tipico di G1 dopo un crollo; resta un caso in avanti, e nessuna regola sul lato venduto ha un perché.
+**23 novembre, 12:40 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (104 articoli nuovi, CryptoBriefing piena: qualche articolo della
+fonte può mancare), mappa delle liquidazioni (600 conti, 2.340 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase.
+Trading AI: la sua sessione ha scritto il codice con i test e una richiesta (`trader_ai/RICHIESTE_CRYPTO.md`); il proprietario le ha
+detto che il modello sceglie da solo quando essere richiamato (non ogni 4 ore). Risposta in `docs/risposte_trading_ai.md`: un servizio
+suo installato una volta dal proprietario come quello delle azioni, senza toccare il bot. **Capito oggi**: il trading AI può stare sulla
+macchina accanto al bot senza codice nell'area delle crypto, come le azioni.
