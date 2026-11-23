@@ -945,3 +945,7 @@ sono rari, e per quelli la strada è la lettura caso per caso in avanti.
 (600 conti, 2.341 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (le due letture delle
 notizie partono alle 04:17). Ricerca: nessuna prova pronta; lo scout del pomeriggio non ha trovato un'idea da provare (idea 159 scartata).
 **Capito oggi**: niente di nuovo in questo giro.
+**23 novembre, 00:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (36 articoli nuovi); il lunedì rinnova i conti scelti di
+Hyperliquid (migliori del mese, balene e i 600 della mappa delle liquidazioni); mappa: 600 conti, 2.341 posizioni. Nessuna chiusura nuova,
+nessuna moneta nuova su Coinbase. G1: nessun passo nuovo in questo giro (alle 04:17 il ribilancio, le due letture delle notizie e poi il
+confronto settimanale). **Capito oggi**: niente di nuovo in questo giro.
