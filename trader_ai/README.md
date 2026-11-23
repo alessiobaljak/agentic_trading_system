@@ -27,26 +27,15 @@ Alpha Arena (Nof1, dal 17-19 ottobre al 3-4 novembre 2025): sei modelli con 10.0
 per circa 17 giorni; solo due in guadagno (Qwen 3 Max +22%, DeepSeek), GPT-5 circa −63%. Periodo breve: dice soprattutto quanto il
 risultato oscilla, non chi è bravo.
 
-## Il piano (21 novembre 2026; le regole sono in `REGOLE.md`)
-1. **Codice e test con un modello finto**, prima della chiave: l'elenco delle monete (`universo.py`), i dati tagliati all'ora della
-   decisione, il messaggio al modello, i limiti fissi (`limiti.py`), il simulatore degli ordini con spese, funding e stop, il diario.
-   Il modello finto risponde a caso dentro lo schema: serve a provare che il codice scarta ciò che esce dai limiti.
-2. **La prova sul passato** (1° luglio – 20 novembre 2026, ramo «mercato»), appena c'è la chiave. Gira in una sessione come questa o
-   su GitHub Actions a mano; risultato contro G1, il solo Bitcoin e i contanti.
-3. **Il paper in avanti** su GitHub Actions, a orario ogni 4 ore (come le azioni con `azioni_avanti.yml`): legge i dati, chiama il
-   modello, simula, salva stato e diario in `trader_ai/avanti/` e committa. Non tocca il bot sulla macchina.
-4. **La scheda in dashboard** (`dashboard/app/components/trader_ai/`) quando ci sono le prime due settimane di numeri.
+## Il piano (versione 2, 23 novembre 2026; le regole sono in `REGOLE.md`)
+Il modello sceglie da solo monete, momenti, entrate e uscite; il codice fissa solo limiti di rischio, tetto di spesa (5 al giorno) e dati.
+1. Codice e test con un modello finto: panoramica di tutti i perpetui, dettaglio delle monete scelte, schema della risposta, limiti
+   fissi, sveglia (tempo scelto dal modello e allarmi di prezzo), conto del budget, diario.
+2. live-path-reviewer sul codice che manda ordini; il collegamento sulla macchina lo scrive la sessione delle crypto
+   (`RICHIESTE_CRYPTO.md`); il conto demo nuovo e le chiavi li crea il proprietario; ok del proprietario al primo avvio.
+3. Numeri ogni lunedì; scheda in dashboard (`dashboard/app/components/trader_ai/`) dopo le prime due settimane.
+4. Nessuna prova sul passato (costerebbe circa 700 dollari: `REGOLE.md`, sezione 8), salvo richiesta del proprietario.
 
-### Stima del costo delle chiamate (stima, non misura: la misura arriva con le prime chiamate)
-Un messaggio con 12 monete sono circa 7.000 token in entrata (circa 2.000 fissi, che vanno in cache) e circa 3.000 in uscita contando il
-pensiero del modello. Con i prezzi di Opus 5.5 (4 e 20 dollari al milione) fanno circa **9 centesimi a decisione**: circa 55 centesimi al
-giorno, **circa 16 dollari al mese per ramo** in avanti, e **circa 75-80 dollari** per la prova sul passato (858 decisioni). Con 1.000
-USDT di conto, 16 dollari al mese sono l'1,6% al mese, circa il 19% all'anno: il trader deve guadagnare almeno questo solo per pagare le
-chiamate. Per questo si guardano sempre due numeri, prima e dopo il costo delle chiamate.
-
-### Dove prendere i prezzi in avanti (controllato il 21 novembre 2026 da questa sessione)
-Le pagine dell'API dei futures di Binance (`fapi.binance.com`) rispondono **451** («posto non permesso») ai server degli Stati Uniti:
-le ha date a questa sessione e, con ogni probabilità, le darà anche a GitHub Actions (che gira negli Stati Uniti). Rispondono invece i
-file pubblici `data.binance.vision` (ma arrivano con circa un giorno di ritardo), le candele spot di `data-api.binance.vision`, l'API
-pubblica di OKX e quella di Hyperliquid. La proposta: in avanti le decisioni usano i prezzi e il funding dei perpetui di OKX dell'ora
-della decisione; il conto ufficiale si ricalcola ogni giorno con le candele e il funding di Binance dai file pubblici, appena escono.
+La versione 1 (ogni 4 ore, 12 monete fisse, solo simulata su GitHub Actions) è stata scartata prima di ogni chiamata: frequenza e monete
+erano esempi del messaggio di avvio, non richieste del proprietario. Da quella versione resta un fatto misurato: `fapi.binance.com`
+risponde 451 dai server degli Stati Uniti (sessioni cloud, GitHub Actions), per questo il trader gira sulla macchina.

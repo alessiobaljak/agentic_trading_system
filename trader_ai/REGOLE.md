@@ -1,122 +1,100 @@
-# Le regole del trader AI (scritte il 21 novembre 2026, prima di ogni calcolo e di ogni chiamata al modello)
+# Le regole del trader AI (versione 2, 23 novembre 2026, prima di ogni chiamata al modello)
 
-Nessun numero di questo trader esiste ancora: queste regole sono scritte prima. Ogni cambio dopo la prima chiamata al modello è una
-**versione nuova** (sezione 10), con la data, e non cancella la precedente.
+Il proprietario, 23 novembre 2026, sulla versione 1: «stai sbagliando approccio, chi ti ha detto ogni 4 ore e 12 monete?». Nessuno:
+erano esempi del messaggio di avvio diventati regole. **Da qui il modello sceglie da solo quali monete guardare, quando guardarle di
+nuovo, quando entrare e quando uscire.** Il codice fissa solo i limiti di rischio, il tetto di spesa e i dati che gli passa.
+Decisione del proprietario del 23 novembre (`docs/decisioni_del_proprietario.md`): conto demo di Binance suo (1.000 USDT, separato da
+G1), Claude Opus 5.5, tetto di 5 euro al giorno nel codice, gira sulla macchina.
 
-## 1. Cosa fa, in una frase
-Ogni 4 ore un modello linguistico di Anthropic riceve un riassunto del mercato e del suo portafoglio e risponde con decisioni
-strutturate (apri, chiudi, riduci, sposta lo stop); il codice controlla i limiti fissi, scarta ciò che li supera e simula gli ordini sui
-perpetui in USDT di Binance con spese vere. **Nessun ordine vero, su nessun conto** (né il demo di G1, né altri).
+## 1. Cosa fa
+Il modello riceve una panoramica di **tutti** i perpetui in USDT di Binance, il dettaglio delle monete che ha chiesto di seguire, il suo
+portafoglio e quanto budget gli resta; risponde con decisioni strutturate e dice **lui** quando vuole essere richiamato e a quali prezzi
+vuole essere svegliato. Il codice controlla i limiti e manda gli ordini **solo sul conto demo suo**.
 
-## 2. Il modello
-* **Quale**: `claude-opus-5-5` (Claude Opus 5.5), il modello predefinito della documentazione di Anthropic; si chiama con l'SDK
-  Python ufficiale `anthropic`. Pensiero adattivo (sempre acceso su questo modello), sforzo `medium` scritto esplicitamente.
-  Un modello diverso (per esempio `claude-sonnet-5-5`, la metà del prezzo) solo se lo sceglie il proprietario, ed è una versione nuova.
-* **Data di addestramento**: «Training data cutoff: Jun 2026», «Reliable knowledge cutoff: Jun 2026» (pagina ufficiale
-  https://platform.claude.com/docs/en/about-claude/models/overview, letta il 21 novembre 2026).
-* **Prezzo** (stessa pagina): 4 dollari per milione di parole-pezzo («token») in entrata, 20 in uscita; le letture dalla cache costano
-  il 5% dell'entrata; le richieste in blocco («Batch») costano la metà.
-* **Niente strumenti**: il modello non cerca sul web, non esegue codice, non vede altro che il messaggio che gli diamo.
-* **Rifiuto o risposta non valida** (`stop_reason` «refusal», JSON che non rispetta lo schema, errore del servizio dopo i tentativi
-  dell'SDK): in quel giro **nessuna operazione nuova**; le posizioni aperte restano con i loro stop. Si scrive nel diario.
+## 2. Il modello e il tetto di spesa
+* `claude-opus-5-5` (decisione del proprietario), SDK Python ufficiale `anthropic`, pensiero adattivo (sempre acceso), sforzo `medium`.
+  Data di addestramento: giugno 2026 (https://platform.claude.com/docs/en/about-claude/models/overview, letta il 21 novembre 2026).
+  Nessuno strumento: niente web, niente codice; solo il messaggio che gli diamo.
+* **Tetto: 5 dollari al giorno** (giorno UTC), contati dal codice sui token dichiarati da ogni risposta ai prezzi ufficiali (4 dollari al
+  milione in entrata, 20 in uscita, cache come da listino). Il proprietario ha detto 5 euro: 5 dollari restano sotto finché l'euro vale
+  più del dollaro, senza dipendere da un cambio. Quando il budget rimasto non basta per una chiamata, nessuna chiamata fino alla mezzanotte
+  UTC; le posizioni restano protette dagli stop già piazzati sul conto.
+* **Il modello vede a ogni chiamata quanto budget gli resta oggi**: decide lui se spenderlo guardando spesso o tenerlo per i momenti
+  movimentati.
+* **Stima, non misura**: una chiamata costa circa 10-15 centesimi (circa 20.000 token in entrata con la panoramica, circa 3.000 in
+  uscita); con 5 dollari sono circa 35-50 chiamate al giorno. La misura vera arriva dalle prime chiamate e si scrive qui.
 
-## 3. Il passato onesto e il paper in avanti
-* **La prova sul passato** comincia il **1° luglio 2026 alle 00:00 UTC** (il primo giorno dopo la data di addestramento) e finisce il
-  **20 novembre 2026 alle 24:00 UTC** (143 giorni, 858 decisioni da 4 ore). Prima di luglio il modello ha già letto com'è andata: lì
-  **nessuna prova**, mai.
-* A ogni decisione il modello riceve **solo i dati chiusi prima dell'ora della decisione**: il codice taglia ogni serie all'ora della
-  decisione e un test lo controlla (`tests/`: nessuna riga dopo l'ora della decisione entra nel messaggio).
-* **Nel messaggio c'è la data vera.** Dopo giugno 2026 il modello non sa niente del mercato, quindi la data non gli dà vantaggi; toglierla
-  non servirebbe (i prezzi la tradiscono comunque).
-* **Il paper in avanti** parte appena c'è la chiave, accanto alla prova sul passato, e prosegue finché il proprietario non lo ferma.
-* **Una sola corsa vale.** Il modello non risponde due volte uguale. La corsa che conta è la prima, completa, sul periodo intero; una
-  seconda corsa solo su luglio misura quanto il risultato cambia a parità di dati (si scrive, non sostituisce la prima). Ritoccare le
-  istruzioni e rifare la prova sullo stesso periodo finché viene bella è vietato: ogni versione nuova si prova sui giorni **dopo** la sua
-  data (paper in avanti), il periodo luglio-novembre è usato una volta.
+## 3. Quando viene chiamato (lo decide lui)
+Ogni risposta contiene:
+* `prossimo_controllo_minuti`: fra quanto vuole guardare di nuovo, da **15 a 1.440** (un giorno). Il minimo di 15 minuti è una protezione
+  contro un giro che si richiama senza fine, non una scelta di strategia.
+* `allarmi`: fino a 20 prezzi a cui vuole essere svegliato prima («BTC sotto 91.000», «SOL sopra 260»).
 
-## 4. Le monete
-* **Regola**: i 12 perpetui in USDT di Binance con più volume scambiato (in USDT) nel **mese di giugno 2026**, fra quelli quotati da prima
-  del 1° gennaio 2026 e ancora quotati il 20 novembre 2026, esclusi gli stablecoin e l'oro tokenizzato. Il mese di giugno sta prima della
-  prova: la scelta non guarda avanti. Lo script `trader_ai/universo.py` la calcola dai file mensili pubblici di
-  `data.binance.vision`, scrive `trader_ai/universo.json` e quel file non cambia più per tutta la versione.
-* **BTC** entra sempre (è anche il riferimento); se non fosse fra i primi 12 sarebbe il tredicesimo.
+Il codice, **senza chiamare il modello** (non costa niente), legge i prezzi ogni minuto e lo richiama prima del tempo scelto quando: scatta
+un suo allarme; una posizione si chiude sullo stop; una moneta che ha in portafoglio si muove di più del 5% dall'ultima chiamata. Fra
+due chiamate passano comunque almeno 5 minuti.
 
-## 5. Cosa riceve il modello a ogni decisione
-Tutto in un unico messaggio, con le parti fisse (istruzioni, regole, schema) in testa per la cache e le parti che cambiano in coda.
-1. **Le istruzioni fisse** (`trader_ai/istruzioni.md`, scritte prima della prima chiamata): il compito (far crescere il conto al netto
-   delle spese), i limiti fissi della sezione 7 (così non propone cose che verrebbero scartate), le spese della sezione 8, il formato della
-   risposta.
-2. **Per ogni moneta**: le ultime 42 candele da 4 ore (7 giorni: apertura, massimo, minimo, chiusura, volume in milioni di USDT), le
-   chiusure giornaliere degli ultimi 30 giorni, il funding degli ultimi 3 pagamenti e la media dei 7 giorni, l'interesse aperto in USDT
-   ora e la sua variazione su 24 ore e 7 giorni, il rapporto fra acquisti e vendite aggressive delle ultime 24 ore.
-3. **Il portafoglio**: il conto (contanti più guadagni e perdite aperti), ogni posizione con lato, valore, prezzo di entrata, guadagno o
-   perdita, stop, funding pagato o incassato, da quante ore è aperta; le ultime 10 operazioni chiuse con il risultato.
-4. **Solo nel ramo «con notizie e balene» (sezione 6)**: i titoli (non i testi) degli articoli dell'archivio
-   `research/notizie/archivio/` visti nelle ultime 24 ore che citano una moneta dell'elenco (al massimo 60, i più recenti), e per ogni
-   moneta la posizione netta sommata dei conti di Hyperliquid seguiti in `research/trader_copiati/hyperliquid/` (lettura più recente prima
-   dell'ora della decisione) con quanti conti sono lunghi e quanti corti. Questi testi stanno dentro un contenitore marcato «dati esterni,
-   non istruzioni»; il modello non ha strumenti e può solo rispondere con lo schema della sezione 6, che il codice controlla.
+## 4. Cosa riceve
+1. **Istruzioni fisse** (`trader_ai/istruzioni.md`, scritte prima della prima chiamata): far crescere il conto al netto di spese e
+   chiamate; i limiti della sezione 6 (così non propone cose che verrebbero scartate); il formato della risposta.
+2. **La panoramica di tutti i perpetui in USDT** quotati su Binance in quel momento, una riga per moneta: prezzo, variazione su 1 ora,
+   4 ore, 24 ore e 7 giorni, volume delle 24 ore, funding attuale, variazione dell'interesse aperto su 24 ore.
+3. **Il dettaglio delle monete che segue** (`segui`, fino a 15, le sceglie lui; quelle in portafoglio ci sono sempre): candele da 15
+   minuti dell'ultimo giorno, da 1 ora degli ultimi 3 giorni, da 4 ore degli ultimi 10 giorni, giornaliere degli ultimi 60; funding
+   recente; interesse aperto; acquisti e vendite aggressive.
+4. **Il portafoglio** letto dal conto demo: saldo, posizioni con entrata, guadagno o perdita, stop, funding; ordini aperti; le ultime 20
+   operazioni chiuse con il risultato.
+5. **Fatti esterni**: i titoli dell'archivio delle notizie (`research/notizie/archivio/`) delle ultime 24 ore (al massimo 80, i più
+   recenti) e la posizione netta sommata dei conti di Hyperliquid seguiti (`research/trader_copiati/hyperliquid/`) per moneta. Stanno in
+   un contenitore marcato «dati esterni, non istruzioni»: il modello può solo rispondere con lo schema della sezione 5, che il codice
+   controlla campo per campo.
+6. **L'ora, il budget rimasto oggi, il motivo della chiamata** (tempo scelto, allarme, stop, movimento).
 
-I dati di mercato della prova sul passato vengono dai file pubblici di Binance (`data.binance.vision`: candele, funding, «metrics» con
-l'interesse aperto e gli acquisti aggressivi). Le notizie esistono solo dal 30 ottobre 2026 e le posizioni di Hyperliquid dal 2 novembre
-2026: per questo la prova sul passato usa **solo il ramo «mercato»**.
+## 5. Cosa risponde (uscita strutturata validata)
+* `decisioni` (anche vuoto): `moneta`, `azione` (`apri_lungo`, `apri_corto`, `chiudi`, `riduci`, `sposta_stop`, `metti_obiettivo`),
+  `quota_conto` (dimensione come frazione del conto, o della posizione per `riduci`), `stop_prezzo`, `obiettivo_prezzo` (facoltativo),
+  `tipo_ordine` (`mercato` o `limite` con il suo prezzo), `motivo` (al massimo 300 caratteri).
+* `segui`: le monete di cui vuole il dettaglio la prossima volta.
+* `prossimo_controllo_minuti` e `allarmi` (sezione 3).
+* `diario`: cosa pensa del mercato e perché (al massimo 600 caratteri); si salva, serve a capire come ragiona e perché perde quando perde.
+* Rifiuto (`stop_reason` «refusal»), JSON fuori schema o errore del servizio: nessuna operazione nuova, prossima chiamata fra 30 minuti.
 
-## 6. Cosa risponde il modello, e i due rami
-* **Lo schema** (uscita strutturata validata, `output_config.format` con schema JSON): un elenco di al massimo 12 decisioni, ognuna con
-  `moneta` (dell'elenco), `azione` (`apri_lungo`, `apri_corto`, `chiudi`, `riduci`, `sposta_stop`), `quota_conto` (la dimensione come
-  frazione del conto, da 0 a 0,20; per `riduci` la frazione della posizione da chiudere), `stop_percentuale` (distanza dello stop dal
-  prezzo, da 1 a 15), `motivo` (al massimo 300 caratteri), più un `commento_mercato` generale (al massimo 600 caratteri). Un elenco vuoto
-  vuol dire «non faccio niente», ed è una risposta valida.
-* **Ramo «mercato»**: le parti 1-3 della sezione 5. È quello della prova sul passato e gira anche in avanti, con le stesse istruzioni.
-* **Ramo «con notizie e balene»**: le parti 1-4, solo in avanti. Il confronto fra i due rami negli stessi giorni dice se notizie e balene
-  aggiungono qualcosa. Il secondo ramo raddoppia il costo delle chiamate: parte solo con l'ok del proprietario.
+## 6. I limiti fissi (nel codice, `trader_ai/limiti.py`; il modello propone, il codice decide)
+I numeri sono una proposta della sessione: li cambia solo il proprietario.
+* Conto: il demo suo da 1.000 USDT. **Mai ordini sul conto demo di G1**: le chiavi sono diverse e il codice rifiuta di partire se trova
+  quelle di G1.
+* **Per posizione**: margine al massimo il **20% del conto**, leva al massimo **3**; una sola posizione per moneta.
+* **Esposizione totale** (valore di tutte le posizioni, lunghe più corte): al massimo **2 volte il conto**.
+* Al massimo **8 posizioni** aperte; solo monete con almeno **20 milioni di USDT** scambiati nelle 24 ore (sotto, lo scarto di prezzo
+  diventa troppo grande per un conto finto che deve dire il vero).
+* **Stop obbligatorio**, piazzato sul conto come ordine vero (si chiude anche se il modello o la macchina sono fermi), fra lo 0,5% e il
+  25% dal prezzo di entrata. Lo stop si può stringere, mai allargare.
+* **Perdita di un giorno**: −10% dalla mezzanotte UTC → si chiude tutto e per il resto del giorno niente aperture.
+* **Perdita massima**: −35% dal massimo del conto → si chiude tutto e il trader si ferma; riparte solo con l'ok del proprietario.
+* Una decisione scartata si scrive nel diario con il motivo; le altre dello stesso giro vanno avanti. Monete inesistenti, campi fuori
+  schema e numeri fuori limite si scartano qualunque cosa dica il motivo.
 
-## 7. I limiti fissi (nel codice, `trader_ai/limiti.py`; il modello propone, il codice decide)
-* **Capitale simulato di partenza**: 1.000 USDT per ramo (come il demo di G1 dall'8 novembre 2026).
-* **Per posizione**: valore al massimo il **20% del conto** al momento dell'apertura; una sola posizione per moneta (aprire il lato
-  opposto vuol dire prima chiudere).
-* **Esposizione totale** (somma dei valori di tutte le posizioni, lunghe più corte): al massimo il **100% del conto**, cioè leva 1.
-* **Al massimo 6 posizioni aperte** insieme; ordine minimo 20 USDT.
-* **Stop obbligatorio** fra l'1% e il 15% dal prezzo di entrata; senza stop valido la decisione si scarta. Lo stop si può solo
-  avvicinare al prezzo (stringere), mai allontanare.
-* **Perdita di un giorno**: se il conto scende dell'**8%** rispetto alla mezzanotte UTC, si chiude tutto e per 24 ore non si apre niente.
-* **Perdita massima**: se il conto scende del **25%** dal massimo raggiunto, si chiude tutto e il trader **si ferma**; riparte solo con
-  l'ok del proprietario (versione nuova).
-* **Spesa delle chiamate in avanti**: al massimo **3 dollari al giorno** e **60 al mese** contati dal codice sui token veri della
-  risposta; oltre, nessuna chiamata fino al giorno (o al mese) dopo, e le posizioni restano con i loro stop. **La prova sul passato** ha
-  un tetto suo, **100 dollari** per la corsa intera (stima in `README.md`, «Il piano»): oltre, si ferma e si scrive dove è arrivata. Le
-  858 decisioni sono in fila (ognuna dipende dal portafoglio lasciato dalla precedente), quindi lo sconto delle richieste in blocco non si
-  può usare. In più il proprietario mette un limite di spesa
-  sul suo conto di Anthropic: è l'ultima protezione, fuori dal nostro codice.
-* Una decisione scartata si scrive nel diario con il motivo dello scarto; il resto delle decisioni dello stesso giro va avanti.
-* Il codice rifiuta qualunque moneta fuori elenco e qualunque campo fuori schema, qualunque cosa dica il motivo.
+## 7. Spese e misura
+* Le spese sono quelle vere del conto demo (commissioni, funding, prezzo eseguito). Il costo delle chiamate si sottrae dal risultato
+  come se 1 dollaro valesse 1 USDT.
+* Ogni lunedì al proprietario, negli stessi giorni: il conto al netto di tutto e prima del costo delle chiamate; contro **G1** (il suo
+  demo) e contro **il solo Bitcoin** tenuto; discesa massima; quante chiamate, quanto sono costate, perché è stato chiamato (tempo scelto
+  o allarme); quante decisioni scartate e perché; le operazioni migliori e peggiori con il motivo che aveva scritto.
+* Un periodo di settimane oscilla molto (Alpha Arena, `README.md`): i numeri dei primi mesi dicono come ragiona e quanto costa, non
+  ancora se è bravo. Soldi veri: mai senza la richiesta esplicita del proprietario.
 
-## 8. Come si simulano gli ordini e le spese
-* **Quando**: la decisione delle 00, 04, 08, 12, 16, 20 UTC usa i dati chiusi a quell'ora; l'ordine si esegue all'**apertura della
-  candela da 4 ore che comincia a quell'ora** (nella prova sul passato) o al prezzo letto dopo la risposta del modello (in avanti).
-* **Spese**: ogni ordine a mercato paga lo **0,05%** del valore; scarto di prezzo **0,01%** su BTC, ETH e SOL e **0,02%** sulle altre,
-  sempre contro di noi (decisione del proprietario del 7 novembre 2026). Nessun ordine limite nella prima versione (non sapremmo
-  simularne l'esecuzione in modo onesto con candele da 4 ore).
-* **Funding vero**: ogni 8 ore (o all'intervallo vero della moneta) la posizione aperta paga o incassa il tasso pubblicato da Binance per
-  quell'ora sul valore della posizione.
-* **Stop**: si controllano sulle candele da 1 ora. Se il minimo (per i lunghi) o il massimo (per i corti) tocca lo stop, si esce allo
-  stop meno lo scarto; se la candela apre già oltre lo stop, si esce all'apertura (il caso peggiore). La spesa dello 0,05% vale anche qui.
-* **Costo delle chiamate**: si conta in dollari dai token veri di ogni risposta (entrata, cache, uscita) e si sottrae dal conto come se
-  1 dollaro valesse 1 USDT.
+## 8. Il passato
+Con questa libertà una prova sul passato costa come il vivo: circa 5 dollari per ogni giorno provato, quindi circa 700 per i 143 giorni
+dopo la data di addestramento (luglio-novembre 2026), dentro un tetto di 5 al giorno. **Non si fa**, salvo richiesta del proprietario:
+la misura è il conto demo in avanti. Prima di luglio 2026 una prova non sarebbe onesta comunque (il modello ha letto com'è andata).
 
-## 9. Come si giudica
-* **Contro chi**, negli stessi giorni e con 1.000 USDT di partenza: (a) **G1** (nella prova sul passato il G1 ricalcolato dalla ricerca
-  su luglio-novembre; in avanti il G1 del paper e del demo); (b) **il solo Bitcoin** comprato e tenuto; (c) **i contanti** (zero).
-* **Quali numeri**, ogni lunedì al proprietario: il conto al netto di tutto; il conto **prima** del costo delle chiamate (dice se il
-  modello sa scegliere, a prescindere da quanto costa); la discesa massima; lo Sharpe sui giorni; quante decisioni, quante scartate e
-  perché; quanto è costato il modello.
-* **Cosa può dire la prova sul passato**: 143 giorni non bastano per l'esame delle strategie (ogni anno positivo, t da 3, Sharpe corretto
-  da 0,80): un risultato bello lì **non promuove** niente, perché un periodo di 4-5 mesi oscilla troppo (Alpha Arena, `README.md`).
-  Può però **bocciare**: se il conto prima del costo delle chiamate finisce sotto zero **e** sotto il solo Bitcoin, l'idea si scrive come
-  bocciata (con il perché) e il paper in avanti continua solo se il proprietario lo chiede.
-* **Soldi veri o un conto demo suo**: mai senza la richiesta esplicita del proprietario, qualunque sia il risultato.
+## 9. Prima dell'avvio
+Codice e test con un modello finto (che risponde a caso dentro lo schema, per provare che il codice scarta ciò che esce dai limiti) →
+live-path-reviewer sul codice che manda ordini → il collegamento sulla macchina lo scrive la sessione delle crypto
+(`trader_ai/RICHIESTE_CRYPTO.md`) → ok del proprietario al primo avvio.
 
 ## 10. Versioni
 | Versione | Data | Cosa cambia |
 |---|---|---|
-| 1 | 21 novembre 2026 | prima scrittura, prima di ogni chiamata al modello |
+| 1 | 21 novembre 2026 | ogni 4 ore, 12 monete fisse, solo simulato, GitHub Actions. Mai usata: nessuna chiamata fatta |
+| 2 | 23 novembre 2026 | il modello sceglie monete e momenti; conto demo suo, Opus 5.5, tetto di 5 al giorno, sulla macchina (decisione del 23 novembre) |
