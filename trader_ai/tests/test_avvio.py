@@ -545,3 +545,23 @@ def test_il_fermo_non_entra_mai_in_git():
     r = subprocess.run(["git", "check-ignore", "trader_ai/avanti/fermo", "trader_ai/avanti/stato.tmp"], cwd=radice,
                        capture_output=True, text=True)
     assert r.stdout.split() == ["trader_ai/avanti/fermo", "trader_ai/avanti/stato.tmp"]
+
+
+# --- quinta revisione: 140 -----------------------------------------------------------------------------------------------
+
+def test_annullamento_del_limite_non_riuscito_l_operazione_resta_in_attesa(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **LIMITE), risposta("chiudi")])
+    tr.passo()
+    c.annulla_tutto = lambda: None                              # Binance non annulla e annulla_tutto non lo dice
+    o.t = T0 + timedelta(minutes=15)
+    tr.passo()
+    st = tr.carica()
+    assert st["aperta"] is not None and st["aperta"]["in_attesa"] and "non si è annullato" in st["ultimo_scarto"]
+
+
+def test_la_prova_sul_demo_con_il_conto_finto_lascia_il_conto_pulito():
+    from trader_ai.prova import prova
+    c = ContoFinto()
+    esiti = prova(c)
+    assert [e["punto"] for e in esiti] == [1, 2, 3, 4, 5, 6] and all(e["ok"] for e in esiti)
+    assert c.pos is None and not c.algo and not c.normali

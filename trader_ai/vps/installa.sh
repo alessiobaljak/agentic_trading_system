@@ -8,6 +8,7 @@
 #
 # Da lanciare da root, dentro la cartella del repository che c'è già sulla macchina (/root/agentic_trading_system):
 #     bash trader_ai/vps/installa.sh            installa o aggiorna il codice (chiede le chiavi la prima volta); NON avvia
+#     bash trader_ai/vps/installa.sh prova      la prova sul demo con la quantità minima (prima del primo avvio, trader spento)
 #     bash trader_ai/vps/installa.sh avvia      avvia il trader (solo dopo l'ok del proprietario)
 #     bash trader_ai/vps/installa.sh ferma      lo ferma (le posizioni aperte restano con stop e obiettivo sul conto)
 #     bash trader_ai/vps/installa.sh chiudi     chiude posizione e ordini del trader e lo tiene fermo finché non arriva «riparti»
@@ -70,6 +71,10 @@ case "${1:-installa}" in
     journalctl -u trader-ai.service -n 30 --no-pager || true; exit 0 ;;
   chiavi)
     chiedi_chiavi; exit 0 ;;
+  prova)
+    systemctl is-active --quiet trader-ai.service && { echo "[trader-ai] il trader è acceso: prima «ferma»"; exit 1; }
+    ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.prova )
+    exit $? ;;
   chiudi|riparti)
     ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.avvio "$1" )
     exit $? ;;

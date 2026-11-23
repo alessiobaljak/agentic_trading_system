@@ -352,8 +352,7 @@ class Trader:
             st["aperta"].pop("inviata", None)
             if self.fermo_a_mano():                    # «chiudi» è arrivato mentre l'ordine partiva: si richiude subito
                 if limite:
-                    self.c.annulla_tutto()
-                    st["aperta"] = None
+                    self._annulla_limite(st, prezzo, ora, "ordine limite annullato: fermo a mano")
                 else:
                     st["aperta"]["entrata"] = float(esito.get("avgPrice") or 0) or prezzo
                     self._chiudi_ora(st, {"lato": lato, "quantita": float(esito.get("executedQty") or q)}, prezzo, ora,
@@ -410,6 +409,11 @@ class Trader:
         self.c.annulla_tutto()
         rimasta = next(({k: v for k, v in p.items() if k != "simbolo"} for p in self.c.posizioni_simbolo()), None)
         if rimasta is None:
+            # l'annullamento può non riuscire senza errore (annulla_tutto scrive e va avanti): se l'ordine limite del trader è
+            # ancora sul libro, l'operazione resta «in attesa» e si riprova (revisione del 23 novembre 2026, problemi 136 e 140)
+            if any(nostro(o) and not o["_algo"] for o in self.c.ordini_simbolo()):
+                self.evento(ora, "ordine limite ancora aperto dopo l'annullamento: resta in attesa")
+                raise RuntimeError("l'ordine limite non si è annullato: riprovo alla chiamata dopo")
             st["aperta"] = None
             self.evento(ora, perche)
             return
