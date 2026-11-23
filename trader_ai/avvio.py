@@ -316,9 +316,14 @@ class Trader:
     def _esegui(self, st: dict, r, pos: Optional[dict], s: dict, ora: datetime) -> None:
         if self.fermo_a_mano():
             raise RuntimeError("il proprietario ha fermato il trader")
-        motivo = self.estraneo(st, self.c.posizioni_tutte(), self.c.ordini_tutti(), modo=False)
+        posizioni = self.c.posizioni_tutte()
+        motivo = self.estraneo(st, posizioni, self.c.ordini_tutti(), modo=False)
         if motivo:
             raise RuntimeError(f"il conto non è solo del trader: {motivo}")
+        # la posizione si rilegge adesso: un ordine limite può essersi eseguito mentre il modello pensava (problema 133)
+        pos = next(({k: v for k, v in p.items() if k != "simbolo"} for p in posizioni if p["simbolo"] == self.c.simbolo), None)
+        if pos is not None and (st.get("aperta") or {}).get("in_attesa"):
+            st["aperta"].update(in_attesa=False, entrata=pos["entrata"])
         f = self.c.filtri()
         tick = f["passo_prezzo"]
         prezzo = self.c.mercato()["prezzo"]                       # il prezzo è cambiato mentre il modello pensava
@@ -378,9 +383,7 @@ class Trader:
         elif r.azione == "chiudi":
             a = st.get("aperta") or {}
             if pos is None:                            # solo un ordine limite in attesa: si annulla
-                self.c.annulla_tutto()
-                st["aperta"] = None
-                self.evento(ora, "ordine limite annullato")
+                self._annulla_limite(st, prezzo, ora, "ordine limite annullato dal modello")
             else:
                 a["chiusa_da"] = "chiusa dal modello"
                 self.c.chiudi(pos, self._cid(ora, "x"))
@@ -400,6 +403,22 @@ class Trader:
                     return
                 a[campo] = valore
             self.evento(ora, "modificata", stop=a.get("stop"), obiettivo=a.get("obiettivo"))
+
+    def _annulla_limite(self, st: dict, prezzo: float, ora: datetime, perche: str) -> None:
+        """Annulla l'ordine limite (e stop e obiettivo); poi rilegge: se nel frattempo si è eseguito, la posizione si chiude subito
+        a mercato con «solo riduzione», perché senza stop non deve restare (revisione del 23 novembre 2026, problemi 133 e 134)."""
+        self.c.annulla_tutto()
+        rimasta = next(({k: v for k, v in p.items() if k != "simbolo"} for p in self.c.posizioni_simbolo()), None)
+        if rimasta is None:
+            st["aperta"] = None
+            self.evento(ora, perche)
+            return
+        a = st.get("aperta") or {"aperta": ora.isoformat(), "lato": rimasta["lato"], "leva": rimasta["leva"],
+                                 "conto_prima": st.get("conto_mezzanotte", 0.0)}
+        a.update(in_attesa=False, entrata=rimasta["entrata"])
+        st["aperta"] = a
+        self.evento(ora, "il limite si era eseguito mentre lo annullavo: chiudo a mercato")
+        self._chiudi_ora(st, rimasta, prezzo, ora, "chiusa: limite eseguito durante l'annullamento")
 
     def _sostituisci(self, st, a, pos, prezzo, ora, campo, tipo, sigla, valore, vecchi, tick) -> None:
         """Mette il nuovo stop (o obiettivo) senza lasciare mai la posizione scoperta: prima il nuovo accanto al vecchio; se Binance
@@ -438,8 +457,7 @@ class Trader:
             raise RuntimeError(f"{campo} nuovo rifiutato, rimesso il vecchio: {errore}")
         if campo == "stop" and pos.get("in_attesa"):
             self.evento(ora, "nessuno stop accettato: annullo l'ordine limite", errore=errore)
-            self.c.annulla_tutto()
-            st["aperta"] = None
+            self._annulla_limite(st, prezzo, ora, "ordine limite annullato: nessuno stop accettato")
             return
         if campo == "stop":
             self.evento(ora, "nessuno stop accettato: chiudo a mercato", errore=errore)

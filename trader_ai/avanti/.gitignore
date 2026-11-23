@@ -1,0 +1,4 @@
+# il fermo a mano e i file temporanei non vanno mai in git: un rebase o un abort non deve toccarli (revisione del 23 novembre 2026,
+# problema 135)
+fermo
+*.tmp

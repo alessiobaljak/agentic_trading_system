@@ -495,3 +495,53 @@ def test_salvataggio_con_git_vero_niente_scorte_e_dati_spinti(tmp_path):
     assert g("stash", "list", cwd=dati) == ""
     assert "trader_ai/avanti/stato.json" in g("ls-tree", "-r", "--name-only", ramo, cwd=str(origine))
     assert (av / "stato.json").read_text() == '{"aperta": {"lato": "lungo"}}'
+
+
+# --- quarta revisione: 133, 134, 135 --------------------------------------------------------------------------------
+
+LIMITE = dict(tipo_ordine="limite", prezzo_limite=89500, **APRI)
+
+
+def _eseguito(c):
+    c.normali = []
+    c.pos = {"lato": "lungo", "quantita": 0.005, "entrata": 89500.0, "leva": 5, "liquidazione": None}
+
+
+def test_chiudi_un_limite_eseguito_mentre_il_modello_pensa_chiude_la_posizione(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **LIMITE)])
+    tr.passo()
+
+    def modello(system, utente):
+        _eseguito(c)                                            # si esegue mentre il modello pensa
+        return Esito(risposta("chiudi"), "ok", {"input_tokens": 10})
+    tr.chiama = modello
+    o.t = T0 + timedelta(minutes=15)
+    tr.passo()
+    assert c.pos is None and c.chiusure == 1 and tr.carica()["aperta"] is None
+
+
+def test_annullo_del_limite_che_si_esegue_nel_frattempo_chiude(tmp_path):
+    tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **LIMITE)])
+    tr.passo()
+    vero_annulla = c.annulla_tutto
+
+    def annulla_ma_eseguito(*a):
+        if not getattr(c, "_gia", False):                       # l'esecuzione arriva un attimo prima del primo annullamento
+            c._gia = True
+            _eseguito(c)
+        vero_annulla()
+    c.annulla_tutto = annulla_ma_eseguito
+    c.rifiuta_stop = True                                       # nessuno stop accettato nella modifica (problema 134)
+    tr.chiama = lambda s, u: Esito(risposta("modifica", stop_prezzo=88500), "ok", {"input_tokens": 10})
+    o.t = T0 + timedelta(minutes=15)
+    tr.passo()
+    assert c.pos is None and c.chiusure == 1
+
+
+def test_il_fermo_non_entra_mai_in_git():
+    import subprocess
+    from pathlib import Path
+    radice = Path(__file__).resolve().parents[2]
+    r = subprocess.run(["git", "check-ignore", "trader_ai/avanti/fermo", "trader_ai/avanti/stato.tmp"], cwd=radice,
+                       capture_output=True, text=True)
+    assert r.stdout.split() == ["trader_ai/avanti/fermo", "trader_ai/avanti/stato.tmp"]
