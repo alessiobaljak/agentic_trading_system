@@ -182,18 +182,19 @@ def elenco(mese: str | None = None) -> list[str]:
 
 
 def _posizioni_candela() -> list[dict]:
-    """Le posizioni della prima candela: tutte tranne i titoli della miscela, che sta nello stesso conto (stock/avanti/conto.py)."""
+    """Le posizioni della prima candela: tutte tranne i titoli della miscela e della prova 45, che stanno nello stesso conto
+    (stock/avanti/conto.py)."""
     from stock.avanti import conto
     return conto.separa(_richiesta("GET", "/v2/positions"))[0]
 
 
 def _ordini_aperti_candela() -> list[dict]:
     from stock.avanti import conto
-    return [o for o in _richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if not conto.della_miscela(o["symbol"])]
+    return [o for o in _richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500}) if conto.della_candela(o["symbol"])]
 
 
 def _cancella_ordini_candela() -> None:
-    """Cancella gli ordini aperti della prima candela (non quelli della miscela) e aspetta che siano spariti."""
+    """Cancella gli ordini aperti della prima candela (non quelli della miscela né della prova 45) e aspetta che siano spariti."""
     for o in _ordini_aperti_candela():
         try:
             _richiesta("DELETE", f"/v2/orders/{o['id']}")

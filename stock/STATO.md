@@ -31,11 +31,8 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 
 ## Cosa aspetta il proprietario
 
-0. **(22 novembre) La prova 45 sul demo, come misura in avanti?** L'esame sul periodo chiuso (prova 45b) dice «non si può
-   dire»: 18 operazioni, sotto il minimo di 20, ma tutte e quattro le condizioni vere (+14,44 punti base a operazione contro −1,61
-   negli altri giorni). Solo il demo può dire di più; serve l'ok del proprietario e un controllo giornaliero che il dato di
-   SqueezeMetrics esca prima delle 15:30.
-   **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti).
+0. **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti). (La prova 45 sul demo: decisa dal proprietario il
+   23 novembre, vedi sotto.)
 1. **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
    farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
    conto di paper trading: lì c'è il **nome utente del demo**, diverso da quello del conto vero, e conviene dargli una password sua
@@ -357,6 +354,15 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **Sul demo dal 24 novembre 2026: la prova 45** (decisione del proprietario del 23 novembre: «metti la prova 45 sul demo»),
+  regole scritte prima in `stock/avanti/GAMMA.md`, programma `stock/avanti/gamma.py`, lavoro di GitHub
+  `.github/workflows/azioni_gamma.yml`, acceso da `stock/avanti/gamma_accesa`. Nei giorni con la copertura delle opzioni del giorno
+  prima sotto zero, alle 15:30 si compra o si vende **VOO** nella direzione della giornata dello SPY e si esce all'asta di chiusura.
+  VOO e non lo SPY perché lo SPY è della miscela nello stesso conto; capitale virtuale suo di 100'000 dollari; il conto ora si
+  divide in tre (`conto.py`: la prima candela non chiude né cancella più VOO, il guadagno di VOO non va alla miscela). Controllo in
+  sola lettura del 23 novembre su GitHub: VOO vendibile allo scoperto e facile da prendere in prestito, conto attivo (moltiplicatore
+  4), il dato di SqueezeMetrics si scarica. **Da sapere:** nel 2025-2026 la copertura è stata sotto zero solo nel 4% dei giorni; un
+  giudizio può richiedere anni. Da fare: l'installazione sul server (`stock/avanti/vps/`) non ha ancora il timer della prova 45.
 * **Sul demo dal 12 novembre 2026:** la **miscela** nello stesso conto della prima candela (capitale virtuale di 100'000 dollari
   ciascuna, titoli separati: `stock/avanti/conto.py`, `MISCELA.md`), accesa da `stock/avanti/miscela_accesa`. Ogni avvio lancia il
   comando `auto`, che decide dall'orologio (chi avvia non deve essere puntuale). Pronta l'installazione sulla VPS
