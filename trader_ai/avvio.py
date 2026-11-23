@@ -549,6 +549,8 @@ def main(argv: list) -> int:
         print(f"[trader_ai] modalità a due posizioni: {conto.modo_doppio()}; posizioni aperte: {len(pos)}; ordini aperti: "
               f"{len(ordini)} (condizionati {sum(o['_algo'] for o in ordini)}); filtri {conto.filtri()}")
         motivo = Trader(conto, lambda *_: None).estraneo(None, pos, ordini)
+        if motivo is None and (pos or ordini):          # pulito vuol dire vuoto, anche di ordini del trader
+            motivo = f"{len(pos)} posizioni e {len(ordini)} ordini aperti"
         print(f"[trader_ai] conto pulito per il primo avvio: {'sì' if motivo is None else 'NO: ' + motivo}")
         return 0
     trader = Trader(conto, lambda *_: None)
@@ -562,6 +564,7 @@ def main(argv: list) -> int:
     client = crea_client()
     trader.chiama = lambda system, utente: chiama(client, system, utente)
     print(f"[trader_ai] acceso su {cfg['moneta']}, codice al commit {_commit()}, dati in {CARTELLA}", flush=True)
+    trader.evento(datetime.now(timezone.utc), "acceso", commit=_commit(), moneta=cfg["moneta"])
     while True:
         try:
             with bloccato():

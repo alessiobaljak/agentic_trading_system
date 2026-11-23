@@ -24,7 +24,7 @@ class ContoFinto:
         self.conto, self.disp, self.prezzo, self.pos = 1000.0, 1000.0, 90000.0, None
         self.algo, self.normali, self.altri = [], [], []        # ordini condizionati, normali, posizioni d'altri simboli
         self.doppio, self.rifiuta_stop, self.prezzo_all_ordine = False, False, None
-        self.ordini, self.chiusure = [], 0
+        self.ordini, self.chiusure, self.pausa_fino = [], 0, 0.0
 
     def saldo(self):
         return {"conto": self.conto, "disponibile": self.disp, "portafoglio": self.conto}
@@ -563,5 +563,30 @@ def test_la_prova_sul_demo_con_il_conto_finto_lascia_il_conto_pulito():
     from trader_ai.prova import prova
     c = ContoFinto()
     esiti = prova(c)
-    assert [e["punto"] for e in esiti] == [1, 2, 3, 4, 5, 6] and all(e["ok"] for e in esiti)
+    assert [e["punto"] for e in esiti] == [1, 2, 3, 4, 5, 6, 7] and all(e["ok"] for e in esiti)
     assert c.pos is None and not c.algo and not c.normali
+
+
+def test_la_prova_non_parte_su_un_conto_con_ordini_anche_nostri():
+    from trader_ai.prova import prova
+    c = ContoFinto()
+    c.normali.append({"symbol": "BTCUSDT", "clientOrderId": "taio1"})
+    esiti = prova(c)
+    assert len(esiti) == 1 and not esiti[0]["ok"] and not c.ordini
+
+
+def test_la_prova_interrotta_pulisce_lo_stesso_e_lo_dice():
+    from trader_ai.prova import prova
+    c = ContoFinto()
+    vero = c.condizionato
+    stato = {"n": 0}
+
+    def condizionato(*a):
+        stato["n"] += 1
+        if stato["n"] == 2:
+            raise LimiteBinance("429 pausa")                    # Binance chiede una pausa a metà prova
+        return vero(*a)
+    c.condizionato = condizionato
+    esiti = prova(c)
+    assert esiti[-1]["punto"] == 7 and esiti[-1]["ok"] and c.pos is None and not c.algo
+    assert any(e["punto"] == 0 for e in esiti)
