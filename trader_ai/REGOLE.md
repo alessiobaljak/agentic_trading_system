@@ -75,6 +75,10 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
   come se 1 dollaro valesse 1 USDT.
 * Ogni lunedì al proprietario: quanti giorni ha raggiunto i 50, quanto ha guadagnato o perso al netto di tutto, quante operazioni e con
   che risultato, quante volte ha cambiato approccio e con che effetto, quanto sono costate le chiamate, la discesa massima del conto.
+  **In più, la prova di una previsione della sessione** (23 novembre, il proprietario: «chi ha detto che il modello deve alzare il
+  rischio per recuperare?»): la leva e il margine medi delle aperture fatte quando il guadagno del giorno era sotto zero, contro quelle
+  fatte quando era sopra. Le istruzioni gli dicono di non alzarli per recuperare; se salgono lo stesso, la previsione era giusta e si
+  corregge; se non salgono, era sbagliata.
   Confronto con il solo BTC tenuto negli stessi giorni. Non si confronta con le strategie dell'altra sessione dentro il trader (il
   modello non le vede mai); il confronto, se il proprietario lo vuole, lo fa la sessione nei resoconti.
 * Soldi veri: mai senza la richiesta esplicita del proprietario.
