@@ -177,3 +177,18 @@ dimmi se è veramente così» e, dopo l'analisi (`research/programma6/ANALISI_SH
   dispersione delle prove di oggi): sopra 0,80. Il numero non si ricalcola più a ogni prova nuova.
 * Le prove nuove si giudicano con N di oggi, come prima: per loro lo sconto pieno è giusto, perché vengono scelte fra tutte.
 * Una variante di una strategia in corso (per esempio G11, G1 neutra, le miscele) è una prova nuova: N di quando viene provata.
+
+
+## 23 novembre 2026: il trading AI parte su un conto demo suo, con Opus e 5 euro al giorno
+Le parole del proprietario: «crea un altro conto demo binance con 1000 demo, non collegato a G1 e fai girare il nuovo trading AI con
+Opus 5, limite di spesa 5 euro al giorno, per la sessione riaprila». Cosa cambia rispetto al 21 novembre:
+* Il trading AI (`trader_ai/`, sessione «trading AI», riaperta il 23 novembre) non resta solo simulato: gira su **un conto demo di
+  Binance suo, separato da quello di G1**, con **1.000 USDT** finti. Mai ordini sul conto demo di G1. `DRY_RUN` resta vero, niente soldi veri.
+* Il modello è **Claude Opus 5.5** (`claude-opus-5-5`).
+* **Tetto di spesa: 5 euro al giorno** per le chiamate al modello, controllato **nel codice** (si conta il costo di ogni chiamata dai
+  token dichiarati dalla risposta; raggiunto il tetto, nessuna chiamata fino al giorno dopo e nessuna operazione nuova); in più il tetto
+  mensile sulla chiave nella console di Anthropic, che mette il proprietario.
+* Il conto demo nuovo e le sue chiavi li crea il proprietario (la sessione non può registrarsi a servizi esterni); le chiavi vanno solo
+  nel file delle impostazioni della macchina, mai in chat né nel repository.
+* Gira sulla macchina (raggiunge Binance; da GitHub e dalle sessioni cloud Binance risponde 451) con la chiave del modello già presente
+  («trading-bot-vps», caricata il 19 settembre). Il codice che manda ordini passa da live-path-reviewer e l'avvio lo approva il proprietario.

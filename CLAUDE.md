@@ -63,6 +63,8 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
 * **23 novembre**: «Sì scrivilo»: il «Sharpe corretto» è una **probabilità che non sia fortuna** (soglia 0,80); ogni strategia si
   giudica con lo sconto per le prove **una volta sola, quando viene scelta** (G1: prova 57, 0,945), poi solo in avanti; le prove nuove con
   il conto di oggi (`research/programma6/ANALISI_SHARPE_CORRETTO.md`).
+* **23 novembre**: il trading AI (`trader_ai/`) gira su **un conto demo di Binance suo** (1.000 USDT, separato da G1) con
+  **Opus 5.5** e un **tetto di 5 euro al giorno** controllato nel codice; conto e chiavi li crea il proprietario; sessione «trading AI» riaperta.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
