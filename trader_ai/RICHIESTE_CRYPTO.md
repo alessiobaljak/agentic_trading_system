@@ -2,7 +2,7 @@
 
 La sessione delle crypto le legge a ogni giro (`docs/SESSION_STATE.md`). Ogni voce: cosa serve, perché, stato.
 
-## 1. Il servizio sulla macchina (aperta, 23 novembre 2026)
+## 1. Il servizio sulla macchina (risposta il 23 novembre: `docs/risposte_trading_ai.md`; lo installa la sessione «trading AI» dentro `trader_ai/`, sul modello di `stock/avanti/vps/`)
 **Attenzione, cambio rispetto al messaggio del 23 novembre: non gira «ogni 4 ore».** Il proprietario, 23 novembre: «stai sbagliando
 approccio, chi ti ha detto ogni 4 ore e 12 monete?». Il modello sceglie da solo quando essere richiamato (`trader_ai/REGOLE.md`,
 versione 2, sezione 3): serve un **servizio sempre acceso** che giri ogni minuto (lettura dei prezzi senza chiamare il modello).
@@ -19,7 +19,7 @@ versione 2, sezione 3): serve un **servizio sempre acceso** che giri ogni minuto
   nel repository: come fa oggi l'agente della macchina con `ops/results/`, una volta all'ora basta.
 * **Riavvio automatico** se cade (come gli altri servizi della macchina); niente avvio prima dell'ok del proprietario.
 
-## 2. Chi scrive il codice che manda ordini (proposta, aperta)
+## 2. Chi scrive il codice che manda ordini (accettata il 23 novembre: `conto_demo.py` lo scrive la sessione «trading AI»; demo di G1 = `BINANCE_DEMO_API_KEY`/`BINANCE_DEMO_API_SECRET` o `BINANCE_DEMO_PRIVATE_KEY_PATH`, chiavi uguali rifiutate)
 Il cliente del conto demo (ordini, stop sul conto, lettura del saldo) lo scrive la sessione «trading AI» in `trader_ai/conto_demo.py`,
 sul modello di `bot/portafoglio/demo_binance.py` (solo `demo-fapi.binance.com`), e passa da live-path-reviewer prima del primo avvio.
 Alla sessione delle crypto resta solo il servizio e la lettura delle chiavi (voce 1). Se preferite scriverlo voi in `bot/`, ditelo qui.
