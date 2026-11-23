@@ -50,3 +50,20 @@ def test_esame_da_crisi_mese_migliore_e_condizioni():
     assert v == "passa l'esame da crisi" and all(c)
     v, c = p045b.esito(tante, np.array([0.0] * 25), 0.01, -0.001, 0.002, 0.1, 1.1, 1.0)
     assert v == "bocciata nel periodo chiuso" and c == [True, False, True, True]
+
+
+def test_prova_47_giorni_esclusi_per_la_copertura():
+    from stock.prove import p047
+    giorni = [date(2020, 3, d) for d in (2, 3, 4, 5)]
+    gex = {giorni[0]: -1.0, giorni[1]: 2.0, giorni[2]: 0.0}                     # il 5 senza dato
+    assert p047.esclusi_per_copertura(giorni, gex, True) == {giorni[1], giorni[2], giorni[3]}
+    assert p047.esclusi_per_copertura(giorni, gex, False) == {giorni[0], giorni[3]}
+    s = pd.Series([0.1, 0.2], index=[date(2020, 3, 2), date(2020, 4, 1)])
+    assert list(p047.senza_marzo_2020(s).index) == [date(2020, 4, 1)]
+
+
+def test_prova_47_giorni_d_ingresso_dall_ora():
+    from stock.prove import p047
+    e = pd.DataFrame({"t": pd.to_datetime(["2020-03-02 14:45", "2020-03-02 20:59", "2020-03-03 14:45"], utc=True),
+                      "etichetta": ["ingresso", "chiusura", "ingresso"]})
+    assert p047.giorni_d_ingresso(e) == [date(2020, 3, 2), date(2020, 3, 3)]
