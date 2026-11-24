@@ -232,6 +232,19 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
   costante importata (78).
 - Problemi aperti: 54 (ii) Alto; 70 Medio; 78 Basso. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-77; 56, 58, 69 come scelto.
 
+## 15. Il trader AI sul suo conto demo (area `trader_ai/`, 23 novembre 2026)
+Fuori dal bot: servizio suo sulla macchina (`trader_ai/vps/installa.sh`), copia sua del repository, chiavi in un file suo. Rapporti:
+`trader_ai/revisioni/2026-11-23-*.md` (sette revisioni; la settima: APPROVE con condizioni). Invarianti (righe dalla prima revisione,
+da ricontrollare sul codice installato):
+* indirizzo unico `demo-fapi.binance.com` (`trader_ai/conto_demo.py:25-35`); chiavi `TRADER_AI_DEMO_*` (`:42-52`), mai quelle del
+  demo di G1 (`BINANCE_DEMO_*`) né del conto vero (`BINANCE_API_*`);
+* leva da 1 a 10 (`trader_ai/limiti.py:14`, `:72-73`); margine separato (`conto_demo.py:153`); stop obbligatorio sul conto
+  (`trader_ai/avvio.py:173-194`, `:213-216`);
+* obiettivo di 50 USDT al giorno e fermo fino alla mezzanotte UTC (`limiti.py:13`, `avvio.py:99-106`); tetto di 5 dollari al giorno
+  per le chiamate al modello, controllato prima di ogni chiamata (`trader_ai/costi.py:19`, `trader_ai/giro.py:34`);
+* nessuna perdita massima del conto (scelta del proprietario, demo).
+Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una revisione nuova (settima, ultime righe).
+
 ## Storia degli invarianti
 
 - 7 nov 2026: nessun invariante cambiato; la proposta di leva 10 e perdita giornaliera dalla dashboard ha avuto REQUEST CHANGES.

@@ -4,12 +4,16 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa del percorso e invarianti con file:riga (sezioni 1-13; sezione 14: il conto vero, `ff89531` + 12 nov).
+- `LIVE_PATH_MAP.md` — mappa del percorso e invarianti con file:riga (sezioni 1-13; sezione 14: il conto vero, `ff89531` + 12 nov; sezione 15: il trader AI sul suo demo, 23 nov).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10.
 - `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
 ## Stato (aggiornato al 17 nov 2026)
+- **23 nov, trader AI** (area `trader_ai/`, sessione «trading AI»): sette revisioni del primo avvio sul suo conto demo, rapporti in
+  `trader_ai/revisioni/2026-11-23-*.md` (la sessione del trader non può scrivere in `reviews/`). Verdetto finale (settima):
+  **APPROVE con condizioni** prima del primo avvio (ok di Alessio, `installa.sh prova` con «TUTTO BENE», conto pulito); prima dei soldi
+  veri correggere 146 e 147 e una revisione nuova. Invarianti nella sezione 15 di `LIVE_PATH_MAP.md`.
 - **Ultima revisione**: `reports/2026-11-17-stato-funding-demo-paper.md`, sezione «G1: il funding per regolamento, demo contro paper»
   dello «stato»: **APPROVE** (0 bloccanti, alti, medi; Bassi 90-94: monete della riga «altre», «—», Firebase muto, letture doppie, test).
   Non committata: se committata, confrontare con `giro17nov/copia/` (md5 `6b5a6a8c`, test `27399f22`). Prove: `giro17nov/test_prove_17nov.py`
