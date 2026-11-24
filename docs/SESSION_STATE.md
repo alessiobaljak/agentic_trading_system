@@ -50,6 +50,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Giudice delle balene** (idea 152, regole `research/trader_copiati/GIUDICE_BALENE.md` del 24 novembre): scrivere
+  `research/trader_copiati/giudice_balene.py` (i numeri per conto della sezione del giudizio) **prima di lunedì 30 novembre**, primo
+  giudizio quel lunedì, salvato prima della settimana dopo; misura dopo 8 settimane.
 - **Ogni lunedì, F5 accanto a G1** (domanda del proprietario del 23 novembre: «perché F5 non è meglio di G1?»): nel riepilogo e
   nel confronto settimanale la settimana di F5 e di G1 sulle stesse letture dello stato (16-23 novembre: F5 −1,2%, G1 −6,0%); sul
   passato sono pari (300 settimane: F5 +55,4% l'anno, Sharpe 1,88; G1 +54,1%, 1,97). Se il proprietario sceglie F5 per il conto

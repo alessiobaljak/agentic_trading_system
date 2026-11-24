@@ -533,6 +533,9 @@ Trovate ma già fatte o varianti (non si rifanno): il funding molto negativo sul
 152. **Il giudice delle balene** (sessione principale, 21 novembre): invece di copiare tutti i grandi conti di Hyperliquid (idea 132),
    l'intelligenza artificiale giudica conto per conto chi guadagna con costanza e chi per caso, e si segue solo chi regge; dati nostri
    dal 2 novembre, in avanti.
+   **24 novembre**: regole della misura in avanti scritte prima di ogni calcolo (`research/trader_copiati/GIUDICE_BALENE.md`): giudizio
+   ogni lunedì dal 30 novembre (costante, mercato, caso), conto copiato dei soli «costanti» contro tutti i conti e contro G1; si giudica
+   dopo 8 settimane, fuori dal conto delle prove finché non diventa una strategia.
 153. ~~**L'arbitraggio vero del funding fra Binance e Hyperliquid**~~ → prova 163 (proposta della sessione principale del 21 novembre,
    via libera del proprietario: «procedi»): due gambe opposte sulla stessa moneta, una per borsa; le prove 135 e 137 avevano usato lo
    scarto solo come segnale su Binance, la 162 dentro la stessa borsa. **Esito (21 novembre): no** (riga 163).
