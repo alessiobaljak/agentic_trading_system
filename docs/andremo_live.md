@@ -1017,3 +1017,7 @@ provato sui dati fino al 23 novembre fuori dal repository: 407 conti letti, 18 g
 giorni), proposte 0 costanti, 14 «mercato», 4 «caso»; esposizione netta venduta fino a 9 volte il valore del conto. **Capito oggi**: nel
 mese del crollo i grandi conti di Hyperliquid hanno guadagnato quasi solo con la direzione del mercato (parte propria fra +4% e +41% del
 conto contro parte del mercato fino a +306%): copiarli oggi vuol dire scommettere sul ribasso.
+**24 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (206 articoli nuovi in 4 ore; piene le prime tre pagine di
+CryptoBriefing e Bitcoinist: la quarta pagina di CryptoBriefing non è piena, quindi quella fonte è coperta; per Bitcoinist qualche articolo
+può mancare), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito oggi**:
+niente di nuovo in questo giro.
