@@ -1011,3 +1011,9 @@ moneta sono pochi (due su 41 monete citate); il resto è mercato in generale.
 nuova, nessuna moneta nuova su Coinbase. Ricerca: strategy-scout scrive le regole del «giudice delle balene» (idea 152), una misura in
 avanti in cui la sessione giudica ogni lunedì quali conti grandi di Hyperliquid guadagnano con la scelta delle monete e quali solo con la
 direzione del mercato. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
+**24 novembre, 12:40 UTC, giro delle 4 ore**: raccolta 23 fonti su 25 (106 articoli nuovi; CryptoBriefing piena), nessuna chiusura nuova,
+nessuna moneta nuova su Coinbase. Scritto `research/trader_copiati/giudice_balene.py` (il foglio del lunedì del giudice delle balene);
+provato sui dati fino al 23 novembre fuori dal repository: 407 conti letti, 18 giudicabili (la mappa delle liquidazioni ha solo due
+giorni), proposte 0 costanti, 14 «mercato», 4 «caso»; esposizione netta venduta fino a 9 volte il valore del conto. **Capito oggi**: nel
+mese del crollo i grandi conti di Hyperliquid hanno guadagnato quasi solo con la direzione del mercato (parte propria fra +4% e +41% del
+conto contro parte del mercato fino a +306%): copiarli oggi vuol dire scommettere sul ribasso.

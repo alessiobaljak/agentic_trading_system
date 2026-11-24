@@ -76,3 +76,6 @@ prezzi medi della raccolta delle liquidazioni): **nessun dato di Binance** nel g
 Con 8 settimane non si distingue davvero la costanza dalla fortuna: la misura dice se vale la pena una prova vera, non la sostituisce. I
 conti dei grandi cambiano indirizzo e strategia; i giri ogni 4 ore perdono i movimenti dentro l'intervallo; un conto che chiude prima di un
 giro non si vede.
+* (24 novembre, dalla prova dello script sui dati fino al 23 novembre, nessun giudizio) Il valore del conto cambia anche con versamenti e
+  prelievi: la discesa dal picco e le percentuali sul valore medio ne risentono (un conto da 85 milioni con «discesa» −99%). Il giudizio
+  guarda soprattutto la parte propria e la costanza; la discesa si legge con questa cautela.
