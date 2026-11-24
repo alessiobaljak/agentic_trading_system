@@ -25,11 +25,17 @@ class MercatoFinto:
         self.minuti.append((inizio_ms, apertura, massimo, minimo, chiusura))
         self.prezzo = chiusura
 
+    pausa_fino = 0.0
+
     def klines(self, intervallo, n=200, inizio_ms=None):
         if intervallo == "1m":
-            return [[a, o, h, l, c, 1.0, a + MIN - 1] for a, o, h, l, c in self.minuti if inizio_ms is None or a >= inizio_ms]
+            return [[a, o, h, l, c, 1.0, a + MIN - 1] for a, o, h, l, c in self.minuti
+                    if inizio_ms is None or a >= inizio_ms][:n]
         passo = {"5m": 5, "15m": 15, "30m": 30}[intervallo] * MIN
         return [[T0_MS - passo * (60 - i), 90000, 90100, 89900, 90000 + i, 5.0, T0_MS - passo * (59 - i) - 1] for i in range(60)]
+
+    def klines_mark(self, n=1000, inizio_ms=None):
+        return self.klines("1m", n, inizio_ms)
 
     def mercato(self):
         return {"prezzo": self.prezzo, "funding": 0.0001, "prossimo_funding_ms": T0_MS + 8 * 3600_000, "interesse_aperto": 100.0}
@@ -53,15 +59,17 @@ class Orologio:
 def conto(tmp_path):
     m, o = MercatoFinto(), Orologio(T0_MS)
     c = ContoSimulato(m, tmp_path / "conto_simulato.json", o)
-    c.aggiorna()                  # primo aggiornamento: fissa il punto di partenza dei minuti
+    c.aggiorna(forza=True)        # primo aggiornamento: fissa il punto di partenza dei minuti
     return c, m, o
 
 
 def avanza(c, m, o, apertura, massimo, minimo, chiusura):
-    inizio = o.ms - o.ms % MIN
+    """Il minuto dopo quello di adesso (il minuto in cui parte un ordine non conta)."""
+    inizio = o.ms - o.ms % MIN + MIN
+    m.minuto(inizio - MIN, 90000, 90000, 90000, 90000) if not any(x[0] == inizio - MIN for x in m.minuti) else None
     m.minuto(inizio, apertura, massimo, minimo, chiusura)
     o.ms = inizio + MIN + 10_000
-    c.aggiorna()
+    c.aggiorna(forza=True)
 
 
 def test_apertura_a_mercato_con_scarto_e_commissione(tmp_path):
@@ -191,3 +199,89 @@ def test_il_programma_gira_sul_conto_simulato(tmp_path):
     st = tr.carica()
     assert c.posizioni_tutte() == [] and st["operazioni"][-1]["come"] == "stop"
     assert st["operazioni"][-1]["risultato"] < 0
+
+
+# --- ottava revisione: 152, 153, 154, 155 --------------------------------------------------------------------------------
+
+def test_due_programmi_sullo_stesso_conto_non_si_sovrascrivono(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    altro = ContoSimulato(m, tmp_path / "conto_simulato.json", o)      # il comando «chiudi» lanciato a mano
+    altro.chiudi({"lato": "lungo", "quantita": 0.01}, "taix1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)                       # il servizio continua con il suo oggetto
+    assert c.posizioni_tutte() == [] and c.ordini_tutti() == []
+    assert any(x.get("come") == "chiusa a mercato" for x in c.s["movimenti"])
+
+
+def test_dopo_2500_minuti_di_fermo_si_recupera_tutto(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    inizio = T0_MS + MIN
+    for i in range(2500):
+        basso = 87000.0 if i == 1100 else 89900.0
+        alto = 99000.0 if i > 1100 else 90100.0                       # dopo lo stop il prezzo vola: non deve contare
+        m.minuto(inizio + i * MIN, 90000, alto, basso, 90000)
+    o.ms = inizio + 2500 * MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() == [] and c.s["ultimo_minuto_ms"] == inizio + 2500 * MIN
+    stop = [x for x in c.s["movimenti"] if x.get("come") == "stop" and x["cosa"] == "risultato"]
+    assert stop and stop[0]["importo"] < 0
+
+
+def test_minuti_mancanti_nessuna_decisione(tmp_path):
+    c, m, o = conto(tmp_path)
+    o.ms = T0_MS + 10 * MIN
+    with pytest.raises(RuntimeError, match="mancanti"):
+        c.aggiorna(forza=True)
+
+
+def test_funding_pubblicato_in_ritardo_applicato_una_volta(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    m.pagamenti.append((T0_MS + 40_000, 0.0002, 90000.0))             # pubblicato dopo il controllo
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    f = [x for x in c.s["movimenti"] if x["cosa"] == "funding"]
+    assert len(f) == 1 and f[0]["importo"] == pytest.approx(-0.01 * 90000 * 0.0002)
+
+
+def test_il_minuto_in_cui_parte_l_ordine_non_conta(tmp_path):
+    c, m, o = conto(tmp_path)
+    o.ms = T0_MS + 30_000                                             # ordine a metà minuto
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    m.minuto(T0_MS, 90000, 90100, 87000, 90000)                       # il minimo di 87.000 era PRIMA dell'ordine
+    o.ms = T0_MS + MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() != []
+
+
+def test_limite_solo_toccato_non_si_esegue(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1", "LIMIT", 89500.0)
+    avanza(c, m, o, 90000, 90100, 89500, 89600)
+    assert c.posizioni_tutte() == []
+
+
+def test_pausa_dopo_troppe_richieste():
+    visti = []
+
+    class R:
+        status_code, text, headers = 429, "", {}
+
+    def http(url, timeout):
+        visti.append(url)
+        return R()
+    mp = MercatoPubblico("BTCUSDT", http)
+    for _ in range(3):
+        with pytest.raises(RuntimeError):
+            mp.mercato()
+    assert len(visti) == 1

@@ -118,7 +118,10 @@ python3 -m venv "$DEST/.venv"
 "$DEST/.venv/bin/pip" install -q -r "$DEST/trader_ai/requirements.txt"
 echo "[trader-ai] ambiente Python pronto"
 
-if [ ! -f "$ENVF" ]; then chiedi_chiavi; else echo "[trader-ai] $ENVF c'è già: non lo tocco (per cambiarle: installa.sh chiavi)"; fi
+# con il conto simulato il file si riscrive SEMPRE (solo la chiave del modello): non deve restarci nessuna chiave di Binance
+# (revisione del 24 novembre 2026, problema 157)
+if simulato || [ ! -f "$ENVF" ]; then chiedi_chiavi; else echo "[trader-ai] $ENVF c'è già: non lo tocco (per cambiarle: installa.sh chiavi)"; fi
+if simulato && grep -q "TRADER_AI_DEMO" "$ENVF"; then echo "[trader-ai] ATTENZIONE: chiavi di Binance ancora nel file: mi fermo"; exit 1; fi
 
 cat > /etc/systemd/system/trader-ai.service <<UNIT
 [Unit]
