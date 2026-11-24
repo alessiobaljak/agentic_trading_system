@@ -354,6 +354,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 37b** (l'esame da crisi del ribilanciamento dei fondi 60/40 sul periodo chiuso, idee I44 e I53): **non passa**, la prova
+  37 è bocciata definitivamente (`prove/P037b_risultati.md`). Capito: **come assicurazione costa più di quanto paga**. Nella crisi
+  nuova (aprile 2025, il mese più agitato del periodo chiuso) ha reso +2,16%, contro il +32% del 2020; nei 21 mesi −4,5% con i
+  costi e −1,1% anche senza. Il marzo 2020 era un caso solo (giorni da ±10% che si alternavano), l'aprile 2025 no. Nel conto: 115.
 * **La prova 49** (le vendite allo scoperto fuori borsa, il DIX di SqueezeMetrics, idea I57: lo SPY al 98% nelle settimane con il
   DIX sopra la media di un anno, al 49% nelle altre): **bocciata** (`prove/P049_risultati.md`). Capito: **il DIX non separa le
   settimane** (lo SPY nelle 4 settimane dopo +1,37% con il DIX alto, +1,20% con quello basso); lo SPY tenuto sempre alla quota
