@@ -1,170 +1,185 @@
 {
- "dati_fino_al": "2026-11-21",
+ "dati_fino_al": "2026-11-22",
  "funding_stimato_dal": "2026-10-01",
  "candidate": {
   "F3": {
    "settimane": {
     "2026-10-26": -0.004261,
     "2026-11-02": 0.046257,
-    "2026-11-09": -0.009049
+    "2026-11-09": -0.009049,
+    "2026-11-16": -0.006142
    },
-   "periodi": 3,
-   "totale": 0.032371624698904755,
-   "media": 0.010982329257891011,
-   "sharpe": 2.5844469822733394
+   "periodi": 4,
+   "totale": 0.026031262613354755,
+   "media": 0.006701359410997677,
+   "sharpe": 1.827403891204849
   },
   "F5": {
    "settimane": {
     "2026-10-26": 0.005522,
     "2026-11-02": 0.03199,
-    "2026-11-09": 0.030866
+    "2026-11-09": 0.030866,
+    "2026-11-16": -0.013351
    },
-   "periodi": 3,
-   "totale": 0.06971721216801385,
-   "media": 0.022792432693679043,
-   "sharpe": 10.981105092962212
+   "periodi": 4,
+   "totale": 0.055435548659174216,
+   "media": 0.013756605133680752,
+   "sharpe": 4.5471560432720395
   },
   "K1": {
    "settimane": {
     "2026-10-26": -0.015757,
     "2026-11-02": 0.001249,
-    "2026-11-09": 0.033256
+    "2026-11-09": 0.033256,
+    "2026-11-16": -0.019382
    },
-   "periodi": 3,
-   "totale": 0.018245562548064864,
-   "media": 0.006249458071812153,
-   "sharpe": 1.810860153936616
+   "periodi": 4,
+   "totale": -0.0014903936962640252,
+   "media": -0.0001584851970419755,
+   "sharpe": -0.047572237621125696
   },
   "K2": {
    "settimane": {
     "2026-10-26": -0.010454,
     "2026-11-02": 0.009974,
-    "2026-11-09": 0.029505
+    "2026-11-09": 0.029505,
+    "2026-11-16": 0.010715
    },
-   "periodi": 3,
-   "totale": 0.02890357985038694,
-   "media": 0.00967502494795555,
-   "sharpe": 3.491711598114054
+   "periodi": 4,
+   "totale": 0.03992813144588303,
+   "media": 0.009934982200596831,
+   "sharpe": 4.389131282573231
   },
   "M1": {
    "settimane": {
     "2026-10-26": -0.003495,
     "2026-11-02": 0.022232,
-    "2026-11-09": -0.042777
+    "2026-11-09": -0.042777,
+    "2026-11-16": -0.09615
    },
-   "periodi": 3,
-   "totale": -0.0249155445420306,
-   "media": -0.00801320793748601,
-   "sharpe": -1.7649614924055206
+   "periodi": 4,
+   "totale": -0.1186703359112099,
+   "media": -0.03004751388655894,
+   "sharpe": -4.203826723389684
   },
   "M6": {
    "settimane": {
     "2026-10-26": 0.035313,
     "2026-11-02": 0.069877,
-    "2026-11-09": -0.041444
+    "2026-11-09": -0.041444,
+    "2026-11-16": -0.049367
    },
-   "periodi": 3,
-   "totale": 0.06175132166076258,
-   "media": 0.02124851538098722,
-   "sharpe": 2.689215156948152
+   "periodi": 4,
+   "totale": 0.009335652404966144,
+   "media": 0.0035945913840731425,
+   "sharpe": 0.44382695360508234
   },
   "M7": {
    "settimane": {
     "2026-10-26": 0.04684,
     "2026-11-02": 0.025327,
-    "2026-11-09": -0.01835
+    "2026-11-09": -0.01835,
+    "2026-11-16": -0.055091
    },
-   "periodi": 3,
-   "totale": 0.05365787757253582,
-   "media": 0.017939190830253856,
-   "sharpe": 3.89443128954367
+   "periodi": 4,
+   "totale": -0.004388984866156798,
+   "media": -0.0003183085469501464,
+   "sharpe": -0.05046352958644543
   },
   "F2": {
    "settimane": {
     "2026-10-26": -0.010472,
     "2026-11-02": -0.008398,
-    "2026-11-09": 0.030685
+    "2026-11-09": 0.030685,
+    "2026-11-16": -0.004548
    },
-   "periodi": 3,
-   "totale": 0.011326993443736555,
-   "media": 0.003938455983235886,
-   "sharpe": 1.2248844025358174
+   "periodi": 4,
+   "totale": 0.006727604262344089,
+   "media": 0.0018168731308628215,
+   "sharpe": 0.675298995057136
   },
   "C1": {
    "settimane": {
     "2026-10-26": 0.006191,
     "2026-11-02": 0.058156,
-    "2026-11-09": -0.204338
+    "2026-11-09": -0.204338,
+    "2026-11-16": -0.125062
    },
-   "periodi": 3,
-   "totale": -0.15285289286335946,
-   "media": -0.04666358418085612,
-   "sharpe": -2.4208315564360503
+   "periodi": 4,
+   "totale": -0.2587986700277156,
+   "media": -0.06626314848834669,
+   "sharpe": -3.979535185399914
   },
   "metà F3 + metà K1 (derivata)": {
    "settimane": {
     "2026-10-26": -0.010009,
     "2026-11-02": 0.023753,
-    "2026-11-09": 0.012103
+    "2026-11-09": 0.012103,
+    "2026-11-16": -0.012762
    },
-   "periodi": 3,
-   "totale": 0.025773413003970624,
-   "media": 0.008615893664851581,
-   "sharpe": 3.6229378573571926
+   "periodi": 4,
+   "totale": 0.01268256187855843,
+   "media": 0.0032714371069778505,
+   "sharpe": 1.339182400158958
   },
   "F3 + M1 a rischio uguale": {
    "settimane": {
     "2026-10-26": -0.003951,
     "2026-11-02": 0.036912,
-    "2026-11-09": -0.022069
+    "2026-11-09": -0.022069,
+    "2026-11-16": -0.040864
    },
-   "periodi": 3,
-   "totale": 0.010021969600032987,
-   "media": 0.0036306673308878676,
-   "sharpe": 0.8665651946628176
+   "periodi": 4,
+   "totale": -0.031251234946675255,
+   "media": -0.007492917023670866,
+   "sharpe": -1.6265704247726507
   },
   "F5 + M7 a rischio uguale (informazione)": {
    "settimane": {
     "2026-10-26": 0.021884,
     "2026-11-02": 0.029395,
-    "2026-11-09": 0.011773
+    "2026-11-09": 0.011773,
+    "2026-11-16": -0.029627
    },
-   "periodi": 3,
-   "totale": 0.06430708787240169,
-   "media": 0.021017502350950762,
-   "sharpe": 17.138878722681845
+   "periodi": 4,
+   "totale": 0.03277471408786825,
+   "media": 0.008356342071125738,
+   "sharpe": 2.2884468444189636
   },
   "M7 + M8 a rischio uguale (informazione)": {
    "settimane": {
     "2026-10-26": 0.033409,
     "2026-11-02": 0.029935,
-    "2026-11-09": -0.019371
+    "2026-11-09": -0.019371,
+    "2026-11-16": -0.073404
    },
-   "periodi": 3,
-   "totale": 0.04372657135677538,
-   "media": 0.014657627519443139,
-   "sharpe": 3.5804492068129408
+   "periodi": 4,
+   "totale": -0.032886913208939994,
+   "media": -0.007357726502187481,
+   "sharpe": -1.0569926448366802
   },
   "F5 + M7 + K2 a rischio uguale (informazione)": {
    "settimane": {
     "2026-10-26": 0.006731,
     "2026-11-02": 0.020164,
-    "2026-11-09": 0.020262
+    "2026-11-09": 0.020262,
+    "2026-11-16": -0.010417
    },
-   "periodi": 3,
-   "totale": 0.04784120123380431,
-   "media": 0.015719252783226386,
-   "sharpe": 14.562161998756332
+   "periodi": 4,
+   "totale": 0.036925679559767666,
+   "media": 0.009185151442139756,
+   "sharpe": 4.557946349204195
   },
   "EWIL (informazione, dal 2 novembre)": {
    "settimane": {
     "2026-11-02": -0.002085,
-    "2026-11-09": -0.026093
+    "2026-11-09": -0.026093,
+    "2026-11-16": 0.033146
    },
-   "periodi": 2,
-   "totale": -0.028122693471387294,
-   "media": -0.014088541864247564,
-   "sharpe": -5.984468988282537
+   "periodi": 3,
+   "totale": 0.004090951154924083,
+   "media": 0.0016562366305539488,
+   "sharpe": 0.40083783872251233
   },
   "HLI (informazione, dal 2 novembre)": {
    "giorni": {
@@ -186,12 +201,13 @@
     "2026-11-17": -0.002902,
     "2026-11-18": -0.00022,
     "2026-11-19": -0.013167,
-    "2026-11-20": -0.006355
+    "2026-11-20": -0.006355,
+    "2026-11-21": -0.004743
    },
-   "periodi": 19,
-   "totale": -0.10379708641623209,
-   "media": -0.005708370730389096,
-   "sharpe": -11.541304407017552
+   "periodi": 20,
+   "totale": -0.10804733755411855,
+   "media": -0.0056600776859577215,
+   "sharpe": -11.754007447138118
   },
   "G1 sulle stesse monete di HLI (informazione, dal 2 novembre)": {
    "giorni": {
@@ -213,12 +229,13 @@
     "2026-11-17": 0.004384,
     "2026-11-18": -0.000106,
     "2026-11-19": -0.000699,
-    "2026-11-20": 0.002194
+    "2026-11-20": 0.002194,
+    "2026-11-21": -0.025651
    },
-   "periodi": 19,
-   "totale": 0.06189251357657377,
-   "media": 0.0032012181490972047,
-   "sharpe": 7.038227564279614
+   "periodi": 20,
+   "totale": 0.03465434908293763,
+   "media": 0.0017586279768914818,
+   "sharpe": 3.1585073919201596
   },
   "DXI (informazione, dal 2 novembre)": {
    "giorni": {
@@ -240,12 +257,13 @@
     "2026-11-17": 0.001811,
     "2026-11-18": 0.009016,
     "2026-11-19": -0.003841,
-    "2026-11-20": 0.015229
+    "2026-11-20": 0.015229,
+    "2026-11-21": -0.007888
    },
-   "periodi": 19,
-   "totale": 0.04564042270819413,
-   "media": 0.0024932351631272525,
-   "sharpe": 2.7390871142608173
+   "periodi": 20,
+   "totale": 0.037392235678596064,
+   "media": 0.0019741650189486976,
+   "sharpe": 2.207599612638903
   },
   "G1 sulle stesse monete di DXI (informazione, dal 2 novembre)": {
    "giorni": {
@@ -267,12 +285,13 @@
     "2026-11-17": -0.002522,
     "2026-11-18": 0.000497,
     "2026-11-19": 0.000614,
-    "2026-11-20": 0.006594
+    "2026-11-20": 0.006594,
+    "2026-11-21": -0.024658
    },
-   "periodi": 19,
-   "totale": 0.07281851618948343,
-   "media": 0.00374267498346233,
-   "sharpe": 8.121731528359566
+   "periodi": 20,
+   "totale": 0.046364745961894105,
+   "media": 0.0023226313884771818,
+   "sharpe": 4.160344946946159
   },
   "A1": {
    "giorni": {
@@ -308,12 +327,13 @@
     "2026-11-18": -0.000148,
     "2026-11-19": -7e-06,
     "2026-11-20": -0.000174,
-    "2026-11-21": 1e-05
+    "2026-11-21": 1e-05,
+    "2026-11-22": 5.6e-05
    },
-   "periodi": 33,
-   "totale": -0.016685301452988965,
-   "media": -0.000507382579839658,
-   "sharpe": -4.392194466622383
+   "periodi": 34,
+   "totale": -0.016629867829657585,
+   "media": -0.0004908014967680013,
+   "sharpe": -4.310270597844112
   }
  },
  "eventi_N3": [
@@ -351,302 +371,307 @@
  ],
  "adesso": {
   "F3": {
-   "lunedi": "2026-11-16",
+   "lunedi": "2026-11-23",
    "long": {
-    "1000BONKUSDT": 0.0603,
-    "ADAUSDT": 0.0797,
-    "AEROUSDT": 0.0617,
-    "AKEUSDT": 0.0042,
-    "APTUSDT": 0.0598,
-    "ARBUSDT": 0.0624,
-    "BIRBUSDT": 0.0233,
-    "BMTUSDT": 0.019,
-    "ERAUSDT": 0.0396,
-    "GTCUSDT": 0.0282,
-    "HUMAUSDT": 0.0362,
-    "INITUSDT": 0.0174,
-    "JUPUSDT": 0.0623,
-    "LSKUSDT": 0.0348,
-    "OPUSDT": 0.0516,
-    "SANDUSDT": 0.0674,
-    "SEIUSDT": 0.0704,
-    "TRUMPUSDT": 0.053,
-    "TRXUSDT": 0.1177,
-    "WLDUSDT": 0.0512
+    "1000BONKUSDT": 0.0708,
+    "1000PEPEUSDT": 0.0642,
+    "AKEUSDT": 0.0049,
+    "BIRBUSDT": 0.0348,
+    "BMTUSDT": 0.0238,
+    "ERAUSDT": 0.0612,
+    "FETUSDT": 0.0729,
+    "GTCUSDT": 0.074,
+    "HOTUSDT": 0.0388,
+    "HUMAUSDT": 0.025,
+    "INITUSDT": 0.0206,
+    "IRYSUSDT": 0.0271,
+    "JUPUSDT": 0.0654,
+    "LITUSDT": 0.0587,
+    "LSKUSDT": 0.0463,
+    "ONEUSDT": 0.0217,
+    "OPUSDT": 0.0634,
+    "SOPHUSDT": 0.0194,
+    "TRXUSDT": 0.1353,
+    "WLDUSDT": 0.0718
    },
    "short": {
-    "AGTUSDT": -0.0107,
-    "AINUSDT": -0.014,
-    "APRUSDT": -0.0283,
-    "ARIAUSDT": -0.031,
-    "BEAMXUSDT": -0.0467,
-    "BEATUSDT": -0.061,
-    "BNBUSDT": -0.1722,
-    "BRUSDT": -0.0371,
-    "BULLAUSDT": -0.0202,
-    "EVAAUSDT": -0.0154,
-    "GRASSUSDT": -0.0694,
-    "IDOLUSDT": -0.0193,
-    "JCTUSDT": -0.0064,
-    "MAGMAUSDT": -0.0281,
-    "ONUSDT": -0.0408,
-    "QUSDT": -0.0085,
-    "UAIUSDT": -0.0233,
-    "USELESSUSDT": -0.0509,
-    "WLFIUSDT": -0.1944,
-    "XMRUSDT": -0.1223
+    "AINUSDT": -0.013,
+    "APRUSDT": -0.0282,
+    "ARIAUSDT": -0.0362,
+    "BEATUSDT": -0.0523,
+    "BLESSUSDT": -0.0176,
+    "BNBUSDT": -0.1456,
+    "BULLAUSDT": -0.0177,
+    "EVAAUSDT": -0.0129,
+    "FARTCOINUSDT": -0.0843,
+    "GRASSUSDT": -0.0645,
+    "IDOLUSDT": -0.016,
+    "JCTUSDT": -0.0063,
+    "ONUSDT": -0.0362,
+    "PIEVERSEUSDT": -0.0269,
+    "QUSDT": -0.0084,
+    "UAIUSDT": -0.0215,
+    "USELESSUSDT": -0.0437,
+    "VVVUSDT": -0.0605,
+    "WLFIUSDT": -0.2037,
+    "XMRUSDT": -0.1043
    }
   },
   "F5": {
-   "lunedi": "2026-11-16",
+   "lunedi": "2026-11-23",
    "long": {
-    "1000BONKUSDT": 0.0439,
-    "ADAUSDT": 0.058,
-    "AEROUSDT": 0.0449,
-    "AKEUSDT": 0.0031,
-    "APTUSDT": 0.0435,
-    "ARBUSDT": 0.0454,
-    "ATOMUSDT": 0.057,
-    "BCHUSDT": 0.0624,
-    "BIRBUSDT": 0.0169,
-    "BMTUSDT": 0.0139,
-    "ERAUSDT": 0.0288,
-    "GTCUSDT": 0.0205,
-    "HUMAUSDT": 0.0263,
-    "INITUSDT": 0.0127,
-    "JUPUSDT": 0.0453,
-    "LSKUSDT": 0.0253,
-    "OPUSDT": 0.0376,
-    "SANDUSDT": 0.049,
-    "SEIUSDT": 0.0512,
-    "STXUSDT": 0.0425,
-    "TIAUSDT": 0.0423,
-    "TRUMPUSDT": 0.0386,
-    "TRXUSDT": 0.0857,
-    "WLDUSDT": 0.0373,
-    "XLMUSDT": 0.068
+    "1000BONKUSDT": 0.0399,
+    "1000PEPEUSDT": 0.0362,
+    "ADAUSDT": 0.0534,
+    "AKEUSDT": 0.0028,
+    "APTUSDT": 0.0408,
+    "ATOMUSDT": 0.052,
+    "BCHUSDT": 0.0564,
+    "BIRBUSDT": 0.0196,
+    "BMTUSDT": 0.0134,
+    "ERAUSDT": 0.0345,
+    "FETUSDT": 0.0411,
+    "GTCUSDT": 0.0417,
+    "HOTUSDT": 0.0219,
+    "HUMAUSDT": 0.0141,
+    "INITUSDT": 0.0116,
+    "IRYSUSDT": 0.0153,
+    "JUPUSDT": 0.0368,
+    "LITUSDT": 0.0331,
+    "LSKUSDT": 0.0261,
+    "ONEUSDT": 0.0122,
+    "OPUSDT": 0.0357,
+    "SANDUSDT": 0.0507,
+    "SEIUSDT": 0.0471,
+    "SOPHUSDT": 0.0109,
+    "STXUSDT": 0.0403,
+    "TRUMPUSDT": 0.0346,
+    "TRXUSDT": 0.0763,
+    "WLDUSDT": 0.0404,
+    "XLMUSDT": 0.0612
    },
    "short": {
-    "AGTUSDT": -0.0055,
-    "AINUSDT": -0.0073,
-    "APRUSDT": -0.0146,
-    "ARIAUSDT": -0.016,
-    "ASTERUSDT": -0.0513,
-    "BEAMXUSDT": -0.0241,
-    "BEATUSDT": -0.0315,
-    "BNBUSDT": -0.089,
-    "BRUSDT": -0.0192,
-    "BTCUSDT": -0.1043,
-    "BULLAUSDT": -0.0104,
-    "EVAAUSDT": -0.008,
-    "FARTCOINUSDT": -0.0462,
-    "GRASSUSDT": -0.0359,
+    "AGTUSDT": -0.0062,
+    "AINUSDT": -0.0079,
+    "APRUSDT": -0.0171,
+    "ARIAUSDT": -0.022,
+    "ASTERUSDT": -0.0477,
+    "BEAMXUSDT": -0.0262,
+    "BEATUSDT": -0.0318,
+    "BLESSUSDT": -0.0107,
+    "BNBUSDT": -0.0885,
+    "BTCUSDT": -0.1061,
+    "BULLAUSDT": -0.0108,
+    "EVAAUSDT": -0.0078,
+    "FARTCOINUSDT": -0.0513,
+    "GRASSUSDT": -0.0392,
     "HYPEUSDT": -0.061,
-    "IDOLUSDT": -0.01,
-    "JCTUSDT": -0.0033,
-    "JTOUSDT": -0.0484,
-    "MAGMAUSDT": -0.0145,
-    "NEARUSDT": -0.0447,
-    "ONUSDT": -0.0211,
-    "QUSDT": -0.0044,
-    "RENDERUSDT": -0.0551,
-    "UAIUSDT": -0.012,
-    "USELESSUSDT": -0.0263,
-    "WLFIUSDT": -0.1005,
-    "XMRUSDT": -0.0632,
-    "XRPUSDT": -0.072
+    "ICNTUSDT": -0.0217,
+    "IDOLUSDT": -0.0098,
+    "JCTUSDT": -0.0038,
+    "MAGMAUSDT": -0.0214,
+    "NEARUSDT": -0.0466,
+    "ONUSDT": -0.022,
+    "PIEVERSEUSDT": -0.0164,
+    "QUSDT": -0.0051,
+    "RENDERUSDT": -0.0553,
+    "UAIUSDT": -0.0131,
+    "USELESSUSDT": -0.0266,
+    "VVVUSDT": -0.0368,
+    "WLFIUSDT": -0.1238,
+    "XMRUSDT": -0.0634
    }
   },
   "K1": {
-   "lunedi": "2026-11-16",
+   "lunedi": "2026-11-23",
    "long": {
-    "AGTUSDT": 0.0061,
-    "AKEUSDT": 0.0037,
-    "APTUSDT": 0.0534,
-    "ARIAUSDT": 0.0178,
-    "ATOMUSDT": 0.0699,
-    "ERAUSDT": 0.0354,
-    "ETCUSDT": 0.0813,
+    "ADAUSDT": 0.0757,
+    "ATOMUSDT": 0.0736,
+    "ETCUSDT": 0.0822,
     "ETHFIUSDT": 0.0472,
-    "FETUSDT": 0.0566,
-    "INITUSDT": 0.0155,
-    "INJUSDT": 0.0529,
-    "JUPUSDT": 0.0556,
-    "NEARUSDT": 0.0496,
-    "PENDLEUSDT": 0.0654,
-    "POLUSDT": 0.0791,
-    "SANDUSDT": 0.0602,
-    "TIAUSDT": 0.0519,
-    "TRUMPUSDT": 0.0474,
-    "TRXUSDT": 0.1052,
-    "WLDUSDT": 0.0457
+    "EVAAUSDT": 0.0085,
+    "GTCUSDT": 0.0591,
+    "HOTUSDT": 0.031,
+    "HUMAUSDT": 0.02,
+    "ICNTUSDT": 0.0234,
+    "IRYSUSDT": 0.0216,
+    "JUPUSDT": 0.0522,
+    "OPUSDT": 0.0506,
+    "PYTHUSDT": 0.0489,
+    "QNTUSDT": 0.0554,
+    "RAYSOLUSDT": 0.0512,
+    "TRUMPUSDT": 0.049,
+    "TRXUSDT": 0.108,
+    "VVVUSDT": 0.0397,
+    "XPLUSDT": 0.0528,
+    "ZECUSDT": 0.05
    },
    "short": {
-    "APRUSDT": -0.0202,
-    "ASTERUSDT": -0.0707,
-    "BEATUSDT": -0.0435,
-    "BNBUSDT": -0.1227,
-    "BULLAUSDT": -0.0144,
-    "DASHUSDT": -0.067,
-    "DOODUSDT": -0.0179,
-    "GRASSUSDT": -0.0494,
-    "IRYSUSDT": -0.0062,
-    "JCTUSDT": -0.0046,
-    "ONDOUSDT": -0.0686,
-    "PARTIUSDT": -0.0266,
-    "PENGUUSDT": -0.0622,
+    "AGTUSDT": -0.0073,
+    "APRUSDT": -0.02,
+    "ARBUSDT": -0.0663,
+    "ASTERUSDT": -0.0556,
+    "BEATUSDT": -0.0371,
+    "BNBUSDT": -0.1033,
+    "BULLAUSDT": -0.0126,
+    "ENAUSDT": -0.0524,
+    "FARTCOINUSDT": -0.0599,
+    "HBARUSDT": -0.0904,
+    "HYPEUSDT": -0.0712,
+    "IDOLUSDT": -0.0114,
+    "JCTUSDT": -0.0045,
+    "MEGAUSDT": -0.0531,
+    "ONDOUSDT": -0.0649,
+    "PENDLEUSDT": -0.0722,
     "QUSDT": -0.006,
-    "TAOUSDT": -0.0793,
-    "UAIUSDT": -0.0166,
-    "UNIUSDT": -0.0599,
-    "VIRTUALUSDT": -0.0779,
-    "XMRUSDT": -0.0871,
-    "XRPUSDT": -0.0992
+    "UAIUSDT": -0.0152,
+    "UNIUSDT": -0.052,
+    "WLFIUSDT": -0.1446
    }
   },
   "M1": {
-   "lunedi": "2026-11-09",
+   "lunedi": "2026-11-16",
    "long": {
-    "AAVEUSDT": 0.0431,
-    "ADAUSDT": 0.0535,
-    "AVAXUSDT": 0.0535,
-    "BCHUSDT": 0.0499,
-    "DOGEUSDT": 0.0655,
-    "DOTUSDT": 0.0509,
-    "ETHUSDT": 0.0642,
-    "FARTCOINUSDT": 0.039,
-    "FETUSDT": 0.0352,
-    "FILUSDT": 0.0338,
-    "GALAUSDT": 0.0436,
-    "ICPUSDT": 0.0402,
-    "LINKUSDT": 0.0478,
-    "SOLUSDT": 0.0715,
-    "SUIUSDT": 0.0447,
-    "TRXUSDT": 0.0665,
-    "WIFUSDT": 0.0449,
-    "XLMUSDT": 0.0551,
-    "XRPUSDT": 0.0637,
-    "ZECUSDT": 0.0334
+    "1000BONKUSDT": 0.0419,
+    "ADAUSDT": 0.0553,
+    "AEROUSDT": 0.0428,
+    "APTUSDT": 0.0415,
+    "AVAXUSDT": 0.0504,
+    "BCHUSDT": 0.0595,
+    "CHIPUSDT": 0.0279,
+    "DOGEUSDT": 0.0642,
+    "DOTUSDT": 0.0527,
+    "ENAUSDT": 0.034,
+    "ETHUSDT": 0.0667,
+    "FETUSDT": 0.044,
+    "OPUSDT": 0.0359,
+    "PENGUUSDT": 0.039,
+    "SOLUSDT": 0.0694,
+    "TIAUSDT": 0.0403,
+    "TRXUSDT": 0.0818,
+    "WIFUSDT": 0.0509,
+    "XRPUSDT": 0.0621,
+    "ZECUSDT": 0.0398
    },
    "short": {
-    "1000PEPEUSDT": -0.1266,
-    "AGTUSDT": -0.02,
-    "AINUSDT": -0.0193,
-    "AKEUSDT": -0.0244,
-    "APRUSDT": -0.0345,
-    "ARIAUSDT": -0.0428,
-    "BIRBUSDT": -0.0516,
-    "BMTUSDT": -0.0404,
-    "ERAUSDT": -0.0818,
-    "GTCUSDT": -0.0409,
-    "HUMAUSDT": -0.0736,
-    "ICNTUSDT": -0.0524,
-    "INITUSDT": -0.0578,
-    "IRYSUSDT": -0.0117,
-    "JCTUSDT": -0.0088,
-    "LSKUSDT": -0.0743,
-    "MAGMAUSDT": -0.0398,
-    "QNTUSDT": -0.1389,
-    "QUSDT": -0.0113,
-    "USUSDT": -0.0492
+    "AGTUSDT": -0.0171,
+    "AINUSDT": -0.0225,
+    "AKEUSDT": -0.0105,
+    "APRUSDT": -0.0453,
+    "ARIAUSDT": -0.0496,
+    "BEAMXUSDT": -0.0747,
+    "BEATUSDT": -0.0976,
+    "BIRBUSDT": -0.058,
+    "BMTUSDT": -0.0474,
+    "ERAUSDT": -0.0986,
+    "EVAAUSDT": -0.0246,
+    "GTCUSDT": -0.0702,
+    "HUMAUSDT": -0.0902,
+    "ICNTUSDT": -0.0718,
+    "IDOLUSDT": -0.0308,
+    "INITUSDT": -0.0433,
+    "JCTUSDT": -0.0102,
+    "LSKUSDT": -0.0867,
+    "QUSDT": -0.0135,
+    "UAIUSDT": -0.0373
    }
   },
   "F2": {
-   "lunedi": "2026-11-16",
+   "lunedi": "2026-11-23",
    "long": {
     "1000BONKUSDT": 0.05,
-    "ADAUSDT": 0.05,
-    "AEROUSDT": 0.05,
+    "1000PEPEUSDT": 0.05,
     "AKEUSDT": 0.05,
-    "APTUSDT": 0.05,
-    "ARBUSDT": 0.05,
     "BIRBUSDT": 0.05,
     "BMTUSDT": 0.05,
     "ERAUSDT": 0.05,
+    "FETUSDT": 0.05,
     "GTCUSDT": 0.05,
+    "HOTUSDT": 0.05,
     "HUMAUSDT": 0.05,
     "INITUSDT": 0.05,
+    "IRYSUSDT": 0.05,
     "JUPUSDT": 0.05,
+    "LITUSDT": 0.05,
     "LSKUSDT": 0.05,
+    "ONEUSDT": 0.05,
     "OPUSDT": 0.05,
-    "SANDUSDT": 0.05,
-    "SEIUSDT": 0.05,
-    "TRUMPUSDT": 0.05,
+    "SOPHUSDT": 0.05,
     "TRXUSDT": 0.05,
     "WLDUSDT": 0.05
    },
    "short": {
-    "AGTUSDT": -0.05,
     "AINUSDT": -0.05,
     "APRUSDT": -0.05,
     "ARIAUSDT": -0.05,
-    "BEAMXUSDT": -0.05,
     "BEATUSDT": -0.05,
+    "BLESSUSDT": -0.05,
     "BNBUSDT": -0.05,
-    "BRUSDT": -0.05,
     "BULLAUSDT": -0.05,
     "EVAAUSDT": -0.05,
+    "FARTCOINUSDT": -0.05,
     "GRASSUSDT": -0.05,
     "IDOLUSDT": -0.05,
     "JCTUSDT": -0.05,
-    "MAGMAUSDT": -0.05,
     "ONUSDT": -0.05,
+    "PIEVERSEUSDT": -0.05,
     "QUSDT": -0.05,
     "UAIUSDT": -0.05,
     "USELESSUSDT": -0.05,
+    "VVVUSDT": -0.05,
     "WLFIUSDT": -0.05,
     "XMRUSDT": -0.05
    }
   },
   "C1": {
-   "lunedi": "2026-11-09",
+   "lunedi": "2026-11-16",
    "long": [
-    "1000PEPEUSDT",
-    "AAVEUSDT",
-    "ARBUSDT",
+    "AKEUSDT",
     "ARIAUSDT",
+    "ATOMUSDT",
+    "BEAMXUSDT",
+    "BEATUSDT",
     "BIRBUSDT",
+    "BMTUSDT",
+    "BRUSDT",
+    "DASHUSDT",
     "ERAUSDT",
     "ICNTUSDT",
-    "INJUSDT",
-    "JCTUSDT",
+    "JUPUSDT",
     "LITUSDT",
     "POLUSDT",
-    "QNTUSDT",
     "RAYSOLUSDT",
     "RENDERUSDT",
-    "STXUSDT",
+    "STRKUSDT",
     "TRXUSDT",
-    "UNIUSDT",
-    "XMRUSDT",
-    "ZAMAUSDT",
-    "ZECUSDT"
+    "WLFIUSDT",
+    "XLMUSDT"
    ],
    "short": [
-    "AGTUSDT",
-    "AKEUSDT",
-    "ATOMUSDT",
-    "BATUSDT",
-    "BCHUSDT",
-    "CHIPUSDT",
+    "AEROUSDT",
+    "APTUSDT",
+    "ASTERUSDT",
+    "BNBUSDT",
+    "BTCUSDT",
+    "BULLAUSDT",
+    "DOGEUSDT",
+    "DOTUSDT",
     "ENAUSDT",
-    "FETUSDT",
-    "GRASSUSDT",
-    "GTCUSDT",
+    "ETHUSDT",
+    "FILUSDT",
     "HUMAUSDT",
     "INITUSDT",
-    "MAGMAUSDT",
-    "PUMPUSDT",
-    "QUSDT",
+    "JCTUSDT",
+    "PENGUUSDT",
+    "SOLUSDT",
     "TRUMPUSDT",
-    "USUSDT",
-    "WLDUSDT",
-    "XPLUSDT",
-    "ZKUSDT"
+    "UAIUSDT",
+    "UNIUSDT",
+    "XRPUSDT"
    ]
   },
   "A1": {
-   "giorno": "2026-11-21",
+   "giorno": "2026-11-22",
    "pesi": {
     "HYPEUSDT": 0.002
    }
@@ -655,18 +680,17 @@
  "nuove_nell_universo": [
   "AGTUSDT",
   "AINUSDT",
-  "APRUSDT",
   "ARIAUSDT",
-  "BATUSDT",
   "BEAMXUSDT",
   "BEATUSDT",
   "BIRBUSDT",
+  "BLESSUSDT",
   "BMTUSDT",
   "BULLAUSDT",
   "CHIPUSDT",
-  "DOODUSDT",
   "ERAUSDT",
   "EVAAUSDT",
+  "HOTUSDT",
   "HUMAUSDT",
   "ICNTUSDT",
   "IDOLUSDT",
@@ -674,15 +698,17 @@
   "IRYSUSDT",
   "JCTUSDT",
   "MAGMAUSDT",
+  "MEGAUSDT",
   "ONUSDT",
-  "PARTIUSDT",
+  "PIEVERSEUSDT",
+  "SOPHUSDT",
   "UAIUSDT"
  ],
  "settimana_in_corso": {
   "F5": {
-   "lunedi": "2026-11-16",
-   "fino_al": "2026-11-21",
-   "netto_senza_costi": -0.004886122551641999
+   "lunedi": "2026-11-23",
+   "fino_al": "2026-11-22",
+   "netto_senza_costi": null
   }
  },
  "passato": {
@@ -969,7 +995,7 @@
    ],
    [
     "2026-11",
-    2172.2
+    2143.2
    ]
   ],
   "F5 + M7 + K2": [
@@ -1207,7 +1233,7 @@
    ],
    [
     "2026-11",
-    768.68
+    760.67
    ]
   ]
  }
