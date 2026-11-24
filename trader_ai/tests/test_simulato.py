@@ -365,3 +365,56 @@ def test_stop_spostato_nel_minuto_del_limite_eseguito(tmp_path):
     o.ms = T0_MS + 2 * MIN + 5_000
     c.aggiorna(forza=True)
     assert c.posizioni_tutte() == []
+
+
+# --- undicesima revisione: 170, 171 ------------------------------------------------------------------------------------
+
+def _sposta_stop(c, nuovo):
+    vecchio = [x for x in c.ordini_tutti() if x["_algo"]][0]
+    c.condizionato("lungo", "STOP_MARKET", nuovo, "tais9")
+    c.annulla_condizionato(vecchio)
+
+
+def test_stop_allargato_nei_primi_secondi_il_minuto_chiuso_conta_il_vecchio(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 89500.0, "tais1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    vecchio = [x for x in c.ordini_tutti() if x["_algo"]][0]           # letto durante il minuto
+    inizio = o.ms - o.ms % MIN                                         # il minuto in corso, con lo stop a 89.500
+    m.minuto(inizio, 90000, 90010, 89400, 89900)                       # tocca 89.500
+    o.ms = inizio + MIN + 2_000                                        # 2 secondi dopo la chiusura del minuto
+    c.condizionato("lungo", "STOP_MARKET", 89000.0, "tais9")           # lo stop si allarga, ma prima si conta il minuto chiuso
+    c.annulla_condizionato(vecchio)
+    assert c.posizioni_tutte() == []
+    assert [x for x in c.s["movimenti"] if x.get("come") == "stop" and x["cosa"] == "risultato"][0]["prezzo"] == \
+        pytest.approx(89500 * 0.9999)
+
+
+def test_stop_stretto_nei_primi_secondi_non_conta_nel_minuto_prima(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 89000.0, "tais1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    inizio = o.ms - o.ms % MIN
+    m.minuto(inizio, 90000, 90010, 89400, 89900)                       # 89.400: sotto lo stop nuovo, non sotto il vecchio
+    o.ms = inizio + MIN + 2_000
+    _sposta_stop(c, 89300.0)                                           # nasce DOPO quel minuto
+    assert c.posizioni_tutte() != []
+
+
+def test_stop_allargato_a_meta_minuto_il_vecchio_vale_fino_alla_fine(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 89500.0, "tais1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    o.ms += 30_000
+    _sposta_stop(c, 89000.0)                                           # allargato a metà minuto
+    inizio = o.ms - o.ms % MIN
+    m.minuto(inizio, 90000, 90010, 89400, 89900)                       # tocca il vecchio (89.500), non il nuovo
+    o.ms = inizio + MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() == []

@@ -181,6 +181,7 @@ class ContoSimulato:
                 km = mark.get(t, k)                             # senza la candela mark si usa quella dei prezzi
                 self._candela(t, float(k[1]), float(k[2]), float(k[3]), float(km[1]), float(km[2]), float(km[3]))
                 self.s["ultimo_minuto_ms"] = int(k[6]) + 1
+                self.s["tolti"] = [a for a in self.s.get("tolti", []) if a["tolto_ms"] >= self.s["ultimo_minuto_ms"]]
         self._funding(adesso)
 
     def _candela(self, t: int, apertura: float, massimo: float, minimo: float,
@@ -205,8 +206,12 @@ class ContoSimulato:
         # * l'obiettivo conta dal minuto dopo quello in cui è nato (i prezzi di prima non potevano toccarlo);
         # * lo stop conta già nel minuto in cui nasce, e uno stop tolto resta valido fino alla fine del suo minuto: quando lo stop si
         #   sposta la posizione non resta mai scoperta; fra più stop validi nello stesso minuto vale il più vicino al prezzo.
-        stop_validi = [a for a in self.s["algo"] if a["tipo"] == "STOP_MARKET"] + \
-            [a for a in self.s.get("tolti", []) if a["tipo"] == "STOP_MARKET" and t == a["tolto_ms"] - a["tolto_ms"] % MIN]
+        #   Ogni stop vale dal minuto in cui nasce al minuto in cui viene tolto, compresi (problema 170).
+        def vivo(a):
+            nato = a.get("messo_ms", 0) - a.get("messo_ms", 0) % MIN
+            tolto = a.get("tolto_ms")
+            return nato <= t and (tolto is None or t <= tolto - tolto % MIN)
+        stop_validi = [a for a in self.s["algo"] + self.s.get("tolti", []) if a["tipo"] == "STOP_MARKET" and vivo(a)]
         stop = max(stop_validi, key=lambda a: a["prezzo"] if lungo else -a["prezzo"], default=None)
         obiettivo = next((a for a in self.s["algo"] if a["tipo"] == "TAKE_PROFIT_MARKET"
                           and t >= _minuto_dopo(a.get("messo_ms", 0))), None)
@@ -269,7 +274,7 @@ class ContoSimulato:
         p["chiusa_ms"] = t if t is not None else self.ora_ms()
         self.s["chiuse"] = (self.s["chiuse"] + [p])[-20:]
         self.s["posizione"] = None
-        self.s["algo"] = []                           # stop e obiettivo «chiudi tutto» non servono più
+        self.s["algo"], self.s["tolti"] = [], []      # stop e obiettivo «chiudi tutto» non servono più
 
     # --- la stessa interfaccia di ContoDemo ------------------------------------------------------------------------
     def candele(self, intervallo: str, ora_ms: Optional[int] = None, n: int = 200) -> list:
@@ -357,6 +362,7 @@ class ContoSimulato:
         if subito:
             raise RuntimeError('{"code":-2021,"msg":"Order would immediately trigger."}')
         with self._stato():
+            self._aggiorna(self.ora_ms())             # i minuti già chiusi si contano con gli stop di prima (problema 170)
             algo_id = self.s["prossimo_id"]
             self.s["prossimo_id"] += 1
             self.s["algo"].append({"algoId": algo_id, "cid": cid, "tipo": tipo, "prezzo": prezzo, "lato": lato_posizione,
@@ -365,11 +371,11 @@ class ContoSimulato:
 
     def annulla_condizionato(self, ordine: dict) -> None:
         with self._stato():
+            self._aggiorna(self.ora_ms())             # i minuti già chiusi si contano con lo stop ancora al suo posto
             tolti = [a for a in self.s["algo"] if a["algoId"] == ordine.get("algoId")]
             self.s["algo"] = [a for a in self.s["algo"] if a["algoId"] != ordine.get("algoId")]
             adesso = self.ora_ms()
-            self.s["tolti"] = [a for a in self.s.get("tolti", []) if adesso - a["tolto_ms"] < 2 * MIN] + \
-                [{**a, "tolto_ms": adesso} for a in tolti]
+            self.s["tolti"] = self.s.get("tolti", []) + [{**a, "tolto_ms": adesso} for a in tolti]
 
     def annulla_tutto(self) -> None:
         with self._stato():
