@@ -40,3 +40,9 @@ con l'obiettivo di 50 USDT al giorno, poi si ferma fino a mezzanotte UTC. Chiama
 
 Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto
 misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti, per questo il trader gira sulla macchina.
+
+## Aperti dopo le revisioni (bassi, non bloccano l'avvio; 24 novembre 2026)
+* 173-175 della dodicesima revisione (`revisioni/2026-11-24-dodicesima.md`): togliere il conteggio dei minuti dentro `condizionato` e
+  `annulla_condizionato` (gli intervalli di vita degli stop bastano), far valere solo gli stop dello stesso lato della posizione,
+  rendere significativo il test dello stop stretto. Da fare con il primo giro di modifiche dopo l'avvio, con la sua revisione.
+* Le revisioni del trader vanno copiate in `reviews/` dalla sessione delle crypto (`RICHIESTE_CRYPTO.md`, voce 3).
