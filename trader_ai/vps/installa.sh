@@ -31,7 +31,19 @@ valore() {   # valore di una variabile in un file .env, senza stamparlo (toglie 
     | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^["'\'']//' -e 's/["'\'']$//' || true
 }
 
+simulato() { grep -q '"conto": "simulato"' "$QUI/trader_ai/config.json"; }
+
 chiedi_chiavi() {
+  if simulato; then          # conto simulato (24 novembre 2026): nessuna chiave di Binance, solo quella del modello
+    A="$(valore ANTHROPIC_API_KEY "$ENV_BOT")"
+    W="$(valore ANTHROPIC_WORKSPACE_ID "$ENV_BOT")"
+    [ -n "$A" ] || { echo "[trader-ai] manca ANTHROPIC_API_KEY nelle impostazioni del bot: mi fermo"; exit 1; }
+    umask 077
+    { printf 'ANTHROPIC_API_KEY=%s\n' "$A"; [ -n "$W" ] && printf 'ANTHROPIC_WORKSPACE_ID=%s\n' "$W"; true; } > "$ENVF"
+    chmod 600 "$ENVF"
+    echo "[trader-ai] conto simulato: nessuna chiave di Binance; chiave del modello copiata dalle impostazioni del bot in $ENVF (solo root)"
+    return 0
+  fi
   echo "[trader-ai] Chiavi del conto demo NUOVO (non quello di G1). Non compaiono mentre scrivi."
   read -r -s -p "  TRADER_AI_DEMO_API_KEY: " K; echo
   read -r -s -p "  TRADER_AI_DEMO_API_SECRET: " S; echo
@@ -72,6 +84,7 @@ case "${1:-installa}" in
   chiavi)
     chiedi_chiavi; exit 0 ;;
   prova)
+    simulato && { echo "[trader-ai] conto simulato: la prova sul demo non serve (nessun ordine va a Binance)"; exit 0; }
     systemctl is-active --quiet trader-ai.service && { echo "[trader-ai] il trader è acceso: prima «ferma»"; exit 1; }
     ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.prova )
     exit $? ;;

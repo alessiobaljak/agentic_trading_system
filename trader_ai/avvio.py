@@ -539,8 +539,12 @@ def _commit() -> str:
 
 def main(argv: list) -> int:
     cfg = json.loads(CONFIG.read_text())
-    chiave, segreto = controlla_chiavi()
-    conto = ContoDemo(chiave, segreto, cfg["moneta"])
+    if cfg.get("conto", "simulato") == "simulato":   # decisione del proprietario del 24 novembre 2026
+        from trader_ai.conto_simulato import ContoSimulato, MercatoPubblico
+        conto = ContoSimulato(MercatoPubblico(cfg["moneta"]), CARTELLA / "conto_simulato.json")
+    else:
+        chiave, segreto = controlla_chiavi()
+        conto = ContoDemo(chiave, segreto, cfg["moneta"])
     comando = argv[1] if len(argv) > 1 else "controlla"
     if comando == "controlla":                         # sola lettura
         m, s = conto.mercato(), conto.saldo()
@@ -563,8 +567,9 @@ def main(argv: list) -> int:
         return 2
     client = crea_client()
     trader.chiama = lambda system, utente: chiama(client, system, utente)
-    print(f"[trader_ai] acceso su {cfg['moneta']}, codice al commit {_commit()}, dati in {CARTELLA}", flush=True)
-    trader.evento(datetime.now(timezone.utc), "acceso", commit=_commit(), moneta=cfg["moneta"])
+    print(f"[trader_ai] acceso su {cfg['moneta']}, conto {cfg.get('conto', 'simulato')}, codice al commit {_commit()}, "
+          f"dati in {CARTELLA}", flush=True)
+    trader.evento(datetime.now(timezone.utc), "acceso", commit=_commit(), moneta=cfg["moneta"], conto=cfg.get("conto", "simulato"))
     while True:
         try:
             with bloccato():

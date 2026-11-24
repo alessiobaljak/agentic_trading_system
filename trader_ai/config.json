@@ -1,5 +1,11 @@
 {
  "moneta": "BTCUSDT",
- "intervalli": ["5m", "15m", "30m"],
- "nota": "La moneta la sceglie il proprietario (23 novembre 2026, «la moneta la scelgo io, esempio BTC»); intervalli fissi 5, 15, 30 minuti."
+ "intervalli": [
+  "5m",
+  "15m",
+  "30m"
+ ],
+ "nota": "La moneta la sceglie il proprietario (23 novembre 2026, «la moneta la scelgo io, esempio BTC»); intervalli fissi 5, 15, 30 minuti.",
+ "conto": "simulato",
+ "nota_conto": "Il proprietario, 24 novembre 2026: «conto simulato sul programma va bene» (le chiavi nuove possono stare solo sull'account di G1). Con «demo» il trader usa un conto demo suo (conto_demo.py), se un giorno ci sarà."
 }

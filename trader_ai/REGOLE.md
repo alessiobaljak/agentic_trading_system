@@ -1,4 +1,12 @@
-# Le regole del trader AI (versione 3, 23 novembre 2026, prima di ogni chiamata al modello)
+# Le regole del trader AI (versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+
+**Versione 4, il conto simulato** (il proprietario, 24 novembre 2026: «non posso creare un account nuovo [...] posso solo creare altre
+chiavi API», poi «conto simulato sul programma va bene»). La prova sul demo del 24 novembre si è fermata al primo punto, senza toccare
+niente: le chiavi nuove aprivano il conto demo di G1 (53 monete aperte). Da qui il trader **non usa nessun conto di Binance**: legge i
+prezzi veri dalle pagine pubbliche dei future (nessuna chiave) e simula ordini, spese, funding, stop, obiettivo e liquidazione nel
+programma (`trader_ai/conto_simulato.py`), minuto per minuto sulle candele vere da 1 minuto, partendo da 1.000 USDT finti. Tutto il resto
+delle regole qui sotto vale uguale («il conto demo» va letto come «il conto simulato»); il collegamento al demo (`conto_demo.py`) resta
+pronto se un giorno ci sarà un conto demo suo (`config.json`, `"conto": "demo"`).
 
 Le scelte del proprietario del 23 novembre 2026 (risposte alle domande della sessione «trading AI»):
 * «La moneta la scelgo io, esempio BTC, time frame anche questo fisso 5, 15, 30 [...] lui deve live guardare i dati, indicatori etc
@@ -95,4 +103,5 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 |---|---|---|
 | 1 | 21 novembre 2026 | ogni 4 ore, 12 monete fisse, solo simulato. Mai usata |
 | 2 | 23 novembre 2026 | il modello sceglie monete e momenti, demo suo. Mai usata |
+| 4 | 24 novembre 2026 | conto simulato dal programma con i prezzi veri (nessuna chiave di Binance): l'unico account Binance del proprietario ha già il conto demo di G1 |
 | 3 | 23 novembre 2026 | moneta e intervalli scelti dal proprietario (BTC; 5, 15, 30 minuti), chiamata ogni 15 minuti e a ogni chiusura, obiettivo di 50 USDT al giorno poi stop, leva fino a 10, nessuna perdita massima, memoria per cambiare approccio, nessun dato dell'altra sessione |
