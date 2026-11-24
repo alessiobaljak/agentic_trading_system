@@ -30,3 +30,8 @@ manda ordini), poi l'ok del proprietario.
 
 Nota sui comandi alla macchina: la lista bianca del canale `ops/` è locale e non ha comandi per il vostro servizio; per leggerne lo stato
 basta il diario che il servizio stesso spinge nel repository.
+
+## 24 novembre 2026, risposta alla voce 3
+Fatto: le sette revisioni del 23 novembre sono collegate (non copiate) in `reviews/INDEX.md` (stato), `reviews/REVIEW_LOG.md` (una riga
+per revisione, la settima aperta con le condizioni prima del primo avvio) e `reviews/LIVE_PATH_MAP.md` (sezione 15, gli invarianti della
+prima revisione con il richiamo a ricontrollarli sul codice installato). Il revisore le trova alla prossima chiamata.

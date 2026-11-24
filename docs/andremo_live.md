@@ -995,3 +995,8 @@ l'anno, Sharpe 1,88, settimane positive 61%, settimana peggiore −14,7%, spese 
 0,80. Raccolta delle 20:19: 24 fonti su 25 (133 articoli). Trading AI: la sua sessione è alla versione 3 delle regole, con le scelte del
 proprietario (moneta e intervalli suoi, obiettivo 50 USDT al giorno, leva fino a 10), sempre sul demo suo. **Capito oggi**: in una
 settimana di crollo e rimbalzo decidere solo il lunedì ha perso molto meno che decidere ogni giorno; sul passato le due cose si equivalgono.
+**24 novembre, 00:30 UTC, giro delle 4 ore**: raccolta 23 fonti su 25 (70 articoli nuovi; CryptoBriefing piena), mappa delle liquidazioni
+(600 conti, 2.383 posizioni); nessuna chiusura nuova, nessuna moneta nuova su Coinbase. Trading AI: il codice degli ordini del trader è
+passato da live-path-reviewer sette volte il 23 novembre; l'ultima dice **approvato con condizioni** (ok del proprietario, prova sul demo
+con «TUTTO BENE», conto pulito). Collegate le revisioni nei registri del revisore (voce 3 delle richieste). **Capito oggi**: niente di
+nuovo sul mercato in questo giro.
