@@ -1021,3 +1021,6 @@ conto contro parte del mercato fino a +306%): copiarli oggi vuol dire scommetter
 CryptoBriefing e Bitcoinist: la quarta pagina di CryptoBriefing non è piena, quindi quella fonte è coperta; per Bitcoinist qualche articolo
 può mancare), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito oggi**:
 niente di nuovo in questo giro.
+**24 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (129 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (alle 04:17 il ribilancio e le due letture del mattino). **Capito oggi**:
+niente di nuovo in questo giro.
