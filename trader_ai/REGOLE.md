@@ -8,6 +8,18 @@ programma (`trader_ai/conto_simulato.py`), minuto per minuto sulle candele vere 
 delle regole qui sotto vale uguale («il conto demo» va letto come «il conto simulato»); il collegamento al demo (`conto_demo.py`) resta
 pronto se un giorno ci sarà un conto demo suo (`config.json`, `"conto": "demo"`).
 
+**Come simula** (`conto_simulato.py`; scelte tecniche della sessione, approvate dalla nona revisione del 24 novembre):
+* spese 0,05% a mercato e 0,02% con ordine limite eseguito; scarto di prezzo 0,01% su BTC, ETH e SOL, 0,02% sulle altre, contro di noi;
+* stop, obiettivo e liquidazione scattano sul **prezzo mark** del minuto (come farebbero sul conto, `workingType=MARK_PRICE`); si esce al
+  livello meno lo scarto, o all'apertura del minuto se apre già oltre; stop e obiettivo nello stesso minuto: vale lo stop;
+* un ordine limite si esegue solo se il prezzo **va oltre** il limite (toccarlo non basta); un limite che incrocia subito il prezzo si
+  esegue a mercato;
+* un ordine, uno stop o un obiettivo contano **dal minuto dopo** quello in cui sono nati; nel minuto in cui un limite si esegue
+  l'obiettivo non conta e lo stop sì (il caso peggiore);
+* liquidazione: si perde tutto il margine della posizione (margine separato), prezzo approssimato a 1/leva meno lo 0,5%;
+* funding: i pagamenti veri pubblicati da Binance, anche in ritardo, una volta sola, alla posizione aperta in quel momento;
+* dopo un fermo si recuperano tutti i minuti persi; se Binance non li ha, nessuna decisione finché non arrivano.
+
 Le scelte del proprietario del 23 novembre 2026 (risposte alle domande della sessione «trading AI»):
 * «La moneta la scelgo io, esempio BTC, time frame anche questo fisso 5, 15, 30 [...] lui deve live guardare i dati, indicatori etc
   e decidere quando entrare, TP, SL, leva; l'obiettivo [...] partendo da 1000 fare XX profitto al giorno, dopo quello si ferma.»

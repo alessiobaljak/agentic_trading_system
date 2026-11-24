@@ -201,8 +201,13 @@ class ContoSimulato:
         if p is None or t < _minuto_dopo(p["aperta_ms"]) - (MIN if p.get("da_limite") else 0):
             return
         lungo = p["lato"] == "lungo"
-        stop = next((a for a in self.s["algo"] if a["tipo"] == "STOP_MARKET"), None)
-        obiettivo = next((a for a in self.s["algo"] if a["tipo"] == "TAKE_PROFIT_MARKET"), None)
+        # uno stop o un obiettivo conta dal minuto dopo quello in cui è nato (i prezzi di prima non potevano toccarlo); nel minuto
+        # in cui un limite si esegue l'obiettivo non conta, lo stop sì (il caso peggiore) (revisione del 24 novembre, problema 163)
+        attivi = [a for a in self.s["algo"] if t >= _minuto_dopo(a.get("messo_ms", 0))]
+        stop = next((a for a in attivi if a["tipo"] == "STOP_MARKET"), None)
+        obiettivo = next((a for a in attivi if a["tipo"] == "TAKE_PROFIT_MARKET"), None)
+        if p.get("da_limite") and t == p["aperta_ms"]:
+            obiettivo = None
         avverso = m_minimo if lungo else m_massimo
         favorevole = m_massimo if lungo else m_minimo
         livelli = [(p["liquidazione"], "liquidazione")] + ([(stop["prezzo"], "stop")] if stop else [])
@@ -350,7 +355,8 @@ class ContoSimulato:
         with self._stato():
             algo_id = self.s["prossimo_id"]
             self.s["prossimo_id"] += 1
-            self.s["algo"].append({"algoId": algo_id, "cid": cid, "tipo": tipo, "prezzo": prezzo, "lato": lato_posizione})
+            self.s["algo"].append({"algoId": algo_id, "cid": cid, "tipo": tipo, "prezzo": prezzo, "lato": lato_posizione,
+                                   "messo_ms": self.ora_ms()})
         return {"algoId": algo_id}
 
     def annulla_condizionato(self, ordine: dict) -> None:

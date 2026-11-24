@@ -285,3 +285,32 @@ def test_pausa_dopo_troppe_richieste():
         with pytest.raises(RuntimeError):
             mp.mercato()
     assert len(visti) == 1
+
+
+# --- nona revisione: 163 --------------------------------------------------------------------------------------------------
+
+def test_stop_spostato_a_meta_minuto_non_conta_i_prezzi_di_prima(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    o.ms += 20_000                                                     # a metà del minuto dopo si mette un obiettivo
+    c.condizionato("lungo", "TAKE_PROFIT_MARKET", 90500.0, "tait1")
+    inizio = o.ms - o.ms % MIN
+    m.minuto(inizio, 90000, 90600, 89990, 90000)                       # il 90.600 era prima dell'obiettivo
+    o.ms = inizio + MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() != []
+    avanza(c, m, o, 90000, 90600, 89990, 90000)                        # al minuto dopo sì
+    assert c.posizioni_tutte() == [] and c.s["movimenti"][-2]["come"] == "obiettivo"
+
+
+def test_nel_minuto_del_limite_eseguito_l_obiettivo_non_conta(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1", "LIMIT", 89500.0)
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    c.condizionato("lungo", "TAKE_PROFIT_MARKET", 90500.0, "tait1")
+    avanza(c, m, o, 90000, 90600, 89400, 90000)                        # esegue il limite e tocca anche 90.600
+    assert c.posizioni_tutte() != []                                   # l'ordine dei prezzi nel minuto non si sa
