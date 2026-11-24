@@ -354,6 +354,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 49** (le vendite allo scoperto fuori borsa, il DIX di SqueezeMetrics, idea I57: lo SPY al 98% nelle settimane con il
+  DIX sopra la media di un anno, al 49% nelle altre): **bocciata** (`prove/P049_risultati.md`). Capito: **il DIX non separa le
+  settimane** (lo SPY nelle 4 settimane dopo +1,37% con il DIX alto, +1,20% con quello basso); lo SPY tenuto sempre alla quota
+  media della regola rende di più (Sharpe 0,84 contro 0,79), e la regola al contrario quasi uguale (0,81). Non è nemmeno il «comprare
+  dopo le cadute» (correlazione con le 4 settimane prima −0,05). La tesi del venditore del dato non trova conferma qui. Nel conto: 114.
 * **Sul demo dal 24 novembre 2026: la prova 45** (decisione del proprietario del 23 novembre: «metti la prova 45 sul demo»),
   regole scritte prima in `stock/avanti/GAMMA.md`, programma `stock/avanti/gamma.py`, lavoro di GitHub
   `.github/workflows/azioni_gamma.yml`, acceso da `stock/avanti/gamma_accesa`. Nei giorni con la copertura delle opzioni del giorno
