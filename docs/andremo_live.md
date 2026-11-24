@@ -1000,3 +1000,10 @@ settimana di crollo e rimbalzo decidere solo il lunedì ha perso molto meno che 
 passato da live-path-reviewer sette volte il 23 novembre; l'ultima dice **approvato con condizioni** (ok del proprietario, prova sul demo
 con «TUTTO BENE», conto pulito). Collegate le revisioni nei registri del revisore (voce 3 delle richieste). **Capito oggi**: niente di
 nuovo sul mercato in questo giro.
+**24 novembre, 04:30 UTC, il diciassettesimo ribilancio e le letture del mattino** (`ops/results/0771`, `0772`): 9 ordini, gli stessi
+rifiuti. Il 23 novembre, con il ritorno di Huang in Nvidia e il Bitcoin +17% dai 55.000, G1 risale: demo +1,71%, paper +0,96%, F5 +2,1%
+fra le due letture. Dal 9 novembre demo −0,22%, paper +1,91%. Fatti gravi (commit 1377db3, prima dei prezzi): **SKY giù forza 2** (Upbit e
+Bithumb la mettono «con cautela», il cofondatore deve 77 milioni e pensa di vendere), **MON giù forza 1** (sblocco da 190 milioni più grande
+del suo valore); ACE e CYBER non contate di nuovo (già segnate ieri). Monete vendute da G1: nessuna a rischio. Su 552 articoli in 24 ore,
+nessun fatto nuovo di mercato oltre il ritorno di Huang. **Capito oggi**: nelle notizie di una giornata grande i fatti propri di una
+moneta sono pochi (due su 41 monete citate); il resto è mercato in generale.

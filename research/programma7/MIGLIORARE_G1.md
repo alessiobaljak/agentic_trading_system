@@ -493,3 +493,8 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   29 vendute; articoli solo per XMR, HYPE, VVV e PIEVERSE, tutti sul rimbalzo dopo il crollo di sabato (movimenti di prezzo, non fatti);
   18 ricerche sul web senza notizie datate. **Nessuna moneta «sì».**
 * **23 novembre 2026, voce 12, G1 dopo un crollo del Bitcoin** (`misure_g1/voce12_rimbalzi.py`, `voce12_rimbalzi.md`; crollo = Bitcoin -10% in 3 giorni, 14 giorni fra eventi, 26 eventi 2021-4 ott 2026): lato venduto **+1,0 / +2,0 / +2,6** a 1, 3, 7 giorni (normale +0,05 a 7), piccole 51-100 positive; lato comprato -2,8 a 7 giorni (normale +0,95); G1 -0,16 contro +1,01. Errori grandi quanto le medie: nessun effetto netto. **Capito**: sul passato le piccole vendute non perdono dopo i crolli; la settimana del 21-22 e' un caso solo. Nessuna regola provata; da guardare semmai il lato comprato (idea senza perche' forte).
+* **24 novembre 2026, 04:25 UTC, voce 8 (diciassettesimo ribilancio a 1.000 USDT)** (`ops/results/0771`, `0772`): 9 ordini (8 a limite,
+  1 a mercato), 45 variazioni sotto il minimo (7,0% del conto), gli stessi 4 rifiuti e IRYSUSDT assente; nessun errore nuovo. Il 23
+  novembre demo +1,71%, paper +0,96%. Equity del demo 993,05 (−0,69% dall'8 novembre), G1 nel paper 10.664,47; **dal 9 novembre (16 giorni)
+  demo −0,22%, paper +1,91%** (−0,13 punti al giorno). Lettura delle monete vendute (voce 14, terza): nessuna «sì»; da oggi niente
+  ricerche sul web senza un articolo che faccia pensare a un fatto (due mattine su due senza risultati).
