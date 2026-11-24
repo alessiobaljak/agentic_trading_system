@@ -14,8 +14,10 @@ pronto se un giorno ci sarà un conto demo suo (`config.json`, `"conto": "demo"`
   livello meno lo scarto, o all'apertura del minuto se apre già oltre; stop e obiettivo nello stesso minuto: vale lo stop;
 * un ordine limite si esegue solo se il prezzo **va oltre** il limite (toccarlo non basta); un limite che incrocia subito il prezzo si
   esegue a mercato;
-* un ordine, uno stop o un obiettivo contano **dal minuto dopo** quello in cui sono nati; nel minuto in cui un limite si esegue
-  l'obiettivo non conta e lo stop sì (il caso peggiore);
+* sempre il caso peggiore per noi: un ordine limite e un obiettivo contano **dal minuto dopo** quello in cui sono nati; uno stop
+  conta **già nel minuto in cui nasce**, e uno stop tolto resta valido fino alla fine del suo minuto (quando lo stop si sposta la
+  posizione non resta mai scoperta; fra più stop vale il più vicino al prezzo); nel minuto in cui un limite si esegue l'obiettivo non
+  conta e lo stop sì;
 * liquidazione: si perde tutto il margine della posizione (margine separato), prezzo approssimato a 1/leva meno lo 0,5%;
 * funding: i pagamenti veri pubblicati da Binance, anche in ritardo, una volta sola, alla posizione aperta in quel momento;
 * dopo un fermo si recuperano tutti i minuti persi; se Binance non li ha, nessuna decisione finché non arrivano.

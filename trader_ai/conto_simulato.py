@@ -201,11 +201,15 @@ class ContoSimulato:
         if p is None or t < _minuto_dopo(p["aperta_ms"]) - (MIN if p.get("da_limite") else 0):
             return
         lungo = p["lato"] == "lungo"
-        # uno stop o un obiettivo conta dal minuto dopo quello in cui è nato (i prezzi di prima non potevano toccarlo); nel minuto
-        # in cui un limite si esegue l'obiettivo non conta, lo stop sì (il caso peggiore) (revisione del 24 novembre, problema 163)
-        attivi = [a for a in self.s["algo"] if t >= _minuto_dopo(a.get("messo_ms", 0))]
-        stop = next((a for a in attivi if a["tipo"] == "STOP_MARKET"), None)
-        obiettivo = next((a for a in attivi if a["tipo"] == "TAKE_PROFIT_MARKET"), None)
+        # sempre il caso peggiore per noi (revisioni del 24 novembre, problemi 163 e 167):
+        # * l'obiettivo conta dal minuto dopo quello in cui è nato (i prezzi di prima non potevano toccarlo);
+        # * lo stop conta già nel minuto in cui nasce, e uno stop tolto resta valido fino alla fine del suo minuto: quando lo stop si
+        #   sposta la posizione non resta mai scoperta; fra più stop validi nello stesso minuto vale il più vicino al prezzo.
+        stop_validi = [a for a in self.s["algo"] if a["tipo"] == "STOP_MARKET"] + \
+            [a for a in self.s.get("tolti", []) if a["tipo"] == "STOP_MARKET" and t == a["tolto_ms"] - a["tolto_ms"] % MIN]
+        stop = max(stop_validi, key=lambda a: a["prezzo"] if lungo else -a["prezzo"], default=None)
+        obiettivo = next((a for a in self.s["algo"] if a["tipo"] == "TAKE_PROFIT_MARKET"
+                          and t >= _minuto_dopo(a.get("messo_ms", 0))), None)
         if p.get("da_limite") and t == p["aperta_ms"]:
             obiettivo = None
         avverso = m_minimo if lungo else m_massimo
@@ -361,7 +365,11 @@ class ContoSimulato:
 
     def annulla_condizionato(self, ordine: dict) -> None:
         with self._stato():
+            tolti = [a for a in self.s["algo"] if a["algoId"] == ordine.get("algoId")]
             self.s["algo"] = [a for a in self.s["algo"] if a["algoId"] != ordine.get("algoId")]
+            adesso = self.ora_ms()
+            self.s["tolti"] = [a for a in self.s.get("tolti", []) if adesso - a["tolto_ms"] < 2 * MIN] + \
+                [{**a, "tolto_ms": adesso} for a in tolti]
 
     def annulla_tutto(self) -> None:
         with self._stato():

@@ -289,7 +289,7 @@ def test_pausa_dopo_troppe_richieste():
 
 # --- nona revisione: 163 --------------------------------------------------------------------------------------------------
 
-def test_stop_spostato_a_meta_minuto_non_conta_i_prezzi_di_prima(tmp_path):
+def test_obiettivo_messo_a_meta_minuto_non_conta_i_prezzi_di_prima(tmp_path):
     c, m, o = conto(tmp_path)
     c.prepara(5)
     c.apri("lungo", 0.01, "taio1")
@@ -314,3 +314,54 @@ def test_nel_minuto_del_limite_eseguito_l_obiettivo_non_conta(tmp_path):
     c.condizionato("lungo", "TAKE_PROFIT_MARKET", 90500.0, "tait1")
     avanza(c, m, o, 90000, 90600, 89400, 90000)                        # esegue il limite e tocca anche 90.600
     assert c.posizioni_tutte() != []                                   # l'ordine dei prezzi nel minuto non si sa
+
+
+# --- decima revisione: 167 -----------------------------------------------------------------------------------------------
+
+def test_stop_spostato_a_meta_minuto_il_vecchio_vale_fino_alla_fine_del_minuto(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    c.condizionato("lungo", "STOP_MARKET", 89500.0, "tais1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)
+    o.ms += 30_000                                                     # a metà minuto lo stop passa da 89.500 a 89.700
+    vecchio = [x for x in c.ordini_tutti() if x["_algo"]][0]
+    c.condizionato("lungo", "STOP_MARKET", 89700.0, "tais2")
+    c.annulla_condizionato(vecchio)
+    inizio = o.ms - o.ms % MIN
+    m.minuto(inizio, 90000, 90010, 89400, 89900)                       # il minimo tocca tutti e due gli stop
+    o.ms = inizio + MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() == []
+    uscita = [x for x in c.s["movimenti"] if x.get("come") == "stop" and x["cosa"] == "risultato"][0]["prezzo"]
+    assert uscita == pytest.approx(89700 * 0.9999)                     # il più vicino al prezzo
+
+
+def test_stop_rimesso_a_meta_minuto_conta_subito(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1")
+    avanza(c, m, o, 90000, 90010, 89990, 90000)                        # per un minuto senza stop (dopo un riavvio)
+    o.ms += 30_000
+    c.condizionato("lungo", "STOP_MARKET", 89500.0, "tais1")           # la protezione lo rimette a metà minuto
+    inizio = o.ms - o.ms % MIN
+    m.minuto(inizio, 90000, 90010, 89400, 89900)
+    o.ms = inizio + MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() == []
+
+
+def test_stop_spostato_nel_minuto_del_limite_eseguito(tmp_path):
+    c, m, o = conto(tmp_path)
+    c.prepara(5)
+    c.apri("lungo", 0.01, "taio1", "LIMIT", 89500.0)
+    c.condizionato("lungo", "STOP_MARKET", 88000.0, "tais1")
+    m.minuto(T0_MS, 90000, 90010, 89990, 90000)
+    o.ms = T0_MS + MIN + 30_000                                        # nel minuto dopo, a metà, lo stop sale a 89.300
+    vecchio = [x for x in c.ordini_tutti() if x["_algo"]][0]
+    c.condizionato("lungo", "STOP_MARKET", 89300.0, "tais2")
+    c.annulla_condizionato(vecchio)
+    m.minuto(T0_MS + MIN, 90000, 90010, 89200, 89900)                  # esegue il limite e scende sotto lo stop nuovo
+    o.ms = T0_MS + 2 * MIN + 5_000
+    c.aggiorna(forza=True)
+    assert c.posizioni_tutte() == []
