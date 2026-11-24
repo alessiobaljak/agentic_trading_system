@@ -1,0 +1,106 @@
+{
+ "giorno": "2026-11-24",
+ "valore_conto": 100120.73,
+ "ordini": [
+  {
+   "simbolo": "MU",
+   "lato": "sell",
+   "quantita": 15,
+   "stop": 671.67,
+   "obiettivo": 458.77,
+   "riferimento": 652.315,
+   "id": "ce16c999-b7ec-4474-a55a-2cf18924551c",
+   "inviato": "2026-11-24T09:45:06.333455931-05:00"
+  },
+  {
+   "simbolo": "NVDA",
+   "lato": "sell",
+   "quantita": 63,
+   "stop": 159.88,
+   "obiettivo": 104.77,
+   "riferimento": 154.87,
+   "id": "dfa79f7a-e54e-485a-bbaf-d9a7cb4f1549",
+   "inviato": "2026-11-24T09:45:06.541993250-05:00"
+  },
+  {
+   "simbolo": "SNDK",
+   "lato": "sell",
+   "quantita": 121,
+   "stop": 83.82,
+   "obiettivo": 47.08,
+   "riferimento": 80.48,
+   "id": "a92b1589-8514-42c1-96af-3072f9585f10",
+   "inviato": "2026-11-24T09:45:06.799037570-05:00"
+  },
+  {
+   "simbolo": "AAPL",
+   "lato": "buy",
+   "quantita": 27,
+   "stop": 345.92,
+   "obiettivo": 416.65,
+   "riferimento": 352.35,
+   "id": "fd1e9b73-c4f9-4326-a149-c12b18e126ed",
+   "inviato": "2026-11-24T09:45:06.953072245-05:00"
+  },
+  {
+   "simbolo": "META",
+   "lato": "buy",
+   "quantita": 16,
+   "stop": 588.58,
+   "obiettivo": 677.9,
+   "riferimento": 596.7,
+   "id": "14133e64-6bf8-4c58-89dc-75bfa217462f",
+   "inviato": "2026-11-24T09:45:07.172735633-05:00"
+  },
+  {
+   "simbolo": "TSLA",
+   "lato": "buy",
+   "quantita": 25,
+   "stop": 380.64,
+   "obiettivo": 439.77,
+   "riferimento": 386.02,
+   "id": "2b52b739-0f6e-4a65-9455-1836fed303b0",
+   "inviato": "2026-11-24T09:45:07.440697870-05:00"
+  },
+  {
+   "simbolo": "MSFT",
+   "lato": "buy",
+   "quantita": 19,
+   "stop": 488.89,
+   "obiettivo": 529.7,
+   "riferimento": 492.6,
+   "id": "182b250f-56c9-4ce2-a65a-0aa67cdaf218",
+   "inviato": "2026-11-24T09:45:07.871612498-05:00"
+  },
+  {
+   "simbolo": "AMD",
+   "lato": "sell",
+   "quantita": 23,
+   "stop": 428.64,
+   "obiettivo": 286.58,
+   "riferimento": 415.73,
+   "id": "d0ae01c3-3cb6-4d1a-b3e1-9e76673daf34",
+   "inviato": "2026-11-24T09:45:08.064450508-05:00"
+  },
+  {
+   "simbolo": "INTC",
+   "lato": "sell",
+   "quantita": 172,
+   "stop": 57.52,
+   "obiettivo": 49.21,
+   "riferimento": 56.76,
+   "id": "34284722-e0a2-4a02-8c28-82dc84303caa",
+   "inviato": "2026-11-24T09:45:08.200252663-05:00"
+  },
+  {
+   "simbolo": "AMZN",
+   "lato": "buy",
+   "quantita": 38,
+   "stop": 250.61,
+   "obiettivo": 280.47,
+   "riferimento": 253.325,
+   "id": "e8198cb0-8020-4f2c-95c4-2d6199542e8a",
+   "inviato": "2026-11-24T09:45:08.352618704-05:00"
+  }
+ ]
+}
