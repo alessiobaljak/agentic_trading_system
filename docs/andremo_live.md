@@ -1007,3 +1007,7 @@ Bithumb la mettono «con cautela», il cofondatore deve 77 milioni e pensa di ve
 del suo valore); ACE e CYBER non contate di nuovo (già segnate ieri). Monete vendute da G1: nessuna a rischio. Su 552 articoli in 24 ore,
 nessun fatto nuovo di mercato oltre il ritorno di Huang. **Capito oggi**: nelle notizie di una giornata grande i fatti propri di una
 moneta sono pochi (due su 41 monete citate); il resto è mercato in generale.
+**24 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 23 fonti su 25 (32 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. Ricerca: strategy-scout scrive le regole del «giudice delle balene» (idea 152), una misura in
+avanti in cui la sessione giudica ogni lunedì quali conti grandi di Hyperliquid guadagnano con la scelta delle monete e quali solo con la
+direzione del mercato. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
