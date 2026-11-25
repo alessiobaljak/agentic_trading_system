@@ -498,3 +498,8 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   novembre demo +1,71%, paper +0,96%. Equity del demo 993,05 (−0,69% dall'8 novembre), G1 nel paper 10.664,47; **dal 9 novembre (16 giorni)
   demo −0,22%, paper +1,91%** (−0,13 punti al giorno). Lettura delle monete vendute (voce 14, terza): nessuna «sì»; da oggi niente
   ricerche sul web senza un articolo che faccia pensare a un fatto (due mattine su due senza risultati).
+* **25 novembre 2026, 04:25 UTC, voce 8 (diciottesimo ribilancio a 1.000 USDT)** (`ops/results/0773`, `0774`): 4 ordini a limite, 51
+  variazioni sotto il minimo (7,4% del conto), gli stessi 4 rifiuti e IRYSUSDT assente; nessun errore nuovo. Il 24 novembre demo −0,59%,
+  paper +0,23% (il demo 0,82 sotto). Equity del demo 991,51 (−0,85% dall'8 novembre), G1 nel paper 10.672,34, F5 nel paper 10.876,97
+  (F5 +1,16% e G1 +0,07% fra le letture delle 04:18 del 24 e del 25). **Dal 9 novembre (17 giorni) demo −0,37%, paper +1,98%** (−0,14 punti
+  al giorno). Voce 14, quarta lettura: nessuna «sì».

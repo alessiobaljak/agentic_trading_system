@@ -1031,3 +1031,9 @@ piccolo, oppure una prova «ogni giorno con il mercato in tendenza, una volta a 
 **25 novembre, 00:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (52 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
 nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito oggi**: nel paper, in un mercato che va su e giù, decidere una
 volta a settimana ha battuto decidere ogni giorno di quasi 6 punti in 8 giorni; sul passato le due cose si equivalgono.
+**25 novembre, 04:30 UTC, il diciottesimo ribilancio e le letture del mattino**: 4 ordini a limite, gli stessi rifiuti. Fra le letture
+delle 04:18 del 24 e del 25 novembre F5 +1,16%, G1 nel paper +0,07%, demo −0,16%; dal 9 novembre demo −0,37%, paper +1,98%. Fatti gravi
+(commit be1600b, prima dei prezzi): **AAVE, LINK e UNI su, forza 1** (Fidelity le apre ai suoi clienti al dettaglio; un fatto solo, tre
+casi). Monete vendute da G1: nessuna a rischio (Arthur Hayes nomina NEAR e VVV fra le sue preferite: opinione, non fatto). **Capito oggi**:
+lo scarto fra demo e paper di G1 continua ad allargarsi (−0,14 punti al giorno in 17 giorni): le monete che mancano sul demo (EVAA, LIT,
+UAI, IRYS, PIEVERSE) pesano ogni giorno, in un verso o nell'altro.
