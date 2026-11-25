@@ -1037,3 +1037,8 @@ delle 04:18 del 24 e del 25 novembre F5 +1,16%, G1 nel paper +0,07%, demo −0,1
 casi). Monete vendute da G1: nessuna a rischio (Arthur Hayes nomina NEAR e VVV fra le sue preferite: opinione, non fatto). **Capito oggi**:
 lo scarto fra demo e paper di G1 continua ad allargarsi (−0,14 punti al giorno in 17 giorni): le monete che mancano sul demo (EVAA, LIT,
 UAI, IRYS, PIEVERSE) pesano ogni giorno, in un verso o nell'altro.
+**25 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (35 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. Il conto vero esegue F5 (commit 03ee29e, spento, APPROVE di live-path-reviewer per il commit).
+Due passi su F5 con strategy-improver: la misura del peso massimo per moneta con la deriva della settimana (problema 180, voce P36) e le
+regole della prova 169 «G1 o F5 secondo il mercato» (ogni giorno con una direzione, il lunedì senza), scritte prima del calcolo.
+**Capito oggi**: niente di nuovo sul mercato in questo giro.
