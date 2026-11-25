@@ -1,0 +1,132 @@
+{
+ "settimane": 300,
+ "prima": "2021-01-04",
+ "ultima": "2026-09-28",
+ "1_lunedi_peso_max": {
+  "peso": 0.43733790219596586,
+  "moneta": "BLZUSDT",
+  "data": "2024-02-05",
+  "percentile_99": 0.2494594033428757,
+  "mediana": 0.09070559949710541
+ },
+ "1_lunedi_somma_max": 2.0000000000000004,
+ "2_settimana_peso_max": {
+  "peso": 0.44905068043070273,
+  "moneta": "BLZUSDT",
+  "lunedi": "2024-02-05",
+  "giorno": 3,
+  "percentile_99": 0.34189857418661085,
+  "mediana": 0.09705644609162067
+ },
+ "2_settimana_somma_max": {
+  "somma": 3.972077481096011,
+  "lunedi": "2021-02-08",
+  "giorno": 6,
+  "mediana": 2.0990836346218833
+ },
+ "3_settimane_sopra_60_moneta": 0,
+ "3_settimane_sopra_60_lunedi": 0,
+ "3_settimane_sopra_200_somma": 300,
+ "3_settimane_sopra_200_lunedi": 0,
+ "3_settimane_sopra_50_moneta": 0,
+ "3_somma_soglie": {
+  "2.1": 149,
+  "2.25": 55,
+  "2.5": 10,
+  "3.0": 1
+ },
+ "3_somma_quantili": {
+  "0.5": 2.0990836346218833,
+  "0.9": 2.314149530614008,
+  "0.99": 2.680999621099072
+ },
+ "3_somma_fine_settimana_max": 3.641697459592947,
+ "3_eventi_sopra_60": [],
+ "3_sopra_200_date": [
+  {
+   "lunedi": "2021-02-08",
+   "somma_max_settimana": 3.972077481096011,
+   "giorno_max": 6
+  },
+  {
+   "lunedi": "2024-02-26",
+   "somma_max_settimana": 2.918781393248908,
+   "giorno_max": 7
+  },
+  {
+   "lunedi": "2025-05-05",
+   "somma_max_settimana": 2.8528064776027997,
+   "giorno_max": 6
+  },
+  {
+   "lunedi": "2021-01-04",
+   "somma_max_settimana": 2.6792641983061065,
+   "giorno_max": 4
+  },
+  {
+   "lunedi": "2021-05-24",
+   "somma_max_settimana": 2.6697722992171373,
+   "giorno_max": 1
+  }
+ ],
+ "4_peggior_perdita": {
+  "moneta": "XRPUSDT",
+  "lunedi": "2021-01-25",
+  "peso_lunedi_x": -0.17899220855440084,
+  "salita_settimana": 0.8105147864184006,
+  "peso_fine_settimana": 0.34141001441566954,
+  "perdita_sul_conto": -0.145075831687028
+ },
+ "4_peggior_peso_fine": {
+  "moneta": "XRPUSDT",
+  "lunedi": "2021-01-25",
+  "peso_fine": 0.34141001441566954,
+  "perdita_sul_conto": -0.145075831687028
+ },
+ "conto_minimo_in_settimana": {
+  "valore": 0.8334676317787661,
+  "lunedi": "2021-02-08"
+ },
+ "4_cinque_peggiori": [
+  {
+   "lunedi": "2021-01-25",
+   "peggior_moneta": "XRPUSDT",
+   "peggior_x": -0.17899220855440084,
+   "peggior_salita": 0.8105147864184006,
+   "peggior_peso_fine": 0.34141001441566954,
+   "peggior_contributo": -0.145075831687028
+  },
+  {
+   "lunedi": "2021-02-01",
+   "peggior_moneta": "ZRXUSDT",
+   "peggior_x": -0.13828853757561851,
+   "peggior_salita": 0.9967495760316569,
+   "peggior_peso_fine": 0.2617434714388124,
+   "peggior_contributo": -0.1378390411985356
+  },
+  {
+   "lunedi": "2021-02-08",
+   "peggior_moneta": "IOTAUSDT",
+   "peggior_x": -0.1191903112905826,
+   "peggior_salita": 1.1306604617862899,
+   "peggior_peso_fine": 0.29763689708448104,
+   "peggior_contributo": -0.13476377240426177
+  },
+  {
+   "lunedi": "2024-02-26",
+   "peggior_moneta": "1000SHIBUSDT",
+   "peggior_x": -0.07952735686296578,
+   "peggior_salita": 1.3299938029332776,
+   "peggior_peso_fine": 0.218806960784876,
+   "peggior_contributo": -0.10577089179140775
+  },
+  {
+   "lunedi": "2021-01-04",
+   "peggior_moneta": "XLMUSDT",
+   "peggior_x": -0.08417396831469304,
+   "peggior_salita": 1.0832846288720042,
+   "peggior_peso_fine": 0.15507412323074501,
+   "peggior_contributo": -0.09118436602646608
+  }
+ ]
+}
