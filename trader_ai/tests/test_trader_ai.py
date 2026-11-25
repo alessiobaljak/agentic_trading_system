@@ -72,9 +72,10 @@ def test_il_tetto_non_si_sfora_mai_anche_con_chiamate_al_massimo(tmp_path):
 
 # --- obiettivo del giorno -------------------------------------------------------------------------------------------
 
-def test_obiettivo_di_50_chiude_e_non_chiama(tmp_path):
-    assert not obiettivo_raggiunto(conto(conto=1049.99))
-    assert obiettivo_raggiunto(conto(conto=1050.0))
+def test_obiettivo_del_3_per_cento_chiude_e_non_chiama(tmp_path):
+    assert not obiettivo_raggiunto(conto(conto=1029.99))
+    assert obiettivo_raggiunto(conto(conto=1030.0))
+    assert not obiettivo_raggiunto(conto(conto=1059.0, conto_mezzanotte=1040.0))   # il 3% di 1.040 è 31,20
     chiamato = []
     ris = decidi(ORA, "t", Budget(tmp_path / "s.json"), conto(conto=1050.0), P, lambda: chiamato.append(1), 0.5)
     assert ris.stato == "obiettivo" and not chiamato
@@ -174,8 +175,8 @@ def test_messaggio_dice_obiettivo_memoria_e_scarto():
                            "come": "stop", "risultato": -27.8, "approccio": "rottura"}], "rottura", ["nota"], "leva 50")
     system, utente = costruisci(ORA, "candela", 4.2, "BTCUSDT", {"5m": _candele(60), "15m": _candele(60, 15),
                                 "30m": _candele(60, 30)}, {"prezzo": 130.0, "funding": 0.0001}, conto(conto=1020), mem)
-    assert "50 USDT" in system and "adatti" in system
-    assert "mancano 30.00" in utente and "SCARTATA" in utente and "rottura" in utente and "4.20 dollari" in utente
+    assert "3%" in system and "adatti" in system
+    assert "mancano 10.00" in utente and "SCARTATA" in utente and "rottura" in utente and "4.20 dollari" in utente
     assert all(f"candele {x}" in utente for x in ("5m", "15m", "30m"))
 
 

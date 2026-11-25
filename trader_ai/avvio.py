@@ -6,7 +6,7 @@
 2. a mezzanotte UTC scrive il resoconto del giorno finito e riparte dal conto di quel momento;
 3. se l'operazione aperta si è chiusa (stop, obiettivo, liquidazione) la scrive nella memoria e chiama subito il modello;
 4. la posizione aperta deve avere lo stop sul conto: se manca lo rimette; se il prezzo l'ha già superato, chiude a mercato (problema 96);
-5. a +50 USDT dalla mezzanotte chiude tutto e si ferma fino alla mezzanotte dopo;
+5. a +3% dal conto della mezzanotte chiude tutto e si ferma fino alla mezzanotte dopo;
 6. a ogni candela da 15 minuti chiusa chiama il modello (se il tetto di spesa lo permette) ed esegue la decisione accettata, dopo aver
    riletto il prezzo e ricontrollato la decisione; se lo stop viene rifiutato dopo l'apertura, chiude subito.
 
@@ -515,7 +515,7 @@ class Trader:
         guadagno = sum(o["risultato"] for o in ops)
         righe = [f"# Trader AI, {giorno} (UTC)", "",
                  f"* Conto a mezzanotte: {st.get('conto_mezzanotte', 0):.2f} USDT; risultato delle operazioni chiuse: "
-                 f"{guadagno:+.2f} USDT; obiettivo dei 50: {'sì' if st.get('fermo_fino') else 'no'}",
+                 f"{guadagno:+.2f} USDT; obiettivo del 3%: {'sì' if st.get('fermo_fino') else 'no'}",
                  f"* Operazioni chiuse: {len(ops)} (in guadagno {sum(o['risultato'] > 0 for o in ops)}); "
                  f"cambi di approccio dall'inizio: {st.get('cambi_approccio', 0)}",
                  f"* Costo delle chiamate al modello: {spesa:.2f} dollari", "",
