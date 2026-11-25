@@ -1048,3 +1048,9 @@ per moneta non si è mai avvicinato. La somma dei pesi invece si allarga in sett
 volta 397% (8 febbraio 2021, gli short salivano). La perdita peggiore di una moneta venduta in una settimana è −14,5% del conto (XRP, gennaio
 2021, +81%). **Capito oggi**: con le posizioni ferme una settimana il rischio non è una moneta sola troppo grande ma l'esposizione totale che
 cresce quando le monete vendute salgono; lo stop del conto a −35% resta l'unica protezione (voce P36).
+**25 novembre, 12:00 UTC, prova 169: «G1 o F5 secondo il mercato» non passa** (`research/programma7/RISULTATI_CENTOSETTIMA_BIS.md`): con la
+direzione del Bitcoin sui 30 giorni a decidere fra i pesi di G1 (ogni giorno) e quelli di F5 (il lunedì), A fa Sharpe 1,99 e B 2,10 contro
+1,97 di G1 e 1,88 di F5, ma lo Sharpe corretto è 0,61 e 0,72 e le spese dei cambi di stato mangiano più della metà del guadagno. L'ipotesi non
+regge: nel 2023 la misura dice «con direzione», eppure lì F5 ha battuto G1 di 23 punti; e dal 16 al 23 novembre avrebbe seguito G1, quella
+che perdeva. Conto delle prove 340. **Capito oggi**: quando decidere una volta a settimana batte decidere ogni giorno non dipende dalla
+direzione del Bitcoin; il vantaggio di F5 di queste settimane non si sa prevedere con una regola semplice.
