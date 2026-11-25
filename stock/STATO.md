@@ -359,6 +359,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 51** (le acquisizioni pagate in contanti, idea I59): **bocciata** (`prove/P051_risultati.md`). Capito: **il premio
+  c'è ma è piccolo e non protegge**: gli affari chiusi rendono +2,56% in media (t 5,68), quelli che saltano o si trascinano −3,80%;
+  con lo scarto mediano dell'1,59% il conto fa +11,4% in 9 anni (Sharpe 0,28), e nei mesi in cui lo SPY perde la correlazione è
+  +0,58 (marzo 2020 −8,85%). Gli scarti si sono ristretti, come diceva lo studio del 2010. Nel conto: 119.
 * **La prova 50** (l'incertezza sulla politica economica, idea I58, Brogaard e Detzel 2015: lo SPY al 98% nei mesi con l'incertezza
   sopra la media di un anno, al 49% negli altri): **bocciata** (`prove/P050_risultati.md`). Capito: **dopo il 2016 l'effetto dello
   studio non c'è**: nel mese dopo lo SPY fa +1,48% con l'incertezza alta e +1,15% con quella bassa (differenza piccola), nei 3 mesi
