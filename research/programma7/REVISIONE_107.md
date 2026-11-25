@@ -208,3 +208,4 @@ corretti e i costi veri, da misurare in avanti.
 | 2026-11-24 12:20 | nessuno dopo il 21 ottobre | — | — |
 | 2026-11-24 16:20 | nessuno dopo il 21 ottobre | — | — |
 | 2026-11-24 20:20 | nessuno dopo il 21 ottobre | — | — |
+| 2026-11-25 00:20 | nessuno dopo il 21 ottobre | — | — |

@@ -1024,3 +1024,10 @@ niente di nuovo in questo giro.
 **24 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (129 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
 nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (alle 04:17 il ribilancio e le due letture del mattino). **Capito oggi**:
 niente di nuovo in questo giro.
+**24 novembre, 18:00 UTC, F5 contro G1 nel paper** (domanda del proprietario, `docs/state.md` delle 17:45 e `ops/results/0746`, `0772`):
+oggi F5 +0,51%, G1 −0,48%; dal 16 novembre F5 +1,38%, G1 −4,45%; dalla partenza F5 +8,07%, G1 +6,13%; spese F5 12,65 dollari contro
+34,42 (circa 0,2 punti: lo scarto viene dalle posizioni). Proposte al proprietario, senza avviare niente: F5 candidata per il conto
+piccolo, oppure una prova «ogni giorno con il mercato in tendenza, una volta a settimana senza tendenza».
+**25 novembre, 00:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (52 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito oggi**: nel paper, in un mercato che va su e giù, decidere una
+volta a settimana ha battuto decidere ogni giorno di quasi 6 punti in 8 giorni; sul passato le due cose si equivalgono.
