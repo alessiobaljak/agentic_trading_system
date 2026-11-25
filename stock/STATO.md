@@ -354,6 +354,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 50** (l'incertezza sulla politica economica, idea I58, Brogaard e Detzel 2015: lo SPY al 98% nei mesi con l'incertezza
+  sopra la media di un anno, al 49% negli altri): **bocciata** (`prove/P050_risultati.md`). Capito: **dopo il 2016 l'effetto dello
+  studio non c'è**: nel mese dopo lo SPY fa +1,48% con l'incertezza alta e +1,15% con quella bassa (differenza piccola), nei 3 mesi
+  dopo il contrario (+3,52% contro +4,03%); la regola al contrario fa meglio (Sharpe 0,91 contro 0,71). Come per la prova 49: un
+  segnale mensile o settimanale sull'esposizione allo SPY, fuori dalle crisi, non batte lo SPY tenuto a quota fissa. Nel conto: 117.
 * **La prova 37b** (l'esame da crisi del ribilanciamento dei fondi 60/40 sul periodo chiuso, idee I44 e I53): **non passa**, la prova
   37 è bocciata definitivamente (`prove/P037b_risultati.md`). Capito: **come assicurazione costa più di quanto paga**. Nella crisi
   nuova (aprile 2025, il mese più agitato del periodo chiuso) ha reso +2,16%, contro il +32% del 2020; nei 21 mesi −4,5% con i
