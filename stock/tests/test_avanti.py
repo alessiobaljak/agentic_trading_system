@@ -197,3 +197,15 @@ def test_miscela_cancella_non_tocca_gli_ordini_giusti_di_stasera_e_si_ferma_se_u
     monkeypatch.setattr(av, "_richiesta", lambda *a, **k: (_ for _ in ()).throw(dati.alpaca.ErroreAlpaca("500")))
     with _pt.raises(dati.alpaca.ErroreAlpaca):     # la cancellazione fallisce: niente ordini nuovi
         mi.cancella_ordini("2026-11-12")
+
+
+def test_il_controllo_finale_aspetta_le_chiusure_gia_partite(monkeypatch):
+    orologio = {"t": 0.0}
+    letture = iter([["INTC"], ["INTC"], []])
+    monkeypatch.setattr(av.time, "monotonic", lambda: orologio["t"])
+    monkeypatch.setattr(av.time, "sleep", lambda s: orologio.__setitem__("t", orologio["t"] + s))
+    monkeypatch.setattr(av, "_posizioni_candela", lambda: [{"symbol": s} for s in next(letture)])
+    assert av._aspetta_chiusure() == []                                  # INTC chiusa 10 secondi dopo: nessun allarme
+    monkeypatch.setattr(av, "_posizioni_candela", lambda: [{"symbol": "INTC"}])
+    orologio["t"] = 0.0
+    assert av._aspetta_chiusure() == ["INTC"] and orologio["t"] >= 60  # ancora aperta dopo un minuto: allarme
