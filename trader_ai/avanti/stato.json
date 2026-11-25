@@ -1,0 +1,249 @@
+{
+ "operazioni": [],
+ "note": [
+  "07:37 30m ribassista: massimi calanti da 60600, EMA9<21<50, sotto VWAP 59280. Range 58920-59400 da ore. Ora prezzo 58634: rottura netta del supporto 58920, circa 370 sotto l'ultima chiusura 5m, a candela non chiusa. Inseguire dopo 1,5 ATR15 è rischioso (possibile spike e rientro). Aspetto la chiusura 15m: se resta sotto 58900 cerco corto sul ritest 58850-58950 con stop sopra 59100; se rientra nel range, niente.",
+  "07:45 La 15m chiude a 58767, sotto 58900, con un volume 4,7 volte la media: la rottura del range 58920-59400 è confermata. EMA ribassiste su tutti i timeframe e prezzo sotto il VWAP. Il prezzo rimbalza verso 58840, cioè dentro la zona di ritest. Corto limite a 58890 con stop 59110, sopra lo swing di ritest e sotto 59100+. Valore 3500 (~0,059 BTC): rischio ~13 USDT. Obiettivo 58400, sotto il minimo dello spike 58600, ~29 USDT. Il funding positivo favorisce il corto. Se il limite non si riempie e il prezzo scende, non inseguo.",
+  "08:00 Corto da 58890 in guadagno di circa 7,8 USDT. La 15m delle 08:00 chiude a 58715 con un massimo di ritest a 58906, che respinge sotto la vecchia base 58920. Le EMA sono ribassiste su tutti i timeframe e il prezzo sta sotto il VWAP 59200. Però l'RSI è a 33 e il prezzo è vicino alla Bollinger bassa: un rimbalzo è possibile. Stringo lo stop a 59010, sopra lo swing di ritest con un margine di circa mezzo ATR15, e taglio il rischio a ~7 USDT. Obiettivo invariato a 58400."
+ ],
+ "oi": [
+  [
+   1795592276.944473,
+   97259.513
+  ],
+  [
+   1795592321.601448,
+   97228.311
+  ],
+  [
+   1795592352.208548,
+   97275.356
+  ],
+  [
+   1795592383.547436,
+   97266.63
+  ],
+  [
+   1795592414.190876,
+   97259.184
+  ],
+  [
+   1795592445.48551,
+   97285.315
+  ],
+  [
+   1795592476.112667,
+   97317.323
+  ],
+  [
+   1795592507.381166,
+   97320.637
+  ],
+  [
+   1795592538.521298,
+   97325.272
+  ],
+  [
+   1795592569.770823,
+   97345.277
+  ],
+  [
+   1795592600.414478,
+   97357.175
+  ],
+  [
+   1795592631.742223,
+   97366.421
+  ],
+  [
+   1795592662.379037,
+   97363.554
+  ],
+  [
+   1795592693.664255,
+   97370.394
+  ],
+  [
+   1795592724.311254,
+   97359.811
+  ],
+  [
+   1795592768.790696,
+   97400.822
+  ],
+  [
+   1795592800.061778,
+   97402.796
+  ],
+  [
+   1795592830.719942,
+   97410.261
+  ],
+  [
+   1795592863.95543,
+   97399.78
+  ],
+  [
+   1795592895.560325,
+   97396.349
+  ],
+  [
+   1795592927.793559,
+   97473.215
+  ],
+  [
+   1795592959.430142,
+   97492.26
+  ],
+  [
+   1795592991.728915,
+   97512.912
+  ],
+  [
+   1795593023.33917,
+   97524.908
+  ],
+  [
+   1795593055.594683,
+   97551.969
+  ],
+  [
+   1795593087.214954,
+   97578.63
+  ],
+  [
+   1795593119.433377,
+   97590.733
+  ],
+  [
+   1795593151.009417,
+   97675.947
+  ],
+  [
+   1795593183.688903,
+   97834.596
+  ],
+  [
+   1795593215.985006,
+   97847.812
+  ],
+  [
+   1795593247.53341,
+   97882.87
+  ],
+  [
+   1795593280.296919,
+   97901.938
+  ],
+  [
+   1795593312.328118,
+   97906.418
+  ],
+  [
+   1795593344.539198,
+   97934.518
+  ],
+  [
+   1795593376.15199,
+   97959.601
+  ],
+  [
+   1795593408.398646,
+   97977.272
+  ],
+  [
+   1795593440.04385,
+   97999.28
+  ],
+  [
+   1795593472.229237,
+   98007.712
+  ],
+  [
+   1795593503.837054,
+   98012.548
+  ],
+  [
+   1795593536.094914,
+   98009.073
+  ],
+  [
+   1795593567.783148,
+   98010.472
+  ],
+  [
+   1795593600.055366,
+   98019.382
+  ],
+  [
+   1795593645.698116,
+   98018.547
+  ],
+  [
+   1795593677.300906,
+   98002.475
+  ],
+  [
+   1795593709.877705,
+   98003.092
+  ],
+  [
+   1795593741.468138,
+   98014.524
+  ],
+  [
+   1795593773.660316,
+   98013.252
+  ],
+  [
+   1795593805.223664,
+   98004.153
+  ],
+  [
+   1795593838.133968,
+   98005.966
+  ],
+  [
+   1795593869.750669,
+   97990.553
+  ],
+  [
+   1795593901.971917,
+   97994.734
+  ],
+  [
+   1795593934.266716,
+   98006.873
+  ],
+  [
+   1795593965.829198,
+   98010.168
+  ],
+  [
+   1795593998.111401,
+   98013.288
+  ]
+ ],
+ "estraneo": null,
+ "giorno": "2026-11-25",
+ "conto_mezzanotte": 1000.0,
+ "fermo_fino": null,
+ "esaurito": false,
+ "ultima": "2026-11-25T08:00:00.055366+00:00",
+ "ultimo_scarto": null,
+ "cambi_approccio": 1,
+ "approccio": "Seguire la tendenza ribassista sul 30m: corto su rotture confermate o su ritest dei supporti rotti, stop sopra la struttura, rischio ~1-1,5% del conto.",
+ "aperta": {
+  "aperta": "2026-11-25T07:45:24.311254+00:00",
+  "lato": "corto",
+  "leva": 10,
+  "entrata": 58890.0,
+  "quantita": 0.059,
+  "cid": "taio1795592724311",
+  "stop": 59010.0,
+  "obiettivo": 58400.0,
+  "approccio": "Seguire la tendenza ribassista sul 30m: corto su rotture confermate o su ritest dei supporti rotti, stop sopra la struttura, rischio ~1-1,5% del conto.",
+  "conto_prima": 1000.0,
+  "margine": 350.0,
+  "in_attesa": false
+ }
+}
