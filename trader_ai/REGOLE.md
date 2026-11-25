@@ -37,7 +37,7 @@ Decisione del 23 novembre (`docs/decisioni_del_proprietario.md`): conto demo di 
 ## 1. Cosa fa
 Su **una moneta scelta dal proprietario** (all'inizio **BTCUSDT**, si cambia in `trader_ai/config.json`), il modello guarda le candele da
 **5, 15 e 30 minuti** con gli indicatori e decide da solo: entrare lungo o corto, quanto, con quale leva, dove mettere lo stop (SL) e
-l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **50 USDT dalla mezzanotte UTC**, il codice chiude tutto e il trader
+l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del conto della mezzanotte UTC** (30 USDT su 1.000; fino al 24 novembre 50 USDT), il codice chiude tutto e il trader
 **si ferma fino alla mezzanotte UTC** (l'una di notte in Svizzera d'inverno).
 
 ## 2. Quando viene chiamato
@@ -89,7 +89,7 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 * **Leva al massimo 10**; margine al massimo il saldo disponibile; una sola operazione aperta alla volta.
 * **Stop obbligatorio** per ogni operazione, piazzato sul conto come ordine vero (scatta anche se il programma è fermo), dalla parte
   giusta del prezzo e prima del prezzo di liquidazione. Lo stop e l'obiettivo li sceglie il modello; li può spostare quando vuole.
-* **Obiettivo del giorno**: conto ≥ conto a mezzanotte UTC + 50 USDT → si chiude tutto e niente chiamate fino a mezzanotte.
+* **Obiettivo del giorno**: conto ≥ conto a mezzanotte UTC × 1,03 → si chiude tutto e niente chiamate fino a mezzanotte.
 * **Nessuna perdita massima del giorno né totale** (scelta del proprietario). Se il conto non basta per l'ordine minimo di Binance, il
   trader si ferma da solo e lo scrive.
 * Una decisione fuori da questi limiti si scarta e si scrive nel diario, e il modello alla chiamata dopo vede che è stata scartata e perché.
