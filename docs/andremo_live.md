@@ -1060,3 +1060,6 @@ prova in corso. **Capito oggi**: niente di nuovo in questo giro.
 **25 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (186 articoli nuovi; tre pagine di CryptoBriefing piene, la quarta no:
 la fonte è coperta), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito
 oggi**: niente di nuovo in questo giro.
+**25 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (148 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (alle 04:17 il ribilancio e le due letture del mattino). **Capito oggi**:
+niente di nuovo in questo giro.
