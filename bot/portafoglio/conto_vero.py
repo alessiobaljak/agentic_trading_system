@@ -124,7 +124,11 @@ STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chi
 PAVIMENTO_RIPARTI = 0.65               # lo stop scatta anche sotto il 65% del capitale di partenza; «riparti» non riaccende lì sotto
 SOMMA_PESI_MASSIMA = 2.0               # G1 ha i due lati da 1 ciascuno; niente eventi qui (revisione con le skill: «non oltre il 200%»)
 PESO_MASSIMO_MONETA = 0.60             # il peso più alto di G1 sul passato è il 47,8% (BLZ, 5 febbraio 2024, docs/backlog.md)
-ETA_MASSIMA_DECISIONE_S = 26 * 3600    # G1 decide ogni giorno alle 00:05 UTC; una decisione più vecchia non si esegue
+# 25 novembre 2026, il proprietario: «metti F5 come candidata per il conto piccolo»: il conto vero esegue F5 (lo stesso motore di G1,
+# deciso il lunedì) leggendo lo stato del paper di F5 (stesso formato: `ultimo_lunedi`, `pesi`); il demo resta su G1.
+STRATEGIA = "F5"
+FILE_STRATEGIA = RADICE / "data" / "paper_f5.json"
+ETA_MASSIMA_DECISIONE_S = 8 * 86400 + 2 * 3600   # F5 decide il lunedì alle 00:05 UTC; oltre 8 giorni e 2 ore il paper si è fermato
 # problema 64: «saldo vero sotto il valore del bot» (un prelievo) ferma gli ordini nuovi solo oltre lo 0,5% del valore (almeno 1 USDT)
 # e in 3 letture di fila a un minuto l'una dall'altra. Con 280 USDT la tolleranza è 1,40: un giro di funding di G1 (40 monete, 560
 # USDT lordi, 0,01%) muove 0,06 USDT, le commissioni di un ribilancio intero (circa 150 USDT a 0,05%) 0,08; un utile o una perdita
@@ -327,6 +331,7 @@ class ContoVeroG1(demo.DemoG1):
     FILE_COMANDI_DI_SERIE = (FILE_CHIUDI,)
     LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO = LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO
     SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA = SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA
+    STRATEGIA = STRATEGIA                       # F5 dal 25 novembre 2026 (decisione del proprietario)
     ETA_MASSIMA_DECISIONE_S = ETA_MASSIMA_DECISIONE_S
     VALORE_MASSIMO_PER_ORDINI = VALORE_MASSIMO_PER_ORDINI
     TOLLERANZA_SALDO, TOLLERANZA_SALDO_MINIMA, LETTURE_SALDO_SOTTO = TOLLERANZA_SALDO, TOLLERANZA_SALDO_MINIMA, LETTURE_SALDO_SOTTO
@@ -334,7 +339,7 @@ class ContoVeroG1(demo.DemoG1):
     CHIAVE_ILLEGGIBILE = "chiave del conto vero non leggibile"
     CHIAVE_VALORE_VERO = "valore_vero_del_conto"
 
-    def __init__(self, fb, cliente: Optional[ClienteVero] = None, file_stato: Path = FILE_STATO, file_g1: Path = demo.FILE_G1,
+    def __init__(self, fb, cliente: Optional[ClienteVero] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_STRATEGIA,
                  interruttore: Path = INTERRUTTORE, file_chiudi: Path = FILE_CHIUDI,
                  file_capitale: Path = FILE_CAPITALE, verifica_codice: Optional[Callable[[], Optional[str]]] = None,
                  radice: Path = RADICE) -> None:
@@ -840,14 +845,15 @@ class ContoVeroG1(demo.DemoG1):
                 self._ordini_scaduti_senza_mercato(c, st, now)
             return False
         if "blocco" in st or not st.get("acceso_dal"):
-            # l'accensione: si compra solo alla prima decisione di G1 dopo (la mezzanotte UTC), mai a metà giornata
+            # l'accensione: si compra solo alla prima decisione della strategia dopo (per F5 il lunedì alle 00:05 UTC), mai a metà settimana
             st.pop("blocco", None)
             giorno = self._giorno_g1(now)
             st["ultimo_giorno"] = max(int(st.get("ultimo_giorno") or 0), giorno)
             st["acceso_dal"] = now
             dopo = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
             self._scrivi("acceso_dal", {"ora": now, "compra_alla_decisione_di_g1_dopo_il": dopo})
-            print(f"[{self.NOME}] acceso: ordini solo dalla prima decisione di G1 dopo quella del {dopo} (la mezzanotte UTC)")
+            quando = "il lunedì alle 00:05 UTC" if self.STRATEGIA == "F5" else "la mezzanotte UTC"
+            print(f"[{self.NOME}] acceso: ordini solo dalla prima decisione di {self.STRATEGIA} dopo quella del {dopo} ({quando})")
         return True
 
     def _vuoto_da_spento(self, c: ClienteVero, st: dict, now: float) -> None:

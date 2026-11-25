@@ -168,7 +168,8 @@ def test_i_limiti_del_conto_vero_sono_fissati():
     assert cv.PAVIMENTO_RIPARTI == 0.65
     assert cv.SOMMA_PESI_MASSIMA == 2.0
     assert cv.PESO_MASSIMO_MONETA == 0.60
-    assert cv.ETA_MASSIMA_DECISIONE_S == 26 * 3600
+    assert cv.ETA_MASSIMA_DECISIONE_S == 8 * 86400 + 2 * 3600      # F5, decisa il lunedì (25 novembre 2026)
+    assert cv.STRATEGIA == "F5" and cv.FILE_STRATEGIA.name == "paper_f5.json"
     assert (cv.TOLLERANZA_SALDO, cv.TOLLERANZA_SALDO_MINIMA, cv.LETTURE_SALDO_SOTTO) == (0.005, 1.0, 3)          # problema 64
     assert (cv.RITARDO_REDDITI_S, cv.SOVRAPPOSIZIONE_REDDITI_S, cv.ERRORI_REDDITI_PRIMA_DELL_ALLARME) == (60, 900, 3)
     assert cv.PERCORSI_DEGLI_ORDINI == ("bot/portafoglio", "bot/execution", "bot/risk", "bot/config.py", "bot/main.py")

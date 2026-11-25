@@ -41,7 +41,8 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
    a. spento con posizioni aperte, il bot manda solo ordini di chiusura anche con `DRY_RUN` vero (sì nel codice; è un'eccezione alla
       regola «in paper nessun ordine al conto vero» e serve il suo sì);
    b. i limiti: capitale 300 USDT, valore massimo 600 prima di fermare gli ordini nuovi, posizioni al massimo il 200% del conto, 60%
-      per moneta, leva 5, stop a −35% dal massimo con il pavimento al 65% del capitale, decisione di G1 non più vecchia di 26 ore;
+      per moneta, leva 5, stop a −35% dal massimo con il pavimento al 65% del capitale, decisione della strategia non più vecchia di 26
+      ore per G1, di 8 giorni e 2 ore per F5 (dal 25 novembre 2026 il conto vero esegue F5, decisione del proprietario);
    c. un prelievo ferma gli ordini nuovi finché non si scrive un capitale nuovo (che chiude tutto e riapre alla mezzanotte);
    d. ogni commit che tocca un file caricato dal bot ferma gli ordini nuovi finché la versione non è riapprovata, e un ribilancio in
       corso resta a metà; l'alternativa è tenere il codice dei soldi veri separato dalle varianti del paper (non fatto);

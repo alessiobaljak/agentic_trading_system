@@ -499,6 +499,7 @@ class DemoG1:
     # il nome, i comandi e i limiti di questo conto: il conto vero (`conto_vero.ContoVeroG1`) li cambia con i suoi, senza copiare
     # il codice (fase 2 del piano del conto vero, `docs/conto_vero.md`)
     NOME = "demo_binance"                      # il ramo su Firebase (/demo_binance) e il prefisso del log
+    STRATEGIA = "G1"                           # la strategia che il conto esegue (nei testi del log, degli allarmi e dell'avvio)
     HOST = HOST_DEMO
     COMANDO_CHIUDI, COMANDO_RIPARTI = COMANDO_CHIUDI, COMANDO_RIPARTI
     INTERRUTTORE_DI_SERIE, FILE_CAPITALE_DI_SERIE = INTERRUTTORE, FILE_CAPITALE
@@ -919,14 +920,14 @@ class DemoG1:
         vecchia di ``ETA_MASSIMA_DECISIONE_S`` (il paper di G1 si è fermato: il demo terrebbe le stesse posizioni senza limite), se ha
         una data nel futuro, o se i pesi sono vuoti o fuori dai limiti; allarme in tutti e due i casi, tolto quando la causa finisce. Gli ordini già piazzati finiscono lo stesso."""
         if not giorno:
-            vecchia = "nessuna decisione di G1 nel file: niente ordini nuovi"
+            vecchia = f"nessuna decisione di {self.STRATEGIA} nel file: niente ordini nuovi"
         elif giorno * 86400 > now + 3600:              # problema 45: una data nel futuro non si esegue (bloccherebbe le vere)
-            vecchia = (f"la decisione di G1 ha una data nel futuro ({time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}): "
+            vecchia = (f"la decisione di {self.STRATEGIA} ha una data nel futuro ({time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}): "
                        f"niente ordini nuovi")
         elif now - giorno * 86400 > self.ETA_MASSIMA_DECISIONE_S:
-            vecchia = (f"la decisione di G1 è del {time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}, "
+            vecchia = (f"la decisione di {self.STRATEGIA} è del {time.strftime('%Y-%m-%d', time.gmtime(giorno * 86400))}, "
                        f"{(now - giorno * 86400) / 3600:.0f} ore fa (oltre {self.ETA_MASSIMA_DECISIONE_S // 3600}): niente ordini nuovi "
-                       f"finché il paper di G1 non decide di nuovo")
+                       f"finché il paper di {self.STRATEGIA} non decide di nuovo")
         else:
             vecchia = None
         self._allarme(st, now, "decisione_g1", vecchia)
@@ -939,7 +940,8 @@ class DemoG1:
                 "capitale_massimo": self.CAPITALE_MASSIMO, "eventi_accesi": self.eventi_accesi(),
                 "filtri_del_conto_vero_del": DATA_FILTRI_VERI, "somma_pesi_massima": self.SOMMA_PESI_MASSIMA,
                 "peso_massimo_moneta": self.PESO_MASSIMO_MONETA,
-                "eta_massima_decisione_ore": self.ETA_MASSIMA_DECISIONE_S // 3600, "pavimento_riparti": self.PAVIMENTO_RIPARTI}
+                "eta_massima_decisione_ore": self.ETA_MASSIMA_DECISIONE_S // 3600, "pavimento_riparti": self.PAVIMENTO_RIPARTI,
+                "strategia": self.STRATEGIA, "file_della_decisione": self.file_g1.name}
 
     def _log_d_avvio(self, now: float) -> None:
         """Problema 22: all'avvio, nel log e su Firebase (`/demo_binance/avvio`), l'ambiente in cui il demo lavora."""

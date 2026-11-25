@@ -231,12 +231,13 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
 - Test di guardia del 54 (secondo giro): nessun file fuori da conto vero, test e dashboard nomina i quattro comandi; non vede la
   costante importata (78).
 - Problemi aperti: 54 (ii) Alto; 70 Medio; 78 Basso. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-77; 56, 58, 69 come scelto.
-- **25 nov (non committato su `932c048`, REQUEST CHANGES)**: il conto vero esegue **F5** (`STRATEGIA`, `FILE_STRATEGIA` =
-  `data/paper_f5.json`, `conto_vero.py:127-131`, predefinito di `file_g1` a `:341`); età massima della decisione **194 ore** (8 giorni
-  e 2 ore) invece di 26; il demo resta su `paper_g1.json` e 26 ore. Stesse chiavi lette (`ultimo_lunedi` = il lunedì, `pesi`; scritte
-  in modo atomico da `PaperF5`, `f5.py:297-301`, `:457-459`); prima accensione, «riparti», fine blocco e capitale nuovo aspettano il
-  lunedì dopo (`_giorno_g1`, `demo_binance.py:1127-1133`). Aperti: 178 (test), 179 (strategia non dichiarata, testi «G1»), 180 (pesi
-  controllati solo al lunedì), 181 (blocco sopra il lunedì salta la settimana), 182 Basso. Prove `giro25nov/test_prove_25nov.py`.
+- **25 nov, F5 (non committato su `ecf55d7`, percorso = `932c048`; secondo giro APPROVE per il commit)**: il conto vero esegue
+  **F5** (`STRATEGIA`, `FILE_STRATEGIA` = `data/paper_f5.json`, `conto_vero.py:129-131`; classe `:334`; predefinito di `file_g1`
+  `:342`); età massima **194 ore** invece di 26; il demo resta su `paper_g1.json`, 26 ore e `DemoG1.STRATEGIA` «G1»
+  (`demo_binance.py:502`). Stesse chiavi lette (`ultimo_lunedi` = il lunedì, `pesi`, scritte in modo atomico da `PaperF5`,
+  `f5.py:297-301`, `:457-459`); prima accensione, «riparti», fine blocco e capitale nuovo aspettano il lunedì dopo (`_giorno_g1`,
+  `demo_binance.py:1129-1135`). Avvio con `strategia` e `file_della_decisione` (`:944`). Test `tests/test_conto_vero_f5.py`
+  (8). Aperti: 180, 181 Medi (decisioni di Alessio), 182, 183 Bassi. Chiusi 178, 179.
 
 ## 15. Il trader AI sul suo conto demo (area `trader_ai/`, 23 novembre 2026)
 Fuori dal bot: servizio suo sulla macchina (`trader_ai/vps/installa.sh`), copia sua del repository, chiavi in un file suo. Rapporti:
@@ -284,6 +285,6 @@ Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una re
 - 17 nov (non committato, APPROVE): lo «stato» legge una volta in più `income` FUNDING_FEE del demo (3 giorni) per il confronto
   del funding per regolamento con il paper; stesso cliente, stessa finestra, stesso blocco. `96c6094` = sezione dei pesi approvata il 14 nov.
   Nessun invariante del percorso degli ordini cambiato.
-- 25 nov (non committato, REQUEST CHANGES): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
+- 25 nov (non committato; secondo giro APPROVE per il commit): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
   F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
-  pesi controllati solo al lunedì. Demo e limiti fissi invariati.
+  pesi controllati solo al lunedì. Demo e limiti fissi invariati. Secondo giro: nessun invariante nuovo; strategia dichiarata da una costante di classe.

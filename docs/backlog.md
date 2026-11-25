@@ -850,3 +850,12 @@ scrivono con e senza le serie a incasso quasi fisso.
 * **23 novembre 2026, P34 in parte chiusa dal proprietario** («Sì scrivilo», `docs/decisioni_del_proprietario.md`): lo sconto per le
   prove si applica una volta sola, quando una strategia viene scelta (G1: prova 57, 0,945); dopo conta la conferma in avanti. Resta
   aperta la parte tecnica (la correzione per le settimane legate delle serie a incasso quasi fisso, e la F5 vecchia nel mazzo, P35).
+
+### P36. Prima di accendere il conto vero su F5 — trovata il 25 novembre 2026 (revisioni `reviews/reports/2026-11-25-conto-vero-F5*.md`)
+* **Cosa**: il conto vero esegue F5 (commit del 25 novembre, approvato per il commit, spento). Prima dell'approvazione per l'accensione:
+  il 183 (testi «G1» rimasti: allarmi dei pesi `demo_binance.py:139` e `:934`, tre righe del log, il titolo in `scripts/state_snapshot.py`,
+  il piano `docs/conto_vero.md`, `/conto_vero/versione` senza la strategia); il 180 (pesi fermi 7 giorni, limiti controllati solo il lunedì:
+  misurare il peso massimo per moneta di F5 sul passato con la deriva della settimana, oggi c'è solo quello di G1, 47,8%); il 181 (un blocco
+  sopra il lunedì salta la settimana); le decisioni per il proprietario delle revisioni (età di 194 ore, nessuno stop per posizione, F5 mai
+  su un demo) e i vecchi 54 (ii), 70, 78.
+* **Perché non subito**: il conto vero è spento e i soldi veri si accendono solo quando il proprietario lo chiede.

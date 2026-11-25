@@ -50,6 +50,8 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Conto vero su F5** (25 novembre): codice committato dopo l'APPROVE di live-path-reviewer per il commit (spento); prima
+  dell'accensione la voce P36 del backlog (testi «G1» rimasti, peso massimo di F5, settimana saltata dopo un blocco, decisioni del proprietario).
 - **Giudice delle balene** (idea 152, regole `research/trader_copiati/GIUDICE_BALENE.md` del 24 novembre): scrivere
   `research/trader_copiati/giudice_balene.py` (i numeri per conto della sezione del giudizio) **prima di lunedì 30 novembre**, primo
   giudizio quel lunedì, salvato prima della settimana dopo; misura dopo 8 settimane.
