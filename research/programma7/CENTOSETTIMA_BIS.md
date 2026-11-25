@@ -69,6 +69,25 @@ descrizione, la quota di giorni «con direzione» per ogni anno e per ogni sogli
 Dalle risposte «stato» di `ops/results/`: lo stato di ER di ogni giorno dal 16 novembre e quale delle due strategie la variante avrebbe
 seguito, contro G1 e F5 reali nello stesso periodo. Non entra nel conto: 9 giorni sono pochi per giudicare.
 
+## Chiusura della verifica (25 novembre 2026, sessione principale, prima di ogni calcolo)
+Dalla verifica di strategy-researcher (`VERIFICA_CENTOSETTIMA_BIS.md`, 3 punti bloccanti). **Dove il testo sopra dice diversamente, vale
+questa sezione.** Dove c'era una scelta, si è presa la più prudente.
+1. **Buchi del Bitcoin** (bloccante): il controllo parte da 31 chiusure prima del 4 gennaio 2021 (4 dicembre 2020); un giorno senza la
+   chiusura del Bitcoin nella finestra conta come «senza direzione» (pesi di F5); più di 5 chiusure mancanti in tutto il periodo: la prova
+   si ferma e si scrive.
+2. **I motori** (bloccante): G1 e F5 rifatte con i pesi devono stare entro **0,01** (G1) e **0,005** (F5) di netto settimanale dalle serie
+   salvate, in ogni settimana; oltre, ci si ferma e si scrive.
+3. **Rapporto di efficienza non calcolabile** (bloccante): calcolabile solo con tutte e 31 le chiusure finite e il denominatore sopra zero;
+   altrimenti «senza direzione» (F5). Il confronto con la soglia è «maggiore o uguale», senza arrotondamenti.
+4. I pesi giornalieri di G1 e quelli di F5 si calcolano interi, ogni giorno, e si sceglie riga per riga secondo lo stato del giorno (G1
+   «virtuale» nei giorni di F5); al cambio di stato si paga il passaggio dai pesi tenuti ai pesi nuovi.
+5. Controllo descrittivo in più: la stessa costruzione con la sola F5 (tutti i giorni «senza direzione») contro la serie settimanale di F5.
+6. «Spese dei cambi» = spese dei soli giorni in cui lo stato cambia; «la differenza con G1» = sul netto annuo.
+7. Un anno è «con direzione» se almeno metà dei suoi giorni lo sono; si scrive anche il netto della variante nei giorni di ciascuno stato.
+8. Esame con le regole della prova (Sharpe corretto 0,80 per famiglie, ogni anno positivo, t da 3), nomi «169 A» e «169 B» in
+   `corretto_famiglie`; si annota che il mazzo ha ancora la F5 vecchia (backlog P35).
+9. Parte in avanti: solo fin dove arriva il pannello dei prezzi, senza scarichi nuovi; descrittiva.
+
 ## Cosa si consegna
 `research/programma7/RISULTATI_CENTOSETTIMA_BIS.md`, serie in `research/programma7/risultati_centosettima_bis/settimane_A.csv.gz` e
 `settimane_B.csv.gz` (colonna `netto`, leggibili da `asticella.py`), script `research/programma7/centosettima_bis.py` (nuovo, che importa
