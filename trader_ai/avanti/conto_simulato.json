@@ -1,11 +1,37 @@
 {
- "portafoglio": 973.4676843918703,
- "posizione": null,
+ "portafoglio": 969.1734682459103,
+ "posizione": {
+  "lato": "corto",
+  "quantita": 0.02,
+  "entrata": 58450.0,
+  "leva": 3,
+  "margine": 389.6666666666667,
+  "liquidazione": 77641.08333333333,
+  "aperta_ms": 1795622040000,
+  "da_limite": true
+ },
  "ordini": [],
- "algo": [],
- "leva": 5,
- "ultimo_minuto_ms": 1795619220000,
- "ultimo_funding_ms": 1795619239764,
+ "algo": [
+  {
+   "algoId": 30,
+   "cid": "tais1795621509185",
+   "tipo": "STOP_MARKET",
+   "prezzo": 58950.0,
+   "lato": "corto",
+   "messo_ms": 1795621528146
+  },
+  {
+   "algoId": 31,
+   "cid": "tait1795622122259",
+   "tipo": "TAKE_PROFIT_MARKET",
+   "prezzo": 57400.0,
+   "lato": "corto",
+   "messo_ms": 1795622125497
+  }
+ ],
+ "leva": 3,
+ "ultimo_minuto_ms": 1795622760000,
+ "ultimo_funding_ms": 1795622805648,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -126,9 +152,40 @@
    "cosa": "commissione",
    "importo": -1.170517,
    "come": "stop"
+  },
+  {
+   "ora_ms": 1795620930453,
+   "cosa": "commissione",
+   "importo": -0.24486,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795621026578,
+   "cosa": "risultato",
+   "importo": -3.272745,
+   "prezzo": 58455.845,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795621026578,
+   "cosa": "commissione",
+   "importo": -0.613786,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795622122913,
+   "cosa": "commissione",
+   "importo": -0.2338,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795622412728,
+   "cosa": "funding",
+   "importo": 0.070975,
+   "tasso": 6.085e-05
   }
  ],
- "prossimo_id": 27,
+ "prossimo_id": 32,
  "chiuse": [
   {
    "lato": "corto",
@@ -195,10 +252,22 @@
    "aperta_ms": 1795618860000,
    "da_limite": true,
    "chiusa_ms": 1795618860000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.021,
+   "entrata": 58300.0,
+   "leva": 5,
+   "margine": 244.86000000000004,
+   "liquidazione": 69668.5,
+   "aperta_ms": 1795620840000,
+   "da_limite": true,
+   "chiusa_ms": 1795620960000
   }
  ],
  "funding_applicati": [
-  1795593600001
+  1795593600001,
+  1795622400000
  ],
  "tolti": []
 }
