@@ -1057,3 +1057,6 @@ direzione del Bitcoin; il vantaggio di F5 di queste settimane non si sa preveder
 **25 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (105 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
 nuova, nessuna moneta nuova su Coinbase. G1 e F5: le due misure di stamattina sono chiuse (peso massimo di F5, prova 169 no). Ricerca: nessuna
 prova in corso. **Capito oggi**: niente di nuovo in questo giro.
+**25 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (186 articoli nuovi; tre pagine di CryptoBriefing piene, la quarta no:
+la fonte è coperta), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito
+oggi**: niente di nuovo in questo giro.
