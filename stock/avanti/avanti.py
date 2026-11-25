@@ -345,7 +345,7 @@ def chiudi(aspetta: bool = True) -> str:
             except alpaca.ErroreAlpaca as e:
                 print(f"chiusura di {p['symbol']} rifiutata: {str(e)[:120]}")
         time.sleep(10)
-    rimaste = [p["symbol"] for p in _posizioni_candela()]
+    rimaste = _aspetta_chiusure()
     time.sleep(30)
     esito = scrivi_diario(oggi)
     allarme = {"posizioni_aperte": {"ora": int(time.time()), "testo": f"posizioni ancora aperte dopo la chiusura: {', '.join(rimaste)}"}}
@@ -353,6 +353,25 @@ def chiudi(aspetta: bool = True) -> str:
     if rimaste:
         raise alpaca.ErroreAlpaca(f"POSIZIONI ANCORA APERTE dopo la chiusura: {', '.join(rimaste)} ({esito})")
     return esito
+
+
+ATTESA_CHIUSURE_S = 60
+
+
+def _aspetta_chiusure(secondi: float = ATTESA_CHIUSURE_S) -> list[str]:
+    """I titoli ancora aperti dopo le chiusure, ricontrollati ogni 5 secondi fino a `secondi`. 24 nov 2026: le chiusure partite
+    alle 15:55 sono finite alle 15:55:47, ma il controllo guardava subito e ha dato un falso allarme su INTC a metà della vendita."""
+    fine = time.monotonic() + secondi
+    rimaste = None
+    while True:
+        try:
+            rimaste = [p["symbol"] for p in _posizioni_candela()]
+        except alpaca.ErroreAlpaca:
+            if rimaste is None and time.monotonic() >= fine:
+                raise                                   # nessuna lettura riuscita: l'errore si vede
+        if rimaste is not None and (not rimaste or time.monotonic() >= fine):
+            return rimaste
+        time.sleep(5)
 
 
 ATTESA_MASSIMA = pd.Timedelta(hours=5, minutes=20)     # un lavoro di GitHub dura al massimo 6 ore

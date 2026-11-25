@@ -29,6 +29,11 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.
 
+## Come rispondere al proprietario (25 novembre 2026)
+
+«Devi ridurre il testo nelle risposte, è troppo; non mostrarmi a schermo i tuoi pensieri ma solo l'output finale»: risposte corte,
+nessun messaggio di passaggio fra un'azione e l'altra, solo il risultato finale.
+
 ## Cosa aspetta il proprietario
 
 0. **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti). (La prova 45 sul demo: decisa dal proprietario il
