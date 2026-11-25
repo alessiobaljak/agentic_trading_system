@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from trader_ai.indicatori import riassunto
-from trader_ai.limiti import OBIETTIVO_GIORNO_USDT, Conto
+from trader_ai.limiti import OBIETTIVO_GIORNO_QUOTA, Conto, obiettivo_usdt
 
 ISTRUZIONI = Path(__file__).with_name("istruzioni.md")
 #: Quante candele si mostrano per intervallo (gli indicatori si calcolano su tutte quelle ricevute, di solito 200).
@@ -38,7 +38,8 @@ def blocco_intervallo(nome: str, candele: List[dict]) -> str:
 def blocco_conto(c: Conto, prezzo: float) -> str:
     guadagno = c.conto - c.conto_mezzanotte
     righe = [f"conto {c.conto:.2f} USDT, disponibile {c.disponibile:.2f}; guadagno da mezzanotte UTC {guadagno:+.2f}; "
-             f"mancano {max(0.0, OBIETTIVO_GIORNO_USDT - guadagno):.2f} all'obiettivo di {OBIETTIVO_GIORNO_USDT:g}"]
+             f"mancano {max(0.0, obiettivo_usdt(c) - guadagno):.2f} all'obiettivo di {obiettivo_usdt(c):.2f} "
+             f"({OBIETTIVO_GIORNO_QUOTA:.0%} del conto a mezzanotte)"]
     p = c.posizione
     if p is None:
         righe.append("nessuna operazione aperta")

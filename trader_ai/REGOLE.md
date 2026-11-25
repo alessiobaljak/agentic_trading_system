@@ -1,4 +1,4 @@
-# Le regole del trader AI (versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+# Le regole del trader AI (versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
 
 **Versione 4, il conto simulato** (il proprietario, 24 novembre 2026: «non posso creare un account nuovo [...] posso solo creare altre
 chiavi API», poi «conto simulato sul programma va bene»). La prova sul demo del 24 novembre si è fermata al primo punto, senza toccare
@@ -117,5 +117,6 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 |---|---|---|
 | 1 | 21 novembre 2026 | ogni 4 ore, 12 monete fisse, solo simulato. Mai usata |
 | 2 | 23 novembre 2026 | il modello sceglie monete e momenti, demo suo. Mai usata |
+| 5 | 25 novembre 2026 | obiettivo del giorno: il 3% del conto della mezzanotte UTC invece di 50 USDT (il proprietario: «il profitto giornaliero mettilo al 3%»), prima del primo avvio |
 | 4 | 24 novembre 2026 | conto simulato dal programma con i prezzi veri (nessuna chiave di Binance): l'unico account Binance del proprietario ha già il conto demo di G1 |
 | 3 | 23 novembre 2026 | moneta e intervalli scelti dal proprietario (BTC; 5, 15, 30 minuti), chiamata ogni 15 minuti e a ogni chiusura, obiettivo di 50 USDT al giorno poi stop, leva fino a 10, nessuna perdita massima, memoria per cambiare approccio, nessun dato dell'altra sessione |

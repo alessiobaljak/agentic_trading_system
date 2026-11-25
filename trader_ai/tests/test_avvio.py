@@ -10,7 +10,7 @@ from trader_ai.avvio import Trader
 from trader_ai.conto_demo import ContoDemo, LimiteBinance, _url, arrotonda, controlla_chiavi
 from trader_ai.costi import TETTO_GIORNO_DOLLARI, Budget
 from trader_ai.giro import decidi
-from trader_ai.limiti import LEVA_MAX, OBIETTIVO_GIORNO_USDT, Conto
+from trader_ai.limiti import LEVA_MAX, OBIETTIVO_GIORNO_QUOTA, Conto
 from trader_ai.modello import Esito
 from trader_ai.schema import Risposta
 
@@ -302,7 +302,7 @@ def test_chiamata_senza_token_dichiarati_conta_il_massimo(tmp_path):
 
 
 def test_valori_fissati_dal_proprietario():
-    assert LEVA_MAX == 10 and OBIETTIVO_GIORNO_USDT == 50 and TETTO_GIORNO_DOLLARI == 5.0
+    assert LEVA_MAX == 10 and OBIETTIVO_GIORNO_QUOTA == 0.03 and TETTO_GIORNO_DOLLARI == 5.0
 
 
 # --- conto_demo ------------------------------------------------------------------------------------------------------

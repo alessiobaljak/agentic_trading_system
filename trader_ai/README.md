@@ -29,7 +29,7 @@ risultato oscilla, non chi è bravo.
 
 ## Il piano (versione 3, 23 novembre 2026; le regole sono in `REGOLE.md`)
 Il proprietario sceglie la moneta (BTC) e gli intervalli (5, 15, 30 minuti); il modello decide entrata, leva, stop, obiettivo e uscita,
-con l'obiettivo di 50 USDT al giorno, poi si ferma fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al giorno.
+con l'obiettivo del 3% al giorno (dal 25 novembre; prima 50 USDT), poi si ferma fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al giorno.
 1. Fatto: decisione, limiti, tetto, obiettivo, indicatori, messaggio, memoria, collegamento al conto demo suo (`conto_demo.py`), il
    programma che gira ogni 30 secondi (`avvio.py`), l'installazione sulla macchina (`vps/installa.sh`, `vps/salva.sh`); test con conto
    e modello finti. Revisioni del percorso degli ordini in `revisioni/`.

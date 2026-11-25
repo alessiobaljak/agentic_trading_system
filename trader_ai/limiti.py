@@ -1,7 +1,8 @@
 """I limiti nel codice (REGOLE.md, versione 3, sezione 6): pochi, per scelta del proprietario («non ci sono limiti nella demo»).
 
 Restano: leva fino a 10, margine non oltre il disponibile, una sola operazione alla volta, stop obbligatorio dalla parte giusta e
-prima della liquidazione, obiettivo del giorno di 50 USDT dopo il quale ci si ferma fino a mezzanotte UTC.
+prima della liquidazione, obiettivo del giorno del 3% del conto di mezzanotte (il proprietario, 25 novembre 2026: «il profitto
+giornaliero mettilo al 3%»; prima 50 USDT) dopo il quale ci si ferma fino a mezzanotte UTC.
 """
 from __future__ import annotations
 
@@ -10,7 +11,7 @@ from typing import Optional
 
 from trader_ai.schema import Risposta
 
-OBIETTIVO_GIORNO_USDT = 50.0
+OBIETTIVO_GIORNO_QUOTA = 0.03      # 3% del conto a mezzanotte UTC (30 USDT su 1.000)
 LEVA_MAX = 10.0
 #: Valore minimo di un ordine; per BTCUSDT Binance chiede 100 USDT (da confermare sul conto demo con le regole del simbolo).
 ORDINE_MIN_VALORE = 100.0
@@ -39,7 +40,11 @@ class Conto:
 
 
 def obiettivo_raggiunto(c: Conto) -> bool:
-    return c.conto >= c.conto_mezzanotte + OBIETTIVO_GIORNO_USDT
+    return c.conto >= c.conto_mezzanotte + obiettivo_usdt(c)
+
+
+def obiettivo_usdt(c: Conto) -> float:
+    return c.conto_mezzanotte * OBIETTIVO_GIORNO_QUOTA
 
 
 def _stop_ok(lato: str, prezzo: float, stop: Optional[float], leva: float, liquidazione: Optional[float]) -> Optional[str]:
