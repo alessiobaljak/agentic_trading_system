@@ -1,6 +1,7 @@
-# Prova 169 — La scadenza delle opzioni di Deribit: l'ora prima e le due ore dopo (idea 158)
+# Idea 159, non eseguita (nessun numero di prova) — La scadenza delle opzioni di Deribit: l'ora prima e le due ore dopo (idea 158)
 
-Regole scritte il 22 novembre 2026 da strategy-scout, **prima di ogni calcolo** (nessun prezzo guardato), per l'indirizzo del proprietario
+**Non eseguita** (riga 159 della coda del registro): il numero 169 è passato alla prova «G1 o F5 secondo il mercato»
+(`CENTOSETTIMA_BIS.md`). Regole scritte il 22 novembre 2026 da strategy-scout, **prima di ogni calcolo** (nessun prezzo guardato), per l'indirizzo del proprietario
 del 22 novembre («non si tratta di predire prima [...] la reazione ci sarà dopo»; le idee si provano senza aspettare il via libera). Le
 committa la sessione principale; la esegue strategy-researcher (prima in modalità verifica), il giudizio lo dà backtest-auditor.
 Non spegne e non sostituisce niente.
