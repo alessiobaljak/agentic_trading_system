@@ -65,6 +65,8 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   il conto di oggi (`research/programma6/ANALISI_SHARPE_CORRETTO.md`).
 * **23 novembre**: il trading AI (`trader_ai/`) gira su **un conto demo di Binance suo** (1.000 USDT, separato da G1) con
   **Opus 5.5** e un **tetto di 5 euro al giorno** controllato nel codice; conto e chiavi li crea il proprietario; sessione «trading AI» riaperta.
+* **25 novembre**: «metti F5 come candidata per il conto piccolo»: il conto vero (spento) eseguirà **F5** al posto di G1; il demo resta
+  su G1 e nessuna strategia si spegne.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

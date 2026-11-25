@@ -17,6 +17,7 @@ codice 300).
    **23 novembre (decisione del proprietario)**: il numero è una probabilità che non sia fortuna; si calcola una volta sola, con le
    famiglie di prove fatte fino a quando la strategia è stata scelta (G1: prova 57, 0,945), e non si ricalcola con le prove nuove;
    dopo la scelta conta la conferma in avanti (porta 3). Fonte: `docs/decisioni_del_proprietario.md`, 23 novembre.
+   **25 novembre (decisione del proprietario)**: la candidata per il conto piccolo è **F5**, non più G1 (`docs/decisioni_del_proprietario.md`).
 2. Revisione di backtest-auditor sulla configurazione finale (la revisione separata già nel registro conta finché la configurazione non cambia).
 3. Parità di gate2-reconciler dimostrata (con le soglie approvate dal proprietario; senza soglie approvate la parità è «non dimostrata»).
 4. Il codice del conto vero la sa già eseguire, oppure il costo del cambio (punto 5) è dichiarato.

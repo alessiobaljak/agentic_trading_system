@@ -192,3 +192,14 @@ Opus 5, limite di spesa 5 euro al giorno, per la sessione riaprila». Cosa cambi
   nel file delle impostazioni della macchina, mai in chat né nel repository.
 * Gira sulla macchina (raggiunge Binance; da GitHub e dalle sessioni cloud Binance risponde 451) con la chiave del modello già presente
   («trading-bot-vps», caricata il 19 settembre). Il codice che manda ordini passa da live-path-reviewer e l'avvio lo approva il proprietario.
+
+
+## 25 novembre 2026: F5 candidata per il conto piccolo al posto di G1
+Le parole del proprietario: «metti F5 come candidata per il conto piccolo», dopo il confronto nel paper (dal 16 al 24 novembre F5 +1,4%,
+G1 −4,4%; dalla partenza F5 +8,1%, G1 +6,1%; sul passato pari: F5 +55,4% l'anno, Sharpe 1,88; G1 +54,1%, 1,97). Cosa cambia:
+* La strategia che il **conto vero** eseguirà, quando il proprietario lo chiederà, è **F5** (lo stesso motore di G1 deciso il lunedì):
+  `bot/portafoglio/conto_vero.py` legge lo stato del paper di F5 (`data/paper_f5.json`) e accetta una decisione vecchia fino a 8 giorni e
+  2 ore. Il conto vero resta **spento**; la modifica passa da live-path-reviewer e la versione nuova va approvata dal proprietario.
+* Il **demo resta su G1** e nessuna strategia del paper si spegne (8 novembre). Il confronto settimanale guarda F5 e G1 sugli stessi giorni.
+* Perché F5 con poco capitale: decide una volta a settimana (spese 4,9% l'anno contro 6,5% sul passato) e fa meno variazioni sotto il
+  minimo di Binance. Limite: F5 non ha un demo suo, quindi la parità fra paper e conto con ordini veri per F5 non è misurata.
