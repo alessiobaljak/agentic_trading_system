@@ -12,7 +12,7 @@ Firebase) sono nella sezione 14.
 | Parte | Dove | Verso dove | Acceso da |
 |---|---|---|---|
 | G1 sul conto demo | `bot/portafoglio/demo_binance.py` (`DemoG1`, `ClienteDemo`) | solo `demo-fapi.binance.com` | file `ops/demo_binance_acceso` + chiavi `BINANCE_DEMO_*` |
-| G1 sul conto vero (**fase 2, `ff89531`, spento**) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + codice approvato (tag; dal 12 nov, non committato: Firebase) + capitale + chiavi (sezione 14) |
+| G1 sul conto vero (**fase 2, `ff89531`, spento**; dal 25 nov, non committato: **F5**, sezione 14) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + codice approvato (tag; dal 12 nov, non committato: Firebase) + capitale + chiavi (sezione 14) |
 | Vecchio esecutore, ramo reale | `bot/execution/executor.py` | **nessuno: bloccato dal `9f47972c`** | `_init_binance` non crea il client e rimette `dry_run` vero (`executor.py:244-254`) |
 
 Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) e `eventi.py` (dati pubblici da `fapi.binance.com`,
@@ -20,7 +20,7 @@ Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) 
 dello stato (`scripts/state_snapshot.py:844-874` `SoloLettura`: solo GET su `userTrades`, `commissionRate`, `income`, `positionRisk` e
 `time` del conto demo, con la chiave del demo, con la richiesta «stato»; finestra vietata 23:50-01:45 UTC `:830`, stop al primo 429/418
 `:862-869`, soglia del peso usato 600 `:822`, tetto 1.000 per sezione `:821`; righe del 17 nov); dal 14 nov (`96c6094`) `positionRisk`
-(`:817-818`, `sezione_pesi_g1_oggi`) e un solo cliente per le sezioni (`:120-126`); dal 17 nov (non committato, APPROVE) una terza sezione,
+(`:817-818`, `sezione_pesi_g1_oggi`) e un solo cliente per le sezioni (`:120-126`); dal 17 nov (`d5c6708`, APPROVE) una terza sezione,
 `sezione_funding_demo_paper` (`:1194-1289`), che rilegge `income` FUNDING_FEE dei 3 giorni con lo stesso cliente (`:232`).
 `bot/risk/portafoglio.py` è una simulazione.
 
@@ -191,7 +191,7 @@ dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24
 (`DRY_RUN` falso ferma anche il demo; chiuso al riavvio con `ff89531`). Fuori dal codice: chiavi vere non limitate all'indirizzo,
 prelievo non detto; regole pubblicate senza i comandi del demo e del conto vero; servizio che riparte da solo con l'ultimo codice
 spinto. Conto vero: 54 ii Alto, 70 Medio, 78 Basso (sezione 14). Paper: 83 Basso latente. Fotografia dello stato:
-89 chiuso (`96c6094`); 17 nov (non committata, APPROVE) Bassi 90-94 (testi e conteggi della sezione del funding, letture doppie, test).
+89 chiuso (`96c6094`); 17 nov (`d5c6708`, APPROVE; 90-92 corretti dalla sessione principale) Bassi 90-94 (testi e conteggi della sezione del funding, letture doppie, test).
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
 ## 14. Il conto vero: fase 2 (`ff89531`), versione approvata su Firebase (`a267c40`), secondo giro del 12 nov non committato
@@ -231,6 +231,12 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
 - Test di guardia del 54 (secondo giro): nessun file fuori da conto vero, test e dashboard nomina i quattro comandi; non vede la
   costante importata (78).
 - Problemi aperti: 54 (ii) Alto; 70 Medio; 78 Basso. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-77; 56, 58, 69 come scelto.
+- **25 nov (non committato su `932c048`, REQUEST CHANGES)**: il conto vero esegue **F5** (`STRATEGIA`, `FILE_STRATEGIA` =
+  `data/paper_f5.json`, `conto_vero.py:127-131`, predefinito di `file_g1` a `:341`); età massima della decisione **194 ore** (8 giorni
+  e 2 ore) invece di 26; il demo resta su `paper_g1.json` e 26 ore. Stesse chiavi lette (`ultimo_lunedi` = il lunedì, `pesi`; scritte
+  in modo atomico da `PaperF5`, `f5.py:297-301`, `:457-459`); prima accensione, «riparti», fine blocco e capitale nuovo aspettano il
+  lunedì dopo (`_giorno_g1`, `demo_binance.py:1127-1133`). Aperti: 178 (test), 179 (strategia non dichiarata, testi «G1»), 180 (pesi
+  controllati solo al lunedì), 181 (blocco sopra il lunedì salta la settimana), 182 Basso. Prove `giro25nov/test_prove_25nov.py`.
 
 ## 15. Il trader AI sul suo conto demo (area `trader_ai/`, 23 novembre 2026)
 Fuori dal bot: servizio suo sulla macchina (`trader_ai/vps/installa.sh`), copia sua del repository, chiavi in un file suo. Rapporti:
@@ -278,3 +284,6 @@ Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una re
 - 17 nov (non committato, APPROVE): lo «stato» legge una volta in più `income` FUNDING_FEE del demo (3 giorni) per il confronto
   del funding per regolamento con il paper; stesso cliente, stessa finestra, stesso blocco. `96c6094` = sezione dei pesi approvata il 14 nov.
   Nessun invariante del percorso degli ordini cambiato.
+- 25 nov (non committato, REQUEST CHANGES): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
+  F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
+  pesi controllati solo al lunedì. Demo e limiti fissi invariati.
