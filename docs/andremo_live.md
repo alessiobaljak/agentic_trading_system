@@ -1054,3 +1054,6 @@ direzione del Bitcoin sui 30 giorni a decidere fra i pesi di G1 (ogni giorno) e 
 regge: nel 2023 la misura dice «con direzione», eppure lì F5 ha battuto G1 di 23 punti; e dal 16 al 23 novembre avrebbe seguito G1, quella
 che perdeva. Conto delle prove 340. **Capito oggi**: quando decidere una volta a settimana batte decidere ogni giorno non dipende dalla
 direzione del Bitcoin; il vantaggio di F5 di queste settimane non si sa prevedere con una regola semplice.
+**25 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (105 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. G1 e F5: le due misure di stamattina sono chiuse (peso massimo di F5, prova 169 no). Ricerca: nessuna
+prova in corso. **Capito oggi**: niente di nuovo in questo giro.
