@@ -16,3 +16,4 @@ principale e stanno nel diario di `research/programma7/MIGLIORARE_G1.md`.
 - 14 novembre 2026: voce 12, regole scritte, non calcolate (prova 156, `research/programma7/NOVANTAQUATTRESIMA.md`: uscita dal lato venduto per 3 o 7 ribilanci dopo +20% in un giorno, esame con 4 anni su 5 meglio di G1); da committare e far verificare.
 - 15 novembre 2026: voce nuova (leva più alta), regole scritte, non calcolate (prova 158, research/programma7/NOVANTASEIESIMA.md, varianti ×1,5 e ×2 con lo stop del conto vero); da committare e far verificare.
 - 23 novembre 2026: voce 12 misurata (G1 dopo crollo Bitcoin, 26 eventi: venduto +2,6 a 7 giorni, comprato -2,8, nessun effetto netto; research/programma7/misure_g1/voce12_rimbalzi.md).
+- 2026-11-25 misura F5 pesi (P36/180): max moneta 44,9% in settimana, somma max 397%; vedi misure_g1/f5_peso_massimo.md

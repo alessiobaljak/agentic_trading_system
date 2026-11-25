@@ -1042,3 +1042,9 @@ nuova, nessuna moneta nuova su Coinbase. Il conto vero esegue F5 (commit 03ee29e
 Due passi su F5 con strategy-improver: la misura del peso massimo per moneta con la deriva della settimana (problema 180, voce P36) e le
 regole della prova 169 «G1 o F5 secondo il mercato» (ogni giorno con una direzione, il lunedì senza), scritte prima del calcolo.
 **Capito oggi**: niente di nuovo sul mercato in questo giro.
+**25 novembre, 10:00 UTC, quanto può pesare una moneta in F5** (`research/programma7/misure_g1/f5_peso_massimo.md`, 300 settimane dal 2021,
+solo misura): al lunedì il peso più alto è 43,7% (BLZ, 5 febbraio 2024), in settimana con i prezzi che si muovono 44,9%: il tetto del 60%
+per moneta non si è mai avvicinato. La somma dei pesi invece si allarga in settimana: mediana dei massimi 209,9%, 99° percentile 268%, una
+volta 397% (8 febbraio 2021, gli short salivano). La perdita peggiore di una moneta venduta in una settimana è −14,5% del conto (XRP, gennaio
+2021, +81%). **Capito oggi**: con le posizioni ferme una settimana il rischio non è una moneta sola troppo grande ma l'esposizione totale che
+cresce quando le monete vendute salgono; lo stop del conto a −35% resta l'unica protezione (voce P36).

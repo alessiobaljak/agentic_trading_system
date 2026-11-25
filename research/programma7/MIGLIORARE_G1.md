@@ -503,3 +503,8 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   paper +0,23% (il demo 0,82 sotto). Equity del demo 991,51 (−0,85% dall'8 novembre), G1 nel paper 10.672,34, F5 nel paper 10.876,97
   (F5 +1,16% e G1 +0,07% fra le letture delle 04:18 del 24 e del 25). **Dal 9 novembre (17 giorni) demo −0,37%, paper +1,98%** (−0,14 punti
   al giorno). Voce 14, quarta lettura: nessuna «sì».
+
+### Misura F5, pesi (25 novembre 2026, P36/180)
+Peso massimo per moneta al lunedì 43,7% (BLZ, 5 feb 2024), in settimana 44,9%: mai sopra il 60%. Somma dei pesi in settimana: massimo 397% (8 feb 2021), sopra 300% una volta,
+sempre sopra 200%. Peggior moneta venduta: XRP, 25 gen 2021, +81% in settimana, -14,5% sul conto. Idea non provata: controllare la somma sul peso vero, con un tetto separato.
+Fonte: `research/programma7/misure_g1/f5_peso_massimo.md`.
