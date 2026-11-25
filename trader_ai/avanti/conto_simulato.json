@@ -1,37 +1,11 @@
 {
- "portafoglio": 975.1394380518701,
- "posizione": {
-  "lato": "corto",
-  "quantita": 0.04,
-  "entrata": 58420.0,
-  "leva": 3,
-  "margine": 778.9333333333334,
-  "liquidazione": 77601.23333333334,
-  "aperta_ms": 1795614420000,
-  "da_limite": true
- },
+ "portafoglio": 973.4676843918703,
+ "posizione": null,
  "ordini": [],
- "algo": [
-  {
-   "algoId": 18,
-   "cid": "tais1795615223640",
-   "tipo": "STOP_MARKET",
-   "prezzo": 58310.0,
-   "lato": "corto",
-   "messo_ms": 1795615237055
-  },
-  {
-   "algoId": 19,
-   "cid": "tait1795615223640",
-   "tipo": "TAKE_PROFIT_MARKET",
-   "prezzo": 57900.0,
-   "lato": "corto",
-   "messo_ms": 1795615238359
-  }
- ],
- "leva": 3,
- "ultimo_minuto_ms": 1795615620000,
- "ultimo_funding_ms": 1795615653258,
+ "algo": [],
+ "leva": 5,
+ "ultimo_minuto_ms": 1795619160000,
+ "ultimo_funding_ms": 1795619208790,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -120,9 +94,41 @@
    "cosa": "commissione",
    "importo": -0.46736,
    "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795615750036,
+   "cosa": "risultato",
+   "importo": 4.16676,
+   "prezzo": 58315.831,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795615750036,
+   "cosa": "commissione",
+   "importo": -1.166317,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "commissione",
+   "importo": -0.4676,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "risultato",
+   "importo": -3.03408,
+   "prezzo": 58525.852,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "commissione",
+   "importo": -1.170517,
+   "come": "stop"
   }
  ],
- "prossimo_id": 20,
+ "prossimo_id": 27,
  "chiuse": [
   {
    "lato": "corto",
@@ -167,6 +173,28 @@
    "aperta_ms": 1795608031675,
    "da_limite": false,
    "chiusa_ms": 1795611626794
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.04,
+   "entrata": 58420.0,
+   "leva": 3,
+   "margine": 778.9333333333334,
+   "liquidazione": 77601.23333333334,
+   "aperta_ms": 1795614420000,
+   "da_limite": true,
+   "chiusa_ms": 1795615680000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.04,
+   "entrata": 58450.0,
+   "leva": 5,
+   "margine": 467.6,
+   "liquidazione": 69847.75,
+   "aperta_ms": 1795618860000,
+   "da_limite": true,
+   "chiusa_ms": 1795618860000
   }
  ],
  "funding_applicati": [
