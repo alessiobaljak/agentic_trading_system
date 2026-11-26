@@ -37,12 +37,15 @@ con l'obiettivo del 3% al giorno (dal 25 novembre; prima 50 USDT), poi si ferma 
    seconda revisione), ok del proprietario, `installa.sh avvia`.
 3. Comandi sulla macchina: `installa.sh stato | ferma | chiudi | riparti | chiavi | togli`.
 4. Resoconto ogni giorno a mezzanotte UTC; diario di ogni decisione durante il giorno; scheda in dashboard.
+5. 26 novembre 2026, versione 7 (`REGOLE.md`): il controllo di istruzioni e dati (`revisioni/2026-11-26-controllo-istruzioni-e-dati.md`)
+   ha trovato dati sbagliati nel messaggio al modello; corretti. Dopo l'aggiornamento il programma ricostruisce da solo, una volta, la
+   memoria delle operazioni dal conto simulato (`ripara.py`) e rifà il resoconto del 25 novembre.
 
 Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto
 misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti, per questo il trader gira sulla macchina.
 
 ## Aperti dopo le revisioni (bassi, non bloccano l'avvio; 24 novembre 2026)
-* 173-175 della dodicesima revisione (`revisioni/2026-11-24-dodicesima.md`): togliere il conteggio dei minuti dentro `condizionato` e
-  `annulla_condizionato` (gli intervalli di vita degli stop bastano), far valere solo gli stop dello stesso lato della posizione,
-  rendere significativo il test dello stop stretto. Da fare con il primo giro di modifiche dopo l'avvio, con la sua revisione.
+* 173 e 175 della dodicesima revisione (`revisioni/2026-11-24-dodicesima.md`): togliere il conteggio dei minuti dentro `condizionato`
+  e `annulla_condizionato` (gli intervalli di vita degli stop bastano), rendere significativo il test dello stop stretto. Il 174 (solo
+  gli stop dello stesso lato della posizione) è fatto il 26 novembre, dopo che è successo davvero.
 * Le revisioni del trader vanno copiate in `reviews/` dalla sessione delle crypto (`RICHIESTE_CRYPTO.md`, voce 3).

@@ -1,5 +1,9 @@
-"""Lo schema della risposta del modello (REGOLE.md, versione 3, sezione 5): una decisione per chiamata. L'SDK lo manda come
-uscita strutturata e lo valida; i limiti veri li controlla `limiti.py`."""
+"""Lo schema della risposta del modello (REGOLE.md, versione 7, sezione 5): una decisione per chiamata. L'SDK lo manda come
+uscita strutturata e lo valida; i limiti veri li controlla `limiti.py`.
+
+Niente lunghezze massime nei testi (controllo del 26 novembre 2026, punto 2.5): l'API non le applica e l'SDK le controlla solo dopo,
+così un diario di 601 caratteri buttava via tutta la decisione. Le lunghezze sono indicazioni nella descrizione; il programma taglia
+i testi quando li salva in memoria. La leva è un numero intero: il formato lo garantisce l'API."""
 from __future__ import annotations
 
 from typing import Literal, Optional
@@ -12,12 +16,18 @@ Azione = Literal["aspetta", "apri_lungo", "apri_corto", "chiudi", "modifica"]
 class Risposta(BaseModel):
     azione: Azione
     margine_usdt: Optional[float] = Field(None, description="aprire: USDT del conto messi come margine")
-    leva: Optional[float] = Field(None, description="aprire: leva da 1 a 10")
+    leva: Optional[int] = Field(None, description="aprire: leva, numero intero da 1 a 10")
     stop_prezzo: Optional[float] = Field(None, description="aprire (obbligatorio) e modifica: prezzo dello stop")
     obiettivo_prezzo: Optional[float] = Field(None, description="aprire e modifica: prezzo dell'obiettivo (facoltativo)")
-    tipo_ordine: Literal["mercato", "limite"] = "mercato"
-    prezzo_limite: Optional[float] = None
-    approccio: str = Field(max_length=200, description="il metodo che stai usando adesso, in una frase")
+    tipo_ordine: Literal["mercato", "limite"] = Field(
+        "mercato", description="aprire: «mercato» (subito) o «limite» (con prezzo_limite; si esegue solo quando il prezzo degli "
+                               "scambi va oltre il limite)")
+    prezzo_limite: Optional[float] = Field(None, description="solo con tipo_ordine «limite»: il prezzo dell'ordine")
+    approccio: str = Field(description="il tuo metodo in una frase, circa 200 caratteri, senza i livelli di prezzo di oggi "
+                                       "(quelli vanno nel diario)")
     cambio_approccio: bool = Field(description="vero se hai deciso adesso di cambiare metodo")
-    perche: Optional[str] = Field(None, max_length=300, description="se cambi approccio: perché")
-    diario: str = Field(max_length=600, description="cosa vedi e perché decidi così")
+    perche: Optional[str] = Field(None, description="se cambi approccio: perché, circa 300 caratteri")
+    lezione: Optional[str] = Field(None, description="quando sei chiamato per un'operazione chiusa: che cosa avevi previsto, che "
+                                                     "cosa è successo, che cosa cambi (circa 300 caratteri); resta nella tua "
+                                                     "memoria anche nei giorni dopo")
+    diario: str = Field(description="cosa vedi e perché decidi così, circa 600 caratteri")

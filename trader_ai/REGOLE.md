@@ -1,4 +1,11 @@
-# Le regole del trader AI (versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+# Le regole del trader AI (versione 7, 26 novembre 2026: dati e istruzioni corretti dopo il controllo del 26 novembre; versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+
+**Versione 7, il controllo del 26 novembre 2026** (`trader_ai/revisioni/2026-11-26-controllo-istruzioni-e-dati.md`; il proprietario: «sei
+sicuro di avere creato le istruzioni corrette [...] che abbia tutti gli elementi a disposizione per prendere le decisioni?»). Il primo
+giorno (25-26 novembre) il modello riceveva dati sbagliati: un ordine limite non eseguito come «operazione aperta» con un guadagno finto
+(19 chiamate su 104), le uscite sbagliate in memoria, un'operazione eseguita e chiusa fra due controlli mai registrata, le lezioni
+sparite dopo due ore e mezza, il budget in dollari scambiato per un motivo per aspettare. Corretto tutto: sezioni 2-5 e 7 qui sotto. Le
+scelte del proprietario non cambiano (moneta, intervalli, obiettivo, nessuna perdita massima, leva, tetto, nessun consiglio di strategia).
 
 **Versione 4, il conto simulato** (il proprietario, 24 novembre 2026: «non posso creare un account nuovo [...] posso solo creare altre
 chiavi API», poi «conto simulato sul programma va bene»). La prova sul demo del 24 novembre si è fermata al primo punto, senza toccare
@@ -14,6 +21,9 @@ pronto se un giorno ci sarà un conto demo suo (`config.json`, `"conto": "demo"`
   livello meno lo scarto, o all'apertura del minuto se apre già oltre; stop e obiettivo nello stesso minuto: vale lo stop;
 * un ordine limite si esegue solo se il prezzo **va oltre** il limite (toccarlo non basta); un limite che incrocia subito il prezzo si
   esegue a mercato;
+* stop e obiettivo valgono solo per una posizione del loro lato (dal 26 novembre: uno stop rimasto da un lungo chiudeva il corto aperto
+  dopo); ogni posizione tiene i suoi conti (nome dell'ordine, spese, funding, uscita, modo), che il programma legge con `esito_ordine`;
+  prima di annullare gli ordini si contano i minuti già chiusi (un limite eseguito in un minuto appena chiuso non sparisce);
 * sempre il caso peggiore per noi: un ordine limite e un obiettivo contano **dal minuto dopo** quello in cui sono nati; uno stop
   conta **già nel minuto in cui nasce**, e uno stop tolto resta valido fino alla fine del suo minuto (quando lo stop si sposta la
   posizione non resta mai scoperta; fra più stop vale il più vicino al prezzo); nel minuto in cui un limite si esegue l'obiettivo non
@@ -42,17 +52,22 @@ l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del con
 
 ## 2. Quando viene chiamato
 * **A ogni candela da 15 minuti chiusa** (:00, :15, :30, :45 UTC), con o senza un'operazione aperta;
-* **subito quando un'operazione si chiude** (stop, obiettivo o liquidazione sul conto), per decidere cosa fare dopo.
+* **subito quando un'operazione si chiude** (stop, obiettivo o liquidazione sul conto), per decidere cosa fare dopo; dal 26 novembre
+  anche quando la chiude il modello stesso o quando annulla un ordine limite (al passo dopo, entro 30 secondi), e quando un limite si
+  esegue e si chiude fra due controlli.
 * Non viene chiamato: dopo l'obiettivo del giorno raggiunto; quando il tetto di spesa è finito (sezione 3).
 
 ## 3. Il modello e il tetto di spesa
-* `claude-opus-5-5`, SDK Python ufficiale `anthropic`, pensiero adattivo (sempre acceso), sforzo `high` (dal 26 novembre; prima `medium`), risposta al massimo 16.000
-  token. Data di addestramento: giugno 2026 (https://platform.claude.com/docs/en/about-claude/models/overview, letta il 21 novembre
+* `claude-opus-5-5`, SDK Python ufficiale `anthropic`, pensiero adattivo (sempre acceso) con il **riassunto del ragionamento**
+  (`display: "summarized"`, dal 26 novembre: si paga uguale, ma si vede come ragiona; nel diario i primi 1.500 caratteri, intero nei file
+  dei messaggi sulla macchina), sforzo `high` (dal 26 novembre; prima `medium`), risposta al massimo 16.000 token. Istruzioni e memoria
+  stabile nella **cache da un'ora** (dal 26 novembre: con una chiamata ogni 15 minuti quella da 5 minuti scadeva sempre). Data di addestramento: giugno 2026 (https://platform.claude.com/docs/en/about-claude/models/overview, letta il 21 novembre
   2026). Nessuno strumento (niente web, niente codice). Nessun ripiego automatico su un altro modello.
 * **Tetto: 5 dollari al giorno UTC** (sotto i 5 euro finché l'euro vale più del dollaro), contati sui token dichiarati da ogni risposta
-  (4 dollari al milione in entrata, 20 in uscita, cache 0,20 in lettura e 5,00 in scrittura). **Prima di ogni chiamata** il codice
-  calcola il costo più alto possibile (messaggio a 2 caratteri per token al prezzo più caro, più 16.000 token di risposta); se non sta nel
-  rimasto, non chiama fino alla mezzanotte UTC. Le operazioni aperte restano con lo stop e l'obiettivo già piazzati sul conto.
+  (4 dollari al milione in entrata, 20 in uscita, cache 0,20 in lettura, 5,00 in scrittura da 5 minuti e 8,00 da un'ora). **Prima di
+  ogni chiamata** il codice calcola il costo più alto possibile (messaggio a 1,5 caratteri per token, misurati 1,8, al prezzo più caro,
+  più 16.000 token di risposta); se non sta nel rimasto, non chiama fino alla mezzanotte UTC. Le operazioni aperte restano con lo stop e
+  l'obiettivo già piazzati sul conto. Il modello non vede dollari: vede quante chiamate restano e a che ora arriverà l'ultima.
 * **Stima, non misura**: con una sola moneta una chiamata costa circa 5-7 centesimi; 96 chiamate al giorno più quelle alle chiusure
   fanno circa 5-7 dollari, cioè **il tetto può finire prima di sera**. La misura vera dei primi giorni si scrive qui.
 
@@ -60,15 +75,26 @@ l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del con
 1. **Istruzioni fisse** (`trader_ai/istruzioni.md`), corte e **senza consigli di strategia** (il proprietario, 23 novembre: «non capisco
    perché devi dare al modello istruzioni così dettagliate [...] è un agente live AI, legge, interpreta e si adatta sul momento trade
    dopo trade, con l'obiettivo giornaliero di max 50»): l'obiettivo, le regole meccaniche della sezione 6, le spese, il formato.
-2. **I dati della moneta**: candele chiuse da 5 minuti (ultime 4 ore), da 15 minuti (ultime 12 ore), da 30 minuti (ultime 24 ore), con
-   per ogni intervallo gli indicatori calcolati dal codice sull'ultima candela chiusa (medie esponenziali a 9, 21 e 50, RSI a 14,
-   MACD 12-26-9, bande di Bollinger 20-2, ATR a 14, VWAP del giorno, volume rispetto alla media di 20); il prezzo attuale, il funding
-   attuale e il prossimo, l'interesse aperto e la sua variazione nell'ultima ora. Solo candele chiuse prima dell'ora della chiamata.
-3. **Il conto**: saldo, guadagno del giorno rispetto alla mezzanotte e quanto manca ai 50, l'operazione aperta (lato, entrata, leva,
-   margine, stop, obiettivo, risultato, prezzo di liquidazione), gli ordini aperti.
-4. **La sua memoria** (per adattarsi in fretta): le ultime 30 operazioni chiuse con entrata, uscita, come si sono chiuse, risultato e
-   l'approccio che stava usando; il suo approccio attuale e le sue ultime 10 note di diario.
-5. L'ora, il motivo della chiamata, il budget di chiamate rimasto oggi.
+2. **I dati della moneta**: le ultime 48 candele chiuse da 5 minuti (4 ore), da 15 minuti (12 ore), da 30 minuti (24 ore), con il volume
+   e la quota comprata a mercato, e la candela in corso a parte (dal 26 novembre: «solo candele chiuse» era una scelta della sessione,
+   non del proprietario); per ogni intervallo gli indicatori calcolati dal codice sulle candele chiuse (medie esponenziali a 9, 21 e 50,
+   RSI a 14, MACD 12-26-9, bande di Bollinger 20-2, ATR a 14 anche in percentuale, ampiezza mediana delle ultime 20 candele, volume
+   rispetto alla media di 20) e gli ultimi 4 valori di RSI, istogramma del MACD e volume sulla media. Poi: il prezzo mark (su cui scattano
+   stop, obiettivo e liquidazione) e l'indice con il premio; il funding in percentuale e sulla posizione; l'interesse aperto con la
+   variazione in 1 e 4 ore; prezzo, VWAP e quota comprata a mercato dalla mezzanotte UTC; i livelli di oggi, di ieri e delle ultime 100
+   ore; l'ampiezza tipica delle candele per fascia oraria; il giorno della settimana, la borsa di New York (aperta, chiusa, festa) e gli
+   orari del funding (`calendario.py`). Nessuna notizia.
+3. **Il conto**: saldo, guadagno da mezzanotte e quanto manca al 3%, risultato dall'inizio della prova, le perdite di fila; l'operazione
+   aperta (lato, entrata e ora d'esecuzione, leva, valore, margine, stop iniziale e attuale, obiettivo, liquidazione, distanze in
+   percentuale e in ATR dei tre intervalli, risultato lordo e netto se chiude adesso, netto allo stop e all'obiettivo, pareggio, 1 R,
+   quanto il prezzo è andato a favore e contro dall'esecuzione) **oppure** l'ordine limite in attesa, detto come tale (nessuna
+   posizione, nessun risultato).
+4. **La sua memoria**, in due parti. Stabile, nella cache: il bilancio delle operazioni chiuse (oggi, ieri, dall'inizio: per direzione,
+   netto diviso in prezzo, spese e funding, come si sono chiuse), le sue ultime 10 lezioni (restano anche nei giorni dopo), le ultime 30
+   operazioni chiuse (le ultime 5 con la scheda intera: stop iniziale e spostamenti, spese, durata, R, a favore e contro, il motivo scritto
+   all'apertura). Nuova a ogni chiamata: l'approccio attuale, le lezioni scritte dopo l'ultima chiusura, le note delle ultime 10 chiamate.
+5. L'ora, il motivo della chiamata, quante chiamate restano oggi e a che ora arriverà l'ultima, e la sua decisione precedente se non è
+   stata eseguita (scartata dal programma, rifiutata dal conto, o risposta non letta).
 
 **Niente altro**: nessun dato, file, risultato o nome delle strategie dell'altra sessione (G1, la ricerca, le notizie e i conti di
 Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa niente da `research/` né da `bot/` (test).
@@ -78,9 +104,11 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 * Per aprire: `margine_usdt` (quanto del conto mette), `leva` (da 1 a 10), `stop_prezzo` (obbligatorio), `obiettivo_prezzo`
   (facoltativo), `tipo_ordine` (`mercato` o `limite` con `prezzo_limite`).
 * Per modificare: `stop_prezzo` e/o `obiettivo_prezzo` nuovi.
-* `approccio`: in una frase, il metodo che sta usando adesso (per esempio «rottura del massimo delle 4 ore sui 15 minuti»).
-* `cambio_approccio`: vero se ha deciso di cambiare metodo, con `perche`.
-* `diario`: cosa vede e perché decide così (al massimo 600 caratteri).
+* `approccio`: in una frase, il metodo che sta usando adesso, senza i livelli di prezzo di oggi.
+* `cambio_approccio`: vero se ha deciso di cambiare metodo, con `perche` (entra nelle lezioni).
+* `lezione` (dal 26 novembre): quando è chiamato per un'operazione chiusa, che cosa aveva previsto, che cosa è successo e che cosa cambia.
+* `diario`: cosa vede e perché decide così (circa 600 caratteri). Le lunghezze sono indicazioni: l'API non le controlla e il programma
+  taglia i testi quando li salva (prima un diario di 601 caratteri buttava via la decisione). La leva è un numero intero.
 * Rifiuto, risposta fuori schema, tagliata o errore del servizio: nessuna operazione nuova; si riprova alla candela dopo.
 
 ## 6. I limiti nel codice (pochi, per scelta del proprietario: «non ci sono limiti nella demo»)
@@ -93,6 +121,12 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 * **Nessuna perdita massima del giorno né totale** (scelta del proprietario). Se il conto non basta per l'ordine minimo di Binance, il
   trader si ferma da solo e lo scrive.
 * Una decisione fuori da questi limiti si scarta e si scrive nel diario, e il modello alla chiamata dopo vede che è stata scartata e perché.
+* Dal 26 novembre (quindicesima revisione): margine più la commissione d'entrata dentro il disponibile; un ordine limite già oltre il
+  prezzo si controlla anche sul prezzo di adesso e si tratta come un ordine a mercato (stop subito, chiusura se il conto lo rifiuta);
+  l'obiettivo di un ordine limite va sul conto all'esecuzione e, se il prezzo l'ha già superato, si chiude a mercato; un ordine limite
+  sparito dal libro si decide solo dopo aver letto l'esito e riletto la posizione (un errore di lettura non fa niente: si riprova).
+* Il messaggio intero al modello e il suo ragionamento restano sulla macchina, fuori da `trader_ai/avanti/` (che va nel repository):
+  `/opt/trader-ai-dati/trader_ai/messaggi_modello/`, un file al giorno, 7 giorni.
 
 ## 7. Spese e misura
 * Le spese sono quelle vere del conto demo (commissioni, funding, prezzo eseguito). Il costo delle chiamate si sottrae dal risultato
@@ -102,7 +136,10 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
   da questo trader): obiettivo raggiunto o no e a che ora; le operazioni del giorno con entrata, uscita, leva, risultato e il motivo
   scritto dal modello; quante volte ha cambiato approccio; quanto sono costate le chiamate; il conto e la discesa massima dall'inizio;
   il solo BTC tenuto negli stessi giorni. Solo misura, nessuna istruzione al modello: anche la leva e il margine medi delle aperture
-  fatte con il giorno in perdita contro quelle con il giorno in guadagno.
+  fatte con il giorno in perdita contro quelle con il giorno in guadagno. Dal 26 novembre il risultato si legge dal conto (prima era la
+  somma delle operazioni registrate: il 25 novembre −48,93 invece di −53,61), con la discesa massima, le uscite per tipo, la durata, il
+  rischio allo stop di ogni apertura, quanto mancava al 3% e quante ore alla mezzanotte, e i numeri delle chiamate (quante, costo medio,
+  durata, esiti). Il resoconto del 25 novembre è stato rifatto con la memoria ricostruita.
 * **Durante il giorno** ogni decisione va subito nel diario sulla macchina (`trader_ai/avanti/`), nel repository una volta all'ora;
   più avanti in una scheda della dashboard.
 * Soldi veri: mai senza la richiesta esplicita del proprietario.
@@ -121,3 +158,4 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 | 4 | 24 novembre 2026 | conto simulato dal programma con i prezzi veri (nessuna chiave di Binance): l'unico account Binance del proprietario ha già il conto demo di G1 |
 | 5 | 25 novembre 2026 | obiettivo del giorno: il 3% del conto della mezzanotte UTC invece di 50 USDT (il proprietario: «il profitto giornaliero mettilo al 3%»), prima del primo avvio |
 | 6 | 26 novembre 2026 | il 3% è un obiettivo obbligatorio, non un tetto; a ogni chiamata il bilancio di oggi (direzioni, vinte e perse, prezzo da mezzanotte); sforzo di ragionamento «high» e risposta fino a 16.000 token (il proprietario: «non si deve fermare finché non ha raggiunto il 3% [...] l'AI deve sapere se il primo trade è fallito [...] che cosa hai creato come AI se non pensa») |
+| 7 | 26 novembre 2026 | dopo il controllo del 26 novembre: ordine limite in attesa detto come tale; limite eseguito e chiuso fra due controlli registrato; stop e obiettivo solo per il loro lato; uscite, spese e funding dal conto; memoria ricostruita; scheda di ogni operazione, lezioni che restano, bilancio con il netto diviso; candela in corso, livelli, orari, premio, interesse aperto in 1 e 4 ore; chiamate rimaste invece dei dollari; richiamo dopo un «chiudi»; risposte non lette dette al modello; cache da un'ora e ragionamento riassunto; istruzioni sulla meccanica degli ordini e sulle spese (nessun consiglio di strategia) |

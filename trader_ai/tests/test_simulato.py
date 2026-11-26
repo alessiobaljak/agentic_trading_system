@@ -1,6 +1,6 @@
 """Test del conto simulato (conto_simulato.py) con un mercato finto: spese, scarto, stop, obiettivo, limite, liquidazione,
 funding, salvataggio; e il programma (avvio.Trader) che gira sul conto simulato senza saperlo."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 import pytest
 
@@ -197,7 +197,7 @@ def test_il_programma_gira_sul_conto_simulato(tmp_path):
     avanza(c, m, o, 90000, 90050, 87500, 87800)                         # scatta lo stop
     tr.passo()
     st = tr.carica()
-    assert c.posizioni_tutte() == [] and st["operazioni"][-1]["come"] == "stop"
+    assert c.posizioni_tutte() == [] and st["operazioni"][-1]["come"] == "stop iniziale"
     assert st["operazioni"][-1]["risultato"] < 0
 
 

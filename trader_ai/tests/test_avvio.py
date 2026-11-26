@@ -25,6 +25,7 @@ class ContoFinto:
         self.algo, self.normali, self.altri = [], [], []        # ordini condizionati, normali, posizioni d'altri simboli
         self.doppio, self.rifiuta_stop, self.prezzo_all_ordine = False, False, None
         self.ordini, self.chiusure, self.pausa_fino = [], 0, 0.0
+        self.esiti = {}                                           # cid -> esito_ordine (vuoto: il programma stima)
 
     def saldo(self):
         return {"conto": self.conto, "disponibile": self.disp, "portafoglio": self.conto}
@@ -52,10 +53,17 @@ class ContoFinto:
         self._letto = True
         return {"prezzo": p, "funding": 0.0001, "prossimo_funding_ms": 0, "interesse_aperto": 100.0}
 
-    def candele(self, tf, ora_ms=None, n=200):
-        passo = {"5m": 5, "15m": 15, "30m": 30}[tf]
+    def candele(self, tf, ora_ms=None, n=200, inizio_ms=None):
+        passo = {"1m": 1, "5m": 5, "15m": 15, "30m": 30}[tf]
         return [{"apertura": 90000.0, "massimo": 90100.0, "minimo": 89900.0, "chiusura": 90000.0 + i, "volume": 5.0,
+                 "acquisti": 2.5, "aperta": T0 - timedelta(minutes=passo * (61 - i)),
                  "chiusa": T0 - timedelta(minutes=passo * (60 - i))} for i in range(60)]
+
+    def interesse_aperto_storia(self):
+        return []
+
+    def esito_ordine(self, cid):
+        return self.esiti.get(cid)
 
     def filtri(self):
         return {"passo_prezzo": 0.1, "passo_quantita": 0.001, "passo_quantita_limite": 0.001, "quantita_min": 0.001,
@@ -88,10 +96,13 @@ class ContoFinto:
         self.algo, self.normali = [], [o for o in self.normali if not str(o.get("clientOrderId", "")).startswith("tai")]
 
     def chiudi(self, pos, cid):
-        if pos:
+        esito = None
+        if pos and self.pos:                                      # come i conti veri: un esito solo se ha chiuso qualcosa
             self.chiusure += 1
             self.pos = None
+            esito = {"avgPrice": str(self.prezzo)}
         self.annulla_tutto()
+        return esito
 
 
 def risposta(azione="aspetta", **kw):
@@ -113,7 +124,7 @@ def trader(tmp_path, risposte, c=None):
     chiamate = []
 
     def modello(system, utente):
-        chiamate.append(utente)
+        chiamate.append("\n\n".join(utente) if isinstance(utente, list) else utente)
         return Esito(risposte.pop(0) if risposte else risposta(), "ok", {"input_tokens": 5000, "output_tokens": 2000})
     o = Orologio(T0)
     return Trader(c, modello, tmp_path, o), c, chiamate, o
@@ -146,9 +157,9 @@ def test_chiusura_sullo_stop_scritta_in_memoria_e_chiamata_subito(tmp_path):
     c.pos, c.prezzo, c.conto, c.algo = None, 88000.0, 990.0, []
     o.t = T0 + timedelta(minutes=2)
     tr.passo()
-    assert len(chiamate) == 2 and "operazione chiusa (stop)" in chiamate[1]
+    assert len(chiamate) == 2 and "operazione chiusa (stop iniziale)" in chiamate[1]
     st = tr.carica()
-    assert st["operazioni"][-1]["come"] == "stop" and st["operazioni"][-1]["risultato"] == -10.0
+    assert st["operazioni"][-1]["come"] == "stop iniziale" and st["operazioni"][-1]["risultato"] == -10.0
     assert "-10.00" in chiamate[1]
 
 
@@ -159,7 +170,7 @@ def test_obiettivo_del_giorno_chiude_e_ferma_fino_a_mezzanotte(tmp_path):
     o.t = T0 + timedelta(minutes=20)
     tr.passo()
     assert c.pos is None and len(chiamate) == 1
-    assert tr.carica()["operazioni"][-1]["come"] == "obiettivo del giorno"
+    assert tr.carica()["operazioni"][-1]["come"].startswith("obiettivo del giorno")
     o.t = T0 + timedelta(hours=5)
     tr.passo()
     assert len(chiamate) == 1
@@ -207,7 +218,7 @@ def test_stop_rifiutato_dopo_l_apertura_chiude_subito(tmp_path):
     tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **APRI)], c)
     tr.passo()
     assert c.pos is None and c.chiusure == 1
-    assert tr.carica()["operazioni"][-1]["come"] == "chiusa: stop rifiutato da Binance"
+    assert tr.carica()["operazioni"][-1]["come"] == "chiusa: stop rifiutato dal conto"
 
 
 def test_stop_sparito_con_prezzo_oltre_chiude_e_il_passo_continua(tmp_path):
@@ -412,7 +423,7 @@ def test_risposta_persa_ma_ordine_eseguito_diventa_nostra(tmp_path):
     c.pos, c.algo, c.prezzo, c.conto = None, [], 88000.0, 990.0
     o.t = T0 + timedelta(minutes=2)
     tr.passo()
-    assert tr.carica()["operazioni"][-1]["come"] == "stop"       # la chiusura entra nella memoria
+    assert tr.carica()["operazioni"][-1]["come"] == "stop iniziale"   # la chiusura entra nella memoria
 
 
 def test_modifica_con_tutti_i_nuovi_rifiutati_rimette_il_vecchio(tmp_path):

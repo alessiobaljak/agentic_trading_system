@@ -27,8 +27,9 @@ class Risultato:
 
 
 def decidi(ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: float, chiama_modello: Callable[[], Esito],
-           costo_massimo: float, diario: Optional[Path] = None) -> Risultato:
-    """`costo_massimo`: il costo più alto possibile della chiamata (`costi.costo_massimo` sul messaggio già costruito)."""
+           costo_massimo: float, diario: Optional[Path] = None, extra: Optional[dict] = None) -> Risultato:
+    """`costo_massimo`: il costo più alto possibile della chiamata (`costi.costo_massimo` sul messaggio già costruito); `extra`:
+    campi in più per la riga del diario (per esempio l'impronta del messaggio)."""
     if obiettivo_raggiunto(conto):
         ris = Risultato("obiettivo")                     # chiudere tutto, niente chiamate fino a mezzanotte UTC
     elif not budget.puo_chiamare(ora, costo_massimo):
@@ -47,18 +48,26 @@ def decidi(ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: flo
             if ris.scarto is None:
                 ris.accettata = esito.risposta
     if diario is not None:
-        scrivi_diario(diario, ora, motivo, budget, conto, prezzo, ris)
+        scrivi_diario(diario, ora, motivo, budget, conto, prezzo, ris, extra)
     return ris
 
 
+#: Quanto del riassunto del ragionamento entra nel diario (che va nel repository ogni ora); il testo intero resta sulla macchina,
+#: nel file dei messaggi del giorno (controllo del 26 novembre 2026, punto 2.7).
+PENSIERO_NEL_DIARIO = 1500
+
+
 def scrivi_diario(percorso: Path, ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: float,
-                  ris: Risultato) -> None:
+                  ris: Risultato, extra: Optional[dict] = None) -> None:
     riga = {"ora": ora.isoformat(), "motivo": motivo, "stato": ris.stato, "prezzo": prezzo, "conto": round(conto.conto, 2),
             "guadagno_giorno": round(conto.conto - conto.conto_mezzanotte, 2), "costo": round(ris.costo, 4),
-            "speso_oggi": round(budget.speso(ora), 4)}
+            "speso_oggi": round(budget.speso(ora), 4), **(extra or {})}
     if ris.esito is not None:
         riga["usage"] = ris.esito.usage
         riga["dettaglio"] = ris.esito.dettaglio
+        riga["durata_s"] = ris.esito.durata_s
+        if ris.esito.pensiero:
+            riga["pensiero"] = ris.esito.pensiero[:PENSIERO_NEL_DIARIO]
         if ris.esito.risposta is not None:
             riga["risposta"] = ris.esito.risposta.model_dump(exclude_none=True)
             riga["scarto"] = ris.scarto

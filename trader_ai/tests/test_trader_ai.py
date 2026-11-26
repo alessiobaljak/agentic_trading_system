@@ -10,7 +10,7 @@ from trader_ai.costi import Budget, costo_dollari, costo_massimo
 from trader_ai.giro import decidi
 from trader_ai.indicatori import atr, ema, riassunto, rsi
 from trader_ai.limiti import Conto, Posizione, controlla, obiettivo_raggiunto
-from trader_ai.messaggio import blocco_memoria, costruisci, taglia
+from trader_ai.messaggio import Memoria, blocco_intervallo, costruisci, riga_bilancio
 from trader_ai.modello import Esito, ModelloFinto
 from trader_ai.schema import Risposta
 from trader_ai.sveglia import motivo
@@ -105,8 +105,10 @@ def test_decisioni_fuori_regola_scartate(dec, parola):
 
 
 def test_aperture_valide_e_una_sola_operazione():
-    ok = r("apri_lungo", margine_usdt=1000, leva=10, stop_prezzo=P * 0.95, obiettivo_prezzo=P * 1.02)
+    ok = r("apri_lungo", margine_usdt=990, leva=10, stop_prezzo=P * 0.95, obiettivo_prezzo=P * 1.02)
     assert controlla(ok, conto(), P) is None
+    tutto = r("apri_lungo", margine_usdt=1000, leva=10, stop_prezzo=P * 0.95)
+    assert "commissione d'entrata" in controlla(tutto, conto(), P)          # il conto la vuole dentro il disponibile
     pos = Posizione("lungo", 0.1, 89000, 10, 85000, liquidazione=81000)
     assert "già un'operazione" in controlla(ok, conto(posizione=pos), P)
     assert controlla(r("modifica", stop_prezzo=88000), conto(posizione=pos), P) is None
@@ -159,25 +161,32 @@ def test_indicatori_ragionevoli():
     assert 1.5 < atr(c) < 3.5
     ind = riassunto(c)
     assert ind["bollinger_bassa"] < ind["bollinger_media"] < ind["bollinger_alta"]
-    assert ind["rsi14"] > 50 and ind["vwap_giorno"] is not None
+    assert ind["rsi14"] > 50 and len(ind["ultimi_rsi14"]) == 4 and ind["ampiezza_mediana20"] == pytest.approx(2.0)
+    assert "vwap_giorno" not in ind                                   # uno solo, del giorno UTC, nel blocco della moneta
 
 
 def test_nessuna_candela_dopo_l_ora_della_chiamata():
-    c = _candele(10) + [{"apertura": 1, "massimo": 1, "minimo": 1, "chiusura": 777777.0, "volume": 1,
-                         "chiusa": ORA + timedelta(minutes=5)}]
-    assert len(taglia(c, ORA)) == 10
-    _, utente = costruisci(ORA, "t", 4.0, "BTCUSDT", {"5m": c}, {"prezzo": 100.0}, conto(), "m")
-    assert "777777" not in utente
+    futura = {"apertura": 1, "massimo": 1, "minimo": 1, "chiusura": 777777.0, "volume": 1, "aperta": ORA + timedelta(minutes=1),
+              "chiusa": ORA + timedelta(minutes=6)}
+    in_corso = {"apertura": 5, "massimo": 6, "minimo": 4, "chiusura": 555555.0, "volume": 1, "aperta": ORA - timedelta(minutes=2),
+                "chiusa": ORA + timedelta(minutes=3), "in_corso": True}
+    testo = blocco_intervallo("5m", _candele(30) + [in_corso, futura], ORA)
+    assert "777777" not in testo and "in corso, aperta alle 09:58 (da 2 min)" in testo and "555555" in testo
+    assert "555555" not in testo.split("in corso")[1].split("indicatori")[1]     # gli indicatori solo sulle chiuse
 
 
 def test_messaggio_dice_obiettivo_memoria_e_scarto():
-    mem = blocco_memoria([{"aperta": "11-24 09:00", "lato": "lungo", "leva": 5, "entrata": 90000, "uscita": 89500,
-                           "come": "stop", "risultato": -27.8, "approccio": "rottura"}], "rottura", ["nota"], "leva 50")
-    system, utente = costruisci(ORA, "candela", 4.2, "BTCUSDT", {"5m": _candele(60), "15m": _candele(60, 15),
-                                "30m": _candele(60, 30)}, {"prezzo": 130.0, "funding": 0.0001}, conto(conto=1020), mem)
-    assert "3%" in system and "adatti" in system
-    assert "mancano 10.00" in utente and "SCARTATA" in utente and "rottura" in utente and "4.20 dollari" in utente
-    assert all(f"candele {x}" in utente for x in ("5m", "15m", "30m"))
+    mem = Memoria([{"n": 1, "aperta": "2026-11-24T09:00:00+00:00", "chiusa": "2026-11-24T09:40:00+00:00", "lato": "lungo",
+                    "leva": 5, "entrata": 90000, "uscita": 89500, "come": "stop iniziale", "risultato": -27.8,
+                    "approccio": "rottura"}], [], ["24/11 09:45 nota"], "rottura", "scartata dal programma: leva 50",
+                  {"giorno": "2026-11-24", "conto": 1000.0}, "2026-11-24")
+    system, stabile, utente = costruisci(ORA, "candela", "BTCUSDT", {"5m": _candele(60), "15m": _candele(60, 15),
+                                         "30m": _candele(60, 30)}, {"prezzo": 130.0, "funding": 0.0001}, conto(conto=1020), None,
+                                         mem, "bastano fino a mezzanotte UTC")
+    assert "3%" in system and "adatti" in system and "lezione" in system
+    assert "mancano 10.00" in utente and "NON è stata eseguita" in utente and "leva 50" in utente and "bastano" in utente
+    assert "rottura" in stabile and "stop iniziale" in stabile and "oggi (24/11): 1 operazioni" in stabile
+    assert all(f"candele {x}" in utente for x in ("5m", "15m", "30m")) and "dollari" not in utente
 
 
 def test_niente_dati_ne_codice_dell_altra_sessione():
@@ -199,9 +208,22 @@ class _Usage:
         return {"input_tokens": 100, "output_tokens": 50}
 
 
+class _Pensiero:
+    type, thinking = "thinking", "il prezzo è sotto il vwap"
+
+
+class _Testo:
+    type = "text"
+
+    def __init__(self, testo):
+        self.text = testo
+
+
 class _R:
-    def __init__(self, stop_reason, parsed):
-        self.stop_reason, self.parsed_output, self.usage = stop_reason, parsed, _Usage()
+    def __init__(self, stop_reason, parsed, testo=None):
+        self.stop_reason, self.usage = stop_reason, _Usage()
+        self.content = [_Pensiero()] + ([_Testo(testo if testo is not None else parsed.model_dump_json())]
+                                        if parsed is not None or testo is not None else [])
 
 
 class _Client:
@@ -210,7 +232,7 @@ class _Client:
         esterno = self
 
         class _M:
-            def parse(self, **kw):
+            def create(self, **kw):
                 esterno.chiamate.append(kw)
                 return esterno.risposta
         self.messages = _M()
@@ -221,25 +243,40 @@ def test_chiama_usa_il_modello_scelto_e_gestisce_rifiuto_e_troncata():
     ok = r()
     c = _Client(_R("end_turn", ok))
     e = chiama(c, "s", "u")
-    assert e.stato == "ok" and e.risposta is ok and e.usage["output_tokens"] == 50
+    assert e.stato == "ok" and e.risposta == ok and e.usage["output_tokens"] == 50
     kw = c.chiamate[0]
-    assert kw["model"] == "claude-opus-5-5" and kw["output_format"] is Risposta and kw["max_tokens"] == 16000
+    assert kw["model"] == "claude-opus-5-5" and kw["max_tokens"] == 16000
+    assert kw["output_config"]["format"]["type"] == "json_schema" and "azione" in kw["output_config"]["format"]["schema"]["properties"]
     assert "fallbacks" not in kw
+    # cache da un'ora sulle istruzioni e sulla memoria stabile, ragionamento riassunto, sforzo alto (controllo del 26 novembre)
+    assert kw["system"][0]["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
+    assert kw["thinking"] == {"type": "adaptive", "display": "summarized"} and kw["output_config"]["effort"] == "high"
+    assert e.pensiero == "il prezzo è sotto il vwap"
+    c2 = _Client(_R("end_turn", ok))
+    chiama(c2, "s", ["memoria", "resto"])
+    blocchi = c2.chiamate[0]["messages"][0]["content"]
+    assert blocchi[0] == {"type": "text", "text": "memoria", "cache_control": {"type": "ephemeral", "ttl": "1h"}}
+    assert blocchi[1] == {"type": "text", "text": "resto"}
     assert chiama(_Client(_R("refusal", None)), "s", "u").stato == "rifiuto"
     assert chiama(_Client(_R("max_tokens", None)), "s", "u").stato == "troncata"
+    # tagliata mentre scrive il JSON: resta «troncata» e tiene i token (revisione, R7-08)
+    tagliata = chiama(_Client(_R("max_tokens", None, '{"azione": "apri_lu')), "s", "u")
+    assert tagliata.stato == "troncata" and tagliata.usage["output_tokens"] == 50
+    rotta = chiama(_Client(_R("end_turn", None, '{"azione": "vola"}')), "s", "u")
+    assert rotta.stato == "fuori_schema" and rotta.usage["output_tokens"] == 50
 
 
-def test_bilancio_di_oggi_dice_direzioni_vinte_perse_e_prezzo():
-    from trader_ai.messaggio import bilancio_di_oggi
-    ops = [{"chiusa": "2026-11-25T08:30:00", "lato": "corto", "risultato": -9.6},
-           {"chiusa": "2026-11-25T14:09:00", "lato": "corto", "risultato": 2.5},
-           {"chiusa": "2026-11-25T20:00:00", "lato": "lungo", "risultato": -4.0},
-           {"chiusa": "2026-11-24T20:00:00", "lato": "lungo", "risultato": 50.0}]
-    b = bilancio_di_oggi(ops, "2026-11-25", 58890.0, 60120.0)
-    assert "3 operazioni chiuse" in b and "corto: 2 operazioni, 1 vinte e 1 perse" in b and "+2.09%" in b
-    piene = [{**o, "aperta": "x", "leva": 5, "entrata": 1.0, "uscita": 1.0, "come": "stop", "approccio": "a"} for o in ops]
-    _, utente = costruisci(ORA, "t", 4.0, "BTCUSDT", {}, {"prezzo": 1.0}, conto(), blocco_memoria(piene, "x", [], None, b))
-    assert "bilancio di oggi" in utente
+def test_bilancio_dice_direzioni_vinte_perse_e_netto_diviso():
+    ops = [{"chiusa": "2026-11-25T08:30:00", "lato": "corto", "risultato": -9.6, "risultato_prezzo": -7.4, "spese": 2.4,
+            "funding": 0.2, "come": "stop spostato da te"},
+           {"chiusa": "2026-11-25T14:09:00", "lato": "corto", "risultato": 2.5, "risultato_prezzo": 3.5, "spese": 1.0,
+            "funding": 0.0, "come": "obiettivo"},
+           {"chiusa": "2026-11-25T20:00:00", "lato": "lungo", "risultato": -4.0, "risultato_prezzo": -3.0, "spese": 1.0,
+            "funding": 0.0, "come": "chiusa da te"}]
+    b = riga_bilancio("oggi", ops)
+    assert "3 operazioni, netto -11.10 USDT (prezzo -6.90, spese -4.40, funding +0.20)" in b
+    assert "corti 2 (1 vinte, 1 perse, -7.10)" in b and "lunghi 1 (0 vinte, 1 perse, -4.00)" in b
+    assert "obiettivo 1, stop spostato da te 1, chiusa da te 1" in b
 
 
 def test_istruzioni_obiettivo_obbligatorio():

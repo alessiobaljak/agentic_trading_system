@@ -81,6 +81,22 @@ def nostro(ordine: dict) -> bool:
     return str(nome).startswith(PREFISSO)
 
 
+def candele_da_klines(righe: list, ora_ms: int) -> list:
+    """Le candele di Binance in dizionari, comuni al conto demo e a quello simulato. Quella non ancora chiusa all'ora `ora_ms`
+    resta, segnata `in_corso` (il modello la vede a parte; gli indicatori usano solo le chiuse: controllo del 26 novembre 2026,
+    punto 3.8). `acquisti`: il volume comprato a mercato (campo 9 di Binance, punto 3.12)."""
+    out = []
+    for k in righe:
+        aperta_ms, chiusa_ms = int(k[0]), int(k[6]) + 1
+        if aperta_ms > ora_ms:
+            continue
+        out.append({"apertura": float(k[1]), "massimo": float(k[2]), "minimo": float(k[3]), "chiusura": float(k[4]),
+                    "volume": float(k[5]), "acquisti": float(k[9]) if len(k) > 9 else None,
+                    "aperta": datetime.fromtimestamp(aperta_ms / 1000, timezone.utc),
+                    "chiusa": datetime.fromtimestamp(chiusa_ms / 1000, timezone.utc), "in_corso": chiusa_ms > ora_ms})
+    return out
+
+
 class ContoDemo:
     def __init__(self, chiave: str, segreto: str, simbolo: str, http: Callable = requests.request) -> None:
         self.chiave, self.simbolo, self.http = chiave, simbolo, http
@@ -121,24 +137,49 @@ class ContoDemo:
         return r.json()
 
     # --- dati di mercato (pubblici) --------------------------------------------------------------------------------
-    def candele(self, intervallo: str, ora_ms: Optional[int] = None, n: int = 200) -> list:
-        """Solo candele chiuse: quella ancora aperta (chiusura dopo adesso) si toglie."""
-        ora_ms = ora_ms or int(time.time() * 1000)
-        righe = self.chiedi("GET", "/fapi/v1/klines", {"symbol": self.simbolo, "interval": intervallo, "limit": n})
-        out = []
-        for k in righe:
-            chiusa_ms = int(k[6]) + 1
-            if chiusa_ms > ora_ms:
-                continue
-            out.append({"apertura": float(k[1]), "massimo": float(k[2]), "minimo": float(k[3]), "chiusura": float(k[4]),
-                        "volume": float(k[5]), "chiusa": datetime.fromtimestamp(chiusa_ms / 1000, timezone.utc)})
-        return out
+    def candele(self, intervallo: str, ora_ms: Optional[int] = None, n: int = 200, inizio_ms: Optional[int] = None) -> list:
+        """Le candele chiuse e quella in corso (segnata `in_corso`)."""
+        p = {"symbol": self.simbolo, "interval": intervallo, "limit": n}
+        if inizio_ms is not None:
+            p["startTime"] = inizio_ms
+        return candele_da_klines(self.chiedi("GET", "/fapi/v1/klines", p), ora_ms or int(time.time() * 1000))
 
     def mercato(self) -> dict:
         pi = self.chiedi("GET", "/fapi/v1/premiumIndex", {"symbol": self.simbolo})
         oi = self.chiedi("GET", "/fapi/v1/openInterest", {"symbol": self.simbolo})
-        return {"prezzo": float(pi["markPrice"]), "funding": float(pi["lastFundingRate"]),
-                "prossimo_funding_ms": int(pi["nextFundingTime"]), "interesse_aperto": float(oi["openInterest"])}
+        return {"prezzo": float(pi["markPrice"]), "indice": float(pi.get("indexPrice") or 0) or None,
+                "funding": float(pi["lastFundingRate"]), "prossimo_funding_ms": int(pi["nextFundingTime"]),
+                "interesse_aperto": float(oi["openInterest"])}
+
+    def interesse_aperto_storia(self, periodo: str = "15m", n: int = 18) -> list:
+        """[(ora in ms, interesse aperto)]; sul demo la pagina può mancare: allora lista vuota (il messaggio dice «-»)."""
+        try:
+            righe = self.chiedi("GET", "/futures/data/openInterestHist", {"symbol": self.simbolo, "period": periodo, "limit": n})
+        except RuntimeError:
+            return []
+        return [(int(r["timestamp"]), float(r["sumOpenInterest"])) for r in righe]
+
+    def esito_ordine(self, cid: Optional[str]) -> Optional[dict]:
+        """Lo stato dell'ordine di apertura `cid` (`GET /fapi/v1/order`): {"stato": "in_attesa"} se è ancora sul libro; per un
+        ordine eseguito entrata, quantità e ora di esecuzione, con stato «eseguito» (aperta o già chiusa: sul demo lo dice la
+        posizione); None se non si è mai eseguito. Uscita, spese e funding della chiusura qui non ci sono: il programma li stima
+        (da provare sul demo prima di usarlo; oggi il trader gira sul conto simulato)."""
+        if not cid:
+            return None
+        try:
+            o = self.chiedi("GET", "/fapi/v1/order", {"symbol": self.simbolo, "origClientOrderId": cid}, firmata=True)
+        except RuntimeError as e:
+            if "-2013" in str(e):              # l'ordine non esiste
+                return None
+            raise
+        eseguita = float(o.get("executedQty") or 0)
+        if o.get("status") in ("NEW", "PARTIALLY_FILLED") and eseguita == 0:
+            return {"stato": "in_attesa"}
+        if eseguita == 0:
+            return None
+        return {"stato": "eseguito", "entrata": float(o.get("avgPrice") or 0) or float(o.get("price") or 0),
+                "quantita": eseguita, "eseguita_ms": int(o.get("updateTime") or 0) or None,
+                "da_limite": o.get("type") == "LIMIT"}
 
     def filtri(self) -> dict:
         if self._filtri is None:

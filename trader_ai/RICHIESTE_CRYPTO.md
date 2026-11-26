@@ -30,4 +30,6 @@ live-path-reviewer ha rivisto il trader sette volte il 23 novembre (verdetto fin
 che la sessione delle crypto li copi o li colleghi in `reviews/INDEX.md`, `REVIEW_LOG.md` e `LIVE_PATH_MAP.md` (sezione 15 proposta nel
 primo rapporto), così la memoria del revisore li conosce.
 
-Le righe pronte per `reviews/INDEX.md` e `reviews/REVIEW_LOG.md` (fino alla quattordicesima revisione) sono in `trader_ai/revisioni/righe_per_reviews.patch`: basta `git apply`.
+Le righe pronte per `reviews/` sono in `trader_ai/revisioni/righe_per_reviews.patch`: basta `git apply`. Applicate il 26 novembre fino
+alla quattordicesima revisione (`docs/risposte_trading_ai.md`). **Nuove dal 26 novembre**: la quindicesima revisione e il suo riesame
+(`trader_ai/revisioni/2026-11-26-quindicesima.md`; problemi fino al 197); la patch le scrive su `0de9328` (`git apply --check` passato).

@@ -1,0 +1,3 @@
+# i messaggi interi al modello quando il programma gira fuori dalla macchina (sulla macchina stanno in
+# /opt/trader-ai-dati/trader_ai/messaggi_modello, che vps/salva.sh non aggiunge mai): revisione del 26 novembre 2026, problema 191
+messaggi_modello/
