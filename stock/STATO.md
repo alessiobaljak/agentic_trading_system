@@ -359,6 +359,9 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 53** (i giudizi degli analisti dall'archivio delle notizie, idea I61): **bocciata** (`prove/P053_risultati.md`). Capito,
+  la stessa lezione della prova 46 su 24'082 casi: **il movimento è tutto prima che si possa entrare** (+1,39% dopo una
+  promozione, −2,12% dopo una bocciatura, rispetto allo SPY), dopo non succede niente (20 sedute: −0,13% e −0,04%). Nel conto: 123.
 * **La prova 52** (vendere la volatilità con la curva normale, SVXY, idea I60): **bocciata** (`prove/P052_risultati.md`). Capito:
   **il premio c'è ma il rischio lo mangia**: +322% in 9 anni contro +235% dello SPY, ma Sharpe 0,61 contro 0,84 e perdita massima
   −60%. Il filtro della curva salva il marzo 2020 (0,0%) ma non il 5 febbraio 2018 (−31,4% in un giorno, la curva si è rovesciata
