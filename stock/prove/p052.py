@@ -57,7 +57,7 @@ def main():
     from stock.dati import yahoo
 
     def chiusure(s):
-        df = yahoo.prezzi(s, "2015-11-02", "2024-12-31")
+        df = yahoo.prezzi(s, "2015-11-02", "2024-12-31", frazionamenti=True)     # SVXY ha un raggruppamento: si usa la rettificata
         c = pd.Series(df["rettificata"].to_numpy(float), index=pd.Index([x.date() for x in df.index]))
         return c[c.index <= FINO]
     sv, sp = chiusure("SVXY"), chiusure("SPY")
