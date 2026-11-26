@@ -14,9 +14,9 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
   al commit confrontare le md5 nel rapporto (`conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py`
   99c9fd1f). Mutazioni: `giro25nov_b/mutazioni_f5.py <copia>` (10 su 12 prese; le 2 vive sono solo testi). Primo giro:
   `reports/2026-11-25-conto-vero-F5.md` (180, 181 Medi e 182 Basso, ancora aperti).
-- **Numeri dei problemi**: il trader AI ha usato fino al 177 (`trader_ai/revisioni/2026-11-25-tredicesima.md`): il 183 è del 25 nov (F5): i nuovi partono da 184.
-- Trader AI (area `trader_ai/`): tredici revisioni in `trader_ai/revisioni/` (23-25 nov); l'ultima, la tredicesima, APPROVE con
-  condizioni (176 Medio, 177 Basso). Nel registro di qui solo le prime sette.
+- **Numeri dei problemi**: trader AI fino al 186 (`trader_ai/revisioni/2026-11-26-quattordicesima.md`; 183 è F5): i nuovi partono da 187.
+- Trader AI (area `trader_ai/`): quattordici revisioni in `trader_ai/revisioni/` (23-26 nov); l'ultima, la quattordicesima (`d9c8af7`), APPROVE con
+  condizioni (184 Medio timeout 300 s con 16.000 token; 185, 186 Bassi). Tetto di 5 dollari tiene; stato vecchio compatibile. Nel registro di qui solo le prime sette.
 - 17 nov, funding demo contro paper: committato come `d5c6708` con le correzioni 90-92 della sessione principale (19 righe diverse dalla
   copia; grep del 25 nov: nessuna riga su richieste, cliente o chiavi). Chiusa.
 - Conto vero, per l'accensione: 54 (ii) Alto, 70 Medio, 78 Basso (`reports/2026-11-12-conto-vero-versione-firebase-2.md`), più

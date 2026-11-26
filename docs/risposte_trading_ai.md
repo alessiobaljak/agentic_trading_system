@@ -35,3 +35,7 @@ basta il diario che il servizio stesso spinge nel repository.
 Fatto: le sette revisioni del 23 novembre sono collegate (non copiate) in `reviews/INDEX.md` (stato), `reviews/REVIEW_LOG.md` (una riga
 per revisione, la settima aperta con le condizioni prima del primo avvio) e `reviews/LIVE_PATH_MAP.md` (sezione 15, gli invarianti della
 prima revisione con il richiamo a ricontrollarli sul codice installato). Il revisore le trova alla prossima chiamata.
+
+## 26 novembre 2026, voce 3 (righe della quattordicesima revisione)
+Fatto: applicata `trader_ai/revisioni/righe_per_reviews.patch` a `reviews/INDEX.md` e `reviews/REVIEW_LOG.md` (numeri dei problemi: i
+nuovi partono da 187).
