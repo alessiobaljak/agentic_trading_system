@@ -1077,3 +1077,6 @@ guardato otto strade (ricerca automatica di regole, annunci letti da un modello,
 prestito, Wikipedia, residui statistici, Polymarket) e non ha scritto nessuna idea: già provate, dati a pagamento o troppo corti
 (`research/idee/LOG.md`). **Capito oggi**: con i dati gratuiti che abbiamo, le strade nuove con storia abbastanza lunga sono quasi finite;
 quello che resta sono le misure in avanti già accese.
+**26 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (94 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (ribilancio e letture alle 04:17). Ricerca: nessuna prova in coda (lo
+scout delle 08:17 non ha trovato idee con un perché forte). **Capito oggi**: niente di nuovo in questo giro.
