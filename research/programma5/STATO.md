@@ -158,6 +158,10 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   Aggiornamento del 25 novembre (dati fino al 23 novembre): M-001c 503 (già bocciata, −0,46% a trade); M-002 3.938 (p 0,25) e M-003
   1.592 (p 0,99) non passano; seconda tornata in corso: N-001 101 (−1,67%), N-002 170 (+0,14%, p 0,35), N-003 101 (−1,29%). Paper del
   programma 6: le 25 monete entrate nell'universo sono tutte monete (exchangeInfo, «COIN»).
+  Aggiornamento del 26 novembre (dati fino al 24 novembre): M-001c 540 (già bocciata, −0,82% a trade); M-002 3.998 (p 0,25) e M-003
+  1.629 (p 0,99) non passano; seconda tornata in corso: N-001 122 (−2,66%), N-002 170 (+0,14%, p 0,35), N-003 102 (−1,18%). Paper del
+  programma 6: dati ancora fino al 23 novembre (nessun giorno nuovo nell'archivio); le 25 monete entrate nell'universo sono tutte monete
+  (exchangeInfo, «COIN»).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
