@@ -42,7 +42,7 @@ def chiama(client, system: str, utente: str, max_tokens: int = MAX_TOKENS) -> Es
             max_tokens=max_tokens,
             system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": utente}],
-            output_config={"effort": "medium"},
+            output_config={"effort": "high"},   # il proprietario, 26 novembre: «se non pensa...»
             output_format=Risposta,
         )
     except pydantic.ValidationError as e:

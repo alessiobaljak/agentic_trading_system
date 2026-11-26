@@ -19,7 +19,7 @@ PREZZI = {  # dollari al milione di token
 TETTO_GIORNO_DOLLARI = 5.00
 #: Token della risposta al massimo (pensiero compreso): fissa anche il costo massimo della risposta (12.000 x 20 / milione
 #: = 0,24 dollari).
-MAX_TOKENS = 12000
+MAX_TOKENS = 16000   # sforzo «high» dal 26 novembre: più spazio per il ragionamento
 #: Caratteri per token, per difetto: un messaggio pieno di numeri ne ha circa 2,5-3; con 2 la stima del costo sta in eccesso.
 CARATTERI_PER_TOKEN = 2.0
 

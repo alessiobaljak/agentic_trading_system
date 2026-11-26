@@ -34,7 +34,7 @@ from trader_ai.conto_demo import ContoDemo, arrotonda, controlla_chiavi, nostro
 from trader_ai.costi import Budget, costo_massimo
 from trader_ai.giro import decidi
 from trader_ai.limiti import ORDINE_MIN_VALORE, LEVA_MAX, Conto, Posizione, controlla, obiettivo_raggiunto
-from trader_ai.messaggio import blocco_memoria, costruisci
+from trader_ai.messaggio import bilancio_di_oggi, blocco_memoria, costruisci
 from trader_ai.modello import Esito, chiama, crea_client
 
 #: I dati (stato, diario, spesa, resoconti) stanno in una copia del repository diversa da quella del codice (problema 98):
@@ -155,7 +155,7 @@ class Trader:
         if st.get("giorno") != giorno:                                    # mezzanotte UTC
             if st.get("giorno"):
                 self.resoconto(st, st["giorno"])
-            st.update(giorno=giorno, conto_mezzanotte=s["conto"], fermo_fino=None)
+            st.update(giorno=giorno, conto_mezzanotte=s["conto"], prezzo_mezzanotte=prezzo, fermo_fino=None)
             self.evento(ora, "giorno nuovo", conto=s["conto"])
 
         chiusa = None
@@ -219,7 +219,8 @@ class Trader:
         mercato = {"prezzo": prezzo, "funding": m["funding"],
                    "minuti_al_prossimo_funding": round((m["prossimo_funding_ms"] - ora_ms) / 60000),
                    "interesse_aperto": m["interesse_aperto"], "interesse_aperto_var_1h_pct": self._oi_1h(st, ora)}
-        memoria = blocco_memoria(st["operazioni"], st.get("approccio"), st["note"], st.get("ultimo_scarto"))
+        memoria = blocco_memoria(st["operazioni"], st.get("approccio"), st["note"], st.get("ultimo_scarto"),
+                                 bilancio_di_oggi(st["operazioni"], giorno, st.get("prezzo_mezzanotte"), prezzo))
         system, utente = costruisci(ora, motivo, self.budget.rimasto(ora), self.c.simbolo, candele, mercato, conto, memoria)
         ris = decidi(ora, motivo, self.budget, conto, prezzo, lambda: self.chiama(system, utente),
                      costo_massimo(len(system) + len(utente)), self.diario)
