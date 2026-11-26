@@ -359,6 +359,10 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   (`prove/P048_risultati.md`). Capito: l'effetto dello studio c'era fino al 2019 (+0,40% a settimana contro +0,28% delle altre) e
   **dal 2020 si è rovesciato** (−0,43% contro +0,47%): con le scadenze settimanali e giornaliere la scadenza mensile non pesa più
   come prima. Nel conto: 112.
+* **La prova 52** (vendere la volatilità con la curva normale, SVXY, idea I60): **bocciata** (`prove/P052_risultati.md`). Capito:
+  **il premio c'è ma il rischio lo mangia**: +322% in 9 anni contro +235% dello SPY, ma Sharpe 0,61 contro 0,84 e perdita massima
+  −60%. Il filtro della curva salva il marzo 2020 (0,0%) ma non il 5 febbraio 2018 (−31,4% in un giorno, la curva si è rovesciata
+  lo stesso giorno) né l'agosto 2024 (2024 −34%). Dopo il cambio del fondo (da −1 a −0,5 volte) Sharpe 0,31. Nel conto: 121.
 * **La prova 51** (le acquisizioni pagate in contanti, idea I59): **bocciata** (`prove/P051_risultati.md`). Capito: **il premio
   c'è ma è piccolo e non protegge**: gli affari chiusi rendono +2,56% in media (t 5,68), quelli che saltano o si trascinano −3,80%;
   con lo scarto mediano dell'1,59% il conto fa +11,4% in 9 anni (Sharpe 0,28), e nei mesi in cui lo SPY perde la correlazione è
