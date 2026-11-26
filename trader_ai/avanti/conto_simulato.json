@@ -1,0 +1,451 @@
+{
+ "portafoglio": 940.1430470340105,
+ "posizione": null,
+ "ordini": [],
+ "algo": [],
+ "leva": 6,
+ "ultimo_minuto_ms": 1795676760000,
+ "ultimo_funding_ms": 1795676790685,
+ "movimenti": [
+  {
+   "ora_ms": 1795592831364,
+   "cosa": "commissione",
+   "importo": -0.694902,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795593612468,
+   "cosa": "funding",
+   "importo": 0.25002,
+   "tasso": 7.217e-05
+  },
+  {
+   "ora_ms": 1795595416632,
+   "cosa": "risultato",
+   "importo": -7.428159,
+   "prezzo": 59015.901,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795595416632,
+   "cosa": "commissione",
+   "importo": -1.740969,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795598128106,
+   "cosa": "commissione",
+   "importo": -0.974444,
+   "come": "a mercato"
+  },
+  {
+   "ora_ms": 1795600810718,
+   "cosa": "risultato",
+   "importo": 0.372543,
+   "prezzo": 59045.904,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795600810718,
+   "cosa": "commissione",
+   "importo": -0.974257,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795607345629,
+   "cosa": "commissione",
+   "importo": -0.587,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795607537630,
+   "cosa": "risultato",
+   "importo": -4.2939,
+   "prezzo": 58785.878,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795607537630,
+   "cosa": "commissione",
+   "importo": -1.469647,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795608031675,
+   "cosa": "commissione",
+   "importo": -0.995924,
+   "come": "a mercato"
+  },
+  {
+   "ora_ms": 1795611626794,
+   "cosa": "risultato",
+   "importo": -4.858211,
+   "prezzo": 58726.62959024144,
+   "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795611626794,
+   "cosa": "commissione",
+   "importo": -0.998353,
+   "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795614487314,
+   "cosa": "commissione",
+   "importo": -0.46736,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795615750036,
+   "cosa": "risultato",
+   "importo": 4.16676,
+   "prezzo": 58315.831,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795615750036,
+   "cosa": "commissione",
+   "importo": -1.166317,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "commissione",
+   "importo": -0.4676,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "risultato",
+   "importo": -3.03408,
+   "prezzo": 58525.852,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795618926795,
+   "cosa": "commissione",
+   "importo": -1.170517,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795620930453,
+   "cosa": "commissione",
+   "importo": -0.24486,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795621026578,
+   "cosa": "risultato",
+   "importo": -3.272745,
+   "prezzo": 58455.845,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795621026578,
+   "cosa": "commissione",
+   "importo": -0.613786,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795622122913,
+   "cosa": "commissione",
+   "importo": -0.2338,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795622412728,
+   "cosa": "funding",
+   "importo": 0.070975,
+   "tasso": 6.085e-05
+  },
+  {
+   "ora_ms": 1795623743166,
+   "cosa": "risultato",
+   "importo": -10.1179,
+   "prezzo": 58955.895,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795623743166,
+   "cosa": "commissione",
+   "importo": -0.589559,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795625537170,
+   "cosa": "commissione",
+   "importo": -0.17514,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795626316092,
+   "cosa": "risultato",
+   "importo": -5.78814,
+   "prezzo": 58765.876,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795626316092,
+   "cosa": "commissione",
+   "importo": -0.440744,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795635123119,
+   "cosa": "commissione",
+   "importo": -0.216288,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795636816390,
+   "cosa": "risultato",
+   "importo": -3.275827,
+   "prezzo": 59898.0096,
+   "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795636816390,
+   "cosa": "commissione",
+   "importo": -0.539082,
+   "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795644078262,
+   "cosa": "commissione",
+   "importo": -0.252504,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795644748751,
+   "cosa": "risultato",
+   "importo": -0.756189,
+   "prezzo": 60083.991,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795644748751,
+   "cosa": "commissione",
+   "importo": -0.630882,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795653746996,
+   "cosa": "commissione",
+   "importo": -0.36372,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795654206068,
+   "cosa": "risultato",
+   "importo": -4.68141,
+   "prezzo": 60463.953,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795654206068,
+   "cosa": "commissione",
+   "importo": -0.906959,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795656915635,
+   "cosa": "commissione",
+   "importo": -0.315484,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795661582407,
+   "cosa": "risultato",
+   "importo": 3.091933,
+   "prezzo": 60788.9205,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795661582407,
+   "cosa": "commissione",
+   "importo": -0.790256,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795666758007,
+   "cosa": "commissione",
+   "importo": -0.35322,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795669026527,
+   "cosa": "risultato",
+   "importo": -1.046523,
+   "prezzo": 60863.913,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795669026527,
+   "cosa": "commissione",
+   "importo": -0.882527,
+   "come": "stop"
+  }
+ ],
+ "prossimo_id": 69,
+ "chiuse": [
+  {
+   "lato": "corto",
+   "quantita": 0.059,
+   "entrata": 58890.0,
+   "leva": 10,
+   "margine": 347.45099999999996,
+   "liquidazione": 64484.55000000001,
+   "aperta_ms": 1795592760000,
+   "da_limite": true,
+   "chiusa_ms": 1795595340000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.033,
+   "entrata": 59057.19317556145,
+   "leva": 10,
+   "margine": 194.88873747935278,
+   "liquidazione": 64667.6265272398,
+   "aperta_ms": 1795598128106,
+   "da_limite": false,
+   "chiusa_ms": 1795600740000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.05,
+   "entrata": 58700.0,
+   "leva": 3,
+   "margine": 978.3333333333334,
+   "liquidazione": 77973.16666666667,
+   "aperta_ms": 1795607280000,
+   "da_limite": true,
+   "chiusa_ms": 1795607460000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.034,
+   "entrata": 58583.74104,
+   "leva": 5,
+   "margine": 398.36943907200003,
+   "liquidazione": 70007.57054280001,
+   "aperta_ms": 1795608031675,
+   "da_limite": false,
+   "chiusa_ms": 1795611626794
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.04,
+   "entrata": 58420.0,
+   "leva": 3,
+   "margine": 778.9333333333334,
+   "liquidazione": 77601.23333333334,
+   "aperta_ms": 1795614420000,
+   "da_limite": true,
+   "chiusa_ms": 1795615680000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.04,
+   "entrata": 58450.0,
+   "leva": 5,
+   "margine": 467.6,
+   "liquidazione": 69847.75,
+   "aperta_ms": 1795618860000,
+   "da_limite": true,
+   "chiusa_ms": 1795618860000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.021,
+   "entrata": 58300.0,
+   "leva": 5,
+   "margine": 244.86000000000004,
+   "liquidazione": 69668.5,
+   "aperta_ms": 1795620840000,
+   "da_limite": true,
+   "chiusa_ms": 1795620960000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.02,
+   "entrata": 58450.0,
+   "leva": 3,
+   "margine": 389.6666666666667,
+   "liquidazione": 77641.08333333333,
+   "aperta_ms": 1795622040000,
+   "da_limite": true,
+   "chiusa_ms": 1795623660000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.015,
+   "entrata": 58380.0,
+   "leva": 2,
+   "margine": 437.84999999999997,
+   "liquidazione": 87278.1,
+   "aperta_ms": 1795625460000,
+   "da_limite": true,
+   "chiusa_ms": 1795626240000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.018,
+   "entrata": 60080.0,
+   "leva": 5,
+   "margine": 216.28799999999995,
+   "liquidazione": 48364.4,
+   "aperta_ms": 1795635060000,
+   "da_limite": true,
+   "chiusa_ms": 1795636816390
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.021,
+   "entrata": 60120.0,
+   "leva": 5,
+   "margine": 252.504,
+   "liquidazione": 48396.600000000006,
+   "aperta_ms": 1795644000000,
+   "da_limite": true,
+   "chiusa_ms": 1795644660000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.03,
+   "entrata": 60620.0,
+   "leva": 5,
+   "margine": 363.71999999999997,
+   "liquidazione": 48799.100000000006,
+   "aperta_ms": 1795653660000,
+   "da_limite": true,
+   "chiusa_ms": 1795654140000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.026,
+   "entrata": 60670.0,
+   "leva": 5,
+   "margine": 315.484,
+   "liquidazione": 48839.350000000006,
+   "aperta_ms": 1795656840000,
+   "da_limite": true,
+   "chiusa_ms": 1795661520000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.029,
+   "entrata": 60900.0,
+   "leva": 6,
+   "margine": 294.35,
+   "liquidazione": 51054.5,
+   "aperta_ms": 1795666680000,
+   "da_limite": true,
+   "chiusa_ms": 1795668960000
+  }
+ ],
+ "funding_applicati": [
+  1795593600001,
+  1795622400000
+ ],
+ "tolti": []
+}

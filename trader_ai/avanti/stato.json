@@ -1,0 +1,1096 @@
+{
+ "operazioni": [
+  {
+   "aperta": "2026-11-25T07:45:24.311254+00:00",
+   "chiusa": "2026-11-25T08:30:15.991416+00:00",
+   "lato": "corto",
+   "leva": 10,
+   "entrata": 58890.0,
+   "uscita": 59124.55402899,
+   "come": "stop",
+   "risultato": -9.61,
+   "approccio": "Seguire la tendenza ribassista sul 30m: corto su rotture confermate o su ritest dei supporti rotti, stop sopra la struttura, rischio ~1-1,5% del conto.",
+   "margine": 350.0
+  },
+  {
+   "aperta": "2026-11-25T09:15:12.234403+00:00",
+   "chiusa": "2026-11-25T10:00:10.098029+00:00",
+   "lato": "corto",
+   "leva": 10,
+   "entrata": 59057.19317556145,
+   "uscita": 59079.9,
+   "come": "stop",
+   "risultato": -1.58,
+   "approccio": "Range 58920-59460: corto su rifiuto della resistenza con chiusura 15m sotto 59150, lungo solo su chiusura sopra 59460; rischio ~1%.",
+   "margine": 200.0
+  },
+  {
+   "aperta": "2026-11-25T11:30:20.634313+00:00",
+   "chiusa": "2026-11-25T11:52:17.009212+00:00",
+   "lato": "corto",
+   "leva": 3,
+   "entrata": 58700.0,
+   "uscita": 58726.30586232,
+   "come": "stop",
+   "risultato": -6.35,
+   "approccio": "Rottura del range sotto 58700 con volume: corto sul ritest di 58700 dal basso, stop sopra 58900 e rischio ~1%.",
+   "margine": 980.0
+  },
+  {
+   "aperta": "2026-11-25T12:00:18.181767+00:00",
+   "chiusa": "2026-11-25T13:00:13.962019+00:00",
+   "lato": "corto",
+   "leva": 5,
+   "entrata": 58583.74104,
+   "uscita": 58720.75751449,
+   "come": "chiusa dal modello",
+   "risultato": -6.85,
+   "approccio": "Rottura del range sotto 58700: corto sul ritest respinto con chiusura 15m sotto 58700, stop sopra 58860, rischio ~0,8-1% del conto.",
+   "margine": 410.0
+  },
+  {
+   "aperta": "2026-11-25T13:45:13.344056+00:00",
+   "chiusa": "2026-11-25T14:09:09.356699+00:00",
+   "lato": "corto",
+   "leva": 3,
+   "entrata": 58420.0,
+   "uscita": 58286.69217391,
+   "come": "stop",
+   "risultato": 2.53,
+   "approccio": "Rottura del supporto 58430 con volume: corto con limite sul ritest del livello rotto, stop sopra i massimi 5m del ritest, rischio ~0,8-0,9% del conto.",
+   "margine": 780.0
+  },
+  {
+   "aperta": "2026-11-25T15:15:10.172156+00:00",
+   "chiusa": "2026-11-25T15:37:05.939495+00:00",
+   "lato": "corto",
+   "leva": 5,
+   "entrata": 58300.0,
+   "uscita": 58623.69562275,
+   "come": "stop",
+   "risultato": -4.13,
+   "approccio": "Tendenza ribassista con volatilità estrema: corto solo con limite sui rimbalzi verso EMA21 15m e livello 58300-58430, stop oltre lo spike 58700 e rischio ~1%.",
+   "margine": 245.0
+  },
+  {
+   "aperta": "2026-11-25T15:45:09.185808+00:00",
+   "chiusa": "2026-11-25T16:22:22.506914+00:00",
+   "lato": "corto",
+   "leva": 3,
+   "entrata": 58450.0,
+   "uscita": 58804.65132609,
+   "come": "stop",
+   "risultato": -10.87,
+   "approccio": "Volatilità estrema: corto solo con limite sui rimbalzi verso 58430-58500 (livello rotto/EMA21 15m), stop largo oltre 58900, size ridotta e rischio ~1%.",
+   "margine": 390.0
+  },
+  {
+   "aperta": "2026-11-25T16:45:12.014781+00:00",
+   "chiusa": "2026-11-25T17:05:15.431820+00:00",
+   "lato": "corto",
+   "leva": 2,
+   "entrata": 58380.0,
+   "uscita": 58743.11652174,
+   "come": "stop",
+   "risultato": -6.4,
+   "approccio": "Range ad alta volatilità: opero solo setup confermati da una chiusura 15m, entrando con limite sui ritest; rischio ≤0,7%, niente inseguimenti.",
+   "margine": 467.0
+  },
+  {
+   "aperta": "2026-11-25T19:30:11.417161+00:00",
+   "chiusa": "2026-11-25T20:00:01.780779+00:00",
+   "lato": "lungo",
+   "leva": 5,
+   "entrata": 60080.0,
+   "uscita": 59902.03515217,
+   "come": "chiusa dal modello",
+   "risultato": -4.03,
+   "approccio": "Rottura confermata su 30m sopra la resistenza 60000-60100: lungo con limite sul ritest del livello rotto, stop sotto la struttura 5m/15m, rischio ~0,6%.",
+   "margine": 228.0
+  },
+  {
+   "aperta": "2026-11-25T21:00:15.966884+00:00",
+   "chiusa": "2026-11-25T22:12:28.099102+00:00",
+   "lato": "lungo",
+   "leva": 5,
+   "entrata": 60120.0,
+   "uscita": 60085.82858696,
+   "come": "stop",
+   "risultato": -1.64,
+   "approccio": "Range 59800-60400 dopo falso breakout: entro solo su 30m chiusa sopra 60200 con volume o su rifiuto netto; rischio ≤0,6%, niente inseguimenti.",
+   "margine": 260.0
+  },
+  {
+   "aperta": "2026-11-26T00:15:18.583013+00:00",
+   "chiusa": "2026-11-26T00:50:05.395039+00:00",
+   "lato": "lungo",
+   "leva": 5,
+   "entrata": 60620.0,
+   "uscita": 60460.0,
+   "come": "stop",
+   "risultato": -5.95,
+   "approccio": "Rottura rialzista del range 59800-60475 con volume: lungo con limite sul ritest dell'area rotta 60550-60650, stop sotto 60400, rischio ~0,8%.",
+   "margine": 364.0
+  },
+  {
+   "aperta": "2026-11-26T01:15:30.207960+00:00",
+   "chiusa": "2026-11-26T02:53:01.773051+00:00",
+   "lato": "lungo",
+   "leva": 5,
+   "entrata": 60670.0,
+   "uscita": 60760.32106522,
+   "come": "stop",
+   "risultato": 1.99,
+   "approccio": "Ritest tenuto di 60475 e recupero di 60620 con volume: lungo con limite sul ritest di 60650-60680, stop sotto i minimi 60437 e rischio di circa 0,7%.",
+   "margine": 316.0
+  },
+  {
+   "aperta": "2026-11-26T04:15:23.579404+00:00",
+   "chiusa": "2026-11-26T04:57:05.891640+00:00",
+   "lato": "lungo",
+   "leva": 6,
+   "entrata": 60900.0,
+   "uscita": 60875.3,
+   "come": "stop",
+   "risultato": -2.28,
+   "approccio": "Tendenza rialzista su 30m: lungo con limite sul ritest dopo una chiusura 15m sopra il range 60590-60930, stop sotto i minimi 5m, rischio ≤0,6%.",
+   "margine": 300.0
+  }
+ ],
+ "note": [
+  "04:57 04:57: lo stop a 60870 è scattato a 60875 (-2,28), giorno -6,25. La 5m mostra una serie di massimi calanti dopo il rifiuto a 61121. Il volume è basso (0,5x) e l'istogramma MACD 15m è negativo. Il 30m resta rialzista, ma il prezzo oscilla nel range 60590-61120 senza spinta. Ho fatto troppe operazioni piccole in perdita, quindi riduco la frequenza. Lungo solo con una 15m chiusa sopra 61120 con volume, oppure su un rimbalzo netto da 60590-60650 con stop sotto 60430. Corto sotto 60437. Budget 3,78: aspetto.",
+  "05:00 05:00: la 15m chiude a 60951 dentro il range 60590-61120. La 5m delle 05:00 ha un minimo a 60845 rimbalzato con volume 2x, ma non c'è rottura. L'istogramma MACD 15m è negativo, il volume 15m è basso (0,57x) e l'istogramma 30m è positivo ma piccolo. Siamo a metà range, nessun vantaggio. Il giorno è a -6,25 dopo troppe operazioni piccole, quindi riduco la frequenza. Lungo su una 15m chiusa sopra 61120 con volume, entrando con limite sul ritest, oppure su un rimbalzo netto da 60590-60650. Corto sotto 60437. Budget 3,72.",
+  "05:15 05:15: la 15m chiude a 60876 a metà range, con volume molto basso (0,33x) e istogramma MACD 15m negativo. Il prezzo è sopra il VWAP 60831 ma sotto EMA9/21 5m, e il 30m resta rialzista con istogramma piccolo. Non c'è vantaggio. Lungo con una 15m chiusa sopra 61120 con volume, entrando con limite sul ritest, oppure su un rimbalzo netto da 60590-60650 con stop sotto 60430. Corto sotto 60437. Giorno a -6,25, budget 3,68: frequenza ridotta.",
+  "05:30 05:30: la 15m chiude a 60974 con massimo 61038, ancora dentro il range 60590-61120 e con volume molto basso (0,39x). L'istogramma MACD 15m è negativo (-26), quello del 30m quasi piatto (+2,4). Sul 5m il prezzo è sopra EMA21 e VWAP, ma il MACD è negativo. Sono a metà-alto range e non c'è vantaggio. Lungo su una 15m chiusa sopra 61120 con volume, entrando con limite sul ritest, oppure su un rimbalzo netto da 60590-60650. Corto sotto 60437. Giorno a -6,25, budget 3,63: aspetto.",
+  "05:45 05:45: la 15m chiude a 60866, vicino al minimo, dentro il range 60590-61120. Il volume è basso (0,65x) e l'istogramma MACD 15m è negativo (-33). Il 30m è rialzista ma piatto (istogramma +2,4). Sul 5m il prezzo è sotto EMA9/21 e appena sopra il VWAP 60848, sulla Bollinger bassa. Siamo a metà range: nessun vantaggio. Lungo su una 15m chiusa sopra 61120 con volume, oppure su un rimbalzo netto da 60590-60650. Corto sotto 60437. Giorno a -6,25, budget 3,57: aspetto.",
+  "06:00 06:00: la 15m chiude a 60792, sotto il VWAP 60834 e sotto EMA9 15m, ma sopra EMA21 60772. L'istogramma MACD 15m è negativo (-42) e anche quello del 30m è passato negativo (-17). Il 30m chiude sotto EMA9. Sul 5m il prezzo è sulla Bollinger bassa e l'RSI è a 41. Il volume è sotto la media. Il prezzo scende verso il supporto 60590-60650 senza averlo ancora testato. Aspetto un rimbalzo netto lì per il lungo, oppure una rottura sotto 60437 per il corto. Giorno a -6,25, budget 3,52: frequenza ridotta.",
+  "06:15 La 15m chiude a 60512 sotto il supporto 60590 con volume 2,2x e MACD 15m negativo, ma resta sopra i minimi 60437-60440 e l'EMA21 30m (60471). Sul 5m l'RSI è a 27, ipervenduto, sulla Bollinger bassa. Aprire un corto qui significa vendere sopra un supporto. Non vedo un rimbalzo netto per il lungo. Aspetto. Corto con una 15m chiusa sotto 60437 con volume, limite sul ritest 60450-60480 e stop sopra 60620. Lungo se una 15m chiude di nuovo sopra 60650. Giorno a -6,25, budget 3,47.",
+  "06:30 La 15m delle 06:30 è scesa a 60356, sotto i minimi 60437, ma ha chiuso a 60571 con un lungo stoppino inferiore e volume 2,1x: sembra uno sweep con recupero, non una rottura confermata. Sul 30m il prezzo resta sopra EMA21 60480, ma il MACD 15m è negativo e il prezzo è sotto il VWAP. Nessuna delle due condizioni del piano si è verificata. Lungo su una 15m chiusa sopra 60650, entrando con limite sul ritest e stop sotto 60430. Corto su una 15m chiusa sotto 60350. Giorno a -6,25, budget 3,41: aspetto.",
+  "06:45 La 15m delle 06:45 chiude a 60496. Il massimo a 60657 è stato respinto e il prezzo è tornato verso i minimi 60430: il recupero dopo lo sweep non tiene. Il MACD 15m è negativo, il prezzo è sotto EMA9/21 15m e sotto il VWAP 60796, ma sopra EMA21 30m 60480. RSI 5m 36. Nessuna condizione del piano si è verificata: siamo in zona di supporto, senza conferme. Corto su una 15m chiusa sotto 60350, con limite sul ritest e stop sopra 60600. Lungo su una 15m chiusa sopra 60650. Giorno -6,25, budget 3,35: aspetto.",
+  "07:00 07:00: la 15m chiude a 60530 con minimo 60430, il supporto tiene ancora. Il massimo a 60612 resta sotto 60650. Il MACD 15m è negativo e il prezzo è sotto EMA9/21 15m e sotto il VWAP 60790, ma sopra EMA21 30m 60485. Il volume è sotto la media e l'RSI 5m è a 40. Il 30m ha minimi crescenti dallo sweep, però nessuna condizione del piano si è verificata. Corto su una 15m chiusa sotto 60350 con limite sul ritest. Lungo su una 15m chiusa sopra 60650. Giorno -6,25, budget 3,29: aspetto."
+ ],
+ "oi": [
+  [
+   1795669604.955281,
+   96601.377
+  ],
+  [
+   1795669635.925769,
+   96603.937
+  ],
+  [
+   1795669667.535209,
+   96603.479
+  ],
+  [
+   1795669698.498959,
+   96603.613
+  ],
+  [
+   1795669730.058427,
+   96600.021
+  ],
+  [
+   1795669761.027124,
+   96600.341
+  ],
+  [
+   1795669793.104349,
+   96600.057
+  ],
+  [
+   1795669824.080273,
+   96607.601
+  ],
+  [
+   1795669855.665419,
+   96603.958
+  ],
+  [
+   1795669886.629348,
+   96603.825
+  ],
+  [
+   1795669918.226237,
+   96573.953
+  ],
+  [
+   1795669949.182926,
+   96576.143
+  ],
+  [
+   1795669980.773031,
+   96568.749
+  ],
+  [
+   1795670012.35976,
+   96571.014
+  ],
+  [
+   1795670043.322479,
+   96574.691
+  ],
+  [
+   1795670074.93312,
+   96577.781
+  ],
+  [
+   1795670105.935977,
+   96579.152
+  ],
+  [
+   1795670144.143337,
+   96581.344
+  ],
+  [
+   1795670175.134889,
+   96586.955
+  ],
+  [
+   1795670206.728281,
+   96585.983
+  ],
+  [
+   1795670237.696947,
+   96581.63
+  ],
+  [
+   1795670269.308769,
+   96577.009
+  ],
+  [
+   1795670300.259278,
+   96580.363
+  ],
+  [
+   1795670332.275985,
+   96582.298
+  ],
+  [
+   1795670363.258837,
+   96582.83
+  ],
+  [
+   1795670394.87401,
+   96581.598
+  ],
+  [
+   1795670425.830486,
+   96574.989
+  ],
+  [
+   1795670457.439546,
+   96570.484
+  ],
+  [
+   1795670488.447377,
+   96573.064
+  ],
+  [
+   1795670520.050328,
+   96580.864
+  ],
+  [
+   1795670551.672123,
+   96586.837
+  ],
+  [
+   1795670582.671387,
+   96587.478
+  ],
+  [
+   1795670614.259426,
+   96590.876
+  ],
+  [
+   1795670645.276883,
+   96584.428
+  ],
+  [
+   1795670676.872434,
+   96583.511
+  ],
+  [
+   1795670708.261308,
+   96577.073
+  ],
+  [
+   1795670740.327118,
+   96569.527
+  ],
+  [
+   1795670771.284021,
+   96573.418
+  ],
+  [
+   1795670803.314163,
+   96574.002
+  ],
+  [
+   1795670834.249131,
+   96570.227
+  ],
+  [
+   1795670865.853301,
+   96561.174
+  ],
+  [
+   1795670896.844765,
+   96559.95
+  ],
+  [
+   1795670928.455226,
+   96546.108
+  ],
+  [
+   1795670959.425668,
+   96555.817
+  ],
+  [
+   1795670991.025378,
+   96558.442
+  ],
+  [
+   1795671022.00079,
+   96586.35
+  ],
+  [
+   1795671059.809854,
+   96595.004
+  ],
+  [
+   1795671091.302989,
+   96572.285
+  ],
+  [
+   1795671122.973376,
+   96569.105
+  ],
+  [
+   1795671154.590795,
+   96565.454
+  ],
+  [
+   1795671185.564729,
+   96565.066
+  ],
+  [
+   1795671217.227824,
+   96555.263
+  ],
+  [
+   1795671248.239346,
+   96547.656
+  ],
+  [
+   1795671279.860735,
+   96547.062
+  ],
+  [
+   1795671310.831404,
+   96540.515
+  ],
+  [
+   1795671342.439251,
+   96553.735
+  ],
+  [
+   1795671373.418647,
+   96557.066
+  ],
+  [
+   1795671405.016201,
+   96558.595
+  ],
+  [
+   1795671436.007064,
+   96566.552
+  ],
+  [
+   1795671467.635422,
+   96568.452
+  ],
+  [
+   1795671498.599829,
+   96570.15
+  ],
+  [
+   1795671530.201282,
+   96572.797
+  ],
+  [
+   1795671561.17106,
+   96575.512
+  ],
+  [
+   1795671592.782978,
+   96562.594
+  ],
+  [
+   1795671623.780906,
+   96573.236
+  ],
+  [
+   1795671655.400974,
+   96577.354
+  ],
+  [
+   1795671686.385463,
+   96569.21
+  ],
+  [
+   1795671717.987174,
+   96558.701
+  ],
+  [
+   1795671748.967278,
+   96560.484
+  ],
+  [
+   1795671780.563409,
+   96560.276
+  ],
+  [
+   1795671812.191014,
+   96560.78
+  ],
+  [
+   1795671843.153086,
+   96563.323
+  ],
+  [
+   1795671874.75425,
+   96559.963
+  ],
+  [
+   1795671906.156945,
+   96557.805
+  ],
+  [
+   1795671945.202901,
+   96568.992
+  ],
+  [
+   1795671976.169759,
+   96554.841
+  ],
+  [
+   1795672007.750276,
+   96555.641
+  ],
+  [
+   1795672038.719933,
+   96562.094
+  ],
+  [
+   1795672070.315962,
+   96556.011
+  ],
+  [
+   1795672101.271616,
+   96575.53
+  ],
+  [
+   1795672132.856539,
+   96572.976
+  ],
+  [
+   1795672163.850548,
+   96565.667
+  ],
+  [
+   1795672195.450917,
+   96576.534
+  ],
+  [
+   1795672226.42856,
+   96576.037
+  ],
+  [
+   1795672258.031916,
+   96575.17
+  ],
+  [
+   1795672289.009346,
+   96563.759
+  ],
+  [
+   1795672320.604008,
+   96564.178
+  ],
+  [
+   1795672352.201659,
+   96554.367
+  ],
+  [
+   1795672383.144743,
+   96574.732
+  ],
+  [
+   1795672420.532362,
+   96581.317
+  ],
+  [
+   1795672451.479879,
+   96577.821
+  ],
+  [
+   1795672483.139813,
+   96583.107
+  ],
+  [
+   1795672514.109874,
+   96597.477
+  ],
+  [
+   1795672545.70367,
+   96604.963
+  ],
+  [
+   1795672576.666512,
+   96603.76
+  ],
+  [
+   1795672608.268795,
+   96604.148
+  ],
+  [
+   1795672639.247108,
+   96602.349
+  ],
+  [
+   1795672670.846195,
+   96602.326
+  ],
+  [
+   1795672701.788381,
+   96595.846
+  ],
+  [
+   1795672733.394995,
+   96589.823
+  ],
+  [
+   1795672764.354631,
+   96585.581
+  ],
+  [
+   1795672795.970789,
+   96582.039
+  ],
+  [
+   1795672826.932247,
+   96563.546
+  ],
+  [
+   1795672865.070932,
+   96565.551
+  ],
+  [
+   1795672896.665271,
+   96487.199
+  ],
+  [
+   1795672927.612135,
+   96483.533
+  ],
+  [
+   1795672959.215407,
+   96485.231
+  ],
+  [
+   1795672990.146991,
+   96442.078
+  ],
+  [
+   1795673021.788821,
+   96430.701
+  ],
+  [
+   1795673052.763778,
+   96421.579
+  ],
+  [
+   1795673084.86763,
+   96426.038
+  ],
+  [
+   1795673115.864103,
+   96351.062
+  ],
+  [
+   1795673147.491208,
+   96343.81
+  ],
+  [
+   1795673178.500392,
+   96346.97
+  ],
+  [
+   1795673210.127698,
+   96344.269
+  ],
+  [
+   1795673241.097333,
+   96330.149
+  ],
+  [
+   1795673272.718418,
+   96309.216
+  ],
+  [
+   1795673303.681264,
+   96282.254
+  ],
+  [
+   1795673335.261187,
+   96290.376
+  ],
+  [
+   1795673366.191215,
+   96279.339
+  ],
+  [
+   1795673398.217389,
+   96276.328
+  ],
+  [
+   1795673429.171765,
+   96253.513
+  ],
+  [
+   1795673460.802981,
+   96249.686
+  ],
+  [
+   1795673492.417125,
+   96252.05
+  ],
+  [
+   1795673523.408753,
+   96253.607
+  ],
+  [
+   1795673554.967896,
+   96251.256
+  ],
+  [
+   1795673585.926026,
+   96270.476
+  ],
+  [
+   1795673617.566251,
+   96308.918
+  ],
+  [
+   1795673648.545404,
+   96314.821
+  ],
+  [
+   1795673680.152117,
+   96322.521
+  ],
+  [
+   1795673711.126802,
+   96330.897
+  ],
+  [
+   1795673752.896949,
+   96339.506
+  ],
+  [
+   1795673783.826925,
+   96300.891
+  ],
+  [
+   1795673815.448267,
+   96262.04
+  ],
+  [
+   1795673846.395803,
+   96237.783
+  ],
+  [
+   1795673878.00805,
+   96245.49
+  ],
+  [
+   1795673908.987217,
+   96247.855
+  ],
+  [
+   1795673940.612815,
+   96296.299
+  ],
+  [
+   1795673972.275662,
+   96277.865
+  ],
+  [
+   1795674003.254952,
+   96275.311
+  ],
+  [
+   1795674034.852692,
+   96288.173
+  ],
+  [
+   1795674065.81039,
+   96251.717
+  ],
+  [
+   1795674097.436404,
+   96206.995
+  ],
+  [
+   1795674128.380035,
+   96249.289
+  ],
+  [
+   1795674159.982426,
+   96247.472
+  ],
+  [
+   1795674190.945257,
+   96253.549
+  ],
+  [
+   1795674222.577709,
+   96250.182
+  ],
+  [
+   1795674253.561329,
+   96252.233
+  ],
+  [
+   1795674285.150803,
+   96257.177
+  ],
+  [
+   1795674316.153509,
+   96263.191
+  ],
+  [
+   1795674347.766422,
+   96267.083
+  ],
+  [
+   1795674378.729618,
+   96289.312
+  ],
+  [
+   1795674410.335286,
+   96292.83
+  ],
+  [
+   1795674441.320775,
+   96302.129
+  ],
+  [
+   1795674472.9195,
+   96313.562
+  ],
+  [
+   1795674503.914054,
+   96318.807
+  ],
+  [
+   1795674535.975813,
+   96328.137
+  ],
+  [
+   1795674566.988869,
+   96332.599
+  ],
+  [
+   1795674598.550892,
+   96343.113
+  ],
+  [
+   1795674629.510524,
+   96355.662
+  ],
+  [
+   1795674673.72806,
+   96313.027
+  ],
+  [
+   1795674705.306411,
+   96312.353
+  ],
+  [
+   1795674736.71124,
+   96318.505
+  ],
+  [
+   1795674768.266847,
+   96322.36
+  ],
+  [
+   1795674799.235139,
+   96337.586
+  ],
+  [
+   1795674830.814902,
+   96331.516
+  ],
+  [
+   1795674861.790277,
+   96339.31
+  ],
+  [
+   1795674893.399872,
+   96327.818
+  ],
+  [
+   1795674924.367856,
+   96318.214
+  ],
+  [
+   1795674955.984295,
+   96318.819
+  ],
+  [
+   1795674986.939233,
+   96318.75
+  ],
+  [
+   1795675018.5964,
+   96314.301
+  ],
+  [
+   1795675049.591465,
+   96321.356
+  ],
+  [
+   1795675081.212402,
+   96323.607
+  ],
+  [
+   1795675112.803514,
+   96331.689
+  ],
+  [
+   1795675143.795442,
+   96345.688
+  ],
+  [
+   1795675175.41124,
+   96352.962
+  ],
+  [
+   1795675206.36984,
+   96358.934
+  ],
+  [
+   1795675237.978925,
+   96366.933
+  ],
+  [
+   1795675268.924055,
+   96391.072
+  ],
+  [
+   1795675300.544003,
+   96394.169
+  ],
+  [
+   1795675331.517555,
+   96394.901
+  ],
+  [
+   1795675363.488269,
+   96398.337
+  ],
+  [
+   1795675394.448805,
+   96402.181
+  ],
+  [
+   1795675426.078365,
+   96405.029
+  ],
+  [
+   1795675457.047036,
+   96405.005
+  ],
+  [
+   1795675489.139846,
+   96407.403
+  ],
+  [
+   1795675520.122287,
+   96412.702
+  ],
+  [
+   1795675560.253491,
+   96383.888
+  ],
+  [
+   1795675591.845262,
+   96386.986
+  ],
+  [
+   1795675622.826185,
+   96386.333
+  ],
+  [
+   1795675654.414759,
+   96386.481
+  ],
+  [
+   1795675685.360924,
+   96401.954
+  ],
+  [
+   1795675717.438268,
+   96403.203
+  ],
+  [
+   1795675748.398386,
+   96407.43
+  ],
+  [
+   1795675780.016794,
+   96393.214
+  ],
+  [
+   1795675810.988951,
+   96398.906
+  ],
+  [
+   1795675843.039989,
+   96395.511
+  ],
+  [
+   1795675874.024261,
+   96399.524
+  ],
+  [
+   1795675905.63332,
+   96401.067
+  ],
+  [
+   1795675936.610911,
+   96400.854
+  ],
+  [
+   1795675968.248216,
+   96405.777
+  ],
+  [
+   1795675999.217922,
+   96413.513
+  ],
+  [
+   1795676030.84086,
+   96418.931
+  ],
+  [
+   1795676061.817832,
+   96427.688
+  ],
+  [
+   1795676093.425404,
+   96438.179
+  ],
+  [
+   1795676124.444044,
+   96438.606
+  ],
+  [
+   1795676156.052097,
+   96445.392
+  ],
+  [
+   1795676187.003486,
+   96447.627
+  ],
+  [
+   1795676218.586327,
+   96449.1
+  ],
+  [
+   1795676249.592779,
+   96452.729
+  ],
+  [
+   1795676281.188422,
+   96454.926
+  ],
+  [
+   1795676312.801312,
+   96434.402
+  ],
+  [
+   1795676343.785163,
+   96473.051
+  ],
+  [
+   1795676375.41169,
+   96483.677
+  ],
+  [
+   1795676406.391166,
+   96481.455
+  ],
+  [
+   1795676446.135014,
+   96471.706
+  ],
+  [
+   1795676477.123002,
+   96503.666
+  ],
+  [
+   1795676508.745692,
+   96504.218
+  ],
+  [
+   1795676539.709232,
+   96496.748
+  ],
+  [
+   1795676571.340918,
+   96498.06
+  ],
+  [
+   1795676602.34714,
+   96503.207
+  ],
+  [
+   1795676634.397908,
+   96512.459
+  ],
+  [
+   1795676665.378153,
+   96508.678
+  ],
+  [
+   1795676697.010038,
+   96512.239
+  ],
+  [
+   1795676727.9958,
+   96512.817
+  ],
+  [
+   1795676759.696372,
+   96522.112
+  ],
+  [
+   1795676790.684515,
+   96517.095
+  ]
+ ],
+ "estraneo": null,
+ "giorno": "2026-11-26",
+ "conto_mezzanotte": 946.3912130340102,
+ "fermo_fino": null,
+ "esaurito": false,
+ "ultima": "2026-11-26T07:00:06.391166+00:00",
+ "ultimo_scarto": null,
+ "cambi_approccio": 11,
+ "approccio": "Range 60350-61120 dopo uno sweep dei minimi: lungo su una 15m chiusa sopra 60650 con limite sul ritest, corto su una 15m chiusa sotto 60350; rischio ≤0,7%.",
+ "aperta": null
+}
