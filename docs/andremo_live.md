@@ -1071,3 +1071,9 @@ prezzi, HYPE su (Franklin Templeton la mette nel suo fondo quotato dal 1° dicem
 VVV. Voce 8, diciannovesimo ribilancio: 6 ordini, gli stessi 4 rifiuti; dal 9 novembre demo −0,80%, paper +0,87% (`ops/results/0776`).
 **Capito oggi**: il foglio dei fatti gravi mostrava solo 6 titoli per moneta, e il fatto di HYPE era nascosto fra gli altri 11. Da oggi i
 due fogli mostrano tutti i titoli.
+**26 novembre, 08:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (36 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
+nuova, nessuna moneta nuova su Coinbase. Righe della quattordicesima revisione del trader AI applicate in `reviews/`. Ricerca: lo scout ha
+guardato otto strade (ricerca automatica di regole, annunci letti da un modello, aggiornamenti di rete, ricavi dei protocolli, tassi di
+prestito, Wikipedia, residui statistici, Polymarket) e non ha scritto nessuna idea: già provate, dati a pagamento o troppo corti
+(`research/idee/LOG.md`). **Capito oggi**: con i dati gratuiti che abbiamo, le strade nuove con storia abbastanza lunga sono quasi finite;
+quello che resta sono le misure in avanti già accese.

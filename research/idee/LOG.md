@@ -150,3 +150,14 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   Letters 2021-2023 (letto solo da un riassunto). Probabilità bassa (quattro scambi, circa 0,24%). Scartate: ETF a leva (ribilanciamento di fine giornata: storico
   dal giugno 2023, effetto piccolo, in giornata), cambi di contratto dei gettoni (meno di 20 eventi), dimezzamenti di altre monete (meno di 10), liquidazioni
   (già la 112). Nessuna riga di registro.
+
+- 26 novembre 2026 (giro delle 08:17, regola del 21 novembre: niente idee da manuale): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido,
+  dopo la prova 169). Controllato con `--cerca` e con prove di esistenza dei dati (solo conteggi di titoli, nessun prezzo): (1) ricerca automatica di regole con dati
+  nascosti: già fatta con gli alberi (M1-M8, prove 14-29) e la esplorazione larga del programma 9; (2) modello linguistico sugli annunci di Binance: le categorie
+  utili (rimozioni, monitoraggio, margini, quotazioni, gare, Launchpool) hanno già la loro prova con regole fisse, e dopo giugno 2026 i giorni sono troppo pochi
+  per t da 3; (3) aggiornamenti di rete, hard fork, cambi di gettone: nell'archivio `notizie.json` 176 e 152 titoli ma quasi tutti 2020-2022 (2023-2025: meno di 35
+  in tutto, pochi con perpetuo): materia prima in esaurimento; (4) ricavi dei protocolli che tornano ai possessori (DefiLlama, 420 protocolli, gratis): è «valore»
+  e riacquisti, parente di 116 (Sharpe 0,33) e 131 (0,13): fattori pubblicati spenti; (5) tassi di prestito di Aave e Compound come interesse a ribasso on-chain:
+  la storia (`yields.llama.fi`) risponde 402 (a pagamento); (6) attenzione su Wikipedia: il server blocca l'indirizzo (troppe richieste), e GA (prova 138) copre
+  l'attenzione dai giornali; (7) residui da fattori statistici (PCA), coppie: prova 40 e lezione degli indicatori sul prezzo; (8) Polymarket (API gratuita
+  `gamma-api.polymarket.com`, mai usato): probabilità di eventi macro, pochi eventi indipendenti e storia breve, non regge t da 3. Nessuna riga di registro.
