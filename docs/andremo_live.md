@@ -1083,3 +1083,8 @@ scout delle 08:17 non ha trovato idee con un perché forte). **Capito oggi**: ni
 **26 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (127 articoli nuovi; una pagina di CryptoBriefing piena: qualche
 articolo di quella fonte può mancare), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun
 passo nuovo. Ricerca: nessuna prova in coda. **Capito oggi**: niente di nuovo in questo giro.
+**26 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (97 articoli nuovi; di nuovo una pagina di CryptoBriefing piena),
+mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. Ricerca: al posto dello scout,
+su richiesta del proprietario («fai un audit per capire se c'è qualcosa che ci stiamo perdendo nel trovare strategie [...] altri bug da
+correggere») parte un audit del sistema in sei aree, ognuna con un verificatore. **Capito oggi**: niente di nuovo in questo giro (l'esito
+dell'audit va nel suo rapporto).
