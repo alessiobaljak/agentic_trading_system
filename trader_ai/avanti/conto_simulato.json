@@ -4,8 +4,8 @@
  "ordini": [],
  "algo": [],
  "leva": 5,
- "ultimo_minuto_ms": 1795651560000,
- "ultimo_funding_ms": 1795651616679,
+ "ultimo_minuto_ms": 1795651620000,
+ "ultimo_funding_ms": 1795651647619,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
