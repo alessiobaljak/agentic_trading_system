@@ -503,6 +503,14 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   paper +0,23% (il demo 0,82 sotto). Equity del demo 991,51 (−0,85% dall'8 novembre), G1 nel paper 10.672,34, F5 nel paper 10.876,97
   (F5 +1,16% e G1 +0,07% fra le letture delle 04:18 del 24 e del 25). **Dal 9 novembre (17 giorni) demo −0,37%, paper +1,98%** (−0,14 punti
   al giorno). Voce 14, quarta lettura: nessuna «sì».
+* **26 novembre 2026, 04:30 UTC, voce 8 (diciannovesimo ribilancio a 1.000 USDT)** (`ops/results/0775`, `0776`): 6 ordini (5 a limite, 1 a
+  mercato), 48 variazioni sotto il minimo (8,8% del conto), gli stessi 4 rifiuti e IRYSUSDT assente. Errori: un tempo scaduto nelle
+  protezioni alle 17:36 del 25 (riprovato dopo un minuto, nessun effetto) e tre messaggi a Telegram non partiti fra l'01:24 e l'01:25 del 26.
+  Il 25 novembre demo −1,39%, paper −2,07% (il demo 0,68 sopra). Equity del demo 987,27 (−1,27% dall'8 novembre), G1 nel paper
+  10.555,59, F5 nel paper 10.698,10 (fra le letture delle 04:18 del 25 e delle 04:19 del 26: G1 −1,09%, F5 −1,64%). **Dal 9 novembre
+  (18 giorni) demo −0,80%, paper +0,87%** (−0,095 punti al giorno). Monete oggi: paper 58, demo 52; esposizione lorda 200,0% contro 189,9%;
+  posizioni vere contro volute: scarto 16,0% del conto, oltre il 2% solo LITUSDT (−3,2%). Voce 14, quinta lettura: due «sì» (HYPE −6,46%,
+  VVV −3,57%).
 
 ### Misura F5, pesi (25 novembre 2026, P36/180)
 Peso massimo per moneta al lunedì 43,7% (BLZ, 5 feb 2024), in settimana 44,9%: mai sopra il 60%. Somma dei pesi in settimana: massimo 397% (8 feb 2021), sopra 300% una volta,

@@ -1065,3 +1065,9 @@ nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (alle 04:17 il r
 niente di nuovo in questo giro.
 **26 novembre, 00:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (53 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
 nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. **Capito oggi**: niente di nuovo in questo giro.
+**26 novembre, 04:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (24 articoli nuovi), mappa delle liquidazioni (600 conti); nessuna
+chiusura nuova, nessuna moneta nuova su Coinbase. Fatti gravi: nessun caso nella lettura; con una correzione scritta dopo, prima dei
+prezzi, HYPE su (Franklin Templeton la mette nel suo fondo quotato dal 1° dicembre). Voce 14, quinta lettura: le prime due «sì», HYPE e
+VVV. Voce 8, diciannovesimo ribilancio: 6 ordini, gli stessi 4 rifiuti; dal 9 novembre demo −0,80%, paper +0,87% (`ops/results/0776`).
+**Capito oggi**: il foglio dei fatti gravi mostrava solo 6 titoli per moneta, e il fatto di HYPE era nascosto fra gli altri 11. Da oggi i
+due fogli mostrano tutti i titoli.
