@@ -112,6 +112,8 @@ if [ ! -d "$DATI/.git" ]; then
   git clone -q --branch "$RAMO" "$(git -C "$QUI" remote get-url origin)" "$DATI"
   echo "[trader-ai] copia per i dati in $DATI"
 fi
+# il salvataggio deve scrivere su GitHub senza chiedere la password: si usano le credenziali già salvate sulla macchina per il bot
+git -C "$DATI" config credential.helper store
 echo "[trader-ai] codice al commit $(git -C "$DEST" rev-parse --short HEAD)"
 python3 -m venv "$DEST/.venv"
 "$DEST/.venv/bin/pip" install -q --upgrade pip

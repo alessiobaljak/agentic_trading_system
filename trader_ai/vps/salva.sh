@@ -26,7 +26,9 @@ for i in 1 2 3 4; do
     *) echo "riallineamento non riuscito"; sleep $((i * 5)); continue ;;
   esac
   [ "$(git rev-parse HEAD)" = "$(git rev-parse FETCH_HEAD)" ] && { echo "niente da salvare"; exit 0; }
-  timeout 60 git push -q origin "HEAD:$RAMO" && exit 0
+  # le credenziali sono quelle già salvate sulla macchina per la copia del bot (helper «store»): un servizio non può rispondere a
+  # una richiesta di password (25-26 novembre 2026: «could not read Username», nessun salvataggio per 22 ore)
+  timeout 60 git -c credential.helper=store push -q origin "HEAD:$RAMO" && exit 0
   sleep $((i * 5))
 done
 echo "salvataggio non riuscito"; exit 1
