@@ -1,27 +1,47 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-11-23.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-11-24.zip",
  "procedure": {
   "N-001": {
-   "trade": 101,
+   "trade": 122,
    "netto": {
-    "n": 101,
-    "giorni": 33,
-    "media": -0.01671274180162222,
-    "basso": -0.042665251515959284,
-    "alto": 0.013853618568655484,
-    "p": 0.8686131386861314
+    "n": 122,
+    "giorni": 34,
+    "media": -0.0266128742569316,
+    "basso": -0.05026176701669088,
+    "alto": 0.006650139705700374,
+    "p": 0.9461053894610539
    },
-   "netto_doppio": -0.018500860613503405,
-   "caso_netto": -0.005831799085011359,
-   "senza_migliore": -0.025032778962963055,
+   "netto_doppio": -0.028403038191357834,
+   "caso_netto": -0.006697628490574855,
+   "senza_migliore": -0.033714252737413374,
    "per_moneta": {
+    "1000BONKUSDT": {
+     "trade": 1,
+     "netto": -0.05616212187637002
+    },
     "1000PEPEUSDT": {
      "trade": 2,
      "netto": 0.027565113241578974
     },
+    "1000SHIBUSDT": {
+     "trade": 1,
+     "netto": -0.05566849749141809
+    },
     "ACEUSDT": {
      "trade": 1,
      "netto": 0.1744155466088573
+    },
+    "ADAUSDT": {
+     "trade": 1,
+     "netto": -0.05583645833333315
+    },
+    "ALGOUSDT": {
+     "trade": 1,
+     "netto": -0.09629994258812721
+    },
+    "ARBUSDT": {
+     "trade": 1,
+     "netto": -0.051295798319327714
     },
     "ARKUSDT": {
      "trade": 2,
@@ -51,9 +71,17 @@
      "trade": 1,
      "netto": -0.046237602627257714
     },
+    "CRVUSDT": {
+     "trade": 1,
+     "netto": -0.07548967306694351
+    },
     "CVCUSDT": {
      "trade": 3,
      "netto": 0.051718661040685975
+    },
+    "DOGEUSDT": {
+     "trade": 1,
+     "netto": -0.06267841275224692
     },
     "EIGENUSDT": {
      "trade": 1,
@@ -64,8 +92,12 @@
      "netto": -0.07319047438439678
     },
     "FARTCOINUSDT": {
-     "trade": 2,
-     "netto": -0.0343702624088533
+     "trade": 3,
+     "netto": -0.049537235788833706
+    },
+    "FILUSDT": {
+     "trade": 1,
+     "netto": -0.052841666666666655
     },
     "GALAUSDT": {
      "trade": 1,
@@ -80,20 +112,24 @@
      "netto": -0.03814861627426667
     },
     "IOSTUSDT": {
-     "trade": 7,
-     "netto": 0.06436722690664129
+     "trade": 8,
+     "netto": 0.05207788359553045
     },
     "LITUSDT": {
      "trade": 3,
      "netto": -0.01704607084375846
     },
     "LSKUSDT": {
-     "trade": 5,
-     "netto": -0.025586535021502987
+     "trade": 6,
+     "netto": -0.027155289926096574
+    },
+    "LTCUSDT": {
+     "trade": 1,
+     "netto": -0.052730232558139446
     },
     "MORPHOUSDT": {
-     "trade": 1,
-     "netto": -0.035752815042894036
+     "trade": 2,
+     "netto": -0.025752577418965222
     },
     "MOVRUSDT": {
      "trade": 1,
@@ -104,8 +140,8 @@
      "netto": -0.05975981452859345
     },
     "ONEUSDT": {
-     "trade": 7,
-     "netto": 0.04409571073566733
+     "trade": 8,
+     "netto": 0.022225628515081558
     },
     "PENGUUSDT": {
      "trade": 2,
@@ -116,16 +152,16 @@
      "netto": -0.06598366108301996
     },
     "PROMUSDT": {
-     "trade": 6,
-     "netto": 0.025356288795973864
+     "trade": 7,
+     "netto": -0.020731942709282136
     },
     "PYTHUSDT": {
      "trade": 1,
      "netto": -0.16201513756906086
     },
     "RAREUSDT": {
-     "trade": 7,
-     "netto": -0.014484911926325636
+     "trade": 8,
+     "netto": -0.01858111611735311
     },
     "REZUSDT": {
      "trade": 5,
@@ -148,32 +184,40 @@
      "netto": -0.02461614481661127
     },
     "SUSHIUSDT": {
-     "trade": 1,
-     "netto": 0.008390217391304435
+     "trade": 2,
+     "netto": -0.005347656989366987
     },
     "SYNUSDT": {
      "trade": 2,
      "netto": -0.06808291297698253
     },
     "TRUMPUSDT": {
-     "trade": 3,
-     "netto": -0.04145159785596861
+     "trade": 4,
+     "netto": -0.0599961452004871
     },
     "TRXUSDT": {
      "trade": 2,
      "netto": -0.034832940874145395
     },
     "UNIUSDT": {
-     "trade": 1,
-     "netto": 0.08445638578652562
+     "trade": 2,
+     "netto": 0.0015963102431753862
     },
     "VTHOUSDT": {
      "trade": 2,
      "netto": -0.07915900092695326
     },
+    "XLMUSDT": {
+     "trade": 1,
+     "netto": -0.07236556222666965
+    },
     "XMRUSDT": {
      "trade": 2,
      "netto": -0.05535515665660505
+    },
+    "XRPUSDT": {
+     "trade": 1,
+     "netto": -0.07148535699878986
     },
     "ZENUSDT": {
      "trade": 1,
@@ -184,7 +228,7 @@
      "netto": -0.09722483660130718
     }
    },
-   "esito": "in corso (101 trade chiusi su 400)"
+   "esito": "in corso (122 trade chiusi su 400)"
   },
   "N-002": {
    "trade": 170,
@@ -197,7 +241,7 @@
     "p": 0.35196480351964804
    },
    "netto_doppio": -0.0003427380655604478,
-   "caso_netto": -0.0014665672597508098,
+   "caso_netto": -0.0015756290678952604,
    "senza_migliore": -0.0010763580029952216,
    "per_moneta": {
     "1000BONKUSDT": {
@@ -536,18 +580,18 @@
    "esito": "in corso (170 trade chiusi su 400)"
   },
   "N-003": {
-   "trade": 101,
+   "trade": 102,
    "netto": {
-    "n": 101,
-    "giorni": 22,
-    "media": -0.01285108882590453,
-    "basso": -0.03763558814178667,
-    "alto": 0.0030515796943970837,
-    "p": 0.952904709529047
+    "n": 102,
+    "giorni": 23,
+    "media": -0.011803626799428146,
+    "basso": -0.034933817984284125,
+    "alto": 0.004922640884506486,
+    "p": 0.9372062793720628
    },
-   "netto_doppio": -0.01692721895319651,
-   "caso_netto": 0.013591923181098677,
-   "senza_migliore": -0.015552818748860822,
+   "netto_doppio": -0.015879866599238773,
+   "caso_netto": 0.012665287576089238,
+   "senza_migliore": -0.014446325247612865,
    "per_moneta": {
     "1000BONKUSDT": {
      "trade": 2,
@@ -810,8 +854,8 @@
      "netto": -0.03402452596124901
     },
     "VVVUSDT": {
-     "trade": 1,
-     "netto": 0.0755963273881744
+     "trade": 2,
+     "netto": 0.08479318263143047
     },
     "WIFUSDT": {
      "trade": 2,
@@ -842,7 +886,7 @@
      "netto": -0.03010539099641259
     }
    },
-   "esito": "in corso (101 trade chiusi su 400)"
+   "esito": "in corso (102 trade chiusi su 400)"
   }
  }
 }
