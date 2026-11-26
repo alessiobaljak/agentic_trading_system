@@ -29,3 +29,5 @@ live-path-reviewer ha rivisto il trader sette volte il 23 novembre (verdetto fin
 `trader_ai/revisioni/2026-11-23-*.md`, perché il blocco delle aree impedisce alla sessione «trading AI» di scrivere in `reviews/`. Serve
 che la sessione delle crypto li copi o li colleghi in `reviews/INDEX.md`, `REVIEW_LOG.md` e `LIVE_PATH_MAP.md` (sezione 15 proposta nel
 primo rapporto), così la memoria del revisore li conosce.
+
+Le righe pronte per `reviews/INDEX.md` e `reviews/REVIEW_LOG.md` (fino alla quattordicesima revisione) sono in `trader_ai/revisioni/righe_per_reviews.patch`: basta `git apply`.

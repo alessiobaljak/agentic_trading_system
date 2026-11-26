@@ -63,7 +63,7 @@ def test_il_tetto_non_si_sfora_mai_anche_con_chiamate_al_massimo(tmp_path):
     b = Budget(tmp_path / "s.json")
     caratteri = 30_000
     cm = costo_massimo(caratteri)
-    massimo_vero = {"cache_creation_input_tokens": int(caratteri / 2), "output_tokens": 12000}
+    massimo_vero = {"cache_creation_input_tokens": int(caratteri / 2), "output_tokens": 16000}
     assert costo_dollari(massimo_vero) <= cm + 1e-9
     for i in range(500):
         decidi(ORA + timedelta(minutes=i), "t", b, conto(), P, lambda: Esito(None, "fuori_schema", massimo_vero), cm)
@@ -223,7 +223,26 @@ def test_chiama_usa_il_modello_scelto_e_gestisce_rifiuto_e_troncata():
     e = chiama(c, "s", "u")
     assert e.stato == "ok" and e.risposta is ok and e.usage["output_tokens"] == 50
     kw = c.chiamate[0]
-    assert kw["model"] == "claude-opus-5-5" and kw["output_format"] is Risposta and kw["max_tokens"] == 12000
+    assert kw["model"] == "claude-opus-5-5" and kw["output_format"] is Risposta and kw["max_tokens"] == 16000
     assert "fallbacks" not in kw
     assert chiama(_Client(_R("refusal", None)), "s", "u").stato == "rifiuto"
     assert chiama(_Client(_R("max_tokens", None)), "s", "u").stato == "troncata"
+
+
+def test_bilancio_di_oggi_dice_direzioni_vinte_perse_e_prezzo():
+    from trader_ai.messaggio import bilancio_di_oggi
+    ops = [{"chiusa": "2026-11-25T08:30:00", "lato": "corto", "risultato": -9.6},
+           {"chiusa": "2026-11-25T14:09:00", "lato": "corto", "risultato": 2.5},
+           {"chiusa": "2026-11-25T20:00:00", "lato": "lungo", "risultato": -4.0},
+           {"chiusa": "2026-11-24T20:00:00", "lato": "lungo", "risultato": 50.0}]
+    b = bilancio_di_oggi(ops, "2026-11-25", 58890.0, 60120.0)
+    assert "3 operazioni chiuse" in b and "corto: 2 operazioni, 1 vinte e 1 perse" in b and "+2.09%" in b
+    piene = [{**o, "aperta": "x", "leva": 5, "entrata": 1.0, "uscita": 1.0, "come": "stop", "approccio": "a"} for o in ops]
+    _, utente = costruisci(ORA, "t", 4.0, "BTCUSDT", {}, {"prezzo": 1.0}, conto(), blocco_memoria(piene, "x", [], None, b))
+    assert "bilancio di oggi" in utente
+
+
+def test_istruzioni_obiettivo_obbligatorio():
+    from trader_ai.messaggio import ISTRUZIONI
+    t = ISTRUZIONI.read_text()
+    assert "OBBLIGATORIO" in t and "Non è un tetto" in t and "IMPARA" in t

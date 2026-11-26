@@ -51,8 +51,24 @@ def blocco_conto(c: Conto, prezzo: float) -> str:
     return "\n".join(righe)
 
 
-def blocco_memoria(operazioni: List[dict], approccio: Optional[str], note: List[str], scarto: Optional[str]) -> str:
-    righe = [f"approccio attuale: {approccio or 'nessuno ancora'}"]
+def bilancio_di_oggi(operazioni: List[dict], giorno: str, prezzo_mezzanotte: Optional[float], prezzo: float) -> str:
+    """Il bilancio del giorno in chiaro (il proprietario, 26 novembre 2026: «è ovvio che l'AI deve sapere se il primo trade è
+    fallito [...] altrimenti come impara»)."""
+    oggi = [o for o in operazioni if str(o.get("chiusa", "")).startswith(giorno)]
+    righe = [f"bilancio di oggi ({giorno}): {len(oggi)} operazioni chiuse, risultato {sum(o['risultato'] for o in oggi):+.2f} USDT"]
+    for lato in ("lungo", "corto"):
+        x = [o for o in oggi if o["lato"] == lato]
+        if x:
+            righe.append(f"- {lato}: {len(x)} operazioni, {sum(o['risultato'] > 0 for o in x)} vinte e "
+                         f"{sum(o['risultato'] < 0 for o in x)} perse, risultato {sum(o['risultato'] for o in x):+.2f} USDT")
+    if prezzo_mezzanotte:
+        righe.append(f"- il prezzo da mezzanotte: da {prezzo_mezzanotte:g} a {prezzo:g} ({(prezzo / prezzo_mezzanotte - 1) * 100:+.2f}%)")
+    return "\n".join(righe)
+
+
+def blocco_memoria(operazioni: List[dict], approccio: Optional[str], note: List[str], scarto: Optional[str],
+                   bilancio: str = "") -> str:
+    righe = ([bilancio] if bilancio else []) + [f"approccio attuale: {approccio or 'nessuno ancora'}"]
     if scarto:
         righe.append(f"la tua decisione precedente è stata SCARTATA dal codice: {scarto}")
     if operazioni:
