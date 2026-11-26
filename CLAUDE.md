@@ -182,6 +182,9 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 * **Niente costi.** Non parlare del costo in dollari delle sessioni o delle campagne: il proprietario ha
   l'abbonamento e le campagne non consumano API a pagamento (7 ott 2026). Contano il tempo e i limiti d'uso,
   e solo se fermano il lavoro.
+* **Corto, come a un bambino (26 nov 2026)**: «non mostrarmi i ragionamenti nella risposta, rispondi solo quando hai finito e sii conciso,
+  breve e chiaro come se parlassi ad un bambino». Niente messaggi di avanzamento né spiegazioni dei passaggi: a lavoro finito poche righe
+  semplici con l'esito e cosa serve da lui.
 * **Prima la risposta, poi il perche'.** Se la risposta e' "no", che sia la prima
   parola.
 * **Un numero va con la sua fonte.** "224 coppie a 1 pass" va bene se viene da un
