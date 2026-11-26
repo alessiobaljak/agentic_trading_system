@@ -46,12 +46,12 @@ l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del con
 * Non viene chiamato: dopo l'obiettivo del giorno raggiunto; quando il tetto di spesa è finito (sezione 3).
 
 ## 3. Il modello e il tetto di spesa
-* `claude-opus-5-5`, SDK Python ufficiale `anthropic`, pensiero adattivo (sempre acceso), sforzo `medium`, risposta al massimo 12.000
+* `claude-opus-5-5`, SDK Python ufficiale `anthropic`, pensiero adattivo (sempre acceso), sforzo `high` (dal 26 novembre; prima `medium`), risposta al massimo 16.000
   token. Data di addestramento: giugno 2026 (https://platform.claude.com/docs/en/about-claude/models/overview, letta il 21 novembre
   2026). Nessuno strumento (niente web, niente codice). Nessun ripiego automatico su un altro modello.
 * **Tetto: 5 dollari al giorno UTC** (sotto i 5 euro finché l'euro vale più del dollaro), contati sui token dichiarati da ogni risposta
   (4 dollari al milione in entrata, 20 in uscita, cache 0,20 in lettura e 5,00 in scrittura). **Prima di ogni chiamata** il codice
-  calcola il costo più alto possibile (messaggio a 2 caratteri per token al prezzo più caro, più 12.000 token di risposta); se non sta nel
+  calcola il costo più alto possibile (messaggio a 2 caratteri per token al prezzo più caro, più 16.000 token di risposta); se non sta nel
   rimasto, non chiama fino alla mezzanotte UTC. Le operazioni aperte restano con lo stop e l'obiettivo già piazzati sul conto.
 * **Stima, non misura**: con una sola moneta una chiamata costa circa 5-7 centesimi; 96 chiamate al giorno più quelle alle chiusure
   fanno circa 5-7 dollari, cioè **il tetto può finire prima di sera**. La misura vera dei primi giorni si scrive qui.
@@ -117,7 +117,7 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 |---|---|---|
 | 1 | 21 novembre 2026 | ogni 4 ore, 12 monete fisse, solo simulato. Mai usata |
 | 2 | 23 novembre 2026 | il modello sceglie monete e momenti, demo suo. Mai usata |
-| 6 | 26 novembre 2026 | il 3% è un obiettivo obbligatorio, non un tetto; a ogni chiamata il bilancio di oggi (direzioni, vinte e perse, prezzo da mezzanotte); sforzo di ragionamento «high» e risposta fino a 16.000 token (il proprietario: «non si deve fermare finché non ha raggiunto il 3% [...] l'AI deve sapere se il primo trade è fallito [...] che cosa hai creato come AI se non pensa») |
-| 5 | 25 novembre 2026 | obiettivo del giorno: il 3% del conto della mezzanotte UTC invece di 50 USDT (il proprietario: «il profitto giornaliero mettilo al 3%»), prima del primo avvio |
-| 4 | 24 novembre 2026 | conto simulato dal programma con i prezzi veri (nessuna chiave di Binance): l'unico account Binance del proprietario ha già il conto demo di G1 |
 | 3 | 23 novembre 2026 | moneta e intervalli scelti dal proprietario (BTC; 5, 15, 30 minuti), chiamata ogni 15 minuti e a ogni chiusura, obiettivo di 50 USDT al giorno poi stop, leva fino a 10, nessuna perdita massima, memoria per cambiare approccio, nessun dato dell'altra sessione |
+| 4 | 24 novembre 2026 | conto simulato dal programma con i prezzi veri (nessuna chiave di Binance): l'unico account Binance del proprietario ha già il conto demo di G1 |
+| 5 | 25 novembre 2026 | obiettivo del giorno: il 3% del conto della mezzanotte UTC invece di 50 USDT (il proprietario: «il profitto giornaliero mettilo al 3%»), prima del primo avvio |
+| 6 | 26 novembre 2026 | il 3% è un obiettivo obbligatorio, non un tetto; a ogni chiamata il bilancio di oggi (direzioni, vinte e perse, prezzo da mezzanotte); sforzo di ragionamento «high» e risposta fino a 16.000 token (il proprietario: «non si deve fermare finché non ha raggiunto il 3% [...] l'AI deve sapere se il primo trade è fallito [...] che cosa hai creato come AI se non pensa») |

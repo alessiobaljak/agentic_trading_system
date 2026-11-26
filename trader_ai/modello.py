@@ -28,7 +28,7 @@ def crea_client():
 
     ws = (os.environ.get("ANTHROPIC_WORKSPACE_ID") or "").strip()  # chiavi d'organizzazione: vedi bot/ai/client.py
     # max_retries=0: ogni tentativo si paga; il tetto conta una chiamata per giro, quindi l'SDK non deve riprovare da solo
-    return anthropic.Anthropic(timeout=300.0, max_retries=0,
+    return anthropic.Anthropic(timeout=600.0, max_retries=0,   # sforzo «high»: fino a 5 minuti
                                default_headers={"anthropic-workspace-id": ws} if ws else None)
 
 

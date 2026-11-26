@@ -60,7 +60,7 @@ def bilancio_di_oggi(operazioni: List[dict], giorno: str, prezzo_mezzanotte: Opt
         x = [o for o in oggi if o["lato"] == lato]
         if x:
             righe.append(f"- {lato}: {len(x)} operazioni, {sum(o['risultato'] > 0 for o in x)} vinte e "
-                         f"{sum(o['risultato'] <= 0 for o in x)} perse, risultato {sum(o['risultato'] for o in x):+.2f} USDT")
+                         f"{sum(o['risultato'] < 0 for o in x)} perse, risultato {sum(o['risultato'] for o in x):+.2f} USDT")
     if prezzo_mezzanotte:
         righe.append(f"- il prezzo da mezzanotte: da {prezzo_mezzanotte:g} a {prezzo:g} ({(prezzo / prezzo_mezzanotte - 1) * 100:+.2f}%)")
     return "\n".join(righe)
