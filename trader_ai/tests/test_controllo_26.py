@@ -311,7 +311,8 @@ def test_la_ricostruzione_parte_da_sola_una_volta(tmp_path):
     tr.passo()
     st = tr.carica()
     assert st["versione_memoria"] == 7 and "oi" not in st and st["operazioni"][0]["n"] == 1 and st["prossimo_n"] == 2
-    assert any("memoria ricostruita" in json.loads(x).get("evento", "") for x in tr.diario.read_text().splitlines())
+    assert any("memoria solo numerata: il conto non tiene la storia" in json.loads(x).get("evento", "")
+               for x in tr.diario.read_text().splitlines())                    # il conto finto non ha la storia (197)
 
 
 # --- quindicesima revisione (26 novembre 2026): 188, 189, 190, 192, 193 e i punti del messaggio -----------------------------
@@ -538,3 +539,114 @@ def test_annullare_nel_minuto_dopo_l_esecuzione_trova_la_posizione(tmp_path):
     o.ms = T0_MS + 2 * 60_000 + 500                                                # mezzo secondo dopo
     c.annulla_tutto()
     assert c.posizioni_tutte() and c.posizioni_tutte()[0]["entrata"] == 89500.0
+
+
+
+# --- riesame della quindicesima revisione (26 novembre 2026): 194-197 e N1-N5 ------------------------------------------------
+
+def test_annullare_un_limite_gia_eseguito_e_chiuso_lo_registra(tmp_path):
+    """194: il limite si era eseguito e chiuso nel minuto contato prima di annullare: l'operazione entra in memoria."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", **LIMITE), risposta("chiudi")])
+    tr.passo()
+    cid = tr.carica()["aperta"]["cid"]
+    vero = c.annulla_tutto
+
+    def annulla_e_scopri():
+        vero()
+        c.esiti[cid] = {"stato": "chiusa", "entrata": 89000.0, "quantita": 0.005,
+                        "eseguita_ms": int(T0.timestamp() * 1000) + 60_000, "chiusa_ms": int(T0.timestamp() * 1000) + 60_000,
+                        "uscita": 87991.2, "come": "stop", "spese_entrata": 0.089, "spese": 0.309, "funding": 0.0,
+                        "risultato_prezzo": -5.044, "netto": -5.353}
+    c.annulla_tutto = annulla_e_scopri
+    o.t = T0 + timedelta(minutes=14)
+    tr.passo()
+    st = tr.carica()
+    assert len(st["operazioni"]) == 1 and st["operazioni"][0]["uscita"] == 87991.2
+    assert st["richiama"] == "operazione chiusa (stop iniziale)"
+
+
+def test_ricostruzione_non_tocca_l_operazione_aperta(tmp_path):
+    """195: la posizione dell'operazione aperta nello stato non si aggiunge dalla ricostruzione."""
+    storia = {"chiuse": [{"lato": "lungo", "quantita": 0.01, "entrata": 90000.0, "leva": 5, "margine": 180.0, "cid": "taio7",
+                          "aperta_ms": 1, "chiusa_ms": 2, "da_limite": False}],
+              "movimenti": [{"cosa": "commissione", "importo": -0.45, "come": "a mercato"},
+                            {"cosa": "risultato", "importo": -10.0, "prezzo": 89000.0, "come": "stop"},
+                            {"cosa": "commissione", "importo": -0.445, "come": "stop"}], "funding_applicati": []}
+    diario = [{"ora": "1970-01-01T00:00:00+00:00", "evento": "aperta", "lato": "lungo", "entrata": 90000.0, "stop": 89000.0}]
+    ops, rapporto = ricostruisci([], storia, diario, "BTCUSDT", {"cid": "taio7", "lato": "lungo", "entrata": 90000.0})
+    assert ops == [] and rapporto["aggiunte"] == 0
+
+
+def test_eseguito_del_demo_senza_posizione_si_conferma_al_passo_dopo(tmp_path):
+    """196: sul demo «eseguito» vale anche per una posizione aperta: niente chiusura inventata al primo passo."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", **LIMITE)])
+    tr.passo()
+    cid = tr.carica()["aperta"]["cid"]
+    c.normali = []
+    c.esiti[cid] = {"stato": "eseguito", "entrata": 89000.0, "quantita": 0.005, "eseguita_ms": int(T0.timestamp() * 1000) + 60_000}
+    o.t = T0 + timedelta(minutes=4)
+    tr.passo()
+    assert tr.carica()["operazioni"] == [] and stop_sul_conto(c) == [88000.0]          # niente annullamenti
+    o.t = T0 + timedelta(minutes=4, seconds=30)
+    tr.passo()
+    assert len(tr.carica()["operazioni"]) == 1 and tr.carica()["aperta"] is None
+
+
+def test_annullamento_dopo_la_chiusura_non_riuscito_si_riprova(tmp_path):
+    """N1: la chiusura resta fatta e detta al modello; gli ordini rimasti si annullano al passo dopo e mai sotto una nuova."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", margine_usdt=100, leva=5, stop_prezzo=88000),
+                                               risposta("chiudi")])
+    tr.passo()
+    vero = c.annulla_tutto
+    guasto = {"si": True}
+
+    def annulla():
+        if guasto["si"]:
+            guasto["si"] = False
+            raise RuntimeError("rete")
+        vero()
+    c.annulla_tutto = annulla
+    c.chiudi = lambda pos, cid: (setattr(c, "pos", None), {"avgPrice": "90000"})[1]   # chiude senza annullare
+    o.t = T0 + timedelta(minutes=14)
+    tr.passo()
+    st = tr.carica()
+    assert st["operazioni"][-1]["come"] == "chiusa da te" and st["da_annullare"] and st["richiama"]
+    assert "NON è stata eseguita" not in (st.get("ultimo_scarto") or "")
+    o.t = T0 + timedelta(minutes=14, seconds=30)
+    tr.passo()
+    assert "da_annullare" not in tr.carica() and stop_sul_conto(c) == []
+
+
+def test_uscita_stimata_corretta_quando_l_esito_torna(tmp_path):
+    """N5: un'operazione registrata con l'uscita stimata si corregge con i dati del conto."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", margine_usdt=100, leva=5, stop_prezzo=88000)])
+    tr.passo()
+    cid = tr.carica()["aperta"]["cid"]
+    c.pos, c.algo, c.prezzo, c.conto = None, [], 88000.0, 990.0                         # lo stop, ma l'esito non c'è ancora
+    o.t = T0 + timedelta(minutes=2)
+    tr.passo()
+    assert tr.carica()["operazioni"][-1]["uscita_stimata"]
+    c.esiti[cid] = {"stato": "chiusa", "entrata": 90000.0, "quantita": 0.005, "eseguita_ms": int(T0.timestamp() * 1000),
+                    "chiusa_ms": int(T0.timestamp() * 1000) + 90_000, "uscita": 87991.2, "come": "stop", "spese_entrata": 0.225,
+                    "spese": 0.445, "funding": 0.0, "risultato_prezzo": -10.04, "netto": -10.49}
+    o.t = T0 + timedelta(minutes=3)
+    tr.passo()
+    op = tr.carica()["operazioni"][-1]
+    assert not op["uscita_stimata"] and op["uscita"] == 87991.2 and op["risultato"] == -10.49 and op["come"] == "stop iniziale"
+
+
+def test_numero_in_testa_al_diario_resta(tmp_path):
+    """N3: si toglie solo un'ora vera, non un numero come 0.42."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta(diario="0.42% di distanza dal vwap")])
+    tr.passo()
+    assert tr.carica()["note"][-1] == "24/11 10:01 0.42% di distanza dal vwap"
+
+
+def test_lati_del_bilancio_con_la_stessa_regola_del_netto():
+    """N2: il netto dei lunghi e dei corti torna con quello del giorno."""
+    from trader_ai.messaggio import riga_bilancio
+    ops = [{"chiusa": "2026-11-25T10:00:00+00:00", "lato": "lungo", "risultato": -1.0, "risultato_prezzo": -0.333,
+            "spese": 0.666, "funding": 0.0, "come": "stop iniziale"},
+           {"chiusa": "2026-11-25T11:00:00+00:00", "lato": "lungo", "risultato": -1.0, "risultato_prezzo": -0.333,
+            "spese": 0.666, "funding": 0.0, "come": "stop iniziale"}]
+    assert "netto -2.00 USDT" in riga_bilancio("oggi", ops) and "lunghi 2 (0 vinte, 2 perse, -2.00)" in riga_bilancio("oggi", ops)

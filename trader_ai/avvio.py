@@ -114,7 +114,9 @@ class Trader:
     def __init__(self, conto: ContoDemo, chiama_modello: Callable[[str, str], Esito], cartella: Path = CARTELLA,
                  ora: Callable[[], datetime] = lambda: datetime.now(timezone.utc), messaggi: Optional[Path] = None) -> None:
         self.c, self.chiama, self.cartella, self.ora = conto, chiama_modello, Path(cartella), ora
-        self.cartella_messaggi = Path(messaggi) if messaggi else self.cartella / "messaggi"
+        # senza indicazione: sulla macchina (cartella dei dati di sempre) fuori da avanti/, altrove accanto ai dati (revisione 197)
+        self.cartella_messaggi = Path(messaggi) if messaggi else (
+            CARTELLA_MESSAGGI if self.cartella == CARTELLA else self.cartella / "messaggi")
         self.f_stato = self.cartella / "stato.json"
         self.diario = self.cartella / "diario.jsonl"
         self.budget = Budget(self.cartella / "spesa.json")
@@ -195,18 +197,25 @@ class Trader:
                                  "conto": float(getattr(self.c, "capitale", 0) or CAPITALE_PROVA)})
         if st.get("versione_memoria", 0) < VERSIONE_MEMORIA:
             self._ripara_memoria(st, ora)
+        if st.get("da_annullare") and not st.get("aperta"):
+            # un annullamento dopo una chiusura non era riuscito: stop e obiettivo vecchi non devono restare sul conto (revisione
+            # del 26 novembre 2026, N1)
+            self.c.annulla_tutto()
+            st.pop("da_annullare", None)
+            self.evento(ora, "ordini rimasti dopo una chiusura annullati")
         s = self.c.saldo()
         m = self.c.mercato()
         prezzo = m["prezzo"]
         pos = next(({k: v for k, v in p.items() if k != "simbolo"} for p in posizioni if p["simbolo"] == self.c.simbolo), None)
 
+        self._correggi_uscite_stimate(st, ora)
         # una chiusura (o un annullamento) decisa dal modello al passo prima: il modello si richiama subito (punto 2.10 del
         # controllo del 26 novembre); qui c'è già il motivo intero della chiamata
         richiama = st.pop("richiama", None)
         chiusa = None
         a = st.get("aperta")
         if a and pos is not None and a.get("inviata"):                     # risposta persa ma ordine eseguito: è nostra
-            a.pop("inviata", None)
+            self._eseguito(a, self._esito_o_niente(a), ora, pos)          # con entrata, ora, spese e 1 R (revisione, 197)
             self.evento(ora, "apertura eseguita anche se la risposta si era persa")
         if a and pos is None and a.get("inviata"):                         # ordine a mercato mai eseguito (risposta persa o rifiuto)
             if not any(o.get("clientOrderId") == a.get("cid") for o in ordini):
@@ -332,7 +341,8 @@ class Trader:
             if r.cambio_approccio:
                 st["cambi_approccio"] = st.get("cambi_approccio", 0) + 1
             st["approccio"] = taglia(r.approccio, 250)
-            diario = re.sub(r"^\s*\d{1,2}[:.]\d{2}(?::\d{2})?\s*[:,—–-]?\s*", "", r.diario or "")   # l'ora c'è già (R7-10)
+            # l'ora c'è già (R7-10); solo un'ora vera con i due punti, non un numero come 0.42 (revisione, N3)
+            diario = re.sub(r"^\s*(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?!\d)\s*[:,—–-]?\s*", "", r.diario or "")
             st["note"] = (st["note"] + [f"{ora:%d/%m %H:%M} {taglia(diario, 700)}"])[-10:]
             self._lezioni(st, r, ora, motivo, conto)
         self.salva(st)
@@ -459,6 +469,12 @@ class Trader:
             self.evento(ora, "ordine limite eseguito", entrata=a["entrata"], eseguita=a["eseguita"])
             return pos, None
         stato = (esito or {}).get("stato")
+        if stato == "eseguito" and not a.get("eseguito_senza_posizione"):
+            # sul conto demo «eseguito» vale anche per una posizione ancora aperta: se la posizione non si vede, si conferma al
+            # passo dopo prima di registrare una chiusura e togliere stop e obiettivo (revisione del 26 novembre 2026, 196)
+            a["eseguito_senza_posizione"] = ora.isoformat()
+            self.evento(ora, "ordine limite eseguito ma posizione non vista: confermo al passo dopo")
+            return None, None
         if stato in ("chiusa", "eseguito"):
             # eseguito e chiuso fra due controlli: prima spariva dalla memoria (punto 2.2 del controllo del 26 novembre)
             self._eseguito(a, esito, ora)
@@ -524,6 +540,7 @@ class Trader:
             come = "obiettivo"
         else:
             come = "chiusa sul conto (stop, obiettivo o liquidazione)"
+        come_stimato = not a.get("chiusa_da") and dati is None
         chiusa_iso = iso_da_ms(dati["chiusa_ms"]) if dati and dati.get("chiusa_ms") else ora.isoformat()
         op = {"n": st.get("prossimo_n") or len(st["operazioni"]) + 1, "aperta": a["aperta"], "tipo": a.get("tipo"),
               "eseguita": a.get("eseguita"), "chiusa": chiusa_iso, "lato": a["lato"], "leva": a["leva"],
@@ -533,7 +550,7 @@ class Trader:
               "atr15": a.get("atr15"), "motivo": a.get("motivo", ""), "approccio": a.get("approccio", ""),
               "margine": a.get("margine"), "giorno_prima": a.get("giorno_prima"), "mancava": a.get("mancava"),
               "ore_a_mezzanotte": a.get("ore_a_mezzanotte"), "rischio_pct": a.get("rischio_pct"), "nota": a.get("nota"),
-              "inviato": a.get("inviato")}
+              "inviato": a.get("inviato"), "cid": a.get("cid"), "come_stimato": come_stimato}
         if dati:
             op.update(spese_entrata=dati.get("spese_entrata"), spese=round(dati.get("spese") or 0.0, 6),
                       funding=round(dati.get("funding") or 0.0, 6), risultato_prezzo=round(dati.get("risultato_prezzo") or 0.0, 6),
@@ -554,9 +571,35 @@ class Trader:
         for lez in st.get("lezioni", []):                                 # le lezioni entrano nella memoria stabile
             lez["fissata"] = True
         st["aperta"] = None
-        self.c.annulla_tutto()                        # l'altro ordine condizionato (stop o obiettivo) non serve più
         self.evento(ora, "operazione chiusa", **{k: v for k, v in op.items() if k not in ("motivo", "spostamenti")})
+        try:
+            self.c.annulla_tutto()                    # l'altro ordine condizionato (stop o obiettivo) non serve più
+        except Exception as e:  # noqa: BLE001 - la chiusura è fatta e registrata; l'annullamento si riprova (revisione, N1)
+            st["da_annullare"] = True
+            self.evento(ora, "annullamento dopo la chiusura non riuscito: riprovo al passo dopo", errore=str(e)[:200])
         return come
+
+    def _correggi_uscite_stimate(self, st: dict, ora: datetime) -> None:
+        """Un'operazione registrata con l'uscita stimata (esito del conto non letto in quel momento) si corregge appena l'esito
+        torna leggibile: uscita, ora, spese, funding e netto veri (revisione del 26 novembre 2026, N5)."""
+        for op in st.get("operazioni", [])[-5:]:
+            if not (op.get("uscita_stimata") and op.get("cid")) or op.get("tentativi_uscita", 0) >= 20:
+                continue
+            op["tentativi_uscita"] = op.get("tentativi_uscita", 0) + 1
+            e = self._esito_o_niente(op)
+            if not (e and e.get("stato") == "chiusa"):
+                continue
+            op.update(uscita=e.get("uscita"), uscita_stimata=False, chiusa=iso_da_ms(e.get("chiusa_ms")) or op["chiusa"],
+                      spese_entrata=e.get("spese_entrata"), spese=round(e.get("spese") or 0.0, 6),
+                      funding=round(e.get("funding") or 0.0, 6), risultato_prezzo=round(e.get("risultato_prezzo") or 0.0, 6),
+                      risultato=round(e["netto"], 2))
+            if op.get("come_stimato"):
+                op["come"] = tipo_di_stop(op.get("spostamenti") or []) if e.get("come") == "stop" else e.get("come") or op["come"]
+                op["come_stimato"] = False
+            if op.get("R"):
+                op["r"] = round(op["risultato"] / op["R"], 2)
+            op.pop("tentativi_uscita", None)
+            self.evento(ora, "uscita dell'operazione corretta con i dati del conto", n=op.get("n"), uscita=op["uscita"])
 
     def _ripara_memoria(self, st: dict, ora: datetime) -> None:
         """Una volta sola: ricostruisce dal conto simulato e dal diario la memoria scritta prima del 26 novembre 2026, con le
@@ -578,7 +621,7 @@ class Trader:
         st.pop("tentativi_ripara", None)
         try:
             diario = [json.loads(x) for x in self.diario.read_text().splitlines() if x.strip()] if self.diario.exists() else []
-            ops, rapporto = ricostruisci(st.get("operazioni") or [], storia, diario, self.c.simbolo)
+            ops, rapporto = ricostruisci(st.get("operazioni") or [], storia, diario, self.c.simbolo, st.get("aperta"))
         except Exception as e:  # noqa: BLE001 - la memoria resta com'era (numerata), senza riprovare a ogni passo
             ops = st.get("operazioni") or []
             for n, o in enumerate(ops, start=1):
@@ -596,10 +639,16 @@ class Trader:
                     break
         st["operazioni"] = ops
         st["prossimo_n"] = len(ops) + 1
-        if not st["lezioni"]:
-            st["lezioni"] = lezioni_dal_diario(diario, ops)[-50:]
-        self.evento(ora, "memoria ricostruita dal conto e dal diario (controllo del 26 novembre 2026)", **rapporto,
-                    lezioni=len(st["lezioni"]))
+        # i perché vecchi si uniscono alle lezioni che ci sono già (anche scritte mentre la ricostruzione aspettava: N4)
+        gia = {(x.get("ora"), x.get("testo")) for x in st["lezioni"]}
+        st["lezioni"] = sorted(st["lezioni"] + [x for x in lezioni_dal_diario(diario, ops) if (x["ora"], x["testo"]) not in gia],
+                               key=lambda x: x.get("ora") or "")[-50:]
+        if storia is None:                            # revisione, 197: detto com'è andata
+            perche = "conto non letto" if hasattr(self.c, "storia") else "il conto non tiene la storia delle posizioni"
+            self.evento(ora, f"memoria solo numerata: {perche}", lezioni=len(st["lezioni"]))
+        else:
+            self.evento(ora, "memoria ricostruita dal conto e dal diario (controllo del 26 novembre 2026)", **rapporto,
+                        lezioni=len(st["lezioni"]))
         if not (rapporto["corrette"] or rapporto["aggiunte"]):
             return
         oggi = ora.strftime("%Y-%m-%d")
@@ -657,7 +706,8 @@ class Trader:
         if self.fermo_a_mano():
             raise Scartata("il proprietario ha fermato il trader")
         posizioni = self.c.posizioni_tutte()
-        motivo = self.estraneo(st, posizioni, self.c.ordini_tutti(), modo=False)
+        ordini_conto = self.c.ordini_tutti()
+        motivo = self.estraneo(st, posizioni, ordini_conto, modo=False)
         if motivo:
             raise Scartata(f"il conto non è solo del trader: {motivo}")
         # la posizione si rilegge adesso: mentre il modello pensava (anche minuti) un ordine limite può essersi eseguito, e
@@ -690,6 +740,9 @@ class Trader:
         if scarto:
             raise Scartata(f"con il prezzo di adesso ({prezzo:.10g}) la decisione non vale più: {scarto}")
         if r.azione in ("apri_lungo", "apri_corto"):
+            if st.get("aperta") is None and any(nostro(o) for o in ordini_conto):
+                self.c.annulla_tutto()                 # ordini rimasti da un'operazione chiusa: mai sotto una nuova (N1)
+                st.pop("da_annullare", None)
             lato = "lungo" if r.azione == "apri_lungo" else "corto"
             leva = int(r.leva)
             limite = r.tipo_ordine == "limite"
@@ -809,6 +862,19 @@ class Trader:
             if any(nostro(o) and not o["_algo"] for o in self.c.ordini_simbolo()):
                 self.evento(ora, "ordine limite ancora aperto dopo l'annullamento: resta in attesa")
                 raise RuntimeError("l'ordine limite non si è annullato: riprovo alla chiamata dopo")
+            a = st.get("aperta")
+            if a:
+                # il limite può essersi eseguito e chiuso proprio nel minuto contato prima di annullare (revisione, 194)
+                try:
+                    esito = self._esito(a)
+                except Exception as e:  # noqa: BLE001 - stato sconosciuto: resta in attesa, si riprova
+                    self.evento(ora, "esito dell'ordine limite non letto dopo l'annullamento", errore=str(e)[:200])
+                    raise RuntimeError("lo stato dell'ordine limite non si è potuto leggere: riprovo alla chiamata dopo") from None
+                if esito and esito.get("stato") in ("chiusa", "eseguito"):
+                    self._eseguito(a, esito, ora)
+                    self.evento(ora, "il limite si era eseguito e chiuso prima dell'annullamento")
+                    self._registra_chiusura(st, a, self.c.saldo()["conto"], prezzo, ora, esito)
+                    return
             st["aperta"] = None
             self.evento(ora, perche)
             return

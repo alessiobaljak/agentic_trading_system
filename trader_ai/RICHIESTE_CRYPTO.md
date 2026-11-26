@@ -31,5 +31,5 @@ che la sessione delle crypto li copi o li colleghi in `reviews/INDEX.md`, `REVIE
 primo rapporto), così la memoria del revisore li conosce.
 
 Le righe pronte per `reviews/` sono in `trader_ai/revisioni/righe_per_reviews.patch`: basta `git apply`. Applicate il 26 novembre fino
-alla quattordicesima revisione (`docs/risposte_trading_ai.md`). **Nuove dal 26 novembre**: la quindicesima revisione e il suo riesame
-(`trader_ai/revisioni/2026-11-26-quindicesima.md`; problemi fino al 197); la patch le scrive su `0de9328` (`git apply --check` passato).
+alla quattordicesima revisione (`docs/risposte_trading_ai.md`). **Nuove dal 26 novembre**: la quindicesima revisione e i suoi due riesami
+(`trader_ai/revisioni/2026-11-26-quindicesima.md`; problemi fino al 202, i nuovi partono da 203); `git apply --check` passato.

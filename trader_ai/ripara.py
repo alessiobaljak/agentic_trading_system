@@ -83,8 +83,10 @@ def _stop_e_spostamenti(op: dict, apertura: Optional[dict], modifiche: List[dict
     op.update(stop_iniziale=si, obiettivo_iniziale=oi, spostamenti=spostamenti)
 
 
-def ricostruisci(ops: List[dict], storia: Optional[dict], diario: List[dict], simbolo: str) -> Tuple[List[dict], dict]:
-    """Ritorna (operazioni ricostruite e numerate, rapporto)."""
+def ricostruisci(ops: List[dict], storia: Optional[dict], diario: List[dict], simbolo: str,
+                 aperta: Optional[dict] = None) -> Tuple[List[dict], dict]:
+    """Ritorna (operazioni ricostruite e numerate, rapporto). `aperta`: l'operazione aperta nello stato, che la ricostruzione non
+    tocca (se si è chiusa, la registra il passo: revisione del 26 novembre 2026, problema 195)."""
     rapporto = {"corrette": 0, "aggiunte": 0, "lasciate": 0}
     ops = [dict(o) for o in ops]
     if storia:
@@ -101,6 +103,10 @@ def ricostruisci(ops: List[dict], storia: Optional[dict], diario: List[dict], si
         aperture, modifiche, decisioni = _dal_diario(diario)
         usate = set()
         for i, (p, m) in enumerate(zip(chiuse, dai_mov)):
+            if aperta and ((p.get("cid") and p.get("cid") == aperta.get("cid"))
+                           or (p["lato"] == aperta.get("lato") and abs(p["entrata"] - (aperta.get("entrata") or 0)) < TOLLERANZA
+                               and p["aperta_ms"] >= (ms(aperta.get("aperta")) or 0) - 1000)):
+                continue
             op = next((o for j, o in enumerate(ops) if j not in usate and o["lato"] == p["lato"]
                        and abs(o["entrata"] - p["entrata"]) < TOLLERANZA and (ms(o["aperta"]) or 0) <= p["aperta_ms"] + 1000), None)
             apertura = next((r for r in reversed(aperture) if r.get("lato") == p["lato"]

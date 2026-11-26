@@ -1,8 +1,6 @@
-diff --git a/reviews/INDEX.md b/reviews/INDEX.md
-index 6524676..be43b70 100644
 --- a/reviews/INDEX.md
 +++ b/reviews/INDEX.md
-@@ -8,21 +8,21 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
+@@ -8,21 +8,21 @@
  - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10. `ARCHIVE.md` — revisioni più vecchie, chiuse.
  - `reports/` — un rapporto completo per revisione.
  
@@ -18,12 +16,12 @@ index 6524676..be43b70 100644
 -- 17 nov, funding demo contro paper: committato come `d5c6708` con le correzioni 90-92 della sessione principale (19 righe diverse dalla
 -  copia; grep del 25 nov: nessuna riga su richieste, cliente o chiavi). Chiusa.
 +## Stato (aggiornato al 26 nov 2026)
-+- **Ultima revisione**: riesame della quindicesima (sezione «Riesame» di `trader_ai/revisioni/2026-11-26-quindicesima.md`),
-+  trader AI versione 7 non committata su `0de9328`: **APPROVE con condizioni** per il riavvio sul conto simulato (188-193 chiusi;
-+  194, 195, 197 Bassi; 196 Medio solo demo). Condizioni: riavvio con nessuna operazione aperta, md5 al commit (`avvio.py`
-+  97c2750e), demo spento fino al 196. Prove: `.../scratchpad/riesame_v7/test_riesame_*.py` (sessione 3e86fc2d; 42 passate).
-+- **Numeri dei problemi**: trader AI fino al 197 (187 non usato); i nuovi partono da 198.
-+- Trader AI (area `trader_ai/`): quindici revisioni e un riesame in `trader_ai/revisioni/` (23-26 nov); 184-186 chiusi nel `f7fe784`. Nel registro
++- **Ultima revisione**: secondo riesame della quindicesima (sezione «Secondo riesame» di `trader_ai/revisioni/2026-11-26-quindicesima.md`),
++  copia `.../scratchpad/wt2` su `c52fbab`: **APPROVE con condizioni** per commit e riavvio sul simulato (194-197 e N1-N5 chiusi; 198 Medio
++  solo demo; 202 Medio, test da aggiungere prima del commit; 199-201 Bassi). md5 al commit: `avvio.py` c19205d2, `messaggio.py` 0ca870c9,
++  `ripara.py` 4e1e13a9. Prove: `.../scratchpad/riesame2_v7/` (sessione 3e86fc2d; il primo riesame in `riesame_v7/`).
++- **Numeri dei problemi**: trader AI fino al 202 (187 non usato); i nuovi partono da 203.
++- Trader AI (area `trader_ai/`): quindici revisioni e due riesami in `trader_ai/revisioni/` (23-26 nov); 184-186 chiusi nel `f7fe784`. Nel registro
 +  di qui la settima (condizioni per i soldi veri: 146, 147) e le ultime tre.
 +- Conto vero su F5 (25 nov): `reports/2026-11-25-conto-vero-F5-2.md`, APPROVE per il commit del codice spento; al commit confrontare
 +  le md5 (`conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py` 99c9fd1f). 180, 181 Medi e 182, 183 Bassi aperti.
@@ -32,58 +30,54 @@ index 6524676..be43b70 100644
    S4 (`giro12nov/test_prove_12nov.py`) e `mutazioni2.py`.
 -- Voci aperte: 6 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; trader AI settima; F5 25 nov, secondo giro).
 +- Voci aperte: 7 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; trader AI settima; F5 secondo
-+  giro; trader AI riesame della quindicesima).
++  giro; trader AI secondo riesame della quindicesima).
  
  ## Promemoria
  - Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero lo riusa con `HOST = "fapi.binance.com"`,
-@@ -34,6 +34,7 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
+@@ -34,6 +34,7 @@
    test (aiuti `_repo`/`_commit` di `tests/test_conto_vero.py`).
  - Mutazioni su una copia di `bot/`, dei test e di `research/programma6/` (`giro25nov_b/copia`); `env -i` è negato: `os.environ`.
  - Test dei limiti: `tests/test_risk.py`, `tests/test_sizing.py:104`, demo `tests/test_demo_binance.py:1520`, conto vero
 -  `tests/test_conto_vero.py:161`. Suite al 25 nov: 2826 passed, 1 deselected (la firma passa con `PYTHONPATH=<cartella di lavoro>/cripto`).
 -- Vietate le letture di `dashboard/node_modules`; `find` sulla radice è negato: usare Glob. Il gancio dei segreti blocca i comandi che
-+  `tests/test_conto_vero.py:161`. Suite al 26 nov: 2825 passed, 1 failed (ricerca, estraneo), 1 skipped.
++  `tests/test_conto_vero.py:161`. Suite al 26 nov sera: 2825 passed, 1 skipped, 1 deselected (ricerca).
 +- Dall'area `trader_ai` non si scrive in `reviews/` (blocco delle aree): righe nuove come differenza per la sessione crypto. Vietate
 +  le letture di `dashboard/node_modules`; `find` sulla radice è negato: usare Glob. Il gancio dei segreti blocca i comandi che
    nominano file `.env`. In `reviews/` si scrive con Write o con un breve script Python.
-diff --git a/reviews/REVIEW_LOG.md b/reviews/REVIEW_LOG.md
-index 2627efe..c30ba8d 100644
 --- a/reviews/REVIEW_LOG.md
 +++ b/reviews/REVIEW_LOG.md
-@@ -8,9 +8,6 @@ Una riga per revisione. Restano qui le voci aperte e le ultime 10; le altre vann
+@@ -8,14 +8,13 @@
  | 2026-11-07 | claude/brave-albattani-1b12fv | 782a01fc (codice del percorso = b29f5713) | primo avvio: revisione completa dello stato attuale (demo, rischio, vecchio esecutore, configurazione, Firebase, ops) | REQUEST CHANGES (0 bloccanti oggi, 9 alti, 11 medi, 4 bassi) | aperta: Alti 1-9 chiusi; dei Medi e Bassi 10-24, nel `1a8522f` 12, 15, 21 chiusi, 10, 13, 16, 22 in parte, 23 come chiesto; 11, 14, 17-20, 24 aperti | `reviews/reports/2026-11-07-primo-avvio.md` |
  | 2026-11-07 | claude/brave-albattani-1b12fv | 5d5d26ad (padre a752e9f3; già sul remoto, bot non riavviato) | correzioni dei problemi 25-31 (annullo rifiutato, identificativo per ribilancio, «riparti» a file, attesa delle protezioni, avvio con `DRY_RUN` falso, commenti, ordini da fermo) | REQUEST CHANGES (0 bloccanti, 0 alti; 1 medio nuovo: 32, regressione; 3 bassi: 33-35) | aperta: 32 chiuso dal 013f9426; 33 con allarme visibile (39 chiuso dal 755bde2); 34, 35 aperti (35 toccato dalla fase 2) | `reviews/reports/2026-11-07-correzioni-25-31.md` |
  | 2026-11-12 | claude/brave-albattani-1b12fv | non committato su 7e9adba (codice del percorso = a267c40), secondo giro | correzioni di 74 (approvazione letta davvero negli ultimi 10 minuti, con git), 75 (da spento ogni 10 minuti), 76 (fermo riscritto), 77, e la parte «subito» del 54 (commenti, test di guardia) | APPROVE per il commit; REQUEST CHANGES per l'accensione (54 ii Alto; 70 Medio; 78 Basso nuovo, il test di guardia non vede la costante importata) | aperta (fino all'accensione): 74-77 chiusi; committato come `da91124` | `reviews/reports/2026-11-12-conto-vero-versione-firebase-2.md` |
 -| 2026-11-17 | claude/brave-albattani-1b12fv | non committato su 6cad6f4 | `scripts/state_snapshot.py`: sezione `sezione_funding_demo_paper` (funding di G1 per regolamento, demo da `GET /fapi/v1/income` FUNDING_FEE su 3 giorni, paper da `/paper_g1/funding/{giorno}/{ora}`, in % dell'equity di oggi di ciascuno), stesso cliente; `tests/test_funding_demo_paper.py` | APPROVE (0 bloccanti, 0 alti, 0 medi; Bassi 90 monete della riga «altre» non confrontabili, 91 «—» non spiegato, 92 Firebase muto = «non ancora», 93 letture doppie, 94 test) | chiusa: committata come `d5c6708` con le correzioni dei Bassi 90-92 della sessione principale (19 e 20 righe diverse dalla copia approvata; controllato il 25 nov con grep: nessuna riga su richieste a Binance, cliente, liste ammesse o chiavi; il resto non rivisto riga per riga) | `reviews/reports/2026-11-17-stato-funding-demo-paper.md` |
 -| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | primo avvio del trader AI sul suo demo (`trader_ai/`: conto_demo, avvio, limiti, costi, modello, servizio) | REQUEST CHANGES (1 Bloccante, 3 Alti, 7 Medi, 9 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-primo-avvio.md` |
 -| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della prima | REQUEST CHANGES (1 Alto, 4 Medi, 6 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-seconda.md` |
- | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della seconda | REQUEST CHANGES (3 Medi: 126-128; 4 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-terza.md` |
+-| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della seconda | REQUEST CHANGES (3 Medi: 126-128; 4 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-terza.md` |
  | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della terza | REQUEST CHANGES (1 Alto: 133) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-quarta.md` |
  | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della quarta | APPROVE con condizioni (133-135 chiusi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-quinta.md` |
-@@ -18,4 +15,6 @@ Una riga per revisione. Restano qui le voci aperte e le ultime 10; le altre vann
+ | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della quinta | APPROVE con condizioni | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-sesta.md` |
  | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni dei problemi 143 e 149 | **APPROVE con condizioni** (143, 149 chiusi; Bassi 150, 151; prima dei soldi veri correggere 146 e 147) | aperta: condizioni prima del primo avvio (Alessio) | `trader_ai/revisioni/2026-11-23-settima.md` |
  | 2026-11-25 | claude/brave-albattani-1b12fv | non committato su 932c048 (md5 `conto_vero.py` f3d97671, test d0c657c7) | il conto vero esegue F5 al posto di G1: `STRATEGIA`, `FILE_STRATEGIA` = `data/paper_f5.json`, età massima della decisione da 26 ore a 8 giorni e 2 ore, file predefinito di `ContoVeroG1`; guardia del test | REQUEST CHANGES (0 bloccanti, 0 alti; Medi 178 test che non coprono la modifica, 179 strategia non dichiarata e testi «G1» e «mezzanotte», 180 limiti dei pesi solo al lunedì, 181 blocco sopra il lunedì salta la settimana; Basso 182) | chiusa dal secondo giro: 178 e 179 chiusi (il resto del 179 è il 183); 180-182 seguiti nel secondo giro | `reviews/reports/2026-11-25-conto-vero-F5.md` |
  | 2026-11-25 | claude/brave-albattani-1b12fv | non committato su ecf55d7 (percorso degli ordini = 932c048), secondo giro; md5 `conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py` 99c9fd1f, `test_conto_vero.py` d0c657c7 | correzioni di 178 (`tests/test_conto_vero_f5.py`, 8 test) e 179 (`STRATEGIA` della classe, testi degli allarmi dell'età, avvio con `strategia` e `file_della_decisione`, prima accensione «il lunedì», scheda «F5 sul conto vero» e testi del «riparti», piano) | **APPROVE per il commit** del codice spento (178, 179 chiusi; 183 Basso nuovo: testi «G1» rimasti, allarme dei pesi, tre righe del log, fotografia, piano); REQUEST CHANGES per l'accensione (54 ii Alto; 70, 180, 181 Medi; 78, 182, 183 Bassi) | aperta: al commit confrontare le impronte; fino all'accensione | `reviews/reports/2026-11-25-conto-vero-F5-2.md` |
 -| 2026-11-26 | claude/brave-albattani-1b12fv | `d9c8af7` | trader AI: obiettivo obbligatorio, bilancio di oggi, sforzo «high», `MAX_TOKENS` 16000 | **APPROVE con condizioni** (Medio 184, Bassi 185, 186) | aperta: 184 e 185 prima del riavvio (ok di Alessio) | `trader_ai/revisioni/2026-11-26-quattordicesima.md` |
 +| 2026-11-26 | claude/brave-albattani-1b12fv | `d9c8af7` | trader AI: obiettivo obbligatorio, bilancio di oggi, sforzo «high», `MAX_TOKENS` 16000 | **APPROVE con condizioni** (Medio 184, Bassi 185, 186) | chiusa: 184-186 corretti nel `f7fe784` (letto il 26 nov: tempo massimo 600 s, testi, pari non contate fra le perse); superata dalla quindicesima | `trader_ai/revisioni/2026-11-26-quattordicesima.md` |
 +| 2026-11-26 | claude/brave-albattani-1b12fv | non committato su `0de9328` (md5 `avvio.py` 89497691, `conto_simulato.py` b76a4e29, `conto_demo.py` 453e0288, `limiti.py` ea69db16, `ripara.py` ef2b2fc6) | trader AI versione 7, correzioni del controllo del 26 nov: limite in attesa detto come tale, limite eseguito e chiuso fra due controlli, esito degli ordini dal conto, stop e obiettivo del simulato per lato, memoria ricostruita, richiamo dopo «chiudi», cache da un'ora | **REQUEST CHANGES** (Bloccante 188: stop tolto da una posizione aperta nella corsa fra la lettura delle posizioni e quella degli ordini, regressione; Alto 189: esito in errore = «mai eseguito»; Medi 190 ricostruzione con il conto non letto, 193 limite che incrocia senza stop, preesistente; Bassi 191 messaggi nel repository, 192 «chiusa da te» sopra lo stop) | superata dal riesame dello stesso giorno (188-193 chiusi) | `trader_ai/revisioni/2026-11-26-quindicesima.md` |
-+| 2026-11-26 | claude/brave-albattani-1b12fv | non committato su `0de9328`, riesame (md5 `avvio.py` 97c2750e, `conto_simulato.py` c7f7e815, `conto_demo.py` 453e0288, `limiti.py` 19144b5b, `modello.py` 46038db6, `ripara.py` b4628098, `messaggio.py` 68cd3e83, `operazioni.py` 3120d09a) | riesame della quindicesima: correzioni di 188-193 (limite sparito con rilettura della posizione, esito in errore senza azioni, ricostruzione rimandata, messaggi fuori da `avanti/`, «chiusa da te» dopo la chiusura, limite che incrocia), obiettivo di un limite sul conto all'esecuzione, cambio di giorno dopo le chiusure, `messages.create` con lo schema | **APPROVE con condizioni** per il riavvio sul simulato (188-193 chiusi con prove; nuovi: 194, 195, 197 Bassi, 196 Medio solo demo) | aperta: riavvio con nessuna operazione aperta (195) e ok di Alessio; al commit confrontare le md5; demo spento fino al 196 | `trader_ai/revisioni/2026-11-26-quindicesima.md` (sezione «Riesame») |
-diff --git a/reviews/ARCHIVE.md b/reviews/ARCHIVE.md
-index 7f280a7..4cd1164 100644
++| 2026-11-26 | claude/brave-albattani-1b12fv | non committato su `0de9328`, riesame (md5 `avvio.py` 97c2750e, `conto_simulato.py` c7f7e815, `conto_demo.py` 453e0288, `limiti.py` 19144b5b, `modello.py` 46038db6, `ripara.py` b4628098, `messaggio.py` 68cd3e83, `operazioni.py` 3120d09a) | riesame della quindicesima: correzioni di 188-193 (limite sparito con rilettura della posizione, esito in errore senza azioni, ricostruzione rimandata, messaggi fuori da `avanti/`, «chiusa da te» dopo la chiusura, limite che incrocia), obiettivo di un limite sul conto all'esecuzione, cambio di giorno dopo le chiusure, `messages.create` con lo schema | **APPROVE con condizioni** per il riavvio sul simulato (188-193 chiusi con prove; nuovi: 194, 195, 197 Bassi, 196 Medio solo demo) | superata dal secondo riesame (194-197 chiusi; il codice del riesame è `c52fbab`, stesse md5) | `trader_ai/revisioni/2026-11-26-quindicesima.md` (sezione «Riesame») |
++| 2026-11-26 | claude/brave-albattani-1b12fv | copia non committata su `c52fbab`, secondo riesame (md5 `avvio.py` c19205d2, `messaggio.py` 0ca870c9, `ripara.py` 4e1e13a9, `tests/test_controllo_26.py` 3b7fc12a) | correzioni di 194-197 e di N1-N5 del verificatore: chiusura registrata anche con l'annullamento in errore (ripreso al passo dopo e prima di aprire), «eseguito» del demo confermato al passo dopo, limite annullato già eseguito e chiuso registrato, ricostruzione senza l'operazione aperta, uscite stimate corrette dal conto, lezioni unite, testi | **APPROVE con condizioni** (nuovi: 198 Medio solo demo, posizione senza stop in `_annulla_limite`; 202 Medio, sei correzioni senza test; 199 Basso solo demo, 200 Basso preesistente, 201 Basso solo al passaggio dalla versione 6) | aperta: test mancanti prima del commit (202); riavvio con nessuna operazione aperta (201) e ok di Alessio; md5 al commit; demo spento fino a 198 e 199 | `trader_ai/revisioni/2026-11-26-quindicesima.md` (sezione «Secondo riesame») |
 --- a/reviews/ARCHIVE.md
 +++ b/reviews/ARCHIVE.md
-@@ -18,3 +18,6 @@ Le righe di `REVIEW_LOG.md` chiuse e più vecchie delle ultime 10.
+@@ -18,3 +18,7 @@
  | 2026-11-12 | claude/brave-albattani-1b12fv | non committato su 6785d17 | `scripts/state_snapshot.py`: sezione `sezione_demo_esecuzioni` (esecuzioni, commissione e funding del conto demo in sola lettura, con la richiesta «stato») e `tests/test_demo_esecuzioni.py` | REQUEST CHANGES (0 bloccanti, 0 alti; 79 Medio: nessuna finestra vietata, lo «stato» parte ogni giorno alle 00:24 UTC nell'ora degli ordini limite; 80 Basso: 429 e 418 ritentati dal cliente; 81 Basso: coda vicina al taglio dei 20.000 caratteri); secondo giro APPROVE (79-81 chiusi) | chiusa: committata come `3566bd4` (non confrontata con una copia) | `reviews/reports/2026-11-12-stato-demo-esecuzioni.md` |
  | 2026-11-12 | claude/brave-albattani-1b12fv | non committato su 4f61aaf | funding dei paper: `f5.py` (punto per moneta `funding_visti`, sospesi al ribilancio `funding_sospesi`, `/paper_g1/funding`), `eventi.py` (punto per gamba), test | REQUEST CHANGES per commit e riavvio (0 bloccanti, 0 alti; 82 Medio: chiave con «/» in `funding_regolamenti` nello stato di G1, `/paper_g1/stato_interno` rifiutato da Firebase); secondo giro APPROVE (82 chiuso; 83 Basso latente) | chiusa: committata come `3624baa` (non confrontata con una copia); 83 aperto | `reviews/reports/2026-11-12-funding-dei-paper.md` |
  | 2026-11-14 | claude/brave-albattani-1b12fv | non committato su 6740920 | `scripts/state_snapshot.py`: sezione `sezione_pesi_g1_oggi` (pesi di oggi di G1 moneta per moneta, paper da `/paper_g1/posizioni` e demo da `GET /fapi/v2/positionRisk` sull'equity del conto ridotto), `positionRisk` in `PESO_LETTURE` e quindi in `AMMESSI`; `tests/test_pesi_g1_oggi.py` | REQUEST CHANGES (0 bloccanti, 0 alti; 84 Medio: dopo un 429 o 418 della sezione delle esecuzioni la sezione nuova chiede ancora, cliente e lettore suoi; Bassi 85 equity vecchia o assurda, 86 segno da `notional`, 87 paper al prezzo del ribilancio contro demo al prezzo di adesso, 88 test); secondo giro APPROVE (84-88 chiusi, 87 come scelto; 89 Basso nuovo, un commento) | chiusa: committata come `96c6094`, uguale alla copia approvata salvo il commento del 89 (89 chiuso, verificato il 17 nov) | `reviews/reports/2026-11-14-stato-pesi-g1-oggi.md` |
 +| 2026-11-17 | claude/brave-albattani-1b12fv | non committato su 6cad6f4 | `scripts/state_snapshot.py`: sezione `sezione_funding_demo_paper` (funding di G1 per regolamento, demo da `GET /fapi/v1/income` FUNDING_FEE su 3 giorni, paper da `/paper_g1/funding/{giorno}/{ora}`, in % dell'equity di oggi di ciascuno), stesso cliente; `tests/test_funding_demo_paper.py` | APPROVE (0 bloccanti, 0 alti, 0 medi; Bassi 90 monete della riga «altre» non confrontabili, 91 «—» non spiegato, 92 Firebase muto = «non ancora», 93 letture doppie, 94 test) | chiusa: committata come `d5c6708` con le correzioni dei Bassi 90-92 della sessione principale (19 e 20 righe diverse dalla copia approvata; controllato il 25 nov con grep: nessuna riga su richieste a Binance, cliente, liste ammesse o chiavi; il resto non rivisto riga per riga) | `reviews/reports/2026-11-17-stato-funding-demo-paper.md` |
 +| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | primo avvio del trader AI sul suo demo (`trader_ai/`: conto_demo, avvio, limiti, costi, modello, servizio) | REQUEST CHANGES (1 Bloccante, 3 Alti, 7 Medi, 9 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-primo-avvio.md` |
 +| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della prima | REQUEST CHANGES (1 Alto, 4 Medi, 6 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-seconda.md` |
-diff --git a/reviews/LIVE_PATH_MAP.md b/reviews/LIVE_PATH_MAP.md
-index 5e348ea..2774230 100644
++| 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni della seconda | REQUEST CHANGES (3 Medi: 126-128; 4 Bassi) | superata dalla revisione dopo | `trader_ai/revisioni/2026-11-23-terza.md` |
 --- a/reviews/LIVE_PATH_MAP.md
 +++ b/reviews/LIVE_PATH_MAP.md
-@@ -239,18 +239,24 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
+@@ -239,18 +239,24 @@
    `demo_binance.py:1129-1135`). Avvio con `strategia` e `file_della_decisione` (`:944`). Test `tests/test_conto_vero_f5.py`
    (8). Aperti: 180, 181 Medi (decisioni di Alessio), 182, 183 Bassi. Chiusi 178, 179.
  
@@ -99,31 +93,32 @@ index 5e348ea..2774230 100644
 -  per le chiamate al modello, controllato prima di ogni chiamata (`trader_ai/costi.py:19`, `trader_ai/giro.py:34`);
 -* nessuna perdita massima del conto (scelta del proprietario, demo).
 -Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una revisione nuova (settima, ultime righe).
-+## 15. Il trader AI (area `trader_ai/`, dal 23 nov 2026; versione 7 del 26 nov non committata, `avvio.py` md5 97c2750e)
++## 15. Il trader AI (area `trader_ai/`, dal 23 nov; versione 7 `c52fbab`; correzioni del secondo riesame non committate, `avvio.py` c19205d2)
 +Programma suo sulla macchina (`trader_ai/vps/installa.sh`); dati in `/opt/trader-ai-dati` (solo `trader_ai/avanti` va in git, `vps/salva.sh`),
-+messaggi interi in `.../trader_ai/messaggi_modello` (`avvio.py:56`, `:1025`). Dal 24 nov **conto simulato** (`conto_simulato.py`: solo GET
-+pubblici su `fapi.binance.com`, nessuna chiave, `:42`, `:62-78`); demo suo pronto ma spento fino al 196 (`conto_demo.py`: solo
++messaggi interi in `.../trader_ai/messaggi_modello` (`avvio.py:56`, `:117-119`, `:1091`). Dal 24 nov **conto simulato** (`conto_simulato.py`:
++solo GET pubblici su `fapi.binance.com`, nessuna chiave, `:42`, `:62-78`); demo suo pronto ma spento fino a 198 e 199 (`conto_demo.py`: solo
 +`demo-fapi.binance.com` `:30-45`, chiavi `TRADER_AI_DEMO_*` diverse da G1 e conto vero `:34`, `:52-63`; `config.json` «simulato»).
 +* leva intera 1-10 (`limiti.py:15`, `:88-89`; `schema.py:19`); margine separato (`conto_demo.py:237-243`) più commissione dentro il
 +  disponibile (`limiti.py:96-99`); una sola operazione o un solo limite in attesa (`:84-87`);
-+* stop obbligatorio sul conto: controllo (`limiti.py:55-69`, `:108-113` anche sul prezzo di adesso, `:123-138`), messo subito
-+  (`avvio.py:741-756`; limite eseguito subito → come a mercato `:723-731`; rifiutato → chiusura), rimesso o chiusura a ogni passo
-+  (`:224-232`, `:618-636`), spostato senza scoprire (`:823-867`); limite sparito: esito e rilettura della posizione, errore = nessuna
-+  azione (`:433-473`); obiettivo di un limite sul conto all'esecuzione, già superato → chiusura (`:638-654`, `:787-788`);
-+* fermo a mano (`avvio.py:171`, `:657`, `:717`, `:732`; `chiudi` `:869-902`); conto estraneo → fermo senza toccare niente (`:150-163`,
-+  `:177-188`, `:659-662`); intenzione salvata prima dell'invio (`:706-715`, `:208-214`);
-+* obiettivo del 3% della mezzanotte UTC, poi chiuso e fermo (`limiti.py:14`, `:47-52`; `avvio.py:257-271`); nessuna perdita massima;
-+  tetto di 5 dollari, costo massimo registrato prima (`costi.py:22`, `:25`, `:28`, `:48-52`; `giro.py:33-44`; `modello.py:37`);
-+* esito degli ordini dal conto (`conto_simulato.py:310-331`; demo `conto_demo.py:162-182`, solo «eseguito»: 196); memoria ricostruita
-+  una volta, fino a 5 tentativi (`avvio.py:561-609`, `ripara.py`; doppia se al primo passo c'è un'operazione aperta: 195).
++* stop obbligatorio sul conto: controllo (`limiti.py:55-69`, `:108-113`, `:123-138`), messo subito (`avvio.py:794-815`; limite eseguito
++  subito `:776-784`), rimesso o chiusura a ogni passo (`:233-241`, `:667-685`), spostato senza scoprire (`:829-852`, `:889-933`); limite
++  sparito: esito e rilettura, errore = nessuna azione, «eseguito» del demo confermato al passo dopo (`:443-489`; non in `_annulla_limite`:
++  198); obiettivo di un limite sul conto all'esecuzione (`:687-703`); ordini rimasti annullati a inizio passo e prima di aprire (`:200-205`,
++  `:742-745`; demo: 199);
++* fermo a mano (`avvio.py:173`, `:706`, `:770`, `:785`; `chiudi` `:935-968`); conto estraneo → fermo senza toccare niente (`:152-165`,
++  `:178-190`, `:708-712`); intenzione salvata prima dell'invio (`:759-768`, `:217-223`);
++* obiettivo del 3% (`limiti.py:14`, `avvio.py:265-280`); nessuna perdita massima; tetto di 5 dollari prima di ogni chiamata (`costi.py:22`, `giro.py:33-44`);
++* esito dal conto (`conto_simulato.py:310-331`; demo `conto_demo.py:162-182`, solo «eseguito»); chiusura registrata anche con l'annullamento
++  in errore (`avvio.py:574-579`); uscita stimata corretta (`:582-602`); memoria ricostruita una volta senza l'operazione aperta (201).
 +Prima di qualunque uso con soldi veri: 146 e 147 (settima revisione) e una revisione nuova.
  
  ## Storia degli invarianti
  
-@@ -288,3 +294,6 @@ Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una re
+@@ -288,3 +294,7 @@
  - 25 nov (non committato; secondo giro APPROVE per il commit): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
    F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
    pesi controllati solo al lunedì. Demo e limiti fissi invariati. Secondo giro: nessun invariante nuovo; strategia dichiarata da una costante di classe.
 +- 26 nov, trader AI versione 7 (non committata): quindicesima REQUEST CHANGES (il limite sparito toglieva lo stop: 188); riesame
 +  APPROVE con condizioni per il simulato: rilettura della posizione, esito in errore senza azioni, limite che incrocia come a
-+  mercato, obiettivo di un limite all'esecuzione, stop e obiettivo del simulato per lato, messaggi fuori da `avanti/`. Valori invariati.
++  mercato, obiettivo di un limite all'esecuzione, stop e obiettivo del simulato per lato, messaggi fuori da `avanti/`. Secondo
++  riesame (copia): chiusura registrata anche con l'annullamento in errore, ordini rimasti annullati prima di aprire. Valori invariati.

@@ -48,4 +48,9 @@ misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti
 * 173 e 175 della dodicesima revisione (`revisioni/2026-11-24-dodicesima.md`): togliere il conteggio dei minuti dentro `condizionato`
   e `annulla_condizionato` (gli intervalli di vita degli stop bastano), rendere significativo il test dello stop stretto. Il 174 (solo
   gli stop dello stesso lato della posizione) è fatto il 26 novembre, dopo che è successo davvero.
+* Quindicesima revisione e due riesami (26 novembre 2026, `revisioni/2026-11-26-quindicesima.md`): APPROVE con condizioni per il
+  riavvio sul conto simulato (riavvio con il trader fermo e nessuna operazione aperta). Aperti: 198 Medio e 199 Basso solo per il
+  conto demo (spento: non si accende senza correggerli, misurare sul demo il ritardo delle posizioni e una revisione nuova); 200
+  Basso (una chiusura registrata si può scrivere due volte nel diario se il passo si interrompe subito dopo; c'era già prima); 201
+  Basso (solo con un ordine limite in attesa al primo passo della versione 7: oggi non c'è).
 * Le revisioni del trader vanno copiate in `reviews/` dalla sessione delle crypto (`RICHIESTE_CRYPTO.md`, voce 3).

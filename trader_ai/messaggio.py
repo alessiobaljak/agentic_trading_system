@@ -129,7 +129,7 @@ def riga_bilancio(nome: str, ops: List[dict]) -> str:
         x = [o for o in ops if o["lato"] == lato]
         if x:
             lati.append(f"{nome_lato} {len(x)} ({sum(o['risultato'] > 0 for o in x)} vinte, {sum(o['risultato'] < 0 for o in x)} "
-                        f"perse, {sum(o['risultato'] for o in x):+.2f})")
+                        f"perse, {bilancio(x)['netto']:+.2f})")          # con la stessa regola del netto (revisione, N2)
     return riga + "; " + ", ".join(lati) + f"; uscite: {_uscite(b)}"
 
 

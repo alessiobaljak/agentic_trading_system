@@ -421,3 +421,225 @@ scrive più). `revisione_v7/verifica_ordini/` → le 10 prove dei difetti fallis
 * La memoria del revisore (`reviews/`) da quest'area non si scrive: le righe nuove della quindicesima e del riesame (indice, registro,
   archivio, mappa con la sezione 15 aggiornata) sono in `<cartella del riesame>/righe_per_reviews.patch` (solo i quattro file, si
   applica con `git apply`), per la sessione che può applicarle.
+
+## Secondo riesame (26 novembre 2026, sera, sulla copia con le correzioni del riesame)
+
+Revisore: live-path-reviewer. Base: il codice del riesame, committato come `c52fbab` (`avvio.py` 97c2750e). Oggetto: la copia
+`/tmp/claude-0/-home-user-agentic-trading-system/3e86fc2d-e676-5e8c-aab8-125249da6bfe/scratchpad/wt2/trader_ai` (sotto: «la copia»), con
+le correzioni di 194-197 e dei punti N1-N5 del verificatore. Prove mie in
+`/tmp/claude-0/-home-user-agentic-trading-system/3e86fc2d-e676-5e8c-aab8-125249da6bfe/scratchpad/riesame2_v7/` (sotto: «la cartella del
+secondo riesame»). Lancio di ogni prova dalla copia: `cd <copia>/.. && TRADER_AI_BLOCCO=<cartella del secondo riesame>/x.lock
+PYTHONPATH=<copia>/.. python -m pytest <file> -q -s -p no:cacheprovider` (per `verifica_altri/` anche
+`revisione_v7/scenari` nel `PYTHONPATH`); in ogni cartella di prove un `conftest.py` controlla che
+`trader_ai` venga dalla copia. Nessuna rete; i dati veri di `trader_ai/avanti/` solo copiati e letti; `git status` del repository vuoto
+alla fine; la copia non è cambiata (impronte rilette alla fine).
+
+Attenzione per chi rifà le prove del verificatore: `riesame_v7/verifica_altri/rete_finta.py` mette la radice del repository in testa a
+`sys.path` e `test_n3_n5.py` legge l'espressione da `trader_ai/avvio.py` del repository: lanciate così provano il codice del repository
+anche con `PYTHONPATH` sulla copia. Le ho rifatte da copie che puntano alla copia (`<cartella del secondo riesame>/verifica_altri/`,
+`prove_riesame/` per le mie del riesame, `verifica_ordini/` per quelle dell'altro verificatore).
+
+### Riepilogo e verdetto del secondo riesame
+
+**APPROVE con condizioni** per il commit della copia e per il riavvio sul conto simulato (il riavvio resta da approvare da Alessio).
+194, 195, 196, 197 (a, b, c) e N1-N5 sono corretti sul conto simulato: ogni prova che mostrava un difetto, rifatta sulla copia, adesso
+fallisce (cioè il difetto non c'è più), e le prove di controllo passano. Una prova lunga a caso con guasti di rete sulla copia (14 prove
+da 30 ore di mercato, 6 con l'8% delle richieste in errore, fino a 1.062 guasti l'una) non trova nessuna posizione senza stop per due
+passi riusciti, nessuna posizione sconosciuta, nessun ordine del trader più vecchio della posizione sotto di lei, nessun fermo per
+conto estraneo, nessuna operazione doppia o persa (contate per nome d'ordine), la somma della memoria uguale al conto, nessuna uscita
+stimata rimasta; le strade nuove sono passate davvero (32 annullamenti falliti dopo una chiusura, 33 ripresi al passo dopo).
+Nessun Bloccante, nessun Alto. Nuovi: **198 Medio, solo demo** (la radice del 196 su un'altra strada: `_annulla_limite`), **202 Medio**
+(sei correzioni su quattordici senza un test che se ne accorga), 199 Basso solo demo, 200 Basso preesistente, 201 Basso (solo al
+passaggio dalla versione 6 con un limite in attesa: operazione persa, regressione della correzione del 195).
+
+Condizioni:
+1. Riavviare con il trader fermo e **nessuna operazione aperta nello stato**. Nei dati delle 08:07 (`8a7b513`) è così: `aperta` vuota,
+   conto simulato senza posizione né ordini, ultima riga del diario «chiuso tutto a mano» alle 07:11. Adesso serve per il 201 (e
+   perché un'operazione aperta dalla versione 6 resterebbe con l'uscita stimata per sempre: riga del 195).
+2. **Prima del commit**, nei test del repository le prove che mancano (202): annullamento prima di aprire, ricostruzione con
+   l'operazione aperta passata da `_ripara_memoria`, N2 con arrotondamenti diversi, N4, 197 b, 197 c. Sono pronte (vedi 202).
+3. Committare il codice con le impronte qui sotto (`avvio.py` c19205d2, `messaggio.py` 0ca870c9, `ripara.py` 4e1e13a9; i file di test
+   cambiano per la condizione 2). Dopo il primo passo, nel diario: «memoria ricostruita dal conto e dal diario» con 13 corrette,
+   1 aggiunta, 0 lasciate, 11 lezioni; 14 operazioni; somma dei netti −59,84 contro −59,86 del conto (rifatto con la copia sulla copia
+   dei dati: `rapporto_ricostruzione.py` nella cartella del secondo riesame).
+4. Il conto demo resta spento: prima le correzioni di 198 e 199, la misura sul demo del ritardo della lettura delle posizioni, una
+   revisione nuova.
+
+### Oggetto del secondo riesame
+
+* File cambiati rispetto a `c52fbab`: `avvio.py`, `messaggio.py`, `ripara.py`, `tests/test_controllo_26.py` (7 test nuovi, uno cambiato);
+  tutti gli altri file di `trader_ai/` uguali al repository (confronto byte per byte). Nessun file fuori da `trader_ai/`;
+  `bot/risk/hard_limits.py` invariato.
+* **Impronte md5 (primi 8 caratteri) della copia approvata**: `avvio.py` c19205d2, `messaggio.py` 0ca870c9, `ripara.py` 4e1e13a9,
+  `tests/test_controllo_26.py` 3b7fc12a; invariati: `conto_simulato.py` c7f7e815, `conto_demo.py` 453e0288, `limiti.py` 19144b5b,
+  `schema.py` 58dacc4f, `modello.py` 46038db6, `costi.py` 2b1e9f30, `giro.py` 0b813210, `operazioni.py` 3120d09a, `calendario.py`
+  f9540623, `trader_ai/.gitignore` 86892b11, `tests/test_corse_188.py` f759675a, `vps/salva.sh` 76a65754, `vps/installa.sh` dbfd1986.
+* Invarianti coinvolti: stop sul conto per ogni posizione; nessun ordine del trader sotto un'operazione nuova; memoria uguale al conto;
+  fermo a mano; conto estraneo.
+
+### Esito dei problemi
+
+| Problema | Esito | Dove nel codice (copia) | Prova rifatta sulla copia |
+|---|---|---|---|
+| 194 | **chiuso** sul simulato | `avvio.py:865-877` | `prove_riesame/test_riesame_nuovi.py::test_annullo_di_un_limite...` ora fallisce: `memoria: operazioni 1 \| richiama operazione chiusa (stop iniziale)`. `verifica_ordini/test_v194_annullo.py`: le due prove del difetto (simulato e demo) falliscono, l'operazione è in memoria. Sul demo, con la posizione letta in ritardo: **198**. |
+| 195 | **chiuso** per l'operazione doppia | `ripara.py:86-109`, `avvio.py:624` | `test_riesame_ripara_aperta.py` ora fallisce: 1 operazione (era 2). Passaggio vero in due processi (`verifica_ordini/v195_migrazione.py`: versione 6, poi la copia): `memoria: [(1, 'stop iniziale', 90009.0, 88900, True, -5.54)]`, «corrette 0, aggiunte 0». Restano: uscita stimata per sempre (88.900 contro 88.991,1; il netto è giusto) perché la posizione della versione 6 non ha il nome d'ordine; con un limite in attesa: **201**. |
+| 196 | **chiuso** in `_limite_sparito` | `avvio.py:472-477` | `test_riesame_demo_ritardo.py` ora fallisce: dopo il primo passo nessuna operazione e lo stop 89.000 resta; al passo dopo `posizione True \| stop [89000.0] \| estraneo: None`. `verifica_ordini/test_v196_demo.py[1]` fallisce allo stesso modo (classe `ContoDemo` vera). La stessa radice resta in `_annulla_limite`: **198**. |
+| 197 a | **chiuso** | `avvio.py:646-651` | `test_riesame_190.py::test_190_b`: dopo «rinuncio» il diario scrive «memoria solo numerata: conto non letto». `verifica_ordini/test_v197.py::test_a` fallisce. |
+| 197 b | **chiuso** | `avvio.py:117-119` | `test_riesame_rifiniture.py::test_cartella...` ora fallisce: `/opt/trader-ai-dati/trader_ai/messaggi_modello`. Nessun test nel repository (202). |
+| 197 c | **chiuso** | `avvio.py:217-219` | `test_riesame_rifiniture.py::test_risposta_persa...` fallisce: `entrata 90050.0 (posizione 90050) \| eseguita 10:01:30 \| R 10.7391`, stop rimesso; `test_v197.py::test_c` fallisce: in memoria entrata 90.009 vera, uscita 88.991,1, −1,00 R. Nessun test nel repository (202). |
+| N1 | **chiuso** sul simulato | `avvio.py:574-579`, `:200-205`, `:742-745` | `verifica_altri/test_n1.py`: le 4 prove del difetto falliscono. Con il 429 sulle candele dell'escursione: «operazione chiusa» nel diario, `richiama: operazione chiusa (chiusa da te)`, nessuno scarto, modello richiamato appena finisce la pausa (10:17:05); rete giù nell'annullamento: nessuno scarto; chiusa mentre il modello pensa: richiamo; protezione: motivo «operazione chiusa (obiettivo)». Prova mia: con l'annullamento in errore la nuova non si apre (`rifiutata dal conto: GET /fapi/v1/klines: 429: pausa`). Sul demo l'annullamento non lancia errori: **199**. |
+| N2 | **chiuso** | `messaggio.py:132` | Dati veri: `lunghi 5 (1 vinte, 4 perse, -11.92), corti 9 (1 vinte, 8 perse, -47.94)`, netto −59,86 (prima −11,91 e −47,93). Prova mia con tre operazioni da −1,004: `netto -3.01 ... lunghi 3 (0 vinte, 3 perse, -3.01)`; con la formula di prima −3,00. La prova del repository non distingue le due formule (202). |
+| N3 | **chiuso** | `avvio.py:344-345` | `test_n3_n5.py`: «0.42%», «89.500», «1.25 R» restano interi (anche nella nota del messaggio); «10:15» si toglie; «60699.5», «1.5 R», «30m» restano. |
+| N4 | **chiuso** | `avvio.py:642-645` | `test_n2_n4_dati_veri.py::test_n4_con_guasto` ora fallisce: 12 lezioni (11 vecchie e quella scritta durante l'attesa, una volta sola), come senza guasto. Nessun test nel repository (202). Un perché oltre 380 caratteri comparirebbe due volte (tagli diversi in `_lezioni` e in `ripara.py:172`): nel diario vero il più lungo è 217. |
+| N5 | **chiuso** sul simulato | `avvio.py:211`, `:582-602` | `test_n3_n5.py::test_n5` fallisce: al passo dopo uscita 88.991,1, chiusa 10:18, prezzo −5,09, spese −0,45, netto −5,54, nel messaggio «uscita 88991.1: stop iniziale». Prove lunghe: nessuna uscita stimata rimasta. Sul demo l'esito non dà mai l'uscita (scelta scritta in `conto_demo.py:162-166`): resta stimata. |
+
+Altre prove rifatte sulla copia: le mie del riesame (`prove_riesame/`, 42) → 37 passate e 5 fallite, esattamente le 5 che mostravano i
+difetti 194, 195, 196, 197 b, 197 c (la 197 a stampava gli eventi senza controllarli); quelle del verificatore (`verifica_altri/`, 21) →
+11 fallite (i difetti) e 10 passate (i controlli, più due prove che non controllano il difetto: N2 calcola i lati con la sua
+formula, la protezione con il 429 stampa e basta); quelle dell'altro verificatore (`verifica_ordini/`, 8) → 5 fallite (difetti) e 3
+passate: i due controlli e `test_v196_annullo_demo.py[1]`, che mostra il 198.
+
+### Parti nuove rilette
+
+* `_annulla_limite` che legge l'esito (`avvio.py:854-887`): OK sul simulato. Con l'esito non letto si lascia l'operazione «in attesa»
+  con limite e stop già annullati: il passo dopo decide con `_limite_sparito` e nessuna posizione può nascere (il limite non c'è più);
+  il modello legge «rifiutata dal conto: lo stato del tuo ordine limite non si è potuto leggere» anche se l'annullamento è riuscito
+  (solo testo). Sul demo «eseguito» senza posizione diventa una chiusura: 198.
+* `_limite_sparito` con la conferma al passo dopo per «eseguito» (`:472-477`): OK. La seconda lettura può arrivare nello stesso passo
+  dentro `_esegui`, dopo la risposta del modello (secondi o minuti dopo): basta per un ritardo di lettura breve. Il segno resta
+  sull'operazione ma vale solo per quell'ordine. Sul simulato «eseguito» non esiste: strada mai presa (prove lunghe: 0 volte).
+* `_registra_chiusura` con l'annullamento che non fa fallire la chiusura e `da_annullare` (`:574-579`): OK. Il segno non si toglie
+  dopo un annullamento riuscito più avanti: innocuo (un annullamento in più con il conto senza operazione). Se dopo la chiusura il
+  passo si interrompe per un altro errore: 200.
+* Annullamento all'inizio del passo (`:200-205`): OK; dopo il fermo a mano e il controllo del conto estraneo; un errore interrompe il
+  passo quando non c'è nessuna operazione (e quindi nessuna posizione: il controllo del conto estraneo viene prima).
+* Annullamento degli ordini rimasti prima di aprire (`:742-745`): OK sul simulato (prova mia, nelle due varianti); sul demo l'esito
+  non si controlla: 199. Nessun test nel repository: 202.
+* `_correggi_uscite_stimate` (`:582-602`): OK; al massimo le ultime 5 operazioni e 20 tentativi; nessun ordine; non ricalcola
+  «favore» e «contro» (dettaglio della memoria).
+* `ricostruisci` con l'operazione aperta esclusa (`ripara.py:106-109`): OK per il doppio; 201.
+* Cartella dei messaggi predefinita (`:117-119`): OK; resta dentro `avanti/` solo con un percorso diverso ma uguale (relativo o con
+  un collegamento), caso non usato da nessun punto d'ingresso.
+* Risposta persa adottata con `_eseguito` (`:217-219`): OK; lo stop si rimette con la protezione come prima.
+* Mutazioni (`mutazioni.py`, 14 correzioni tolte una alla volta da una copia della copia): 8 prese dai test della copia, 6 vive: 202.
+
+### Checklist A–F (secondo riesame)
+
+* **A.** `bot/risk/hard_limits.py` invariato (ultimo commit `41ee966`); `limiti.py` (leva 10, obiettivo 3%) e `costi.py` (tetto di 5
+  dollari, 16.000 token) uguali al repository. Fermo a mano: i due annullamenti nuovi stanno dopo il controllo del fermo (`:173`,
+  `:706`); `chiudi` senza Firebase invariato (`:935-968`). OK.
+* **B.** Ordini: annullamento nuovo prima di aprire (OK sul simulato; demo 199); nomi d'ordine, «solo riduzione», prezzo mark, leva e
+  margine separato invariati (`conto_demo.py` uguale). Stop di ogni posizione sul conto: OK sul simulato (prove lunghe); demo **198**.
+* **C.** Stato letto dal conto: 194, 196, N1, N5 OK; ricostruzione: **201**; stato a metà dopo una chiusura: **200**. 429 e 418: la
+  pausa del conto simulato si rispetta (prova N1 con il 429 vero di `MercatoPubblico`). Candele chiuse invariate.
+* **D.** Invariato: `config.json` «simulato»; il demo solo su `demo-fapi.binance.com` (le mie prove del demo controllano l'indirizzo
+  a ogni richiesta). OK.
+* **E.** Nessuna chiave nella differenza; il nome d'ordine scritto nel diario non è un segreto. Chiavi senza prelievo: da confermare
+  con Alessio (oggi il simulato non usa chiavi). OK.
+* **F.** Copia: `trader_ai/tests` → **140 passed, 1 failed** (`test_il_fermo_non_entra_mai_in_git`: la copia non è un repository
+  git); repository `c52fbab`: `trader_ai/tests` → **134 passed** (141 = 134 + 7 nuovi). Suite intera `python3 -m pytest tests/ -q`
+  (escluso `tests/test_programma5_motore.py::test_libro_squilibrio_e_liquidita_a_ore`, ricerca) → **2825 passed, 1 skipped,
+  1 deselected**. Limiti (`tests/test_risk.py`, `tests/test_sizing.py`, `tests/test_strategie_restano_accese.py`) → **23 passed**.
+  Prove mie: `test_secondo_riesame.py` → 7 passed (le prove di 198-200 passano perché mostrano il difetto); `test_lunga_eventi.py`
+  → 14 passed. Mutazioni: **202**.
+
+### Problemi nuovi
+
+**198 — Medio, solo per il conto demo (oggi spento) — `trader_ai/avvio.py:865-877` con `trader_ai/conto_demo.py:175-182`.**
+* Cosa succede. Il modello annulla il suo limite («chiudi»). Se il limite si esegue proprio prima dell'annullamento e la rilettura delle
+  posizioni del demo arriva in ritardo, l'esito «eseguito» del demo (che vale anche per una posizione aperta) diventa «eseguito e
+  chiuso»: chiusura inventata in memoria, e lo stop è già stato annullato da `annulla_tutto`. Al passo dopo la posizione si vede e il
+  programma si ferma come davanti a una posizione d'altri, senza toccarla: **posizione senza stop**. È la radice del 196 su un'altra
+  strada (la correzione del 196 c'è solo in `_limite_sparito`). Non è una regressione: sul codice di `c52fbab` lo stesso caso finisce
+  uguale, con la memoria vuota invece della chiusura inventata.
+* Quando. Solo sul demo, con il limite eseguito nell'istante dell'annullamento e la lettura delle posizioni in ritardo (lo stesso
+  ritardo da misurare del 196). Letto e non provato: la stessa radice, più rara, nel ramo dell'obiettivo del giorno (`avvio.py:266-270`:
+  con un limite «in attesa» `chiudi` senza posizione annulla anche lo stop).
+* Prova (eseguita). `test_secondo_riesame.py::test_198_...` con la classe `ContoDemo` vera e un Binance finto sotto: ritardo 0 → «il
+  limite si era eseguito mentre lo annullavo: chiudo a mercato», posizione chiusa; ritardo 1 → «il limite si era eseguito e chiuso prima
+  dell'annullamento», poi `posizione vera sul demo {'q': 0.005, 'e': 89500.0, 'lato': 'lungo'} | ordini condizionati [] | estraneo una
+  posizione che il trader non ha aperto`. Stesso esito nella prova dell'altro verificatore (`verifica_ordini/test_v196_annullo_demo.py[1]`).
+* Correzione suggerita alla sessione principale (prima del demo). In `_annulla_limite`, con l'esito «eseguito» (non «chiusa») e nessuna
+  posizione letta, non registrare: lasciare l'operazione come eseguita da confermare (non più «in attesa», con il segno «da chiudere»)
+  e alzare l'errore «riprovo»; al passo dopo, se la posizione c'è, la protezione rimette lo stop e il programma la chiude a mercato come
+  chiesto; se non c'è, si registra la chiusura. Test con la semantica del demo: la prova qui sopra.
+
+**199 — Basso, solo per il conto demo — `trader_ai/conto_demo.py:265-270` con `trader_ai/avvio.py:574-579` e `:742-745`.**
+* Cosa succede. Sul demo `annulla_tutto` scrive l'errore e va avanti: `da_annullare` non si mette mai e l'annullamento prima di aprire
+  non controlla l'esito. Se l'annullamento fallisce (rete, errore 5xx di Binance), l'obiettivo o lo stop dell'operazione chiusa resta
+  sotto l'operazione nuova, e il programma non lo sa. Non toglie protezione (gli ordini «chiudi tutto» possono solo ridurre), ma può
+  chiudere l'operazione nuova al livello di quella vecchia. Preesistente: la correzione N1 vale solo dove l'annullamento lancia l'errore.
+* Prova (eseguita). `test_secondo_riesame.py::test_199_...` (classe `ContoDemo` vera, Binance finto che risponde 500 agli annullamenti):
+  `ordini condizionati sul demo [('tait', 'TAKE_PROFIT_MARKET', '91000'), ('tais', 'STOP_MARKET', '88000')] | da_annullare None`;
+  l'operazione nuova non ha obiettivo nello stato. Uguale sul codice di `c52fbab`.
+* Correzione suggerita (prima del demo). Dopo `annulla_tutto` (alla chiusura e prima di aprire) rileggere gli ordini del simbolo: se ne
+  resta uno del trader, `da_annullare` alla chiusura e nessuna apertura prima di aprire; oppure far lanciare l'errore a
+  `ContoDemo.annulla_tutto`.
+
+**200 — Basso, preesistente — `trader_ai/avvio.py:233-241` (e ogni lettura del conto dopo una chiusura nello stesso passo).**
+* Cosa succede. Una chiusura registrata (memoria del processo e diario) si perde dallo stato se il passo si interrompe dopo, per
+  esempio con `saldo()` in errore (`:241`): lo stato non si salva e il passo dopo registra di nuovo la stessa operazione dal conto. In
+  memoria resta una volta sola (giusto), ma con il modo letto dal conto invece di quello del programma («stop iniziale» invece di
+  «chiusa: senza stop valido sul conto»; «chiusa a mercato» invece di «obiettivo») e nel diario ci sono due «operazione chiusa». Con N1
+  l'evento si scrive prima dell'annullamento, quindi succede anche quando a fallire sono l'annullamento e poi un'altra lettura (prova del
+  verificatore, protezione con il 429: 2 eventi, prima 1).
+* Prova (eseguita). `test_secondo_riesame.py::test_200_...`: `errore del passo: GET /fapi/v2/account: rete: Read timed out | sul disco
+  dopo l'errore: aperta True, operazioni 0` → `operazioni [(1, 'stop iniziale')] | «operazione chiusa» nel diario 2 | modi scritti
+  ['chiusa: senza stop valido sul conto', 'stop iniziale']`. Prove lunghe: da 1 a 9 doppioni per prova sulla copia (14 prove), da 2 a 6 sul
+  codice di `c52fbab` (le 6 prove all'8%).
+* Correzione suggerita. Salvare lo stato subito dopo ogni chiusura registrata, con il richiamo del modello già messo, così un errore
+  dopo non la fa rifare; oppure scrivere l'evento solo quando lo stato è salvato.
+
+**201 — Basso, solo al primo passo della versione 7 con un limite in attesa nello stato — `trader_ai/ripara.py:106-109` con
+`trader_ai/avvio.py:455-489`.**
+* Cosa succede. La correzione del 195 toglie dalla ricostruzione la posizione dell'operazione aperta, perché «la registra il passo». Ma
+  il conto della versione 6 non scriveva il nome d'ordine nella posizione: se il limite si è eseguito sotto la versione 6 senza che il
+  programma lo vedesse e poi si è chiuso, il passo non lo trova (`esito_ordine` → nessuno) e scrive «ordine limite non più sul conto e
+  mai eseguito». L'operazione, con la sua perdita sul conto, non entra mai in memoria. Sul codice di `c52fbab` la ricostruzione la
+  aggiungeva: regressione.
+* Quando. Solo se si riavvia con un limite in attesa nello stato; con i dati di adesso (nessuna operazione aperta) no: condizione 1.
+  Dopo il primo passo della versione 7 la ricostruzione non gira più.
+* Prova (eseguita). `v195_limite.py` lanciato da `lancia_v195_limite.py` (due processi: codice della versione 6 di `a94db04`, poi il
+  codice da provare): copia → `memoria: [] | aperta None`, eventi «corrette 0, aggiunte 0» e «ordine limite non più sul conto e mai
+  eseguito», conto −2,86; `c52fbab` → `memoria: [(1, 'stop iniziale', 89500.0, -2.86)]`, «aggiunte 1».
+* Correzione suggerita. Rimandare la ricostruzione al primo passo senza operazione aperta (la seconda proposta del 195): il passo
+  registra la chiusura come può e la ricostruzione dopo la trova e la corregge, o la aggiunge. Toglie anche l'uscita stimata per sempre
+  dell'operazione aperta dalla versione 6.
+
+**202 — Medio — `trader_ai/tests/test_controllo_26.py` (copia): test che non coprono sei correzioni.**
+* Cosa succede. Sei correzioni su quattordici si possono togliere senza che un test del repository se ne accorga, fra cui una guardia
+  del percorso degli ordini (l'annullamento prima di aprire).
+* Prova (eseguita). `mutazioni.py`: base 140 passed + 1 (git); prese 8 (N1 due volte, 196, 194, 195 in `ripara.py`, N3, N5, 197 a);
+  vive 6: annullamento prima di aprire (`avvio.py:743`), passaggio dell'operazione aperta a `ricostruisci` (`:624`), N2 (la prova usa
+  −1,998 contro −2,00: le due formule danno lo stesso testo), N4, 197 b, 197 c.
+* Correzione suggerita (prima del commit, condizione 2). Aggiungere `test_annullo_prima_di_aprire` e
+  `test_n2_lati_e_netto_con_arrotondamenti_diversi` (`test_secondo_riesame.py`; controllato: colgono le loro mutazioni), la corsa intera
+  del 195 (`riesame_v7/test_riesame_ripara_aperta.py` con l'asserzione girata: un'operazione), N4
+  (`riesame_v7/verifica_altri/test_n2_n4_dati_veri.py::test_n4_con_guasto` girata: 12 lezioni, senza doppioni), 197 b e 197 c
+  (`riesame_v7/test_riesame_rifiniture.py` girate).
+
+### Invarianti modificati (dal riesame)
+
+* Una chiusura resta registrata e detta al modello anche se l'annullamento degli altri ordini fallisce; l'annullamento si riprova
+  all'inizio del passo dopo (`avvio.py:574-579`, `:200-205`). Vale dove l'annullamento lancia l'errore (simulato), non sul demo (199).
+* Prima di aprire, gli ordini del trader rimasti senza operazione si annullano; se l'annullamento lancia un errore l'operazione non si
+  apre (`:742-745`).
+* Sul demo «eseguito» senza posizione si conferma al passo dopo prima di registrare e annullare (`:472-477`); non in `_annulla_limite`
+  (198).
+* Un limite annullato che si era già eseguito e chiuso si registra (`:865-877`).
+* La ricostruzione salta la posizione dell'operazione aperta (`ripara.py:106-109`; 201).
+* L'uscita stimata si corregge dal conto, ultime 5 operazioni, al massimo 20 tentativi (`avvio.py:582-602`).
+* Nessun valore dei limiti cambiato; `bot/risk/hard_limits.py` invariato.
+
+### Decisioni per Alessio
+
+* Il riavvio con questa versione sul conto simulato: è suo, con le condizioni 1-3.
+* Il conto demo: non con questo codice; prima 198 e 199, la misura del ritardo delle posizioni sul demo e una revisione nuova.
+
+### Domande aperte
+
+* Sul demo la lettura delle posizioni può arrivare in ritardo rispetto allo stato di un ordine eseguito? (Già del 196; adesso vale
+  anche per il 198.) Da misurare sul demo prima di usarlo.
+* La memoria del revisore (`reviews/`) da quest'area non si scrive: le righe nuove del secondo riesame (con quelle del riesame, non
+  ancora applicate) sono in `<cartella del secondo riesame>/righe_per_reviews.patch` (solo i quattro file di `reviews/`, si applica con
+  `git apply`), per la sessione che può applicarle.
