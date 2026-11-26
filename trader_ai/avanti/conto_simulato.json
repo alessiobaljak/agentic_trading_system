@@ -1,11 +1,11 @@
 {
- "portafoglio": 942.4253167725104,
+ "portafoglio": 940.1430470340105,
  "posizione": null,
  "ordini": [],
  "algo": [],
- "leva": 5,
- "ultimo_minuto_ms": 1795666020000,
- "ultimo_funding_ms": 1795666052845,
+ "leva": 6,
+ "ultimo_minuto_ms": 1795669560000,
+ "ultimo_funding_ms": 1795669604956,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -265,9 +265,28 @@
    "cosa": "commissione",
    "importo": -0.790256,
    "come": "stop"
+  },
+  {
+   "ora_ms": 1795666758007,
+   "cosa": "commissione",
+   "importo": -0.35322,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795669026527,
+   "cosa": "risultato",
+   "importo": -1.046523,
+   "prezzo": 60863.913,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795669026527,
+   "cosa": "commissione",
+   "importo": -0.882527,
+   "come": "stop"
   }
  ],
- "prossimo_id": 63,
+ "prossimo_id": 69,
  "chiuse": [
   {
    "lato": "corto",
@@ -411,6 +430,17 @@
    "aperta_ms": 1795656840000,
    "da_limite": true,
    "chiusa_ms": 1795661520000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.029,
+   "entrata": 60900.0,
+   "leva": 6,
+   "margine": 294.35,
+   "liquidazione": 51054.5,
+   "aperta_ms": 1795666680000,
+   "da_limite": true,
+   "chiusa_ms": 1795668960000
   }
  ],
  "funding_applicati": [
