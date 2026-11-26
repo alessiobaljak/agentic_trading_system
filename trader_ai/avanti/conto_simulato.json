@@ -1,29 +1,11 @@
 {
- "portafoglio": 940.1430470340105,
+ "portafoglio": 934.1096080740103,
  "posizione": null,
- "ordini": [
-  {
-   "cid": "taio1795724265938",
-   "lato": "lungo",
-   "quantita": 0.024,
-   "prezzo": 60620.0,
-   "leva": 5,
-   "messo_ms": 1795724297996
-  }
- ],
- "algo": [
-  {
-   "algoId": 69,
-   "cid": "tais1795724265938",
-   "tipo": "STOP_MARKET",
-   "prezzo": 60390.0,
-   "lato": "lungo",
-   "messo_ms": 1795724299006
-  }
- ],
- "leva": 5,
- "ultimo_minuto_ms": 1795727160000,
- "ultimo_funding_ms": 1795727211895,
+ "ordini": [],
+ "algo": [],
+ "leva": 3,
+ "ultimo_minuto_ms": 1795730760000,
+ "ultimo_funding_ms": 1795730816036,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -302,9 +284,28 @@
    "cosa": "commissione",
    "importo": -0.882527,
    "come": "stop"
+  },
+  {
+   "ora_ms": 1795730401194,
+   "cosa": "commissione",
+   "importo": -0.389056,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795730702831,
+   "cosa": "risultato",
+   "importo": -4.67408,
+   "prezzo": 60643.935,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795730702831,
+   "cosa": "commissione",
+   "importo": -0.970303,
+   "come": "stop"
   }
  ],
- "prossimo_id": 70,
+ "prossimo_id": 72,
  "chiuse": [
   {
    "lato": "corto",
@@ -459,6 +460,24 @@
    "aperta_ms": 1795666680000,
    "da_limite": true,
    "chiusa_ms": 1795668960000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.032,
+   "entrata": 60790.0,
+   "leva": 3,
+   "margine": 648.4266666666666,
+   "liquidazione": 40830.61666666667,
+   "aperta_ms": 1795730340000,
+   "da_limite": true,
+   "cid": "taio1795728647883",
+   "spese_entrata": 0.389056,
+   "spese": 1.35935896,
+   "funding": 0.0,
+   "risultato_prezzo": -4.674080000000075,
+   "uscita": 60643.935,
+   "come": "stop",
+   "chiusa_ms": 1795730640000
   }
  ],
  "funding_applicati": [
