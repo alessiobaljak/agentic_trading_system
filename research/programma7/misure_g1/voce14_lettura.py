@@ -99,8 +99,8 @@ def main() -> None:
             dettagli.append(f"\n### {s}")
             for q, a in trovati[:8]:
                 dettagli.append(f"- {q:%m-%d %H:%M} {a.get('fonte', '')}: {a.get('titolo', '')} — {str(a.get('sommario', ''))[:220]}")
-            if len(trovati) > 8:
-                dettagli.append(f"- (altri {len(trovati) - 8})")
+            for q, a in trovati[8:]:     # gli altri solo con il titolo (dal 26 novembre)
+                dettagli.append(f"- {q:%m-%d %H:%M} {a.get('fonte', '')}: {a.get('titolo', '')}")
     LETTURE.mkdir(exist_ok=True)
     out = LETTURE / f"{ora:%Y-%m-%d}.md"
     if out.exists():

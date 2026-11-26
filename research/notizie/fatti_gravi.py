@@ -45,8 +45,8 @@ def main(ora: datetime | None = None) -> Path:
         for q, a in xs[:TITOLI_MAX]:
             righe.append(f"- {q:%m-%d %H:%M} {a.get('fonte', '')}: {a.get('titolo', '')} — {str(a.get('sommario', ''))[:200]} "
                          f"<{a.get('link', '')}>")
-        if len(xs) > TITOLI_MAX:
-            righe.append(f"- (altri {len(xs) - TITOLI_MAX})")
+        for q, a in xs[TITOLI_MAX:]:     # gli altri solo con il titolo: dal 26 novembre, dopo il caso di HYPE nascosto fra gli «altri»
+            righe.append(f"- {q:%m-%d %H:%M} {a.get('fonte', '')}: {a.get('titolo', '')} <{a.get('link', '')}>")
     FOGLI.mkdir(exist_ok=True)
     out = FOGLI / f"{ora:%Y-%m-%d}.md"
     if out.exists():
