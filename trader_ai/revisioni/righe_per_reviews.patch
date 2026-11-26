@@ -1,0 +1,26 @@
+diff --git a/reviews/INDEX.md b/reviews/INDEX.md
+index 6afe4ba..6524676 100644
+--- a/reviews/INDEX.md
++++ b/reviews/INDEX.md
+@@ -14,9 +14,9 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
+   al commit confrontare le md5 nel rapporto (`conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py`
+   99c9fd1f). Mutazioni: `giro25nov_b/mutazioni_f5.py <copia>` (10 su 12 prese; le 2 vive sono solo testi). Primo giro:
+   `reports/2026-11-25-conto-vero-F5.md` (180, 181 Medi e 182 Basso, ancora aperti).
+-- **Numeri dei problemi**: il trader AI ha usato fino al 177 (`trader_ai/revisioni/2026-11-25-tredicesima.md`): il 183 è del 25 nov (F5): i nuovi partono da 184.
+-- Trader AI (area `trader_ai/`): tredici revisioni in `trader_ai/revisioni/` (23-25 nov); l'ultima, la tredicesima, APPROVE con
+-  condizioni (176 Medio, 177 Basso). Nel registro di qui solo le prime sette.
++- **Numeri dei problemi**: trader AI fino al 186 (`trader_ai/revisioni/2026-11-26-quattordicesima.md`; 183 è F5): i nuovi partono da 187.
++- Trader AI (area `trader_ai/`): quattordici revisioni in `trader_ai/revisioni/` (23-26 nov); l'ultima, la quattordicesima (`d9c8af7`), APPROVE con
++  condizioni (184 Medio timeout 300 s con 16.000 token; 185, 186 Bassi). Tetto di 5 dollari tiene; stato vecchio compatibile. Nel registro di qui solo le prime sette.
+ - 17 nov, funding demo contro paper: committato come `d5c6708` con le correzioni 90-92 della sessione principale (19 righe diverse dalla
+   copia; grep del 25 nov: nessuna riga su richieste, cliente o chiavi). Chiusa.
+ - Conto vero, per l'accensione: 54 (ii) Alto, 70 Medio, 78 Basso (`reports/2026-11-12-conto-vero-versione-firebase-2.md`), più
+diff --git a/reviews/REVIEW_LOG.md b/reviews/REVIEW_LOG.md
+index 54cfd5e..2627efe 100644
+--- a/reviews/REVIEW_LOG.md
++++ b/reviews/REVIEW_LOG.md
+@@ -18,3 +18,4 @@ Una riga per revisione. Restano qui le voci aperte e le ultime 10; le altre vann
+ | 2026-11-23 | claude/brave-albattani-1b12fv | area trader_ai (fino a `c550eae`) | correzioni dei problemi 143 e 149 | **APPROVE con condizioni** (143, 149 chiusi; Bassi 150, 151; prima dei soldi veri correggere 146 e 147) | aperta: condizioni prima del primo avvio (Alessio) | `trader_ai/revisioni/2026-11-23-settima.md` |
+ | 2026-11-25 | claude/brave-albattani-1b12fv | non committato su 932c048 (md5 `conto_vero.py` f3d97671, test d0c657c7) | il conto vero esegue F5 al posto di G1: `STRATEGIA`, `FILE_STRATEGIA` = `data/paper_f5.json`, età massima della decisione da 26 ore a 8 giorni e 2 ore, file predefinito di `ContoVeroG1`; guardia del test | REQUEST CHANGES (0 bloccanti, 0 alti; Medi 178 test che non coprono la modifica, 179 strategia non dichiarata e testi «G1» e «mezzanotte», 180 limiti dei pesi solo al lunedì, 181 blocco sopra il lunedì salta la settimana; Basso 182) | chiusa dal secondo giro: 178 e 179 chiusi (il resto del 179 è il 183); 180-182 seguiti nel secondo giro | `reviews/reports/2026-11-25-conto-vero-F5.md` |
+ | 2026-11-25 | claude/brave-albattani-1b12fv | non committato su ecf55d7 (percorso degli ordini = 932c048), secondo giro; md5 `conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py` 99c9fd1f, `test_conto_vero.py` d0c657c7 | correzioni di 178 (`tests/test_conto_vero_f5.py`, 8 test) e 179 (`STRATEGIA` della classe, testi degli allarmi dell'età, avvio con `strategia` e `file_della_decisione`, prima accensione «il lunedì», scheda «F5 sul conto vero» e testi del «riparti», piano) | **APPROVE per il commit** del codice spento (178, 179 chiusi; 183 Basso nuovo: testi «G1» rimasti, allarme dei pesi, tre righe del log, fotografia, piano); REQUEST CHANGES per l'accensione (54 ii Alto; 70, 180, 181 Medi; 78, 182, 183 Bassi) | aperta: al commit confrontare le impronte; fino all'accensione | `reviews/reports/2026-11-25-conto-vero-F5-2.md` |
++| 2026-11-26 | claude/brave-albattani-1b12fv | `d9c8af7` | trader AI: obiettivo obbligatorio, bilancio di oggi, sforzo «high», `MAX_TOKENS` 16000 | **APPROVE con condizioni** (Medio 184, Bassi 185, 186) | aperta: 184 e 185 prima del riavvio (ok di Alessio) | `trader_ai/revisioni/2026-11-26-quattordicesima.md` |
