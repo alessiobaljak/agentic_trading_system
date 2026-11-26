@@ -1080,3 +1080,6 @@ quello che resta sono le misure in avanti già accese.
 **26 novembre, 12:30 UTC, giro delle 4 ore**: raccolta 25 fonti su 25 (94 articoli nuovi), mappa delle liquidazioni; nessuna chiusura
 nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo (ribilancio e letture alle 04:17). Ricerca: nessuna prova in coda (lo
 scout delle 08:17 non ha trovato idee con un perché forte). **Capito oggi**: niente di nuovo in questo giro.
+**26 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (127 articoli nuovi; una pagina di CryptoBriefing piena: qualche
+articolo di quella fonte può mancare), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun
+passo nuovo. Ricerca: nessuna prova in coda. **Capito oggi**: niente di nuovo in questo giro.
