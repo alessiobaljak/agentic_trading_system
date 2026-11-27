@@ -170,6 +170,11 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   era successo il 20 novembre: 262 monete su 884 con il 18 (commit c74b1c9). Dal 27 novembre lo scarico riprova anche su quell'errore,
   l'errore di una moneta non ferma le altre, e PAPER.md scrive in fondo «Scarico incompleto: N monete senza il giorno …» quando
   mancano monete.
+  Aggiornamento del 27 novembre (dati fino al 25 novembre): M-001c 544 (già bocciata, −0,81% a trade); M-002 4.048 (p 0,24) e M-003
+  1.643 (p 0,99) non passano; seconda tornata in corso: N-001 124 (−2,65%), N-002 170 (+0,14%, p 0,35), N-003 102 (−1,18%). Paper del
+  programma 6: dati fino al 25 novembre, scarico completo al primo giro con la correzione (884 monete attive, nessuna senza il 25; il
+  calcolo, fermato dal limite di tempo dei comandi alle 07:30, è stato rifatto alle 11:18-11:38); le 25 monete entrate nell'universo sono
+  tutte monete (exchangeInfo, «COIN»).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
