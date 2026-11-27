@@ -308,3 +308,4 @@
 {"ora": "2026-11-27T16:30:00.561844+00:00", "motivo": "candela da 15 minuti chiusa", "stato": "tetto", "prezzo": 60021.0, "conto": 928.03, "guadagno_giorno": -8.71, "guadagno_netto": -8.71, "costo": 0.0, "speso_oggi": 4.533, "impronta": "f0ab41bb64a3"}
 {"ora": "2026-11-27T16:34:13.873052+00:00", "evento": "ordine limite eseguito", "entrata": 60400.0, "eseguita": "2026-11-27T16:33:00+00:00"}
 {"ora": "2026-11-27T16:34:13.873052+00:00", "evento": "obiettivo messo sul conto", "obiettivo": 59050.0}
+{"ora": "2026-11-27T16:45:28.682031+00:00", "motivo": "candela da 15 minuti chiusa", "stato": "tetto", "prezzo": 60315.58884058, "conto": 929.94, "guadagno_giorno": -6.8, "guadagno_netto": -7.85, "costo": 0.0, "speso_oggi": 4.533, "impronta": "b47c2937de60"}
