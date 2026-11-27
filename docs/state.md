@@ -1,10 +1,10 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-27 12:14 UTC_
+_Generato: 2026-11-27 12:21 UTC_
 - macchina: non letta qui (lo stato lo fa GitHub): disco, memoria e orologio sono nella risposta «stato» della macchina
 
 ## Il bot (un solo processo: paper, demo e conto vero)
 - stato: **running** (🟢 online)
-- ultimo heartbeat: 2026-11-27 12:14 UTC
+- ultimo heartbeat: 2026-11-27 12:21 UTC
 - DRY_RUN: True
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
@@ -32,9 +32,9 @@ _Generato: 2026-11-27 12:14 UTC_
 - pesi maggiori: WLFIUSDT -14.1%, HYPEUSDT -8.7%, AEROUSDT -8.6%, XMRUSDT -8.3%, FARTCOINUSDT -7.3%, XPLUSDT -6.7%, TRXUSDT +6.7%, GRASSUSDT -6.2%, BEATUSDT -5.3%, XLMUSDT +5.1%
 
 ## Paper G1N (G1 neutra al mercato, a confronto con G1; per i soldi veri resta G1, revisione del 29 ottobre)
-- stato: **acceso** (2026-11-27 11:16 UTC)
+- stato: **acceso** (2026-11-27 12:16 UTC)
 - prova a secco (2026-10-25 08:33 UTC, pesi del 2026-10-25): universo 100, 20 long, 20 short; pesi maggiori ALGOUSDT +6.1%, ASTERUSDT -8.9%, ATOMUSDT +5.7%, BTCUSDT -15.2%, LABUSDT -4.9%, POLUSDT +8.3%, TRXUSDT +45.0%, WLFIUSDT -9.4%, XMRUSDT -7.8%, ZENUSDT -5.2%
-- equity: **$11,162.98** su $10,000 (+11.63%) · costi $34.62 · funding pagato $-532.09
+- equity: **$11,167.74** su $10,000 (+11.68%) · costi $34.62 · funding pagato $-533.47
 - posizioni: 29 long, 29 short · ultimo ribilancio 2026-11-27
 - ordini limite: 1809 eseguiti su 1813 · tutto a mercato sarebbe costato $92.50 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -10.5%, TRXUSDT +7.3%, HYPEUSDT -6.4%, AEROUSDT -6.3%, 1000SHIBUSDT +6.2%, XMRUSDT -6.1%, RENDERUSDT -5.8%, XLMUSDT +5.6%, BCHUSDT +5.5%, FARTCOINUSDT -5.4%
@@ -105,7 +105,7 @@ Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: 
 - non letto: manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env; c'è solo sulla macchina)
 
 ## G1 oggi, moneta per moneta: paper e demo (sola lettura)
-Letto il 2026-11-27 12:14 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,010.98 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
+Letto il 2026-11-27 12:21 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,010.98 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
 - demo: non letto: manca la chiave del conto demo (c'è solo sulla macchina)
 - WLFIUSDT -10.39/— · TRXUSDT +7.34/— · HYPEUSDT -6.36/— · AEROUSDT -6.29/— · 1000SHIBUSDT +6.23/— · XMRUSDT -6.10/—
 - RENDERUSDT -5.77/— · XLMUSDT +5.65/— · BCHUSDT +5.53/— · FARTCOINUSDT -5.35/— · ADAUSDT +5.03/— · ASTERUSDT -4.97/—
@@ -144,13 +144,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| holdout | 1 | 0.1% |
 | regime | 22 | 1.7% |
-| total_return | 1207 | 91.4% |
-| pf_ex_top | 3 | 0.2% |
-| trades | 6 | 0.5% |
+| holdout | 1 | 0.1% |
 | consistency | 17 | 1.3% |
+| pf_ex_top | 3 | 0.2% |
 | recovery | 64 | 4.8% |
+| trades | 6 | 0.5% |
+| total_return | 1207 | 91.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -158,13 +158,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| holdout | 153 | 0.5% |
-| total_return | 26463 | 78.0% |
-| regime | 2815 | 8.3% |
-| pf_ex_top | 242 | 0.7% |
 | trades | 936 | 2.8% |
 | consistency | 589 | 1.7% |
+| holdout | 153 | 0.5% |
+| pf_ex_top | 242 | 0.7% |
 | recovery | 2737 | 8.1% |
+| regime | 2815 | 8.3% |
+| total_return | 26463 | 78.0% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
