@@ -549,7 +549,7 @@ def test_annullare_un_limite_gia_eseguito_e_chiuso_lo_registra(tmp_path):
     tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", **LIMITE), risposta("chiudi")])
     tr.passo()
     cid = tr.carica()["aperta"]["cid"]
-    vero = c.annulla_tutto
+    vero = c.annulla_ordini                                     # dal 27 novembre si annulla prima il solo limite (problema 232)
 
     def annulla_e_scopri():
         vero()
@@ -557,7 +557,7 @@ def test_annullare_un_limite_gia_eseguito_e_chiuso_lo_registra(tmp_path):
                         "eseguita_ms": int(T0.timestamp() * 1000) + 60_000, "chiusa_ms": int(T0.timestamp() * 1000) + 60_000,
                         "uscita": 87991.2, "come": "stop", "spese_entrata": 0.089, "spese": 0.309, "funding": 0.0,
                         "risultato_prezzo": -5.044, "netto": -5.353}
-    c.annulla_tutto = annulla_e_scopri
+    c.annulla_ordini = annulla_e_scopri
     o.t = T0 + timedelta(minutes=14)
     tr.passo()
     st = tr.carica()
@@ -650,3 +650,33 @@ def test_lati_del_bilancio_con_la_stessa_regola_del_netto():
            {"chiusa": "2026-11-25T11:00:00+00:00", "lato": "lungo", "risultato": -1.0, "risultato_prezzo": -0.333,
             "spese": 0.666, "funding": 0.0, "come": "stop iniziale"}]
     assert "netto -2.00 USDT" in riga_bilancio("oggi", ops) and "lunghi 2 (0 vinte, 2 perse, -2.00)" in riga_bilancio("oggi", ops)
+
+
+# --- decisioni del proprietario del 26 novembre 2026 («sì alle tre decisioni») ----------------------------------------------
+
+def test_il_3_per_cento_si_conta_dopo_le_spese_di_chiusura(tmp_path):
+    """Il conto sopra il 3% solo prima delle spese di chiusura non basta: il programma non chiude; sopra anche dopo, chiude."""
+    tr, c, chiamate, o = trader_con(tmp_path, [risposta("apri_lungo", margine_usdt=990, leva=1, stop_prezzo=80000)])
+    tr.passo()
+    assert c.pos is not None
+    q = c.pos["quantita"]
+    costo = q * (90000.0 * 0.0001 + 90000.0 * 0.9999 * 0.0005)            # chiudere il lungo a 90.000: scarto e commissione
+    c.conto = 1000.0 + 30.0 + costo / 2                                    # +3% prima delle spese, sotto dopo
+    o.t = T0 + timedelta(minutes=5)
+    tr.passo()
+    assert c.pos is not None and not tr.carica().get("fermo_fino")
+    c.conto = 1000.0 + 30.0 + costo + 0.01                                 # +3% anche dopo le spese
+    o.t = T0 + timedelta(minutes=6)
+    tr.passo()
+    st = tr.carica()
+    assert c.pos is None and st["fermo_fino"] and st["operazioni"][-1]["come"].startswith("obiettivo del giorno")
+
+
+def test_il_messaggio_conta_cosa_manca_dopo_le_spese_di_chiusura():
+    from trader_ai.messaggio import blocco_conto
+    pos = Posizione("lungo", 0.01, 90000.0, 5, 89000.0)
+    c = Conto(1029.0, 800.0, 1000.0, pos, spese_chiusura=0.54)
+    testo = blocco_conto(c, 92900.0, {"tipo": "mercato"}, Memoria(giorno="2026-11-24"), "BTCUSDT",
+                         {"5m": 100.0, "15m": 200.0, "30m": 300.0}, datetime(2026, 11, 24, 10, 0, tzinfo=timezone.utc))
+    assert "da mezzanotte UTC +29.00, +28.46 se chiudi adesso (spese di chiusura tolte)" in testo
+    assert "contato dopo le spese di chiusura) 30.00: mancano 1.54" in testo

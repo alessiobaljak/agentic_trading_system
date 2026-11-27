@@ -430,6 +430,13 @@ class ContoSimulato:
             self._aggiorna(self.ora_ms())
             self.s["ordini"], self.s["algo"] = [], []
 
+    def annulla_ordini(self) -> None:
+        """Annulla i soli ordini limite; stop e obiettivo restano (diciassettesima revisione del trader, problema 232). Prima i
+        minuti già chiusi, con l'ordine ancora al suo posto, come in `annulla_tutto`."""
+        with self._stato():
+            self._aggiorna(self.ora_ms())
+            self.s["ordini"] = []
+
     def chiudi(self, pos: Optional[dict], cid: str) -> Optional[dict]:
         esito = None
         mark = self.m.mercato()["prezzo"]

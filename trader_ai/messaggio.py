@@ -22,7 +22,7 @@ from typing import Dict, List, Optional, Tuple
 
 from trader_ai import calendario
 from trader_ai.indicatori import riassunto, vwap
-from trader_ai.limiti import OBIETTIVO_GIORNO_QUOTA, Conto, Posizione, obiettivo_usdt
+from trader_ai.limiti import OBIETTIVO_GIORNO_QUOTA, Conto, Posizione, guadagno_netto, obiettivo_usdt
 from trader_ai.operazioni import (COMMISSIONE_MERCATO, CATEGORIE, bilancio, durata_min, netto_a, pareggio, serie_perdente,
                                   spese_entrata, un_r, uscita_effettiva)
 
@@ -325,10 +325,12 @@ def righe_attesa(p: Posizione, a: dict, prezzo: float, moneta: str, atr: Dict[st
 def blocco_conto(c: Conto, prezzo: float, aperta: Optional[dict], m: Memoria, moneta: str,
                  atr: Dict[str, Optional[float]], ora: datetime) -> str:
     guadagno = c.conto - c.conto_mezzanotte
+    netto = guadagno_netto(c)
     ob = obiettivo_usdt(c)
-    righe = [f"conto {c.conto:.2f} USDT (disponibile {c.disponibile:.2f}); da mezzanotte UTC {guadagno:+.2f}; obiettivo del giorno "
-             f"({OBIETTIVO_GIORNO_QUOTA:.0%} del conto a mezzanotte, {c.conto_mezzanotte:.2f}) {ob:.2f}: mancano "
-             f"{max(0.0, ob - guadagno):.2f}"]
+    chiusura = f", {netto:+.2f} se chiudi adesso (spese di chiusura tolte)" if c.spese_chiusura else ""
+    righe = [f"conto {c.conto:.2f} USDT (disponibile {c.disponibile:.2f}); da mezzanotte UTC {guadagno:+.2f}{chiusura}; obiettivo "
+             f"del giorno ({OBIETTIVO_GIORNO_QUOTA:.0%} del conto a mezzanotte, {c.conto_mezzanotte:.2f}, contato dopo le spese di "
+             f"chiusura) {ob:.2f}: mancano {max(0.0, round(ob, 2) - round(netto, 2)):.2f}"]
     ini = m.inizio.get("conto")
     if ini:
         righe.append(f"dall'inizio della prova ({_data(m.inizio.get('giorno', '-'))}, {ini:.0f} USDT): {c.conto - ini:+.2f} "

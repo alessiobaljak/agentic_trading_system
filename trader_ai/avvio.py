@@ -6,7 +6,9 @@
 2. a mezzanotte UTC scrive il resoconto del giorno finito e riparte dal conto di quel momento;
 3. se l'operazione aperta si è chiusa (stop, obiettivo, liquidazione) la scrive nella memoria e chiama subito il modello;
 4. la posizione aperta deve avere lo stop sul conto: se manca lo rimette; se il prezzo l'ha già superato, chiude a mercato (problema 96);
-5. a +3% dal conto della mezzanotte chiude tutto e si ferma fino alla mezzanotte dopo;
+5. quando il guadagno da mezzanotte, tolte le spese di chiusura, arriva al 3% (al centesimo) chiude tutto; si ferma fino alla
+   mezzanotte dopo solo se il 3% c'è ancora sul conto dopo la chiusura (se no chiama subito il modello), e toglie il fermo se
+   durante il fermo il conto scende sotto il 3% (versione 8, `REGOLE.md`);
 6. a ogni candela da 15 minuti chiusa chiama il modello (se il tetto di spesa lo permette) ed esegue la decisione accettata, dopo aver
    riletto il prezzo e ricontrollato la decisione; se lo stop viene rifiutato dopo l'apertura, chiude subito.
 
@@ -41,10 +43,12 @@ from trader_ai import sveglia
 from trader_ai.conto_demo import ContoDemo, arrotonda, controlla_chiavi, nostro
 from trader_ai.costi import Budget, costo_massimo
 from trader_ai.giro import decidi
-from trader_ai.limiti import ORDINE_MIN_VALORE, LEVA_MAX, Conto, Posizione, controlla, obiettivo_raggiunto, obiettivo_usdt
+from trader_ai.limiti import (ORDINE_MIN_VALORE, OBIETTIVO_GIORNO_QUOTA, LEVA_MAX, Conto, Posizione, controlla, guadagno_netto,
+                              obiettivo_raggiunto, obiettivo_usdt)
 from trader_ai.messaggio import Memoria, atr_per_intervallo, costruisci
 from trader_ai.modello import Esito, chiama, crea_client
-from trader_ai.operazioni import bilancio, escursione, iso_da_ms, ms, spese_entrata, tipo_di_stop, un_r
+from trader_ai.operazioni import (COMMISSIONE_MERCATO, bilancio, escursione, iso_da_ms, ms, spese_entrata, tipo_di_stop, un_r,
+                                  uscita_effettiva)
 from trader_ai.ripara import lezioni_dal_diario, ricostruisci
 
 #: I dati (stato, diario, spesa, resoconti) stanno in una copia del repository diversa da quella del codice (problema 98):
@@ -137,6 +141,19 @@ class Trader:
         tmp.write_text(json.dumps(st, ensure_ascii=False, indent=1))
         tmp.replace(self.f_stato)
 
+    def _ricorda(self, st: dict, motivo: str, del_giorno: bool = False) -> None:
+        """Il motivo della chiamata che deve partire in questo passo si salva SUBITO, con lo stato: se il passo si interrompe prima
+        della chiamata (candele non arrivate, pausa di Binance, riavvio mentre il modello pensa), al passo dopo il modello si chiama
+        con questo motivo e la chiusura non si registra una seconda volta (riesame della sedicesima, problemi 200 e 208). In
+        memoria si toglie: lo stato salvato dopo la chiamata non lo ha più. `del_giorno`: il motivo ha i numeri del 3% di oggi; se
+        la chiamata arriva solo dopo mezzanotte, il motivo lo dice (riesame della sedicesima, problema 231)."""
+        st["richiama"] = motivo
+        if del_giorno:
+            st["richiama_giorno"] = st.get("giorno")
+        self.salva(st)
+        st.pop("richiama", None)
+        st.pop("richiama_giorno", None)
+
     def evento(self, ora: datetime, cosa: str, **altro) -> None:
         self.cartella.mkdir(parents=True, exist_ok=True)
         with open(self.diario, "a") as f:
@@ -212,6 +229,7 @@ class Trader:
         # una chiusura (o un annullamento) decisa dal modello al passo prima: il modello si richiama subito (punto 2.10 del
         # controllo del 26 novembre); qui c'è già il motivo intero della chiamata
         richiama = st.pop("richiama", None)
+        richiama_giorno = st.pop("richiama_giorno", None)
         chiusa = None
         a = st.get("aperta")
         if a and pos is not None and a.get("inviata"):                     # risposta persa ma ordine eseguito: è nostra
@@ -239,6 +257,10 @@ class Trader:
             if st.get("aperta") is None:                                  # chiusa dalla protezione
                 pos, chiusa = None, chiusa or come_protezione or "chiusa dal programma"
                 s = self.c.saldo()
+        if chiusa:
+            # la chiusura è già nella memoria: si salva subito, con il motivo della chiamata, così un passo interrotto prima della
+            # chiamata non la registra una seconda volta e il modello la sa lo stesso (riesame della sedicesima, problemi 200 e 208)
+            self._ricorda(st, sveglia.motivo(ora, None, chiusa))
 
         # mezzanotte UTC: dopo aver registrato le chiusure trovate in questo passo, così un'operazione chiusa nell'ultimo minuto del
         # giorno entra nel resoconto del suo giorno (revisione del 26 novembre 2026, S6)
@@ -253,31 +275,95 @@ class Trader:
                       tetto_dalle=None, massimo_giorno=s["conto"], discesa_max_giorno=0.0, discesa_dalle=ora.isoformat(),
                       stat_giorno={})
             st.pop("prezzo_mezzanotte", None)
+            st.pop("fermi_tolti", None)
             self.evento(ora, "giorno nuovo", conto=s["conto"])
             self._pulisci_messaggi(ora)
+        if richiama and richiama_giorno and richiama_giorno != giorno:
+            # un motivo con i numeri del 3% salvato prima di mezzanotte e chiamato dopo (passo interrotto, pausa, riavvio): i numeri
+            # erano di quel giorno (riesame della sedicesima, problema 231)
+            richiama = (f"{richiama} (numeri del giorno {richiama_giorno}, prima della mezzanotte UTC: da mezzanotte il giorno è "
+                        f"nuovo)")
         st.setdefault("discesa_dalle", ora.isoformat())
         st["massimo_giorno"] = max(st.get("massimo_giorno", s["conto"]), s["conto"])
         st["discesa_max_giorno"] = max(st.get("discesa_max_giorno", 0.0), st["massimo_giorno"] - s["conto"])
 
         if st.get("fermo_fino") and ora < datetime.fromisoformat(st["fermo_fino"]):
-            self.salva(st)
-            return
-        conto = self._conto(st, s, pos)
+            fermo = self._conto(st, s, None, prezzo)
+            if not (pos is None and not st.get("aperta") and not obiettivo_raggiunto(fermo)):
+                self.salva(st)
+                return
+            # durante il fermo non c'è niente di aperto: il conto cambia solo se un funding si paga dopo la chiusura (il conto
+            # simulato lo applica quando Binance lo pubblica). Se il guadagno scende sotto il 3% l'obiettivo non è raggiunto: il
+            # fermo si toglie e il modello si chiama (riesame della sedicesima, problema 210 del secondo cercatore; il proprietario:
+            # «non si deve fermare finché non ha raggiunto il 3%»)
+            sceso = guadagno_netto(fermo)
+            st.setdefault("fermi_tolti", []).append({"raggiunto": st.get("obiettivo_ora"), "tolto": ora.isoformat(),
+                                                     "guadagno": round(sceso, 2)})
+            st["fermo_fino"] = st["obiettivo_ora"] = None
+            self.evento(ora, "dopo il fermo il guadagno del giorno è sceso sotto il 3%: fermo tolto, si continua",
+                        conto=s["conto"], guadagno=round(sceso, 2))
+            richiama = (f"fermo tolto: dopo la chiusura per l'obiettivo del giorno il conto è sceso e il guadagno del giorno è "
+                        f"{sceso:+.2f} USDT, sotto il 3% ({obiettivo_usdt(fermo):.2f}): l'obiettivo non è raggiunto")
+            self._ricorda(st, richiama, del_giorno=True)
+        conto = self._conto(st, s, pos, prezzo)
         if obiettivo_raggiunto(conto):
-            chiuso = self.c.chiudi(pos, self._cid(ora, "x"))
-            if st.get("aperta") and pos is None and st["aperta"].get("in_attesa"):
-                st["aperta"] = None                                       # un limite mai eseguito non è un'operazione
-                self.evento(ora, "ordine limite annullato: obiettivo del giorno raggiunto")
-            elif st.get("aperta"):
-                if chiuso:
-                    st["aperta"]["chiusa_da"] = "obiettivo del giorno (chiusa dal programma)"
-                self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], prezzo, ora)
-            st["fermo_fino"] = mezzanotte_dopo(ora).isoformat()
-            st["obiettivo_ora"] = ora.isoformat()
-            self.evento(ora, "obiettivo del giorno raggiunto: chiuso tutto, fermo fino a mezzanotte UTC",
-                        conto=s["conto"], guadagno=round(s["conto"] - st["conto_mezzanotte"], 2))
-            self.salva(st)
-            return
+            previsto = guadagno_netto(conto)
+            a = st.get("aperta")
+            n_prima = st.get("prossimo_n")
+            come, limite = None, False
+            if a and pos is None and a.get("in_attesa"):
+                # un limite in attesa si annulla come quando lo annulla il modello: se si esegue proprio mentre lo si annulla (il
+                # conto simulato conta prima i minuti chiusi), la posizione si chiude subito a mercato e non resta senza stop
+                # (riesame della sedicesima, problema 207; prima «chiudi» senza posizione toglieva lo stop e la lasciava aperta)
+                self._annulla_limite(st, prezzo, ora, "ordine limite annullato: obiettivo del giorno raggiunto")
+                limite = True
+                if st.get("prossimo_n") != n_prima:                       # si era eseguito: chiuso e registrato
+                    come = st["operazioni"][-1]["come"]
+            else:
+                chiuso = self.c.chiudi(pos, self._cid(ora, "x"))
+                if a:
+                    if chiuso:
+                        a["chiusa_da"] = "obiettivo del giorno (chiusa dal programma)"
+                        self.salva(st)                # chiusa: il modo resta anche se la lettura del saldo qui sotto fallisce
+                    come = self._registra_chiusura(st, a, self.c.saldo()["conto"], prezzo, ora)
+            # registrata (o il limite annullato): lo stato si salva prima di rileggere il saldo, con un motivo provvisorio che il
+            # fermo toglie o il ramo «sotto il 3%» riscrive (diciassettesima revisione, problema 213)
+            if come or chiusa:
+                self._ricorda(st, sveglia.motivo(ora, None, come or chiusa))
+            elif limite:
+                self._ricorda(st, "ordine limite annullato dal programma per l'obiettivo del giorno (nessuna operazione)")
+            # il 3% conta se c'è DOPO la chiusura, al centesimo come prima: fra il controllo e la chiusura il prezzo può essersi
+            # mosso, o uno stop può essere scattato prima (revisione del 26 novembre 2026, problema 204; il proprietario: «non si
+            # deve fermare finché non ha raggiunto il 3%»)
+            s = self.c.saldo()
+            dopo = self._conto(st, s, None, prezzo)
+            incassato = guadagno_netto(dopo)
+            if obiettivo_raggiunto(dopo):
+                st["fermo_fino"] = mezzanotte_dopo(ora).isoformat()
+                st["obiettivo_ora"] = ora.isoformat()
+                self.evento(ora, "obiettivo del giorno raggiunto: chiuso tutto, fermo fino a mezzanotte UTC",
+                            conto=s["conto"], guadagno=round(incassato, 2), guadagno_previsto=round(previsto, 2))
+                self.salva(st)
+                return
+            # sotto il 3% dopo la chiusura: l'obiettivo non è raggiunto, niente fermo; il modello si chiama subito, con il perché
+            self.evento(ora, "chiuso per l'obiettivo del giorno, ma dopo la chiusura il guadagno è sotto il 3%: si continua",
+                        conto=s["conto"], guadagno=round(incassato, 2), guadagno_previsto=round(previsto, 2))
+            sotto = (f"il guadagno del giorno è {incassato:+.2f} USDT, sotto il 3% ({obiettivo_usdt(dopo):.2f}): l'obiettivo non "
+                     f"è raggiunto")
+            if come or chiusa:
+                # un'operazione chiusa in questo passo: dal programma, o già prima sul conto (allora vale il suo modo, problema 209)
+                chiusa = f"{come or chiusa}; dopo la chiusura {sotto}"
+                self._ricorda(st, sveglia.motivo(ora, None, chiusa), del_giorno=True)
+            else:
+                # nessuna operazione chiusa: il motivo non dice «operazione chiusa» (problema 209)
+                if limite:
+                    richiama = (f"ordine limite annullato dal programma per l'obiettivo del giorno (nessuna operazione); dopo "
+                                f"l'annullamento {sotto}")
+                else:                                                     # niente da chiudere: il conto era già senza niente
+                    richiama = f"{richiama}; adesso {sotto}" if richiama else f"adesso {sotto}"
+                self._ricorda(st, richiama, del_giorno=True)
+            pos = None
+            conto = dopo
         if pos is None and not st.get("aperta") and s["disponibile"] * LEVA_MAX < ORDINE_MIN_VALORE:
             if not st.get("esaurito"):
                 self.evento(ora, "FERMO: il conto non basta più per l'ordine minimo", conto=s["conto"])
@@ -361,8 +447,8 @@ class Trader:
         """Le lezioni scritte dal modello (e i perché dei cambi di approccio) restano anche nei giorni dopo (punto 3.4). Entrano
         nella memoria stabile alla chiusura dopo: così la cache non si riscrive a ogni chiamata."""
         ultima = (st["operazioni"] or [{}])[-1].get("n")
-        base = {"ora": ora.isoformat(), "dopo": ultima, "giorno_netto": round(conto.conto - conto.conto_mezzanotte, 2),
-                "fissata": False}
+        # il giorno come lo vedeva il modello: dopo le spese di chiusura dell'operazione aperta (revisione, problema 206)
+        base = {"ora": ora.isoformat(), "dopo": ultima, "giorno_netto": round(guadagno_netto(conto), 2), "fissata": False}
         nuove = []
         if r.lezione and r.lezione.strip():
             nuove.append({**base, "testo": taglia(r.lezione, 400)})
@@ -430,15 +516,20 @@ class Trader:
                 f.unlink(missing_ok=True)
 
     # --- pezzi -----------------------------------------------------------------------------------------------------
-    def _conto(self, st: dict, s: dict, pos: Optional[dict]) -> Conto:
+    def _conto(self, st: dict, s: dict, pos: Optional[dict], prezzo: Optional[float] = None) -> Conto:
         a = st.get("aperta") or {}
         p = None
+        spese_chiusura = 0.0
         if pos is not None:
             p = Posizione(pos["lato"], pos["quantita"], pos["entrata"], pos["leva"], a.get("stop") or 0.0, a.get("obiettivo"),
                           pos["liquidazione"])
+            if prezzo:
+                # chiudere adesso costa commissione e scarto d'uscita: il 3% si conta dopo (il proprietario, 26 novembre 2026)
+                u = uscita_effettiva(pos["lato"], prezzo, self.c.simbolo)
+                spese_chiusura = pos["quantita"] * (abs(u - prezzo) + u * COMMISSIONE_MERCATO)
         elif a.get("in_attesa"):                       # un ordine limite in attesa: non è una posizione (punto 2.1)
             p = Posizione(a["lato"], a["quantita"], a["entrata"], a["leva"], a["stop"], a.get("obiettivo"), in_attesa=True)
-        return Conto(s["conto"], s["disponibile"], st["conto_mezzanotte"], p)
+        return Conto(s["conto"], s["disponibile"], st["conto_mezzanotte"], p, spese_chiusura)
 
     def _esito(self, a: dict) -> Optional[dict]:
         """L'esito dell'ordine di apertura dal conto. Un errore di lettura si propaga: non vuol dire «mai eseguito» (revisione del
@@ -662,7 +753,11 @@ class Trader:
         se nel frattempo lo stop o l'obiettivo l'avevano già chiusa, vale quello del conto (revisione del 26 novembre 2026, S5)."""
         if self.c.chiudi(pos, self._cid(ora, "x")):
             st["aperta"]["chiusa_da"] = perche
-        return self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], prezzo, ora)
+            self.salva(st)                            # chiusa: il modo resta anche se la lettura del saldo qui sotto fallisce
+        come = self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], prezzo, ora)
+        # registrata: lo stato si salva subito, con il motivo della chiamata (diciassettesima revisione, problema 230)
+        self._ricorda(st, sveglia.motivo(ora, None, come))
+        return come
 
     def _protezione(self, st: dict, pos: dict, prezzo: float, condizionati: list, ora: datetime) -> Optional[str]:
         """La posizione aperta deve avere il suo stop sul conto. Se manca: con il prezzo già oltre lo stop si chiude a mercato,
@@ -736,7 +831,7 @@ class Trader:
         f = self.c.filtri()
         tick = f["passo_prezzo"]
         prezzo = self.c.mercato()["prezzo"]                       # il prezzo è cambiato mentre il modello pensava
-        scarto = controlla(r, self._conto(st, s, pos), prezzo)
+        scarto = controlla(r, self._conto(st, s, pos, prezzo), prezzo)
         if scarto:
             raise Scartata(f"con il prezzo di adesso ({prezzo:.10g}) la decisione non vale più: {scarto}")
         if r.azione in ("apri_lungo", "apri_corto"):
@@ -852,9 +947,11 @@ class Trader:
             self.evento(ora, "modificata", stop=a.get("stop"), obiettivo=a.get("obiettivo"))
 
     def _annulla_limite(self, st: dict, prezzo: float, ora: datetime, perche: str) -> None:
-        """Annulla l'ordine limite (e stop e obiettivo); poi rilegge: se nel frattempo si è eseguito, la posizione si chiude subito
-        a mercato con «solo riduzione», perché senza stop non deve restare (revisione del 23 novembre 2026, problemi 133 e 134)."""
-        self.c.annulla_tutto()
+        """Annulla l'ordine limite; poi rilegge: se nel frattempo si è eseguito, la posizione si chiude subito a mercato con «solo
+        riduzione» (revisione del 23 novembre 2026, problemi 133 e 134). Stop e obiettivo si tolgono solo dopo, quando si sa che il
+        limite non si è eseguito: una posizione aperta proprio adesso tiene il suo stop anche se la chiusura non riesce
+        (diciassettesima revisione, problema 232; prima si annullava tutto insieme)."""
+        self.c.annulla_ordini()
         rimasta = next(({k: v for k, v in p.items() if k != "simbolo"} for p in self.c.posizioni_simbolo()), None)
         if rimasta is None:
             # l'annullamento può non riuscire senza errore (annulla_tutto scrive e va avanti): se l'ordine limite del trader è
@@ -875,6 +972,7 @@ class Trader:
                     self.evento(ora, "il limite si era eseguito e chiuso prima dell'annullamento")
                     self._registra_chiusura(st, a, self.c.saldo()["conto"], prezzo, ora, esito)
                     return
+            self.c.annulla_tutto()                                        # stop e obiettivo del limite mai eseguito
             st["aperta"] = None
             self.evento(ora, perche)
             return
@@ -953,9 +1051,19 @@ class Trader:
         try:
             with bloccato(BLOCCO, attesa_blocco_s):
                 st = self.carica() or {"operazioni": [], "note": [], "oi": []}
-                if st.get("aperta") and pos is not None:
-                    st["aperta"]["chiusa_da"] = "chiusa a mano dal proprietario"
-                    self._registra_chiusura(st, st["aperta"], self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora)
+                a = st.get("aperta")
+                if a and pos is not None:
+                    a["chiusa_da"] = "chiusa a mano dal proprietario"
+                    self._registra_chiusura(st, a, self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora)
+                elif a and not a.get("in_attesa") and a.get("eseguita"):
+                    # già chiusa da sola sul conto (stop, obiettivo) prima che un passo la vedesse: si registra con l'esito del
+                    # conto, se no sparirebbe dalla memoria e dal resoconto (diciassettesima revisione, problema 216)
+                    self._registra_chiusura(st, a, self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora)
+                elif a and a.get("in_attesa"):
+                    esito = self._esito_o_niente(a)
+                    if esito and esito.get("stato") == "chiusa":              # il limite si era eseguito e chiuso prima
+                        self._eseguito(a, esito, ora)
+                        self._registra_chiusura(st, a, self.c.saldo()["conto"], self.c.mercato()["prezzo"], ora, esito)
                 st["aperta"] = None
                 self.evento(ora, "chiuso tutto a mano; fermo finché non arriva «riparti»")
                 self.salva(st)
@@ -998,8 +1106,15 @@ class Trader:
             righe.append(f"* Conto: a inizio giorno {soldi(conto_inizio)}, a fine giorno {soldi(conto_fine)} USDT; costo delle "
                          f"chiamate {spesa:.2f} dollari")
         if conto_inizio:
-            obiettivo = conto_inizio * 0.03
+            obiettivo = conto_inizio * OBIETTIVO_GIORNO_QUOTA
             raggiunto = f"raggiunto alle {_hm_iso(st['obiettivo_ora'])} UTC" if corrente and st.get("obiettivo_ora") else "non raggiunto"
+            if corrente and st.get("obiettivo_ora") and risultato is not None and round(risultato, 2) < round(obiettivo, 2):
+                # un funding pagato dopo la chiusura, nei secondi prima di mezzanotte (riesame della sedicesima, problema 210)
+                raggiunto += f", poi il conto è sceso sotto il 3% ({risultato:+.2f})"
+            for f in (st.get("fermi_tolti") or []) if corrente else []:
+                # il fermo tolto durante il giorno (problema 214): quanto costa la regola «niente fermo sotto il 3%»
+                raggiunto += (f"; prima, alle {_hm_iso(f.get('raggiunto'))} UTC, il 3% era arrivato ma il fermo si è tolto alle "
+                              f"{_hm_iso(f.get('tolto'))} UTC (guadagno sceso a {f.get('guadagno', 0.0):+.2f})")
             righe.append(f"* Obiettivo del 3% ({obiettivo:.2f} USDT): {raggiunto}")
         if corrente:
             dalle = st.get("discesa_dalle")

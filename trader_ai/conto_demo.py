@@ -269,6 +269,15 @@ class ContoDemo:
             except RuntimeError as e:
                 print(f"[trader_ai] annullamento {percorso}: {e}")
 
+    def annulla_ordini(self) -> None:
+        """Annulla i soli ordini normali (l'ordine limite d'apertura); stop e obiettivo, che sono ordini condizionati, restano
+        (diciassettesima revisione del trader, problema 232). Un errore si scrive e si va avanti, come in `annulla_tutto`: chi
+        chiama rilegge gli ordini."""
+        try:
+            self.chiedi("DELETE", "/fapi/v1/allOpenOrders", {"symbol": self.simbolo}, firmata=True)
+        except RuntimeError as e:
+            print(f"[trader_ai] annullamento /fapi/v1/allOpenOrders: {e}")
+
     def chiudi(self, pos: Optional[dict], cid: str) -> Optional[dict]:
         """Prima la chiusura a mercato con «solo riduzione», poi l'annullamento di stop, obiettivo e ordini aperti (se la chiusura
         è rifiutata, stop e obiettivo restano al loro posto)."""
