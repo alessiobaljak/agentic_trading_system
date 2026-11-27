@@ -1118,4 +1118,5 @@ USDT** (con i minimi veri il conto rifiuterebbe il 61% delle variazioni: Sharpe 
 posizioni rimaste sotto il minimo), PASS tecnico a 1.000 USDT; il conto vero è spento, la scelta della taglia è del proprietario.
 **Capito oggi**: un controllo che nessuno guarda è come non averlo: i test di GitHub erano l'unico controllo automatico su ogni commit
 e sono stati fermi per 39 giorni. E una strategia scelta per un conto piccolo va provata con i minimi di quel conto: F5 tiene l'81-84%
-del suo Sharpe a 280 USDT, G1 nella prova 148 il 96%, il contrario di quello che si pensava il 25 novembre.
+del suo Sharpe a 280 USDT, G1 nella prova 148 il 96% (simulatori diversi, rumore di circa 0,1: fonte il rapporto di F5), il contrario di
+quello che si pensava il 25 novembre.
