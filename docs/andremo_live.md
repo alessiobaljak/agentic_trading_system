@@ -1120,3 +1120,11 @@ posizioni rimaste sotto il minimo), PASS tecnico a 1.000 USDT; il conto vero è 
 e sono stati fermi per 39 giorni. E una strategia scelta per un conto piccolo va provata con i minimi di quel conto: F5 tiene l'81-84%
 del suo Sharpe a 280 USDT, G1 nella prova 148 il 96% (simulatori diversi, rumore di circa 0,1: fonte il rapporto di F5), il contrario di
 quello che si pensava il 25 novembre.
+**27 novembre, 05:00 UTC, correzioni dell'audit, prima parte (scarico e notizie)**: lo scarico del paper delle candidate non si ferma
+più a un errore di una moneta (il 20 e il 26 novembre una lettura interrotta lo aveva fermato a metà, nascosto da «|| true», e il paper
+era rimasto ai dati del 23); PAPER.md scrive in fondo «Scarico incompleto» quando mancano monete. La raccolta delle notizie: «piena» si
+calcola per sito (il falso allarme di CryptoBriefing del 26), un articolo già visto non si salva di nuovo dopo 10 giorni (17 righe doppie
+su 12.866), le ore si leggono sempre in UTC, e cinque sigle contano solo con il «$». La prova in avanti delle notizie è pronta per il 30
+novembre (`research/notizie/prova_avanti.py`). **Capito**: il conto automatico sbagliava moneta su cinque sigle (ARK Invest, la società
+HIVE, la legge GENIUS, le azioni SATS di Strive, «APR» il tasso annuo: 50 articoli di novembre in tutto, numeri dell'audit); la prova
+in avanti dirà ogni settimana quanto pesavano.

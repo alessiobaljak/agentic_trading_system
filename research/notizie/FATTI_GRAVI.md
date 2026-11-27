@@ -50,3 +50,10 @@ una strategia con le regole scritte prima, nel conto delle prove, con il flusso 
 8. Se serve, si propone una strategia (regole scritte prima, nel conto delle prove, backtest-auditor; il paper lo decide la sessione
    principale, il demo e i soldi veri il proprietario). Se dopo **80 casi** non serve, la lettura si ferma e si scrive il perché, a meno
    che il proprietario dica altro. Lo script della misura (`fatti_gravi_misura.py`) si scrive prima del giudizio e non cambia queste regole.
+
+## Nota del 27 novembre 2026 (audit del 26 novembre)
+L'abbinamento segue `research/notizie/REGOLE.md`, sezione 2, che da oggi conta ARK, HIVE, GENIUS, SATS e APR solo con il «$» (davano abbinamenti falsi: ARK Invest, la società di mining HIVE, la legge GENIUS, le azioni
+SATS di Strive, «APR» il tasso annuo). Per APRUSDT, venduta da G1, il foglio non mostra più gli articoli sul tasso annuo. Le ore
+dell'archivio si leggono sempre in UTC (`raccolta.ora_utc`).
+ANT resta fra le monete abbinate: dal 17 novembre ANTUSDT è il perpetuo sulle azioni di Anthropic, quindi
+lo scarto del 23 novembre come abbinamento sbagliato non vale più.

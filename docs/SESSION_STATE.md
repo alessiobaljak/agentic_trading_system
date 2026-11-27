@@ -77,6 +77,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Lunedì 30 novembre, prova in avanti delle notizie** (P31): dopo il conto a tavolino `python3 -m research.notizie.prova_avanti`, poi
+  commit di `research/notizie/avanti/`; il 30 dice solo che non ci sono settimane finite, il primo numero (30 novembre - 6 dicembre)
+  arriva il 7 dicembre e va nei numeri del lunedì al proprietario.
 - **Conto vero su F5** (25 novembre): codice committato dopo l'APPROVE di live-path-reviewer per il commit (spento); prima
   dell'accensione la voce P36 del backlog (testi «G1» rimasti, peso massimo di F5, settimana saltata dopo un blocco, decisioni del proprietario).
 - **Giudice delle balene** (idea 152, regole `research/trader_copiati/GIUDICE_BALENE.md` del 24 novembre): scrivere

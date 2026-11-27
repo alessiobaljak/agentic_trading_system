@@ -61,6 +61,12 @@ PAROLE = {"ONE", "ALL", "GAS", "SUN", "NOT", "WIN", "HOT", "KEY", "BAND", "FLOW"
           "Story", "Movement", "Plume", "Echelon", "Monad", "Berachain", "Gravity", "Pump", "Bonk", "Floki", "Popcat", "Pepe", "Maker",
           "Compound", "Curve", "Balancer", "Frax", "Liquity", "Synapse", "Across", "Wormhole", "Jupiter", "Raydium", "Orca", "Drift",
           "Kamino", "Marinade", "Ethena", "Pendle", "Lido", "Rocket", "Eigen", "Puffer", "Swell", "Ether", "Bitcoin", "Ethereum"}
+# 27 novembre 2026 (audit del 26 novembre): sigle che nel conto automatico davano abbinamenti falsi (ARK Invest, la società di mining
+# HIVE, la legge GENIUS, le azioni SATS di Strive, «APR» il tasso annuo); da oggi contano solo con il «$» (REGOLE.md, nota del 27
+# novembre). Tenute a parte perché la prova in avanti (`prova_avanti.py`) riporta il conto con e senza di loro.
+PAROLE_FINO_AL_26_NOVEMBRE = frozenset(PAROLE)
+PAROLE_27_NOVEMBRE = frozenset({"ARK", "HIVE", "GENIUS", "SATS", "APR"})
+PAROLE = set(PAROLE_FINO_AL_26_NOVEMBRE | PAROLE_27_NOVEMBRE)
 # Bitcoin ed Ether si contano comunque con il nome (REGOLE.md): li aggiunge `nomi()`
 SEMPRE = {"BTCUSDT": ("Bitcoin",), "ETHUSDT": ("Ethereum", "Ether")}
 
@@ -118,10 +124,29 @@ def leggi_fonte(nome: str, url: str) -> list:
     return out
 
 
-def visti_di_recente(oggi: datetime, giorni: int = 10) -> set:
+def ora_utc(x) -> datetime | None:
+    """Un'ora dell'archivio («pubblicato» o «visto»: in UTC, scritte senza il fuso) letta sempre in UTC, qualunque sia il fuso della
+    macchina. Dal 27 novembre 2026 (audit del 26 novembre): `fromisoformat` seguito da `astimezone` prendeva l'ora senza fuso come ora
+    locale (con l'ora svizzera la finestra si spostava di 1 o 2 ore)."""
+    if not x:
+        return None
+    try:
+        d = datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return (d if d.tzinfo else d.replace(tzinfo=timezone.utc)).astimezone(timezone.utc)
+
+
+def visti_di_recente(oggi: datetime, giorni: int | None = None) -> set:
+    """Gli id degli articoli già salvati. Dal 27 novembre 2026 (audit del 26 novembre) di tutto l'archivio (`giorni=None`), non più dei
+    soli ultimi 10 giorni: un articolo che restava in pagina (la pagina fissa di Cointelegraph «Here's what happened in crypto today») si
+    salvava di nuovo ogni 10 giorni, mentre REGOLE.md (sezione 1) dice che chi l'ha già visto non lo salva una seconda volta."""
+    if giorni is None:
+        file = sorted(ARCHIVIO.glob("????-??-??.jsonl.gz"))
+    else:
+        file = [ARCHIVIO / f"{(oggi - timedelta(days=k)).strftime('%Y-%m-%d')}.jsonl.gz" for k in range(giorni)]
     s = set()
-    for k in range(giorni):
-        f = ARCHIVIO / f"{(oggi - timedelta(days=k)).strftime('%Y-%m-%d')}.jsonl.gz"
+    for f in file:
         if f.exists():
             with gzip.open(f, "rt", encoding="utf-8") as g:
                 s.update(json.loads(r)["id"] for r in g if r.strip())
@@ -154,21 +179,45 @@ def nomi(oggi: datetime) -> Path:
     return f
 
 
-def citate(testo: str, elenco: dict) -> list:
-    """Le monete citate in un testo (REGOLE.md, sezione 2)."""
+def citate(testo: str, elenco: dict, parole: set | None = None) -> list:
+    """Le monete citate in un testo (REGOLE.md, sezione 2). `parole` (di norma `PAROLE`) serve solo alla prova in avanti, che rifà il
+    conto anche senza le sigle aggiunte il 27 novembre 2026."""
+    parole = PAROLE if parole is None else parole
     out = []
     for s, x in elenco.items():
         sigla, nome = x["sigla"], x["nome"]
         trovata = bool(re.search(r"\$" + re.escape(sigla) + r"\b", testo, re.I))
-        if not trovata and len(sigla) >= 3 and sigla not in PAROLE:
+        if not trovata and len(sigla) >= 3 and sigla not in parole:
             trovata = bool(re.search(r"(?<![A-Za-z0-9])" + re.escape(sigla) + r"(?![A-Za-z0-9])", testo))
-        if not trovata and len(nome) >= 5 and nome not in PAROLE and nome.upper() not in PAROLE:
+        if not trovata and len(nome) >= 5 and nome not in parole and nome.upper() not in parole:
             trovata = bool(re.search(r"\b" + re.escape(nome) + r"\b", testo))
         if not trovata and s in SEMPRE:
             trovata = any(re.search(r"\b" + n + r"\b", testo) for n in SEMPRE[s])
         if trovata:
             out.append(s)
     return out
+
+
+def citatore(elenco: dict, parole: set | None = None):
+    """La stessa regola di `citate` (REGOLE.md, sezione 2) con le espressioni preparate una volta per elenco: restituisce una funzione
+    testo → monete citate. Serve alla prova in avanti, che legge migliaia di articoli (`citate` ne fa circa 20 al secondo, perché
+    ricompila le espressioni a ogni articolo). Un test controlla che dia sempre lo stesso risultato di `citate`."""
+    parole = PAROLE if parole is None else parole
+    prove = []
+    for s, x in elenco.items():
+        sigla, nome = x["sigla"], x["nome"]
+        pp = [re.compile(r"\$" + re.escape(sigla) + r"\b", re.I)]
+        if len(sigla) >= 3 and sigla not in parole:
+            pp.append(re.compile(r"(?<![A-Za-z0-9])" + re.escape(sigla) + r"(?![A-Za-z0-9])"))
+        if len(nome) >= 5 and nome not in parole and nome.upper() not in parole:
+            pp.append(re.compile(r"\b" + re.escape(nome) + r"\b"))
+        if s in SEMPRE:
+            pp += [re.compile(r"\b" + n + r"\b") for n in SEMPRE[s]]
+        prove.append((s, pp))
+
+    def cerca(testo: str) -> list:
+        return [s for s, pp in prove if any(p.search(testo) for p in pp)]
+    return cerca
 
 
 TENDENZE = "https://api.coingecko.com/api/v3/search/trending"
@@ -198,6 +247,28 @@ def tendenze(ora: datetime) -> int:
     return len(righe)
 
 
+def sito(fonte: str) -> str:
+    """Il sito di una fonte: le pagine in più dello stesso sito hanno il nome con un numero in fondo (cryptobriefing2, beincrypto2)."""
+    return re.sub(r"\d+$", "", fonte)
+
+
+def note_piena(giro: list) -> list:
+    """La nota «piena» di ogni riga del giro [(fonte, articoli, nuovi), ...], nell'ordine di `FONTI`. Dal 27 novembre 2026 (audit del
+    26 novembre) si calcola per sito e non per pagina: un sito è pieno solo se gli articoli nuovi riempiono tutto quello che le sue
+    pagine hanno dato, e la nota va solo sulla riga della sua ultima pagina. Prima una prima pagina tutta nuova con la seconda che
+    ritrovava articoli già visti dava un falso allarme (26 novembre, Crypto Briefing)."""
+    tot: dict = {}
+    nuovi: dict = {}
+    ultima: dict = {}
+    for k, (fonte, n, n_nuovi) in enumerate(giro):
+        s = sito(fonte)
+        tot[s] = tot.get(s, 0) + n
+        nuovi[s] = nuovi.get(s, 0) + n_nuovi
+        ultima[s] = k
+    pieni = {s for s in tot if tot[s] and nuovi[s] == tot[s]}
+    return ["piena" if sito(fonte) in pieni and ultima[sito(fonte)] == k else "" for k, (fonte, _, _) in enumerate(giro)]
+
+
 def esegui(log=print) -> dict:
     ora = datetime.now(timezone.utc)
     ARCHIVIO.mkdir(parents=True, exist_ok=True)
@@ -216,7 +287,8 @@ def esegui(log=print) -> dict:
             a["visto"] = ora.strftime("%Y-%m-%d %H:%M:%S")
             nuovi.append(a)
             n_nuovi += 1
-        giro.append((fonte, len(articoli), n_nuovi, "piena" if articoli and n_nuovi == len(articoli) else ""))
+        giro.append((fonte, len(articoli), n_nuovi))
+    giro = [(fonte, n, k, nota) for (fonte, n, k), nota in zip(giro, note_piena(giro))]
     f = ARCHIVIO / f"{ora.strftime('%Y-%m-%d')}.jsonl.gz"
     with gzip.open(f, "at", encoding="utf-8") as g:
         for a in nuovi:
@@ -243,7 +315,7 @@ def esegui(log=print) -> dict:
     except Exception as ex:  # noqa: BLE001
         log(f"[liquidazioni] Hyperliquid non letto ({ex})")
     log(f"[notizie] {ora.strftime('%Y-%m-%d %H:%M')} UTC: {len(nuovi)} articoli nuovi da {risposte} fonti su {len(FONTI)}; "
-        f"piene: {', '.join(x[0] for x in giro if x[3]) or 'nessuna'}; monete di tendenza su CoinGecko: {n_tendenze}")
+        f"piene: {', '.join(sito(x[0]) for x in giro if x[3]) or 'nessuna'}; monete di tendenza su CoinGecko: {n_tendenze}")
     return {"nuovi": len(nuovi), "fonti_che_rispondono": risposte, "tendenze": n_tendenze}
 
 

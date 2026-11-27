@@ -94,3 +94,42 @@ Il 10 novembre alle 16:18 erano piene sia la prima sia la seconda pagina di Cryp
 più notizie da quando si raccoglie): qualche articolo può essere sfuggito. Da oggi si legge anche la terza pagina (`cryptobriefing3` in
 `raccolta.py`); gli articoli già visti si riconoscono dal link, quindi non si contano due volte. Le fonti lette diventano 24. La regola
 della prova in avanti non cambia: conta gli articoli, non le fonti.
+
+## Aggiunta del 27 novembre 2026 (audit del 26 novembre)
+
+Scritta prima del primo calcolo della prova in avanti: nessun numero della regola è stato guardato. **La regola della sezione 3 non
+cambia.**
+
+* **Le parole comuni (sezione 2), da oggi**: in `PAROLE` entrano anche **ARK, HIVE, GENIUS, SATS e APR** (`PAROLE_27_NOVEMBRE` in
+  `raccolta.py`). Nel conto automatico davano abbinamenti falsi: ARK Invest (ARKUSDT, 23 articoli di novembre), la società di mining HIVE
+  (9), la legge GENIUS sulle monete stabili (8), le azioni SATS di Strive (1000SATSUSDT, 6), «APR» il tasso annuo (APRUSDT, 4); numeri
+  dell'audit del 26 novembre, `raccolta.citate` sugli 11.697 articoli di novembre. Con il «$» davanti si contano ancora. **ANT non
+  entra**: dal 17 novembre ANTUSDT di Binance è il perpetuo sulle azioni di Anthropic (il verificatore dell'audit, da exchangeInfo), quindi
+  gli articoli su Anthropic parlano proprio di quel contratto; è l'elenco del mese che dice ancora «Autonomi». La prova in avanti riporta
+  ogni settimana il conto con le parole di oggi (la misura) e senza le cinque sigle nuove (`PAROLE_FINO_AL_26_NOVEMBRE`), per vedere quanto
+  pesano gli abbinamenti falsi.
+* **«Piena» (sezione 1), da oggi**: si calcola per sito, non per pagina. Un sito letto con più pagine (Crypto Briefing con quattro,
+  BeInCrypto con due) è «pieno» solo se gli articoli nuovi riempiono tutto quello che le sue pagine hanno dato, e la nota va sulla riga
+  della sua ultima pagina. Prima bastava una pagina tutta nuova: il 26 novembre alle 16:18 la prima pagina di Crypto Briefing era tutta
+  nuova ma la seconda aveva 16 articoli nuovi su 30 (gli altri già visti), e il diario ha segnalato una perdita che non c'era.
+* **Gli articoli già visti (sezione 1), da oggi**: la raccolta riconosce un collegamento già visto in tutto l'archivio, non più solo negli
+  ultimi 10 giorni. Prima un articolo rimasto in pagina più di 10 giorni si salvava di nuovo (al 27 novembre alle 02:14: 12.866 righe per
+  12.849 articoli diversi; fra i doppi la pagina fissa di Cointelegraph «Here's what happened in crypto today»). Le righe doppie già
+  salvate restano nell'archivio; la prova in avanti conta ogni articolo una volta sola, la prima volta che l'abbiamo visto.
+* **Le ore (sezione 1)**: nell'archivio sono in UTC e si scrivono senza il fuso. `raccolta.ora_utc` le legge sempre in UTC, qualunque sia
+  il fuso della macchina (`fromisoformat` seguito da `astimezone` le prendeva come ora locale: con l'ora svizzera la finestra si
+  spostava di 1 ora, 2 d'estate). La usa la prova in avanti.
+* **Come `prova_avanti.py` legge la sezione 3** (nessun cambio della regola, solo le scelte che il testo lascia aperte, fissate prima):
+  * «gli articoli raccolti nei 28 giorni fino al giorno l − 2»: gli articoli che la raccolta ha visto (ora `visto`, in UTC) dal giorno
+    l − 29 al giorno l − 2 compresi, come la prova 147 contava il giorno di raccolta dei titoli; più uno, diviso il volume in dollari del
+    perpetuo (`quote_volume` del pannello del programma 6) negli stessi giorni, in logaritmo;
+  * le monete citate secondo `raccolta.citate`, con l'elenco dei nomi del mese in cui l'articolo è stato visto (sezione 2);
+  * «almeno 3 articoli nei giorni raccolti fino a l − 2 (al massimo 112)»: dal 30 ottobre 2026, primo giorno della raccolta (o dai 112
+    giorni prima, quando saranno dopo), al giorno l − 2;
+  * universo di G1 della settimana, volatilità, banda, almeno 20 monete, costi e funding: le stesse funzioni del conto a tavolino e delle
+    prove 138 e 147 (`terza.pannello_settimane`, `ottava.sigma_30`, `ventiquattresima.pesi_banda`, `terza.conto`); la banda parte vuota il
+    30 novembre;
+  * una settimana si conta quando è finita, cioè dal lunedì dopo: il primo numero (la settimana dal 30 novembre al 6 dicembre) arriva il
+    7 dicembre; il 30 novembre lo script dice solo che non ci sono ancora settimane finite;
+  * accanto, G1 a tavolino sulle stesse settimane (le regole di `programma7/prima.py`, banda dal 4 gennaio 2021), con le spese a limite
+    (a mercato dove mancano le candele a 1 ora) e tutto a mercato.

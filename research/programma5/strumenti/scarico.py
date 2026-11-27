@@ -40,14 +40,17 @@ PREFISSI = {
 
 
 def _leggi(url: str, tentativi: int = 6) -> str:
-    """Una pagina dell'elenco S3, con nuovi tentativi sulle connessioni interrotte."""
+    """Una pagina dell'elenco S3, con nuovi tentativi sulle connessioni interrotte e sulle letture incomplete, come
+    ``_prendi``. Fino al 27 novembre 2026 riprovava solo su ``OSError``: una ``http.client.IncompleteRead``, che non lo e',
+    ha fermato a meta' lo scarico del paper delle candidate il 26 novembre (audit del 26 novembre, raccolta-3)."""
+    import http.client
     import time
     for k in range(tentativi):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(req, timeout=60) as r:
                 return r.read().decode("utf-8")
-        except OSError:
+        except (OSError, http.client.HTTPException):
             if k == tentativi - 1:
                 raise
             time.sleep(2 ** k)

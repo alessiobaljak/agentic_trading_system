@@ -51,13 +51,9 @@ def ultimo_stato() -> tuple[Path, datetime, dict]:
 
 
 def _quando(r: dict) -> datetime | None:
-    x = r.get("pubblicato") or r.get("visto")
-    if not x:
-        return None
-    try:
-        return datetime.fromisoformat(str(x).replace("Z", "+00:00")).astimezone(timezone.utc)
-    except ValueError:
-        return None
+    # 27 novembre 2026 (audit del 26 novembre): le ore dell'archivio sono in UTC senza il fuso e si leggono sempre in UTC
+    # (`astimezone` le prendeva come ora locale: con l'ora svizzera la finestra si spostava di 1 o 2 ore)
+    return raccolta.ora_utc(r.get("pubblicato") or r.get("visto"))
 
 
 def articoli(fine: datetime) -> list:

@@ -694,6 +694,15 @@ Non è «una riga di codice»: dettaglio nell'archivio.
 
 **Cosa**: dal 30 novembre 2026, ogni lunedì, il conto a tavolino della regola «GA2 al contrario» (comprare le monete con tanti articoli per dollaro scambiato, vendere quelle molto scambiate senza notizie) sugli articoli raccolti da `research/notizie/raccolta.py`, come scritto in `research/notizie/REGOLE.md` (sezione 3), accanto a G1 sulle stesse settimane.
 **Perché non subito**: servono 28 giorni di articoli prima del primo lunedì.
+**27 novembre 2026 (audit del 26 novembre)**: lo script c'è (`research/notizie/prova_avanti.py`, test
+`tests/test_notizie_audit.py`). Si lancia il lunedì dopo `research.programma6.paper.aggiorna`. Il 30 novembre dice che non ci sono
+settimane finite; il primo numero (settimana dal 30 novembre al 6 dicembre) arriva il 7 dicembre. Riporta il conto con e senza ARK,
+HIVE, GENIUS, SATS e APR, accanto a G1 a tavolino a limite e a mercato. Non è ancora una riga di `aggiorna.py`. Dallo stesso audit, non
+fatti: (1) `raccolta.nomi()` scrive l'elenco del mese anche se CoinGecko non risponde (con 0 monete lette l'elenco avrebbe solo Bitcoin
+ed Ether per un mese): non scriverlo sotto le 900 monete e riprovare al giro dopo; (2) le fonti a una pagina arrivano spesso vuote
+(CoinJournal 49 giri, ZyCrypto 16, Bitcoinist 12, quasi sempre alle 04 e alle 06): leggere la seconda pagina, se il sito la ha; (3) le
+monete con la sigla diversa fra CoinGecko e Binance (RAYSOL, BEAMX, LUNA2, DODOX) non si abbinano mai: si cambia solo con una nota
+datata e il conto con e senza; (4) il tempo della prova in avanti cresce con l'archivio (42,5 s per 12.849 articoli).
 **Cosa ci si aspetta**: occhiata a 26 settimane (giugno 2027), verdetto a 52 (novembre 2027).
 
 ### P26, aggiunta del 31 ottobre 2026 — il rischio dei settori
@@ -911,6 +920,13 @@ scrivono con e senza le serie a incasso quasi fisso.
   sola a 100 giorni, oppure i ribilanci dei paper in un filo separato. Cambio strutturale del ciclo del bot: live-path-reviewer e riavvio.
 * **salute-7**: il ciclo principale e la chiusura d'emergenza non hanno test; 252 usi di `inspect.getsource` in 82 file di test
   controllano il testo del codice, non quello che fa. Aggiungere almeno un test di `run()` con un orologio finto.
+* **Scarico del paper delle candidate (raccolta-3, corretto il 27 novembre: l'errore di una moneta non ferma le altre e PAPER.md
+  dice «Scarico incompleto»)**. Restano: il paper ha 2 giorni di ritardo perché l'archivio pubblica il giorno prima fra le 08:16 e le
+  08:46 UTC e lo scarico gira prima delle 07:35 (aggiornarlo anche al giro delle 12:17, o prendere l'ultimo giorno dall'interfaccia
+  pubblica come fa `buchi_archivio.py`); la riga «Scarico incompleto» c'è solo in PAPER.md, non in paper.json che legge la dashboard;
+  lo scarico del programma 5 in avanti (`programma5/strumenti/scarico.py`, `main`) ha lo stesso schema, nascosto da `|| true` in
+  `programma5/avanti/aggiorna.sh`; `paper/aggiorna.py:361` passa `log=lambda x: None` al pannello, quindi «tolti N giorni in coda»
+  non si vede mai.
 * **Test di GitHub, dal secondo giro dell'audit (27 novembre)**: corretti subito i requisiti della ricerca (`requirements-ricerca.txt`), i
   quattro test del documento storico, i tempi e i due lavori. Restano: **ci-6**, versioni fisse anche per la macchina del bot (un file di
   vincoli con le versioni della sua .venv: live-path-reviewer e ok del proprietario), test anche su Python 3.12 (la macchina usa 3.12),
