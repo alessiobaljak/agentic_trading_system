@@ -1,41 +1,11 @@
 {
- "portafoglio": 933.5679982896481,
- "posizione": {
-  "lato": "lungo",
-  "quantita": 0.03,
-  "entrata": 60425.0,
-  "leva": 3,
-  "margine": 604.25,
-  "liquidazione": 40585.458333333336,
-  "aperta_ms": 1795736040000,
-  "da_limite": true,
-  "cid": "taio1795735819146",
-  "spese_entrata": 0.36255000000000004,
-  "spese": 0.36255000000000004,
-  "funding": -0.1790597843622
- },
+ "portafoglio": 939.0764792571481,
+ "posizione": null,
  "ordini": [],
- "algo": [
-  {
-   "algoId": 72,
-   "cid": "tais1795735819146",
-   "tipo": "STOP_MARKET",
-   "prezzo": 60290.0,
-   "lato": "lungo",
-   "messo_ms": 1795735844009
-  },
-  {
-   "algoId": 73,
-   "cid": "tait1795736125205",
-   "tipo": "TAKE_PROFIT_MARKET",
-   "prezzo": 60690.0,
-   "lato": "lungo",
-   "messo_ms": 1795736128386
-  }
- ],
+ "algo": [],
  "leva": 3,
- "ultimo_minuto_ms": 1795737960000,
- "ultimo_funding_ms": 1795738002125,
+ "ultimo_minuto_ms": 1795741560000,
+ "ultimo_funding_ms": 1795741604876,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -346,9 +316,22 @@
    "importo": -0.17906,
    "tasso": 9.858e-05,
    "funding_ms": 1795737600000
+  },
+  {
+   "ora_ms": 1795739725109,
+   "cosa": "risultato",
+   "importo": 6.418065,
+   "prezzo": 60638.9355,
+   "come": "obiettivo"
+  },
+  {
+   "ora_ms": 1795739725109,
+   "cosa": "commissione",
+   "importo": -0.909584,
+   "come": "obiettivo"
   }
  ],
- "prossimo_id": 74,
+ "prossimo_id": 76,
  "chiuse": [
   {
    "lato": "corto",
@@ -521,6 +504,24 @@
    "uscita": 60643.935,
    "come": "stop",
    "chiusa_ms": 1795730640000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.03,
+   "entrata": 60425.0,
+   "leva": 3,
+   "margine": 604.25,
+   "liquidazione": 40585.458333333336,
+   "aperta_ms": 1795736040000,
+   "da_limite": true,
+   "cid": "taio1795735819146",
+   "spese_entrata": 0.36255000000000004,
+   "spese": 1.2721340325,
+   "funding": -0.1790597843622,
+   "risultato_prezzo": 6.418064999999988,
+   "uscita": 60638.9355,
+   "come": "obiettivo",
+   "chiusa_ms": 1795739640000
   }
  ],
  "funding_applicati": [
