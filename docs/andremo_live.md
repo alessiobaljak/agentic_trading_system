@@ -1088,3 +1088,18 @@ mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinba
 su richiesta del proprietario («fai un audit per capire se c'è qualcosa che ci stiamo perdendo nel trovare strategie [...] altri bug da
 correggere») parte un audit del sistema in sei aree, ognuna con un verificatore. **Capito oggi**: niente di nuovo in questo giro (l'esito
 dell'audit va nel suo rapporto).
+**27 novembre, 02:40 UTC, giro delle 00:17 (partito alle 02:12 per il limite d'uso)**: raccolta 24 fonti su 25 (69 articoli nuovi;
+CryptoBriefing «piena» è un falso allarme, vedi sotto), mappa delle liquidazioni (600 conti, 2.425 posizioni); nessuna chiusura nuova,
+nessuna moneta nuova su Coinbase. **Audit del sistema finito**: 52 problemi, tutti confermati dal verificatore (4 Alti, 26 Medi, 22
+Bassi; rapporto `audits/reports/2026-11-26-AUDIT_SISTEMA.md`, backlog P37). Corretti subito: (1) dal 23 al 26 novembre i fogli del
+mattino (fatti gravi e voce 14) sono stati preparati prima della raccolta dello stesso giro, e le notizie delle 00:18-04:18 UTC non sono
+entrate in nessun foglio (dal 4,5 al 20% degli articoli di ogni mattina, i più freschi): ora i due fogli si fermano se la raccolta ha più
+di 15 minuti; (2) VVV era stata tolta dai fatti gravi del 26 per un motivo falso (è nell'elenco del mese): terza correzione sotto il
+foglio, la misura si riporta con e senza VVV; (3) lo scout seguiva ancora «al massimo due idee»: ora segue la decisione del 22 novembre.
+Le altre correzioni sono al lavoro (un agente per gruppo di file; quelle del percorso degli ordini passano da live-path-reviewer).
+Note per le misure: il giro delle 08:17 del 12 novembre manca (5,6 ore senza raccolta fra le 06:13 e le 11:47) e non era scritto; la
+«pagina piena» di CryptoBriefing del 26 novembre era un falso allarme (la seconda pagina aveva 16 e 6 articoli nuovi su 30).
+**Capito oggi**: la differenza fra demo e paper dal 9 novembre (−1,67 punti) non viene dalle monete che mancano al demo (lo hanno
+aiutato di circa +1 punto): sta nelle monete che hanno tutti e due, circa −0,15 punti al giorno, e per più di metà non ha ancora una
+spiegazione (fonte: audit, area ordini, sulle risposte 0720-0776). E l'esame delle prove nuove chiede oggi più di quanto chiedono le
+regole, per due difetti di conto che vanno in direzioni opposte.

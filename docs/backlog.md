@@ -164,6 +164,8 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
      Binance (il cuore di G1).
   2. **Lo storico del libro degli ordini e delle opzioni al secondo** (un servizio come Tardis): lo scalping e le scadenze delle opzioni
      (idee 29 e 70) senza questi dati non si possono provare.
+     *27 novembre 2026 (audit)*: gli scambi al secondo e, fra maggio 2023 e aprile 2024, il miglior prezzo a ogni cambio sono gratis
+     nell'archivio di Binance (vedi P18); a pagamento resta il libro completo.
   3. **I dati delle catene** (flussi verso le borse, grandi portafogli; servizi come Glassnode o CryptoQuant): l'unico dato di fondamentali
      che ha mostrato qualcosa (le commissioni delle catene, prova 95) era gratuito e povero.
 * **Senza dati nuovi**: si continua a misurare in avanti (paper, conto demo) le strategie che reggono, si riprovano le idee scritte «da
@@ -283,6 +285,7 @@ foto del libro a ore (programma 5, fase 4). **Cosa:** dati storici del libro deg
 Binance, al secondo o meglio (esistono a pagamento, per esempio Tardis.dev); poi uno studio dei segnali del libro (squilibrio fra
 acquisti e vendite, ordini grandi) con l'esecuzione a limite. **Decide il proprietario** (è una spesa per i dati, non per le
 sessioni). Intanto: i segnali del canale Telegram del proprietario, se li esporta, si controllano gratis sui prezzi al minuto.
+**27 novembre 2026 (audit del 26 novembre, `audits/reports/2026-11-26-AUDIT_SISTEMA.md`): la premessa è sbagliata a metà.** Nell'archivio pubblico e gratuito di Binance (data.binance.vision, futures/um) ci sono: tutti gli scambi con il lato di chi compra o vende a mercato (aggTrades e trades) fino a ieri; il miglior prezzo di acquisto e di vendita a ogni cambio (bookTicker) da maggio 2023 ad aprile 2024 (BTCUSDT 2–7 GB al mese); il libro a fasce ogni 30 secondi (bookDepth, ±0,2%…±5%). A pagamento resta solo il libro completo. Controllato il 26 novembre con richieste HEAD all'archivio. Quindi una prova a campione dello scalping si può fare gratis (per esempio la prova 133 rifatta con i primi 10 secondi presi dagli scambi), con le regole scritte prima; la propone lo scout se ha un perché forte.
 
 
 ### P17. F5 nel bot con gli ordini limite — trovata il 22 ott 2026; FATTA il 23 ott 2026 (prova 56)
@@ -850,6 +853,9 @@ scrivono con e senza le serie a incasso quasi fisso.
 * **23 novembre 2026, P34 in parte chiusa dal proprietario** («Sì scrivilo», `docs/decisioni_del_proprietario.md`): lo sconto per le
   prove si applica una volta sola, quando una strategia viene scelta (G1: prova 57, 0,945); dopo conta la conferma in avanti. Resta
   aperta la parte tecnica (la correzione per le settimane legate delle serie a incasso quasi fisso, e la F5 vecchia nel mazzo, P35).
+* **27 novembre 2026 (audit del 26 novembre, esame-7)**: la parte del mazzo pesa al massimo 0,001 e si può chiudere, ma le serie vecchie
+  (di prima della correzione delle parità del 23 ottobre) sono quattro, non solo F5: 24 F5, K2, F5+M7+K2 e 56 F9 (`asticella.py:82`, `:85-86`,
+  `:205`). Le versioni corrette sono in `research/programma6/risultati_controllo_parita/`: sostituirle per pulizia.
 
 ### P36. Prima di accendere il conto vero su F5 — trovata il 25 novembre 2026 (revisioni `reviews/reports/2026-11-25-conto-vero-F5*.md`)
 * **Cosa**: il conto vero esegue F5 (commit del 25 novembre, approvato per il commit, spento). Prima dell'approvazione per l'accensione:
@@ -859,3 +865,41 @@ scrivono con e senza le serie a incasso quasi fisso.
   sopra il lunedì salta la settimana); le decisioni per il proprietario delle revisioni (età di 194 ore, nessuno stop per posizione, F5 mai
   su un demo) e i vecchi 54 (ii), 70, 78.
 * **Perché non subito**: il conto vero è spento e i soldi veri si accendono solo quando il proprietario lo chiede.
+
+### P37. Dall'audit del sistema del 26 novembre: le cose trovate e non fatte subito — trovata il 26-27 novembre 2026 (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`)
+* **Per il proprietario (cambiano l'esame, decide lui)**: (a) la dispersione V dell'asticella toglie solo le prove perdenti (t sotto −3)
+  e tiene le vincenti: ogni strategia buona trovata alza l'asticella di tutte; con la regola simmetrica la soglia delle prove nuove su 300
+  settimane scende da uno Sharpe di 2,21 a 1,90; (b) il t e la probabilità contano 300 settimane come indipendenti, ma quelle di G1 e
+  delle parenti sono legate (correlazione 0,16-0,19 a 1-3 settimane): il t di G1 scende da 4,73 a circa 3,7 con 4-5 ritardi, e lo 0,945
+  vale circa 0,84-0,90; (c) le varianti di G1 si giudicano contro 200 famiglie e G1 contro 65: con il mazzo di oggi a una variante
+  servirebbe uno Sharpe di 2,21 (G1 ha 1,97). Le due correzioni (a) e (b) insieme: 168 B 0,86, miscela F5+M7+K2 0,84, G1 con l'N di
+  oggi 0,79 (rifatti dall'audit: script e numeri nel rapporto). Finché non decide, l'esame scrive i numeri accanto (funzione unica, P34).
+* **esame-6**: N non conta le circa 60 idee del programma 5, il vecchio sistema automatico e i protocolli 1-4. Scrivere in `ASTICELLA.md`
+  la scelta e il perché. Effetto stimato: fino a −0,05/−0,07 sul numero di G1 alla prova 57; nessun verdetto di oggi cambia.
+* **esame-9**: «ogni anno positivo» si misura sulla somma delle settimane, non sul conto composto, e un anno parziale conta qualunque sia
+  la sua lunghezza (la prova 165 usa «almeno 8 settimane»). Una sola regola per tutte le prove, da proporre al proprietario.
+* **esame-5**: le 26 varianti di 108 e 111 contano come 26 famiglie (N 200 invece di circa 176; +0,02/+0,03 su ogni candidata se contassero
+  come 2): è la decisione 2 della revisione del mazzo, resta com'è finché non si rifanno le loro serie.
+* **motore-3**: le candele da 1 minuto ci sono solo per 100 monete scelte a settembre 2026 fra quelle ancora quotate: le prove in giornata
+  sul passato vedono solo le sopravvissute. Servono i minuti delle monete chiuse (decine di GB); come minimo scriverlo nei verdetti.
+* **motore-6**: i buchi del 2022 (26-28 febbraio e 1-2 aprile, circa 48 monete) sono ancora nel pannello, ma l'interfaccia di Binance ha
+  quei giorni: lanciare `python3 -m research.programma6.buchi_archivio --dal 2020-01-01` (circa 100 richieste), ricostruire il pannello e
+  rifare le serie del mazzo insieme a P35. Effetto: circa 2 punti persi nella settimana del 28 febbraio 2022 (audit del 12 novembre).
+* **motore-7 e punti ciechi 5**: le «monete nate dopo ottobre» sono una sola (CTUSDT): da ottobre Binance quota quasi solo azioni (36
+  contratti su 40). La ricerca dell'8 novembre così com'è non si può fare: dirlo al proprietario e fargli decidere di quale area sono i
+  perpetui su azioni (`AREE.md`). Per le quotazioni nuove usare exchangeInfo, non l'elenco dei file mensili.
+* **ordini-2** (va in P36): il conto vero (F5, al massimo 300 USDT) non è rappresentato dal demo a 1.000: a 280 USDT 15 monete su 58 non
+  si aprono per i minimi. Prima dell'accensione una prova come la 148 su F5 a 280 e a 300 USDT, partenza vuota di lunedì, filtri di oggi.
+* **ordini-6** (va in P36 e P33): le chiusure intere sotto il minimo si potrebbero fare con «solo riduzione» (Binance la esenta dal minimo:
+  testo dell'errore -4164). Prova A3 con le regole scritte prima sul motore della 148, per G1 e F5 a 280 e 1.000 USDT; poi verificare
+  sul demo che l'esenzione funzioni.
+* **raccolta-7, parte di Binance**: le liquidazioni di Binance non sono nell'archivio pubblico e nessuno le registra: un registratore del
+  flusso pubblico sulla macchina, separato dal bot, si propone al proprietario solo se un'idea in coda ne ha bisogno.
+* **raccolta-10**: la prima tornata del programma 5, già giudicata (M-002, M-003, M-001c: non passano), si ricalcola ogni mattina e
+  consuma il tempo del comando: salvare il verdetto al 400° trade e calcolarla una volta a settimana.
+* **salute-2, punto 2**: le candele giornaliere si scaricano tre-quattro volte a mezzanotte (F5, G1, G11, G1 neutra): scaricarle una volta
+  sola a 100 giorni, oppure i ribilanci dei paper in un filo separato. Cambio strutturale del ciclo del bot: live-path-reviewer e riavvio.
+* **salute-7**: il ciclo principale e la chiusura d'emergenza non hanno test; 252 usi di `inspect.getsource` in 82 file di test
+  controllano il testo del codice, non quello che fa. Aggiungere almeno un test di `run()` con un orologio finto.
+* **Perché non subito**: cambi di regola dell'esame (decide il proprietario), scarichi grandi, prove nuove con le regole da scrivere,
+  cambi strutturali del bot. Le altre correzioni dell'audit sono state fatte il 27 novembre (vedi il rapporto).
