@@ -161,3 +161,31 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   la storia (`yields.llama.fi`) risponde 402 (a pagamento); (6) attenzione su Wikipedia: il server blocca l'indirizzo (troppe richieste), e GA (prova 138) copre
   l'attenzione dai giornali; (7) residui da fattori statistici (PCA), coppie: prova 40 e lezione degli indicatori sul prezzo; (8) Polymarket (API gratuita
   `gamma-api.polymarket.com`, mai usato): probabilità di eventi macro, pochi eventi indipendenti e storia breve, non regge t da 3. Nessuna riga di registro.
+
+- 27 novembre 2026 (tre strategy-scout insieme, con lenti diverse: A, i dati di Binance gratuiti e mai usati; B, chi guadagna e come si
+  vede; C, come lo farebbe un'intelligenza artificiale; poi per ogni idea un controllo avversario di novità e perché forte, flusso
+  «idee-nuove-27nov»): **8 idee proposte con le regole scritte, 8 bocciate dal controllo, prima di ogni calcolo** (idee 160-167 della coda;
+  bozze in `research/idee/bozze_2026-11-27/`, con «prova A1» e così via al posto del numero). 160 (A1) chi compra e chi vende per
+  dimensione dell'ordine, dagli scambi uno per uno: variante delle prove 11, 154, 9, 133 e 153, e gli studi citati dicono il verso opposto
+  su giorni; 161 (A2) l'ordine grande spezzato in corse di minuti: i dati sono già nelle candele da 1 minuto, il verso è già battuto (prova
+  9, Sharpe −1,17) e il meccanismo già provato (133); 162 (A3) ricerca automatica sui flussi con 15 mesi nascosti: è A1 dentro gli alberi
+  di M1-M8 e il metodo del programma 9 (prove 79-83), già scartata il 26 novembre; 163 (B1) copiare sul passato i conti di Hyperliquid
+  scelti con i dati di prima: l'interfaccia gratuita dà solo le ultime 10.000 operazioni di ogni conto, quindi chi entra nel passato dipende
+  da quanto ha operato dopo (si sceglie con il futuro), e 7 conti su 20 lavorano con sotto-conti; 164 (B2) le monete dove i conti bravi di
+  Hyperliquid sono più comprati degli scarsi: variante di B1 e della prova 11 (Sharpe 0,06), fattore pubblicato dei gestori bravi; 165 (C1)
+  le narrazioni trovate da un modello nelle notizie: il segnale resta il numero di articoli della prova 138 (−0,07) e l'idea della 143;
+  166 (C2) il tono delle notizie letto da un modello: fattore pubblicato (Tetlock 2007, anche sulle crypto), terzo segnale dallo stesso
+  archivio dopo la 138 e la 145; 167 (C3) i vicini di significato: è il momento dei pari della 143 e della 118 con i pari scelti dal testo
+  (Hoberg e Phillips, 2018). Scartate dagli scout stessi: lo scalping a secondi (prova 133: +0,004% prima dei costi), i cambi dell'intervallo
+  del funding (prova 26), le scadenze dei trimestrali (pochi eventi), il fondo di assicurazione e la chiusura forzata delle posizioni
+  (nessuna storia), la composizione dell'indice (nessun dato gratuito), le metriche a 5 minuti (già usate: 11, 63, 112, 72), l'idea 27 (un
+  programma, non un'idea), il funding attorno al pagamento (E4 e 133), il premio contro l'ultimo prezzo (indicatore), il copy trading di
+  Binance (nessuna interfaccia pubblica: le posizioni le dovrebbe mandare il proprietario), l'idea 38 (lo spot senza vendere: nessun flusso
+  forzato), i fondi quotati su Ether e Solana (storia corta), l'archivio di tutte le operazioni di Hyperliquid (a pagamento, con
+  registrazione: deciderebbe il proprietario), il fondo HLP (solo in avanti), la gamma di Deribit (due serie), i flussi sulla catena
+  (indirizzi a pagamento), il ponte di Hyperliquid (parente di SC), la ricerca automatica di regole (già M1-M8 e programma 9), gli annunci di
+  Binance raggruppati (eventi già provati, troppo pochi dopo il 2023), un modello recente sulle notizie dopo giugno 2026 (22 settimane: t da
+  3 impossibile; si segue in avanti), gli annunci di Upbit (bloccati da Cloudflare), l'attività su GitHub (fattore pubblicato, serve un
+  account), lo scalping con l'apprendimento automatico (133 e 153), il contrario dei trader a leva di Hyperliquid (idea 135, in avanti).
+  **Lezione**: `registro --cerca` legge solo le prove, non la coda delle idee: tre scout su tre non hanno visto idee già in coda (135, 150).
+  Nessuna riga nella sezione 1 del registro.

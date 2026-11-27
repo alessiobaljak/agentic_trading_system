@@ -77,6 +77,11 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Lunedì 30 novembre, Hyperliquid**: al giro delle 00:17 la prima scelta nuova della mappa (circa 4 minuti) e delle balene:
+  controllare `candidati_letti` in `liquidazioni_conti_2026-11-30.json` (nella prova 1.228) ed `esclusi_conto_a_leva_zero` in
+  `scelti_balene_2026-11-30.json`; nel commit della raccolta aggiungere il file nuovo `hyperliquid/mercato_AAAA-MM.jsonl.gz`. Al giro
+  delle 04:17 `python3 -m research.trader_copiati.giudice_balene`, poi il giudizio in `giudice_balene/giudizi/2026-11-30.json` nel
+  formato della nota del 27 novembre di `GIUDICE_BALENE.md`, commit e push subito.
 - **Lunedì 30 novembre, prova in avanti delle notizie** (P31): dopo il conto a tavolino `python3 -m research.notizie.prova_avanti`, poi
   commit di `research/notizie/avanti/`; il 30 dice solo che non ci sono settimane finite, il primo numero (30 novembre - 6 dicembre)
   arriva il 7 dicembre e va nei numeri del lunedì al proprietario.

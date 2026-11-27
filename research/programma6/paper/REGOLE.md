@@ -236,3 +236,51 @@ questo file** (comprese quelle scritte prima con le 52 e le 104 settimane):
   veri li decide il proprietario quando li chiede in modo esplicito** (regola di `CLAUDE.md`: `DRY_RUN` resta vero fino ad allora);
 * le idee nate dai dati, che sul passato non si possono giudicare in modo pulito, vanno in paper (soldi finti) appena si può, e il
   proprietario decide quando ha visto abbastanza.
+
+## 18. Aggiunta del 27 novembre 2026 (audit del 26 novembre): F5 con l'esposizione dimezzata quando il funding medio è molto negativo (idea 45), misura in avanti a tavolino
+
+Scritta il 27 novembre 2026 (venerdì), prima di ogni settimana misurata. L'idea 45 del registro (`research/REGISTRO.md`, sezione 5) è
+nata dal controllo descrittivo `research/programma6/PERDITE_F5.md` (punto 4): sulle 302 settimane dal 2021, quando il funding medio
+dell'universo nei 7 giorni prima era molto negativo (il quinto più basso, sotto −11% l'anno: gli short affollati su tutto il mercato),
+F5 faceva +0,25% a settimana, contro +1,16%, +0,67%, +1,12% e +2,10% negli altri quinti (61 settimane per quinto, circa 2 errori
+standard: suggestivo, non dimostrato). È stata vista su tutti gli anni usati, quindi l'idea stessa diceva: **si prova solo in avanti**,
+con la regola scritta prima. La regola è quella dell'idea 45, **senza cambiarla**:
+* **la regola**: ogni lunedì, se il funding medio dei 7 giorni dell'universo di F5 è **sotto −11% l'anno**, F5 tiene la settimana con
+  l'**esposizione dimezzata** (tutti i pesi, long e short, per 0,5; l'altra metà del capitale resta ferma); altrimenti F5 com'è;
+* **il funding medio dei 7 giorni**: fra le monete dell'universo del lunedì che F5 ordina (le 100 della settimana con la volatilità dei
+  30 giorni), la media della somma del funding dei 7 giorni di tenuta prima del lunedì. È lo stesso calcolo che il bot fa dal 25
+  ottobre nei ribilanci dei paper (`funding_medio_7`, `bot/portafoglio/f5.py`, idea 48). In ragione d'anno si moltiplica per 365/7:
+  la soglia è una somma dei 7 giorni sotto −0,211%;
+* **le settimane**: dal **lunedì 30 novembre 2026**, la prima dopo questa nota; sulle settimane di prima nessun numero;
+* **il conto, ogni settimana, a tavolino**: `research/programma6/paper/funding_medio.py`, dal pannello della ricerca, con la stima dal
+  premio nei giorni ancora senza il funding vero, come il resto del paper (sezione 2). Per ogni settimana: F5 com'è (lo stesso codice
+  del paper, `ventiquattresima.pesi_banda`) e F5 con la regola, con lo stesso conto (`terza.conto`: dentro ci sono le spese per
+  dimezzare e per tornare pieni). Quando esce il funding vero si rifà tutto: conta il numero col funding vero. Risultati in
+  `research/programma6/paper/funding_medio.json`;
+* **cosa si guarda**: ogni settimana il funding medio, se la regola dimezza, F5 com'è e con la regola, la differenza e il totale dal 30
+  novembre. Il confronto con il passato è quello di `PERDITE_F5.md` (+0,25% a settimana sotto la soglia). Nelle settimane sopra la
+  soglia le due righe hanno gli stessi pesi: cambiano solo le spese (per tornare pieni dopo una settimana dimezzata);
+* **chi decide**: come la sezione 17: niente attese fisse, i numeri al proprietario ogni settimana, detti chiari anche quando sono
+  pochi; il proprietario decide quando ha visto abbastanza. Fino ad allora è solo informazione: non cambia F5 nel bot, sul demo né nel
+  conto vero.
+
+Perché a tavolino e non con il dato del bot: il `funding_medio_7` del bot sta su Firebase, che la ricerca non legge, e non arriva nello
+stato della macchina; il pannello della ricerca permette lo stesso calcolo sui dati dell'archivio. L'idea 48 rimandava la misura di 8-12
+settimane; con la sezione 17 (i numeri ogni settimana) si comincia subito.
+
+## 19. Aggiunta del 27 novembre 2026 (audit del 26 novembre): chiusa la misura in avanti delle monete distribuite gratis (prova 113)
+
+La prova 113 (N3G, `research/programma7/RISULTATI_CINQUANTUNESIMA.md`, «Esito e misura in avanti») aveva promesso una misura in avanti a
+tavolino: ogni moneta nuova dei perpetui di Binance dal 22 ottobre 2026 etichettata «gratis» (HODLer Airdrops, Launchpool, Megadrop) o
+no, e lo stesso conto rifatto con 30 eventi gratis nuovi. Non era mai stata scritta in questo file né calcolata (backlog P32). **Si
+chiude oggi, senza numeri**, perché eventi possibili non ce ne sono:
+* secondo `exchangeInfo` di Binance (`research/programma6/tipi_contratto.json`, aggiornato il 27 novembre 2026), dal 22 ottobre Binance
+  non ha aperto nessun perpetuo in USDT su una moneta: l'ultimo è CTUSDT, del 1° ottobre. Dei 38 contratti aperti dal 1° ottobre, 36
+  sono su azioni o fondi, uno è di pre-mercato (PREDICTUSDT) e uno è CTUSDT;
+* già prima i perpetui nuovi su monete erano scesi (stesso file, solo i simboli ancora in elenco): da 9 a 31 al mese nel 2025, 15 a
+  gennaio 2026, da 2 a 8 al mese da febbraio a settembre, 1 a ottobre, nessuno a novembre. A quel ritmo, e con le monete gratis che
+  sono solo una parte delle nuove, i 30 eventi non arriverebbero mai.
+
+La regola e il verdetto della prova 113 non cambiano («no»). La proposta di spostare la misura sulle monete nuove di un'altra borsa, con
+le regole scritte prima, è nel backlog (`docs/backlog.md`). Se Binance torna a quotare perpetui su monete, la misura si riapre solo con
+una nota nuova in questo file, con la data d'inizio di quel giorno.

@@ -778,7 +778,7 @@ p 0,0020 (resta valida), 113 p 0,0268 (resta bocciata), 33 N3 a portafoglio Shar
 0,0258, ventottesima e ventinovesima con esiti invariati, conto unico (G1 più eventi) Sharpe 2,83 (era 2,82). **Restano**: l'elenco
 ufficiale dei tipi di contratto (24 eventi del 2026 su 87 sono contratti su azioni confermati o sospetti), `programma9/quarta.py` e
 `programma6/quarantacinquesima.py` da rifare, `CONTO_UNICO.md` e `RISULTATI_CINQUANTUNESIMA.md` con testo scritto a mano da aggiornare,
-la parità N3 bot-ricerca, la misura in avanti delle monete gratis.
+la parità N3 bot-ricerca, la misura in avanti delle monete gratis (chiusa il 27 novembre 2026, senza numeri: `programma6/paper/REGOLE.md`, sezione 19).
 **12 novembre, i tipi ufficiali** (`exchangeInfo` di Binance, `underlyingType` e `underlyingSubType`): fra gli 87 eventi delle monete
 nuove del 2026, **38 sono contratti su azioni o fondi** (non 24 come stimato dai nomi), nessuno nell'elenco degli esclusi; nel pannello
 ci sono 72 contratti che non sono monete, ma **nessuno è mai entrato fra le 100 di G1** (la ricerca di G1 non è toccata). Gli eventi
@@ -927,6 +927,19 @@ scrivono con e senza le serie a incasso quasi fisso.
   lo scarico del programma 5 in avanti (`programma5/strumenti/scarico.py`, `main`) ha lo stesso schema, nascosto da `|| true` in
   `programma5/avanti/aggiorna.sh`; `paper/aggiorna.py:361` passa `log=lambda x: None` al pannello, quindi «tolti N giorni in coda»
   non si vede mai.
+* **Le monete gratis su un'altra borsa (punti ciechi 8, proposta)**: la misura in avanti della prova 113 è chiusa perché dal 22 ottobre
+  Binance non apre perpetui su monete (36 dei 38 contratti nuovi dal 1° ottobre sono azioni, `programma6/tipi_contratto.json`). Il perché
+  vale per ogni borsa che distribuisce monete gratis e poi le quota con un perpetuo (su Binance +12,11% a evento sulle 87 monete gratis
+  contro +2,99% sulle altre, p 0,027): strategy-scout controlla se gli annunci di Gate.io, Bybit o OKX si leggono gratis e quanti perpetui
+  nuovi su monete aprono al mese; con almeno 2-3 eventi gratis al mese, regole scritte prima. Una registrazione la decide il proprietario.
+* **Idea 45, il dato del bot (facoltativa)**: il `funding_medio_7` che il bot scrive dal 25 ottobre resta su Firebase e nessuno lo legge;
+  farlo uscire nello stato della macchina darebbe ogni lunedì la parità bot-ricerca della misura (`paper/funding_medio.py`). Non tocca gli
+  ordini ma passa dalla macchina (live-path-reviewer).
+* **Il registro**: `--cerca` ora legge anche la coda delle idee (27 novembre: tre scout su tre non vedevano le idee 135 e 150).
+* **Hyperliquid (raccolta-7, corretti il 27 novembre la mappa, le balene e il mercato salvato a ogni giro)**. Restano: un registratore
+  delle liquidazioni di Binance (sulla macchina, separato dal bot: si propone al proprietario solo se un'idea in coda ne ha bisogno, e
+  prima si verifica che il flusso pubblico dia al massimo una liquidazione al secondo per moneta); la pausa per tutti i fili dopo un
+  rifiuto anche nel giro di ogni 4 ore della mappa, se si ripetono conti persi (il 27 novembre alle 04:18: 598 su 600, l'unico giro su 35).
 * **Test di GitHub, dal secondo giro dell'audit (27 novembre)**: corretti subito i requisiti della ricerca (`requirements-ricerca.txt`), i
   quattro test del documento storico, i tempi e i due lavori. Restano: **ci-6**, versioni fisse anche per la macchina del bot (un file di
   vincoli con le versioni della sua .venv: live-path-reviewer e ok del proprietario), test anche su Python 3.12 (la macchina usa 3.12),

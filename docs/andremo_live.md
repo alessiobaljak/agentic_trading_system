@@ -1128,3 +1128,22 @@ su 12.866), le ore si leggono sempre in UTC, e cinque sigle contano solo con il 
 novembre (`research/notizie/prova_avanti.py`). **Capito**: il conto automatico sbagliava moneta su cinque sigle (ARK Invest, la società
 HIVE, la legge GENIUS, le azioni SATS di Strive, «APR» il tasso annuo: 50 articoli di novembre in tutto, numeri dell'audit); la prova
 in avanti dirà ogni settimana quanto pesavano.
+**27 novembre, 05:20 UTC, ricerca nuova e registro**: tre cercatori di idee insieme, con lenti diverse (i dati di Binance gratuiti e mai
+usati; chi guadagna e come si vede; come lo farebbe un'intelligenza artificiale), poi per ogni idea un controllo che prova a smentirla:
+**8 idee con le regole scritte, 8 bocciate prima di ogni calcolo** (idee 160-167: varianti di prove già fallite o fattori pubblicati;
+copiare sul passato i conti di Hyperliquid non si può perché l'interfaccia gratuita dà solo le ultime 10.000 operazioni di ogni conto,
+quindi si sceglierebbe con il futuro). Il registro: il riepilogo diceva «48 idee aperte» ma contava anche le regole in testa al file e
+le voci chiuse a parole; ora legge solo la coda e lo stato di ogni voce (163 voci: nessuna aperta, 9 in avanti, 12 in attesa del
+proprietario, dei dati o di una data), e `--cerca` legge anche le idee. Misure: la regola dell'idea 45 (F5 a metà quando il funding
+medio dei 7 giorni è sotto −11% l'anno) si conta ogni settimana dal 30 novembre (`paper/funding_medio.py`, primo numero verso l'8-9
+dicembre); la misura delle monete gratis della prova 113 è chiusa senza numeri. **Capito oggi**: dal 22 ottobre Binance non apre
+perpetui su monete (dei 38 contratti nuovi dal 1° ottobre, 36 sono azioni): le strategie sulle quotazioni nuove di Binance sono senza
+materia prima; e le idee nuove con un perché forte si sono esaurite sui dati che abbiamo: tre lenti diverse, nessuna idea sopravvissuta.
+**27 novembre, 05:30 UTC, correzioni dell'audit sulla raccolta di Hyperliquid**: metà dei 600 conti della mappa delle liquidazioni non
+aveva posizioni a leva, perché il valore in classifica comprende anche il saldo a pronti. Dal 30 novembre si scelgono i 600 con più
+posizioni aperte fra i primi della classifica (prova dal vivo delle 04:33, fuori dal repository: 1.228 candidati letti in 239 secondi): i
+conti con posizioni passano da 329 a 600, la parte dell'interesse aperto vista dalla mappa dal 19% al 27% per le lunghe e dal 26% al 30%
+per le corte. Le balene saltano i conti con il conto a leva a zero (4 delle 20 di questa settimana). Da oggi si salva a ogni giro anche il
+mercato intero di Hyperliquid (interesse aperto, funding, premio), che dopo non si recupera. **Capito**: Hyperliquid ci accetta circa
+300-360 letture al minuto, non 600 (a 7 al secondo ne ha rifiutate 199 su 1.500); il primo giudizio delle balene, il 30 novembre, sarà
+fatto dei soli 24 conti scelti.
