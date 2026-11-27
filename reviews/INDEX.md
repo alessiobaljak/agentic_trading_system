@@ -8,21 +8,21 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10. `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato al 25 nov 2026)
-- **Ultima revisione**: `reports/2026-11-25-conto-vero-F5-2.md`, secondo giro del conto vero su F5: **APPROVE per il commit**
-  del codice spento (178 e 179 chiusi; 183 Basso nuovo, testi «G1» rimasti). Non committato su `ecf55d7` (percorso = `932c048`):
-  al commit confrontare le md5 nel rapporto (`conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py`
-  99c9fd1f). Mutazioni: `giro25nov_b/mutazioni_f5.py <copia>` (10 su 12 prese; le 2 vive sono solo testi). Primo giro:
-  `reports/2026-11-25-conto-vero-F5.md` (180, 181 Medi e 182 Basso, ancora aperti).
-- **Numeri dei problemi**: trader AI fino al 186 (`trader_ai/revisioni/2026-11-26-quattordicesima.md`; 183 è F5): i nuovi partono da 187.
-- Trader AI (area `trader_ai/`): quattordici revisioni in `trader_ai/revisioni/` (23-26 nov); l'ultima, la quattordicesima (`d9c8af7`), APPROVE con
-  condizioni (184 Medio timeout 300 s con 16.000 token; 185, 186 Bassi). Tetto di 5 dollari tiene; stato vecchio compatibile. Nel registro di qui solo le prime sette.
-- 17 nov, funding demo contro paper: committato come `d5c6708` con le correzioni 90-92 della sessione principale (19 righe diverse dalla
-  copia; grep del 25 nov: nessuna riga su richieste, cliente o chiavi). Chiusa.
+## Stato (aggiornato al 26 nov 2026)
+- **Ultima revisione**: secondo riesame della quindicesima (sezione «Secondo riesame» di `trader_ai/revisioni/2026-11-26-quindicesima.md`),
+  copia `.../scratchpad/wt2` su `c52fbab`: **APPROVE con condizioni** per commit e riavvio sul simulato (194-197 e N1-N5 chiusi; 198 Medio
+  solo demo; 202 Medio, test da aggiungere prima del commit; 199-201 Bassi). md5 al commit: `avvio.py` c19205d2, `messaggio.py` 0ca870c9,
+  `ripara.py` 4e1e13a9. Prove: `.../scratchpad/riesame2_v7/` (sessione 3e86fc2d; il primo riesame in `riesame_v7/`).
+- **Numeri dei problemi**: trader AI fino al 202 (187 non usato); i nuovi partono da 203.
+- Trader AI (area `trader_ai/`): quindici revisioni e due riesami in `trader_ai/revisioni/` (23-26 nov); 184-186 chiusi nel `f7fe784`. Nel registro
+  di qui la settima (condizioni per i soldi veri: 146, 147) e le ultime tre.
+- Conto vero su F5 (25 nov): `reports/2026-11-25-conto-vero-F5-2.md`, APPROVE per il commit del codice spento; al commit confrontare
+  le md5 (`conto_vero.py` 4bb9935b, `demo_binance.py` b98074f6, `test_conto_vero_f5.py` 99c9fd1f). 180, 181 Medi e 182, 183 Bassi aperti.
 - Conto vero, per l'accensione: 54 (ii) Alto, 70 Medio, 78 Basso (`reports/2026-11-12-conto-vero-versione-firebase-2.md`), più
   180-183 e le decisioni del 25 nov; regole pubblicate e pulsanti provati, revisione nuova sul commit da approvare; rifare S1b, S2b,
   S4 (`giro12nov/test_prove_12nov.py`) e `mutazioni2.py`.
-- Voci aperte: 6 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; trader AI settima; F5 25 nov, secondo giro).
+- Voci aperte: 7 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; trader AI settima; F5 secondo
+  giro; trader AI secondo riesame della quindicesima).
 
 ## Promemoria
 - Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero lo riusa con `HOST = "fapi.binance.com"`,
@@ -34,6 +34,7 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
   test (aiuti `_repo`/`_commit` di `tests/test_conto_vero.py`).
 - Mutazioni su una copia di `bot/`, dei test e di `research/programma6/` (`giro25nov_b/copia`); `env -i` è negato: `os.environ`.
 - Test dei limiti: `tests/test_risk.py`, `tests/test_sizing.py:104`, demo `tests/test_demo_binance.py:1520`, conto vero
-  `tests/test_conto_vero.py:161`. Suite al 25 nov: 2826 passed, 1 deselected (la firma passa con `PYTHONPATH=<cartella di lavoro>/cripto`).
-- Vietate le letture di `dashboard/node_modules`; `find` sulla radice è negato: usare Glob. Il gancio dei segreti blocca i comandi che
+  `tests/test_conto_vero.py:161`. Suite al 26 nov sera: 2825 passed, 1 skipped, 1 deselected (ricerca).
+- Dall'area `trader_ai` non si scrive in `reviews/` (blocco delle aree): righe nuove come differenza per la sessione crypto. Vietate
+  le letture di `dashboard/node_modules`; `find` sulla radice è negato: usare Glob. Il gancio dei segreti blocca i comandi che
   nominano file `.env`. In `reviews/` si scrive con Write o con un breve script Python.
