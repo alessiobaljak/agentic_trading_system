@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 340
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: claude/brave-albattani-1b12fv
       - name: Il nome della prova
@@ -34,12 +34,12 @@ jobs:
           if [ "$PROVA" = "rinnova_azioni" ]; then exit 0; fi
           echo "$PROVA" | grep -Eq '^p[0-9]{3}[a-z]?$' || { echo "nome non valido"; exit 1; }
           test -f "stock/prove/$PROVA.py" || { echo "manca stock/prove/$PROVA.py"; exit 1; }
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: pip install pandas numpy requests scipy
+      - run: pip install -r stock/requirements.txt -r stock/requirements-test.txt
       - name: I dati già scaricati
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/stock_dati
           key: azioni-dati-${{ github.run_id }}
@@ -56,7 +56,7 @@ jobs:
           if [ "$PROVA" = "rinnova_azioni" ]; then python -m stock.dati.rinnova_azioni; else python -m "stock.prove.$PROVA"; fi
       - name: Tieni i dati scaricati (anche se la prova si è fermata)
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ~/stock_dati
           key: azioni-dati-${{ github.run_id }}

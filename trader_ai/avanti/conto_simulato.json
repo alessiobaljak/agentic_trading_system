@@ -1,29 +1,41 @@
 {
- "portafoglio": 948.343656444648,
- "posizione": null,
- "ordini": [
-  {
-   "cid": "taio1795757062147",
-   "lato": "lungo",
-   "quantita": 0.03,
-   "prezzo": 61520.0,
-   "leva": 3,
-   "messo_ms": 1795757082947
-  }
- ],
+ "portafoglio": 940.238674157148,
+ "posizione": {
+  "lato": "lungo",
+  "quantita": 0.035,
+  "entrata": 61500.0,
+  "leva": 5,
+  "margine": 430.5,
+  "liquidazione": 49507.5,
+  "aperta_ms": 1795777440000,
+  "da_limite": true,
+  "cid": "taio1795766427483",
+  "spese_entrata": 0.4305,
+  "spese": 0.4305,
+  "funding": 0.0
+ },
+ "ordini": [],
  "algo": [
   {
-   "algoId": 84,
-   "cid": "tais1795757062147",
+   "algoId": 87,
+   "cid": "tais1795766427483",
    "tipo": "STOP_MARKET",
-   "prezzo": 61360.0,
+   "prezzo": 61340.0,
    "lato": "lungo",
-   "messo_ms": 1795757083929
+   "messo_ms": 1795766450276
+  },
+  {
+   "algoId": 88,
+   "cid": "tait1795777524334",
+   "tipo": "TAKE_PROFIT_MARKET",
+   "prezzo": 61840.0,
+   "lato": "lungo",
+   "messo_ms": 1795777527994
   }
  ],
- "leva": 3,
- "ultimo_minuto_ms": 1795759560000,
- "ultimo_funding_ms": 1795759595780,
+ "leva": 5,
+ "ultimo_minuto_ms": 1795777560000,
+ "ultimo_funding_ms": 1795777589626,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -366,9 +378,34 @@
    "cosa": "commissione",
    "importo": -0.771798,
    "come": "obiettivo"
+  },
+  {
+   "ora_ms": 1795760478195,
+   "cosa": "commissione",
+   "importo": -0.43204,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795765205763,
+   "cosa": "risultato",
+   "importo": -6.165425,
+   "prezzo": 61543.845,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795765205763,
+   "cosa": "commissione",
+   "importo": -1.077017,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795777525406,
+   "cosa": "commissione",
+   "importo": -0.4305,
+   "come": "limite eseguito"
   }
  ],
- "prossimo_id": 85,
+ "prossimo_id": 89,
  "chiuse": [
   {
    "lato": "corto",
@@ -577,6 +614,24 @@
    "uscita": 61743.825,
    "come": "obiettivo",
    "chiusa_ms": 1795756980000
+  },
+  {
+   "lato": "lungo",
+   "quantita": 0.035,
+   "entrata": 61720.0,
+   "leva": 3,
+   "margine": 720.0666666666667,
+   "liquidazione": 41455.26666666667,
+   "aperta_ms": 1795760400000,
+   "da_limite": true,
+   "cid": "taio1795760177248",
+   "spese_entrata": 0.4320400000000001,
+   "spese": 1.5090572875000001,
+   "funding": 0.0,
+   "risultato_prezzo": -6.16542499999996,
+   "uscita": 61543.845,
+   "come": "stop",
+   "chiusa_ms": 1795765140000
   }
  ],
  "funding_applicati": [

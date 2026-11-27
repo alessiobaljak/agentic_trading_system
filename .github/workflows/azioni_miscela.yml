@@ -31,24 +31,33 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: claude/brave-albattani-1b12fv
       - name: Accesa?
         id: accesa
+        env:
+          EVENTO: ${{ github.event_name }}
+          COMANDO: ${{ inputs.comando }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.comando }}" != "auto" ]; then
-            echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
+          # il comando dato a mano entra come variabile, non dentro lo script, e vale solo uno di quelli dell'elenco; anche
+          # «auto» dato a mano rispetta l'interruttore stock/avanti/miscela_accesa (audit del 27 novembre 2026)
+          case "${COMANDO:-auto}" in
+            auto|controlla|plancia|ordini|rifai_sera) ;;
+            *) echo "comando non ammesso: $COMANDO"; exit 1 ;;
+          esac
+          if [ "$EVENTO" = "workflow_dispatch" ] && [ "$COMANDO" != "auto" ]; then
+            echo "comando=$COMANDO" >> "$GITHUB_OUTPUT"
           elif [ ! -f stock/avanti/miscela_accesa ]; then
-            echo "comando=" >> "$GITHUB_OUTPUT"; echo "spenta: manca stock/avanti/miscela_accesa"
+            echo "comando=" >> "$GITHUB_OUTPUT"; echo "spento: manca stock/avanti/miscela_accesa"
           else
             echo "comando=auto" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         if: steps.accesa.outputs.comando != ''
         with:
           python-version: "3.12"
-      - run: pip install pandas numpy requests
+      - run: pip install -r stock/requirements.txt
         if: steps.accesa.outputs.comando != ''
       - name: Miscela
         if: steps.accesa.outputs.comando != ''
@@ -59,7 +68,8 @@ jobs:
           AZIONI_FIREBASE_API_KEY: ${{ secrets.AZIONI_FIREBASE_API_KEY }}
           AZIONI_FIREBASE_EMAIL: ${{ secrets.AZIONI_FIREBASE_EMAIL }}
           AZIONI_FIREBASE_PASSWORD: ${{ secrets.AZIONI_FIREBASE_PASSWORD }}
-        run: python -m stock.avanti.miscela "${{ steps.accesa.outputs.comando }}"
+          COMANDO: ${{ steps.accesa.outputs.comando }}
+        run: python -m stock.avanti.miscela "$COMANDO"
       - name: Salva lo stato nel repository
         if: always() && steps.accesa.outputs.comando != ''
         run: |

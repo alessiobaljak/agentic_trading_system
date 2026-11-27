@@ -29,8 +29,9 @@ Da leggere per primo, dopo `README.md`. Nato il 24 ottobre 2026; ultimo aggiorna
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.
 * **Le correzioni dell'audit e la soglia** (27 novembre: «sì, fai le 19 correzioni e abbassa a 0,80»): le correzioni del percorso
-  degli ordini della sezione 3 di `AUDIT_2026-11-27.md`, con la revisione separata; lo Sharpe corretto dell'esame delle azioni passa da
-  0,95 a 0,80 dalla prova 54 (`METODO.md`, sezione 1).
+  degli ordini della sezione 3 di `AUDIT_2026-11-27.md`, **fatte il 27 novembre** con due giri di revisione separata (approvate al
+  secondo; otto problemi medi da correggere prima del 30 novembre: `avanti/REVISIONE_AUDIT.md`); lo Sharpe corretto dell'esame delle
+  azioni passa da 0,95 a 0,80 dalla prova 54 (`METODO.md`, sezione 1).
 
 ## Come rispondere al proprietario (25 novembre 2026)
 
@@ -495,7 +496,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   provata delle opzioni (I62).
 * **Gli archivi delle azioni societarie** rinnovati sul lavoro della ricerca (`rinnova_azioni`, lanciato il 27 novembre); il risultato
   in `prove/RINNOVO_AZIONI_risultati.md`.
-* **Le correzioni dell'audit che toccano gli ordini**, appena il proprietario dà l'ok: revisore separato, test, commit, prima del
-  1° dicembre (il primo elenco del mese calcolato su GitHub).
+* **Le correzioni dell'audit che toccano gli ordini**: fatte e approvate il 27 novembre; restano gli otto problemi medi del secondo
+  giro (`avanti/REVISIONE_AUDIT.md`), da correggere e far ricontrollare prima di lunedì 30 novembre.
 * ~~Verificare il salto di NVDA e il dividendo in più di QQQ~~ (fatto il 27 novembre: veri). Lo scarto nei primi e negli ultimi
   minuti ora si misura sul demo (`avanti/resoconto.md`).

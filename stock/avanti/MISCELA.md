@@ -60,3 +60,14 @@ contro 18,2%, beta 0,51, alfa 3,2% l'anno), non sul guadagno. Calcolo rifatto da
   (nome nuovo `miscela-sera-{giorno}-g-{titolo}`); gli ordini vecchi della miscela si cancellano, e un ordine con lo stesso nome già
   scaduto o cancellato non conta più come mandato. La sera del 12 si rifà a mano (`rifai_sera`). Le regole della strategia non
   cambiano: si compra all'apertura come nelle prove.
+* **27 novembre 2026 — le correzioni del programma** dopo l'audit (`stock/AUDIT_2026-11-27.md`, sezione 3), con l'ok del proprietario del 27 novembre («sì, fai le 19 correzioni») e la revisione separata del codice (`avanti/REVISIONE_AUDIT.md`). Le regole non cambiano. La calma e l'ampiezza si ricalcolano quando la
+  settimana (o il mese) della prossima seduta è diversa da quella dell'ultima decisione salvata nello stato: prima, se saltava la sera
+  dell'ultimo giorno della settimana o del mese, la decisione saltava per tutta la settimana o tutto il mese; ora si prende la sera
+  dopo e il diario scrive «decisa in ritardo». Una posizione della prima candela o della prova 45 rimasta da un altro giorno non
+  sposta più il valore della miscela («tutto il resto» del conto): conta con il suo guadagno non realizzato dentro la sua strategia,
+  e le sue uscite hanno un nome «rim» che il conto riconosce dai nomi degli ordini su Alpaca (`REGOLE.md`). Per questo la sera e la
+  banca centrale non si fermano più quando c'è una posizione rimasta (la prima versione di queste correzioni le fermava: con i file del
+  repository vecchi di qualche minuto avrebbe saltato la vigilia della banca centrale senza motivo). Un ordine ritrovato per nome ma
+  rifiutato o cancellato conta come non mandato; se la ricerca per nome fallisce si scrive «DA VERIFICARE» e si passa al fondo dopo. I valori di fine
+  giornata alla chiusura ufficiale e le tasse sulle vendite come scritto in `REGOLE.md`. Un gruppo di titoli che fallisce nell'ampiezza
+  si riprova un titolo alla volta. La riserva della sera parte anche dalla routine delle 8:15.

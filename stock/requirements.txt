@@ -1,0 +1,13 @@
+# Le librerie dei lavori di GitHub delle azioni (azioni_avanti, azioni_miscela, azioni_gamma, azioni_ricerca, azioni_test), con le
+# versioni che quei lavori installavano il 27 novembre 2026 e con cui gli ordini giravano. Prima non avevano versione e ogni lavoro
+# prendeva l'ultima (audit del 27 novembre 2026, stock/AUDIT_2026-11-27.md). Si aggiornano solo dopo che i test passano (azioni-test).
+pandas==3.1.1
+numpy==2.5.5
+requests==2.34.2
+python-dateutil==4.0.0
+tzdata==2026.6
+# le dipendenze di requests, fisse anche loro (revisione separata del 27 novembre 2026)
+urllib3==2.8.0
+certifi==2026.11.20
+charset_normalizer==3.5.3
+idna==3.20

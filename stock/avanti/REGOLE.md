@@ -88,3 +88,27 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
   guadagno da allora), non sul valore di tutto il conto, e non tocca mai SPY e QQQ (`stock/avanti/conto.py`). Le regole della strategia
   non cambiano. Dopo la revisione separata del codice: gli errori di rete non fermano più un giro di ordini a metà, il file del giorno
   si ricostruisce da Alpaca se manca, la chiusura fuori orario prova tutti i titoli anche se uno è rifiutato.
+* **27 novembre 2026 — le correzioni del programma** dopo l'audit (`stock/AUDIT_2026-11-27.md`, sezione 3), con l'ok del proprietario del 27 novembre («sì, fai le 19 correzioni») e la revisione separata del codice (`avanti/REVISIONE_AUDIT.md`). Le regole della strategia non cambiano; cambia come il programma
+  reagisce ai guasti:
+  * una posizione rimasta da un altro giorno si chiude con un ordine dal nome `candela-rim-<giorno dell'ingresso>-<titolo>-<ora>`
+    (`gamma-rim-<giorno>-<ora>` per la prova 45), e la sua uscita va nella riga del giorno dell'ingresso; il giorno dell'ingresso si
+    legge dai nomi degli ordini su Alpaca, non dai file del repository (un lavoro può avere in mano file vecchi di qualche minuto). Il
+    capitale di oggi conta il flusso e il valore di mercato solo per i titoli entrati oggi; una posizione di un altro giorno conta con
+    il suo guadagno non realizzato, e gli ordini «rim» restano fuori (prima il capitale virtuale del giorno dopo contava i soldi della
+    vendita come guadagno). Finché una riga di un giorno prima resta «aperta» o «parziale» non partono ordini nuovi, con l'allarme sulla
+    Plancia; a ogni avvio le righe aperte si ricalcolano, così un'uscita arrivata tardi le chiude da sola. **Non chiudere a mano dal sito
+    di Alpaca** (un ordine senza nome non si sa a chi attribuirlo): si usa il comando «chiudi» del lavoro di GitHub;
+  * con uscite parziali il guadagno è quello della parte chiusa; dopo le 20:00 di New York niente ordini fuori orario (si aspettano le
+    4:00); gli ordini d'emergenza hanno un nome unico; un ordine non si rimanda mai dopo un errore di rete senza averlo cercato per nome;
+    una risposta «troppe richieste» si ritenta; un ordine con la ricerca per nome fallita si scrive «da verificare» e il diario lo
+    ricerca (prima diventava «saltato»);
+  * l'elenco del mese si calcola prima dell'attesa delle 9:45; i membri dell'S&P 500 si aggiornano ogni mese (`membri.py`, il 27
+    novembre: 7 entrati e 7 usciti rispetto al 30 settembre); un gruppo di titoli che fallisce si riprova un titolo alla volta;
+  * l'interruttore `acceso_su_github` ferma anche gli avvii a mano con «auto»;
+  * i valori di fine giornata delle tre strategie si scrivono 20 minuti dopo la fine della seduta, con le posizioni alla chiusura
+    ufficiale (prima ai prezzi del dopo borsa); le tasse americane sulle vendite che il conto addebita (circa 20,7 dollari per milione,
+    misurate) si tolgono alla strategia che vende (prima finivano tutte nella miscela): il capitale della prima candela scende di
+    qualche dollaro, quello della miscela sale altrettanto;
+  * **il prezzo di riferimento** (la chiusura della candela da cui si calcolano stop e obiettivo) resta nel diario e nei file dei
+    giorni, uno per operazione: è il dato della nostra decisione, come stop e obiettivo, e serve a misurare il costo vero dell'ingresso
+    (`resoconto.md`). È l'unico prezzo di borsa che si tiene; i prezzi scaricati per calcolare le candele restano fuori dal repository.
