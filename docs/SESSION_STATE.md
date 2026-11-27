@@ -3,7 +3,19 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (27 novembre 2026, 02:40 UTC)
+## Compito in corso (27 novembre 2026, 04:35 UTC)
+- **Aggiornamento delle 04:35**: secondo giro dell'audit finito (i test di GitHub: 9 problemi, in tutto 61; rapporto rigenerato).
+  Corretti e committati: `requirements-ricerca.txt`, `tests.yml` (due lavori, la corsa in corso finisce sempre), documento storico e
+  quattro test saltati, CLAUDE.md; qui `research/src/tests` passa (3.142, 9 saltati). Revisione di F5 committata: **FAIL a 280-300 USDT,
+  PASS tecnico a 1.000** (backlog P36). Giro delle 04:17 fatto (raccolta da una copia pulita in `<S>/wt_raccolta`, fogli, voce 8, diario).
+  In corso: il flusso delle correzioni (wf_2957b2e1-ccc; finiti scarico, motore, notizie; poi balene, esame, registro, misure, segreti,
+  stato, bot, verifiche e revisioni) e il flusso delle idee nuove «idee-nuove-27nov» (wf_3836c0f0-689: tre scout A, B, C con le bozze
+  in `<S>/scout_27nov/`, controllo di novità, verifica, ritocco; le idee scartate stanno nel journal del flusso). Dopo: numeri 170 e
+  seguenti alle bozze (nomi CENTOTTAVA, CENTONOVESIMA...), commit delle regole, righe del registro e LOG delle idee; i calcoli solo
+  dopo il commit delle correzioni del motore. Alle 06:13: il paper del programma 6 usa `aggiorna.sh`, che è in correzione: decidere
+  se lanciarlo dalla copia pulita o con le correzioni già controllate.
+
+## Compito in corso, prima parte (27 novembre 2026, 02:40 UTC)
 - **Audit del sistema** (richiesta del proprietario del 26 novembre): 52 problemi confermati, rapporto
   `audits/reports/2026-11-26-AUDIT_SISTEMA.md`, backlog P37. Corretti e committati: i fogli del mattino si fermano senza la raccolta
   fresca, VVV nei fatti gravi del 26 (terza correzione), scout e routine con la decisione del 22 novembre, P18 e P28.
