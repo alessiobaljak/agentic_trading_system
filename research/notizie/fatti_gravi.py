@@ -23,6 +23,7 @@ TITOLI_MAX = 6
 
 def main(ora: datetime | None = None) -> Path:
     ora = (ora or datetime.now(timezone.utc)).replace(second=0, microsecond=0)
+    v14.raccolta_fresca(ora)     # dal 27 novembre: niente foglio con le notizie delle ultime 4 ore ancora da raccogliere
     elenco = json.loads(raccolta.nomi(ora).read_text())["elenco"]
     arts = v14.articoli(ora)
     per_moneta: dict = {}

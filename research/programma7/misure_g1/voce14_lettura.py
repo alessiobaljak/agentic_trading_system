@@ -22,6 +22,20 @@ LETTURE = Path(__file__).resolve().parent / "voce14_letture"
 RIGA = re.compile(r"([0-9A-Z一-鿿]+USDT) ([+-]\d+\.\d+)/([+-]\d+\.\d+)")
 
 
+def raccolta_fresca(fine: datetime, minuti: int = 15) -> datetime:
+    """Ferma il foglio se l'ultima raccolta delle notizie è di più di `minuti` prima della fine della finestra.
+
+    Dal 27 novembre (audit del 26 novembre): dal 23 al 26 novembre i fogli del mattino sono stati preparati prima della raccolta dello
+    stesso giro, e le notizie delle 4 ore prima (dalle 00:18 alle 04:18 UTC) non sono entrate in nessun foglio. Con questo controllo
+    il foglio non parte finché la raccolta non è stata lanciata."""
+    righe = (raccolta.ARCHIVIO / "giri.csv").read_text(encoding="utf-8").strip().splitlines()
+    ultima = datetime.strptime(righe[-1].split(",")[0], "%Y-%m-%d %H:%M").replace(tzinfo=timezone.utc)
+    if ultima < fine - timedelta(minutes=minuti):
+        raise SystemExit(f"l'ultima raccolta è delle {ultima:%Y-%m-%d %H:%M} UTC, più di {minuti} minuti prima delle {fine:%H:%M} UTC: "
+                         "lancia prima `python3 -m research.notizie.raccolta`, poi il foglio")
+    return ultima
+
+
 def ultimo_stato() -> tuple[Path, datetime, dict]:
     """L'ultima risposta «stato» con la tabella dei pesi: file, ora della lettura, pesi del paper G1 (in % del conto)."""
     for f in sorted(RISULTATI.glob("*stato*.md"), reverse=True):
@@ -81,6 +95,7 @@ def cita(testo: str, simbolo: str, elenco: dict) -> bool:
 def main() -> None:
     f, ora, pesi = ultimo_stato()
     vendute = sorted(((s, p) for s, p in pesi.items() if p < 0), key=lambda x: x[1])
+    raccolta_fresca(ora)
     elenco = json.loads(raccolta.nomi(ora).read_text())["elenco"]
     arts = articoli(ora)
     righe = [f"# Lettura delle notizie delle monete vendute da G1 — {ora:%Y-%m-%d}",
