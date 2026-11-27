@@ -23,9 +23,16 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
 * Regole scritte prima del calcolo (un file per prova, la riga nel registro), una prova per volta, nel conto unico delle prove.
 * Le idee partono dai vantaggi che reggono (la direzione dal funding, gli eventi) e usano gli indicatori per **scegliere il
   momento** dell'entrata e dell'uscita dentro la giornata; le entrate e gli obiettivi a **ordine limite** dove si può.
-* Esame: come il programma 6 (`terza.esame` e `terza.esito` sulle settimane, Sharpe corretto con l'aggiunta del 23 ottobre,
-  soglia 0,95; accanto il t dello Sharpe contro 3). Si riportano sempre quante operazioni al giorno, la durata media, la quota
-  vinte, vincita e perdita medie, i costi.
+* Esame (*27 novembre 2026, audit del 26 novembre*: qui c'era ancora l'esame di ottobre, `terza.esito` con la soglia 0,95, che resta
+  solo per le prove già fatte con lui). Le misure sulle settimane con `terza.esame`; il verdetto con **`asticella.esame(nuove,
+  candidate)`** (`research/programma6/ASTICELLA.md`, sezione 6), l'esame in vigore dalle decisioni del 9, 11 e 23 novembre: netto
+  positivo, **ogni anno solare positivo**, **t dello Sharpe da 3** e **probabilità che non sia fortuna da 0,80** (lo Sharpe corretto,
+  con N = le famiglie di prove simili del mazzo di oggi e V senza le famiglie con il t sotto −3). Una strategia già scelta si giudica
+  con lo sconto una volta sola, con il mazzo di quando è stata scelta (G1: prova 57, 0,945), poi in avanti. La funzione scrive accanto,
+  **non ufficiali** finché il proprietario non decide, i numeri senza le serie a incasso quasi fisso (157, 159, 161), con la V
+  simmetrica senza la 157, con il t robusto e le settimane efficaci, le due cose insieme, e gli anni sul conto composto: vanno nel
+  risultato di ogni prova accanto al verdetto. Si riportano sempre quante operazioni al giorno, la durata media, la quota vinte,
+  vincita e perdita medie, i costi.
 * Ogni strategia promettente passa da un **revisore separato** prima di andare nel paper.
 
 ## 4. La coda delle idee (in quest'ordine; i dettagli si fissano nel file di ogni prova, prima del calcolo)

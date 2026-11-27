@@ -85,3 +85,7 @@ def test_senza_serie_conta_come_gruppi_a_se():
     assert "110 CC" in s and "151 WE" in s
     _, soli = ast.mazzo()
     assert len(soli) == 18 + len(s)                        # le prove 1 e 2B (18) piu' queste
+    # 27 novembre 2026 (audit esame-4): ognuna con le settimane su cui e' misurata (per il t di `per_v`); 300 solo per le 1 e 2B
+    assert all(isinstance(x, ast.Solo) and x.settimane > 0 for x in soli)
+    assert [x.settimane for x in soli[:18]] == [ast.SETTIMANE_PROGRAMMA] * 18
+    assert s["151 WE"].settimane == 19 and s["153 B"].settimane == 196

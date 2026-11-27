@@ -368,6 +368,12 @@ def esame(df: pd.DataFrame, btc: pd.Series, inizio: int = INIZIO_ESAME, anni_pie
 
 
 def esito(e: dict, dsr: float) -> str:
+    """L'esame di ottobre (TERZA.md, sezione 4): intervallo sopra zero, Sharpe corretto da 0,95, positiva in almeno 4 anni, ultimo anno,
+    costi doppi, trimestri, piu' del Bitcoin. Resta solo per le prove gia' fatte con lui (49 moduli del programma 7, l'ultimo la 145).
+
+    **Non e' l'esame in vigore**: dal 9, 11 e 23 novembre 2026 la soglia e' 0,80 (la «probabilita' che non sia fortuna»), N = le
+    famiglie del mazzo di oggi, con ogni anno positivo e il t dello Sharpe da 3; lo scrive `research.programma6.asticella.esame`
+    (ASTICELLA.md, sezione 6), con i numeri non ufficiali accanto. Nota del 27 novembre 2026 (audit del 26 novembre, esame-10)."""
     if not e["boot"]["basso"] > 0:
         return "netto con l'intervallo non sopra zero"
     if not dsr >= 0.95:

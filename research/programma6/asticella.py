@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +28,25 @@ QUI = Path(__file__).parent
 RIS = QUI / "risultati_asticella"
 MIN_COMUNI, TAGLIO, ALTRI_TAGLI = 52, 0.5, (0.3, 0.7)
 T_PERDENTI, SETTIMANE_PROGRAMMA = -3.0, 300
+# L'esame in vigore (`esame`): probabilita' che non sia fortuna da 0,80 (9 novembre), t dello Sharpe da 3, ogni anno positivo.
+SOGLIA_PROBABILITA, SOGLIA_T = 0.80, 3.0
+# I numeri NON ufficiali accanto (`esame`; ASTICELLA.md, sezione 6): le prove a incasso quasi fisso (backlog P34, 15 novembre), le
+# serie dei calcoli bocciati dal revisore (FAIL, audits/reports/2026-11-15-PROVA157.md), i ritardi di Newey e West (base, controllo).
+INCASSO_FISSO = (157, 159, 161)
+BOCCIATE_DAL_REVISORE = ("157 A", "157 B")
+RITARDI, RITARDI_CONTROLLO = 4, 13
+
+
+class Solo(float):
+    """Lo Sharpe di una prova senza serie, con le settimane su cui e' misurato (``settimane``). Si usa come un numero: le funzioni che
+    lo trattano come uno Sharpe continuano a funzionare; ``per_v`` ne usa le settimane per il t. 27 novembre 2026 (audit del 26
+    novembre, esame-4): prima il t di tutte le prove senza serie si calcolava sulle 300 settimane del programma, anche per la 151 (19
+    settimane) e la 153 (196), che cosi' uscivano da V."""
+
+    def __new__(cls, sharpe: float, settimane: int = SETTIMANE_PROGRAMMA):
+        x = super().__new__(cls, sharpe)
+        x.settimane = int(settimane)
+        return x
 
 
 def _lunedi(giorni) -> np.ndarray:
@@ -137,9 +157,14 @@ def sharpe(x: pd.Series) -> float:
     return float(x.mean() / sd * math.sqrt(52)) if len(x) > 2 and sd > 0 else 0.0
 
 
-def gruppi(serie: dict, taglio: float) -> list:
+def correlazioni(serie: dict) -> tuple:
+    """(nomi, R): la correlazione dei rendimenti settimanali di ogni coppia di serie, sulle settimane comuni in cui almeno una delle
+    due ha operato (almeno ``MIN_COMUNI``, altrimenti 0). 27 novembre 2026 (audit del 26 novembre, esame-8): le settimane vuote
+    (NaN, per esempio le 93 e 108 settimane prima della quotazione di APT e MATIC nella 149) si tolgono coppia per coppia; prima la
+    correlazione con una serie piena usciva NaN, cioe' 0, e quelle serie non potevano entrare in un'altra famiglia."""
     nomi = list(serie)
     n = len(nomi)
+    vuote = [bool(serie[m].isna().any()) for m in nomi]
     R = np.zeros((n, n))
     for i in range(n):
         for j in range(i + 1, n):
@@ -147,9 +172,18 @@ def gruppi(serie: dict, taglio: float) -> list:
             comuni = a.index.intersection(b.index)
             x, y = a.loc[comuni], b.loc[comuni]
             ok = (x.abs() > 0) | (y.abs() > 0)          # le settimane in cui almeno una delle due ha operato
+            if vuote[i] or vuote[j]:
+                ok &= x.notna() & y.notna()             # senza le settimane vuote della coppia
             rho = float(np.corrcoef(x[ok], y[ok])[0, 1]) if ok.sum() >= MIN_COMUNI and x[ok].std() > 0 and y[ok].std() > 0 else 0.0
             R[i, j] = R[j, i] = rho if np.isfinite(rho) else 0.0
     np.fill_diagonal(R, 1.0)
+    return nomi, R
+
+
+def gruppi(serie: dict, taglio: float, corr: tuple | None = None) -> list:
+    """Le famiglie (ASTICELLA.md, sezione 3). ``corr`` = (nomi, R) di `correlazioni` gia' calcolate, nello stesso ordine e per gli
+    stessi nomi di ``serie`` (la correlazione di una coppia non dipende dalle altre serie: `esame` la calcola una volta sola)."""
+    nomi, R = corr if corr is not None else correlazioni(serie)
     D = np.sqrt(np.clip((1 - R) / 2, 0, None))
     Z = linkage(squareform(D, checks=False), method="average")
     etichette = fcluster(Z, t=math.sqrt((1 - taglio) / 2), criterion="distance")
@@ -161,13 +195,15 @@ def gruppi(serie: dict, taglio: float) -> list:
     return out
 
 
-def per_v(gr: list, soli: list, escludi_perdenti: bool) -> list:
+def per_v(gr: list, soli: list, escludi_perdenti: bool, simmetrica: bool = False) -> list:
     """Gli Sharpe dei gruppi che entrano in V. Con ``escludi_perdenti`` (ASTICELLA.md, sezione 5) i gruppi con il t dello
-    Sharpe sotto -3 restano in N ma non in V; per le prove senza serie il t si calcola sulle 300 settimane del programma."""
-    tutti = [(g["sharpe"], g["settimane"]) for g in gr] + [(sr, SETTIMANE_PROGRAMMA) for sr in soli]
+    Sharpe sotto -3 restano in N ma non in V. Per le prove senza serie il t si calcola sulle loro settimane (``Solo.settimane``,
+    dal 27 novembre 2026); un numero semplice vale 300 settimane, quelle del programma (le prove 1 e 2B, che lo coprono tutto).
+    ``simmetrica`` (NON ufficiale, ASTICELLA.md, sezione 6): fuori da V anche i gruppi con il t sopra +3."""
+    tutti = [(g["sharpe"], g["settimane"]) for g in gr] + [(float(x), getattr(x, "settimane", SETTIMANE_PROGRAMMA)) for x in soli]
     if not escludi_perdenti:
         return [sr for sr, _ in tutti]
-    return [sr for sr, n in tutti if sr * math.sqrt(n / 52) >= T_PERDENTI]
+    return [sr for sr, n in tutti if T_PERDENTI <= sr * math.sqrt(n / 52) and (not simmetrica or sr * math.sqrt(n / 52) <= -T_PERDENTI)]
 
 
 def corretto_rivisto(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
@@ -290,7 +326,10 @@ def serie_programma7() -> dict:
     if f.exists():
         d = pd.read_csv(f)
         g = d["venerdi"].map(lambda x: sc.giorno(*map(int, x.split("-")))).to_numpy() + 3      # il lunedi' dopo il venerdi'
-        out["68 G10"] = pd.Series(0.01 * d["R"].to_numpy(), index=g).groupby(level=0).sum()
+        s = pd.Series(0.01 * d["R"].to_numpy(), index=g).groupby(level=0).sum()
+        # 27 novembre 2026 (audit esame-8): le settimane senza operazioni valgono zero, come in `qu.portafoglio` (prima c'erano solo
+        # le 150 settimane operate, con salti fino a 126 giorni: Sharpe -1,94 invece di -1,35 sulle 301 settimane)
+        out["68 G10"] = s.reindex(np.arange(int(s.index.min()), int(s.index.max()) + 1, 7)).fillna(0.0)
     out.update(_eventi_mancanti(p7))
     f = p7 / "risultati_ottantaseiesima" / "giorni.csv.gz"            # 148: la sola regola nuova (B), dai giorni alle settimane
     if f.exists():
@@ -346,51 +385,62 @@ DIFFERENZE_DAL_REGISTRO = {
 
 def senza_serie() -> list:
     """(nome, Sharpe) delle varianti dalla 49 in poi che il registro conta senza una serie salvata nel mazzo: contano ognuna come
-    un gruppo a se' (ASTICELLA.md, sezione 3: «scelta prudente: N piu' alto»), come le prove 1 e 2B. Il t si calcola sulle 300
-    settimane del programma (``per_v``).
+    un gruppo a se' (ASTICELLA.md, sezione 3: «scelta prudente: N piu' alto»), come le prove 1 e 2B. Lo Sharpe e' un ``Solo``
+    con le settimane su cui e' misurato, che ``per_v`` usa per il t (27 novembre 2026, audit esame-4; prima 300 per tutte).
 
     * 108 (18 varianti) e 111 (8): lo Sharpe non e' salvato; ogni variante perde lo 0,11% a operazione dopo i costi con p 1,00
-      (``esame.json``): t molto sotto -3, quindi entrano in N e non in V qualunque sia il valore. Il -10 e' convenzionale.
-    * 110, la chiamata coperta: lo Sharpe di ``esame.json`` (``CC_opzioni``, mensile).
-    * 151: lo Sharpe della sua serie nel periodo (la prova si e' fermata per dati troppo corti, senza esame).
-    * 153: la prova ha salvato solo i riassunti del segnale, non le serie: lo Sharpe delle varianti A e B da ``esame.json``."""
+      (``esame.json``): t molto sotto -3, quindi entrano in N e non in V qualunque sia il valore. Il -10 e' convenzionale; le
+      settimane sono quelle del periodo delle prove (dal 1° gennaio 2024 al 30 settembre 2026, QUARANTASEIESIMA.md, sezione 2).
+    * 110, la chiamata coperta: lo Sharpe di ``esame.json`` (``CC_opzioni``, mensile), sui suoi 66 mesi (286 settimane).
+    * 151: lo Sharpe della sua serie nel periodo, sulle sue 19 settimane (la prova si e' fermata per dati troppo corti, senza esame).
+    * 153: la prova ha salvato solo i riassunti del segnale, non le serie: lo Sharpe e le settimane (196) delle varianti A e B da
+      ``esame.json``."""
     p7 = QUI.parent / "programma7"
     out = []
+    w108 = round((sc.giorno(2026, 9, 30) - sc.giorno(2024, 1, 1) + 1) / 7)
     for n, cartella in ((108, "risultati_quarantaseiesima"), (111, "risultati_quarantanovesima")):
         f = p7 / cartella / "esame.json"
         if f.exists():
-            out += [(f"{n} {k}", -10.0) for k in json.loads(f.read_text())]
+            out += [(f"{n} {k}", Solo(-10.0, w108)) for k in json.loads(f.read_text())]
     f = p7 / "risultati_quarantottesima" / "esame.json"
     if f.exists():
-        out.append(("110 CC", float(json.loads(f.read_text())["CC_opzioni"]["sharpe"])))
+        cc = json.loads(f.read_text())["CC_opzioni"]
+        out.append(("110 CC", Solo(float(cc["sharpe"]), round(cc["portafoglio"]["n"] * 52 / 12))))
     f = p7 / "risultati_ottantanovesima" / "settimane.csv"
     if f.exists():
         d = pd.read_csv(f, index_col=0)
         d = d[d["fatta"].astype(bool)]
-        s = pd.Series(d["netto"].to_numpy(), index=[sc.giorno(*map(int, x.split("-"))) for x in d.index])
-        out.append(("151 WE", sharpe(periodo(s))))
+        s = periodo(pd.Series(d["netto"].to_numpy(), index=[sc.giorno(*map(int, x.split("-"))) for x in d.index]))
+        out.append(("151 WE", Solo(sharpe(s), int(s.notna().sum()))))
     f = p7 / "risultati_novantunesima" / "esame.json"
     if f.exists():
         v = json.loads(f.read_text())["varianti"]
-        out += [(f"153 {k}", float(v[k]["sharpe"])) for k in ("A", "B")]
+        out += [(f"153 {k}", Solo(float(v[k]["sharpe"]), int(v[k]["settimane"]))) for k in ("A", "B")]
     return out
 
 
-def mazzo(nuove: dict | None = None) -> tuple:
-    """Il mazzo completo dell'esame: (serie settimanali nel periodo, Sharpe delle prove senza serie). ``nuove`` = serie da
-    aggiungere (una prova appena calcolata); a parita' di nome sostituiscono quelle del mazzo."""
+def mazzo(nuove: dict | None = None, fino_alla: int | None = None) -> tuple:
+    """Il mazzo completo dell'esame: (serie settimanali nel periodo, Sharpe delle prove senza serie, come ``Solo`` con le loro
+    settimane). ``nuove`` = serie da aggiungere (una prova appena calcolata); a parita' di nome sostituiscono quelle del mazzo.
+    ``fino_alla`` = solo le prove del mazzo fino a quel numero (per una strategia gia' scelta, il mazzo di quando e' stata scelta:
+    decisione del 23 novembre; G1 alla 57: 102 serie, 65 famiglie); le ``nuove`` entrano comunque."""
+    def dentro(nome: str) -> bool:
+        return fino_alla is None or (_numero_prova(nome) or 0) <= fino_alla
+
     prove = le_prove()
-    serie = {n: periodo(s) for n, s, _ in prove if s is not None}
-    serie.update({n: periodo(s) for n, s in serie_nuove().items()})
+    serie = {n: periodo(s) for n, s, _ in prove if s is not None and dentro(n)}
+    serie.update({n: periodo(s) for n, s in serie_nuove().items() if dentro(n)})
     serie.update({n: periodo(s) for n, s in (nuove or {}).items()})
-    soli = [sr for _, s, sr in prove if s is None] + [sr for _, sr in senza_serie()]
+    soli = [Solo(sr) for n, s, sr in prove if s is None and dentro(n)] + [sr for n, sr in senza_serie() if dentro(n)]
     return serie, soli
 
 
 def corretto_famiglie(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
-    """**L'esame di oggi** (decisione dell'11 novembre): lo Sharpe corretto con N = famiglie di prove simili e V con l'aggiunta
-    del 23 ottobre, sul mazzo completo (``mazzo``) piu' le serie ``nuove`` = {nome: serie settimanale netta}. ``candidate`` =
-    {nome: {"sharpe", "settimane", "asimmetria", "curtosi"}}. Da usare per ogni prova nuova al posto di ``corretto_rivisto``."""
+    """La probabilita' dell'esame di oggi (decisione dell'11 novembre): lo Sharpe corretto con N = famiglie di prove simili e V con
+    l'aggiunta del 23 ottobre, sul mazzo completo (``mazzo``) piu' le serie ``nuove`` = {nome: serie settimanale netta}.
+    ``candidate`` = {nome: {"sharpe", "settimane", "asimmetria", "curtosi"}}. Dal 27 novembre 2026 l'esame intero (probabilita', t,
+    ogni anno positivo, verdetto e i numeri non ufficiali accanto) e' `esame`, che da' la stessa probabilita'; questa resta per le
+    prove che la chiamano gia'."""
     serie, soli = mazzo(nuove)
     gr = gruppi(serie, taglio)
     sr_g, sr_v = per_v(gr, soli, False), per_v(gr, soli, True)
@@ -402,6 +452,202 @@ def corretto_famiglie(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> d
             "t": i["sharpe"] * math.sqrt(i["settimane"] / 52),
             "gruppo": next((g["membri"] for g in gr if nome in g["membri"]), [nome])}
     return out
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# L'esame in vigore in una funzione sola, con i numeri non ufficiali accanto (27 novembre 2026; ASTICELLA.md, sezione 6)
+# ---------------------------------------------------------------------------------------------------------------------------------
+
+def _numero_prova(nome: str) -> int | None:
+    """Il numero della prova dal nome della serie («157 A» -> 157, «2A A1» -> 2); None se il nome non comincia con un numero."""
+    m = re.match(r"\d+", nome)
+    return int(m.group()) if m else None
+
+
+def varianza_lunga(x, ritardi: int) -> float:
+    """La varianza di lungo periodo di Newey e West (1987, pesi di Bartlett) con ``ritardi`` settimane; con 0 ritardi e' la varianza
+    semplice (divisa per n)."""
+    v = np.asarray(pd.Series(x, dtype=float).dropna(), dtype=float)
+    u = v - v.mean()
+    n = len(u)
+    s = float(u @ u) / n
+    for k in range(1, min(int(ritardi), n - 1) + 1):
+        s += 2.0 * (1.0 - k / (ritardi + 1.0)) * float(u[k:] @ u[:-k]) / n
+    return s
+
+
+def rapporto_robusto(x, ritardi: int) -> float:
+    """Varianza semplice (divisa per n) / varianza di lungo periodo (`varianza_lunga`): le settimane efficaci sono le settimane per
+    il rapporto e il t robusto e' il t per la radice del rapporto (con 0 ritardi il rapporto e' 1). Sotto 1 quando le settimane sono
+    legate a quelle prima (G1: correlazione 0,19 con la settimana prima; audit del 26 novembre, esame-2)."""
+    v = np.asarray(pd.Series(x, dtype=float).dropna(), dtype=float)
+    lunga = varianza_lunga(v, ritardi)
+    return float(v.var() / lunga) if lunga > 0 and v.var() > 0 else 1.0
+
+
+def _anni(x: pd.Series):
+    x = x.dropna()
+    return x, pd.to_datetime(x.index.to_numpy() * 86400, unit="s").year
+
+
+def per_anno(x: pd.Series) -> dict:
+    """Ogni anno solare (l'anno del lunedi' della settimana): la media delle settimane per 52, come `terza.esame` (stesso segno della
+    somma; gli anni parziali compresi, qualunque sia la loro lunghezza)."""
+    x, anni = _anni(x)
+    return {int(a): float(v * 52) for a, v in x.groupby(anni).mean().items()}
+
+
+def per_anno_composto(x: pd.Series) -> dict:
+    """Ogni anno solare sul conto composto (prodotto di 1 piu' il rendimento delle settimane, meno 1). NON ufficiale: si mostra accanto
+    (audit del 26 novembre, esame-9: un anno con la somma positiva puo' essere una perdita sul conto)."""
+    x, anni = _anni(x)
+    return {int(a): float(v) for a, v in ((1 + x).groupby(anni).prod() - 1).items()}
+
+
+def verdetto(annuo: float, anni: dict, t: float, probabilita: float) -> str:
+    """Il verdetto dell'esame in vigore: «PROMETTENTE» se il netto e' positivo, ogni anno e' positivo, il t e' da 3 e la probabilita'
+    che non sia fortuna e' da 0,80; altrimenti «NON PROMETTENTE» con i motivi (come `programma7.centosesta.esito_regole`)."""
+    m = []
+    if not annuo > 0:
+        m.append("netto non positivo")
+    neg = [a for a, v in sorted(anni.items()) if not v > 0]
+    if not anni:
+        m.append("anni non misurati")
+    elif neg:
+        m.append("anni non positivi " + ",".join(map(str, neg)))
+    if not t >= SOGLIA_T:
+        m.append(f"t {t:.2f} sotto 3")
+    if not probabilita >= SOGLIA_PROBABILITA:
+        m.append(f"probabilita' che non sia fortuna {probabilita:.2f} sotto 0,80")
+    return "PROMETTENTE" if not m else "NON PROMETTENTE: " + "; ".join(m)
+
+
+def _senza(gr: list, serie: dict, via) -> list:
+    """Le famiglie con le serie ``via`` tolte dalla loro media; una famiglia che resta vuota non entra in V (in N resta: la prova e'
+    stata fatta)."""
+    via, out = set(via), []
+    for g in gr:
+        resto = [m for m in g["membri"] if m not in via]
+        if len(resto) == len(g["membri"]):
+            out.append(g)
+        elif resto:
+            media = pd.concat([serie[m] for m in resto], axis=1).mean(axis=1)
+            out.append({"membri": resto, "sharpe": sharpe(media), "settimane": int(media.notna().sum())})
+    return out
+
+
+def esame(nuove: dict | None = None, candidate=None, taglio: float = TAGLIO, base: tuple | None = None) -> dict:
+    """**L'esame in vigore** in una funzione sola (27 novembre 2026; backlog P34 e P37, audit del 26 novembre, esame-10) e accanto i
+    numeri NON ufficiali da mostrare al proprietario finche' non decide (ASTICELLA.md, sezione 6). Qui le regole non cambiano.
+
+    In vigore (decisioni del 9, 11 e 23 novembre, `docs/decisioni_del_proprietario.md`): «PROMETTENTE» se il netto e' positivo, ogni
+    anno solare e' positivo (`per_anno`), il t dello Sharpe (Sharpe per la radice di settimane/52) e' da 3 e la probabilita' che non
+    sia fortuna (`terza.sharpe_corretto`: N = famiglie del mazzo di oggi, V senza le famiglie con il t sotto -3) e' da 0,80. La
+    probabilita' e' la stessa di `corretto_famiglie`. Una strategia gia' scelta (G1: prova 57, 0,945) si giudica con lo sconto una
+    volta sola, quando e' stata scelta (23 novembre): il numero sul mazzo di oggi per lei e' solo un confronto.
+
+    Accanto, NON ufficiali (non decidono niente; ognuno cambia una regola sola rispetto a quella in vigore):
+    (a) senza le serie a incasso quasi fisso (le prove ``INCASSO_FISSO``, backlog P34, 15 novembre): famiglie rifatte senza di loro;
+    (b) V simmetrica (fuori da V anche le famiglie con il t sopra +3; restano in N) e senza le serie ``BOCCIATE_DAL_REVISORE``;
+    (c) il t robusto di Newey e West (``RITARDI`` settimane; ``RITARDI_CONTROLLO`` come controllo) e la probabilita' con le
+        settimane efficaci (settimane per `rapporto_robusto`, sulla serie della candidata) al posto delle settimane;
+    (d) (b) e (c) insieme.
+    Piu' ogni anno sul conto composto (`per_anno_composto`), solo da mostrare.
+
+    ``nuove``: {nome: serie settimanale netta} da aggiungere al mazzo (la prova appena calcolata; a parita' di nome sostituiscono).
+    ``candidate``: i nomi da giudicare (misure dalla loro serie nel mazzo con `terza.numeri_settimana`, anni con `per_anno`) oppure
+    {nome: misure} con "sharpe", "settimane", "asimmetria", "curtosi" e, se ci sono, "annuo" e "per_anno" (dall'esame della prova);
+    la serie con quel nome nel mazzo (o con il nome in "serie", se le misure sono di un'altra misura della stessa strategia) serve
+    per il t robusto, gli anni che mancano e gli anni composti. Senza ``candidate``: i nomi di ``nuove``.
+    ``base``: (serie, soli) di `mazzo` gia' costruito, per non rileggerlo (le ``nuove`` si aggiungono sopra).
+    Le correlazioni si calcolano una volta sola: il tempo e' circa quello di `gruppi`."""
+    if base is None:
+        serie, soli = mazzo(nuove)
+    else:
+        serie, soli = dict(base[0]), list(base[1])
+        serie.update({n: periodo(s) for n, s in (nuove or {}).items()})
+    if candidate is None:
+        candidate = list(nuove or {})
+    if not isinstance(candidate, dict):
+        candidate = {n: None for n in candidate}
+    nomi, R = correlazioni(serie)
+    gr = gruppi(serie, taglio, (nomi, R))
+    sr_n, sr_v = per_v(gr, soli, False), per_v(gr, soli, True)
+    N = len(sr_n)
+    k = [i for i, n in enumerate(nomi) if _numero_prova(n) not in INCASSO_FISSO]                      # (a)
+    nomi_a = [nomi[i] for i in k]
+    gr_a = gruppi({n: serie[n] for n in nomi_a}, taglio, (nomi_a, R[np.ix_(k, k)]))
+    sr_n_a, sr_v_a = per_v(gr_a, soli, False), per_v(gr_a, soli, True)
+    gr_b = _senza(gr, serie, BOCCIATE_DAL_REVISORE)                                                    # (b)
+    sr_v_b = per_v(gr_b, soli, True, simmetrica=True)
+
+    def mazzo_di(n_, v_):
+        return {"famiglie": n_, "in_v": len(v_), "deviazione_v": float(np.std(v_, ddof=1)), "v": [float(x) for x in v_]}
+
+    def tv(g):
+        return g["sharpe"] * math.sqrt(g["settimane"] / 52)
+
+    out = {"in_vigore": {"serie": len(serie), "senza_serie": len(soli), "taglio": taglio, **mazzo_di(N, sr_v)},
+           "a_senza_incasso_fisso": {"tolte": [n for n in nomi if n not in set(nomi_a)], "serie": len(nomi_a),
+                                     **mazzo_di(len(sr_n_a), sr_v_a)},
+           "b_v_simmetrica_senza_bocciate": {"bocciate": [n for n in BOCCIATE_DAL_REVISORE if n in serie], **mazzo_di(N, sr_v_b),
+                                             "fuori_da_v_vincenti": [g["membri"] for g in gr_b if tv(g) > -T_PERDENTI]},
+           "gruppi": gr, "candidate": {}}
+    for nome, date in candidate.items():
+        chi = (date or {}).get("serie", nome)                       # la serie del mazzo della candidata (di norma, il suo nome)
+        x = serie[chi].dropna() if chi in serie else None
+        x = x if x is not None and len(x) > 2 else None
+        mis = {**(te.numeri_settimana(x) if x is not None else {}), **{k_: v_ for k_, v_ in (date or {}).items() if k_ != "serie"}}
+        sh, w, asim, curt = (float(mis[c]) for c in ("sharpe", "settimane", "asimmetria", "curtosi"))
+        annuo = float(mis["annuo"])
+        anni = mis.get("per_anno")
+        anni = {int(a): float(v) for a, v in anni.items()} if isinstance(anni, dict) else (per_anno(x) if x is not None else {})
+        t = sh * math.sqrt(w / 52)
+        p = te.sharpe_corretto(sh, w, asim, curt, sr_v, 52, n_prove=N)
+        p_a = te.sharpe_corretto(sh, w, asim, curt, sr_v_a, 52, n_prove=len(sr_n_a))
+        p_b = te.sharpe_corretto(sh, w, asim, curt, sr_v_b, 52, n_prove=N)
+        resto = annuo > 0 and bool(anni) and all(v > 0 for v in anni.values())        # le condizioni che (a)-(d) non cambiano
+        c = {"a_senza_incasso_fisso": {"probabilita": p_a, "passerebbe": bool(resto and t >= SOGLIA_T and p_a >= SOGLIA_PROBABILITA)},
+             "b_v_simmetrica_senza_bocciate": {"probabilita": p_b,
+                                               "passerebbe": bool(resto and t >= SOGLIA_T and p_b >= SOGLIA_PROBABILITA)},
+             "c_t_robusto": None, "d_b_e_c": None}
+        if x is not None:
+            rob = {}
+            for L in (RITARDI, RITARDI_CONTROLLO):
+                r = rapporto_robusto(x, L)
+                w_eff = max(3, int(round(w * r)))
+                rob[L] = {"ritardi": L, "rapporto": r, "settimane_efficaci": w_eff, "t": sh * math.sqrt(w * r / 52),
+                          "probabilita": te.sharpe_corretto(sh, w_eff, asim, curt, sr_v, 52, n_prove=N),
+                          "probabilita_d": te.sharpe_corretto(sh, w_eff, asim, curt, sr_v_b, 52, n_prove=N)}
+            b4, b13 = rob[RITARDI], rob[RITARDI_CONTROLLO]
+            c["c_t_robusto"] = {**{k_: b4[k_] for k_ in ("ritardi", "rapporto", "settimane_efficaci", "t", "probabilita")},
+                                "controllo": {k_: b13[k_] for k_ in ("ritardi", "rapporto", "settimane_efficaci", "t", "probabilita")},
+                                "passerebbe": bool(resto and b4["t"] >= SOGLIA_T and b4["probabilita"] >= SOGLIA_PROBABILITA)}
+            c["d_b_e_c"] = {"probabilita": b4["probabilita_d"], "controllo": b13["probabilita_d"],
+                            "passerebbe": bool(resto and b4["t"] >= SOGLIA_T and b4["probabilita_d"] >= SOGLIA_PROBABILITA)}
+            comp = per_anno_composto(x)
+            c["per_anno_composto"], c["ogni_anno_positivo_composto"] = comp, all(v > 0 for v in comp.values())
+        out["candidate"][nome] = {
+            "misure": {"sharpe": sh, "settimane": w, "asimmetria": asim, "curtosi": curt, "annuo": annuo}, "serie": chi,
+            "gruppo": next((g["membri"] for g in gr if chi in g["membri"]), [chi]),
+            "in_vigore": {"probabilita": p, "t": t, "per_anno": anni,
+                          "ogni_anno_positivo": bool(anni) and all(v > 0 for v in anni.values()), "esito": verdetto(annuo, anni, t, p)},
+            "non_ufficiali": c}
+    return out
+
+
+def sharpe_minimo(settimane: float, v: list, n_prove: int, probabilita: float = SOGLIA_PROBABILITA) -> float:
+    """Lo Sharpe che serve, con rendimenti normali (asimmetria 0, curtosi 3), per arrivare a ``probabilita`` su ``settimane`` con
+    la dispersione ``v`` e N = ``n_prove`` (audit del 26 novembre, punti ciechi 1). Accanto vale anche il t da 3: Sharpe almeno
+    3 per la radice di 52/settimane."""
+    lo, hi = -5.0, 20.0
+    for _ in range(100):
+        mid = (lo + hi) / 2
+        if te.sharpe_corretto(mid, settimane, 0.0, 3.0, v, 52, n_prove=n_prove) < probabilita:
+            lo = mid
+        else:
+            hi = mid
+    return hi
 
 
 def _eventi_mancanti(p7: Path) -> dict:

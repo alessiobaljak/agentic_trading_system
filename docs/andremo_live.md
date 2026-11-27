@@ -1147,3 +1147,16 @@ per le corte. Le balene saltano i conti con il conto a leva a zero (4 delle 20 d
 mercato intero di Hyperliquid (interesse aperto, funding, premio), che dopo non si recupera. **Capito**: Hyperliquid ci accetta circa
 300-360 letture al minuto, non 600 (a 7 al secondo ne ha rifiutate 199 su 1.500); il primo giudizio delle balene, il 30 novembre, sarà
 fatto dei soli 24 conti scelti.
+**27 novembre, 11:40 UTC, giro delle 08:17 (fatto alle 11:20, in ritardo per il limite d'uso della sessione)**: raccolta delle 11:20
+(86 articoli nuovi, 24 fonti su 25; 40 conti dei trader e 600 della mappa letti); controlli in avanti: nessun annuncio di chiusura dei
+perpetui dopo il 21 ottobre, nessuna moneta nuova su Coinbase con il perpetuo (245). G1: nessun dato nuovo dopo le letture delle 04:17
+(lo stato e il registro del bot si leggono una volta al giorno); il passo di oggi su G1 è l'esame delle varianti (sotto). Ricerca nuova:
+la coda non ha idee aperte e i tre cercatori di stamattina hanno già cercato (8 su 8 bocciate), quindi niente cercatore in questo giro.
+GitHub: test in corso sugli ultimi commit (l'ultimo finito, delle 07:29, verde); monitor e stato lanciati a mano. Il mattino delle 06:13: il
+programma 5 è a posto (M-002 4.048 trade, p 0,24; M-003 1.643, p 0,99; N-002 170, +0,14%); il conto del paper del programma 6 è stato
+fermato dal limite di tempo dei comandi in fondo, dopo uno scarico completo (884 monete, nessuna senza il 25 novembre: la correzione dello
+scarico ha funzionato al primo giro vero) ed è stato rilanciato alle 11:18. L'esame: la funzione unica (`asticella.esame`) è pronta e
+verificata; ogni candidata perde circa 0,03 (168 B da 0,749 a 0,722), nessun verdetto cambia. **Capito oggi**: le settimane di G1 sono
+legate fra loro: il suo t robusto è 3,7, non 4,7, e lo 0,945 di quando è stata scelta vale 0,90 con le settimane efficaci (0,87 con 13
+ritardi). A una variante di G1 oggi serve uno Sharpe di 2,27 su 300 settimane (G1 ha 1,97). Fonte:
+`research/programma6/ESAME_NUMERI_2026-11-27.md`.

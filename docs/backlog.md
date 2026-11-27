@@ -865,6 +865,11 @@ scrivono con e senza le serie a incasso quasi fisso.
 * **27 novembre 2026 (audit del 26 novembre, esame-7)**: la parte del mazzo pesa al massimo 0,001 e si può chiudere, ma le serie vecchie
   (di prima della correzione delle parità del 23 ottobre) sono quattro, non solo F5: 24 F5, K2, F5+M7+K2 e 56 F9 (`asticella.py:82`, `:85-86`,
   `:205`). Le versioni corrette sono in `research/programma6/risultati_controllo_parita/`: sostituirle per pulizia.
+* **27 novembre 2026, fatta la funzione unica dell'esame** (`research/programma6/asticella.esame`, test `tests/test_esame_unico.py`): scrive
+  accanto al verdetto in vigore i numeri con e senza le serie a incasso quasi fisso (regola del 15 novembre), con la V simmetrica e con il t
+  robusto. Corretti i dati del mazzo (151 e 153 B con le loro settimane, G10, vuoti della 149): in V 154, deviazione 0,6891, ogni candidata
+  circa −0,03. La decisione sul metodo resta al proprietario. Esame-7 non fatto: le quattro serie vecchie restano nel mazzo (effetto al
+  massimo 0,0003). Tabella: `research/programma6/ESAME_NUMERI_2026-11-27.md`.
 
 ### P36. Prima di accendere il conto vero su F5 — trovata il 25 novembre 2026 (revisioni `reviews/reports/2026-11-25-conto-vero-F5*.md`)
 * **Cosa**: il conto vero esegue F5 (commit del 25 novembre, approvato per il commit, spento). Prima dell'approvazione per l'accensione:
@@ -893,6 +898,9 @@ scrivono con e senza le serie a incasso quasi fisso.
   vale circa 0,84-0,90; (c) le varianti di G1 si giudicano contro 200 famiglie e G1 contro 65: con il mazzo di oggi a una variante
   servirebbe uno Sharpe di 2,21 (G1 ha 1,97). Le due correzioni (a) e (b) insieme: 168 B 0,86, miscela F5+M7+K2 0,84, G1 con l'N di
   oggi 0,79 (rifatti dall'audit: script e numeri nel rapporto). Finché non decide, l'esame scrive i numeri accanto (funzione unica, P34).
+  **Rifatti il 27 novembre dopo le correzioni dei dati del mazzo** (`research/programma6/ESAME_NUMERI_2026-11-27.md`): (a) e (b) insieme,
+  cioè (d): 168 B 0,852, miscela 0,829, G1 0,765 (0,773 con la misura del 12 novembre). Sharpe che serve su 300 settimane: 2,27 in vigore
+  (era 2,21-2,23), 1,96 con la V simmetrica (era 1,90). Esame-6 ed esame-9 ora sono scritti in `ASTICELLA.md`, sezione 6.
 * **esame-6**: N non conta le circa 60 idee del programma 5, il vecchio sistema automatico e i protocolli 1-4. Scrivere in `ASTICELLA.md`
   la scelta e il perché. Effetto stimato: fino a −0,05/−0,07 sul numero di G1 alla prova 57; nessun verdetto di oggi cambia.
 * **esame-9**: «ogni anno positivo» si misura sulla somma delle settimane, non sul conto composto, e un anno parziale conta qualunque sia

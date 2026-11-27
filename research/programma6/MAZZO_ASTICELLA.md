@@ -54,7 +54,8 @@ corretta da `audits/repro/prova55_2026-11-12_esito_base.json`, la 152 da `progra
   ritorno alla media a 4 ore della 149 su Bitcoin ed Ether (correlazione 0,60 e 0,58). Così le famiglie diventano 190 invece di 191, e la
   sua famiglia a Sharpe +1,19 esce da V: la deviazione scende da 0,631 a 0,621. Effetto: G1 +0,023, miscela +0,016. È l'unica correzione
   che alza i numeri: senza di lei la miscela è a 0,797, sotto 0,80. La 151 come gruppo a sé toglie 0,001 (va in N: con lo Sharpe −1,27,
-  il t sulle 300 settimane del programma è −3,05, quindi resta fuori da V). Le tre domeniche della 139 non cambiano nulla.
+  il t sulle 300 settimane del programma è −3,05, quindi resta fuori da V; *dal 27 novembre* il t si calcola sulle sue 19 settimane,
+  −0,77, e la 151 entra in V: `ASTICELLA.md`, sezione 6). Le tre domeniche della 139 non cambiano nulla.
 * **I tagli (ASTICELLA.md, sezione 4: «se il verdetto cambiasse solo a uno dei tagli, lo si dice»).** La miscela F5 + M7 + K2 sta
   sopra 0,80 ai tagli 0,5 (0,812) e 0,3 (0,819), **sotto al taglio 0,7 (0,731)**. G1, G1 a 280 USDT, C3 e la 152 sono sotto 0,80 a
   tutti e tre i tagli.
@@ -155,11 +156,11 @@ File in `research/programma7/`. Fra parentesi le operazioni usate, uguali a quel
 | 146 | 146 AT | `risultati_ottantaquattresima/eventi_AT.csv` | eventi (28), per le ore della colonna `ore` |
 | 147 | 147 GA2C | `risultati_ottantacinquesima/settimane_GA2C.csv.gz` | portafoglio, 8 settimane (la prova è di 8 settimane); GA2 sul 2026 fuori |
 | 148 | 148 B | `risultati_ottantaseiesima/giorni.csv.gz`, colonna «B, 280 USDT», sommata per settimana | B è la sola regola nuova; A, A2 e gli altri capitali fuori |
-| 149 | 149 `<moneta>_<intervallo>_<A, B o C>` (60) | `risultati_ottantasettesima/settimane.csv.gz` | le 60 varianti |
+| 149 | 149 `<moneta>_<intervallo>_<A, B o C>` (60) | `risultati_ottantasettesima/settimane.csv.gz` | le 60 varianti (le 12 su APT e MATIC hanno 93 e 108 settimane vuote prima della quotazione: dal 27 novembre le correlazioni le tolgono coppia per coppia) |
 | 150 | 150 v7, 150 v30 | `risultati_ottantottesima/settimane_v7.csv.gz`, `settimane_v30.csv.gz` | portafoglio |
-| 151 | 151 WE | `risultati_ottantanovesima/settimane.csv` | **gruppo a sé** con lo Sharpe della sua serie nel periodo (−1,27 su 19 settimane): fermata dalle sue regole per dati troppo corti |
+| 151 | 151 WE | `risultati_ottantanovesima/settimane.csv` | **gruppo a sé** con lo Sharpe della sua serie nel periodo (−1,27 su 19 settimane): fermata dalle sue regole per dati troppo corti; dal 27 novembre il t sulle sue 19 settimane (−0,77): entra in V |
 | 152 | 152 V1, 152 V2, 152 V3 | `risultati_novantesima/settimane_conto1.csv.gz` | le tre varianti; G1 nello stesso file fuori |
-| 153 | — | — | **saltata**: in calcolo il 12 novembre (`DIFFERENZE_DAL_REGISTRO`); il controllo delle cartelle fallisce quando salverà una serie fuori dal mazzo |
+| 153 | 153 A, 153 B | `risultati_novantunesima/esame.json` | **saltata** il 12 novembre (era in calcolo); dal 13 novembre **gruppi a sé senza serie** con lo Sharpe di `esame.json` (A −1,59, B −1,26); dal 27 novembre il t sulle loro 196 settimane: A (−3,09) fuori da V, B (−2,45) in V |
 
 Riassunto: dalla 49 alla 152 ogni prova entra con tante varianti quante ne conta il registro (176 serie e 28 varianti senza serie),
 tranne la 89 (il controllo fuori) e le conferme 50 e 106 (il registro non le conta). In tutto il mazzo: 265 serie e 46 varianti
@@ -168,3 +169,20 @@ senza serie (18 delle prove 1 e 2B).
 Aperto (dalla revisione, non deciso qui): se le serie molto corte (147, 8 settimane; 151) debbano entrare; quante famiglie per 108 e
 111 (oggi 26, come dice la regola scritta; il revisore propone anche 13 o 2); il segnale a una settimana fra 109 GR-N e 136 NT; il
 registro da aggiornare per le prove 90 e 91.
+
+## 27 novembre 2026: tre correzioni dei dati (audit del 26 novembre, esame-4 ed esame-8)
+
+* **Le prove senza serie con le loro settimane** (`senza_serie`, `Solo`, `per_v`): il t che decide chi esce da V si calcolava sulle 300
+  settimane del programma per tutte; ora 151: 19, 153: 196, 110: 286 (66 mesi), 108 e 111: 143 (il loro periodo); 300 solo per le prove
+  1 e 2B. Entrano in V la 151 e la 153 B.
+* **La 68 G10 con le settimane ferme a zero** (`serie_programma7`): prima c'erano solo le 150 settimane operate (salti fino a 126
+  giorni); ora 301, come fa `quarantunesima.portafoglio` per le prove a eventi. Sharpe −1,35 invece di −1,94, t −3,24: resta fuori da V.
+* **Le settimane vuote tolte coppia per coppia** (`correlazioni`, usata da `gruppi`): per le 12 serie della 149 su APT e MATIC la
+  correlazione con ogni serie piena usciva vuota, cioè 0 (per esempio APT_1d_A con SOL_1d_A: 0 invece di 0,33).
+
+Effetto sul mazzo di oggi (291 serie, 48 senza serie): famiglie **200** (invariate), in V **154** (erano 152), deviazione **0,6891**
+(era 0,6776). Le due correzioni della G10 e dei vuoti da sole non spostano niente; tutto l'effetto viene dalla 151 e dalla 153 B: circa
+−0,03 su ogni candidata (G1 0,593 → 0,561, 168 B 0,749 → 0,722). Alla prova 57 non cambia niente (G1 0,945). Numeri e funzione unica
+dell'esame in `ASTICELLA.md`, sezione 6; test `tests/test_esame_unico.py`. Restano aperte la domanda 4 della revisione (le serie molto
+corte, 147 e 151, devono entrare?) e la decisione 2 (108 e 111: 26, 13 o 2 famiglie). Le quattro serie di prima della correzione delle
+parità del 23 ottobre (24 F5, 28 K2, 28 F5+M7+K2, 56 F9; esame-7, backlog P35) sono ancora nel mazzo: sostituirle sposta al massimo 0,0003.

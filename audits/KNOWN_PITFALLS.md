@@ -204,6 +204,8 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     0,9-1,0; la famiglia risulta la piu' alta del mazzo (3,29). Lo Sharpe corretto con le settimane efficaci resta 0,97-0,99 (non e'
     l'autocorrelazione a saturarlo, e' la volatilita' quasi nulla). Cercare: volatilita' annua sotto il 3%, `w.autocorr(1)` sopra 0,3,
     serie usate in miscele pesate sulla volatilita'. Misura: `audits/repro/prova161_2026-11-15.py robustezza_t`.
+    27 nov 2026: il segnale (correlazione a una settimana sopra 0,3) non scatta per G1 (0,19), ma il t robusto di G1 con 4 ritardi
+    e' 3,72 contro 4,73. Da oggi `asticella.esame` scrive il t robusto accanto per ogni prova.
 46. **Il numero dell'esame «alla scelta» dipende da quale scelta** (F5, 27 nov 2026, decisione del 23 novembre): N alla prova in cui la
     strategia è nata (24: 0,959), a quella che ne ha cambiato l'esecuzione (56: 0,899), alla scelta per i soldi veri (N di oggi: 0,506);
     una configurazione mai registrata (F5 a 280 USDT) come «variante» prende N di oggi (0,13-0,24). Riportare sempre i tre e chiedere.
