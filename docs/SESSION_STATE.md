@@ -3,6 +3,17 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
+## Compito in corso (27 novembre 2026, 13:30 UTC)
+- **Audit del 26 novembre: correzioni finite e salvate.** Commit: stato e agente (`e824f22`, attivo, controllato sulla risposta 0779),
+  esame in una funzione sola (`research/programma6/ESAME_NUMERI_2026-11-27.md`), bot/demo/monitor (`16c5712`, APPROVE al secondo giro,
+  **entra con il riavvio: aspetta l'ok del proprietario**), motore della ricerca (funding vero, non monete, rilanci divisi; due verifiche).
+  Rapporto rigenerato: `audits/reports/2026-11-26-AUDIT_SISTEMA.md`. Prima del riavvio: leggere `/commands/bot_state`, `kill_switch`,
+  `/positions`, `/ordini_limite` (lo stato non li legge: backlog P36) e uno «stato» fresco; mai fra le 23:30 e le 01:00 UTC.
+- Mattino del 27: programma 5 e paper del programma 6 salvati (il paper rifatto alle 11:18 dopo il limite di tempo dei comandi: per il
+  calcolo del paper dare un limite lungo, 100 minuti). Giri delle 08:17 (fatto alle 11:20) e 12:17 fatti.
+- Dal prossimo giro del mattino il paper delle candidate usa il motore nuovo: i numeri cambiano (C1 nel periodo P da −25,89% a −8,55%);
+  controllare che il giro non cada e che PREDICTUSDT abbia il funding vero (645 monete da scaricare).
+
 ## Compito in corso (27 novembre 2026, 04:35 UTC)
 - **Aggiornamento delle 04:35**: secondo giro dell'audit finito (i test di GitHub: 9 problemi, in tutto 61; rapporto rigenerato).
   Corretti e committati: `requirements-ricerca.txt`, `tests.yml` (due lavori, la corsa in corso finisce sempre), documento storico e
@@ -70,6 +81,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
   F5 + M7 + K2 si misura a tavolino.
 
 ## Decisioni aperte per il proprietario
+- **27 novembre, dall'audit**: ok al riavvio del bot (correzioni del demo, vecchio sistema fermo); le regole dell'esame (V
+  simmetrica, t robusto, numeri accanto in `ESAME_NUMERI_2026-11-27.md`); la taglia del conto vero per F5 (FAIL a 280-300 USDT, PASS a
+  1.000); avvisi in pochi minuti (servizio esterno); 219 e 220 del bot (429 lunghi e fermo al telefono).
 - Funding coperto (prova 157): rifarlo come prova nuova con una regola di margine scritta prima, o seguirlo solo a tavolino.
 - Conto vero: `docs/conto_vero.md`, punti 1-5 (Firebase per primo).
 - Confronto settimanale: le soglie di `gate2/THRESHOLDS.md` non vanno approvate così (due sono già superate solo per le monete che il

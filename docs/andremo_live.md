@@ -1176,3 +1176,11 @@ nuova: coda senza idee aperte, cercatori già passati stamattina. GitHub: le ult
 (il monitor gira per la prima volta con la correzione dei 429). La sessione del trading AI ha chiesto due cose: le righe delle sue
 revisioni in `reviews/` (in applicazione) e un test della ricerca che le fallisce: fallisce solo con pandas 3, qui e su GitHub passa con la
 2.2.2 fissata (risposta in `docs/risposte_trading_ai.md`).
+**27 novembre, 13:30 UTC, audit del 26 novembre chiuso**: salvate le ultime correzioni, il motore della ricerca (funding vero dopo
+l'ultimo file mensile, contratti che non sono monete fuori, simboli rilanciati divisi; due verifiche indipendenti, la seconda «sì» dopo
+due ritocchi). Rapporto rigenerato con gli stati finali (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`): dei 61 problemi, 35 corretti
+(di cui una parte entra con il riavvio del bot), gli altri nel backlog o al proprietario. **Capito oggi**: lo scarto fra la ricerca e
+il paper di G1 visto il 23 novembre (+4,26 punti in 15 giorni) non era un difetto del paper ma del funding stimato della ricerca: con il
+funding vero lo scarto è +0,25 punti e i pesi coincidono dal 17 novembre. E il paper delle candidate cambia molto per piccoli cambi dei
+dati (C1 nel periodo P da −25,9% a −8,5% per la sola divisione di 10 simboli rilanciati): le candidate allenate sulla storia (M e C1)
+vanno lette con prudenza. Fonte: `research/programma6/paper/REGOLE.md`, sezione 2, nota del 27 novembre.
