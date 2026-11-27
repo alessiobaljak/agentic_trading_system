@@ -51,6 +51,7 @@ class RisultatoConto:
     dividendi: float
     bloccati: list = field(default_factory=list)
     liquidati: list = field(default_factory=list)      # titoli chiusi all'ultimo prezzo perché spariti dal listino
+    uscite_rimandate: int = 0                           # uscite a mercato senza la barra del giorno, riprovate alla prima barra
 
 
 class Storia:
@@ -89,7 +90,11 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
     frazionamento) con indice di tempo. `strategia(giorno, storia, stato)` restituisce una lista di
     coppie (simbolo, Ordine) per il giorno di borsa dopo. `liquida_dopo`: se un titolo in mano resta senza barra per quel numero
     di giorni di borsa di fila (uscito dal listino, comprato, simbolo cambiato), la posizione si chiude all'ultima chiusura, senza
-    costi, e si conta in `liquidati`; senza, resta in mano all'ultimo prezzo (`bloccati`)."""
+    costi, e si conta in `liquidati`; senza, resta in mano all'ultimo prezzo (`bloccati`).
+
+    Un'uscita a mercato (un ordine che riduce una posizione aperta) in un giorno senza la barra del titolo non si perde: si riprova
+    alla prima barra, solo per ridurre, finché la strategia non manda un altro ordine per quel titolo (`uscite_rimandate`; audit del
+    27 novembre 2026: le strategie a evento mandano l'uscita una volta sola, e la posizione restava aperta per sempre)."""
     giorni_per = {s: _giorni(df) for s, df in barre.items()}
     tutti = sorted(set().union(*[set(g) for g in giorni_per.values()]))
     riga = {s: {d: i for i, d in enumerate(g)} for s, g in giorni_per.items()}
@@ -103,6 +108,8 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
 
     stato = StatoConto(contanti=float(capitale))
     in_attesa: list[tuple[str, Ordine]] = []
+    riportati: list[tuple[str, Ordine]] = []           # uscite rimaste senza barra, da riprovare
+    uscite_rimandate = 0
     valori = np.empty(len(tutti))
     esecuzioni: list[dict] = []
     rifiutati = senza_barra = 0
@@ -124,6 +131,7 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
                     stato.contanti += q * prezzo
                     liquidati.append(s)
                     in_attesa = [(x, o) for x, o in in_attesa if x != s]
+                    riportati = [(x, o) for x, o in riportati if x != s]
                     esecuzioni.append({"giorno": d, "simbolo": s, "quantita": -q, "prezzo": prezzo, "tipo": "listino",
                                        "commissione": 0.0, "scarto": 0.0, "etichetta": "uscito dal listino"})
         # 1. dividendi e frazionamenti
@@ -148,22 +156,32 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
                     if nuove == 0:
                         del stato.azioni[s]
                 arrotonda = (lambda x: float(np.trunc(round(x, 9)))) if not frazionarie else (lambda x: x)
-                nuovi = []
-                for x, o in in_attesa:
-                    if x != s:
-                        nuovi.append((x, o))
-                        continue
-                    qq = arrotonda(o.quantita * fr[i])
-                    if qq:
-                        nuovi.append((x, Ordine(qq, o.tipo, None if o.prezzo is None else o.prezzo / fr[i], o.solo_riduce,
-                                                o.etichetta)))
-                in_attesa = nuovi
+
+                def adatta(lista, s=s, f=fr[i], arrotonda=arrotonda):
+                    nuovi = []
+                    for x, o in lista:
+                        if x != s:
+                            nuovi.append((x, o))
+                            continue
+                        qq = arrotonda(o.quantita * f)
+                        if qq:
+                            nuovi.append((x, Ordine(qq, o.tipo, None if o.prezzo is None else o.prezzo / f, o.solo_riduce,
+                                                    o.etichetta)))
+                    return nuovi
+                in_attesa, riportati = adatta(in_attesa), adatta(riportati)
         # 2. ordini: stop, vendite, acquisti, limiti
         ordine_tipo = {"stop": 0, "mercato": 1, "limite": 3}
-        ordinati = sorted(in_attesa, key=lambda so: ordine_tipo[so[1].tipo] + (0 if so[1].quantita < 0 or so[1].tipo != "mercato" else 1))
-        for s, o in ordinati:
+        lavoro = [(s, o, False) for s, o in in_attesa] + [(s, o, True) for s, o in riportati]
+        ordinati = sorted(lavoro, key=lambda so: ordine_tipo[so[1].tipo] + (0 if so[1].quantita < 0 or so[1].tipo != "mercato" else 1))
+        da_riportare: list[tuple[str, Ordine]] = []
+        for s, o, riportato in ordinati:
             if s not in oggi:
-                senza_barra += 1
+                if not riportato:
+                    senza_barra += 1
+                pos_ = stato.azioni.get(s, 0.0)
+                if o.tipo == "mercato" and pos_ and np.sign(o.quantita) == -np.sign(pos_):
+                    da_riportare.append((s, Ordine(o.quantita, o.tipo, o.prezzo, True, o.etichetta, o.dopo_ingresso)))
+                    uscite_rimandate += 0 if riportato else 1
                 continue
             i = oggi[s]
             cs = c_di(s)
@@ -218,6 +236,8 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
             if not frazionarie and float(o.quantita) != int(o.quantita):
                 raise ValueError(f"quantità frazionaria {o.quantita} per {s} con frazionarie=False")
         in_attesa = list(decisi)
+        nuovi_titoli = {s for s, _ in decisi}
+        riportati = [(s, o) for s, o in da_riportare if s not in nuovi_titoli]
 
     ultimo = tutti[-1] if tutti else None
     bloccati = [s for s, q in stato.azioni.items() if q and giorni_per[s][-1] != ultimo]
@@ -225,7 +245,8 @@ def simula_conto(barre: dict[str, pd.DataFrame], strategia: StrategiaConto, cost
                                               "etichetta"])
     return RisultatoConto(valore=pd.Series(valori, index=pd.Index(tutti, name="giorno"), name="valore"),
                           esecuzioni=es_df, rifiutati=rifiutati, senza_barra=senza_barra, commissioni=tot_comm,
-                          costo_scarto=tot_scarto, dividendi=tot_div, bloccati=bloccati, liquidati=liquidati)
+                          costo_scarto=tot_scarto, dividendi=tot_div, bloccati=bloccati, liquidati=liquidati,
+                          uscite_rimandate=uscite_rimandate)
 
 
 def verso_pesi(stato: StatoConto, pesi: dict[str, float], prezzi: dict[str, float], quota: float = 0.98,

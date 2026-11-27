@@ -38,11 +38,21 @@ def aspetta_fuori_dagli_ordini() -> None:
         time.sleep(120)
 
 
+def passeggero(e: Exception) -> bool:
+    """Un errore che può sparire al giro dopo (rete, limite di richieste, errore del server di Alpaca, dopo tutti i tentativi di
+    `alpaca._get`). Un titolo con un errore così non si salva vuoto: si riscarica al lavoro dopo (audit del 27 novembre 2026)."""
+    m = str(e)
+    return m.startswith(("rete:", "tentativi finiti")) or m[:3] in {"429", "500", "502", "503", "504"}
+
+
 def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azioni", asof: str | None = None,
-            dal: datetime = DAL, al: datetime = AL) -> None:
+            dal: datetime = DAL, al: datetime = AL) -> list[str]:
     """Barre al giorno non rettificate e azioni societarie dei titoli che mancano in archivio. `asof="-"`: i prezzi di ciò che
-    si scambiava con quel simbolo allora (`alpaca.barre_di_piu`), da tenere in un archivio con un altro nome (`tipo_raw`)."""
+    si scambiava con quel simbolo allora (`alpaca.barre_di_piu`), da tenere in un archivio con un altro nome (`tipo_raw`).
+    Un file vuoto si salva solo per i titoli che Alpaca dice di non avere; quelli con un errore passeggero restano senza file (si
+    riprovano al lavoro dopo) e tornano nell'elenco che la funzione restituisce, da contare a parte."""
     mancano = [s for s in simboli if archivio.carica(s, tipo_raw) is None]
+    rimandati: list[str] = []
     for i in range(0, len(mancano), 40):
         gruppo = mancano[i:i + 40]
         aspetta_fuori_dagli_ordini()
@@ -54,20 +64,29 @@ def scarica(simboli: list[str], tipo_raw: str = "1Day_raw", tipo_az: str = "azio
             for s in gruppo:
                 try:
                     barre[s] = alpaca.barre(s, "1Day", dal, al, asof=asof)
-                except alpaca.ErroreAlpaca:
-                    barre[s] = pd.DataFrame()
+                except alpaca.ErroreAlpaca as e1:
+                    if passeggero(e1):
+                        print(f"{s}: errore passeggero ({str(e1)[:60]}): niente file, si riprova al lavoro dopo", flush=True)
+                        rimandati.append(s)
+                    else:
+                        barre[s] = pd.DataFrame()
         for s in gruppo:
+            if s in rimandati:
+                continue
             archivio.salva(barre.get(s, pd.DataFrame(columns=["open", "high", "low", "close", "volume"])), s, tipo_raw)
         if i % 400 == 0:
             print(f"barre: {i + len(gruppo)} su {len(mancano)}", flush=True)
     senza_azioni = [s for s in simboli if archivio.carica(s, tipo_az) is None]
-    con_barre = [s for s in senza_azioni if len(archivio.carica(s, tipo_raw))]
+    con_barre = [s for s in senza_azioni if (b := archivio.carica(s, tipo_raw)) is not None and len(b)]
     for i in range(0, len(con_barre), 500):
         aspetta_fuori_dagli_ordini()
         az = alpaca.azioni_societarie_di_piu(con_barre[i:i + 500], dal, al)
         for s, df in az.items():
             archivio.salva(df, s, tipo_az)
         print(f"azioni societarie: {i + len(az)} su {len(con_barre)}", flush=True)
+    if rimandati:
+        print(f"errori passeggeri, da riscaricare al lavoro dopo: {len(rimandati)} titoli ({', '.join(rimandati[:10])})", flush=True)
+    return rimandati
 
 
 def eventi_puliti(tr: pd.DataFrame, barre: dict[str, pd.DataFrame]) -> tuple[pd.DataFrame, dict]:

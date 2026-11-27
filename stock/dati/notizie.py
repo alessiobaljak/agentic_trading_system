@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 import time
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -32,12 +32,28 @@ def mancanti(dal_anno: int, al_anno: int, elenco: list[tuple[int, int]] | None =
     return [(a, m) for a, m in (elenco or mesi(dal_anno, al_anno)) if not _file(a, m).exists()]
 
 
+# chiusure anticipate della borsa (alle 13:00 di New York), dal calendario della NYSE: la prova 45 entra alle 12:30
+CHIUSURE_ANTICIPATE = {date(2026, 11, 27), date(2026, 12, 24)}
+
+
 def ordini_in_corso(adesso: datetime) -> bool:
-    """Vero nei minuti in cui la misura in avanti manda gli ordini (apertura e chiusura di New York, giorni feriali): lì non si
-    scarica, per non consumare il limite di richieste di Alpaca."""
+    """Vero nei minuti in cui le strategie del demo mandano gli ordini (giorni feriali, ora di New York): lì non si scarica, per non
+    consumare il limite di richieste di Alpaca, che ricerca e demo condividono. Le finestre (audit del 27 novembre 2026): la riserva
+    della sera della miscela del mattino (8:20-8:50), l'apertura della prima candela (9:05-10:10), la prova 45 e la chiusura della prima
+    candela (15:25-16:20), la sera della miscela (19:00-19:20); nei giorni della banca centrale e nelle loro vigilie le 13:50-14:10 della
+    miscela; nelle chiusure anticipate le 12:25-13:20 della prova 45."""
+    from stock.dati.fomc import COMUNICATI_AVANTI
     ny = adesso.astimezone(ZoneInfo("America/New_York"))
+    if ny.weekday() >= 5:
+        return False
     minuti = ny.hour * 60 + ny.minute
-    return ny.weekday() < 5 and (9 * 60 + 5 <= minuti <= 10 * 60 + 10 or 15 * 60 + 30 <= minuti <= 16 * 60 + 20)
+    finestre = [(8 * 60 + 20, 8 * 60 + 50), (9 * 60 + 5, 10 * 60 + 10), (15 * 60 + 25, 16 * 60 + 20), (19 * 60, 19 * 60 + 20)]
+    giorno = ny.date()
+    if giorno in COMUNICATI_AVANTI or giorno + timedelta(days=1) in COMUNICATI_AVANTI:
+        finestre.append((13 * 60 + 50, 14 * 60 + 10))
+    if giorno in CHIUSURE_ANTICIPATE:
+        finestre.append((12 * 60 + 25, 13 * 60 + 20))
+    return any(da <= minuti <= a for da, a in finestre)
 
 
 def scarica(dal_anno: int, al_anno: int, minuti: float = 240, pausa: float = 0.5,

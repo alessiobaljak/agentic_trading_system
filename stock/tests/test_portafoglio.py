@@ -306,3 +306,25 @@ def test_titolo_sparito_dal_listino_si_chiude_all_ultimo_prezzo_e_un_simbolo_riu
     # senza l'opzione il comportamento di prima: il titolo resta in mano e il simbolo riusato inventa un guadagno
     r = simula_conto({"A": a, "B": b}, s, Costi())
     assert r.liquidati == [] and r.valore.iloc[-1] == pytest.approx(100_000 + 10 * (500 - 90))
+
+
+def test_un_uscita_senza_la_barra_del_giorno_si_riprova_alla_prima_barra():
+    # audit del 27 novembre 2026: il titolo è sospeso il giorno dell'uscita (manca la barra dell'8 gennaio); prima la posizione restava
+    # in mano fino alla fine, ora esce alla prima barra dopo (il 9), e una sola volta
+    a = barre([(100, 100, 100, 100), (100, 100, 100, 100), (110, 110, 110, 110)], [G[0], G[1], G[3]])
+    b = barre([(10, 10, 10, 10)] * 4, G)
+    piano = {0: [("A", Ordine(10, "mercato"))], 1: [("A", Ordine(-10, "mercato", etichetta="uscita"))]}
+    r = simula_conto({"A": a, "B": b}, al_giorno(piano), Costi())
+    assert r.senza_barra == 1 and r.uscite_rimandate == 1 and r.bloccati == []
+    vendite = r.esecuzioni[r.esecuzioni["quantita"] < 0]
+    assert list(vendite["giorno"].astype(str)) == ["2020-01-09"] and float(vendite["prezzo"].iloc[0]) == 110
+    assert r.valore.iloc[-1] == pytest.approx(100_000 + 10 * 10)
+
+
+def test_l_uscita_rimandata_cede_il_posto_a_un_ordine_nuovo_della_strategia():
+    # se la strategia rimanda lei stessa un ordine per quel titolo, l'uscita rimandata si lascia: niente doppia vendita
+    a = barre([(100, 100, 100, 100), (100, 100, 100, 100), (110, 110, 110, 110)], [G[0], G[1], G[3]])
+    b = barre([(10, 10, 10, 10)] * 4, G)
+    piano = {0: [("A", Ordine(10, "mercato"))], 1: [("A", Ordine(-10, "mercato"))], 2: [("A", Ordine(-10, "mercato"))]}
+    r = simula_conto({"A": a, "B": b}, al_giorno(piano), Costi())
+    assert float(r.esecuzioni.loc[r.esecuzioni["simbolo"] == "A", "quantita"].sum()) == 0      # comprate 10, vendute 10: non allo scoperto

@@ -210,3 +210,80 @@ def test_scissione_valutata_come_incasso():
 def test_un_evento_per_trimestre():
     from stock.dati.bilanci import un_evento_per_trimestre
     assert un_evento_per_trimestre([date(2024, 1, 1), date(2024, 1, 5), date(2024, 4, 1)]) == [date(2024, 1, 1), date(2024, 4, 1)]
+
+
+def test_lo_scarico_non_salva_vuoti_i_titoli_con_un_errore_passeggero(monkeypatch):
+    # audit del 27 novembre 2026: un errore di rete o del server non deve togliere un titolo per sempre dalle prove dopo
+    import pandas as pd
+
+    from stock.dati import alpaca
+    from stock.prove import p027
+
+    salvati: dict = {}
+    monkeypatch.setattr(p027, "aspetta_fuori_dagli_ordini", lambda: None)
+    monkeypatch.setattr(p027.archivio, "carica", lambda s, tipo: salvati.get((s, tipo)))
+    monkeypatch.setattr(p027.archivio, "salva", lambda df, s, tipo: salvati.__setitem__((s, tipo), df))
+
+    def gruppo(*a, **k):
+        raise alpaca.ErroreAlpaca("422 su /v2/stocks/bars: invalid symbol")
+
+    def uno(s, *a, **k):
+        if s == "RETE":
+            raise alpaca.ErroreAlpaca("rete: ConnectionError")
+        if s == "SERVER":
+            raise alpaca.ErroreAlpaca("503 su /v2/stocks/bars: unavailable")
+        if s == "IGNOTO":
+            raise alpaca.ErroreAlpaca("422 su /v2/stocks/bars: invalid symbol")
+        return pd.DataFrame({"open": [1.0], "high": [1.0], "low": [1.0], "close": [1.0], "volume": [10]})
+
+    monkeypatch.setattr(alpaca, "barre_di_piu", gruppo)
+    monkeypatch.setattr(alpaca, "barre", uno)
+    monkeypatch.setattr(alpaca, "azioni_societarie_di_piu", lambda simboli, *a, **k: {s: pd.DataFrame() for s in simboli})
+    rimandati = p027.scarica(["BUONO", "RETE", "SERVER", "IGNOTO"])
+    assert sorted(rimandati) == ["RETE", "SERVER"]
+    assert ("RETE", "1Day_raw") not in salvati and ("SERVER", "1Day_raw") not in salvati   # si riprovano al lavoro dopo
+    assert len(salvati[("IGNOTO", "1Day_raw")]) == 0                                        # Alpaca non lo ha: vuoto, giusto
+    assert len(salvati[("BUONO", "1Day_raw")]) == 1 and ("BUONO", "azioni") in salvati
+    assert p027.passeggero(alpaca.ErroreAlpaca("tentativi finiti")) and not p027.passeggero(alpaca.ErroreAlpaca("404 su x"))
+
+
+def test_i_dividendi_staccati_prima_della_fine_e_pagati_dopo_arrivano(monkeypatch):
+    # Alpaca filtra start/end sulla data di elaborazione (il pagamento): lo stacco del 20 dicembre 2024 è pagato il 31 gennaio 2025
+    from datetime import UTC, datetime
+
+    from stock.dati import alpaca
+
+    eventi = [{"symbol": "SPY", "ex_date": "2024-12-20", "process_date": "2025-01-31", "rate": "1.966"},
+              {"symbol": "SPY", "ex_date": "2025-03-21", "process_date": "2025-04-30", "rate": "1.70"}]
+
+    def finto(url, parametri):
+        dentro = [e for e in eventi if parametri["start"] <= e["process_date"] <= parametri["end"]]
+        return {"corporate_actions": {"cash_dividends": dentro}}
+
+    monkeypatch.setattr(alpaca, "_get", finto)
+    uno = alpaca.azioni_societarie("SPY", datetime(2024, 1, 1, tzinfo=UTC), datetime(2025, 1, 1, tzinfo=UTC))
+    assert [str(d) for d in uno["data"]] == ["2024-12-20"]                  # il pagato dopo la fine c'è, quello staccato dopo no
+    piu = alpaca.azioni_societarie_di_piu(["SPY"], datetime(2024, 1, 1, tzinfo=UTC), datetime(2025, 1, 1, tzinfo=UTC))
+    assert [str(d) for d in piu["SPY"]["data"]] == ["2024-12-20"]
+
+
+def test_il_rinnovo_delle_azioni_societarie_riscrive_gli_archivi_e_conta(monkeypatch, tmp_path):
+    from datetime import date
+
+    import pandas as pd
+
+    from stock.dati import alpaca, archivio, rinnova_azioni
+    from stock.prove import p027
+
+    monkeypatch.setenv("STOCK_DATI_DIR", str(tmp_path / "dati"))
+    monkeypatch.setattr(p027, "aspetta_fuori_dagli_ordini", lambda: None)
+    vecchio = pd.DataFrame({"data": [date(2024, 9, 20)], "tipo": ["dividendo"], "rapporto": [1.0], "importo": [1.7], "nuovo": [""]})
+    archivio.salva(vecchio, "SPY", "azioni")
+    nuovo = pd.concat([vecchio, pd.DataFrame({"data": [date(2024, 12, 20)], "tipo": ["dividendo"], "rapporto": [1.0],
+                                              "importo": [1.966], "nuovo": [""]})], ignore_index=True)
+    monkeypatch.setattr(alpaca, "azioni_societarie_di_piu", lambda simboli, dal, al: {s: nuovo for s in simboli})
+    monkeypatch.setattr(rinnova_azioni, "RISULTATI", tmp_path / "RINNOVO_AZIONI_risultati.md")
+    t = rinnova_azioni.main()
+    assert (tmp_path / "RINNOVO_AZIONI_risultati.md").read_text() == t
+    assert len(archivio.carica("SPY", "azioni")) == 2
+    assert "2024: 1 → 2" in t and "`azioni_chiuso`: nessun titolo" in t

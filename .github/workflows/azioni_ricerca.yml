@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       prova:
-        description: "il programma della prova, per esempio p027"
+        description: "il programma della prova, per esempio p027 (oppure rinnova_azioni)"
         required: true
 
 permissions:
@@ -30,6 +30,8 @@ jobs:
         env:
           PROVA: ${{ inputs.prova }}
         run: |
+          # «rinnova_azioni»: riscarica le azioni societarie già in archivio (stock/dati/rinnova_azioni.py, audit del 27 novembre 2026)
+          if [ "$PROVA" = "rinnova_azioni" ]; then exit 0; fi
           echo "$PROVA" | grep -Eq '^p[0-9]{3}[a-z]?$' || { echo "nome non valido"; exit 1; }
           test -f "stock/prove/$PROVA.py" || { echo "manca stock/prove/$PROVA.py"; exit 1; }
       - uses: actions/setup-python@v5
@@ -50,7 +52,8 @@ jobs:
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
           # l'indirizzo di contatto che la SEC chiede nelle richieste (segreto del repository, mai in un file)
           SEC_CONTATTO: ${{ secrets.SEC_CONTATTO }}
-        run: python -m "stock.prove.$PROVA"
+        run: |
+          if [ "$PROVA" = "rinnova_azioni" ]; then python -m stock.dati.rinnova_azioni; else python -m "stock.prove.$PROVA"; fi
       - name: Tieni i dati scaricati (anche se la prova si è fermata)
         if: always()
         uses: actions/cache/save@v4
