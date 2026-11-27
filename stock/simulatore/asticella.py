@@ -59,6 +59,7 @@ def gruppi(serie: dict[str, pd.Series], rho: float = 0.5) -> list[list[str]]:
 
 
 T_PERDENTI = -3.0   # le prove che perdono di sicuro (LEZIONI_DALLE_CRYPTO.md punto 2, research/programma6/ASTICELLA.md sezione 5)
+SOGLIA = 0.80       # la soglia dell'esame dalla prova 54 (decisione del proprietario del 27 novembre 2026, METODO.md sezione 1)
 
 
 def sharpe_corretto(candidata: pd.Series, tutte: dict[str, pd.Series], rho: float = 0.5) -> dict:

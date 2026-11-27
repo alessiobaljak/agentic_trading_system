@@ -28,6 +28,9 @@ Da leggere per primo, dopo `README.md`. Nato il 24 ottobre 2026; ultimo aggiorna
 * **Autonomia** (24 ottobre: «procedi in autonomia su diverse idee non chiedermi il permesso ma fammi sapere quando vogliamo fare la demo
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.
+* **Le correzioni dell'audit e la soglia** (27 novembre: «sì, fai le 19 correzioni e abbassa a 0,80»): le correzioni del percorso
+  degli ordini della sezione 3 di `AUDIT_2026-11-27.md`, con la revisione separata; lo Sharpe corretto dell'esame delle azioni passa da
+  0,95 a 0,80 dalla prova 54 (`METODO.md`, sezione 1).
 
 ## Come rispondere al proprietario (25 novembre 2026)
 
@@ -65,8 +68,8 @@ indipendenti si sono fermate per il limite d'uso, quindi le correzioni fatte son
 
 0. **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti). (La prova 45 sul demo: decisa dal proprietario il
    23 novembre, vedi sotto.)
-0b. **L'ok alle correzioni dell'audit che toccano gli ordini del demo** (`AUDIT_2026-11-27.md`, sezione 3), e la soglia dello Sharpe
-   corretto delle azioni: oggi 0,95, sulle crypto 0,80 dal 9 novembre.
+0b. *(Dato il 27 novembre: correzioni dell'audit e soglia 0,80.)* Per gli avvii di riserva dal server (facoltativi): un token di
+   GitHub con il solo permesso di avviare i lavori, da dare a `stock/avanti/vps/installa.sh` quando vorrà installarli.
 1. *(Per dopo, non urgente: dal 9 novembre il demo è su Alpaca.)* **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
    farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
    conto di paper trading: lì c'è il **nome utente del demo**, diverso da quello del conto vero, e conviene dargli una password sua

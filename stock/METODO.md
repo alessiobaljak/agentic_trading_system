@@ -25,6 +25,10 @@ della sua serie media × √giorni) conta nel numero dei gruppi ma **non nella v
 `AUDIT_2026-11-27.md`). Rifatto il conto, nessun esito già scritto cambia (il più alto è la miscela della prova 25: 0,37). Si riportano
 sempre i due valori; la regola vale dalla prova 54 e non rivalida le prove già viste.
 
+**La soglia: 0,80 (27 novembre 2026, decisione del proprietario: «abbassa a 0,80»).** Come le crypto dal 9 novembre; prima era 0,95.
+Vale dalla prova 54, insieme alle altre condizioni dell'esame. Rifatto il conto con 0,80, nessun esito delle prove già fatte cambia: la
+più alta resta la miscela della prova 25 (0,37 con la regola qui sopra); la prova 15 aveva 0,79 con il conto di allora.
+
 ## 2. I titoli **(approvato)**
 
 * **Per il paper e il conto vero:** le 10 azioni americane più scambiate, come chiesto. Sono anche le più economiche da comprare e
