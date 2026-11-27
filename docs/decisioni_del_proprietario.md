@@ -203,3 +203,18 @@ G1 −4,4%; dalla partenza F5 +8,1%, G1 +6,1%; sul passato pari: F5 +55,4% l'ann
 * Il **demo resta su G1** e nessuna strategia del paper si spegne (8 novembre). Il confronto settimanale guarda F5 e G1 sugli stessi giorni.
 * Perché F5 con poco capitale: decide una volta a settimana (spese 4,9% l'anno contro 6,5% sul passato) e fa meno variazioni sotto il
   minimo di Binance. Limite: F5 non ha un demo suo, quindi la parità fra paper e conto con ordini veri per F5 non è misurata.
+
+
+## 27 novembre 2026: l'esame conta in due modi più giusti, e il bot si riavvia
+Le parole del proprietario: «riavvia, F5 sul conto live e non G1 alla fine? l'esame delle prove due modi di contatre un pò più giusti usali»,
+dopo il rapporto dell'audit del 26 novembre (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`). Cosa cambia:
+* **L'esame delle prove** (`research/programma6/asticella.esame`) usa da oggi i due modi di contare proposti dall'audit, insieme: (1) la
+  dispersione V è simmetrica (fuori da V anche le famiglie con il t sopra +3, come già quelle sotto −3; restano in N) e senza le serie
+  dei calcoli bocciati dal revisore (157); (2) il t e la probabilità che non sia fortuna contano le **settimane efficaci** (t robusto di
+  Newey e West con 4 settimane di ritardo), non le settimane come indipendenti. Restano: netto positivo, ogni anno positivo, t da 3,
+  probabilità da 0,80, N = famiglie di oggi, lo sconto una volta sola quando una strategia viene scelta (23 novembre). La regola di
+  prima si scrive accanto. **Riserva** (ASTICELLA.md, sezioni 4-6): i due modi nascono dopo aver visto i numeri delle prove 162-169;
+  per questo le prove già viste che ora passerebbero vanno dal revisore delle prove prima del paper.
+* **Il riavvio del bot** con le correzioni dell'audit (commit `16c5712`): approvato. Con il riavvio il vecchio sistema (fermo dal 13
+  ottobre) smette di girare nel bot quando il vecchio paper non ha niente aperto; resta il suo pulsante, e per riaccenderlo si toglie
+  `ops/gate_fermo`.

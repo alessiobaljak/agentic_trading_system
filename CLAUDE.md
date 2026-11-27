@@ -67,6 +67,9 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
   **Opus 5.5** e un **tetto di 5 euro al giorno** controllato nel codice; conto e chiavi li crea il proprietario; sessione «trading AI» riaperta.
 * **25 novembre**: «metti F5 come candidata per il conto piccolo»: il conto vero (spento) eseguirà **F5** al posto di G1; il demo resta
   su G1 e nessuna strategia si spegne.
+* **27 novembre**: «l'esame delle prove due modi di contare un pò più giusti usali»: dispersione V simmetrica e settimane efficaci (t
+  robusto) insieme, la regola di prima accanto; le prove già viste che ora passano vanno dal revisore prima del paper. Riavvio del bot con
+  le correzioni dell'audit approvato (il vecchio sistema smette di girare nel bot).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
