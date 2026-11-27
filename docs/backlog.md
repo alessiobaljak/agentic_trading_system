@@ -889,6 +889,14 @@ scrivono con e senza le serie a incasso quasi fisso.
   300 USDT (filtri di oggi, partenza vuota di lunedì, limiti con margini, chiusure come il bot e «solo riduzione»); la correzione delle
   chiusure sotto il minimo (percorso degli ordini: live-path-reviewer, poi l'ok del proprietario al riavvio); le decisioni del proprietario
   (quale N per l'esame: 24 → 0,96, 56 → 0,90, oggi → 0,51; la taglia, oggi il codice si ferma a 300; lo stop a −35%; i limiti fissi).
+* **27 novembre 2026, correzioni del bot dell'audit** (commit `16c5712`, `reviews/reports/2026-11-27-bot-bis.md`, APPROVE con condizioni):
+  prima di accendere il conto vero vanno corretti anche 211 (il «telefono» scritto nell'allarme prima che l'invio riesca), 213 (l'inversione
+  su una moneta che si può solo ridurre resta aperta nel verso sbagliato), 219 (un 429 di Binance che dura ore non arriva mai al telefono)
+  e 220 (il monitor applica «uno all'ora» per nodo, il bot per tipo di avviso). Aperti anche 217 (i rami delle letture di ogni ora crescono
+  senza pulizia, circa 62 MB l'anno, stima) e 221 (il test del 215 risulta saltato invece che fallito se si toglie il controllo di `CI`).
+  Per il riavvio servono quattro letture che lo «stato» non fa: `/commands/bot_state` (atteso «emergency»), `/commands/kill_switch`
+  (atteso falso), `/positions` e `/ordini_limite` (attesi vuoti): una voce nuova di sola lettura nello stato, da far rivedere, oppure la
+  console di Firebase del proprietario.
 
 ### P37. Dall'audit del sistema del 26 novembre: le cose trovate e non fatte subito — trovata il 26-27 novembre 2026 (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`)
 * **Per il proprietario (cambiano l'esame, decide lui)**: (a) la dispersione V dell'asticella toglie solo le prove perdenti (t sotto −3)

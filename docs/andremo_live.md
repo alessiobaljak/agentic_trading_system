@@ -1160,3 +1160,13 @@ verificata; ogni candidata perde circa 0,03 (168 B da 0,749 a 0,722), nessun ver
 legate fra loro: il suo t robusto è 3,7, non 4,7, e lo 0,945 di quando è stata scelta vale 0,90 con le settimane efficaci (0,87 con 13
 ritardi). A una variante di G1 oggi serve uno Sharpe di 2,27 su 300 settimane (G1 ha 1,97). Fonte:
 `research/programma6/ESAME_NUMERI_2026-11-27.md`.
+**27 novembre, 12:20 UTC, correzioni dell'audit sul percorso degli ordini, salvate (senza riavvio)**: lo stato della macchina e
+l'oscuramento delle chiavi dell'agente (commit `e824f22`; la risposta «stato» 0779 delle 11:32 ha tutto quello che il revisore chiedeva:
+niente testo tagliato, il bot in cima con «DRY_RUN: True», 19.304 caratteri) e il bot, il demo e il monitor (commit `16c5712`, secondo
+giro del revisore del percorso degli ordini: APPROVE con condizioni, nessun problema grave). Del bot vale subito solo il monitor di GitHub
+(non manda più i 429 né gli allarmi già mandati dal bot nell'ultima ora: alle 11:32 nessun allarme acceso, quindi nessun messaggio atteso);
+il resto entra con il riavvio, che decide il proprietario. Al riavvio: il demo non apre più le monete che non ha (le chiude sì), il vecchio
+sistema smette di girare (resta il suo pulsante), il paper conta gli ordini limite in modo più severo (circa −0,01 punti al giorno per
+G1, stima dell'audit), `DRY_RUN` scritto a ogni avvio. Prima del riavvio vanno lette quattro cose che lo stato non legge (backlog P36).
+Test: tests/ 3.066 passati, research/src/tests 3.142 passati e 9 saltati, su una copia pulita. **Capito**: il campo del DRY_RUN in cima
+allo stato e in dashboard lo scriveva solo il giro del vecchio sistema; fermato quello, il campo sarebbe rimasto fermo al valore di prima.
