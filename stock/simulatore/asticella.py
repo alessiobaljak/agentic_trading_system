@@ -58,14 +58,27 @@ def gruppi(serie: dict[str, pd.Series], rho: float = 0.5) -> list[list[str]]:
     return list(out.values())
 
 
+T_PERDENTI = -3.0   # le prove che perdono di sicuro (LEZIONI_DALLE_CRYPTO.md punto 2, research/programma6/ASTICELLA.md sezione 5)
+
+
 def sharpe_corretto(candidata: pd.Series, tutte: dict[str, pd.Series], rho: float = 0.5) -> dict:
     """Lo Sharpe corretto della `candidata` (rendimenti giornalieri) dato il conto di `tutte` le prove.
-    Con meno di 5 gruppi V = 1/T (regola della prova 1, `stock/prove/P001_ultima_mezzora.md`)."""
+    Con meno di 5 gruppi V = 1/T (regola della prova 1, `stock/prove/P001_ultima_mezzora.md`).
+
+    Dal 27 novembre 2026 (`METODO.md`, sezione 1, e l'audit `AUDIT_2026-11-27.md`): un gruppo con il t dello Sharpe sotto −3 (Sharpe
+    giornaliero della sua serie media × √giorni) conta nel numero dei gruppi ma non nella varianza V, come promettono
+    `LEZIONI_DALLE_CRYPTO.md` e il metodo delle crypto; fino a qui il codice lo aveva dimenticato. «sharpe_corretto» è il valore
+    dell'esame; «sharpe_corretto_tutti» è quello di prima (tutti i gruppi nella varianza) e si riporta accanto."""
     g = gruppi(tutte, rho)
-    sr_gruppi = [sharpe(pd.DataFrame({k: tutte[k] for k in membri}).mean(axis=1)) for membri in g]
+    medie = [pd.DataFrame({k: tutte[k] for k in membri}).mean(axis=1) for membri in g]
+    sr_gruppi = [sharpe(m) for m in medie]
+    t_gruppi = [s * math.sqrt(int(m.dropna().shape[0])) for s, m in zip(sr_gruppi, medie)]
     t = int(candidata.dropna().shape[0])
-    v = float(np.var(sr_gruppi, ddof=1)) if len(g) >= 5 else 1.0 / t
-    s0 = soglia_per_caso(len(g), v)
-    return {"gruppi": len(g), "varianza": v, "soglia_giornaliera": s0,
+    v_tutti = float(np.var(sr_gruppi, ddof=1)) if len(g) >= 5 else 1.0 / t
+    nella_v = [s for s, tg in zip(sr_gruppi, t_gruppi) if not tg < T_PERDENTI]
+    v = float(np.var(nella_v, ddof=1)) if len(nella_v) >= 5 else 1.0 / t
+    s0, s0_tutti = soglia_per_caso(len(g), v), soglia_per_caso(len(g), v_tutti)
+    return {"gruppi": len(g), "gruppi_perdenti": len(g) - len(nella_v), "varianza": v, "soglia_giornaliera": s0,
             "sharpe_corretto": sharpe_probabilistico(candidata, s0),
+            "varianza_tutti": v_tutti, "sharpe_corretto_tutti": sharpe_probabilistico(candidata, s0_tutti),
             "t_sharpe": sharpe(candidata) * math.sqrt(t)}

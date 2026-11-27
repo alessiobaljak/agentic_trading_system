@@ -105,6 +105,24 @@ def test_asticella():
     assert r["gruppi"] == 2 and r["varianza"] == pytest.approx(1 / 2000)
 
 
+def test_asticella_le_prove_che_perdono_di_sicuro_contano_nei_gruppi_ma_non_nella_varianza():
+    # cinque prove senza vantaggio e una che perde per costruzione (t dello Sharpe circa −13): conta fra i gruppi, non nella dispersione
+    rng = np.random.default_rng(7)
+    tutte = {f"nulla{i}": pd.Series(rng.normal(0.0, 0.01, 2000)) for i in range(5)}
+    tutte["perde"] = pd.Series(rng.normal(-0.003, 0.01, 2000))
+    candidata = pd.Series(rng.normal(0.001, 0.01, 2000))
+    r = asticella.sharpe_corretto(candidata, tutte)
+    assert r["gruppi"] == 6 and r["gruppi_perdenti"] == 1
+    sr = [asticella.sharpe(tutte[f"nulla{i}"]) for i in range(5)]
+    assert r["varianza"] == pytest.approx(float(np.var(sr, ddof=1)))
+    assert r["varianza"] < r["varianza_tutti"] and r["sharpe_corretto"] > r["sharpe_corretto_tutti"]
+    # senza prove perdenti i due valori coincidono
+    senza = {k: v for k, v in tutte.items() if k != "perde"}
+    senza["altra"] = pd.Series(rng.normal(0.0, 0.01, 2000))
+    r2 = asticella.sharpe_corretto(candidata, senza)
+    assert r2["gruppi_perdenti"] == 0 and r2["sharpe_corretto"] == r2["sharpe_corretto_tutti"]
+
+
 def _giorni_piatti(n, prezzo=100.0):
     giorni = pd.bdate_range("2020-01-06", periods=n)
     parti = []
