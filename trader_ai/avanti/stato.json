@@ -840,7 +840,7 @@
  "conto_mezzanotte": 936.7430732895481,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-27T17:30:29.934287+00:00",
+ "ultima": "2026-11-27T17:45:29.332370+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
  "approccio": "Seguo la struttura 15m: dopo un crollo con volume vendo il rimbalzo solo su un ritracciamento profondo o sotto una resistenza dinamica, con lo stop sopra il livello rotto, senza inseguire e senza vendere sui minimi.",
@@ -1042,7 +1042,7 @@
  "discesa_dalle": "2026-11-27T00:00:08.442251+00:00",
  "massimo_giorno": 953.5326164446479,
  "discesa_max_giorno": 28.406572580045918,
- "ultimo_costo_massimo": 0.498,
+ "ultimo_costo_massimo": 0.4981,
  "stat_giorno": {
   "chiamate": 75,
   "costo": 4.532981,
