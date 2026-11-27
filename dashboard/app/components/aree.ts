@@ -9,6 +9,7 @@
 import type { ComponentType, ReactNode } from 'react';
 import { AREA_CRYPTO } from './crypto/area';
 import { AREA_AZIONI } from './stock/area';
+import { AREA_TRADER_AI } from './trader_ai/area';
 
 export interface PropsPagina {
   /** quello che nell'indirizzo viene dopo la pagina (in #crypto/dettagli/g1 è ['g1']) */
@@ -38,4 +39,4 @@ export interface Area {
   Testata?: ComponentType;
 }
 
-export const AREE: Area[] = [AREA_CRYPTO, AREA_AZIONI];
+export const AREE: Area[] = [AREA_CRYPTO, AREA_AZIONI, AREA_TRADER_AI];

@@ -41,6 +41,11 @@ La dashboard si chiama **Plancia** («crypto e azioni · niente soldi veri»), p
 **Azioni** (`app/components/stock/`): della sessione «trading stock», che ne dichiara le pagine in `stock/area.tsx`. La guida è
 `GUIDA_SCHEDA_AZIONI.md`.
 
+**Trader AI** (`app/components/trader_ai/`, dal 27 novembre 2026): della sessione «trading AI». Adesso (conto, giorno contro il 3%,
+operazione aperta al prezzo di adesso, conto del giorno, ultima decisione), Operazioni, Decisioni e Resoconti. Non legge Firebase: legge
+i file che la macchina salva nel repository ogni 10 minuti (`trader_ai/avanti/`, da raw.githubusercontent.com) e il prezzo di BTC da
+Binance. `vercel.json` fa saltare la costruzione del sito ai commit che non toccano `dashboard/` (i salvataggi dei dati).
+
 **Tema e mattoni comuni.** Il tema resta chiaro; lo scuro si accende dal pulsante in alto e si ricorda sul dispositivo. I mattoni
 comuni (scheda, curve a 100, riga di stato, pesi) stanno in `app/components/comuni/`, i conti in `app/lib/conti.ts`.
 

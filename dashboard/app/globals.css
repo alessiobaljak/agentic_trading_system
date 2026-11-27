@@ -2333,3 +2333,28 @@ input[type='range'] {
 @media (max-width: 600px) {
   .cr-schede.cr-aree { order: 4; width: auto; }
 }
+
+/* ==========================================================================
+   Area «Trader AI» (27 novembre 2026, components/trader_ai/): prefisso ta-
+   ========================================================================== */
+.ta-fonte { margin: -8px 0 0; font-size: 11.5px; }
+.ta-barra { height: 8px; border-radius: 999px; background: var(--bg-elev); margin-top: 10px; overflow: hidden; }
+.ta-barra-piena { display: block; height: 100%; border-radius: 999px; }
+.ta-nota { margin: 4px 0 0; font-style: italic; color: var(--text-dim); overflow-wrap: anywhere; }
+.ta-decisione { display: grid; gap: 2px; min-width: 0; }
+.ta-nota-breve {
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  font: inherit; font-size: 12.5px; line-height: 1.45; font-style: italic; color: var(--text-dim);
+  text-align: left; background: none; border: 0; padding: 0; cursor: pointer;
+}
+.ta-nota-breve.ta-tutta { display: block; -webkit-line-clamp: unset; }
+.ta-elenco { display: grid; gap: 10px; }
+.ta-voce { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 8px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+.ta-voce:first-child { border-top: 0; padding-top: 0; }
+.ta-giorno { font-size: 11.5px; color: var(--text-faint); padding-top: 2px; }
+.ta-evento .cr-riga { color: var(--text-dim); }
+.ta-resoconto { display: grid; gap: 4px; }
+.ta-titolo { margin: 0 0 4px; font-size: 15px; }
+.ta-punto { padding-left: 14px; position: relative; }
+.ta-punto::before { content: '•'; position: absolute; left: 2px; color: var(--text-faint); }
+

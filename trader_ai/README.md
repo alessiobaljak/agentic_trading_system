@@ -37,7 +37,8 @@ fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al 
 2. Prima dell'avvio: conto demo separato da quello di G1 e chiavi del proprietario, installazione, prova a mano sul demo (punti nella
    seconda revisione), ok del proprietario, `installa.sh avvia`.
 3. Comandi sulla macchina: `installa.sh stato | ferma | chiudi | riparti | chiavi | togli`.
-4. Resoconto ogni giorno a mezzanotte UTC; diario di ogni decisione durante il giorno; scheda in dashboard.
+4. Resoconto ogni giorno a mezzanotte UTC; diario di ogni decisione durante il giorno; dal 27 novembre l'area «Trader AI» della
+   plancia (`dashboard/app/components/trader_ai/`), che legge i file di `avanti/` salvati dalla macchina ogni 10 minuti.
 5. 26 novembre 2026, versione 7 (`REGOLE.md`): il controllo di istruzioni e dati (`revisioni/2026-11-26-controllo-istruzioni-e-dati.md`)
    ha trovato dati sbagliati nel messaggio al modello; corretti. Dopo l'aggiornamento il programma ricostruisce da solo, una volta, la
    memoria delle operazioni dal conto simulato (`ripara.py`) e rifà il resoconto del 25 novembre.

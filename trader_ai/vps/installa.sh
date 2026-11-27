@@ -162,10 +162,10 @@ UNIT
 
 cat > /etc/systemd/system/trader-ai-salva.timer <<UNIT
 [Unit]
-Description=Trader AI: salvataggio ogni ora
+Description=Trader AI: salvataggio ogni 10 minuti (la scheda della plancia li legge dal repository)
 
 [Timer]
-OnCalendar=*-*-* *:07:00
+OnCalendar=*-*-* *:02/10:00
 Persistent=false
 
 [Install]
@@ -173,7 +173,14 @@ WantedBy=timers.target
 UNIT
 
 systemctl daemon-reload
+# il salvataggio è già acceso: lo si riparte perché prenda l'orario nuovo (non tocca il trader né gli ordini)
+systemctl is-active --quiet trader-ai-salva.timer && systemctl restart trader-ai-salva.timer \
+  && echo "[trader-ai] salvataggio nel repository: adesso ogni 10 minuti"
 echo "[trader-ai] prova del collegamento al conto demo (nessun ordine, nessuna chiamata al modello):"
 ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.avvio controlla ) \
   || echo "[trader-ai] ATTENZIONE: il collegamento non va, controlla le chiavi (installa.sh chiavi)"
-echo "[trader-ai] installato ma NON avviato. Per avviarlo, dopo l'ok: bash trader_ai/vps/installa.sh avvia"
+if systemctl is-active --quiet trader-ai.service; then
+  echo "[trader-ai] il trader è acceso e gira con il codice che aveva all'avvio (per il codice nuovo: «ferma» e «avvia»)"
+else
+  echo "[trader-ai] installato ma NON avviato. Per avviarlo, dopo l'ok: bash trader_ai/vps/installa.sh avvia"
+fi
