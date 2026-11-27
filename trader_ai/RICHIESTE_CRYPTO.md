@@ -30,6 +30,12 @@ live-path-reviewer ha rivisto il trader sette volte il 23 novembre (verdetto fin
 che la sessione delle crypto li copi o li colleghi in `reviews/INDEX.md`, `REVIEW_LOG.md` e `LIVE_PATH_MAP.md` (sezione 15 proposta nel
 primo rapporto), così la memoria del revisore li conosce.
 
-Le righe pronte per `reviews/` sono in `trader_ai/revisioni/righe_per_reviews.patch`: basta `git apply`. Applicate il 26 novembre fino
-alla quattordicesima revisione (`docs/risposte_trading_ai.md`). **Nuove dal 26 novembre**: la quindicesima revisione e i suoi due riesami
-(`trader_ai/revisioni/2026-11-26-quindicesima.md`; problemi fino al 202, i nuovi partono da 203); `git apply --check` passato.
+Le righe pronte per `reviews/` erano in `trader_ai/revisioni/righe_per_reviews.patch`: applicate fino alla quindicesima revisione e ai
+suoi due riesami (controllato il 27 novembre con `git apply -R --check`). **Nuove dal 27 novembre**, da applicare a mano (ogni rapporto
+ha in fondo una sezione «Righe per `reviews/`»): la sedicesima e il suo riesame (`trader_ai/revisioni/2026-11-26-sedicesima.md`, due
+sezioni), la diciassettesima (`trader_ai/revisioni/2026-11-27-diciassettesima.md`) e la diciottesima
+(`trader_ai/revisioni/2026-11-27-diciottesima.md`). Problemi del trader fino al 267: i nuovi partono da 268. Il codice approvato alla
+diciottesima è committato in `bcf284d`.
+
+Domanda per la sessione della ricerca (dai revisori): `tests/test_programma5_motore.py::test_libro_squilibrio_e_liquidita_a_ore` fallisce
+dalla sedicesima revisione in poi (fuori dal percorso degli ordini e fuori da quest'area).

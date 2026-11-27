@@ -63,8 +63,8 @@ misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti
 * Quindicesima revisione e due riesami (26 novembre 2026, `revisioni/2026-11-26-quindicesima.md`): APPROVE con condizioni per il
   riavvio sul conto simulato (riavvio con il trader fermo e nessuna operazione aperta). Aperti: 198 e 199 Medi solo per il
   conto demo (spento: non si accende senza correggerli, misurare sul demo il ritardo delle posizioni e una revisione nuova); 200
-  Basso (una chiusura registrata si poteva scrivere due volte nel diario se il passo si interrompeva subito dopo: corretto il 27
-  novembre, lo stato si salva subito dopo ogni chiusura, problemi 208, 213 e 230); 201
+  Basso (una chiusura registrata si può scrivere due volte nel diario se il passo si interrompe subito dopo: il 27 novembre lo
+  stato si salva subito dopo ogni chiusura, problemi 208, 213 e 230, ma resta la finestra dentro la registrazione, 263); 201
   Basso (solo con un ordine limite in attesa al primo passo della versione 7: oggi non c'è).
 * Riesame della sedicesima (27 novembre 2026, `revisioni/2026-11-26-sedicesima.md`): corretti 207-211 del revisore e 207, 208, 210 e
   211 del secondo cercatore. Aperti, bassi: il conto e il prezzo del passo vengono da due letture (209 del secondo cercatore: la
@@ -73,4 +73,13 @@ misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti
   programma, costa solo le spese d'uscita anticipate); solo per il demo, misurare quanto tarda il saldo dopo
   un ordine prima di fidarsi della lettura dopo la chiusura (212 del secondo cercatore, non riprodotto), e rifare la prova del 198
   anche dal ramo dell'obiettivo, che ora annulla il limite come il modello (234 della diciassettesima).
+* Diciottesima revisione (27 novembre 2026, `revisioni/2026-11-27-diciottesima.md`): APPROVE con condizioni sul codice committato
+  (`bcf284d`). Aperti, tutti bassi, quasi tutti casi con una lettura del conto che fallisce o il servizio che si ferma proprio dopo
+  una chiusura (nessun ordine sbagliato, sbagliano parole o la memoria): 240 (motivo provvisorio che non dice che il 3% non è
+  confermato), 241 e 242 (il «chiudi» del proprietario con una lettura che fallisce), 243, 262 e 265 (il «chiudi» del modello con
+  il saldo che non si legge o il servizio che si ferma), 244 e 264 (la protezione che chiude e poi un messaggio con la posizione
+  vecchia), 260 e 261 (il «chiudi» del proprietario con un limite che si esegue proprio in quel momento), 263 (il 200 nella
+  registrazione), 266 (resoconto dopo una lettura fallita a mezzanotte), 267 (stop rifiutato e servizio fermo nella chiusura).
+  Da correggere tutti insieme, con una revisione, prima del conto demo o alla prossima modifica del codice. I numeri nuovi partono
+  da 268.
 * Le revisioni del trader vanno copiate in `reviews/` dalla sessione delle crypto (`RICHIESTE_CRYPTO.md`, voce 3).
