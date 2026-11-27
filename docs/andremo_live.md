@@ -1200,3 +1200,9 @@ A e B, ma il sì è fragile (con la famiglia della candidata in V 0,810/0,822; t
 0,833/0,837). Decisione della sessione principale: misura in avanti a tavolino ogni lunedì (A dai quattro paper, B con `centosesta.py`),
 niente codice nuovo nel bot per ora. **Capito**: con le settimane contate per quello che valgono (legate fra loro) lo Sharpe che serve a
 una prova nuova scende da 2,27 a 1,96 su 300 settimane; la miscela delle quattro strategie in corso supera la soglia, ciascuna da sola no.
+**27 novembre, 16:30 UTC, giro delle 16:17**: raccolta delle 16:18 (132 articoli nuovi, 25 fonti su 25); controlli in avanti: niente di
+nuovo. G1 e il bot tre ore dopo il riavvio (`ops/results/0785`, `0786`): bot online, DRY_RUN vero, i cinque paper e il demo aggiornati fra
+le 15:41 e le 16:18, nessun errore nel registro dalle 13:10; spariti gli errori 400 dell'interesse aperto del vecchio sistema (0 dopo il
+riavvio, prima 2 ogni 4 ore); resta l'avviso orario «posizioni diverse da quelle volute: LITUSDT» (3 volte, come prima: Binance rifiuta
+gli ordini su LIT). Ricerca nuova: coda senza idee aperte; la prova 168 passa al tavolino del lunedì. GitHub: ultime tre corse verdi;
+monitor e stato lanciati a mano. **Capito**: il riavvio ha tolto il rumore del vecchio sistema senza toccare paper e demo.
