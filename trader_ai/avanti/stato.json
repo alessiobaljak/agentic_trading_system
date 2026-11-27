@@ -596,27 +596,59 @@
   }
  ],
  "note": [
-  "26/11 21:15 la 15m delle 21:00 chiude a 60786 con massimo 60800. È la sesta chiusura di fila sopra 60650 e la più alta della serie. Il MACD 15m resta positivo (istogramma +30) e quello del 30m è positivo (+2,7). Il prezzo è sopra EMA9/21 su 5m, 15m e 30m e sopra il VWAP 60683. Il volume però è molto basso (0,35x sul 15m, 0,47x sul 5m) per il Ringraziamento e il prezzo è sotto la resistenza 61080-61120. Tengo il limite lungo a 60620, vicino a EMA21 15m 60645 e EMA21 30m 60620: stop 60390 sotto lo sweep 60372, obiettivo 61060, circa 1,4 R. Non inseguo a 60780, perché con lo stop sotto lo sweep il rapporto scenderebbe sotto 1. Lo annullo se il prezzo si avvicina a 61000 senza esecuzione, per rimetterlo pi…",
-  "26/11 21:30 la 15m delle 21:15 chiude a 60882, sopra i massimi della serie (60811) e sopra la Bollinger alta 15m, con volume tornato nella media (0,99x). Sul 30m l'istogramma MACD si allarga (+16) e la candela chiude sui massimi. Il limite a 60620 è ormai lontano (+0,44%) e un ritest lì vorrebbe dire che l'impulso è fallito. Come avevo fissato, lo annullo ora che il prezzo si avvicina a 61000. Alla chiamata dopo valuto due ingressi: un limite sul ritest di 60760-60800 (EMA21 5m ed EMA9 15m), con stop sotto 60640 e obiettivo verso 61080-61120, oppure, se una 15m chiude sopra 61120 con volume, un lungo sul ritest con obiettivo verso 61500. Non inseguo a 60890: la resistenza è a circa 200 punti e il rappo…",
-  "26/11 21:30 . Ho annullato il limite a 60620 perché il prezzo era salito a 60922, staccandosi dalla serie di chiusure sopra 60650. La 15m delle 21:15 ha chiuso a 60882 sopra la Bollinger alta, con volume tornato nella media. Sul 30m il MACD si allarga (+16) e le EMA sono in ordine, e la 5m in corso spinge con il 73% di acquisti. Non inseguo a 60920: la resistenza 61067-61122 è a circa 150-200 punti. Metto un limite a 60790 sul ritest di EMA9 5m (60806) e della zona 60760-60800. Lo stop va a 60650, sotto i minimi delle 15m 60726/60739 e sotto EMA21 15m 60666. L'obiettivo è 61080, sotto la resistenza. Quantità 0,032 BTC (valore circa 1945, leva 3): rischio circa 6 USDT, guadagno netto circa 7 USDT. Se un…",
-  "26/11 21:45 la 15m delle 21:30 chiude a 60869. Ha toccato un massimo di 60979, poi è stata respinta sotto la resistenza 61067-61122, con volume 1,31x. Il minimo è 60853, quindi il ritest su 60760-60800 non è ancora arrivato. Sul 15m il MACD si allarga (istogramma 35) e il prezzo è sopra EMA9 60762 ed EMA21 60685. Sul 30m le EMA sono in ordine e il MACD è positivo. Sul 5m l'RSI scende a 62 dopo il 76 e il prezzo torna su EMA9 60847, con EMA21 a 60784, vicino al mio limite. Il limite lungo a 60790 resta valido: stop 60650 sotto EMA21 15m e i minimi 60726, obiettivo 61080 (+1,28 R). Lo annullo se una 15m chiude sotto 60700 prima dell'esecuzione, oppure se una 15m chiude sopra 61120 con volume: in quel cas…",
   "26/11 22:00 . Il limite lungo a 60790 è stato eseguito alle 21:59, sul ritest della zona 60760-60800 dopo il rifiuto a 60979. La 15m delle 21:45 chiude a 60792, sopra EMA9 15m 60768 ed EMA21 15m 60694. L'istogramma MACD 15m resta positivo (+28) e sul 30m le EMA sono in ordine (EMA9 60709, EMA21 60657) con MACD positivo. Sul 5m il prezzo è sull'EMA21 60798, con istogramma MACD a -6 e RSI 52: c'è una pausa dell'impulso, ma la struttura non è rotta. Il volume resta basso per il Ringraziamento. Tengo la posizione con stop 60650, sotto EMA21 15m e i minimi 60726, e obiettivo 61080, sotto la resistenza 61067-61122. Non stringo lo stop: le ultime perdite sono venute da stop spostati troppo presto. Valuto il p…",
   "26/11 22:05 . Il lungo a 60790 è stato chiuso a 60644 dallo stop iniziale: -6,03, giorno a -12,28. La 5m delle 22:00 è scesa da 60792 a 60634 con volume 3,83x e solo il 26% di acquisti, e la 15m in corso è sotto EMA21 15m (60694). Sul 30m il prezzo è tornato sulla EMA21 60657, a metà del range di oggi 60372-61120. Qui non c'è vantaggio e non entro per recuperare. Il piano ha due ingressi. Lungo vicino al supporto 60420-60460 solo se mostra rifiuto (chiusura 5m/15m con minimo respinto), con stop sotto 60300 e obiettivo verso 60750-60800. Corto solo su un rifiuto netto sotto 61000-61120. Il budget è sufficiente. Aspetto la chiusura della 15m.",
   "26/11 22:15 . La 15m delle 22:00 chiude a 60542 con minimo 60503, volume 2,13x e solo il 39% di acquisti. Ha cancellato tutta la salita delle 21:00-21:45 e chiude sotto EMA9 15m 60723 ed EMA21 15m 60681, vicino alla Bollinger media 60649. Sul 5m il momentum è ribassista: RSI 33, istogramma MACD -41 e prezzo sotto la Bollinger bassa 60585. Il prezzo però è già a metà strada verso il supporto 60370-60460 (sweep 60372, minimi 60390/60448), quindi non apro un corto qui, in basso dopo l'impulso. Non metto nemmeno un limite lungo anticipato sul supporto: ieri i limiti presi contro il momentum sono stati fermati dagli spike. Il piano è questo. Lungo solo se una 5m/15m vicino a 60370-60460 mostra un rifiuto, c…",
   "26/11 22:30 . La 15m delle 22:15 chiude a 60584. Il minimo è 60530 e il volume è 0,75x: c'è un piccolo rimbalzo dopo il crollo delle 22:00, ma nessun rifiuto vero. Il prezzo è a metà range, fra il supporto 60370-60460 e il VWAP 60685, con la resistenza 60800-60980 sopra. Sul 15m l'istogramma MACD diventa negativo (-5,6) e il prezzo è sotto EMA9 60695 ed EMA21 60672. Sul 5m RSI 38, MACD negativo ma in risalita, volume in calo (0,44x). Qui non c'è vantaggio. Le ultime due perdite sono venute proprio da ingressi a metà range. Il piano resta questo. Lungo solo se una 5m o 15m vicino a 60370-60460 mostra un minimo respinto con chiusura in alto: stop sotto 60300, obiettivo 60700-60780. Corto solo su un rifiu…",
   "26/11 22:45 . La 15m delle 22:30 chiude a 60623 con minimo 60495 e volume 1,02x. La 5m delle 22:40 rimbalza da 60521 a 60623 con l'83% di acquisti e volume 1,82x. È una reazione, ma il minimo resta sopra il supporto 60370-60460, quindi non è il rifiuto all'estremo che aspetto. Il prezzo è a metà range, sotto il VWAP 60684 e le EMA21 5m/15m (60670/60667). Il MACD 15m è negativo, mentre l'RSI 5m risale a 45. Mancano 40,67 al traguardo, ma inseguire a metà range ha già fatto due perdite. Il piano non cambia. Lungo solo su un rifiuto chiuso in 60370-60460, con stop sotto 60300 e obiettivo 60700-60780. Corto solo su un rifiuto netto in 60900-61120. Aspetto.",
-  "26/11 23:00 . La 15m delle 22:45 chiude a 60524. Il minimo è 60438, dentro il supporto 60370-60460, e c'è una coda di rifiuto. La 5m delle 22:55 ha respinto 60438 chiudendo a 60524 con volume 1,6x. La 5m in corso però scende già a 60426 con solo il 20% di acquisti, sotto la Bollinger media e vicino alla bassa 5m (60389). Il rifiuto non è confermato: il supporto viene ritestato con vendite. Il MACD 15m si allarga in negativo (-19,6) e il 30m gira negativo (-8,5). Non anticipo con un limite contro il momentum, perché ieri gli spike hanno preso questi ingressi. Lungo solo se una 5m o 15m chiude in alto dopo aver toccato 60370-60460, con stop sotto 60300 e obiettivo 60680-60750. Se invece una 15m chiude so…"
+  "26/11 23:00 . La 15m delle 22:45 chiude a 60524. Il minimo è 60438, dentro il supporto 60370-60460, e c'è una coda di rifiuto. La 5m delle 22:55 ha respinto 60438 chiudendo a 60524 con volume 1,6x. La 5m in corso però scende già a 60426 con solo il 20% di acquisti, sotto la Bollinger media e vicino alla bassa 5m (60389). Il rifiuto non è confermato: il supporto viene ritestato con vendite. Il MACD 15m si allarga in negativo (-19,6) e il 30m gira negativo (-8,5). Non anticipo con un limite contro il momentum, perché ieri gli spike hanno preso questi ingressi. Lungo solo se una 5m o 15m chiude in alto dopo aver toccato 60370-60460, con stop sotto 60300 e obiettivo 60680-60750. Se invece una 15m chiude so…",
+  "26/11 23:15 . La 15m delle 23:00 chiude a 60432, sul minimo della candela. Il minimo è 60400, dentro il supporto 60370-60460, con volume 1,35x: è un ritest con chiusura in basso, non un rifiuto. Sul 5m tre minimi in calo (60438, 60413, 60400), RSI 32, MACD negativo e prezzo sotto EMA9 60517. Il MACD 15m si allarga in negativo (-30) e il 30m è sotto la EMA21. Un lungo qui sarebbe contro il momentum, senza conferma. Un corto sul supporto non ha spazio. Il piano resta questo. Lungo solo su una 5m o 15m che chiude in alto dopo aver toccato 60370-60400, con stop sotto 60300 e obiettivo 60650-60700. Corto solo se una 15m chiude sotto 60350 con volume, sul ritest. Funding fra 45 minuti. Aspetto.",
+  "26/11 23:30 . La 15m delle 23:15 ha fatto uno sweep a 60373, quasi identico al minimo delle 18:45 (60372): è un doppio minimo sull'estremo del range, che coincide con la Bollinger bassa 15m (60381). La 5m delle 23:20 ha toccato 60373 e ha chiuso in alto a 60464. È la condizione che avevo fissato: rifiuto chiuso in 60370-60400. Il momentum però resta negativo, con il MACD 15m a -36 e il 30m sotto la EMA21, e la 5m delle 23:25 ha avuto solo il 33% di acquisti. Per questo non compro a mercato a 60455, che darebbe un rapporto netto scarso. Metto un limite a 60425 sul piccolo ritest, con quantità 0,030 BTC e leva 3. Lo stop va a 60290, sotto lo sweep, con un rischio di circa 5,5 USDT. L'obiettivo è 60690, i…",
+  "26/11 23:45 . Il lungo a 60425 è aperto da 11 minuti, con il mark a 60466, poco sotto il pareggio di 60473. La 15m delle 23:30 chiude a 60468. Ha fatto un nuovo sweep a 60358, sotto il doppio minimo 60372/60373, ed è risalita, chiudendo sopra l'apertura e lasciando una coda lunga. Sul 5m la 23:40 recupera da 60399 a 60468 con il 73% di acquisti, RSI 42 e istogramma MACD in forte risalita (-4). Il 15m resta negativo, ma l'istogramma smette di allargarsi (-35,0). Lo stop a 60290 resta sotto lo sweep 60358 e non lo stringo: le perdite di prima sono venute da stop spostati presto. Obiettivo 60690, sotto il VWAP 60679-60700. Il funding fra 15 minuti costa circa 0,18 e lo accetto. Tengo.",
+  "27/11 00:00 . Il lungo a 60425 è a +1,55 netti, con il mark a 60531, sopra il pareggio di 60479. La 15m delle 23:45 chiude a 60544 con volume 1,06x e minimo 60412: è il terzo minimo crescente dopo gli sweep a 60373 e 60358. L'istogramma MACD 15m si restringe (da -35 a -28). Sul 5m il prezzo è sopra EMA9 ed EMA21 (60490/60523), con MACD positivo e in salita e RSI a 50. Il 30m resta neutro, sulla Bollinger media 60597. L'obiettivo 60690 resta sotto la resistenza 60740-60800. Non sposto lo stop a 60290: è sotto lo sweep, e le perdite passate sono venute da stop stretti troppo presto. Lo porterò al pareggio solo se una 15m chiude sopra 60620. Tengo."
  ],
  "estraneo": null,
- "giorno": "2026-11-26",
- "conto_mezzanotte": 946.3912130340102,
+ "giorno": "2026-11-27",
+ "conto_mezzanotte": 936.7430732895481,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-26T23:00:14.088035+00:00",
+ "ultima": "2026-11-27T00:00:08.442251+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 12,
- "approccio": "Range intraday a basso volume: opero solo agli estremi del range, lungo sul supporto testato con rifiuto confermato o corto sul rifiuto della resistenza, stop oltre lo sweep, niente ingressi a metà range.",
- "aperta": null,
+ "approccio": "Range intraday a basso volume: opero solo agli estremi, lungo sul supporto testato con un rifiuto chiuso, corto sul rifiuto della resistenza o sulla rottura confermata, stop oltre lo sweep.",
+ "aperta": {
+  "aperta": "2026-11-26T23:30:19.146901+00:00",
+  "tipo": "limite",
+  "lato": "lungo",
+  "leva": 3,
+  "entrata": 60425.0,
+  "quantita": 0.03,
+  "cid": "taio1795735819146",
+  "stop": 60290.0,
+  "obiettivo": 60690.0,
+  "spostamenti": [],
+  "approccio": "Range intraday a basso volume: opero solo agli estremi, lungo sul supporto testato con un rifiuto chiuso, corto sul rifiuto della resistenza o sulla rottura confermata, stop oltre lo sweep.",
+  "motivo": "23:30. La 15m delle 23:15 ha fatto uno sweep a 60373, quasi identico al minimo delle 18:45 (60372): è un doppio minimo sull'estremo del range, che coincide con la Bollinger bassa 15m (60381). La 5m delle 23:20 ha toccato 60373 e ha chiuso in alto a 60464. È la condizione che avevo fissato: rifiuto…",
+  "atr15": 156.0593,
+  "conto_prima": 934.1096080740103,
+  "margine": 605.0,
+  "giorno_prima": -12.28,
+  "mancava": 40.67,
+  "ore_a_mezzanotte": 0.5,
+  "rischio_pct": 0.59,
+  "in_attesa": false,
+  "inviato": "2026-11-26T23:30:42.172355+00:00",
+  "eseguita": "2026-11-26T23:34:00+00:00",
+  "stop_iniziale": 60290.0,
+  "obiettivo_iniziale": 60690.0,
+  "spese_entrata": 0.36255000000000004,
+  "R": 5.4977,
+  "escursione": [
+   139.0,
+   67.19999999999709
+  ],
+  "funding": -0.1790597843622
+ },
  "inizio": {
   "giorno": "2026-11-25",
   "conto": 1000.0
@@ -716,19 +748,22 @@
  ],
  "versione_memoria": 7,
  "prossimo_n": 16,
- "discesa_dalle": "2026-11-26T20:17:45.938110+00:00",
- "massimo_giorno": 940.1430470340105,
- "discesa_max_giorno": 6.033438960000126,
- "ultimo_costo_massimo": 0.4822,
+ "discesa_dalle": "2026-11-27T00:00:08.442251+00:00",
+ "massimo_giorno": 940.5182713332482,
+ "discesa_max_giorno": 2.48027304360005,
+ "ultimo_costo_massimo": 0.4849,
  "stat_giorno": {
-  "chiamate": 14,
-  "costo": 0.818098,
+  "chiamate": 1,
+  "costo": 0.086074,
   "esiti": {
-   "ok": 14
+   "ok": 1
   },
-  "durata_tot": 148.4,
-  "durata_max": 21.0,
-  "uscita_tot": 11866,
-  "cambi": 1
- }
+  "durata_tot": 7.8,
+  "durata_max": 7.8,
+  "uscita_tot": 535
+ },
+ "costo_medio_ieri": 0.058118823529411764,
+ "prezzo_inizio_giorno": 60531.17496377,
+ "obiettivo_ora": null,
+ "tetto_dalle": null
 }
