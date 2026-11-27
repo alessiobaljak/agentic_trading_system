@@ -511,6 +511,16 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
   (18 giorni) demo −0,80%, paper +0,87%** (−0,095 punti al giorno). Monete oggi: paper 58, demo 52; esposizione lorda 200,0% contro 189,9%;
   posizioni vere contro volute: scarto 16,0% del conto, oltre il 2% solo LITUSDT (−3,2%). Voce 14, quinta lettura: due «sì» (HYPE −6,46%,
   VVV −3,57%).
+* **27 novembre 2026, 04:28 UTC, voce 8 (ventesimo ribilancio a 1.000 USDT)** (`ops/results/0777`, `0778`): 10 ordini, tutti a limite;
+  43 variazioni sotto il minimo (7,2% del conto), gli stessi 4 rifiuti (EVAA, LIT, PIEVERSE, UAI) e IRYSUSDT assente. Nessun errore nuovo
+  (nel log solo i rifiuti di Binance sull'interesse aperto di MITO e PTB, del vecchio sistema). Il 26 novembre demo +2,87%, paper +3,01%
+  (il demo 0,14 sotto). Equity del demo 1.000,05 (+0,01% dall'8 novembre), G1 nel paper 10.700,73, F5 nel paper 10.777,72 (fra le letture
+  delle 04:19 del 26 e del 27: G1 +1,38%, F5 +0,74%). **Dal 9 novembre (19 giorni) demo +0,49%, paper +2,25%** (−0,094 punti al giorno).
+  Monete oggi: paper 58, demo 52; esposizione lorda 200,0% contro 193,0%; posizioni vere contro volute: scarto 14,7% del conto, oltre il
+  2% solo LITUSDT (−3,4%). Voce 14, sesta lettura: due «sì» (HYPE −6,36%, NEAR −4,90%). Dall'audit del 26 novembre: la differenza fra
+  demo e paper sta nelle monete che hanno tutti e due (circa −0,15 punti al giorno), non in quelle che mancano al demo; il bot non chiude
+  le posizioni rimaste sotto il minimo (revisione di F5 del 27 novembre, `audits/reports/2026-11-27-F5_CONTO_VERO.md`): sul demo quanto
+  pesa è da misurare (backlog P36).
 
 ### Misura F5, pesi (25 novembre 2026, P36/180)
 Peso massimo per moneta al lunedì 43,7% (BLZ, 5 feb 2024), in settimana 44,9%: mai sopra il 60%. Somma dei pesi in settimana: massimo 397% (8 feb 2021), sopra 300% una volta,

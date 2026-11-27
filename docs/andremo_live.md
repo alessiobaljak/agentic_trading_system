@@ -1103,3 +1103,19 @@ Note per le misure: il giro delle 08:17 del 12 novembre manca (5,6 ore senza rac
 aiutato di circa +1 punto): sta nelle monete che hanno tutti e due, circa −0,15 punti al giorno, e per più di metà non ha ancora una
 spiegazione (fonte: audit, area ordini, sulle risposte 0720-0776). E l'esame delle prove nuove chiede oggi più di quanto chiedono le
 regole, per due difetti di conto che vanno in direzioni opposte.
+**27 novembre, 04:30 UTC, giro delle 04:17**: raccolta alle 04:18 da una copia pulita del repository (i file della raccolta sono in
+correzione), 24 fonti su 25, 21 articoli nuovi; mappa delle liquidazioni 598 conti su 600. Nessuna chiusura nuova, nessuna moneta nuova
+su Coinbase. Fatti gravi (preparati alle 04:21, dopo la raccolta): due casi, Monero giù (KuCoin la toglie dal 30 novembre) e Fluid giù
+(la sua borsa decentralizzata ferma dopo un controllo di sicurezza). Voce 14, sesta lettura: due «sì», HYPE (il fondo di Franklin dal 1°
+dicembre) e NEAR (taglio dell'emissione). Voce 8, ventesimo ribilancio a 1.000 USDT: 10 ordini tutti a limite, 43 variazioni sotto il
+minimo, i soliti 4 rifiuti; dal 9 novembre demo +0,49%, paper +2,25%. **L'audit ha chiuso il secondo giro**: il controllo di completezza
+ha trovato l'unica area che nessuno aveva guardato, i test automatici di GitHub, e lì 9 problemi reali (in tutto 61). Il più grave:
+dal 19 ottobre ogni corsa dei test su GitHub si fermava prima di cominciare (mancava numba nei requisiti), 1.533 corse fallite su 1.537,
+e nessuno se n'era accorto. Corretto: `requirements-ricerca.txt` con le versioni fisse, due lavori in parallelo, un limite di tempo
+largo, il documento di ottobre segnato come storico; qui i test della ricerca passano tutti (3.142, 9 saltati con il motivo). Il giro
+delle 4 ore ora guarda l'esito dei test e lancia a mano il monitor e lo stato. **La revisione di F5 per il conto vero è FAIL a 280-300
+USDT** (con i minimi veri il conto rifiuterebbe il 61% delle variazioni: Sharpe 1,40-1,57, 2026 fra −5% e +1%, e il bot non chiude le
+posizioni rimaste sotto il minimo), PASS tecnico a 1.000 USDT; il conto vero è spento, la scelta della taglia è del proprietario.
+**Capito oggi**: un controllo che nessuno guarda è come non averlo: i test di GitHub erano l'unico controllo automatico su ogni commit
+e sono stati fermi per 39 giorni. E una strategia scelta per un conto piccolo va provata con i minimi di quel conto: F5 tiene l'81-84%
+del suo Sharpe a 280 USDT, G1 nella prova 148 il 96%, il contrario di quello che si pensava il 25 novembre.
