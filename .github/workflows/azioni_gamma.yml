@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       comando:
-        description: "auto | controlla | ordini | plancia"
+        description: "auto | controlla | ordini | plancia | chiudi"
         required: true
         default: auto
 
@@ -43,7 +43,7 @@ jobs:
           # il comando dato a mano entra come variabile, non dentro lo script, e vale solo uno di quelli dell'elenco; anche
           # «auto» dato a mano rispetta l'interruttore stock/avanti/gamma_accesa (audit del 27 novembre 2026)
           case "${COMANDO:-auto}" in
-            auto|controlla|ordini|plancia) ;;
+            auto|controlla|ordini|plancia|chiudi) ;;
             *) echo "comando non ammesso: $COMANDO"; exit 1 ;;
           esac
           if [ "$EVENTO" = "workflow_dispatch" ] && [ "$COMANDO" != "auto" ]; then

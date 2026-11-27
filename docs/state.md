@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-27 11:30 UTC_
+_Generato: 2026-11-27 11:40 UTC_
 - macchina: non letta qui (lo stato lo fa GitHub): disco, memoria e orologio sono nella risposta «stato» della macchina
 
 ## Il bot (un solo processo: paper, demo e conto vero)
 - stato: **running** (🟢 online)
-- ultimo heartbeat: 2026-11-27 11:30 UTC
+- ultimo heartbeat: 2026-11-27 11:39 UTC
 - DRY_RUN: True
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
-- stato: **acceso** (2026-11-27 10:39 UTC)
+- stato: **acceso** (2026-11-27 11:39 UTC)
 - prova a secco (2026-10-25 08:29 UTC, pesi del 2026-10-19): universo 100, 20 long, 20 short; pesi maggiori CRVUSDT -6.3%, ETHFIUSDT -6.2%, LITUSDT -6.0%, MORPHOUSDT -7.9%, POLUSDT +6.3%, TRXUSDT +38.1%, WLFIUSDT -14.2%, XMRUSDT -11.7%, ZECUSDT -5.8%, ZENUSDT -6.6%
-- equity: **$10,961.18** su $10,000 (+9.61%) · costi $12.65 · funding pagato $-547.06
+- equity: **$10,991.03** su $10,000 (+9.91%) · costi $12.65 · funding pagato $-547.06
 - posizioni: 31 long, 28 short · ultimo ribilancio 2026-11-23
 - ordini limite: 309 eseguiti su 309 · tutto a mercato sarebbe costato $44.04 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -14.2%, XMRUSDT -7.3%, HYPEUSDT -7.0%, TRXUSDT +7.0%, RENDERUSDT -6.3%, FARTCOINUSDT -5.9%, XPLUSDT -5.6%, XLMUSDT +5.6%, ASTERUSDT -5.5%, BCHUSDT +5.2%
@@ -105,7 +105,7 @@ Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: 
 - non letto: manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env; c'è solo sulla macchina)
 
 ## G1 oggi, moneta per moneta: paper e demo (sola lettura)
-Letto il 2026-11-27 11:30 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,008.92 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
+Letto il 2026-11-27 11:40 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,008.92 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
 - demo: non letto: manca la chiave del conto demo (c'è solo sulla macchina)
 - WLFIUSDT -10.39/— · TRXUSDT +7.34/— · HYPEUSDT -6.36/— · AEROUSDT -6.29/— · 1000SHIBUSDT +6.23/— · XMRUSDT -6.10/—
 - RENDERUSDT -5.77/— · XLMUSDT +5.65/— · BCHUSDT +5.53/— · FARTCOINUSDT -5.35/— · ADAUSDT +5.03/— · ASTERUSDT -4.97/—
@@ -144,13 +144,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 6 | 0.5% |
-| regime | 22 | 1.7% |
-| holdout | 1 | 0.1% |
-| total_return | 1207 | 91.4% |
 | pf_ex_top | 3 | 0.2% |
-| consistency | 17 | 1.3% |
 | recovery | 64 | 4.8% |
+| regime | 22 | 1.7% |
+| total_return | 1207 | 91.4% |
+| holdout | 1 | 0.1% |
+| consistency | 17 | 1.3% |
+| trades | 6 | 0.5% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -158,13 +158,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 2815 | 8.3% |
+| pf_ex_top | 242 | 0.7% |
 | recovery | 2737 | 8.1% |
 | trades | 936 | 2.8% |
-| holdout | 153 | 0.5% |
-| pf_ex_top | 242 | 0.7% |
-| consistency | 589 | 1.7% |
 | total_return | 26463 | 78.0% |
+| holdout | 153 | 0.5% |
+| consistency | 589 | 1.7% |
+| regime | 2815 | 8.3% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 

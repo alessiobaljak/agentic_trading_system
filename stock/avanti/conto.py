@@ -77,7 +77,7 @@ def tasse_vendite(diario: pd.DataFrame) -> float:
 
 def valore_gamma(posizioni: list[dict], diario_gamma: pd.DataFrame | None, oggi: str | None = None,
                  esecuzioni_oggi: list[dict] | None = None, escludi: set[str] | None = None,
-                 entrata_oggi: bool | None = None) -> float:
+                 entrata_oggi: bool | None = None, ordini_oggi: list[dict] | None = None) -> float:
     """Il valore della prova 45 (funzione pura): 100'000 più i guadagni del suo diario, meno le tasse sulle vendite stimate; per oggi,
     se il diario non ha ancora la riga del giorno e oggi c'è stato il suo ingresso, i soldi usciti ed entrati con le sue esecuzioni di
     oggi più il valore di mercato delle sue posizioni; altrimenti il non realizzato. `entrata_oggi` e `escludi` (le chiusure di
@@ -85,9 +85,14 @@ def valore_gamma(posizioni: list[dict], diario_gamma: pd.DataFrame | None, oggi:
     d = diario_gamma if diario_gamma is not None else pd.DataFrame(columns=["giorno", "guadagno"])
     realizzato = float(pd.to_numeric(d["guadagno"], errors="coerce").dropna().sum()) if len(d) else 0.0
     realizzato -= tasse_vendite(d)
+    realizzato += rim_fuori_dal_diario(d, ordini_oggi or [], "gamma-rim-")
     pos = di_gamma(posizioni)
-    if oggi is not None and esecuzioni_oggi is not None and oggi not in set(d["giorno"].astype(str)) and entrata_oggi is not False:
-        mie = [e for e in esecuzioni_oggi if e.get("order_id") not in (escludi or set())]
+    # oggi è «scritto» solo con una riga con la quantità: la riga «chiusa la posizione rimasta» non conta (revisione del 27 novembre)
+    scritti = (set(d.loc[pd.to_numeric(d["quantita"], errors="coerce").notna(), "giorno"].astype(str)) if "quantita" in d.columns
+               else set(d["giorno"].astype(str)))
+    if oggi is not None and esecuzioni_oggi is not None and oggi not in scritti and entrata_oggi is not False:
+        di_oggi_ordine = _di_oggi(ordini_oggi)
+        mie = [e for e in esecuzioni_oggi if e.get("order_id") not in (escludi or set()) and di_oggi_ordine(e)]
         di_oggi = _flusso(mie, della_gamma) + sum(float(p.get("market_value") or 0.0) for p in pos)
     else:
         di_oggi = sum(float(p.get("unrealized_pl") or 0.0) for p in pos)
@@ -101,7 +106,7 @@ def leggi_stato() -> dict | None:
 def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: dict | None, oggi: str | None = None,
            esecuzioni_oggi: list[dict] | None = None, diario_gamma: pd.DataFrame | None = None,
            escludi: set[str] | None = None, entrate_oggi: set[str] | None = None,
-           entrata_gamma_oggi: bool | None = None) -> tuple[float, float | None]:
+           entrata_gamma_oggi: bool | None = None, ordini_oggi: list[dict] | None = None) -> tuple[float, float | None]:
     """(valore della prima candela, valore della miscela o None se la miscela non è partita). Funzione pura.
 
     Il guadagno della prima candela dopo la partenza: il suo diario; per oggi, se il diario non è ancora scritto, i soldi usciti ed
@@ -112,7 +117,8 @@ def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: di
     «candela15-{oggi}-»; solo le loro esecuzioni e il loro valore di mercato fanno il guadagno di oggi, e gli altri titoli (una posizione
     rimasta da un altro giorno, o chiusa) contano con il non realizzato. `escludi`: le chiusure delle posizioni rimaste («candela-rim-»,
     «gamma-rim-»), che vanno nella riga del giorno dell'ingresso. Con `entrate_oggi` None vale il conto di prima. Le tasse sulle
-    vendite stimate si tolgono alla strategia che vende."""
+    vendite stimate si tolgono alla strategia che vende. `ordini_oggi` (gli ordini di Alpaca di oggi): il guadagno delle chiusure
+    «rim» di oggi di righe che nel diario di questo lavoro sono ancora «aperte» (il lavoro che le ha chiuse non ha ancora salvato)."""
     if stato is None:
         return float(equity), None
     candela_pos, _ = separa(posizioni)
@@ -120,17 +126,20 @@ def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: di
     dopo = diario[giorni > stato["dal"]] if len(diario) else diario
     realizzato = float(pd.to_numeric(dopo["guadagno"], errors="coerce").dropna().sum()) if len(dopo) else 0.0
     realizzato -= tasse_vendite(dopo)
+    realizzato += rim_fuori_dal_diario(dopo, ordini_oggi or [], "candela-rim-")
     if oggi is not None and esecuzioni_oggi is not None and oggi > stato["dal"] and oggi not in set(giorni):
         di_oggi_titolo = (lambda s: True) if entrate_oggi is None else (lambda s: s in entrate_oggi)  # noqa: E731
-        mie = [e for e in esecuzioni_oggi if e.get("order_id") not in (escludi or set()) and di_oggi_titolo(e["symbol"])]
+        di_oggi_ordine = _di_oggi(ordini_oggi)
+        mie = [e for e in esecuzioni_oggi if e.get("order_id") not in (escludi or set()) and di_oggi_titolo(e["symbol"])
+               and di_oggi_ordine(e)]
         di_oggi = (_flusso(mie, della_candela)
                    + sum(float(p.get("market_value") or 0.0) for p in candela_pos if di_oggi_titolo(p["symbol"]))
                    + sum(float(p.get("unrealized_pl") or 0.0) for p in candela_pos if not di_oggi_titolo(p["symbol"])))
     else:
         di_oggi = sum(float(p.get("unrealized_pl") or 0.0) for p in candela_pos)
     candela = stato["candela_alla_partenza"] + realizzato + di_oggi
-    gamma = (valore_gamma(posizioni, diario_gamma, oggi, esecuzioni_oggi, escludi, entrata_gamma_oggi) if diario_gamma is not None
-             else CAPITALE_GAMMA)
+    gamma = (valore_gamma(posizioni, diario_gamma, oggi, esecuzioni_oggi, escludi, entrata_gamma_oggi, ordini_oggi)
+             if diario_gamma is not None else CAPITALE_GAMMA)
     miscela = (CAPITALE_MISCELA + (float(equity) - stato["conto_alla_partenza"]) - (candela - stato["candela_alla_partenza"])
                - (gamma - CAPITALE_GAMMA))
     return float(candela), float(miscela)
@@ -139,25 +148,74 @@ def valori(equity: float, posizioni: list[dict], diario: pd.DataFrame, stato: di
 def adesso() -> dict:
     """I valori di adesso letti dal conto: {conto, candela, miscela, gamma, posizioni_candela, posizioni_miscela, posizioni_gamma}."""
     from stock.avanti import avanti as av
-    conto = av._richiesta("GET", "/v2/account")
-    posizioni = av._richiesta("GET", "/v2/positions")
     f = QUI / "diario.csv"
     diario = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=av.COLONNE)
-    equity = float(conto["equity"])
     stato = leggi_stato()
     oggi = av.ny_adesso().date().isoformat()
-    esecuzioni = av.esecuzioni_del_giorno(oggi) if stato is not None else None
     dg = pd.read_csv(DIARIO_GAMMA) if DIARIO_GAMMA.exists() else pd.DataFrame(columns=["giorno", "guadagno"])
-    if esecuzioni is None:
+    # una fotografia: le posizioni si rileggono dopo le esecuzioni, e se sono cambiate (uno stop eseguito fra le due letture) si rilegge
+    # tutto; senza, la stessa vendita contava due volte (revisione separata del 27 novembre 2026)
+    for _ in range(3):
+        conto = av._richiesta("GET", "/v2/account")
+        posizioni = av._richiesta("GET", "/v2/positions")
         esecuzioni = av.esecuzioni_del_giorno(oggi)
-    c = classifica(av._ordini_dal(oggi), oggi)
+        ordini_oggi = av._ordini_dal(oggi)
+        dopo = av._richiesta("GET", "/v2/positions")
+        if _quantita(dopo) == _quantita(posizioni):
+            break
+    equity = float(conto["equity"])
+    c = classifica(ordini_oggi, oggi)
     candela, miscela = valori(equity, posizioni, diario, stato, oggi, esecuzioni, diario_gamma=dg, escludi=c["rimaste"],
-                              entrate_oggi=c["entrate_candela"], entrata_gamma_oggi=c["entrata_gamma"])
-    gamma = valore_gamma(posizioni, dg, oggi, esecuzioni, c["rimaste"], c["entrata_gamma"])
+                              entrate_oggi=c["entrate_candela"], entrata_gamma_oggi=c["entrata_gamma"], ordini_oggi=ordini_oggi)
+    gamma = valore_gamma(posizioni, dg, oggi, esecuzioni, c["rimaste"], c["entrata_gamma"], ordini_oggi)
     pc, pm = separa(posizioni)
     return {"conto": equity, "candela": candela, "miscela": miscela, "gamma": gamma, "posizioni_candela": pc,
             "posizioni_miscela": pm, "posizioni_gamma": di_gamma(posizioni), "entrate_candela": c["entrate_candela"],
             "moltiplicatore": conto.get("multiplier"), "potere_d_acquisto": conto.get("buying_power")}
+
+
+def _ids(ordini: list[dict]) -> set[str]:
+    """Gli id degli ordini e delle loro gambe (gli ordini di Alpaca letti con «nested»)."""
+    out: set[str] = set()
+    for o in ordini:
+        out.add(o.get("id"))
+        out |= _ids(o.get("legs") or [])
+    return out
+
+
+def _di_oggi(ordini_oggi: list[dict] | None):
+    """Chi decide se un'esecuzione è del flusso di oggi: solo se il suo ordine (o la sua gamba) è stato mandato oggi. Se Alpaca data le
+    esecuzioni in UTC, una vendita fuori orario delle 19:30 di ieri cade fra le esecuzioni di oggi (revisione separata del 27
+    novembre 2026). Senza gli ordini di oggi (None) vale il conto di prima."""
+    if ordini_oggi is None:
+        return lambda e: True
+    ids = _ids(ordini_oggi)
+    return lambda e: e.get("order_id") in ids
+
+
+def _quantita(posizioni: list[dict]) -> dict[str, str]:
+    return {p["symbol"]: str(p["qty"]) for p in posizioni}
+
+
+def rim_fuori_dal_diario(diario: pd.DataFrame, ordini: list[dict], prefisso: str) -> float:
+    """Il guadagno delle chiusure «rim» di oggi (funzione pura) delle operazioni che nel diario di QUESTO lavoro sono ancora «aperte»:
+    il lavoro che le ha chiuse non ha ancora salvato il diario, e senza questo il guadagno finiva per qualche ora nella miscela
+    (revisione separata del 27 novembre 2026). Prezzo medio eseguito della chiusura meno il prezzo d'ingresso del diario, per la
+    quantità eseguita. Le righe «parziali» non si toccano (caso raro)."""
+    if not len(diario) or not ordini or not {"uscita", "ingresso", "lato", "simbolo", "giorno"} <= set(diario.columns):
+        return 0.0
+    aperte = diario[diario["uscita"].astype(str) == "aperta"]
+    out = 0.0
+    for g, s, lato, ingresso in zip(aperte["giorno"].astype(str), aperte["simbolo"].astype(str), aperte["lato"], aperte["ingresso"]):
+        if pd.isna(pd.to_numeric(ingresso, errors="coerce")):
+            continue
+        testa = f"{prefisso}{g}-{s}-" if prefisso == "candela-rim-" else f"{prefisso}{g}-"
+        segno = 1 if lato == "buy" else -1
+        for o in ordini:
+            q = float(o.get("filled_qty") or 0)
+            if str(o.get("client_order_id", "")).startswith(testa) and q > 0 and o.get("filled_avg_price"):
+                out += segno * (float(o["filled_avg_price"]) - float(ingresso)) * q
+    return out
 
 
 def classifica(ordini: list[dict], oggi: str) -> dict:
@@ -229,6 +287,22 @@ def registra(giorno: str, chiusura: pd.Timestamp | None = None) -> str:
     from stock.avanti import avanti as av
     if any(della_gamma(o["symbol"]) for o in av._richiesta("GET", "/v2/orders", params={"status": "open", "limit": 500})):
         return f"valori del {giorno} non scritti: la prova 45 ha ancora ordini aperti"
+    # con una riga «aperta» o «parziale» del giorno (o di quello prima) nei diari di questo lavoro la riga sarebbe sbagliata per sempre:
+    # si aspetta che il lavoro che l'ha chiusa salvi (revisione separata del 27 novembre 2026); una riga ferma da più giorni non blocca
+    prima = (pd.Timestamp(giorno) - pd.offsets.BDay(1)).date().isoformat()
+    for f, chi in ((QUI / "diario.csv", "della prima candela"), (DIARIO_GAMMA, "della prova 45")):
+        d = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=["giorno", "uscita"])
+        if len(d) and "uscita" in d.columns:
+            g = d["giorno"].astype(str)
+            if ((g >= prima) & (g <= giorno) & d["uscita"].astype(str).isin({"aperta", "parziale"})).any():
+                return f"valori del {giorno} non scritti: il diario {chi} ha righe aperte"
+    # e con un giorno che ha gli ordini ma non ha ancora le sue righe nel diario (il diario della sera non è riuscito: lo riscrive il
+    # giro, dopo; revisione separata del 27 novembre 2026)
+    from stock.avanti import gamma as ga
+    dopo = (pd.Timestamp(giorno) + pd.Timedelta(days=1)).date().isoformat()
+    mancanti = {g for g in av.giorni_senza_righe(dopo) if prima <= g <= giorno} | {g for g in (prima, giorno) if ga.riga_mancante(g)}
+    if mancanti:
+        return f"valori del {giorno} non scritti: il diario non ha ancora le righe del {', '.join(sorted(mancanti))}"
     v = adesso()
     if v["posizioni_candela"]:
         return f"valori del {giorno} non scritti: la prima candela ha ancora posizioni"
