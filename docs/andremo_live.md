@@ -1083,3 +1083,67 @@ scout delle 08:17 non ha trovato idee con un perché forte). **Capito oggi**: ni
 **26 novembre, 16:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (127 articoli nuovi; una pagina di CryptoBriefing piena: qualche
 articolo di quella fonte può mancare), mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun
 passo nuovo. Ricerca: nessuna prova in coda. **Capito oggi**: niente di nuovo in questo giro.
+**26 novembre, 20:30 UTC, giro delle 4 ore**: raccolta 24 fonti su 25 (97 articoli nuovi; di nuovo una pagina di CryptoBriefing piena),
+mappa delle liquidazioni; nessuna chiusura nuova, nessuna moneta nuova su Coinbase. G1: nessun passo nuovo. Ricerca: al posto dello scout,
+su richiesta del proprietario («fai un audit per capire se c'è qualcosa che ci stiamo perdendo nel trovare strategie [...] altri bug da
+correggere») parte un audit del sistema in sei aree, ognuna con un verificatore. **Capito oggi**: niente di nuovo in questo giro (l'esito
+dell'audit va nel suo rapporto).
+**27 novembre, 02:40 UTC, giro delle 00:17 (partito alle 02:12 per il limite d'uso)**: raccolta 24 fonti su 25 (69 articoli nuovi;
+CryptoBriefing «piena» è un falso allarme, vedi sotto), mappa delle liquidazioni (600 conti, 2.425 posizioni); nessuna chiusura nuova,
+nessuna moneta nuova su Coinbase. **Audit del sistema finito**: 52 problemi, tutti confermati dal verificatore (4 Alti, 26 Medi, 22
+Bassi; rapporto `audits/reports/2026-11-26-AUDIT_SISTEMA.md`, backlog P37). Corretti subito: (1) dal 23 al 26 novembre i fogli del
+mattino (fatti gravi e voce 14) sono stati preparati prima della raccolta dello stesso giro, e le notizie delle 00:18-04:18 UTC non sono
+entrate in nessun foglio (dal 4,5 al 20% degli articoli di ogni mattina, i più freschi): ora i due fogli si fermano se la raccolta ha più
+di 15 minuti; (2) VVV era stata tolta dai fatti gravi del 26 per un motivo falso (è nell'elenco del mese): terza correzione sotto il
+foglio, la misura si riporta con e senza VVV; (3) lo scout seguiva ancora «al massimo due idee»: ora segue la decisione del 22 novembre.
+Le altre correzioni sono al lavoro (un agente per gruppo di file; quelle del percorso degli ordini passano da live-path-reviewer).
+Note per le misure: il giro delle 08:17 del 12 novembre manca (5,6 ore senza raccolta fra le 06:13 e le 11:47) e non era scritto; la
+«pagina piena» di CryptoBriefing del 26 novembre era un falso allarme (la seconda pagina aveva 16 e 6 articoli nuovi su 30).
+**Capito oggi**: la differenza fra demo e paper dal 9 novembre (−1,67 punti) non viene dalle monete che mancano al demo (lo hanno
+aiutato di circa +1 punto): sta nelle monete che hanno tutti e due, circa −0,15 punti al giorno, e per più di metà non ha ancora una
+spiegazione (fonte: audit, area ordini, sulle risposte 0720-0776). E l'esame delle prove nuove chiede oggi più di quanto chiedono le
+regole, per due difetti di conto che vanno in direzioni opposte.
+**27 novembre, 04:30 UTC, giro delle 04:17**: raccolta alle 04:18 da una copia pulita del repository (i file della raccolta sono in
+correzione), 24 fonti su 25, 21 articoli nuovi; mappa delle liquidazioni 598 conti su 600. Nessuna chiusura nuova, nessuna moneta nuova
+su Coinbase. Fatti gravi (preparati alle 04:21, dopo la raccolta): due casi, Monero giù (KuCoin la toglie dal 30 novembre) e Fluid giù
+(la sua borsa decentralizzata ferma dopo un controllo di sicurezza). Voce 14, sesta lettura: due «sì», HYPE (il fondo di Franklin dal 1°
+dicembre) e NEAR (taglio dell'emissione). Voce 8, ventesimo ribilancio a 1.000 USDT: 10 ordini tutti a limite, 43 variazioni sotto il
+minimo, i soliti 4 rifiuti; dal 9 novembre demo +0,49%, paper +2,25%. **L'audit ha chiuso il secondo giro**: il controllo di completezza
+ha trovato l'unica area che nessuno aveva guardato, i test automatici di GitHub, e lì 9 problemi reali (in tutto 61). Il più grave:
+dal 19 ottobre ogni corsa dei test su GitHub si fermava prima di cominciare (mancava numba nei requisiti), 1.533 corse fallite su 1.537,
+e nessuno se n'era accorto. Corretto: `requirements-ricerca.txt` con le versioni fisse, due lavori in parallelo, un limite di tempo
+largo, il documento di ottobre segnato come storico; qui i test della ricerca passano tutti (3.142, 9 saltati con il motivo). Il giro
+delle 4 ore ora guarda l'esito dei test e lancia a mano il monitor e lo stato. **La revisione di F5 per il conto vero è FAIL a 280-300
+USDT** (con i minimi veri il conto rifiuterebbe il 61% delle variazioni: Sharpe 1,40-1,57, 2026 fra −5% e +1%, e il bot non chiude le
+posizioni rimaste sotto il minimo), PASS tecnico a 1.000 USDT; il conto vero è spento, la scelta della taglia è del proprietario.
+**Capito oggi**: un controllo che nessuno guarda è come non averlo: i test di GitHub erano l'unico controllo automatico su ogni commit
+e sono stati fermi per 39 giorni. E una strategia scelta per un conto piccolo va provata con i minimi di quel conto: F5 tiene l'81-84%
+del suo Sharpe a 280 USDT, G1 nella prova 148 il 96% (simulatori diversi, rumore di circa 0,1: fonte il rapporto di F5), il contrario di
+quello che si pensava il 25 novembre.
+**27 novembre, 05:00 UTC, correzioni dell'audit, prima parte (scarico e notizie)**: lo scarico del paper delle candidate non si ferma
+più a un errore di una moneta (il 20 e il 26 novembre una lettura interrotta lo aveva fermato a metà, nascosto da «|| true», e il paper
+era rimasto ai dati del 23); PAPER.md scrive in fondo «Scarico incompleto» quando mancano monete. La raccolta delle notizie: «piena» si
+calcola per sito (il falso allarme di CryptoBriefing del 26), un articolo già visto non si salva di nuovo dopo 10 giorni (17 righe doppie
+su 12.866), le ore si leggono sempre in UTC, e cinque sigle contano solo con il «$». La prova in avanti delle notizie è pronta per il 30
+novembre (`research/notizie/prova_avanti.py`). **Capito**: il conto automatico sbagliava moneta su cinque sigle (ARK Invest, la società
+HIVE, la legge GENIUS, le azioni SATS di Strive, «APR» il tasso annuo: 50 articoli di novembre in tutto, numeri dell'audit); la prova
+in avanti dirà ogni settimana quanto pesavano.
+**27 novembre, 05:20 UTC, ricerca nuova e registro**: tre cercatori di idee insieme, con lenti diverse (i dati di Binance gratuiti e mai
+usati; chi guadagna e come si vede; come lo farebbe un'intelligenza artificiale), poi per ogni idea un controllo che prova a smentirla:
+**8 idee con le regole scritte, 8 bocciate prima di ogni calcolo** (idee 160-167: varianti di prove già fallite o fattori pubblicati;
+copiare sul passato i conti di Hyperliquid non si può perché l'interfaccia gratuita dà solo le ultime 10.000 operazioni di ogni conto,
+quindi si sceglierebbe con il futuro). Il registro: il riepilogo diceva «48 idee aperte» ma contava anche le regole in testa al file e
+le voci chiuse a parole; ora legge solo la coda e lo stato di ogni voce (163 voci: nessuna aperta, 9 in avanti, 12 in attesa del
+proprietario, dei dati o di una data), e `--cerca` legge anche le idee. Misure: la regola dell'idea 45 (F5 a metà quando il funding
+medio dei 7 giorni è sotto −11% l'anno) si conta ogni settimana dal 30 novembre (`paper/funding_medio.py`, primo numero verso l'8-9
+dicembre); la misura delle monete gratis della prova 113 è chiusa senza numeri. **Capito oggi**: dal 22 ottobre Binance non apre
+perpetui su monete (dei 38 contratti nuovi dal 1° ottobre, 36 sono azioni): le strategie sulle quotazioni nuove di Binance sono senza
+materia prima; e le idee nuove con un perché forte si sono esaurite sui dati che abbiamo: tre lenti diverse, nessuna idea sopravvissuta.
+**27 novembre, 05:30 UTC, correzioni dell'audit sulla raccolta di Hyperliquid**: metà dei 600 conti della mappa delle liquidazioni non
+aveva posizioni a leva, perché il valore in classifica comprende anche il saldo a pronti. Dal 30 novembre si scelgono i 600 con più
+posizioni aperte fra i primi della classifica (prova dal vivo delle 04:33, fuori dal repository: 1.228 candidati letti in 239 secondi): i
+conti con posizioni passano da 329 a 600, la parte dell'interesse aperto vista dalla mappa dal 19% al 27% per le lunghe e dal 26% al 30%
+per le corte. Le balene saltano i conti con il conto a leva a zero (4 delle 20 di questa settimana). Da oggi si salva a ogni giro anche il
+mercato intero di Hyperliquid (interesse aperto, funding, premio), che dopo non si recupera. **Capito**: Hyperliquid ci accetta circa
+300-360 letture al minuto, non 600 (a 7 al secondo ne ha rifiutate 199 su 1.500); il primo giudizio delle balene, il 30 novembre, sarà
+fatto dei soli 24 conti scelti.

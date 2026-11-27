@@ -1,0 +1,30 @@
+name: azioni-test
+
+# I test delle azioni (stock/tests) a ogni modifica della cartella stock/ o dei lavori delle azioni, con le stesse librerie dei lavori
+# del demo (stock/requirements.txt). Audit del 27 novembre 2026: i test non giravano mai su GitHub, nemmeno prima che i lavori
+# mandassero ordini. Non usa segreti e non tocca il conto; i salvataggi dei lavori del demo hanno «[skip ci]» e non lo fanno partire.
+on:
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: ["stock/**", ".github/workflows/azioni_*.yml"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: azioni-test-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r stock/requirements.txt -r stock/requirements-test.txt
+      - name: I test delle azioni
+        run: python -m pytest stock/tests -q -rs

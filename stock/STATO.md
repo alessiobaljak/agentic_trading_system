@@ -1,6 +1,6 @@
 # Lo stato delle azioni
 
-Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
+Da leggere per primo, dopo `README.md`. Nato il 24 ottobre 2026; ultimo aggiornamento il 27 novembre 2026 (audit, sezione qui sotto).
 
 ## Cosa ha deciso il proprietario
 
@@ -28,17 +28,50 @@ Da leggere per primo, dopo `README.md`. Aggiornato il 24 ottobre 2026.
 * **Autonomia** (24 ottobre: «procedi in autonomia su diverse idee non chiedermi il permesso ma fammi sapere quando vogliamo fare la demo
   su Interactive Brokers»): la sessione prova le idee da sola, con il metodo, e scrive al proprietario quando una strategia è pronta
   per il demo.
+* **Le correzioni dell'audit e la soglia** (27 novembre: «sì, fai le 19 correzioni e abbassa a 0,80»): le correzioni del percorso
+  degli ordini della sezione 3 di `AUDIT_2026-11-27.md`, **fatte il 27 novembre** con due giri di revisione separata (approvate al
+  secondo; otto problemi medi da correggere prima del 30 novembre: `avanti/REVISIONE_AUDIT.md`); lo Sharpe corretto dell'esame delle
+  azioni passa da 0,95 a 0,80 dalla prova 54 (`METODO.md`, sezione 1).
 
 ## Come rispondere al proprietario (25 novembre 2026)
 
 «Devi ridurre il testo nelle risposte, è troppo; non mostrarmi a schermo i tuoi pensieri ma solo l'output finale»: risposte corte,
 nessun messaggio di passaggio fra un'azione e l'altra, solo il risultato finale.
 
+## L'audit del 27 novembre 2026 (in breve; tutto in `AUDIT_2026-11-27.md`)
+
+Chiesto dal proprietario il 26 novembre: «fai un audit per capire se c'è qualcosa che ci stiamo perdendo nel trovare strategie, il
+sistema ha tutti i dati per operare al meglio, altri bug da correggere». 135 segnalazioni da otto controlli; le verifiche
+indipendenti si sono fermate per il limite d'uso, quindi le correzioni fatte sono state rifatte e controllate a mano dalla sessione.
+
+* **Corretto (non tocca gli ordini):** l'asticella lasciava le prove che perdono di sicuro nella varianza (soglia di Sharpe annuo 2,4-3:
+  ora 1,2-1,3; nessun esito cambia); i dividendi staccati a fine periodo e pagati dopo non arrivavano (circa 111 nel 2024; archivi
+  da rinnovare con il lavoro della ricerca «rinnova_azioni»); nel simulatore un'uscita senza la barra del giorno si perdeva; uno scarico
+  fallito per la rete salvava un file vuoto; la pausa degli scarichi non copriva banca centrale, sera della miscela e prova 45; il
+  riepilogo del lunedì senza costo vero, SPY e t sui giorni (nuovo `avanti/resoconto.py`, `avanti/resoconto.md`); gli avvii delle
+  routine nei giorni a chiusura anticipata (la prova 45 ora parte anche alle 9:10) e la riserva della sera della miscela (ora anche
+  alle 8:15).
+* **Da approvare (tocca gli ordini del demo):** l'elenco in `AUDIT_2026-11-27.md`, sezione 3; la più grave è una posizione della prima
+  candela rimasta di notte, che sbaglierebbe il capitale del giorno dopo di due strategie.
+* **Cosa abbiamo capito:** il demo non può dire in pochi mesi se la miscela batte lo SPY (servirebbero 13-20 anni di giorni, con le
+  sue misure: correlazione 0,89 e Sharpe 1,08 contro 0,87); può dire se il programma fa quello che il passato prevede. La miscela
+  guadagna meno dello SPY (+139% contro +219% nel 2016-2024): vince sul rischio, non sul guadagno. Il costo vero dell'ingresso della
+  prima candela è circa 4-5 punti base, 2-4 volte quello supposto sul passato. Gli anni prima del 2016 (Yahoo, CBOE, FRED) non li
+  ha mai usati nessuna prova: sono un secondo campione gratuito per le idee giornaliere su indici e fondi (I73).
+* **Coda delle idee:** I62-I75 (opzioni sull'indice con perdita limitata, aziende legate dalle notizie, straddle prima dei conti, chi
+  sposta la data dei conti, il ciclo della banca centrale, il rimbalzo senza notizie, il mese del dividendo, le misure della paura
+  della CBOE; tre regole di metodo: due campioni, contanti al tasso dei buoni del Tesoro, misura a tavolino sui giorni dal 1° ottobre).
+* **Da sapere per chi lavora qui:** non lanciare lavori pesanti (flussi con molti agenti) nelle ore di borsa: il 26 novembre il limite
+  d'uso ha bloccato la sessione per ore e le routine delle 15:20 e delle 19:10 sono arrivate alle 2:34 della notte dopo (era il
+  Ringraziamento, borsa chiusa: nessun danno).
+
 ## Cosa aspetta il proprietario
 
 0. **Il segreto `SEC_CONTATTO`** su GitHub per la prova 42 (gli attivisti). (La prova 45 sul demo: decisa dal proprietario il
    23 novembre, vedi sotto.)
-1. **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
+0b. *(Dato il 27 novembre: correzioni dell'audit e soglia 0,80.)* Per gli avvii di riserva dal server (facoltativi): un token di
+   GitHub con il solo permesso di avviare i lavori, da dare a `stock/avanti/vps/installa.sh` quando vorrà installarli.
+1. *(Per dopo, non urgente: dal 9 novembre il demo è su Alpaca.)* **Aprire il conto Interactive Brokers** (tipo «Pro», non «Lite»: l'interfaccia per i programmi vale solo per i conti Pro [IB1]),
    farlo approvare e depositare (è la condizione per avere il demo, `piattaforme.md`). Poi, nel portale clienti, Impostazioni →
    conto di paper trading: lì c'è il **nome utente del demo**, diverso da quello del conto vero, e conviene dargli una password sua
    («Reset Paper Trading Password») [IB2]. Le credenziali non vanno mai scritte in chat né nel repository.
@@ -69,9 +102,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
      rettificati di Alpaca. Il comprare e tenere lo SPY, cioè l'asticella, risulterebbe più basso del vero. Va corretto con una
      seconda fonte prima di qualsiasi confronto (`METODO.md`, sezione 3). Il controllo della cadenza trova quello del 2018; quelli in
      testa e in coda al periodo li trova solo il confronto delle due rettifiche (il 2024) o nessuno (il 2016): limite noto.
-  2. **NVDA, 25 maggio 2023**: apertura il 26% sopra la chiusura del giorno prima senza frazionamento. Credo sia un evento vero (il
-     bilancio del giorno prima), non un errore: lo dico a memoria, **da verificare** su una seconda fonte.
-  3. **QQQ ha 5 dividendi nel 2023** (uno in più il 27 dicembre): coerente con la rettifica di Alpaca; il motivo è **da verificare**.
+  2. **NVDA, 25 maggio 2023**: apertura il 26% sopra la chiusura del giorno prima senza frazionamento. **Verificato il 27 novembre
+     2026 su Yahoo** (audit): l'apertura è 1,2615 volte la chiusura del giorno prima, come in Alpaca (1,261): è il salto dopo il
+     bilancio, un evento vero (solo il rapporto: i prezzi restano fuori dal repository).
+  3. **QQQ ha 5 dividendi nel 2023** (uno in più il 27 dicembre): **verificato il 27 novembre 2026 su Yahoo** (audit): 20 marzo, 20
+     giugno, 18 settembre, 18 dicembre e 27 dicembre (0,216); vero anche lì.
 * **Le barre al minuto di SPY e QQQ** (2016-2024; `stock/dati/ESITO_MINUTI.md`): circa 880'000 minuti di seduta ciascuno, più
   800-900'000 fuori seduta (4:00-9:30 e 16:00-20:00). Mancano minuti in un solo giorno per titolo: **SPY il 12 agosto 2019, l'ultima
   mezz'ora intera** (15:29-15:59, 30 minuti), QQQ il 22 febbraio 2016 (10:26-11:17, 50 minuti). L'ultima mezz'ora è proprio quella
@@ -435,7 +470,8 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa non è fatto, e perché
 
-* **I prezzi del periodo chiuso** (dal 2025) non sono stati scaricati: nessuno li ha visti.
+* ~~I prezzi del periodo chiuso (dal 2025) non sono stati scaricati~~ (superato: il periodo chiuso è stato aperto 8 volte, per
+  famiglie diverse, dal 25 ottobre al 26 novembre; vedi `REGISTRO.md`).
 * Il simulatore gira su un titolo alla volta: la prova 1 (2 titoli × 3 varianti di costo, 880'000 minuti ciascuno) ha impiegato 4
   minuti. Il simulatore a più titoli adesso c'è.
 * Le commissioni di Interactive Brokers (0,005 dollari per azione, minimo 1) sono **da verificare** sul listino ufficiale.
@@ -451,11 +487,16 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 * **Il conto dello Sharpe corretto** (`carica_serie`) comprende anche le 9 serie `*_chiuso` (trovato dal revisore della prova 37):
   conta di più le prove (più prudente), ma usa serie con date del periodo chiuso; da decidere se escluderle.
 
-## Il prossimo passo
+## Il prossimo passo (27 novembre 2026)
 
-* Il periodo chiuso si riusa per famiglie diverse (deciso il 24 ottobre, sopra).
-* La coda delle idee (`REGISTRO.md`, sezione 2): restano le varianti a costi più bassi (I8, I9) e la leva nei giorni speciali (I11,
-  da proporre al proprietario). Le idee della bozza del metodo sono finite: per andare avanti servono idee nuove (vedi il messaggio al
-  proprietario del 24 ottobre).
-* Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
-* Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
+* **Le regole di metodo I73-I75** (`REGISTRO.md`, sezione 2) si scrivono in `METODO.md` prima della prossima prova a cui servono: due
+  campioni per le idee giornaliere su indici e fondi, contanti al tasso dei buoni del Tesoro, misura a tavolino sui giorni dal 1°
+  ottobre 2026.
+* **La coda delle idee**: le I62-I72 dell'audit, a partire da quelle con dati già nostri (I63, I65, I67, I68) e dalla famiglia mai
+  provata delle opzioni (I62).
+* **Gli archivi delle azioni societarie** rinnovati sul lavoro della ricerca (`rinnova_azioni`, lanciato il 27 novembre); il risultato
+  in `prove/RINNOVO_AZIONI_risultati.md`.
+* **Le correzioni dell'audit che toccano gli ordini**: fatte e approvate il 27 novembre; restano gli otto problemi medi del secondo
+  giro (`avanti/REVISIONE_AUDIT.md`), da correggere e far ricontrollare prima di lunedì 30 novembre.
+* ~~Verificare il salto di NVDA e il dividendo in più di QQQ~~ (fatto il 27 novembre: veri). Lo scarto nei primi e negli ultimi
+  minuti ora si misura sul demo (`avanti/resoconto.md`).

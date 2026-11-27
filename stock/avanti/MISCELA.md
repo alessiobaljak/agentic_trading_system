@@ -7,8 +7,8 @@ prima della prima operazione; una modifica vuol dire una misura nuova.
 
 ## Le regole (quelle delle prove 7, 15 e 16, senza numeri nuovi)
 
-**Lo stesso conto demo della prima candela** (decisione del proprietario, 12 novembre 2026: «usa quello attuale»). Le due strategie
-non si toccano: si dividono per **titolo** (la miscela compra solo SPY e QQQ, mai fra le azioni della prima candela) e ognuna ha il
+**Lo stesso conto demo della prima candela** (decisione del proprietario, 12 novembre 2026: «usa quello attuale»; dal 24 novembre c'è
+anche la prova 45, su VOO, `GAMMA.md`: le strategie nel conto sono tre). Le strategie non si toccano: si dividono per **titolo** (la miscela compra solo SPY e QQQ, mai fra le azioni della prima candela) e ognuna ha il
 suo **capitale virtuale di 100'000 dollari**, su cui calcola quantità e rendimento (`stock/avanti/conto.py`). Il conto vero ha quindi
 fino a circa il doppio dell'esposizione del suo valore: è solo il contenitore, e usa il margine del conto demo. Sei parti da un sesto
 del capitale: tre regole × SPY e QQQ.
@@ -39,6 +39,17 @@ in `miscela_stato.json`.
 Ogni decisione in `miscela_diario.csv`, i valori di fine giornata delle due strategie in `valori.csv`, e sulla Plancia (`/azioni/strategie/miscela`); ogni lunedì nel riepilogo al
 proprietario, accanto al tenere lo SPY e alla prova 25 sugli stessi giorni.
 
+## Cosa il demo può dire e cosa no (audit del 27 novembre 2026)
+
+Sul passato (2'054 giorni in comune con lo SPY di Yahoo) la miscela ha Sharpe 1,08 contro 0,87 dello SPY, con una correlazione
+giornaliera di 0,89. L'errore della differenza fra i due Sharpe (Jobson e Korkie con la correzione di Memmel) è 0,47 dopo un anno di
+giorni, 0,27 dopo tre; già sugli 8,2 anni del passato la differenza vale z 1,29, e arriva a 2 solo dopo circa 20 anni. Quindi **il
+demo non può dire, in mesi o in pochi anni, se la miscela batte lo SPY**: qualche mese buono o cattivo è caso. Può dire se il programma
+fa quello che il passato prevede (ordini eseguiti, costi, quote decise, perdite nei giorni agitati). Va detto anche che la miscela
+**guadagna meno dello SPY** (+139% contro +217% sugli stessi giorni; 11,3% l'anno contro 15,8%): vince sul rischio (volatilità 10,4%
+contro 18,2%, beta 0,51, alfa 3,2% l'anno), non sul guadagno. Calcolo rifatto dalla sessione il 27 novembre con la serie
+`prove/serie/P025_miscela.csv`.
+
 ## Le deviazioni (scritte quando succedono)
 
 * **12 novembre 2026 — i primi ordini non sono stati eseguiti.** La miscela è partita la mattina del 12 (l'avvio delle 9:10 di New
@@ -49,3 +60,14 @@ proprietario, accanto al tenere lo SPY e alla prova 25 sugli stessi giorni.
   (nome nuovo `miscela-sera-{giorno}-g-{titolo}`); gli ordini vecchi della miscela si cancellano, e un ordine con lo stesso nome già
   scaduto o cancellato non conta più come mandato. La sera del 12 si rifà a mano (`rifai_sera`). Le regole della strategia non
   cambiano: si compra all'apertura come nelle prove.
+* **27 novembre 2026 — le correzioni del programma** dopo l'audit (`stock/AUDIT_2026-11-27.md`, sezione 3), con l'ok del proprietario del 27 novembre («sì, fai le 19 correzioni») e la revisione separata del codice (`avanti/REVISIONE_AUDIT.md`). Le regole non cambiano. La calma e l'ampiezza si ricalcolano quando la
+  settimana (o il mese) della prossima seduta è diversa da quella dell'ultima decisione salvata nello stato: prima, se saltava la sera
+  dell'ultimo giorno della settimana o del mese, la decisione saltava per tutta la settimana o tutto il mese; ora si prende la sera
+  dopo e il diario scrive «decisa in ritardo». Una posizione della prima candela o della prova 45 rimasta da un altro giorno non
+  sposta più il valore della miscela («tutto il resto» del conto): conta con il suo guadagno non realizzato dentro la sua strategia,
+  e le sue uscite hanno un nome «rim» che il conto riconosce dai nomi degli ordini su Alpaca (`REGOLE.md`). Per questo la sera e la
+  banca centrale non si fermano più quando c'è una posizione rimasta (la prima versione di queste correzioni le fermava: con i file del
+  repository vecchi di qualche minuto avrebbe saltato la vigilia della banca centrale senza motivo). Un ordine ritrovato per nome ma
+  rifiutato o cancellato conta come non mandato; se la ricerca per nome fallisce si scrive «DA VERIFICARE» e si passa al fondo dopo. I valori di fine
+  giornata alla chiusura ufficiale e le tasse sulle vendite come scritto in `REGOLE.md`. Un gruppo di titoli che fallisce nell'ampiezza
+  si riprova un titolo alla volta. La riserva della sera parte anche dalla routine delle 8:15.

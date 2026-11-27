@@ -3,7 +3,34 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (17 novembre 2026, 12:30 UTC)
+## Compito in corso (27 novembre 2026, 04:35 UTC)
+- **Aggiornamento delle 04:35**: secondo giro dell'audit finito (i test di GitHub: 9 problemi, in tutto 61; rapporto rigenerato).
+  Corretti e committati: `requirements-ricerca.txt`, `tests.yml` (due lavori, la corsa in corso finisce sempre), documento storico e
+  quattro test saltati, CLAUDE.md; qui `research/src/tests` passa (3.142, 9 saltati). Revisione di F5 committata: **FAIL a 280-300 USDT,
+  PASS tecnico a 1.000** (backlog P36). Giro delle 04:17 fatto (raccolta da una copia pulita in `<S>/wt_raccolta`, fogli, voce 8, diario).
+  In corso: il flusso delle correzioni (wf_2957b2e1-ccc; finiti scarico, motore, notizie; poi balene, esame, registro, misure, segreti,
+  stato, bot, verifiche e revisioni) e il flusso delle idee nuove «idee-nuove-27nov» (wf_3836c0f0-689: tre scout A, B, C con le bozze
+  in `<S>/scout_27nov/`, controllo di novità, verifica, ritocco; le idee scartate stanno nel journal del flusso). Dopo: numeri 170 e
+  seguenti alle bozze (nomi CENTOTTAVA, CENTONOVESIMA...), commit delle regole, righe del registro e LOG delle idee; i calcoli solo
+  dopo il commit delle correzioni del motore. Alle 06:13: il paper del programma 6 usa `aggiorna.sh`, che è in correzione: decidere
+  se lanciarlo dalla copia pulita o con le correzioni già controllate.
+
+## Compito in corso, prima parte (27 novembre 2026, 02:40 UTC)
+- **Audit del sistema** (richiesta del proprietario del 26 novembre): 52 problemi confermati, rapporto
+  `audits/reports/2026-11-26-AUDIT_SISTEMA.md`, backlog P37. Corretti e committati: i fogli del mattino si fermano senza la raccolta
+  fresca, VVV nei fatti gravi del 26 (terza correzione), scout e routine con la decisione del 22 novembre, P18 e P28.
+  In corso il flusso «correzioni-audit-26nov» (wf_2957b2e1-ccc): scarico, motore (funding vero, azioni, rilanci, giorni a metà),
+  notizie (prova in avanti del 30 novembre, ore in UTC, PAROLE), balene (mercato di Hyperliquid, conti con posizioni, giudice),
+  esame (funzione unica e numeri accanto), registro, misure (idea 45); segreti e stato con live-path-reviewer (entrano senza riavvio);
+  bot (finestra degli ordini limite del paper, monete non disponibili sul demo, allarmi, lettura oraria, ordine dei giri, vecchio
+  sistema, Telegram) con live-path-reviewer: entra solo con il riavvio approvato dal proprietario; revisione di F5 (backtest-auditor).
+  In corso anche il secondo giro dell'audit (completezza, wf_cece32c1-27d ripreso). Dopo: test completi, commit, rapporto con gli
+  stati finali, righe dell'esame nel registro (162-169), risposta breve al proprietario con le due decisioni (esame e riavvio).
+- **Da fare dopo le correzioni del motore**: `python3 -m research.programma6.buchi_archivio --dal 2020-01-01` (buchi del 2022, P37).
+- **Giro delle 12:17**: rilanciare `bash research/programma6/paper/aggiorna.sh <S>/impronte_p6g` (l'archivio pubblica il giorno
+  prima fra le 08:44 e le 11:03: alle 06:13 manca sempre).
+
+## Compito precedente (17 novembre 2026, 12:30 UTC)
 - **Bot**: dal 16 novembre 07:36 UTC gira la fase 2 (versione 884b9b1a: conto vero spento, pulsante di approvazione, funding dei paper per
   regolamento); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
@@ -50,6 +77,14 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Lunedì 30 novembre, Hyperliquid**: al giro delle 00:17 la prima scelta nuova della mappa (circa 4 minuti) e delle balene:
+  controllare `candidati_letti` in `liquidazioni_conti_2026-11-30.json` (nella prova 1.228) ed `esclusi_conto_a_leva_zero` in
+  `scelti_balene_2026-11-30.json`; nel commit della raccolta aggiungere il file nuovo `hyperliquid/mercato_AAAA-MM.jsonl.gz`. Al giro
+  delle 04:17 `python3 -m research.trader_copiati.giudice_balene`, poi il giudizio in `giudice_balene/giudizi/2026-11-30.json` nel
+  formato della nota del 27 novembre di `GIUDICE_BALENE.md`, commit e push subito.
+- **Lunedì 30 novembre, prova in avanti delle notizie** (P31): dopo il conto a tavolino `python3 -m research.notizie.prova_avanti`, poi
+  commit di `research/notizie/avanti/`; il 30 dice solo che non ci sono settimane finite, il primo numero (30 novembre - 6 dicembre)
+  arriva il 7 dicembre e va nei numeri del lunedì al proprietario.
 - **Conto vero su F5** (25 novembre): codice committato dopo l'APPROVE di live-path-reviewer per il commit (spento); prima
   dell'accensione la voce P36 del backlog (testi «G1» rimasti, peso massimo di F5, settimana saltata dopo un blocco, decisioni del proprietario).
 - **Giudice delle balene** (idea 152, regole `research/trader_copiati/GIUDICE_BALENE.md` del 24 novembre): scrivere

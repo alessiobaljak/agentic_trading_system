@@ -10,8 +10,8 @@ name: azioni-misura-in-avanti
 # giusta per quell'ora: prima delle 9:45 ASPETTA le 9:45 (fino a 5 ore e 20 minuti prima), dopo le 10:00 non entra mai, dalle 10:35
 # aspetta le 15:55 e chiude, a seduta finita chiude fuori orario quello che resta. Gli avvii sono tanti e indipendenti: ogni mezz'ora
 # da GitHub, più le routine della sessione «trading stock» (avvio a mano del lavoro, che parte in pochi secondi). I lavori stanno in
-# fila (uno alla volta) e gli ordini hanno un nome unico per giorno e titolo: niente doppioni. Gli orari programmati girano solo se
-# esiste stock/avanti/acceso_su_github.
+# fila (uno alla volta) e gli ordini hanno un nome unico per giorno e titolo: niente doppioni. Gli orari programmati e gli avvii a
+# mano con «auto» girano solo se esiste stock/avanti/acceso_su_github (gli avvii a mano dal 27 novembre 2026).
 on:
   schedule:
     - cron: "15,45 * * * 1-5"
@@ -35,24 +35,33 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: claude/brave-albattani-1b12fv
       - name: Acceso?
         id: acceso
+        env:
+          EVENTO: ${{ github.event_name }}
+          COMANDO: ${{ inputs.comando }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "comando=${{ inputs.comando }}" >> "$GITHUB_OUTPUT"
+          # il comando dato a mano entra come variabile, non dentro lo script, e vale solo uno di quelli dell'elenco; anche
+          # «auto» dato a mano rispetta l'interruttore stock/avanti/acceso_su_github (audit del 27 novembre 2026)
+          case "${COMANDO:-auto}" in
+            auto|controlla|plancia|elenco|apri|chiudi|chiudi_fuori_orario|riepilogo) ;;
+            *) echo "comando non ammesso: $COMANDO"; exit 1 ;;
+          esac
+          if [ "$EVENTO" = "workflow_dispatch" ] && [ "$COMANDO" != "auto" ]; then
+            echo "comando=$COMANDO" >> "$GITHUB_OUTPUT"
           elif [ ! -f stock/avanti/acceso_su_github ]; then
             echo "comando=" >> "$GITHUB_OUTPUT"; echo "spento: manca stock/avanti/acceso_su_github"
           else
             echo "comando=auto" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         if: steps.acceso.outputs.comando != ''
         with:
           python-version: "3.12"
-      - run: pip install pandas numpy requests
+      - run: pip install -r stock/requirements.txt
         if: steps.acceso.outputs.comando != ''
       - name: Misura in avanti
         if: steps.acceso.outputs.comando != ''
@@ -63,7 +72,8 @@ jobs:
           AZIONI_FIREBASE_API_KEY: ${{ secrets.AZIONI_FIREBASE_API_KEY }}
           AZIONI_FIREBASE_EMAIL: ${{ secrets.AZIONI_FIREBASE_EMAIL }}
           AZIONI_FIREBASE_PASSWORD: ${{ secrets.AZIONI_FIREBASE_PASSWORD }}
-        run: python -m stock.avanti.avanti "${{ steps.acceso.outputs.comando }}"
+          COMANDO: ${{ steps.acceso.outputs.comando }}
+        run: python -m stock.avanti.avanti "$COMANDO"
       - name: Salva il diario nel repository
         if: always() && steps.acceso.outputs.comando != ''
         run: |

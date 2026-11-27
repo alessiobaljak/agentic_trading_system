@@ -1,7 +1,8 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 15 novembre 2026 (prova 157: margine delle coperture a pronti;
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 27 novembre 2026 (F5 sul conto vero: voci 44-49; prima, il 15
+novembre, prova 157: margine delle coperture a pronti;
 prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
 
 ## Dati
@@ -15,6 +16,9 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
    26-28 febbraio (48 monete) e 1-2 aprile 2022 (49 monete); `buchi_archivio` riempie solo dal 1° settembre 2026. Il
    movimento fra l'ultima chiusura prima del buco e la prima apertura dopo si perde (`seconda.rendimenti`) e la moneta esce
    dall'universo del lunedì dopo (uscita implicita all'ultima chiusura). Misura: `audits/repro/prova28_buchi_2026-11-11.py`.
+   **27 nov 2026 (F5)**: per 50 monete i file orari mensili non hanno quei giorni; l'interfaccia `www.binance.com/fapi/v1/klines`
+   (raggiungibile da qui) sì: 237 giorni-moneta riempiti in una cartella temporanea, F5 1,880 → 1,872 (−1,2 punti);
+   `audits/repro/f5_conto_vero_2026-11-27.py buchi`.
 2. **Simboli tolti dal listino tenuti a rendimento zero** (prezzo fermo, volume zero): sembrano posizioni piatte e
    abbassano la volatilità. `research/programma6/controllo_zombi.py`; il pannello azzera il loro funding
    (`seconda.py:133-134`). Cercare: giorni con `quote_volume == 0` e chiusura uguale al giorno prima dentro il periodo.
@@ -103,6 +107,9 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     prezzo migliore opposto; il demo li conta tutti «a limite». A 280 USDT lo Sharpe corretto passa da 0,81 a 0,77 (tutto a mercato)
     e 0,73 (limite solo oltre lo 0,05%). Cercare: `spese_limite(` con `oltre=0` nei numeri d'esame; rifare sempre con `oltre` 0,0005 e
     0,001 e tutto a mercato (`audits/repro/g1_corretto_varianti_2026-11-12.py`).
+    **27 nov 2026 (F5)**: il paper del bot conta a limite il 100% (66 su 66 il 16 novembre, 64 su 64 il 23); sul demo di G1 a mercato circa
+    il 27% del valore in regime e il 60% alla partenza da vuoto (`gate2/reports/2026-11-12-G1-funding-commissioni.md:66-67`); F5 senza
+    minimi 1,94 (al tocco) / 1,88 (a mercato) / 1,81 (oltre 0,05%: costo per unità 0,10%, più che a mercato) / 1,69 (0,10%).
 28. **Conto a capitale fisso con i minimi: non neutrale e rumoroso** (prova 148): gli ordini saltati fanno derivare l'esposizione
     netta fra −20% e +25% (fino a +47%); la differenza con G1 e' rumore (+30 punti nel 2021, −15 nel 2025), il capitale non e'
     monotono (250 USDT 1,83, 225 USDT 1,89). Leggere ogni «x% di G1» con ±0,1 di Sharpe.
@@ -129,6 +136,17 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     pronti scoperto. Cercare: strategie con due gambe su portafogli diversi; misura `audits/repro/prova161_2026-11-15.py limiti_bot`.
     Da misurare anche la quota del guadagno dal tasso di base del funding (0,01% ogni 8 ore, fissato dalla borsa): 161 il 29-30%,
     senza il 2022 diventa negativo (`... tasso_base`).
+44. **Posizioni sotto il minimo che il bot non chiude** (F5 sul conto vero, 27 nov 2026): `demo_binance.ordini_del_giorno`
+    (`demo_binance.py:280`) e il resto a mercato (`:1420`) saltano ogni ordine sotto la quantità o il valore minimo, anche le chiusure
+    che Binance accetterebbe come «solo riduzione» (testo dell'errore −4164, da verificare). In una strategia a settimana su un conto
+    piccolo restano posizioni non volute (F5 a 280 USDT: 2.132 settimane-moneta, circa 7 per lunedì) e la coda costa: TUT venduta per
+    3,69 USDT il 3 agosto 2026, +1.049% in una settimana, −13,8% del capitale; partenza del 29 settembre 2025 → −35,7% e stop sul conto
+    (con le chiusure permesse −20,6%). La prova 28 aveva l'ipotesi opposta (chiusure sempre fatte). Cercare: simulazioni a capitale
+    dichiarato con una sola delle due ipotesi; rifarle con tutte e due (`audits/repro/f5_conto_vero_2026-11-27.py polvere`, `conto`).
+45. **Strategia scelta per un conto piccolo con i numeri della ricerca senza minimi** (F5, decisione del 25 nov 2026): citati Sharpe 1,88
+    e «meno variazioni sotto il minimo»; con i filtri veri a 280 USDT 1,40-1,57 (81-84% del suo Sharpe; G1 nella prova 148 il 96%),
+    2026 fra −5% e +1% l'anno, discesa −32/−33%; a 1.000 USDT regge. Il numero di variazioni saltate (61% contro 90%) non dice l'effetto.
+    Cercare: proposte o decisioni per capitali sotto i 1.000 USDT senza una prova a capitale dichiarato con le regole scritte prima.
 
 ## Misure
 
@@ -186,6 +204,13 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     0,9-1,0; la famiglia risulta la piu' alta del mazzo (3,29). Lo Sharpe corretto con le settimane efficaci resta 0,97-0,99 (non e'
     l'autocorrelazione a saturarlo, e' la volatilita' quasi nulla). Cercare: volatilita' annua sotto il 3%, `w.autocorr(1)` sopra 0,3,
     serie usate in miscele pesate sulla volatilita'. Misura: `audits/repro/prova161_2026-11-15.py robustezza_t`.
+46. **Il numero dell'esame «alla scelta» dipende da quale scelta** (F5, 27 nov 2026, decisione del 23 novembre): N alla prova in cui la
+    strategia è nata (24: 0,959), a quella che ne ha cambiato l'esecuzione (56: 0,899), alla scelta per i soldi veri (N di oggi: 0,506);
+    una configurazione mai registrata (F5 a 280 USDT) come «variante» prende N di oggi (0,13-0,24). Riportare sempre i tre e chiedere.
+    Misura: `audits/repro/f5_conto_vero_2026-11-27.py corretto` (mazzo tagliato per numero di prova).
+47. **Lunedì saltati in una strategia a settimana** (F5): con i pesi di una settimana prima Sharpe 1,09 contro 1,88; un lunedì su 4
+    saltato 1,49. Il conto vero salta la settimana se è bloccato quando arriva la decisione (`conto_vero.py:851`). Cercare: una validità
+    lunga della decisione (8 giorni e 2 ore) letta come «il ritardo non costa» (`... tempi`).
 
 ## Procedura dell'audit
 
@@ -206,3 +231,11 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     Per rifare una prova su candele orarie si scaricano i file mensili dall'archivio pubblico di Binance in una cartella temporanea
     della sessione (`audits/repro/prova113_2026-11-11.py scarica <cartella>`, lettore `_lettore`), mai in `research/data/`.
     L'interfaccia `fapi` di Binance (elenco dei contratti) è bloccata da qui: si chiede alla sessione principale (canale della macchina).
+    Il 27 novembre `data.binance.vision` e `www.binance.com/fapi/v1/klines` (candele) rispondevano da qui.
+48. **Resti della virgola mobile contati come posizioni** (simulatore dell'audit di F5, 27 nov 2026): sommando e togliendo quantità
+    sul passo restano 1e-16 che sembrano posizioni (6.065 settimane-moneta di «polvere» invece di 2.132). Dopo ogni ordine riportare le
+    quantità sulla griglia del passo e azzerare i valori sotto 1e-9.
+49. **Cartella temporanea con le cache di audit vecchi**: il 27 novembre la cartella temporanea della sessione aveva `cache/ore.pkl` del
+    12 novembre (G1, altro formato) e lo script l'ha letto come suo. Usare sempre una cartella di cache con il nome dell'audit; e con
+    altre sessioni che modificano `research/` durante l'audit, provare il codice del commit copiato con `git archive` e un pannello
+    congelato (`audits/repro/f5_conto_vero_2026-11-27.py --codice --pannello`).

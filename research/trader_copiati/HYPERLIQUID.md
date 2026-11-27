@@ -75,3 +75,11 @@ Il gruppo di prima resta com'è (regola della sezione 2, senza cambi).
   funding di Binance), nello stesso file `HYPERLIQUID_CONTO.md`, accanto al gruppo di prima e a G1 negli stessi giorni quando c'è.
 * **Niente attese fisse** (aggiunta del 1° novembre): i numeri vanno al proprietario ogni lunedì; nessuno dei tre gruppi entra nel bot
   senza una regola scritta prima e il suo sì.
+* **Nota del 27 novembre 2026 (audit del 26 novembre, raccolta-4).** Dalla scelta di lunedì 30 novembre le balene saltano i conti con il
+  conto a leva a zero, cioè sotto i 10.000 dollari (`marginSummary.accountValue` di `clearinghouseState`). Il motivo: il valore in
+  classifica comprende anche il saldo a pronti, e nel giro del 27 novembre alle 02:13 4 delle 20 balene della settimana (45,1, 33,6, 31,2
+  e 29,0 milioni in classifica) avevano il conto a leva a 566, 0, 0,0007 e 0 dollari e nessuna posizione. Si scende nella classifica
+  finché le balene sono 20 (al massimo 60 secondi di letture; un conto non letto si prende come prima). Gli esclusi sono scritti in
+  `scelti_balene_AAAA-MM-GG.json`. Il conto copiato delle balene cambia da quel giro: i conti a zero già non entravano nella media
+  (`conto_hyperliquid.giri` salta i conti con valore zero); quelli con pochi dollari e senza posizioni sì, e abbassavano la media dei
+  pesi. Ora al loro posto entrano conti con posizioni. I migliori del mese non cambiano.

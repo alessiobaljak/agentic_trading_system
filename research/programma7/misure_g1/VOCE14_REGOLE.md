@@ -49,3 +49,8 @@ prova onesta solo in avanti.
    una regola per G1 da provare in avanti accanto all'originale; se non serve, si scrive il perché e la lettura si ferma, a meno che il
    proprietario dica altro. Il risultato va nel diario di G1 e nel riepilogo del lunedì.
 9. Lo script della misura (`voce14_misura.py`) si scrive prima del giudizio e non cambia le regole qui sopra.
+
+## Nota del 27 novembre 2026 (audit del 26 novembre)
+L'abbinamento segue `research/notizie/REGOLE.md`, sezione 2, che da oggi conta ARK, HIVE, GENIUS, SATS e APR solo con il «$» (davano abbinamenti falsi: ARK Invest, la società di mining HIVE, la legge GENIUS, le azioni
+SATS di Strive, «APR» il tasso annuo). Per APRUSDT, venduta da G1, il foglio non mostra più gli articoli sul tasso annuo. Le ore
+dell'archivio si leggono sempre in UTC (`raccolta.ora_utc`).

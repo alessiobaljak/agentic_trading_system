@@ -239,18 +239,24 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
   `demo_binance.py:1129-1135`). Avvio con `strategia` e `file_della_decisione` (`:944`). Test `tests/test_conto_vero_f5.py`
   (8). Aperti: 180, 181 Medi (decisioni di Alessio), 182, 183 Bassi. Chiusi 178, 179.
 
-## 15. Il trader AI sul suo conto demo (area `trader_ai/`, 23 novembre 2026)
-Fuori dal bot: servizio suo sulla macchina (`trader_ai/vps/installa.sh`), copia sua del repository, chiavi in un file suo. Rapporti:
-`trader_ai/revisioni/2026-11-23-*.md` (sette revisioni; la settima: APPROVE con condizioni). Invarianti (righe dalla prima revisione,
-da ricontrollare sul codice installato):
-* indirizzo unico `demo-fapi.binance.com` (`trader_ai/conto_demo.py:25-35`); chiavi `TRADER_AI_DEMO_*` (`:42-52`), mai quelle del
-  demo di G1 (`BINANCE_DEMO_*`) né del conto vero (`BINANCE_API_*`);
-* leva da 1 a 10 (`trader_ai/limiti.py:14`, `:72-73`); margine separato (`conto_demo.py:153`); stop obbligatorio sul conto
-  (`trader_ai/avvio.py:173-194`, `:213-216`);
-* obiettivo di 50 USDT al giorno e fermo fino alla mezzanotte UTC (`limiti.py:13`, `avvio.py:99-106`); tetto di 5 dollari al giorno
-  per le chiamate al modello, controllato prima di ogni chiamata (`trader_ai/costi.py:19`, `trader_ai/giro.py:34`);
-* nessuna perdita massima del conto (scelta del proprietario, demo).
-Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una revisione nuova (settima, ultime righe).
+## 15. Il trader AI (area `trader_ai/`, dal 23 nov; versione 7 `c52fbab`; correzioni del secondo riesame non committate, `avvio.py` c19205d2)
+Programma suo sulla macchina (`trader_ai/vps/installa.sh`); dati in `/opt/trader-ai-dati` (solo `trader_ai/avanti` va in git, `vps/salva.sh`),
+messaggi interi in `.../trader_ai/messaggi_modello` (`avvio.py:56`, `:117-119`, `:1091`). Dal 24 nov **conto simulato** (`conto_simulato.py`:
+solo GET pubblici su `fapi.binance.com`, nessuna chiave, `:42`, `:62-78`); demo suo pronto ma spento fino a 198 e 199 (`conto_demo.py`: solo
+`demo-fapi.binance.com` `:30-45`, chiavi `TRADER_AI_DEMO_*` diverse da G1 e conto vero `:34`, `:52-63`; `config.json` «simulato»).
+* leva intera 1-10 (`limiti.py:15`, `:88-89`; `schema.py:19`); margine separato (`conto_demo.py:237-243`) più commissione dentro il
+  disponibile (`limiti.py:96-99`); una sola operazione o un solo limite in attesa (`:84-87`);
+* stop obbligatorio sul conto: controllo (`limiti.py:55-69`, `:108-113`, `:123-138`), messo subito (`avvio.py:794-815`; limite eseguito
+  subito `:776-784`), rimesso o chiusura a ogni passo (`:233-241`, `:667-685`), spostato senza scoprire (`:829-852`, `:889-933`); limite
+  sparito: esito e rilettura, errore = nessuna azione, «eseguito» del demo confermato al passo dopo (`:443-489`; non in `_annulla_limite`:
+  198); obiettivo di un limite sul conto all'esecuzione (`:687-703`); ordini rimasti annullati a inizio passo e prima di aprire (`:200-205`,
+  `:742-745`; demo: 199);
+* fermo a mano (`avvio.py:173`, `:706`, `:770`, `:785`; `chiudi` `:935-968`); conto estraneo → fermo senza toccare niente (`:152-165`,
+  `:178-190`, `:708-712`); intenzione salvata prima dell'invio (`:759-768`, `:217-223`);
+* obiettivo del 3% (`limiti.py:14`, `avvio.py:265-280`); nessuna perdita massima; tetto di 5 dollari prima di ogni chiamata (`costi.py:22`, `giro.py:33-44`);
+* esito dal conto (`conto_simulato.py:310-331`; demo `conto_demo.py:162-182`, solo «eseguito»); chiusura registrata anche con l'annullamento
+  in errore (`avvio.py:574-579`); uscita stimata corretta (`:582-602`); memoria ricostruita una volta senza l'operazione aperta (201).
+Prima di qualunque uso con soldi veri: 146 e 147 (settima revisione) e una revisione nuova.
 
 ## Storia degli invarianti
 
@@ -288,3 +294,7 @@ Prima di qualunque uso con soldi veri: problemi 146 e 147 da correggere e una re
 - 25 nov (non committato; secondo giro APPROVE per il commit): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
   F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
   pesi controllati solo al lunedì. Demo e limiti fissi invariati. Secondo giro: nessun invariante nuovo; strategia dichiarata da una costante di classe.
+- 26 nov, trader AI versione 7 (non committata): quindicesima REQUEST CHANGES (il limite sparito toglieva lo stop: 188); riesame
+  APPROVE con condizioni per il simulato: rilettura della posizione, esito in errore senza azioni, limite che incrocia come a
+  mercato, obiettivo di un limite all'esecuzione, stop e obiettivo del simulato per lato, messaggi fuori da `avanti/`. Secondo
+  riesame (copia): chiusura registrata anche con l'annullamento in errore, ordini rimasti annullati prima di aprire. Valori invariati.

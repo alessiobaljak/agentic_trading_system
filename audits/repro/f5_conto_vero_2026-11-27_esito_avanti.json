@@ -1,0 +1,103 @@
+{
+ "settimane": {
+  "2026-10-26": {
+   "paper_del_bot": -0.01408,
+   "ricerca": 0.00559,
+   "funding_della_ricerca_(stimato)": 0.00567
+  },
+  "2026-11-02": {
+   "paper_del_bot": 0.02599,
+   "ricerca": 0.02465,
+   "funding_della_ricerca_(stimato)": 0.00596
+  },
+  "2026-11-09": {
+   "paper_del_bot": 0.04756,
+   "ricerca": 0.03453,
+   "funding_della_ricerca_(stimato)": 0.00771
+  },
+  "2026-11-16": {
+   "paper_del_bot": -0.00236,
+   "ricerca": -0.02652,
+   "funding_della_ricerca_(stimato)": 0.00764
+  }
+ },
+ "totale_paper": 0.05715231502430518,
+ "totale_ricerca": 0.03768756599897749,
+ "funding_annuo_sul_peso_del_lunedi": 0.24709648716181717,
+ "funding_annuo_sulla_posizione_che_deriva": 0.24799809990937263,
+ "sharpe_con_il_funding_sulla_posizione_che_deriva": 1.889534247965895,
+ "lunedi_con_meno_di_10_monete_in_un_lato": [
+  {
+   "lunedi": "2021-01-04",
+   "long": 9,
+   "short": 8,
+   "peso_massimo": 0.206
+  },
+  {
+   "lunedi": "2021-01-11",
+   "long": 10,
+   "short": 8,
+   "peso_massimo": 0.222
+  },
+  {
+   "lunedi": "2021-01-18",
+   "long": 9,
+   "short": 7,
+   "peso_massimo": 0.248
+  },
+  {
+   "lunedi": "2021-01-25",
+   "long": 9,
+   "short": 6,
+   "peso_massimo": 0.213
+  },
+  {
+   "lunedi": "2021-02-01",
+   "long": 9,
+   "short": 8,
+   "peso_massimo": 0.202
+  },
+  {
+   "lunedi": "2021-02-08",
+   "long": 9,
+   "short": 10,
+   "peso_massimo": 0.184
+  },
+  {
+   "lunedi": "2021-02-15",
+   "long": 8,
+   "short": 11,
+   "peso_massimo": 0.205
+  },
+  {
+   "lunedi": "2021-02-22",
+   "long": 9,
+   "short": 12,
+   "peso_massimo": 0.16
+  },
+  {
+   "lunedi": "2021-03-15",
+   "long": 9,
+   "short": 10,
+   "peso_massimo": 0.155
+  },
+  {
+   "lunedi": "2024-01-22",
+   "long": 19,
+   "short": 7,
+   "peso_massimo": 0.396
+  },
+  {
+   "lunedi": "2024-01-29",
+   "long": 24,
+   "short": 6,
+   "peso_massimo": 0.38
+  },
+  {
+   "lunedi": "2024-02-05",
+   "long": 25,
+   "short": 5,
+   "peso_massimo": 0.437
+  }
+ ]
+}

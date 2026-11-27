@@ -162,6 +162,14 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   1.629 (p 0,99) non passano; seconda tornata in corso: N-001 122 (−2,66%), N-002 170 (+0,14%, p 0,35), N-003 102 (−1,18%). Paper del
   programma 6: dati ancora fino al 23 novembre (nessun giorno nuovo nell'archivio); le 25 monete entrate nell'universo sono tutte monete
   (exchangeInfo, «COIN»).
+  Correzione del 27 novembre (audit del 26 novembre): la frase del 26 novembre «nessun giorno nuovo nell'archivio» è falsa. Il 24
+  novembre era nell'archivio dal 25/11 alle 08:46 GMT (WLDUSDT-1d-2026-11-24.zip). Lo scarico del paper del programma 6 si era
+  fermato a metà per una lettura interrotta (`http.client.IncompleteRead` in `strumenti/scarico.py`, `_leggi`, che riprovava solo
+  sugli errori di connessione) e «|| true» in `programma6/paper/aggiorna.sh` lo nascondeva. Nelle impronte (commit 1d0cfac) 725
+  monete attive su 884 avevano il 24 e 159 no, e il pannello toglie l'ultimo giorno quando lo ha meno del 90% delle monete. Lo stesso
+  era successo il 20 novembre: 262 monete su 884 con il 18 (commit c74b1c9). Dal 27 novembre lo scarico riprova anche su quell'errore,
+  l'errore di una moneta non ferma le altre, e PAPER.md scrive in fondo «Scarico incompleto: N monete senza il giorno …» quando
+  mancano monete.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 

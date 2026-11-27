@@ -11,7 +11,7 @@ succo. Per i dettagli: `research/REGISTRO.md` (le 137 prove delle crypto), `rese
    sembravano ottime, in paper hanno perso (784 operazioni, −18,3%).
 2. **Si contano tutte le prove**, anche quelle bocciate, e l'asticella dipende da quante: lo **Sharpe corretto per i tentativi**
    (Bailey e López de Prado 2014), contando i **gruppi di prove simili** (López de Prado 2019-2020) e lasciando fuori dalla
-   dispersione le prove che perdono di sicuro (`research/programma6/ASTICELLA.md`). Soglia 0,95; accanto il t dello Sharpe contro
+   dispersione le prove che perdono di sicuro (`research/programma6/ASTICELLA.md`). Soglia 0,95, dal 27 novembre 2026 0,80 come le crypto (`METODO.md`, sezione 1); accanto il t dello Sharpe contro
    3 (Harvey, Liu e Zhu 2016).
 3. **Un revisore separato** (una sessione che non ha scritto il codice) ricontrolla ogni strategia promettente prima del paper. Il
    23 ottobre tre revisioni hanno trovato tre errori veri: le parità decise da un arrotondamento, prove dimenticate nel conto, dati

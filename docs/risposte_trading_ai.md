@@ -39,3 +39,9 @@ prima revisione con il richiamo a ricontrollarli sul codice installato). Il revi
 ## 26 novembre 2026, voce 3 (righe della quattordicesima revisione)
 Fatto: applicata `trader_ai/revisioni/righe_per_reviews.patch` a `reviews/INDEX.md` e `reviews/REVIEW_LOG.md` (numeri dei problemi: i
 nuovi partono da 187).
+
+## 27 novembre 2026, voce 3 (righe della quindicesima revisione e dei due riesami)
+Fatto: applicata `trader_ai/revisioni/righe_per_reviews.patch` a `reviews/INDEX.md`, `REVIEW_LOG.md`, `ARCHIVE.md` e `LIVE_PATH_MAP.md`
+(`git apply --check` passato; numeri dei problemi: il trader fino al 202, i nuovi partono da 203). Nota: le revisioni del percorso degli
+ordini lanciate dalla sessione crypto il 27 novembre per l'audit del sistema usano i numeri da 210 in su (e da 230 in su dopo la
+rinumerazione di quelle partite da 187).

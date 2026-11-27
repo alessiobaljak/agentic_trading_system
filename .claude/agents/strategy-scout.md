@@ -40,9 +40,12 @@ ragioni economiche (chi paga per una posizione affollata, flussi forzati, eventi
 
 ## Come lavori
 1. Leggi `research/INDEX.md`, il riepilogo del registro (`python3 -m research.src.registro --riepilogo`) e `research/idee/LOG.md`.
-2. Proponi **al massimo due** idee per volta: ogni prova in più alza l'asticella per tutte (lo Sharpe corretto scende con il numero
-   delle prove), quindi meglio poche idee con un perché forte che tante.
-3. Per l'idea migliore scrivi le regole come le prove recenti (esempio: `research/programma7/OTTANTASETTESIMA.md`): dati, universo,
+2. Proponi **tutte le idee con un perché forte** che trovi nel giro, non una o due (decisione del proprietario del 22 novembre: «non
+   una o due alla volta»; le idee si provano da sole, il proprietario si aspetta solo per spese e registrazioni a servizi esterni).
+   Il motivo per non gonfiare la coda resta uno solo: ogni **famiglia** nuova di prove alza N, cioè l'asticella delle prove nuove
+   (`research/programma6/asticella.py`). Non vale più «abbassa G1»: dal 23 novembre le strategie in corso si giudicano una volta
+   sola, quando vengono scelte, e le prove nuove non le toccano. Un'idea senza un perché forte resta fuori lo stesso.
+3. Per ogni idea scrivi le regole come le prove recenti (esempio: `research/programma7/OTTANTASETTESIMA.md`): dati, universo,
    segnale, esecuzione all'apertura dopo il segnale, costi confermati dal proprietario (0,05% a mercato, 0,02% con ordine limite,
    scarto 0,01% su BTC, ETH e SOL e 0,02% sulle altre, funding vero), periodo, quante varianti e perché, l'esame (Sharpe corretto da
    0,80, ogni anno positivo, t da 3; regole approvate dal proprietario il 9 novembre), cosa si consegna.

@@ -1,0 +1,2705 @@
+{
+ "filtri": "bot/portafoglio/filtri_conto_vero.json (6 novembre 2026)",
+ "controllo_simulatore": {
+  "senza_minimi_capitale_fisso": {
+   "settimane": 301,
+   "annuo": 0.5525603690669869,
+   "composto_annuo": 0.6611594904204701,
+   "volatilita": 0.2938852270141473,
+   "sharpe": 1.8801910347143351,
+   "sortino": 3.321781593552077,
+   "discesa_max": -0.26837515320468563,
+   "discesa_settimane_piu_lunga": 37,
+   "asimmetria": 0.17481524112964414,
+   "curtosi": 5.535096360350202,
+   "t": 4.523593313933814,
+   "settimane_negative": 118,
+   "peggiore": -0.1471431673063557,
+   "migliore": 0.1858896626850512
+  },
+  "ricerca_composta": {
+   "settimane": 301,
+   "annuo": 0.5526444642747882,
+   "composto_annuo": 0.6612820274032618,
+   "volatilita": 0.2939215252083008,
+   "sharpe": 1.8802449527408094,
+   "sortino": 3.3221965987915856,
+   "discesa_max": -0.26855248295635314,
+   "discesa_settimane_piu_lunga": 37,
+   "asimmetria": 0.17550414152446256,
+   "curtosi": 5.533466437899327,
+   "t": 4.523723036509636,
+   "settimane_negative": 118,
+   "peggiore": -0.1471151700195376,
+   "migliore": 0.18586213439315957
+  },
+  "nota": "capitale fisso: i rendimenti sono sul capitale di partenza, senza la deriva dei pesi verso il conto",
+  "senza_minimi_composto": {
+   "settimane": 301,
+   "annuo": 0.5525982473866127,
+   "composto_annuo": 0.661214551081506,
+   "volatilita": 0.2939014184526761,
+   "sharpe": 1.88021633340838,
+   "sortino": 3.3219187727166726,
+   "discesa_max": -0.2685524821169122,
+   "discesa_settimane_piu_lunga": 37,
+   "asimmetria": 0.17495082520266017,
+   "curtosi": 5.5321914308741595,
+   "t": 4.5236541806229535,
+   "settimane_negative": 118,
+   "peggiore": -0.14711516931443475,
+   "migliore": 0.18586213394266865
+  },
+  "differenza_media_settimanale_composto_contro_ricerca": 8.891458732743192e-07
+ },
+ "200 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.42323337567098607,
+  "composto_annuo": 0.44008622350429416,
+  "volatilita": 0.3367513114631918,
+  "sharpe": 1.2568128505039158,
+  "sortino": 1.9543096197295104,
+  "discesa_max": -0.3342845013638668,
+  "discesa_settimane_piu_lunga": 60,
+  "asimmetria": -0.44761356989043094,
+  "curtosi": 6.956233192381432,
+  "t": 3.023793913722923,
+  "settimane_negative": 128,
+  "peggiore": -0.22320962184615692,
+  "migliore": 0.1743278757009245,
+  "per_anno": {
+   "2021": 0.7200106110080776,
+   "2022": 0.5654877403914342,
+   "2023": -0.005686575613238976,
+   "2024": 0.66511220039573,
+   "2025": 0.37692636517375233,
+   "2026": 0.14979790315179511
+  },
+  "spese_annue": 0.03429778641536603,
+  "funding_annuo_pagato": -0.18841484537656425,
+  "esposizione_lorda_media": 1.8506716015093092,
+  "esposizione_netta_media": -0.05875403589589564,
+  "netta_min": -0.41976231437173384,
+  "netta_max": 0.545928416579519,
+  "ordini_voluti": 22996,
+  "saltati": 16619,
+  "quota_saltati": 0.7226909027656984,
+  "sotto_valore_minimo": 16619,
+  "sotto_un_passo": 2084,
+  "settimane_moneta_con_polvere": 5298,
+  "monete_al_lunedi": 58.51162790697674,
+  "ordini_al_lunedi": 21.186046511627907,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "AVAXUSDT",
+    100
+   ],
+   [
+    "ETCUSDT",
+    96
+   ],
+   [
+    "ETHUSDT",
+    95
+   ],
+   [
+    "LINKUSDT",
+    93
+   ],
+   [
+    "AAVEUSDT",
+    79
+   ],
+   [
+    "LTCUSDT",
+    72
+   ],
+   [
+    "AXSUSDT",
+    70
+   ],
+   [
+    "TRBUSDT",
+    49
+   ],
+   [
+    "RUNEUSDT",
+    47
+   ],
+   [
+    "UNIUSDT",
+    45
+   ],
+   [
+    "KSMUSDT",
+    39
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.8469430340220471
+ },
+ "250 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5242874380059741,
+  "composto_annuo": 0.5942502024228242,
+  "volatilita": 0.33556774699066544,
+  "sharpe": 1.5623892424338335,
+  "sortino": 2.658690054757762,
+  "discesa_max": -0.3226001573330398,
+  "discesa_settimane_piu_lunga": 49,
+  "asimmetria": 0.08216318877318017,
+  "curtosi": 6.722442178156329,
+  "t": 3.758986932894091,
+  "settimane_negative": 128,
+  "peggiore": -0.18247366078761026,
+  "migliore": 0.21556882414485667,
+  "per_anno": {
+   "2021": 1.3506200810080309,
+   "2022": 0.4716253181064454,
+   "2023": 0.16626758103481273,
+   "2024": 0.6160830064436701,
+   "2025": 0.40863691861544293,
+   "2026": 0.012658119062941302
+  },
+  "spese_annue": 0.0376105844610978,
+  "funding_annuo_pagato": -0.19804555676504076,
+  "esposizione_lorda_media": 1.793801299366912,
+  "esposizione_netta_media": -0.0061531239680015035,
+  "netta_min": -0.376707676297791,
+  "netta_max": 0.4236440046535954,
+  "ordini_voluti": 20631,
+  "saltati": 13054,
+  "quota_saltati": 0.6327371431341186,
+  "sotto_valore_minimo": 13054,
+  "sotto_un_passo": 2012,
+  "settimane_moneta_con_polvere": 2494,
+  "monete_al_lunedi": 51.966777408637874,
+  "ordini_al_lunedi": 25.172757475083056,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "BCHUSDT",
+    101
+   ],
+   [
+    "AVAXUSDT",
+    93
+   ],
+   [
+    "LINKUSDT",
+    93
+   ],
+   [
+    "ETCUSDT",
+    91
+   ],
+   [
+    "ETHUSDT",
+    90
+   ],
+   [
+    "LTCUSDT",
+    72
+   ],
+   [
+    "AAVEUSDT",
+    65
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "KSMUSDT",
+    37
+   ],
+   [
+    "TRBUSDT",
+    36
+   ],
+   [
+    "ICPUSDT",
+    31
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.8889341833864649
+ },
+ "280 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5008338776484623,
+  "composto_annuo": 0.5616837443294118,
+  "volatilita": 0.3275309200327405,
+  "sharpe": 1.5291193808462364,
+  "sortino": 2.5738657331715467,
+  "discesa_max": -0.31975570405301057,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.08282906110135882,
+  "curtosi": 6.730471932957149,
+  "t": 3.6789422349594356,
+  "settimane_negative": 119,
+  "peggiore": -0.18092784737672102,
+  "migliore": 0.21599999125433159,
+  "per_anno": {
+   "2021": 1.3243601349945837,
+   "2022": 0.39181276295895795,
+   "2023": 0.1788314030529593,
+   "2024": 0.6044079042242567,
+   "2025": 0.38376496498226825,
+   "2026": 0.005534410422139585
+  },
+  "spese_annue": 0.03890414987859724,
+  "funding_annuo_pagato": -0.2006910634234317,
+  "esposizione_lorda_media": 1.8124649589752249,
+  "esposizione_netta_media": -0.011216755016607353,
+  "netta_min": -0.30921964811833597,
+  "netta_max": 0.3534857873490586,
+  "ordini_voluti": 20425,
+  "saltati": 12368,
+  "quota_saltati": 0.6055324357405141,
+  "sotto_valore_minimo": 12368,
+  "sotto_un_passo": 1949,
+  "settimane_moneta_con_polvere": 2132,
+  "monete_al_lunedi": 51.737541528239205,
+  "ordini_al_lunedi": 26.767441860465116,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "BCHUSDT",
+    103
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETCUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "LTCUSDT",
+    47
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9077885975021049
+ },
+ "280 USDT, mercato, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.4841492678152277,
+  "composto_annuo": 0.5509159947910123,
+  "volatilita": 0.29678037600765417,
+  "sharpe": 1.631338548485231,
+  "sortino": 2.862783671187595,
+  "discesa_max": -0.31386398725437625,
+  "discesa_settimane_piu_lunga": 51,
+  "asimmetria": 0.21959769480276392,
+  "curtosi": 6.518248208081493,
+  "t": 3.924873597650934,
+  "settimane_negative": 126,
+  "peggiore": -0.16951683349880622,
+  "migliore": 0.18648810805445207,
+  "per_anno": {
+   "2021": 1.1669825377819696,
+   "2022": 0.4108325864967895,
+   "2023": 0.18479861126692018,
+   "2024": 0.49593781253455105,
+   "2025": 0.3974635524681228,
+   "2026": 0.178005164283365
+  },
+  "spese_annue": 0.03959696323615981,
+  "funding_annuo_pagato": -0.19324441948232107,
+  "esposizione_lorda_media": 1.661448700073436,
+  "esposizione_netta_media": -0.019565585341234322,
+  "netta_min": -0.3181269657283409,
+  "netta_max": 0.35379859865479374,
+  "ordini_voluti": 18448,
+  "saltati": 8137,
+  "quota_saltati": 0.4410776235906331,
+  "sotto_valore_minimo": 10533,
+  "sotto_un_passo": 2020,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 44.38538205980066,
+  "ordini_al_lunedi": 34.25581395348837,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BCHUSDT",
+    133
+   ],
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    89
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "LTCUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9236850749209392
+ },
+ "280 USDT, limite oltre 0.00%": {
+  "settimane": 301,
+  "annuo": 0.5144251389874253,
+  "composto_annuo": 0.5830819274281267,
+  "volatilita": 0.3271329548028455,
+  "sharpe": 1.5725261898406284,
+  "sortino": 2.6579591934971174,
+  "discesa_max": -0.31872796824516014,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.07759172372094897,
+  "curtosi": 6.702397243959552,
+  "t": 3.7833756395023235,
+  "settimane_negative": 119,
+  "peggiore": -0.18082948781784125,
+  "migliore": 0.2166157828846498,
+  "per_anno": {
+   "2021": 1.3444976149258545,
+   "2022": 0.40058497771251816,
+   "2023": 0.19614140921340312,
+   "2024": 0.6179834411599355,
+   "2025": 0.39830108286926214,
+   "2026": 0.010838501206111654
+  },
+  "spese_annue": 0.025312888539634298,
+  "funding_annuo_pagato": -0.2006910634234317,
+  "esposizione_lorda_media": 1.8124649589752249,
+  "esposizione_netta_media": -0.011216755016607353,
+  "netta_min": -0.30921964811833597,
+  "netta_max": 0.3534857873490586,
+  "ordini_voluti": 20425,
+  "saltati": 12368,
+  "quota_saltati": 0.6055324357405141,
+  "sotto_valore_minimo": 12368,
+  "sotto_un_passo": 1949,
+  "settimane_moneta_con_polvere": 2132,
+  "monete_al_lunedi": 51.737541528239205,
+  "ordini_al_lunedi": 26.767441860465116,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "BCHUSDT",
+    103
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETCUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "LTCUSDT",
+    47
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.90712145824291
+ },
+ "280 USDT, limite oltre 0.00%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.49771737424187684,
+  "composto_annuo": 0.5721538956332464,
+  "volatilita": 0.2962785906793487,
+  "sharpe": 1.679896522730992,
+  "sortino": 2.963061649511449,
+  "discesa_max": -0.31312507232717124,
+  "discesa_settimane_piu_lunga": 51,
+  "asimmetria": 0.21090776947745388,
+  "curtosi": 6.464078470538598,
+  "t": 4.041700304927341,
+  "settimane_negative": 126,
+  "peggiore": -0.1686918473202348,
+  "migliore": 0.18712447193518789,
+  "per_anno": {
+   "2021": 1.1862064108185602,
+   "2022": 0.42078835766762573,
+   "2023": 0.20136272834876673,
+   "2024": 0.5091082307195064,
+   "2025": 0.4123706849202235,
+   "2026": 0.1838081991850482
+  },
+  "spese_annue": 0.02602885680951066,
+  "funding_annuo_pagato": -0.19324441948232107,
+  "esposizione_lorda_media": 1.661448700073436,
+  "esposizione_netta_media": -0.019565585341234322,
+  "netta_min": -0.3181269657283409,
+  "netta_max": 0.35379859865479374,
+  "ordini_voluti": 18448,
+  "saltati": 8137,
+  "quota_saltati": 0.4410776235906331,
+  "sotto_valore_minimo": 10533,
+  "sotto_un_passo": 2020,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 44.38538205980066,
+  "ordini_al_lunedi": 34.25581395348837,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BCHUSDT",
+    133
+   ],
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    89
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "LTCUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9231735978747414
+ },
+ "280 USDT, limite oltre 0.05%": {
+  "settimane": 301,
+  "annuo": 0.48375700324831983,
+  "composto_annuo": 0.5359980788575225,
+  "volatilita": 0.3262037532993852,
+  "sharpe": 1.4829903039292573,
+  "sortino": 2.4719296337215115,
+  "discesa_max": -0.32490371219674874,
+  "discesa_settimane_piu_lunga": 40,
+  "asimmetria": 0.04063966064783594,
+  "curtosi": 6.637108537015454,
+  "t": 3.5679592656404218,
+  "settimane_negative": 120,
+  "peggiore": -0.181594489282127,
+  "migliore": 0.21568971597859907,
+  "per_anno": {
+   "2021": 1.295644288673142,
+   "2022": 0.3802627035968507,
+   "2023": 0.17507868044074604,
+   "2024": 0.5796989918278422,
+   "2025": 0.3695752583633406,
+   "2026": -0.014558925124587072
+  },
+  "spese_annue": 0.055981024278739785,
+  "funding_annuo_pagato": -0.2006910634234317,
+  "esposizione_lorda_media": 1.8124649589752249,
+  "esposizione_netta_media": -0.011216755016607353,
+  "netta_min": -0.30921964811833597,
+  "netta_max": 0.3534857873490586,
+  "ordini_voluti": 20425,
+  "saltati": 12368,
+  "quota_saltati": 0.6055324357405141,
+  "sotto_valore_minimo": 12368,
+  "sotto_un_passo": 1949,
+  "settimane_moneta_con_polvere": 2132,
+  "monete_al_lunedi": 51.737541528239205,
+  "ordini_al_lunedi": 26.767441860465116,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "BCHUSDT",
+    103
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETCUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "LTCUSDT",
+    47
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9063157446423828
+ },
+ "280 USDT, limite oltre 0.05%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.4663488411392268,
+  "composto_annuo": 0.5243169239587333,
+  "volatilita": 0.2952771882744121,
+  "sharpe": 1.5793595294799117,
+  "sortino": 2.7369107365547207,
+  "discesa_max": -0.320277295997652,
+  "discesa_settimane_piu_lunga": 52,
+  "asimmetria": 0.1576668692718875,
+  "curtosi": 6.3667583993917685,
+  "t": 3.799816122907137,
+  "settimane_negative": 127,
+  "peggiore": -0.1686918473202348,
+  "migliore": 0.18619840502913715,
+  "per_anno": {
+   "2021": 1.1340531080440326,
+   "2022": 0.40019565576214755,
+   "2023": 0.1805025757383284,
+   "2024": 0.47050759070106724,
+   "2025": 0.38435163263573047,
+   "2026": 0.15701860805945667
+  },
+  "spese_annue": 0.0573973899121607,
+  "funding_annuo_pagato": -0.19324441948232107,
+  "esposizione_lorda_media": 1.661448700073436,
+  "esposizione_netta_media": -0.019565585341234322,
+  "netta_min": -0.3181269657283409,
+  "netta_max": 0.35379859865479374,
+  "ordini_voluti": 18448,
+  "saltati": 8137,
+  "quota_saltati": 0.4410776235906331,
+  "sotto_valore_minimo": 10533,
+  "sotto_un_passo": 2020,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 44.38538205980066,
+  "ordini_al_lunedi": 34.25581395348837,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BCHUSDT",
+    133
+   ],
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    89
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "LTCUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9226158006171102
+ },
+ "280 USDT, limite oltre 0.10%": {
+  "settimane": 301,
+  "annuo": 0.4569363505812666,
+  "composto_annuo": 0.4952911055249698,
+  "volatilita": 0.3267857159350249,
+  "sharpe": 1.3982751641204525,
+  "sortino": 2.3068917783412775,
+  "discesa_max": -0.329303846242333,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": 0.019460301676198832,
+  "curtosi": 6.692914202865089,
+  "t": 3.3641412317530826,
+  "settimane_negative": 123,
+  "peggiore": -0.1819708496635251,
+  "migliore": 0.21530260169288476,
+  "per_anno": {
+   "2021": 1.2589426364691505,
+   "2022": 0.3576378593565958,
+   "2023": 0.15263826451226953,
+   "2024": 0.5593908184138798,
+   "2025": 0.3421515726021319,
+   "2026": -0.047528229096551425
+  },
+  "spese_annue": 0.08280167694579299,
+  "funding_annuo_pagato": -0.2006910634234317,
+  "esposizione_lorda_media": 1.8124649589752249,
+  "esposizione_netta_media": -0.011216755016607353,
+  "netta_min": -0.30921964811833597,
+  "netta_max": 0.3534857873490586,
+  "ordini_voluti": 20425,
+  "saltati": 12368,
+  "quota_saltati": 0.6055324357405141,
+  "sotto_valore_minimo": 12368,
+  "sotto_un_passo": 1949,
+  "settimane_moneta_con_polvere": 2132,
+  "monete_al_lunedi": 51.737541528239205,
+  "ordini_al_lunedi": 26.767441860465116,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "BCHUSDT",
+    103
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETCUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "LTCUSDT",
+    47
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9061298466010749
+ },
+ "280 USDT, limite oltre 0.10%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.43878560251671306,
+  "composto_annuo": 0.48283175994220495,
+  "volatilita": 0.29590989353385105,
+  "sharpe": 1.4828351876870163,
+  "sortino": 2.535314092635617,
+  "discesa_max": -0.3250189651546147,
+  "discesa_settimane_piu_lunga": 52,
+  "asimmetria": 0.12770180686587784,
+  "curtosi": 6.436164302476533,
+  "t": 3.567586068032663,
+  "settimane_negative": 131,
+  "peggiore": -0.17432596689166338,
+  "migliore": 0.18581129074342284,
+  "per_anno": {
+   "2021": 1.0976560081441644,
+   "2022": 0.3769419046848558,
+   "2023": 0.15762035172682914,
+   "2024": 0.44914631218117956,
+   "2025": 0.35562764778975225,
+   "2026": 0.1225431092489209
+  },
+  "spese_annue": 0.08496062853467443,
+  "funding_annuo_pagato": -0.19324441948232107,
+  "esposizione_lorda_media": 1.661448700073436,
+  "esposizione_netta_media": -0.019565585341234322,
+  "netta_min": -0.3181269657283409,
+  "netta_max": 0.35379859865479374,
+  "ordini_voluti": 18448,
+  "saltati": 8137,
+  "quota_saltati": 0.4410776235906331,
+  "sotto_valore_minimo": 10533,
+  "sotto_un_passo": 2020,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 44.38538205980066,
+  "ordini_al_lunedi": 34.25581395348837,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BCHUSDT",
+    133
+   ],
+   [
+    "BTCUSDT",
+    112
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    89
+   ],
+   [
+    "AVAXUSDT",
+    88
+   ],
+   [
+    "ETHUSDT",
+    83
+   ],
+   [
+    "AXSUSDT",
+    61
+   ],
+   [
+    "LTCUSDT",
+    61
+   ],
+   [
+    "AAVEUSDT",
+    59
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    32
+   ],
+   [
+    "UNIUSDT",
+    28
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9222804308689679
+ },
+ "300 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5305796491080333,
+  "composto_annuo": 0.6159459151902063,
+  "volatilita": 0.3136468827101643,
+  "sharpe": 1.6916464927800126,
+  "sortino": 2.9536369765777453,
+  "discesa_max": -0.2744133226255413,
+  "discesa_settimane_piu_lunga": 35,
+  "asimmetria": 0.25616300549871424,
+  "curtosi": 6.521753419255569,
+  "t": 4.069969818488097,
+  "settimane_negative": 117,
+  "peggiore": -0.1741372996584859,
+  "migliore": 0.21559084002256237,
+  "per_anno": {
+   "2021": 1.3424739934811476,
+   "2022": 0.44872646704165825,
+   "2023": 0.2777708042338913,
+   "2024": 0.6663774216632959,
+   "2025": 0.31037170251274393,
+   "2026": 0.016515918383810974
+  },
+  "spese_annue": 0.03958299119786989,
+  "funding_annuo_pagato": -0.20686352797833224,
+  "esposizione_lorda_media": 1.8319622666147641,
+  "esposizione_netta_media": -0.01264238423672298,
+  "netta_min": -0.32343835905095414,
+  "netta_max": 0.35101928094926443,
+  "ordini_voluti": 19824,
+  "saltati": 11503,
+  "quota_saltati": 0.5802562550443906,
+  "sotto_valore_minimo": 11503,
+  "sotto_un_passo": 1926,
+  "settimane_moneta_con_polvere": 1467,
+  "monete_al_lunedi": 50.35548172757475,
+  "ordini_al_lunedi": 27.64451827242525,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    84
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    69
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    41
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ],
+   [
+    "YFIUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9119744418160647
+ },
+ "300 USDT, mercato, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.5141449345621986,
+  "composto_annuo": 0.6002537576445375,
+  "volatilita": 0.2914630252871111,
+  "sharpe": 1.7640142658086062,
+  "sortino": 3.156390507925846,
+  "discesa_max": -0.2783599765863567,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.24607648061506446,
+  "curtosi": 6.641043661442424,
+  "t": 4.24408104876857,
+  "settimane_negative": 124,
+  "peggiore": -0.16946180183314194,
+  "migliore": 0.18648002633296323,
+  "per_anno": {
+   "2021": 1.2427137736840297,
+   "2022": 0.44554570504197755,
+   "2023": 0.2323439188741169,
+   "2024": 0.5178031256975917,
+   "2025": 0.3873203593111236,
+   "2026": 0.18255060704661252
+  },
+  "spese_annue": 0.04019578890714416,
+  "funding_annuo_pagato": -0.19750442417310388,
+  "esposizione_lorda_media": 1.6904356873408386,
+  "esposizione_netta_media": -0.020877444149336854,
+  "netta_min": -0.3189502406803635,
+  "netta_max": 0.3468882387500319,
+  "ordini_voluti": 18481,
+  "saltati": 7910,
+  "quota_saltati": 0.42800714247064553,
+  "sotto_valore_minimo": 10305,
+  "sotto_un_passo": 1977,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 45.053156146179404,
+  "ordini_al_lunedi": 35.119601328903656,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "BCHUSDT",
+    87
+   ],
+   [
+    "ETCUSDT",
+    87
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    75
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    55
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9313968083642061
+ },
+ "300 USDT, limite oltre 0.00%": {
+  "settimane": 301,
+  "annuo": 0.5443312787254848,
+  "composto_annuo": 0.6384088105708787,
+  "volatilita": 0.3130723222250541,
+  "sharpe": 1.738675826904266,
+  "sortino": 3.049657001823595,
+  "discesa_max": -0.2718372736314444,
+  "discesa_settimane_piu_lunga": 35,
+  "asimmetria": 0.25011581588886767,
+  "curtosi": 6.489740482137741,
+  "t": 4.183118736590218,
+  "settimane_negative": 117,
+  "peggiore": -0.17332737257015254,
+  "migliore": 0.21620972659121393,
+  "per_anno": {
+   "2021": 1.3620815649012963,
+   "2022": 0.45902944145145014,
+   "2023": 0.2950442781321736,
+   "2024": 0.6797337539314218,
+   "2025": 0.32474820151332434,
+   "2026": 0.02227111665242226
+  },
+  "spese_annue": 0.02583136158041832,
+  "funding_annuo_pagato": -0.20686352797833224,
+  "esposizione_lorda_media": 1.8319622666147641,
+  "esposizione_netta_media": -0.01264238423672298,
+  "netta_min": -0.32343835905095414,
+  "netta_max": 0.35101928094926443,
+  "ordini_voluti": 19824,
+  "saltati": 11503,
+  "quota_saltati": 0.5802562550443906,
+  "sotto_valore_minimo": 11503,
+  "sotto_un_passo": 1926,
+  "settimane_moneta_con_polvere": 1467,
+  "monete_al_lunedi": 50.35548172757475,
+  "ordini_al_lunedi": 27.64451827242525,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    84
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    69
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    41
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ],
+   [
+    "YFIUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9114535667092232
+ },
+ "300 USDT, limite oltre 0.00%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.5280845141197527,
+  "composto_annuo": 0.6227651328585604,
+  "volatilita": 0.2909178614347954,
+  "sharpe": 1.815235790319854,
+  "sortino": 3.2647743384638646,
+  "discesa_max": -0.2774523883901415,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.23624159145868565,
+  "curtosi": 6.5830833720554045,
+  "t": 4.367316050707498,
+  "settimane_negative": 124,
+  "peggiore": -0.16863801566147524,
+  "migliore": 0.1871118475615086,
+  "per_anno": {
+   "2021": 1.2624758332243464,
+   "2022": 0.4556403234280647,
+   "2023": 0.2494422831811555,
+   "2024": 0.531287932737607,
+   "2025": 0.4021306585311235,
+   "2026": 0.18928362999971232
+  },
+  "spese_annue": 0.02625620934959,
+  "funding_annuo_pagato": -0.19750442417310388,
+  "esposizione_lorda_media": 1.6904356873408386,
+  "esposizione_netta_media": -0.020877444149336854,
+  "netta_min": -0.3189502406803635,
+  "netta_max": 0.3468882387500319,
+  "ordini_voluti": 18481,
+  "saltati": 7910,
+  "quota_saltati": 0.42800714247064553,
+  "sotto_valore_minimo": 10305,
+  "sotto_un_passo": 1977,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 45.053156146179404,
+  "ordini_al_lunedi": 35.119601328903656,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "BCHUSDT",
+    87
+   ],
+   [
+    "ETCUSDT",
+    87
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    75
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    55
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9307768069628969
+ },
+ "300 USDT, limite oltre 0.05%": {
+  "settimane": 301,
+  "annuo": 0.5130368111306037,
+  "composto_annuo": 0.5886849091429818,
+  "volatilita": 0.31217887052732524,
+  "sharpe": 1.643406583744742,
+  "sortino": 2.836359687200795,
+  "discesa_max": -0.2774275467081819,
+  "discesa_settimane_piu_lunga": 35,
+  "asimmetria": 0.20690287802135698,
+  "curtosi": 6.4019075267480865,
+  "t": 3.9539083513564455,
+  "settimane_negative": 119,
+  "peggiore": -0.17332737257015254,
+  "migliore": 0.21528365968516322,
+  "per_anno": {
+   "2021": 1.3115027701628692,
+   "2022": 0.4381433917024491,
+   "2023": 0.27324649135015333,
+   "2024": 0.6386630766569136,
+   "2025": 0.29814757421929566,
+   "2026": -0.0029788684778145435
+  },
+  "spese_annue": 0.05712582917529943,
+  "funding_annuo_pagato": -0.20686352797833224,
+  "esposizione_lorda_media": 1.8319622666147641,
+  "esposizione_netta_media": -0.01264238423672298,
+  "netta_min": -0.32343835905095414,
+  "netta_max": 0.35101928094926443,
+  "ordini_voluti": 19824,
+  "saltati": 11503,
+  "quota_saltati": 0.5802562550443906,
+  "sotto_valore_minimo": 11503,
+  "sotto_un_passo": 1926,
+  "settimane_moneta_con_polvere": 1467,
+  "monete_al_lunedi": 50.35548172757475,
+  "ordini_al_lunedi": 27.64451827242525,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    84
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    69
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    41
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ],
+   [
+    "YFIUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9107859726576946
+ },
+ "300 USDT, limite oltre 0.05%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.4960443112734023,
+  "composto_annuo": 0.5723461601311279,
+  "volatilita": 0.28995138317024843,
+  "sharpe": 1.7107844282368672,
+  "sortino": 3.018968806431884,
+  "discesa_max": -0.28659203424544055,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.17951649119134985,
+  "curtosi": 6.474459343197623,
+  "t": 4.116014201892084,
+  "settimane_negative": 125,
+  "peggiore": -0.16863801566147524,
+  "migliore": 0.18618578065545785,
+  "per_anno": {
+   "2021": 1.210069423953629,
+   "2022": 0.4344816379333009,
+   "2023": 0.22781832249016326,
+   "2024": 0.48919813333756895,
+   "2025": 0.37515872776205933,
+   "2026": 0.1627593698791755
+  },
+  "spese_annue": 0.058296412195940416,
+  "funding_annuo_pagato": -0.19750442417310388,
+  "esposizione_lorda_media": 1.6904356873408386,
+  "esposizione_netta_media": -0.020877444149336854,
+  "netta_min": -0.3189502406803635,
+  "netta_max": 0.3468882387500319,
+  "ordini_voluti": 18481,
+  "saltati": 7910,
+  "quota_saltati": 0.42800714247064553,
+  "sotto_valore_minimo": 10305,
+  "sotto_un_passo": 1977,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 45.053156146179404,
+  "ordini_al_lunedi": 35.119601328903656,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "BCHUSDT",
+    87
+   ],
+   [
+    "ETCUSDT",
+    87
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    75
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    55
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9303815928466019
+ },
+ "300 USDT, limite oltre 0.10%": {
+  "settimane": 301,
+  "annuo": 0.4861112907760994,
+  "composto_annuo": 0.546462561643527,
+  "volatilita": 0.31275817989970334,
+  "sharpe": 1.5542720287347485,
+  "sortino": 2.651115025767314,
+  "discesa_max": -0.2925065573792148,
+  "discesa_settimane_piu_lunga": 35,
+  "asimmetria": 0.1805095871629607,
+  "curtosi": 6.476908040783159,
+  "t": 3.7394575484118744,
+  "settimane_negative": 123,
+  "peggiore": -0.17895794867015255,
+  "migliore": 0.2148771896851632,
+  "per_anno": {
+   "2021": 1.2747253129981637,
+   "2022": 0.41539322010339885,
+   "2023": 0.25075265864679575,
+   "2024": 0.6173002807180938,
+   "2025": 0.272112280760607,
+   "2026": -0.03681392312298131
+  },
+  "spese_annue": 0.08405134952980382,
+  "funding_annuo_pagato": -0.20686352797833224,
+  "esposizione_lorda_media": 1.8319622666147641,
+  "esposizione_netta_media": -0.01264238423672298,
+  "netta_min": -0.32343835905095414,
+  "netta_max": 0.35101928094926443,
+  "ordini_voluti": 19824,
+  "saltati": 11503,
+  "quota_saltati": 0.5802562550443906,
+  "sotto_valore_minimo": 11503,
+  "sotto_un_passo": 1926,
+  "settimane_moneta_con_polvere": 1467,
+  "monete_al_lunedi": 50.35548172757475,
+  "ordini_al_lunedi": 27.64451827242525,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "ETCUSDT",
+    84
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    69
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    41
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ],
+   [
+    "YFIUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9105632197536158
+ },
+ "300 USDT, limite oltre 0.10%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.46865846823407575,
+  "composto_annuo": 0.5298631892491334,
+  "volatilita": 0.29056144095224795,
+  "sharpe": 1.6129410244461753,
+  "sortino": 2.8065386228819773,
+  "discesa_max": -0.29206522405453816,
+  "discesa_settimane_piu_lunga": 52,
+  "asimmetria": 0.1468663985045652,
+  "curtosi": 6.553997040683679,
+  "t": 3.8806105864997007,
+  "settimane_negative": 126,
+  "peggiore": -0.17426859176147527,
+  "migliore": 0.18577931065545783,
+  "per_anno": {
+   "2021": 1.1740125790766653,
+   "2022": 0.4115804142166041,
+   "2023": 0.2046657087412831,
+   "2024": 0.4668235989400989,
+   "2025": 0.3483476345548935,
+   "2026": 0.12792546729950874
+  },
+  "spese_annue": 0.08568225523526696,
+  "funding_annuo_pagato": -0.19750442417310388,
+  "esposizione_lorda_media": 1.6904356873408386,
+  "esposizione_netta_media": -0.020877444149336854,
+  "netta_min": -0.3189502406803635,
+  "netta_max": 0.3468882387500319,
+  "ordini_voluti": 18481,
+  "saltati": 7910,
+  "quota_saltati": 0.42800714247064553,
+  "sotto_valore_minimo": 10305,
+  "sotto_un_passo": 1977,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 45.053156146179404,
+  "ordini_al_lunedi": 35.119601328903656,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    111
+   ],
+   [
+    "LINKUSDT",
+    92
+   ],
+   [
+    "BCHUSDT",
+    87
+   ],
+   [
+    "ETCUSDT",
+    87
+   ],
+   [
+    "AVAXUSDT",
+    82
+   ],
+   [
+    "ETHUSDT",
+    75
+   ],
+   [
+    "AXSUSDT",
+    60
+   ],
+   [
+    "AAVEUSDT",
+    55
+   ],
+   [
+    "LTCUSDT",
+    55
+   ],
+   [
+    "KSMUSDT",
+    33
+   ],
+   [
+    "TRBUSDT",
+    28
+   ],
+   [
+    "ICPUSDT",
+    25
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9301474693608313
+ },
+ "500 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5712393430020171,
+  "composto_annuo": 0.6937630006414224,
+  "volatilita": 0.29026816034366254,
+  "sharpe": 1.9679710731128728,
+  "sortino": 3.4820624456520197,
+  "discesa_max": -0.25745041589747286,
+  "discesa_settimane_piu_lunga": 35,
+  "asimmetria": 0.07451661217523692,
+  "curtosi": 5.331636858406947,
+  "t": 4.734785255319073,
+  "settimane_negative": 121,
+  "peggiore": -0.1492457792689435,
+  "migliore": 0.18161089103160827,
+  "per_anno": {
+   "2021": 1.1976132064654927,
+   "2022": 0.49736871580594055,
+   "2023": 0.31928067355153394,
+   "2024": 0.6962518227981781,
+   "2025": 0.4452649601410236,
+   "2026": 0.17865656812940459
+  },
+  "spese_annue": 0.04357410369965671,
+  "funding_annuo_pagato": -0.229793665657356,
+  "esposizione_lorda_media": 1.9254515947539448,
+  "esposizione_netta_media": -0.005940049404719782,
+  "netta_min": -0.2894550029995126,
+  "netta_max": 0.34320051498165527,
+  "ordini_voluti": 19375,
+  "saltati": 9107,
+  "quota_saltati": 0.47003870967741934,
+  "sotto_valore_minimo": 9107,
+  "sotto_un_passo": 1560,
+  "settimane_moneta_con_polvere": 742,
+  "monete_al_lunedi": 51.16279069767442,
+  "ordini_al_lunedi": 34.11295681063123,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    87
+   ],
+   [
+    "AVAXUSDT",
+    57
+   ],
+   [
+    "AXSUSDT",
+    37
+   ],
+   [
+    "KSMUSDT",
+    24
+   ],
+   [
+    "ETCUSDT",
+    23
+   ],
+   [
+    "YFIUSDT",
+    22
+   ],
+   [
+    "BCHUSDT",
+    15
+   ],
+   [
+    "AAVEUSDT",
+    14
+   ],
+   [
+    "ICPUSDT",
+    13
+   ],
+   [
+    "LABUSDT",
+    12
+   ],
+   [
+    "SIRENUSDT",
+    12
+   ],
+   [
+    "EGLDUSDT",
+    11
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9664164557838469
+ },
+ "1000 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5488289320114788,
+  "composto_annuo": 0.6547610481412975,
+  "volatilita": 0.29383109449304107,
+  "sharpe": 1.8678381638212795,
+  "sortino": 3.2243936232643877,
+  "discesa_max": -0.2724788825961679,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.02371735949509185,
+  "curtosi": 5.6316322797692795,
+  "t": 4.493873267859771,
+  "settimane_negative": 121,
+  "peggiore": -0.1579817639077725,
+  "migliore": 0.18476025975172855,
+  "per_anno": {
+   "2021": 1.171615505247217,
+   "2022": 0.38351950163002213,
+   "2023": 0.2769686853706359,
+   "2024": 0.6801060823183266,
+   "2025": 0.4653926441405037,
+   "2026": 0.2420519170097017
+  },
+  "spese_annue": 0.04656352882976887,
+  "funding_annuo_pagato": -0.23900019617707702,
+  "esposizione_lorda_media": 1.9675872733367379,
+  "esposizione_netta_media": -0.006952724017666691,
+  "netta_min": -0.1715735851096097,
+  "netta_max": 0.13491319372303445,
+  "ordini_voluti": 18831,
+  "saltati": 5864,
+  "quota_saltati": 0.3114014125643885,
+  "sotto_valore_minimo": 5864,
+  "sotto_un_passo": 1080,
+  "settimane_moneta_con_polvere": 63,
+  "monete_al_lunedi": 50.3156146179402,
+  "ordini_al_lunedi": 43.079734219269106,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    38
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9887746804401635
+ },
+ "1000 USDT, mercato, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.5434496737349879,
+  "composto_annuo": 0.647042840699686,
+  "volatilita": 0.2915192202338452,
+  "sharpe": 1.8641984336369108,
+  "sortino": 3.215960151786982,
+  "discesa_max": -0.2850283969762134,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": 0.019107643288802146,
+  "curtosi": 5.741358800921654,
+  "t": 4.485116360278284,
+  "settimane_negative": 119,
+  "peggiore": -0.15995003200683125,
+  "migliore": 0.18447226577072925,
+  "per_anno": {
+   "2021": 1.176194284236788,
+   "2022": 0.3674541107782803,
+   "2023": 0.2991084353639232,
+   "2024": 0.648764766625071,
+   "2025": 0.4635586043400216,
+   "2026": 0.2316354139428476
+  },
+  "spese_annue": 0.04699272420906527,
+  "funding_annuo_pagato": -0.23693357862489975,
+  "esposizione_lorda_media": 1.9427692386221593,
+  "esposizione_netta_media": -0.00688704299801459,
+  "netta_min": -0.17999834510960971,
+  "netta_max": 0.12647941372303448,
+  "ordini_voluti": 18776,
+  "saltati": 3834,
+  "quota_saltati": 0.2041968470387729,
+  "sotto_valore_minimo": 5808,
+  "sotto_un_passo": 1083,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 50.096345514950166,
+  "ordini_al_lunedi": 49.64119601328904,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    41
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9906611656255568
+ },
+ "1000 USDT, limite oltre 0.00%": {
+  "settimane": 301,
+  "annuo": 0.5644294690719838,
+  "composto_annuo": 0.6808522924616616,
+  "volatilita": 0.2931754267975706,
+  "sharpe": 1.9252277560823898,
+  "sortino": 3.341645239981732,
+  "discesa_max": -0.2710470991228373,
+  "discesa_settimane_piu_lunga": 37,
+  "asimmetria": 0.01861118621562986,
+  "curtosi": 5.619505588749175,
+  "t": 4.631948160808714,
+  "settimane_negative": 120,
+  "peggiore": -0.15771603857258054,
+  "migliore": 0.18547734163879792,
+  "per_anno": {
+   "2021": 1.195415666996916,
+   "2022": 0.395457796858742,
+   "2023": 0.29612173725444785,
+   "2024": 0.6958633099901704,
+   "2025": 0.4810416310070248,
+   "2026": 0.2468649872774319
+  },
+  "spese_annue": 0.03096299176926372,
+  "funding_annuo_pagato": -0.23900019617707702,
+  "esposizione_lorda_media": 1.9675872733367379,
+  "esposizione_netta_media": -0.006952724017666691,
+  "netta_min": -0.1715735851096097,
+  "netta_max": 0.13491319372303445,
+  "ordini_voluti": 18831,
+  "saltati": 5864,
+  "quota_saltati": 0.3114014125643885,
+  "sotto_valore_minimo": 5864,
+  "sotto_un_passo": 1080,
+  "settimane_moneta_con_polvere": 63,
+  "monete_al_lunedi": 50.3156146179402,
+  "ordini_al_lunedi": 43.079734219269106,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    38
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.988625687104316
+ },
+ "1000 USDT, limite oltre 0.00%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.5593554049645327,
+  "composto_annuo": 0.6735085612993601,
+  "volatilita": 0.2908826141512841,
+  "sharpe": 1.9229592204971713,
+  "sortino": 3.3358581197399477,
+  "discesa_max": -0.2835872845412608,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": 0.013681944178382286,
+  "curtosi": 5.729284630676948,
+  "t": 4.62649024072706,
+  "settimane_negative": 116,
+  "peggiore": -0.15968734803774123,
+  "migliore": 0.18519852950379861,
+  "per_anno": {
+   "2021": 1.2002226922510673,
+   "2022": 0.3796129178441349,
+   "2023": 0.3186541382867923,
+   "2024": 0.6648208674111586,
+   "2025": 0.4795427208814546,
+   "2026": 0.23681956299583984
+  },
+  "spese_annue": 0.031086992979520413,
+  "funding_annuo_pagato": -0.23693357862489975,
+  "esposizione_lorda_media": 1.9427692386221593,
+  "esposizione_netta_media": -0.00688704299801459,
+  "netta_min": -0.17999834510960971,
+  "netta_max": 0.12647941372303448,
+  "ordini_voluti": 18776,
+  "saltati": 3834,
+  "quota_saltati": 0.2041968470387729,
+  "sotto_valore_minimo": 5808,
+  "sotto_un_passo": 1083,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 50.096345514950166,
+  "ordini_al_lunedi": 49.64119601328904,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    41
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9904642200113792
+ },
+ "1000 USDT, limite oltre 0.05%": {
+  "settimane": 301,
+  "annuo": 0.5273783176027397,
+  "composto_annuo": 0.620543245460603,
+  "volatilita": 0.29237465755706493,
+  "sharpe": 1.8037757513227948,
+  "sortino": 3.0726339927366157,
+  "discesa_max": -0.28048255134001465,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": -0.021537382417628325,
+  "curtosi": 5.600390571959329,
+  "t": 4.33974408869546,
+  "settimane_negative": 123,
+  "peggiore": -0.15929701616868053,
+  "migliore": 0.18455127473274718,
+  "per_anno": {
+   "2021": 1.1373548367861317,
+   "2022": 0.3690187473351286,
+   "2023": 0.27091121184115136,
+   "2024": 0.6469247040980037,
+   "2025": 0.4487775596725716,
+   "2026": 0.21746554470528182
+  },
+  "spese_annue": 0.06801414323850785,
+  "funding_annuo_pagato": -0.23900019617707702,
+  "esposizione_lorda_media": 1.9675872733367379,
+  "esposizione_netta_media": -0.006952724017666691,
+  "netta_min": -0.1715735851096097,
+  "netta_max": 0.13491319372303445,
+  "ordini_voluti": 18831,
+  "saltati": 5864,
+  "quota_saltati": 0.3114014125643885,
+  "sotto_valore_minimo": 5864,
+  "sotto_un_passo": 1080,
+  "settimane_moneta_con_polvere": 63,
+  "monete_al_lunedi": 50.3156146179402,
+  "ordini_al_lunedi": 43.079734219269106,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    38
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9875211623753234
+ },
+ "1000 USDT, limite oltre 0.05%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.5220483867251704,
+  "composto_annuo": 0.6130629586800049,
+  "volatilita": 0.29004880880127887,
+  "sharpe": 1.7998639224987867,
+  "sortino": 3.063872648959857,
+  "discesa_max": -0.29265337404207226,
+  "discesa_settimane_piu_lunga": 49,
+  "asimmetria": -0.02685909565140492,
+  "curtosi": 5.708337252543411,
+  "t": 4.330332532961591,
+  "settimane_negative": 121,
+  "peggiore": -0.16126832563384125,
+  "migliore": 0.18427246259774788,
+  "per_anno": {
+   "2021": 1.140973907449845,
+   "2022": 0.35289757992979165,
+   "2023": 0.293705647031355,
+   "2024": 0.6161001309489322,
+   "2025": 0.44682675339184086,
+   "2026": 0.2073563824558898
+  },
+  "spese_annue": 0.06839401121888272,
+  "funding_annuo_pagato": -0.23693357862489975,
+  "esposizione_lorda_media": 1.9427692386221593,
+  "esposizione_netta_media": -0.00688704299801459,
+  "netta_min": -0.17999834510960971,
+  "netta_max": 0.12647941372303448,
+  "ordini_voluti": 18776,
+  "saltati": 3834,
+  "quota_saltati": 0.2041968470387729,
+  "sotto_valore_minimo": 5808,
+  "sotto_un_passo": 1083,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 50.096345514950166,
+  "ordini_al_lunedi": 49.64119601328904,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    41
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9894915936259178
+ },
+ "1000 USDT, limite oltre 0.10%": {
+  "settimane": 301,
+  "annuo": 0.4941713196859204,
+  "composto_annuo": 0.5676037924356592,
+  "volatilita": 0.29326042329051394,
+  "sharpe": 1.6850937952728011,
+  "sortino": 2.8302548195079065,
+  "discesa_max": -0.28582274355773174,
+  "discesa_settimane_piu_lunga": 49,
+  "asimmetria": -0.038132665514922205,
+  "curtosi": 5.620120305238938,
+  "t": 4.054204538213609,
+  "settimane_negative": 125,
+  "peggiore": -0.15966323184524114,
+  "migliore": 0.1841312557327472,
+  "per_anno": {
+   "2021": 1.0956724796940438,
+   "2022": 0.3392672543927432,
+   "2023": 0.2460201860151902,
+   "2024": 0.6215718645935301,
+   "2025": 0.4080888429830703,
+   "2026": 0.17929306803956113
+  },
+  "spese_annue": 0.1012211411553272,
+  "funding_annuo_pagato": -0.23900019617707702,
+  "esposizione_lorda_media": 1.9675872733367379,
+  "esposizione_netta_media": -0.006952724017666691,
+  "netta_min": -0.1715735851096097,
+  "netta_max": 0.13491319372303445,
+  "ordini_voluti": 18831,
+  "saltati": 5864,
+  "quota_saltati": 0.3114014125643885,
+  "sotto_valore_minimo": 5864,
+  "sotto_un_passo": 1080,
+  "settimane_moneta_con_polvere": 63,
+  "monete_al_lunedi": 50.3156146179402,
+  "ordini_al_lunedi": 43.079734219269106,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    38
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9864145933821006
+ },
+ "1000 USDT, limite oltre 0.10%, chiusure libere": {
+  "settimane": 301,
+  "annuo": 0.48869460935733244,
+  "composto_annuo": 0.5601395829928741,
+  "volatilita": 0.2909369197403972,
+  "sharpe": 1.679727034277376,
+  "sortino": 2.8190715838398224,
+  "discesa_max": -0.2979505981995728,
+  "discesa_settimane_piu_lunga": 51,
+  "asimmetria": -0.043372048370366414,
+  "curtosi": 5.726537916420766,
+  "t": 4.041292528897452,
+  "settimane_negative": 122,
+  "peggiore": -0.1616104100832262,
+  "migliore": 0.18385244359774788,
+  "per_anno": {
+   "2021": 1.0993710941903758,
+   "2022": 0.32329460362529905,
+   "2023": 0.26835896283900235,
+   "2024": 0.5909301412249599,
+   "2025": 0.4056228338529271,
+   "2026": 0.16880275543096912
+  },
+  "spese_annue": 0.10174778858672068,
+  "funding_annuo_pagato": -0.23693357862489975,
+  "esposizione_lorda_media": 1.9427692386221593,
+  "esposizione_netta_media": -0.00688704299801459,
+  "netta_min": -0.17999834510960971,
+  "netta_max": 0.12647941372303448,
+  "ordini_voluti": 18776,
+  "saltati": 3834,
+  "quota_saltati": 0.2041968470387729,
+  "sotto_valore_minimo": 5808,
+  "sotto_un_passo": 1083,
+  "settimane_moneta_con_polvere": 0,
+  "monete_al_lunedi": 50.096345514950166,
+  "ordini_al_lunedi": 49.64119601328904,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "BTCUSDT",
+    41
+   ],
+   [
+    "AXSUSDT",
+    32
+   ],
+   [
+    "AVAXUSDT",
+    20
+   ],
+   [
+    "LABUSDT",
+    4
+   ],
+   [
+    "AKEUSDT",
+    3
+   ],
+   [
+    "DEXEUSDT",
+    3
+   ],
+   [
+    "BAKEUSDT",
+    2
+   ],
+   [
+    "BANKUSDT",
+    2
+   ],
+   [
+    "EGLDUSDT",
+    2
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "HIPPOUSDT",
+    2
+   ],
+   [
+    "KSMUSDT",
+    2
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9883779650819322
+ },
+ "2000 USDT, mercato": {
+  "settimane": 301,
+  "annuo": 0.5365763046398234,
+  "composto_annuo": 0.6349786600621081,
+  "volatilita": 0.293833698215377,
+  "sharpe": 1.8261224219644085,
+  "sortino": 3.1832090509791873,
+  "discesa_max": -0.27764194507241147,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": 0.12753723294780475,
+  "curtosi": 5.611202412582416,
+  "t": 4.393508439251703,
+  "settimane_negative": 120,
+  "peggiore": -0.15255915767978828,
+  "migliore": 0.1851201928860799,
+  "per_anno": {
+   "2021": 1.1879347986705322,
+   "2022": 0.30711509784177776,
+   "2023": 0.2992416029168471,
+   "2024": 0.6422003625000605,
+   "2025": 0.48667737689301144,
+   "2026": 0.22156167288327197
+  },
+  "spese_annue": 0.04812303079060527,
+  "funding_annuo_pagato": -0.24582993511495937,
+  "esposizione_lorda_media": 1.9907266215353294,
+  "esposizione_netta_media": 0.0006712734913440101,
+  "netta_min": -0.05418229625954053,
+  "netta_max": 0.07720086363166251,
+  "ordini_voluti": 18851,
+  "saltati": 3554,
+  "quota_saltati": 0.18853111240782983,
+  "sotto_valore_minimo": 3554,
+  "sotto_un_passo": 697,
+  "settimane_moneta_con_polvere": 55,
+  "monete_al_lunedi": 50.6843853820598,
+  "ordini_al_lunedi": 50.820598006644516,
+  "settimane_voluta_e_mai_aperta_prime": [
+   [
+    "AVAXUSDT",
+    4
+   ],
+   [
+    "HIFIUSDT",
+    2
+   ],
+   [
+    "LITUSDT",
+    2
+   ],
+   [
+    "AKEUSDT",
+    1
+   ],
+   [
+    "AXSUSDT",
+    1
+   ]
+  ],
+  "correlazione_con_la_ricerca": 0.9980187242245768
+ },
+ "280 USDT composto, limite oltre 0,05%": {
+  "settimane": 301,
+  "annuo": 0.5378370528104555,
+  "composto_annuo": 0.6311718576022309,
+  "volatilita": 0.30591503872146986,
+  "sharpe": 1.7581255732254022,
+  "sortino": 3.008056205971789,
+  "discesa_max": -0.2820247399959457,
+  "discesa_settimane_piu_lunga": 48,
+  "asimmetria": 0.1460077645921671,
+  "curtosi": 6.978472408150677,
+  "t": 4.22991331266869,
+  "settimane_negative": 117,
+  "peggiore": -0.17437131072148668,
+  "migliore": 0.22222830797993579,
+  "per_anno_composto": {
+   "2021": 1.8374596449376104,
+   "2022": 0.4313989019319935,
+   "2023": 0.28492617202872017,
+   "2024": 0.8361777542117894,
+   "2025": 0.5787606622522803,
+   "2026": 0.12265648564828124
+  },
+  "valore_finale": 4755.590902173295,
+  "primo_lunedi_oltre_600": "2021-05-03"
+ },
+ "1000 USDT composto, limite oltre 0,05%": {
+  "settimane": 301,
+  "annuo": 0.5240253851433674,
+  "composto_annuo": 0.6157857620605145,
+  "volatilita": 0.29152580896225355,
+  "sharpe": 1.7975265620863692,
+  "sortino": 3.1095119424492674,
+  "discesa_max": -0.27940302847109344,
+  "discesa_settimane_piu_lunga": 51,
+  "asimmetria": 0.10223659688569228,
+  "curtosi": 5.561810749840329,
+  "t": 4.324709025701611,
+  "settimane_negative": 119,
+  "peggiore": -0.14881275560849888,
+  "migliore": 0.18557561238069675,
+  "per_anno_composto": {
+   "2021": 1.899664548177642,
+   "2022": 0.32867880517168646,
+   "2023": 0.3083189754048381,
+   "2024": 0.784871394427312,
+   "2025": 0.5848688517592855,
+   "2026": 0.12756039239819827
+  },
+  "valore_finale": 16077.609564616132,
+  "primo_lunedi_oltre_600": "2021-01-04"
+ },
+ "partenze_a_conto_vuoto_un_anno": {
+  "2021-01-04": {
+   "280": 1.2974593843558027,
+   "senza_minimi": 1.1902007228182365,
+   "prima_settimana_spese_280": 0.023137726177142832
+  },
+  "2021-04-05": {
+   "280": 1.1947597052633603,
+   "senza_minimi": 0.9189605318753794,
+   "prima_settimana_spese_280": 0.004044628326496292
+  },
+  "2021-07-05": {
+   "280": 0.6549173842327701,
+   "senza_minimi": 0.5271812603596432,
+   "prima_settimana_spese_280": 0.005685801447125176
+  },
+  "2021-10-04": {
+   "280": 0.5241207873115494,
+   "senza_minimi": 0.39227662594357565,
+   "prima_settimana_spese_280": 0.005873872495936222
+  },
+  "2022-01-03": {
+   "280": 0.3838003939207751,
+   "senza_minimi": 0.326481106159332,
+   "prima_settimana_spese_280": 0.0017266025330494154
+  },
+  "2022-04-04": {
+   "280": 0.2423521355587124,
+   "senza_minimi": 0.25259355555477486,
+   "prima_settimana_spese_280": 0.009069113728961284
+  },
+  "2022-07-04": {
+   "280": 0.19669127004481826,
+   "senza_minimi": 0.32614180780273216,
+   "prima_settimana_spese_280": 0.00036875369913052304
+  },
+  "2022-10-03": {
+   "280": 0.07582113151245115,
+   "senza_minimi": 0.2591611887613829,
+   "prima_settimana_spese_280": 0.0018869400264053854
+  },
+  "2023-01-02": {
+   "280": 0.23408249141961612,
+   "senza_minimi": 0.27945757821640144,
+   "prima_settimana_spese_280": 0.0008517449070391921
+  },
+  "2023-04-03": {
+   "280": 0.006876110019314211,
+   "senza_minimi": 0.14760039426482846,
+   "prima_settimana_spese_280": 0.0018680728255168557
+  },
+  "2023-07-03": {
+   "280": 0.03756427245760189,
+   "senza_minimi": 0.02772166867194478,
+   "prima_settimana_spese_280": 0.000619502901967251
+  },
+  "2023-10-02": {
+   "280": 0.28213358961915563,
+   "senza_minimi": 0.22237281851772525,
+   "prima_settimana_spese_280": 0.0011218292728445984
+  },
+  "2024-01-01": {
+   "280": 0.5194617584980179,
+   "senza_minimi": 0.6345260557901091,
+   "prima_settimana_spese_280": 0.0026729021458084187
+  },
+  "2024-04-01": {
+   "280": 0.9526714422720277,
+   "senza_minimi": 0.9180918294021063,
+   "prima_settimana_spese_280": 0.0013700734058532016
+  },
+  "2024-07-01": {
+   "280": 0.6022798866226191,
+   "senza_minimi": 0.7285603083157168,
+   "prima_settimana_spese_280": 0.002457362247119047
+  },
+  "2024-09-30": {
+   "280": 0.5995072535804928,
+   "senza_minimi": 0.7443894215076893,
+   "prima_settimana_spese_280": 0.0007328225996648694
+  },
+  "2024-12-30": {
+   "280": 0.38069099671014406,
+   "senza_minimi": 0.49712176596608454,
+   "prima_settimana_spese_280": 0.00034550029554069976
+  },
+  "2025-03-31": {
+   "280": 0.256245471915768,
+   "senza_minimi": 0.4245929659774235,
+   "prima_settimana_spese_280": 0.0008974764888711162
+  },
+  "2025-06-30": {
+   "280": 0.2451037341773294,
+   "senza_minimi": 0.3585484526055235,
+   "prima_settimana_spese_280": 0.0004424779009924694
+  },
+  "2025-09-29": {
+   "280": 0.08168429883807024,
+   "senza_minimi": 0.37282809243778436,
+   "prima_settimana_spese_280": 0.0010979251565838317
+  }
+ },
+ "fino_al_19_ottobre": {
+  "ricerca": {
+   "settimane": 303,
+   "sharpe": 1.913658513308812,
+   "2026_l_anno": 0.30468352562233036,
+   "2026_composto": 0.23497889313923848
+  },
+  "280 USDT, mercato": {
+   "settimane": 303,
+   "sharpe": 1.563252559958418,
+   "2026_l_anno": 0.10765848629030636,
+   "2026_composto": 0.04278986289682174
+  },
+  "280 USDT, limite oltre 0.00%": {
+   "settimane": 303,
+   "sharpe": 1.6067983105549117,
+   "2026_l_anno": 0.11360884759902126,
+   "2026_composto": 0.04772754174727334
+  },
+  "280 USDT, limite oltre 0.05%": {
+   "settimane": 303,
+   "sharpe": 1.5177273700177911,
+   "2026_l_anno": 0.08921509875097486,
+   "2026_composto": 0.02705013487282515
+  },
+  "300 USDT, limite oltre 0.05%": {
+   "settimane": 303,
+   "sharpe": 1.678058410488237,
+   "2026_l_anno": 0.09493568005699593,
+   "2026_composto": 0.03857393522855124
+  }
+ }
+}

@@ -25,6 +25,8 @@ import pytest
 
 from research.src import fatti
 
+STORICO = pytest.mark.skip(reason="research/config/regole_dimensione.md descrive il bot del 6 ottobre 2026 (documento storico dal 27 novembre, audit del 26-27 novembre): il bot è cambiato dopo e questo test lo legava alle righe di oggi")
+
 RADICE = Path(__file__).resolve().parents[3]
 DOCUMENTO = RADICE / "research" / "config" / "regole_dimensione.md"
 
@@ -54,6 +56,7 @@ def test_contiene_segreti_vede_anche_chiavi_private_e_minuscole(linea):
 # --------------------------------------------------------------------------- #
 # Riferimenti che non sostengono l'affermazione                                #
 # --------------------------------------------------------------------------- #
+@STORICO
 def test_config_41_non_contiene_il_4h_che_il_documento_gli_attribuisce(documento):
     """Incoerenza 7 e stima 4.3: «timeframe_hours arriva a 4h (bot/config.py:41)».
     La riga 41 contiene 1m/5m/15m; il 4h sta alla riga 42.
@@ -70,6 +73,7 @@ def test_config_41_non_contiene_il_4h_che_il_documento_gli_attribuisce(documento
         "il documento cita ancora bot/config.py:41: il 4h e' alla riga 42")
 
 
+@STORICO
 def test_stima_4_3_non_deve_elencare_30m_e_4h_come_ignoti_a_timeframe_hours(documento):
     """La stima del punto 4.3 dice: «Se il timeframe della strategia e' 30m, 2h,
     4h, ...: bot/config.py:41 (timeframe_hours)». Ma `timeframe_hours` conosce
@@ -117,6 +121,7 @@ def test_nove_strategie_in_codice_come_dice_il_documento(documento):
     assert n == 9
 
 
+@STORICO
 def test_le_affermazioni_negative_restano_vere():
     """«Non trovato» nel documento: workingType, marginType/ISOLATED/CROSSED,
     markPriceKlines/premiumIndexKlines, fundingIntervalHours. Zero occorrenze

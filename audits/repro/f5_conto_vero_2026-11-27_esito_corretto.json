@@ -1,0 +1,878 @@
+{
+ "candidate": {
+  "F5 ricerca a mercato (oggi)": {
+   "sharpe": 1.8802449527408094,
+   "settimane": 301,
+   "asimmetria": 0.17550414152446256,
+   "curtosi": 5.533466437899327,
+   "t": 4.523723036509636,
+   "t_newey_west_4": 3.833433293149444,
+   "t_newey_west_13": 3.7641751929322527,
+   "autocorrelazione_1": 0.09918161182483316,
+   "autocorrelazione_2": 0.1358220744511163
+  },
+  "280 USDT, mercato": {
+   "sharpe": 1.5291193808462364,
+   "settimane": 301,
+   "asimmetria": 0.08282906110135882,
+   "curtosi": 6.730471932957149,
+   "t": 3.6789422349594356,
+   "t_newey_west_4": 3.0670799808911977,
+   "t_newey_west_13": 2.994828284708812,
+   "autocorrelazione_1": 0.1398548402859835,
+   "autocorrelazione_2": 0.121104871950922
+  },
+  "280 USDT, limite oltre 0.00%": {
+   "sharpe": 1.5725261898406284,
+   "settimane": 301,
+   "asimmetria": 0.07759172372094897,
+   "curtosi": 6.702397243959552,
+   "t": 3.7833756395023235,
+   "t_newey_west_4": 3.14931025111668,
+   "t_newey_west_13": 3.066145443818899,
+   "autocorrelazione_1": 0.1397946928956263,
+   "autocorrelazione_2": 0.12321704548452818
+  },
+  "280 USDT, limite oltre 0.05%": {
+   "sharpe": 1.4829903039292573,
+   "settimane": 301,
+   "asimmetria": 0.04063966064783594,
+   "curtosi": 6.637108537015454,
+   "t": 3.5679592656404218,
+   "t_newey_west_4": 2.9758623296724194,
+   "t_newey_west_13": 2.905979799818187,
+   "autocorrelazione_1": 0.13620674749671424,
+   "autocorrelazione_2": 0.12231683459292947
+  },
+  "280 USDT, limite oltre 0.10%": {
+   "sharpe": 1.3982751641204525,
+   "settimane": 301,
+   "asimmetria": 0.019460301676198832,
+   "curtosi": 6.692914202865089,
+   "t": 3.3641412317530826,
+   "t_newey_west_4": 2.8038547296520333,
+   "t_newey_west_13": 2.746960319958475,
+   "autocorrelazione_1": 0.13714854054489253,
+   "autocorrelazione_2": 0.12307378805038723
+  },
+  "280 USDT, mercato, chiusure libere": {
+   "sharpe": 1.631338548485231,
+   "settimane": 301,
+   "asimmetria": 0.21959769480276392,
+   "curtosi": 6.518248208081493,
+   "t": 3.924873597650934,
+   "t_newey_west_4": 3.3944552093393336,
+   "t_newey_west_13": 3.426593125188368,
+   "autocorrelazione_1": 0.10961016252929395,
+   "autocorrelazione_2": 0.09067991483391857
+  },
+  "280 USDT, limite oltre 0.05%, chiusure libere": {
+   "sharpe": 1.5793595294799117,
+   "settimane": 301,
+   "asimmetria": 0.1576668692718875,
+   "curtosi": 6.3667583993917685,
+   "t": 3.799816122907137,
+   "t_newey_west_4": 3.290575158045499,
+   "t_newey_west_13": 3.3228218386680686,
+   "autocorrelazione_1": 0.10496816320996871,
+   "autocorrelazione_2": 0.09142111211614616
+  },
+  "300 USDT, mercato": {
+   "sharpe": 1.6916464927800126,
+   "settimane": 301,
+   "asimmetria": 0.25616300549871424,
+   "curtosi": 6.521753419255569,
+   "t": 4.069969818488097,
+   "t_newey_west_4": 3.397324984667049,
+   "t_newey_west_13": 3.337252149043028,
+   "autocorrelazione_1": 0.1330453600517422,
+   "autocorrelazione_2": 0.1397325007526784
+  },
+  "300 USDT, limite oltre 0.00%": {
+   "sharpe": 1.738675826904266,
+   "settimane": 301,
+   "asimmetria": 0.25011581588886767,
+   "curtosi": 6.489740482137741,
+   "t": 4.183118736590218,
+   "t_newey_west_4": 3.4882044200618068,
+   "t_newey_west_13": 3.415247191738194,
+   "autocorrelazione_1": 0.13258712782671025,
+   "autocorrelazione_2": 0.14163619141287984
+  },
+  "300 USDT, limite oltre 0.05%": {
+   "sharpe": 1.643406583744742,
+   "settimane": 301,
+   "asimmetria": 0.20690287802135698,
+   "curtosi": 6.4019075267480865,
+   "t": 3.9539083513564455,
+   "t_newey_west_4": 3.30498919733023,
+   "t_newey_west_13": 3.24545668552539,
+   "autocorrelazione_1": 0.1286898903211687,
+   "autocorrelazione_2": 0.1405042767667661
+  },
+  "300 USDT, limite oltre 0.10%": {
+   "sharpe": 1.5542720287347485,
+   "settimane": 301,
+   "asimmetria": 0.1805095871629607,
+   "curtosi": 6.476908040783159,
+   "t": 3.7394575484118744,
+   "t_newey_west_4": 3.1252535916818007,
+   "t_newey_west_13": 3.0800321305331892,
+   "autocorrelazione_1": 0.12923550518484364,
+   "autocorrelazione_2": 0.14095270905268076
+  },
+  "1000 USDT, limite oltre 0.00%": {
+   "sharpe": 1.9252277560823898,
+   "settimane": 301,
+   "asimmetria": 0.01861118621562986,
+   "curtosi": 5.619505588749175,
+   "t": 4.631948160808714,
+   "t_newey_west_4": 3.9352849720586285,
+   "t_newey_west_13": 3.8782794866196966,
+   "autocorrelazione_1": 0.1024499803572483,
+   "autocorrelazione_2": 0.13578203059247076
+  },
+  "1000 USDT, limite oltre 0.05%": {
+   "sharpe": 1.8037757513227948,
+   "settimane": 301,
+   "asimmetria": -0.021537382417628325,
+   "curtosi": 5.600390571959329,
+   "t": 4.33974408869546,
+   "t_newey_west_4": 3.7031226722056676,
+   "t_newey_west_13": 3.66722230272074,
+   "autocorrelazione_1": 0.09680409842843286,
+   "autocorrelazione_2": 0.13325619745900427
+  },
+  "1000 USDT, limite oltre 0.10%": {
+   "sharpe": 1.6850937952728011,
+   "settimane": 301,
+   "asimmetria": -0.038132665514922205,
+   "curtosi": 5.620120305238938,
+   "t": 4.054204538213609,
+   "t_newey_west_4": 3.4593777076931844,
+   "t_newey_west_13": 3.445908940981996,
+   "autocorrelazione_1": 0.09676121869973665,
+   "autocorrelazione_2": 0.13449121853599955
+  },
+  "1000 USDT, mercato": {
+   "sharpe": 1.8678381638212795,
+   "settimane": 301,
+   "asimmetria": 0.02371735949509185,
+   "curtosi": 5.6316322797692795,
+   "t": 4.493873267859771,
+   "t_newey_west_4": 3.8225274536412983,
+   "t_newey_west_13": 3.781175215762867,
+   "autocorrelazione_1": 0.10311320951852772,
+   "autocorrelazione_2": 0.13372311867505768
+  },
+  "F5 della prova 24 (prima delle parita')": {
+   "sharpe": 1.9125832249892722,
+   "settimane": 301,
+   "asimmetria": 0.2274362906779066,
+   "curtosi": 5.525803320506882,
+   "t": 4.601526402990182,
+   "t_newey_west_4": 3.834432372907037,
+   "t_newey_west_13": 3.6337868873746455,
+   "autocorrelazione_1": 0.12200984202063973,
+   "autocorrelazione_2": 0.13023182387713972
+  }
+ },
+ "scenari": {
+  "fino alla prova 24 (F5 scelta per il paper), taglio 0.5": {
+   "serie": 30,
+   "senza_serie": 18,
+   "famiglie": 32,
+   "in_V": 32,
+   "deviazione_V_annua": 0.5458473864693699,
+   "deviazione_tutti_annua": 0.5458473864693699,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.9587309637166643,
+    "senza_l_aggiunta": 0.9587309637166643
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.8156487949438583,
+    "senza_l_aggiunta": 0.8156487949438583
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8410762334214262,
+    "senza_l_aggiunta": 0.8410762334214262
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.7849332150667888,
+    "senza_l_aggiunta": 0.7849332150667888
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7227159848854766,
+    "senza_l_aggiunta": 0.7227159848854766
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.8755948142313477,
+    "senza_l_aggiunta": 0.8755948142313477
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.8473702779433856,
+    "senza_l_aggiunta": 0.8473702779433856
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.9031695177953726,
+    "senza_l_aggiunta": 0.9031695177953726
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9206417233644728,
+    "senza_l_aggiunta": 0.9206417233644728
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.881146779406704,
+    "senza_l_aggiunta": 0.881146779406704
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.8335408766400831,
+    "senza_l_aggiunta": 0.8335408766400831
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.964284255534366,
+    "senza_l_aggiunta": 0.964284255534366
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.9359546415517936,
+    "senza_l_aggiunta": 0.9359546415517936
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.8943775937453518,
+    "senza_l_aggiunta": 0.8943775937453518
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.9529776690366909,
+    "senza_l_aggiunta": 0.9529776690366909
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.9658703310891126,
+    "senza_l_aggiunta": 0.9658703310891126
+   }
+  },
+  "fino alla prova 24 (F5 scelta per il paper), taglio 0.3": {
+   "serie": 30,
+   "senza_serie": 18,
+   "famiglie": 30,
+   "in_V": 30,
+   "deviazione_V_annua": 0.5450357200435995,
+   "deviazione_tutti_annua": 0.5450357200435995,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.9619938514770028,
+    "senza_l_aggiunta": 0.9619938514770028
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.8255650852757224,
+    "senza_l_aggiunta": 0.8255650852757224
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8500611113829812,
+    "senza_l_aggiunta": 0.8500611113829812
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.7958137352383243,
+    "senza_l_aggiunta": 0.7958137352383243
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7352449290171548,
+    "senza_l_aggiunta": 0.7352449290171548
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.8832906998811564,
+    "senza_l_aggiunta": 0.8832906998811564
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.8562017064631736,
+    "senza_l_aggiunta": 0.8562017064631736
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.909596639274231,
+    "senza_l_aggiunta": 0.909596639274231
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9261611969010193,
+    "senza_l_aggiunta": 0.9261611969010193
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.8885884058399423,
+    "senza_l_aggiunta": 0.8885884058399423
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.8429213090491211,
+    "senza_l_aggiunta": 0.8429213090491211
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9671204108211184,
+    "senza_l_aggiunta": 0.9671204108211184
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.9405031684467731,
+    "senza_l_aggiunta": 0.9405031684467731
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.9010539625606946,
+    "senza_l_aggiunta": 0.9010539625606946
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.9565402041320038,
+    "senza_l_aggiunta": 0.9565402041320038
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.968675694030457,
+    "senza_l_aggiunta": 0.968675694030457
+   }
+  },
+  "fino alla prova 24 (F5 scelta per il paper), taglio 0.7": {
+   "serie": 30,
+   "senza_serie": 18,
+   "famiglie": 35,
+   "in_V": 35,
+   "deviazione_V_annua": 0.5870857803612627,
+   "deviazione_tutti_annua": 0.5870857803612627,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.9306795549477332,
+    "senza_l_aggiunta": 0.9306795549477332
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.7407102417086939,
+    "senza_l_aggiunta": 0.7407102417086939
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.7721680628046196,
+    "senza_l_aggiunta": 0.7721680628046196
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.7040631620789706,
+    "senza_l_aggiunta": 0.7040631620789706
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.6322834805939634,
+    "senza_l_aggiunta": 0.6322834805939634
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.8150541611185527,
+    "senza_l_aggiunta": 0.8150541611185527
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.7792800111074827,
+    "senza_l_aggiunta": 0.7792800111074827
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.8514380030842336,
+    "senza_l_aggiunta": 0.8514380030842336
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8754734005316633,
+    "senza_l_aggiunta": 0.8754734005316633
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.8223688722222342,
+    "senza_l_aggiunta": 0.8223688722222342
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7618167242172853,
+    "senza_l_aggiunta": 0.7618167242172853
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9397843883742728,
+    "senza_l_aggiunta": 0.9397843883742728
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.8982984722190895,
+    "senza_l_aggiunta": 0.8982984722190895
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.8412883848660428,
+    "senza_l_aggiunta": 0.8412883848660428
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.9227772512753203,
+    "senza_l_aggiunta": 0.9227772512753203
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.9413859945014249,
+    "senza_l_aggiunta": 0.9413859945014249
+   }
+  },
+  "fino alla prova 56 (F9: il paper passa agli ordini limite), taglio 0.5": {
+   "serie": 101,
+   "senza_serie": 18,
+   "famiglie": 65,
+   "in_V": 58,
+   "deviazione_V_annua": 0.5645839709779826,
+   "deviazione_tutti_annua": 2.5648727784628833,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.8989351922223023,
+    "senza_l_aggiunta": 1.1236459063138559e-23
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.6706486977540758,
+    "senza_l_aggiunta": 4.4979077458179664e-27
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.7062851671213712,
+    "senza_l_aggiunta": 1.6717139349191852e-26
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.6303262289841616,
+    "senza_l_aggiunta": 1.776176893081497e-27
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.5534395064495125,
+    "senza_l_aggiunta": 1.8389944362780303e-28
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.7549886042234677,
+    "senza_l_aggiunta": 1.433437587640142e-26
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.7137094414484402,
+    "senza_l_aggiunta": 6.265575252849238e-27
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.7983394643357844,
+    "senza_l_aggiunta": 4.9976795056112305e-26
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8279517756984042,
+    "senza_l_aggiunta": 1.9697723336242968e-25
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.7636937979316791,
+    "senza_l_aggiunta": 2.1821255387275307e-26
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.6936193465640743,
+    "senza_l_aggiunta": 2.466468226909913e-27
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9118187677282343,
+    "senza_l_aggiunta": 2.6540916823731625e-22
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.8579129606555971,
+    "senza_l_aggiunta": 1.650448132557616e-23
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7876630566475389,
+    "senza_l_aggiunta": 7.796798874150994e-25
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.8892470888779556,
+    "senza_l_aggiunta": 5.553647397832825e-23
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.9130762113238803,
+    "senza_l_aggiunta": 1.3513663678611455e-23
+   }
+  },
+  "fino alla prova 56 (F9: il paper passa agli ordini limite), taglio 0.3": {
+   "serie": 101,
+   "senza_serie": 18,
+   "famiglie": 49,
+   "in_V": 44,
+   "deviazione_V_annua": 0.5749449388255465,
+   "deviazione_tutti_annua": 2.3405507345699403,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.9134396708836116,
+    "senza_l_aggiunta": 2.50506611235774e-16
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.7011792244521158,
+    "senza_l_aggiunta": 3.4959250679918743e-19
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.7351584184471709,
+    "senza_l_aggiunta": 1.0085353701162098e-18
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.6622558048548519,
+    "senza_l_aggiunta": 1.557994468059633e-19
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.5871920361249378,
+    "senza_l_aggiunta": 2.3747165405687422e-20
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.7815530364044078,
+    "senza_l_aggiunta": 1.1247136319076353e-18
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.7424938683016977,
+    "senza_l_aggiunta": 5.27230670951583e-19
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.8220217890723022,
+    "senza_l_aggiunta": 3.289328653450286e-18
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8492776794714751,
+    "senza_l_aggiunta": 9.906811634853803e-18
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.789683467585558,
+    "senza_l_aggiunta": 1.5663701734919976e-18
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7234600638630634,
+    "senza_l_aggiunta": 2.534310653329673e-19
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.9246272215507831,
+    "senza_l_aggiunta": 2.40305889830566e-15
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.8761292608449265,
+    "senza_l_aggiunta": 2.4704707037285656e-16
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.8114936351123216,
+    "senza_l_aggiunta": 2.0756502591405965e-17
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.9044999428043918,
+    "senza_l_aggiunta": 6.956042269736868e-16
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.9260783295546049,
+    "senza_l_aggiunta": 3.185376412566494e-16
+   }
+  },
+  "fino alla prova 56 (F9: il paper passa agli ordini limite), taglio 0.7": {
+   "serie": 101,
+   "senza_serie": 18,
+   "famiglie": 82,
+   "in_V": 75,
+   "deviazione_V_annua": 0.5930503216082024,
+   "deviazione_tutti_annua": 2.3205636500179803,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.8405186594739735,
+    "senza_l_aggiunta": 6.849842225084904e-20
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.5654768938191357,
+    "senza_l_aggiunta": 5.0285586653527974e-23
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.6049802790419954,
+    "senza_l_aggiunta": 1.647921286916886e-22
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.5225128274907291,
+    "senza_l_aggiunta": 2.1034725956878003e-23
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.44350120127480736,
+    "senza_l_aggiunta": 2.6343434889284514e-24
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.6590765089094994,
+    "senza_l_aggiunta": 1.6269924608197694e-22
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.6122315738083103,
+    "senza_l_aggiunta": 7.332956710441695e-23
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.7104433305643779,
+    "senza_l_aggiunta": 5.214899604971738e-22
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.7471586586585481,
+    "senza_l_aggiunta": 1.7985740242855005e-21
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.669375485859808,
+    "senza_l_aggiunta": 2.3689481874209727e-22
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.5895255283530686,
+    "senza_l_aggiunta": 3.190500681823052e-23
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.8597398547114772,
+    "senza_l_aggiunta": 1.0213727725883183e-18
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.7875939486096744,
+    "senza_l_aggiunta": 8.128315689403715e-20
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.7001276766613876,
+    "senza_l_aggiunta": 5.103559977831464e-21
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.8286659610574569,
+    "senza_l_aggiunta": 2.511559431486981e-19
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.8597926631960803,
+    "senza_l_aggiunta": 8.508226602710496e-20
+   }
+  },
+  "mazzo di oggi (tutte le prove), taglio 0.5": {
+   "serie": 291,
+   "senza_serie": 48,
+   "famiglie": 200,
+   "in_V": 152,
+   "deviazione_V_annua": 0.6776180792338945,
+   "deviazione_tutti_annua": 3.664955460134104,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.5059216404027664,
+    "senza_l_aggiunta": 3.3404623637481846e-85
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.20909842115287713,
+    "senza_l_aggiunta": 4.5135436467138504e-91
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.2400010573811988,
+    "senza_l_aggiunta": 7.673190913173769e-90
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.1798530868266538,
+    "senza_l_aggiunta": 1.1874161904607896e-91
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.13238620929261996,
+    "senza_l_aggiunta": 1.5273868688331778e-93
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.28204530152916024,
+    "senza_l_aggiunta": 3.54156810977779e-91
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.24280563836650287,
+    "senza_l_aggiunta": 1.7252736251330353e-91
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.33196660322503446,
+    "senza_l_aggiunta": 2.3471493009641793e-90
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.37378543372644046,
+    "senza_l_aggiunta": 4.548493198518689e-89
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.29200550517365964,
+    "senza_l_aggiunta": 9.559545422432551e-91
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.22405347967666434,
+    "senza_l_aggiunta": 1.8346719156943052e-92
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.5472107979946889,
+    "senza_l_aggiunta": 8.628945137153448e-81
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.43548215379666944,
+    "senza_l_aggiunta": 3.920341740103987e-83
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.33063251764926926,
+    "senza_l_aggiunta": 7.152994108386266e-86
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.49432496092487316,
+    "senza_l_aggiunta": 2.520504488962455e-82
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.5365983213768544,
+    "senza_l_aggiunta": 1.5902412553163614e-85
+   }
+  },
+  "mazzo di oggi (tutte le prove), taglio 0.3": {
+   "serie": 291,
+   "senza_serie": 48,
+   "famiglie": 147,
+   "in_V": 102,
+   "deviazione_V_annua": 0.6593486395680448,
+   "deviazione_tutti_annua": 3.989532846473965,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.6155308424126567,
+    "senza_l_aggiunta": 2.4207794235975816e-95
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.2971156616102735,
+    "senza_l_aggiunta": 1.7963526618965254e-101
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.3336014953056435,
+    "senza_l_aggiunta": 3.759293037120899e-100
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.26119528415466475,
+    "senza_l_aggiunta": 4.614151309685269e-102
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.20081222806546145,
+    "senza_l_aggiunta": 4.5679268552355545e-104
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.38344567955098163,
+    "senza_l_aggiunta": 1.0188865791673312e-101
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.33790494830807516,
+    "senza_l_aggiunta": 5.307683634876987e-102
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.43901749097193055,
+    "senza_l_aggiunta": 7.077550039874842e-101
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.4835232785722302,
+    "senza_l_aggiunta": 1.701394143938179e-99
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.3945476917251404,
+    "senza_l_aggiunta": 2.9855562379635535e-101
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.31605489560997335,
+    "senza_l_aggiunta": 4.668553998164983e-103
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.6522900200048316,
+    "senza_l_aggiunta": 1.9038614182105262e-90
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.5439774715827839,
+    "senza_l_aggiunta": 6.294999018878006e-93
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.4346325247060394,
+    "senza_l_aggiunta": 7.51155687713271e-96
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.6023388221172268,
+    "senza_l_aggiunta": 4.2405540845852616e-92
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.645212736986624,
+    "senza_l_aggiunta": 9.57513714675329e-96
+   }
+  },
+  "mazzo di oggi (tutte le prove), taglio 0.7": {
+   "serie": 291,
+   "senza_serie": 48,
+   "famiglie": 237,
+   "in_V": 189,
+   "deviazione_V_annua": 0.6865433388131299,
+   "deviazione_tutti_annua": 3.443074806795755,
+   "F5 ricerca a mercato (oggi)": {
+    "con_l_aggiunta": 0.44713985825298974,
+    "senza_l_aggiunta": 6.839041100012909e-77
+   },
+   "280 USDT, mercato": {
+    "con_l_aggiunta": 0.1694891206995056,
+    "senza_l_aggiunta": 1.5776214532229043e-82
+   },
+   "280 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.19692641791490678,
+    "senza_l_aggiunta": 2.2495029010482894e-81
+   },
+   "280 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.1440608517762607,
+    "senza_l_aggiunta": 4.2560563943378355e-83
+   },
+   "280 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.10354404042103199,
+    "senza_l_aggiunta": 6.857210653397054e-85
+   },
+   "280 USDT, mercato, chiusure libere": {
+    "con_l_aggiunta": 0.2341464990420863,
+    "senza_l_aggiunta": 1.5958036343472888e-82
+   },
+   "280 USDT, limite oltre 0.05%, chiusure libere": {
+    "con_l_aggiunta": 0.19901470488301265,
+    "senza_l_aggiunta": 7.405011943190281e-83
+   },
+   "300 USDT, mercato": {
+    "con_l_aggiunta": 0.2798319545846979,
+    "senza_l_aggiunta": 1.0099503589442079e-81
+   },
+   "300 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.3190231442543361,
+    "senza_l_aggiunta": 1.6303419339229302e-80
+   },
+   "300 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.24325559943111685,
+    "senza_l_aggiunta": 4.020730300119112e-82
+   },
+   "300 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.18226057988510508,
+    "senza_l_aggiunta": 9.230775133964081e-84
+   },
+   "1000 USDT, limite oltre 0.00%": {
+    "con_l_aggiunta": 0.4896586177326546,
+    "senza_l_aggiunta": 7.056098887987012e-73
+   },
+   "1000 USDT, limite oltre 0.05%": {
+    "con_l_aggiunta": 0.37943073690770085,
+    "senza_l_aggiunta": 4.220904331482174e-75
+   },
+   "1000 USDT, limite oltre 0.10%": {
+    "con_l_aggiunta": 0.27992275003582673,
+    "senza_l_aggiunta": 1.1066053373537108e-77
+   },
+   "1000 USDT, mercato": {
+    "con_l_aggiunta": 0.4367717511186561,
+    "senza_l_aggiunta": 2.5917787679170625e-74
+   },
+   "F5 della prova 24 (prima delle parita')": {
+    "con_l_aggiunta": 0.47737774774977004,
+    "senza_l_aggiunta": 3.7738896637605996e-77
+   }
+  }
+ },
+ "gruppo_di_F5_oggi": [
+  "6 F2",
+  "8 F3",
+  "12 K1",
+  "15 F3+M1",
+  "19 P1",
+  "19 P2",
+  "24 F5",
+  "25 F5+M7",
+  "28 K2",
+  "28 F5+M7+K2",
+  "42 F6",
+  "45 I1",
+  "48 R1",
+  "55 C3",
+  "56 F9",
+  "57 G1",
+  "61 F5T",
+  "61 G1T",
+  "63 G6",
+  "63 G1+G6",
+  "69 G11",
+  "86 F5N",
+  "88 G1N",
+  "89 F5C",
+  "92 G1 clima",
+  "92 F5 clima",
+  "93 G1-S",
+  "94 G1N-S",
+  "124 G1M",
+  "142 G1S",
+  "148 B",
+  "152 V1",
+  "152 V2",
+  "152 V3",
+  "155 A",
+  "155 B",
+  "156 A",
+  "156 B",
+  "158 A",
+  "158 B",
+  "160 A",
+  "160 B",
+  "168 A",
+  "168 B",
+  "169 A",
+  "169 B"
+ ]
+}

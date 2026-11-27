@@ -1,0 +1,401 @@
+{
+ "ricerca, senza minimi": {
+  "partenze": {
+   "2021-01-04": {
+    "settimane_controllate": 17,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2021-05-19 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2021-04-05": {
+    "settimane_controllate": 13,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2021-05-19 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2021-07-05": {
+    "settimane_controllate": 12,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2021-10-04": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2022-01-03": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2022-04-04": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2022-07-04": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2022-10-03": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2023-01-02": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2023-04-03": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2023-07-03": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2023-10-02": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2024-01-01": {
+    "settimane_controllate": 4,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2024-04-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2024-07-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2024-09-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2024-12-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2025-03-31": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2025-06-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2025-09-29": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4687
+   },
+   "2025-12-29": {
+    "settimane_controllate": 2,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2026-08-06 09:00",
+    "peggio_dal_massimo_nell_ora": -0.409
+   }
+  },
+  "partenze_con_stop_alla_chiusura_oraria": 0,
+  "partenze_con_stop_nel_limite_prudente_dell_ora": 21,
+  "partenze_totali": 21
+ },
+ "280 USDT, limite oltre 0,05%": {
+  "partenze": {
+   "2021-01-04": {
+    "settimane_controllate": 19,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2021-02-22 14:00",
+    "peggio_dal_massimo_nell_ora": -0.4623
+   },
+   "2021-04-05": {
+    "settimane_controllate": 15,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4656
+   },
+   "2021-07-05": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4572
+   },
+   "2021-10-04": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4613
+   },
+   "2022-01-03": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4604
+   },
+   "2022-04-04": {
+    "settimane_controllate": 12,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4645
+   },
+   "2022-07-04": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4376
+   },
+   "2022-10-03": {
+    "settimane_controllate": 12,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4335
+   },
+   "2023-01-02": {
+    "settimane_controllate": 10,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.435
+   },
+   "2023-04-03": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4333
+   },
+   "2023-07-03": {
+    "settimane_controllate": 12,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4366
+   },
+   "2023-10-02": {
+    "settimane_controllate": 5,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4275
+   },
+   "2024-01-01": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4394
+   },
+   "2024-04-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4286
+   },
+   "2024-07-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4344
+   },
+   "2024-09-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4427
+   },
+   "2024-12-30": {
+    "settimane_controllate": 4,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.5162
+   },
+   "2025-03-31": {
+    "settimane_controllate": 7,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4726
+   },
+   "2025-06-30": {
+    "settimane_controllate": 2,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4546
+   },
+   "2025-09-29": {
+    "settimane_controllate": 6,
+    "stop_alla_chiusura_oraria": "2026-08-19 19:00",
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4839
+   },
+   "2025-12-29": {
+    "settimane_controllate": 0,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": null,
+    "peggio_dal_massimo_nell_ora": 0.0
+   }
+  },
+  "partenze_con_stop_alla_chiusura_oraria": 1,
+  "partenze_con_stop_nel_limite_prudente_dell_ora": 20,
+  "partenze_totali": 21
+ },
+ "1000 USDT, limite oltre 0,05%": {
+  "partenze": {
+   "2021-01-04": {
+    "settimane_controllate": 19,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2021-05-19 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4677
+   },
+   "2021-04-05": {
+    "settimane_controllate": 16,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2021-05-19 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4666
+   },
+   "2021-07-05": {
+    "settimane_controllate": 14,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4656
+   },
+   "2021-10-04": {
+    "settimane_controllate": 13,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4644
+   },
+   "2022-01-03": {
+    "settimane_controllate": 14,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4648
+   },
+   "2022-04-04": {
+    "settimane_controllate": 14,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4673
+   },
+   "2022-07-04": {
+    "settimane_controllate": 13,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4636
+   },
+   "2022-10-03": {
+    "settimane_controllate": 13,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4679
+   },
+   "2023-01-02": {
+    "settimane_controllate": 13,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4648
+   },
+   "2023-04-03": {
+    "settimane_controllate": 12,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4652
+   },
+   "2023-07-03": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-03-05 19:00",
+    "peggio_dal_massimo_nell_ora": -0.4616
+   },
+   "2023-10-02": {
+    "settimane_controllate": 11,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2024-01-03 12:00",
+    "peggio_dal_massimo_nell_ora": -0.4604
+   },
+   "2024-01-01": {
+    "settimane_controllate": 4,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4602
+   },
+   "2024-04-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4609
+   },
+   "2024-07-01": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4602
+   },
+   "2024-09-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4667
+   },
+   "2024-12-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4612
+   },
+   "2025-03-31": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4638
+   },
+   "2025-06-30": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4639
+   },
+   "2025-09-29": {
+    "settimane_controllate": 3,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2025-10-10 21:00",
+    "peggio_dal_massimo_nell_ora": -0.4548
+   },
+   "2025-12-29": {
+    "settimane_controllate": 2,
+    "stop_alla_chiusura_oraria": null,
+    "stop_con_il_limite_prudente_dell_ora": "2026-08-22 05:00",
+    "peggio_dal_massimo_nell_ora": -0.401
+   }
+  },
+  "partenze_con_stop_alla_chiusura_oraria": 0,
+  "partenze_con_stop_nel_limite_prudente_dell_ora": 21,
+  "partenze_totali": 21
+ }
+}

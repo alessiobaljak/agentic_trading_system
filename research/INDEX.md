@@ -32,6 +32,8 @@ Leggi questo file per primo; poi solo i file che servono al tuo compito, mai «t
 - L'ultimo giorno pubblicato a metà dall'archivio non entra nel pannello (`seconda.giorni_parziali_in_coda`). Contratti su azioni:
   la ricerca li deve riconoscere dal tipo ufficiale di Binance, non dal nome (backlog P32).
 - Giorni mancanti nell'archivio di Binance (il 28 ottobre 2026): `programma6/buchi_archivio.py`, `programma5/strumenti/buchi_archivio_minuti.py`.
+- Paper del programma 6: `programma6/paper/funding_medio.py` misura ogni settimana dal 30 novembre l'idea 45 (REGOLE.md del paper, sezione 18).
+- Notizie dal 30 ottobre 2026 (`notizie/`, regole `notizie/REGOLE.md`); la prova in avanti `notizie/prova_avanti.py` gira il lunedì dopo il conto a tavolino (primo numero il 7 dicembre).
 
 ## Rapporti degli agenti
 - Il rapporto di strategy-researcher è il file dei risultati della prova (`RISULTATI_<NOME>.md`). Audit in `audits/`, revisioni del codice in `reviews/`, confronti paper e

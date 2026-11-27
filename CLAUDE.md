@@ -190,7 +190,10 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 * **Un numero va con la sua fonte.** "224 coppie a 1 pass" va bene se viene da un
   file o da un risultato ops; se viene da una stima, dillo.
 * Se la domanda e' una richiesta di modifica al codice, falla davvero: leggi, cambia,
-  lancia `python -m pytest tests/ -q`, committa. Poi riassumi cosa e' cambiato.
+  lancia `python -m pytest tests/ -q`, committa. Poi riassumi cosa e' cambiato. Se hai toccato `bot/`, `backtesting/` o
+  `research/src/`, lancia anche `python -m pytest research/src/tests -q`; dopo il push guarda l'esito dei test di GitHub
+  (`gh run list --workflow tests.yml --limit 2 -R alessiobaljak/agentic_trading_system`): dal 19 ottobre al 27 novembre 2026
+  erano rossi e nessuno se n'era accorto (audit del 26-27 novembre). Una libreria nuova della ricerca va in `requirements-ricerca.txt`.
 
 ## Subagent: quando usarli (`.claude/agents/`, dal 7 novembre 2026)
 
@@ -207,8 +210,8 @@ Principio del proprietario: chi scrive una strategia non la valuta, chi la valut
   `research/programma7/MIGLIORARE_G1.md`); una variante entra accanto all'originale, mai al suo posto. La sessione principale lo chiama
   nel giro delle 4 ore quando c'è un passo vero da fare, non per scrivere «niente di nuovo».
 * **strategy-scout** (modello medio; dall'11 novembre): cerca idee nuove con un perché forte (dato mai usato, studio serio, fatto
-  visto in avanti, idea del proprietario), controlla che non siano già provate e scrive le regole prima di ogni calcolo; una o due idee
-  al giorno (giro delle 08:17) o quando la coda resta senza prove pronte. Non calcola e non giudica.
+  visto in avanti, idea del proprietario), controlla che non siano già provate e scrive le regole prima di ogni calcolo; tutte le idee
+  con un perché forte che trova (non una o due: 22 novembre), nel giro delle 08:17 o quando la coda resta senza prove pronte. Non calcola e non giudica.
 * **portfolio-allocator** (modello medio; prima dei soldi veri il più potente; dall'8 novembre): ogni lunedì dopo gate2-reconciler,
   e prima di ogni proposta di demo combinato o di soldi veri, dice quale strategia o miscela usare in produzione e con quale
   capitale, con regole scritte prima (`allocazione/REGOLE.md`, da far approvare al proprietario). Propone, non esegue.
