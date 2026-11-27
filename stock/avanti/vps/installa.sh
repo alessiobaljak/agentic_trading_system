@@ -13,6 +13,14 @@ DEST=/opt/azioni-avanti
 ENVF=/etc/azioni-avanti.env
 RAMO=claude/brave-albattani-1b12fv
 
+# FERMO dal 27 novembre 2026 (audit, stock/AUDIT_2026-11-27.md): installato accanto ai lavori di GitHub scriverebbe gli stessi file
+# (conflitti a ogni salvataggio, poi una copia ferma su codice vecchio senza nessun avviso) e non ha la prova 45: una copia vecchia
+# chiuderebbe VOO alle 15:55. Va rifatto con un solo scrittore prima di installarlo. Togliere resta sempre possibile.
+if [ "${1:-}" != "togli" ] && [ "${AZIONI_VPS_SO_COSA_FACCIO:-}" != "1" ]; then
+  echo "[azioni] installazione ferma: leggere stock/AUDIT_2026-11-27.md (sezione 3) prima di installare."
+  exit 1
+fi
+
 if [ "${1:-}" = "togli" ]; then
   systemctl disable --now azioni-candela.timer azioni-miscela.timer 2>/dev/null || true
   rm -f /etc/systemd/system/azioni-candela.{service,timer} /etc/systemd/system/azioni-miscela.{service,timer}
