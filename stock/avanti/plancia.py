@@ -160,8 +160,13 @@ def pubblica(allarmi: dict | None = None) -> str:
     if _credenziali() is None:
         return "Plancia: credenziali di Firebase mancanti nell'ambiente, niente pubblicato (stock/avanti/FIREBASE.md)"
     dati = raccogli(allarmi)
-    errore = scrivi({"battito": dati["battito"], "soglia_battito_s": dati["soglia_battito_s"], f"strategie/{ID}": dati["strategie"][ID],
-                     "allarmi/posizioni_aperte": (allarmi or {}).get("posizioni_aperte")})
+    agg = {"battito": dati["battito"], "soglia_battito_s": dati["soglia_battito_s"], f"strategie/{ID}": dati["strategie"][ID],
+           "allarmi/posizioni_aperte": (allarmi or {}).get("posizioni_aperte")}
+    # l'allarme della contabilità della prima candela (righe del diario aperte): si scrive o si azzera solo quando chi pubblica lo dice
+    # (audit del 27 novembre 2026: prima la chiave si perdeva)
+    if allarmi is not None and "contabilita" in allarmi:
+        agg["allarmi/contabilita_candela"] = allarmi["contabilita"]
+    errore = scrivi(agg)
     if errore:
         return errore
     s = dati["strategie"][ID]

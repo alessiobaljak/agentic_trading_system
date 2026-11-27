@@ -1,42 +1,33 @@
 #!/usr/bin/env bash
-# Un giro della misura in avanti delle azioni sulla VPS: aggiorna il codice, lancia il comando «auto» della strategia chiesta
-# (prima_candela o miscela), salva diario e stato nel repository. Lo lancia systemd (stock/avanti/vps/installa.sh).
-#   gira.sh prima_candela | miscela
+# Un avvio di riserva delle azioni dalla VPS: chiede a GitHub di far partire i lavori del demo con il comando «auto».
+#
+# Rifatto il 27 novembre 2026 (audit, stock/AUDIT_2026-11-27.md): il server non tiene più una copia del codice né le chiavi del conto
+# e non scrive diari né stato. Prima avrebbe scritto gli stessi file dei lavori di GitHub (conflitti a ogni salvataggio, poi una copia
+# ferma su codice vecchio senza avviso) e non conosceva la prova 45. Ora l'unico che scrive è GitHub: il server avvia e basta, come le
+# routine della sessione «trading stock», ma senza dipendere da lei. I doppioni sono impossibili (lavori in fila, ordini con nome
+# unico) e un avvio in più esce da solo. Serve solo GITHUB_TOKEN_AZIONI nell'ambiente (dal file /etc/azioni-avanti.env, che legge
+# systemd): un token di GitHub con il solo permesso di avviare i lavori di questo repository. Lo lancia systemd (installa.sh).
+#   gira.sh azioni_avanti.yml [azioni_miscela.yml] [azioni_gamma.yml]
 set -uo pipefail
-cd "$(dirname "$0")/../../.."
+REPO=alessiobaljak/agentic_trading_system
 RAMO=claude/brave-albattani-1b12fv
-case "${1:-}" in
-  prima_candela) MODULO=stock.avanti.avanti ;;
-  miscela) MODULO=stock.avanti.miscela; [ -f stock/avanti/miscela_accesa ] || { echo "miscela spenta"; exit 0; } ;;
-  *) echo "uso: gira.sh prima_candela|miscela"; exit 2 ;;
-esac
-# un giro alla volta per strategia: un secondo avvio mentre il primo aspetta l'ora giusta esce subito
-exec 9>"/tmp/azioni-avanti-$1.lock"
-flock -n 9 || { echo "un altro giro di $1 è in corso"; exit 0; }
-
-# le due strategie usano la stessa copia del repository: git si usa uno alla volta, e senza mai buttare i file non ancora salvati
-aggiorna() {
-  flock 8
-  git pull -q --rebase --autostash origin "$RAMO" || { git rebase --abort 2>/dev/null; echo "aggiornamento del codice non riuscito: si usa quello che c'è"; }
-  flock -u 8
-}
-salva() {
-  flock 8
-  git add stock/avanti/giorni stock/avanti/diario.csv stock/avanti/riepilogo.md stock/avanti/elenco_*.csv stock/avanti/valori.csv \
-          stock/avanti/miscela_stato.json stock/avanti/miscela_diario.csv stock/avanti/conto_condiviso.json 2>/dev/null || true
-  if ! git diff --cached --quiet; then
-    git -c user.name="azioni-vps" -c user.email="noreply@anthropic.com" commit -q -m "stock: $1, auto del $(date -u +%F) (VPS) [skip ci]"
-    for i in 1 2 3 4; do
-      git pull -q --rebase --autostash origin "$RAMO" && git push -q origin "HEAD:$RAMO" && break
-      git rebase --abort 2>/dev/null
-      sleep $((i * 5))
-    done
+[ -n "${GITHUB_TOKEN_AZIONI:-}" ] || { echo "ATTENZIONE: manca GITHUB_TOKEN_AZIONI (/etc/azioni-avanti.env)"; exit 1; }
+ESITO=0
+for LAVORO in "$@"; do
+  case "$LAVORO" in
+    azioni_avanti.yml|azioni_miscela.yml|azioni_gamma.yml) ;;
+    *) echo "lavoro non ammesso: $LAVORO"; ESITO=2; continue ;;
+  esac
+  # il token passa da stdin, non dagli argomenti (che ogni utente della macchina vede con ps)
+  CODICE=$(printf 'Authorization: Bearer %s\n' "$GITHUB_TOKEN_AZIONI" | curl -s -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
+    -H @- -H "Accept: application/vnd.github+json" \
+    "https://api.github.com/repos/$REPO/actions/workflows/$LAVORO/dispatches" \
+    -d "{\"ref\":\"$RAMO\",\"inputs\":{\"comando\":\"auto\"}}")
+  if [ "$CODICE" = "204" ]; then
+    echo "$LAVORO avviato"
+  else
+    echo "ATTENZIONE: $LAVORO non avviato (risposta di GitHub $CODICE)"
+    ESITO=1
   fi
-  flock -u 8
-}
-exec 8>"/tmp/azioni-avanti-git.lock"
-aggiorna
-.venv/bin/python -m "$MODULO" auto
-ESITO=$?
-salva "$1"
+done
 exit $ESITO

@@ -143,14 +143,33 @@ def sedute_intorno() -> list[dict]:
 
 
 def chiusure_rettificate(simboli: list[str], giorni: int) -> dict[str, pd.Series]:
+    """Le chiusure rettificate a gruppi di 100; se un gruppo fallisce si riprova un titolo alla volta (`avanti.barre_a_gruppi`, audit
+    del 27 novembre 2026: un simbolo che Alpaca non conosce fermava la sera di fine mese)."""
     fine = datetime.now(timezone.utc)
     inizio = (pd.Timestamp(fine) - pd.Timedelta(days=giorni)).to_pydatetime()
-    out = {}
-    for i in range(0, len(simboli), 100):
-        for s, df in alpaca.barre_di_piu(simboli[i:i + 100], "1Day", inizio, fine, rettifica="all").items():
-            if not df.empty:
-                out[s] = df["close"]
-    return out
+    return {s: df["close"] for s, df in av.barre_a_gruppi(simboli, "1Day", inizio, fine, rettifica="all").items() if not df.empty}
+
+
+def settimana(g: date) -> str:
+    a, s, _ = g.isocalendar()
+    return f"{a}-W{s:02d}"
+
+
+def decisioni(giorno: date, prossima: date, stato: dict) -> dict:
+    """Quali regole si ricalcolano questa sera (funzione pura). Prima si guardava solo se fra questa seduta e la prossima cambiava la
+    settimana (la calma) o il mese (l'ampiezza): se la sera dell'ultimo giorno saltava, la decisione saltava per tutta la settimana o
+    tutto il mese. Ora si confronta la settimana e il mese della prossima seduta con quelli dell'ultima decisione salvata nello stato
+    (audit del 27 novembre 2026); senza la chiave nello stato vale la regola di prima."""
+    s_prossima, m_prossima = settimana(prossima), prossima.strftime("%Y-%m")
+    s_fatta = stato.get("settimana_calma") or settimana(giorno)
+    m_fatto = stato.get("mese_ampiezza") or giorno.strftime("%Y-%m")
+    calma, amp = s_prossima != s_fatta, m_prossima != m_fatto
+    note = []
+    if calma and settimana(prossima) == settimana(giorno):
+        note.append("calma decisa in ritardo: la sera di fine settimana era saltata")
+    if amp and prossima.month == giorno.month:
+        note.append("ampiezza decisa in ritardo: la sera di fine mese era saltata")
+    return {"calma": calma, "ampiezza": amp, "settimana": s_prossima, "mese": m_prossima, "note": note}
 
 
 def posizioni() -> dict[str, float]:
@@ -203,9 +222,18 @@ def manda(diff: dict[str, int], tif: str, nome: str) -> tuple[list[str], bool]:
                  "client_order_id": unico}
         try:
             o = av._richiesta("POST", "/v2/orders", json=corpo)
-            fatti.append(f"{s} {q:+d} ({o.get('status')})")
+            if o.get("status") in MORTI:            # trovato per nome dopo un errore di rete, ma morto: non conta come mandato
+                fatti.append(f"{s} {q:+d} RIFIUTATO ({o.get('status')})")
+                bene = False
+            else:
+                fatti.append(f"{s} {q:+d} ({o.get('status')})")
         except alpaca.ErroreAlpaca as e:
-            gia = av._ordine_per_nome(unico)
+            try:
+                gia = av._ordine_per_nome(unico)
+            except alpaca.ErroreAlpaca as e2:       # non si sa se c'è: si va avanti con il titolo dopo, e il giro finisce in errore
+                fatti.append(f"{s} {q:+d} DA VERIFICARE ({str(e)[:60]}; ricerca per nome fallita: {str(e2)[:60]})")
+                bene = False
+                continue
             if gia is not None and gia.get("status") not in MORTI:
                 fatti.append(f"{s} {q:+d} (già mandato)")
             else:
@@ -221,9 +249,11 @@ def sera(ultima: dict, prossima: dict) -> str:
     stato = leggi_stato()
     primo_giro = stato.get("ultima_sera") is None
     conto.parti(giorno.isoformat())                # la fotografia della partenza (una volta sola)
+    v = conto.adesso()
     note = []
-    fine_settimana = prossima["giorno"].isocalendar()[:2] != giorno.isocalendar()[:2]
-    fine_mese = prossima["giorno"].month != giorno.month
+    dec = decisioni(giorno, prossima["giorno"], stato)
+    fine_settimana, fine_mese = dec["calma"], dec["ampiezza"]
+    note += dec["note"]
     ch = chiusure_rettificate(list(SIMBOLI), 60)
     for s in SIMBOLI:
         if ch[s].index[-1].tz_convert(av.NY).date() != giorno:
@@ -237,6 +267,7 @@ def sera(ultima: dict, prossima: dict) -> str:
             if abs(q - stato["calma"][s]) * QUOTA > SOGLIA or primo_giro:
                 stato["calma"][s] = round(q, 4)
         note.append(f"calma {stato['calma']}")
+    stato["settimana_calma"] = dec["settimana"] if (fine_settimana or primo_giro) else stato.get("settimana_calma") or settimana(giorno)
     if fine_mese or primo_giro:
         membri = pd.read_csv(QUI / "sp500_membri.csv")["simbolo"].tolist()
         tutte = chiusure_rettificate(membri, 330)
@@ -245,7 +276,8 @@ def sera(ultima: dict, prossima: dict) -> str:
         a = ampiezza(tutte)
         stato["ampiezza"] = QUOTA if a >= 0.5 else QUOTA / 2
         note.append(f"ampiezza {a:.1%}")
-    valore = conto.adesso()["miscela"]
+    stato["mese_ampiezza"] = dec["mese"] if (fine_mese or primo_giro) else stato.get("mese_ampiezza") or giorno.strftime("%Y-%m")
+    valore = v["miscela"]
     prezzi = {s: float(ch[s].iloc[-1]) for s in SIMBOLI}
     cancella_ordini(giorno)                        # gli ordini vecchi della miscela (anche gli «opg» di questa sera), se ce ne sono
     gia = ordini_della_sera(ordini_aperti(), giorno)

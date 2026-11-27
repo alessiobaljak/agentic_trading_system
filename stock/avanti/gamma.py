@@ -83,7 +83,9 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, deciso_oggi: bool, posi
         return f"niente: la misura parte il {PRIMO_GIORNO}"
     apertura, chiusura = seduta["apertura"], seduta["chiusura"]
     ingresso = chiusura - PRIMA_DELLA_CHIUSURA
-    mattina, sera = apertura.normalize() + pd.Timedelta(hours=4), apertura.normalize() + pd.Timedelta(hours=20)
+    # il dopo borsa finisce 4 ore dopo la chiusura (al massimo le 20:00; nei giorni corti le 17:00): revisione del 27 novembre 2026
+    mattina = apertura.normalize() + pd.Timedelta(hours=4)
+    sera = min(chiusura + pd.Timedelta(hours=4), apertura.normalize() + pd.Timedelta(hours=20))
     if posizione and not deciso_oggi:
         # una posizione di un altro giorno (non deve succedere): via subito, a mercato in seduta, con ordini limite fuori orario
         if apertura + pd.Timedelta(minutes=1) <= adesso < chiusura - pd.Timedelta(seconds=45):
@@ -104,11 +106,12 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, deciso_oggi: bool, posi
     return "niente: la giornata è già fatta"
 
 
-def riga_operazione(giorno: str, dec: dict, esecuzioni: list[dict]) -> dict:
-    """La riga del diario di un giorno con l'ordine d'ingresso, dalle esecuzioni di VOO del giorno."""
+def riga_operazione(giorno: str, dec: dict, esecuzioni: list[dict], escludi: set[str] | None = None) -> dict:
+    """La riga del diario di un giorno con l'ordine d'ingresso, dalle esecuzioni di VOO del giorno. `escludi`: gli ordini che altri
+    giorni hanno segnato come uscita di una loro posizione rimasta (non sono uscite di questo ingresso: audit del 27 novembre 2026)."""
     base = {k: dec.get(k) for k in ("copertura_del", "copertura", "r", "lato", "scarto_ingresso_pb")}
     base.update({"giorno": giorno, "simbolo": TITOLO})
-    mie = [e for e in esecuzioni if e["symbol"] == TITOLO]
+    mie = [e for e in esecuzioni if e["symbol"] == TITOLO and e["order_id"] not in (escludi or set())]
     entrata = [e for e in mie if e["order_id"] == dec.get("id_ingresso")]
     if not entrata:
         return {**base, "nota": dec.get("nota") or "ordine d'ingresso non eseguito"}
@@ -119,16 +122,22 @@ def riga_operazione(giorno: str, dec: dict, esecuzioni: list[dict]) -> dict:
     q_out = sum(float(e["qty"]) for e in uscite)
     p_out = sum(float(e["qty"]) * float(e["price"]) for e in uscite) / q_out if q_out else float("nan")
     segno = 1 if dec["lato"] == "buy" else -1
-    guadagno = segno * (p_out - p_in) * q_in if q_out else float("nan")
+    # con uscite parziali il guadagno è quello della parte chiusa; uscite in più non contano oltre l'ingresso (audit, 27 novembre 2026)
+    chiusa = min(q_out, q_in)
+    guadagno = segno * (p_out - p_in) * chiusa if q_out else float("nan")
+    parziale = q_out and q_out < q_in - 1e-9
     come = {(dec.get("uscite") or {}).get(e["order_id"], "asta" if e["order_id"] == dec.get("id_asta") else "altro") for e in uscite}
     nota = [dec["nota"]] if dec.get("nota") else []
-    if q_out and abs(q_out - q_in) > 1e-9:
-        nota.append(f"uscite {q_out:g} su {q_in:g}")
+    if parziale:
+        nota.append(f"uscite {q_out:g} su {q_in:g}: resto aperto")
+    elif q_out > q_in + 1e-9:
+        nota.append(f"uscite {q_out:g} su {q_in:g}: uscite in più, da guardare")
     return {**base, "quantita": q_in, "ingresso": round(p_in, 4), "ora_ingresso": min(e["transaction_time"] for e in entrata),
             "uscita_prezzo": round(p_out, 4) if q_out else float("nan"),
             "ora_uscita": max((e["transaction_time"] for e in uscite), default=""),
-            "uscita": "/".join(sorted(come)) if uscite else "aperta", "guadagno": round(guadagno, 2) if q_out else float("nan"),
-            "proporzione": round(guadagno / (p_in * q_in), 6) if q_out else float("nan"),
+            "uscita": ("parziale" if parziale else "/".join(sorted(come))) if uscite else "aperta",
+            "guadagno": round(guadagno, 2) if q_out else float("nan"),
+            "proporzione": round(guadagno / (p_in * chiusa), 6) if q_out else float("nan"),
             "commissione_ib": round(av.commissione_ib(q_in, p_in) + (av.commissione_ib(q_out, p_out) if q_out else 0), 2),
             "nota": "; ".join(nota)}
 
@@ -194,7 +203,7 @@ def posizione() -> float:
 def capitale() -> float:
     """Il capitale virtuale della prova 45 prima dell'ingresso: 100'000 più i guadagni del diario."""
     d = pd.read_csv(DIARIO) if DIARIO.exists() else pd.DataFrame(columns=COLONNE)
-    return conto.CAPITALE_GAMMA + float(pd.to_numeric(d["guadagno"], errors="coerce").dropna().sum())
+    return conto.valore_gamma([], d)               # lo stesso conto della Plancia, con le tasse sulle vendite (27 novembre 2026)
 
 
 def leggi_giorno(giorno: str) -> dict | None:
@@ -232,6 +241,7 @@ def decidi_senza_ordine(dec: dict, nota: str) -> str:
     dec["nota"] = nota
     scrivi_giorno(dec)
     annota({k: dec.get(k) for k in ("giorno", "copertura_del", "copertura", "r", "lato")} | {"simbolo": TITOLO, "nota": nota})
+    print(pubblica(), flush=True)                  # anche nei giorni senza operazione (audit del 27 novembre 2026)
     return f"{dec['giorno']}: {nota}"
 
 
@@ -416,12 +426,15 @@ def _cancella_ordini_gamma() -> None:
         f"{o.get('client_order_id')} ({o.get('status')})" for o in restano))
 
 
-def _ordine_fuori_orario(q: float) -> dict:
+def _ordine_fuori_orario(q: float, giorno: str, nome: str | None = None) -> dict:
+    """L'ordine limite fuori orario, con un nome unico (audit del 27 novembre 2026: senza, dopo un errore di rete poteva partire due
+    volte)."""
     ultimo = ultimo_prezzo(TITOLO)
     limite = round(ultimo * (0.995 if q > 0 else 1.005), 2)
     return av._richiesta("POST", "/v2/orders", json={"symbol": TITOLO, "qty": str(int(abs(q))), "side": "sell" if q > 0 else "buy",
                                                     "type": "limit", "limit_price": f"{limite:.2f}", "time_in_force": "day",
-                                                    "extended_hours": True})
+                                                    "extended_hours": True,
+                                                    "client_order_id": nome or f"gamma-{giorno}-fo-{av.ny_adesso():%H%M%S}"})
 
 
 def fuori_orario(giorno: str) -> str:
@@ -431,12 +444,21 @@ def fuori_orario(giorno: str) -> str:
     _cancella_ordini_gamma()
     q = posizione()
     if q != 0:
-        o = _ordine_fuori_orario(q)
+        o = _ordine_fuori_orario(q, giorno)
         dec.setdefault("uscite", {})[o["id"]] = "fuori orario"
         _nota(dec, "chiusa fuori orario")
         time.sleep(60)
     rimasta = posizione()
-    esito = scrivi_diario(giorno)
+    # l'allarme PRIMA del diario: se il diario fallisce, l'allarme esce lo stesso (audit del 27 novembre 2026)
+    print(pubblica({"ora": int(time.time()), "testo": f"VOO ancora aperta: {rimasta:g}"} if rimasta else None))
+    try:
+        esito = scrivi_diario(giorno)
+    except Exception as e:
+        if rimasta:
+            raise alpaca.ErroreAlpaca(f"prova 45: POSIZIONE ANCORA APERTA su {TITOLO} ({rimasta:g}); e diario non scritto "
+                                      f"({type(e).__name__}: {str(e)[:100]})") from e
+        raise
+    # di nuovo dopo il diario, che pubblica senza allarme (revisione separata del 27 novembre 2026)
     print(pubblica({"ora": int(time.time()), "testo": f"VOO ancora aperta: {rimasta:g}"} if rimasta else None))
     if rimasta:
         raise alpaca.ErroreAlpaca(f"prova 45: POSIZIONE ANCORA APERTA su {TITOLO} ({rimasta:g}) dopo la chiusura fuori orario ({esito})")
@@ -451,20 +473,27 @@ def chiudi_rimasta(oggi_iso: str, in_seduta: bool) -> str:
     q = posizione()
     if q == 0:
         return "niente: la posizione non c'è più"
-    o = av._richiesta("DELETE", f"/v2/positions/{TITOLO}") if in_seduta else _ordine_fuori_orario(q)
-    time.sleep(60)
-    # il giorno dell'ingresso: l'ultimo con un ingresso dello stesso lato della posizione rimasta
+    # il giorno dell'ingresso: l'ultimo con un ingresso dello stesso lato della posizione rimasta; va nel nome dell'ordine
+    # («gamma-rim-{giorno}-»), che il conto riconosce da Alpaca (revisione separata del 27 novembre 2026; prima era un DELETE senza nome)
     lato = "buy" if q > 0 else "sell"
     prima = [json.loads(f.read_text()) for f in sorted(GIORNI.glob("*.json")) if f.stem < oggi_iso]
     orig = next((d for d in reversed(prima) if d.get("id_ingresso") and d.get("lato") == lato), None)
+    nome = f"gamma-rim-{orig['giorno'] if orig else 'ignoto'}-{av.ny_adesso():%H%M%S}"
+    if in_seduta:
+        o = av._richiesta("POST", "/v2/orders", json={"symbol": TITOLO, "qty": str(int(abs(q))), "side": "sell" if q > 0 else "buy",
+                                                      "type": "market", "time_in_force": "day", "client_order_id": nome})
+    else:
+        o = _ordine_fuori_orario(q, oggi_iso, nome=nome)
+    time.sleep(60)
     if orig is not None:
         orig.setdefault("uscite", {})[o.get("id", "")] = "giorno dopo"
+        orig["chiusa_il"] = oggi_iso               # per completare la riga a un avvio dopo, se l'uscita arriva tardi
         orig["nota"] = "; ".join(x for x in (orig.get("nota"), f"chiusa il {oggi_iso}") if x)
         scrivi_giorno(orig)
         # tutte le uscite del giorno dopo segnate per questo ingresso (anche quelle di un giro prima), non solo quella di adesso
         es = av.esecuzioni_del_giorno(orig["giorno"]) + [e for e in av.esecuzioni_del_giorno(oggi_iso)
                                                           if e["order_id"] in orig["uscite"]]
-        annota(riga_operazione(orig["giorno"], orig, es))
+        annota(riga_operazione(orig["giorno"], orig, es, escludi=uscite_di_altri_giorni(orig["giorno"])))
     d = pd.read_csv(DIARIO) if DIARIO.exists() else pd.DataFrame(columns=COLONNE)
     if oggi_iso not in set(d["giorno"].astype(str)):
         annota({"giorno": oggi_iso, "simbolo": TITOLO,
@@ -477,11 +506,47 @@ def chiudi_rimasta(oggi_iso: str, in_seduta: bool) -> str:
     return f"chiusa una posizione su VOO rimasta da un altro giorno ({-q:+g})"
 
 
+def uscite_di_altri_giorni(giorno: str) -> set[str]:
+    """Gli ordini che i file degli altri giorni hanno segnato come loro uscite (per esempio la chiusura di una posizione rimasta)."""
+    out: set[str] = set()
+    for f in sorted(GIORNI.glob("*.json")) if GIORNI.exists() else []:
+        if f.stem != giorno:
+            out |= set((json.loads(f.read_text()).get("uscite") or {}).keys())
+    return out
+
+
+def completa_righe(oggi_iso: str) -> list[str]:
+    """A ogni avvio: le righe dei giorni prima con un'uscita segnata il giorno dopo («chiusa_il») ma ancora senza guadagno nel diario
+    (l'uscita è arrivata dopo il controllo di 60 secondi) si completano (audit del 27 novembre 2026)."""
+    if not DIARIO.exists() or not GIORNI.exists() or posizione() != 0:
+        return []
+    d = pd.read_csv(DIARIO)
+    fatte = []
+    for f in sorted(GIORNI.glob("*.json"))[-15:]:
+        dec = json.loads(f.read_text())
+        if f.stem >= oggi_iso or not dec.get("id_ingresso"):   # oggi lo fa il giro di oggi (diario e fuori orario)
+            continue
+        riga = d[d["giorno"].astype(str) == f.stem]
+        # da rifare: le righe senza guadagno, «aperte» o «parziali» (anche un'uscita fuori orario dello stesso giorno arrivata tardi)
+        if not riga.empty and not riga["uscita"].astype(str).isin({"aperta", "parziale"}).any() \
+                and pd.to_numeric(riga["guadagno"], errors="coerce").notna().any():
+            continue
+        es = av.esecuzioni_del_giorno(f.stem)
+        il = dec.get("chiusa_il")
+        if il:
+            es += [e for e in av.esecuzioni_del_giorno(il) if e["order_id"] in (dec.get("uscite") or {})]
+        gia = {e["order_id"] for e in es}
+        es += [e for e in av.uscite_rimaste_per("gamma-rim-", f.stem, TITOLO) if e["order_id"] not in gia]
+        annota(riga_operazione(f.stem, dec, es, escludi=uscite_di_altri_giorni(f.stem)))
+        fatte.append(f.stem)
+    return fatte
+
+
 def scrivi_diario(giorno: str) -> str:
     dec = leggi_giorno(giorno)
     if dec is None or not dec.get("id_ingresso"):
         return f"{giorno}: nessun ingresso, niente da aggiungere al diario"
-    riga = riga_operazione(giorno, dec, av.esecuzioni_del_giorno(giorno))
+    riga = riga_operazione(giorno, dec, av.esecuzioni_del_giorno(giorno), escludi=uscite_di_altri_giorni(giorno))
     annota(riga)
     print(pubblica())
     g = riga.get("guadagno")
@@ -532,6 +597,12 @@ def diario_scritto(giorno: str) -> bool:
 
 def auto() -> str:
     adesso = av.ny_adesso()
+    try:
+        completate = completa_righe(adesso.date().isoformat())
+        if completate:
+            print(f"righe completate con l'uscita del giorno dopo: {', '.join(completate)}", flush=True)
+    except Exception as e:  # noqa: BLE001 — la contabilità non deve fermare il giro
+        print(f"righe dei giorni prima non completate ({type(e).__name__}: {str(e)[:120]})", flush=True)
     tutte = sedute()
     oggi = next((s for s in tutte if s["giorno"] == adesso.date()), None)
     giorno = adesso.date().isoformat()

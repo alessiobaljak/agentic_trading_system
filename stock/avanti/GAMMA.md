@@ -74,4 +74,10 @@ e dalla routine della sessione «trading stock» delle 13:30 di New York.
 
 ## Le deviazioni dalle regole (scritte quando succedono)
 
-Nessuna, finora.
+* **27 novembre 2026 — le correzioni del programma** dopo l'audit (`stock/AUDIT_2026-11-27.md`, sezione 3), con l'ok del proprietario del 27 novembre («sì, fai le 19 correzioni») e la revisione separata del codice (`avanti/REVISIONE_AUDIT.md`). Le regole non cambiano. L'ordine fuori orario ha un nome unico; le
+  uscite che un altro giorno ha segnato come sue (la chiusura di una posizione rimasta) non contano nella riga di oggi; con uscite
+  parziali il guadagno è quello della parte chiusa; a ogni avvio le righe con un'uscita del giorno dopo arrivata tardi si completano;
+  l'allarme delle posizioni rimaste esce prima del diario e si ripubblica dopo; la Plancia si aggiorna anche nei giorni senza
+  operazione. Una posizione VOO rimasta si chiude con un ordine dal nome `gamma-rim-<giorno dell'ingresso>-<ora>`; nei giorni senza
+  ingresso della prova la posizione conta con il guadagno non realizzato (`REGOLE.md`, la stessa regola della prima candela). Nei giorni a
+  chiusura anticipata la prova parte anche dalla routine delle 9:10 (prima nessun avvio arrivava in tempo per le 12:30).
