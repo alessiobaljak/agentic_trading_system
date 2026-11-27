@@ -1,10 +1,10 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-27 16:23 UTC_
+_Generato: 2026-11-27 16:40 UTC_
 - macchina: non letta qui (lo stato lo fa GitHub): disco, memoria e orologio sono nella risposta «stato» della macchina
 
 ## Il bot (un solo processo: paper, demo e conto vero)
 - stato: **running** (🟢 online)
-- ultimo heartbeat: 2026-11-27 16:22 UTC
+- ultimo heartbeat: 2026-11-27 16:40 UTC
 - DRY_RUN: True
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
@@ -105,7 +105,7 @@ Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: 
 - non letto: manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env; c'è solo sulla macchina)
 
 ## G1 oggi, moneta per moneta: paper e demo (sola lettura)
-Letto il 2026-11-27 16:23 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,019.09 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
+Letto il 2026-11-27 16:40 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,019.09 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
 - demo: non letto: manca la chiave del conto demo (c'è solo sulla macchina)
 - WLFIUSDT -10.39/— · TRXUSDT +7.34/— · HYPEUSDT -6.36/— · AEROUSDT -6.29/— · 1000SHIBUSDT +6.23/— · XMRUSDT -6.10/—
 - RENDERUSDT -5.77/— · XLMUSDT +5.65/— · BCHUSDT +5.53/— · FARTCOINUSDT -5.35/— · ADAUSDT +5.03/— · ASTERUSDT -4.97/—
@@ -144,13 +144,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 6 | 0.5% |
 | holdout | 1 | 0.1% |
-| pf_ex_top | 3 | 0.2% |
-| regime | 22 | 1.7% |
-| total_return | 1207 | 91.4% |
 | recovery | 64 | 4.8% |
+| pf_ex_top | 3 | 0.2% |
 | consistency | 17 | 1.3% |
+| total_return | 1207 | 91.4% |
+| regime | 22 | 1.7% |
+| trades | 6 | 0.5% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -158,13 +158,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 936 | 2.8% |
 | holdout | 153 | 0.5% |
 | pf_ex_top | 242 | 0.7% |
-| regime | 2815 | 8.3% |
-| total_return | 26463 | 78.0% |
 | recovery | 2737 | 8.1% |
 | consistency | 589 | 1.7% |
+| total_return | 26463 | 78.0% |
+| regime | 2815 | 8.3% |
+| trades | 936 | 2.8% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
