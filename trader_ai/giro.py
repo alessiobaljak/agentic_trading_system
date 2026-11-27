@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Callable, Optional
 
 from trader_ai.costi import Budget, costo_dollari
-from trader_ai.limiti import Conto, controlla, obiettivo_raggiunto
+from trader_ai.limiti import Conto, controlla, guadagno_netto, obiettivo_raggiunto
 from trader_ai.modello import Esito
 from trader_ai.schema import Risposta
 
@@ -60,7 +60,9 @@ PENSIERO_NEL_DIARIO = 1500
 def scrivi_diario(percorso: Path, ora: datetime, motivo: str, budget: Budget, conto: Conto, prezzo: float,
                   ris: Risultato, extra: Optional[dict] = None) -> None:
     riga = {"ora": ora.isoformat(), "motivo": motivo, "stato": ris.stato, "prezzo": prezzo, "conto": round(conto.conto, 2),
-            "guadagno_giorno": round(conto.conto - conto.conto_mezzanotte, 2), "costo": round(ris.costo, 4),
+            "guadagno_giorno": round(conto.conto - conto.conto_mezzanotte, 2),
+            "guadagno_netto": round(guadagno_netto(conto), 2),              # dopo le spese di chiusura (revisione, problema 206)
+            "costo": round(ris.costo, 4),
             "speso_oggi": round(budget.speso(ora), 4), **(extra or {})}
     if ris.esito is not None:
         riga["usage"] = ris.esito.usage

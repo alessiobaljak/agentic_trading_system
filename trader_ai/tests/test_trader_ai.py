@@ -282,4 +282,19 @@ def test_bilancio_dice_direzioni_vinte_perse_e_netto_diviso():
 def test_istruzioni_obiettivo_obbligatorio():
     from trader_ai.messaggio import ISTRUZIONI
     t = ISTRUZIONI.read_text()
-    assert "OBBLIGATORIO" in t and "Non è un tetto" in t and "IMPARA" in t
+    # stessa frase del proprietario, senza maiuscole (il proprietario, 26 novembre 2026: «sì alle tre decisioni»); i due paragrafi
+    # interi, così un cambio della frase (o un consiglio di strategia aggiunto) passa solo da un cambio voluto di questo test
+    # (revisione del 26 novembre 2026, problema 205)
+    paragrafi = (
+        "Obiettivo obbligatorio: ogni giorno devi guadagnare il 3% del conto della mezzanotte UTC, contato dopo le spese di chiusura.\n"
+        "Non è un tetto: è il traguardo che devi raggiungere. Finché non l'hai raggiunto devi continuare a cercare operazioni per "
+        "arrivarci.\n"
+        "Quando lo raggiungi, il programma chiude tutto e ti ferma fino alla mezzanotte dopo.\n"
+        "\n"
+        "Impara dai tuoi risultati: a ogni chiamata ricevi il bilancio delle operazioni chiuse (oggi, ieri e dall'inizio: per "
+        "direzione, vinte\n"
+        "e perse, il netto diviso in prezzo, spese e funding, come si sono chiuse) e le tue operazioni chiuse. Se una cosa che fai "
+        "continua a\n"
+        "perdere, non ripeterla: capisci perché ha perso e cambia davvero il modo di operare, scrivendo che cosa hai capito.\n")
+    assert t.split("\n\n")[1:3] == paragrafi.rstrip("\n").split("\n\n")
+    assert "OBBLIGATORIO" not in t and "IMPARA" not in t

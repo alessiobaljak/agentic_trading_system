@@ -2,7 +2,8 @@
 
 Restano: leva fino a 10, margine non oltre il disponibile, una sola operazione alla volta, stop obbligatorio dalla parte giusta e
 prima della liquidazione, obiettivo del giorno del 3% del conto di mezzanotte (il proprietario, 25 novembre 2026: «il profitto
-giornaliero mettilo al 3%»; prima 50 USDT) dopo il quale ci si ferma fino a mezzanotte UTC.
+giornaliero mettilo al 3%»; prima 50 USDT), contato dopo le spese di chiusura (26 novembre), dopo il quale ci si ferma fino a
+mezzanotte UTC.
 """
 from __future__ import annotations
 
@@ -42,10 +43,20 @@ class Conto:
     disponibile: float               # margine libero, USDT
     conto_mezzanotte: float
     posizione: Optional[Posizione] = None
+    #: quanto costerebbe chiudere adesso l'operazione aperta (commissione e scarto d'uscita): il 3% si conta dopo queste spese,
+    #: così è guadagno vero (il proprietario, 26 novembre 2026: «sì alle tre decisioni»)
+    spese_chiusura: float = 0.0
+
+
+def guadagno_netto(c: Conto) -> float:
+    """Il guadagno da mezzanotte se si chiudesse tutto adesso: spese di chiusura dell'operazione aperta già tolte."""
+    return c.conto - c.spese_chiusura - c.conto_mezzanotte
 
 
 def obiettivo_raggiunto(c: Conto) -> bool:
-    return c.conto >= c.conto_mezzanotte + obiettivo_usdt(c)
+    """Al centesimo, sempre: prima della chiusura (con le spese di chiusura tolte) e dopo, sul conto (riesame della sedicesima
+    revisione, problema 210: prima il centesimo valeva solo dopo una chiusura del programma)."""
+    return round(guadagno_netto(c), 2) >= round(obiettivo_usdt(c), 2)
 
 
 def obiettivo_usdt(c: Conto) -> float:

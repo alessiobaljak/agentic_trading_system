@@ -1,4 +1,17 @@
-# Le regole del trader AI (versione 7, 26 novembre 2026: dati e istruzioni corretti dopo il controllo del 26 novembre; versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+# Le regole del trader AI (versione 8, 26 novembre 2026: le tre decisioni del proprietario; versione 7, 26 novembre 2026: dati e istruzioni corretti dopo il controllo del 26 novembre; versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+
+**Versione 8, le tre decisioni del proprietario** (26 novembre 2026, «sì alle tre decisioni, procedi», sulle proposte 5.1-5.3 del
+controllo): (1) il tetto resta 5 dollari il primo giorno; si misura quanto costa una chiamata a sforzo alto e fino a che ora bastano,
+poi decide il proprietario; (2) l'obiettivo e il «impara» delle istruzioni senza maiuscole, stessa frase; (3) il 3% si conta dopo le
+spese di chiusura dell'operazione aperta (commissione e scarto d'uscita), così è guadagno vero. Il fermo fino a mezzanotte scatta solo
+se il guadagno letto sul conto **dopo** la chiusura arriva al 3%, al centesimo: se fra il controllo e la chiusura il prezzo si è mosso,
+o uno stop è scattato prima, il guadagno resta sotto, l'obiettivo non è raggiunto e il modello si chiama subito per la chiusura
+(revisione del 26 novembre 2026, problema 204; il proprietario: «non si deve fermare finché non ha raggiunto il 3%»). Dal riesame
+della sedicesima (27 novembre 2026): il centesimo vale sempre, prima e dopo la chiusura; un ordine limite in attesa si annulla come
+quando lo annulla il modello (se si esegue proprio in quel momento, si chiude subito); se durante il fermo il conto scende sotto il 3%
+(un funding pagato dopo la chiusura) il fermo si toglie e il modello si chiama (il resoconto lo dice); dopo una chiusura lo stato e il
+motivo della chiamata si salvano subito, prima di ogni altra lettura del conto; annullando un ordine limite si toglie prima il solo
+limite, e stop e obiettivo restano finché non si sa se il limite si è eseguito.
 
 **Versione 7, il controllo del 26 novembre 2026** (`trader_ai/revisioni/2026-11-26-controllo-istruzioni-e-dati.md`; il proprietario: «sei
 sicuro di avere creato le istruzioni corrette [...] che abbia tutti gli elementi a disposizione per prendere le decisioni?»). Il primo
@@ -47,7 +60,7 @@ Decisione del 23 novembre (`docs/decisioni_del_proprietario.md`): conto demo di 
 ## 1. Cosa fa
 Su **una moneta scelta dal proprietario** (all'inizio **BTCUSDT**, si cambia in `trader_ai/config.json`), il modello guarda le candele da
 **5, 15 e 30 minuti** con gli indicatori e decide da solo: entrare lungo o corto, quanto, con quale leva, dove mettere lo stop (SL) e
-l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del conto della mezzanotte UTC** (30 USDT su 1.000; fino al 24 novembre 50 USDT), il codice chiude tutto e il trader
+l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del conto della mezzanotte UTC** (30 USDT su 1.000; fino al 24 novembre 50 USDT), contato dopo le spese di chiusura dell'operazione aperta (dal 26 novembre), il codice chiude tutto e il trader
 **si ferma fino alla mezzanotte UTC** (l'una di notte in Svizzera d'inverno).
 
 ## 2. Quando viene chiamato
@@ -117,7 +130,10 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 * **Leva al massimo 10**; margine al massimo il saldo disponibile; una sola operazione aperta alla volta.
 * **Stop obbligatorio** per ogni operazione, piazzato sul conto come ordine vero (scatta anche se il programma è fermo), dalla parte
   giusta del prezzo e prima del prezzo di liquidazione. Lo stop e l'obiettivo li sceglie il modello; li può spostare quando vuole.
-* **Obiettivo del giorno**: conto ≥ conto a mezzanotte UTC × 1,03 → si chiude tutto e niente chiamate fino a mezzanotte.
+* **Obiettivo del giorno**: conto meno le spese di chiusura dell'operazione aperta ≥ conto a mezzanotte UTC × 1,03, al centesimo →
+  si chiude tutto; se dopo la chiusura il guadagno sul conto è almeno il 3% (al centesimo), niente chiamate fino a mezzanotte, se no
+  si continua; se durante il fermo il guadagno scende sotto il 3%, il fermo si toglie (dal 26-27 novembre; prima senza togliere le
+  spese di chiusura, con il centesimo solo dopo la chiusura e con il fermo anche sotto il 3%).
 * **Nessuna perdita massima del giorno né totale** (scelta del proprietario). Se il conto non basta per l'ordine minimo di Binance, il
   trader si ferma da solo e lo scrive.
 * Una decisione fuori da questi limiti si scarta e si scrive nel diario, e il modello alla chiamata dopo vede che è stata scartata e perché.
@@ -159,3 +175,4 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 | 5 | 25 novembre 2026 | obiettivo del giorno: il 3% del conto della mezzanotte UTC invece di 50 USDT (il proprietario: «il profitto giornaliero mettilo al 3%»), prima del primo avvio |
 | 6 | 26 novembre 2026 | il 3% è un obiettivo obbligatorio, non un tetto; a ogni chiamata il bilancio di oggi (direzioni, vinte e perse, prezzo da mezzanotte); sforzo di ragionamento «high» e risposta fino a 16.000 token (il proprietario: «non si deve fermare finché non ha raggiunto il 3% [...] l'AI deve sapere se il primo trade è fallito [...] che cosa hai creato come AI se non pensa») |
 | 7 | 26 novembre 2026 | dopo il controllo del 26 novembre: ordine limite in attesa detto come tale; limite eseguito e chiuso fra due controlli registrato; stop e obiettivo solo per il loro lato; uscite, spese e funding dal conto; memoria ricostruita; scheda di ogni operazione, lezioni che restano, bilancio con il netto diviso; candela in corso, livelli, orari, premio, interesse aperto in 1 e 4 ore; chiamate rimaste invece dei dollari; richiamo dopo un «chiudi»; risposte non lette dette al modello; cache da un'ora e ragionamento riassunto; istruzioni sulla meccanica degli ordini e sulle spese (nessun consiglio di strategia) |
+| 8 | 26 novembre 2026 | le tre decisioni del proprietario: tetto di 5 dollari confermato per il primo giorno, da misurare; obiettivo e «impara» senza maiuscole; il 3% contato dopo le spese di chiusura, e il fermo solo se dopo la chiusura il guadagno sul conto arriva al 3%; 27 novembre (riesame della sedicesima): centesimo sempre, limite in attesa annullato con la chiusura se si esegue, fermo tolto se il conto scende sotto il 3%, stato salvato prima della chiamata |

@@ -170,5 +170,7 @@ def lezioni_dal_diario(diario: List[dict], ops: List[dict]) -> List[dict]:
         t = ms(r["ora"])
         prima = [o for o in ops if (ms(o.get("chiusa")) or 0) <= t]
         out.append({"ora": r["ora"], "testo": "cambio di approccio: " + risposta["perche"].strip()[:380],
-                    "dopo": prima[-1].get("n") if prima else None, "giorno_netto": r.get("guadagno_giorno"), "fissata": True})
+                    "dopo": prima[-1].get("n") if prima else None, "fissata": True,
+                    # dopo le spese di chiusura quando la riga del diario lo dice (dalla versione 8), se no il guadagno di allora
+                    "giorno_netto": r["guadagno_netto"] if r.get("guadagno_netto") is not None else r.get("guadagno_giorno")})
     return out

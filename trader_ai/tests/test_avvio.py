@@ -95,6 +95,9 @@ class ContoFinto:
     def annulla_tutto(self):
         self.algo, self.normali = [], [o for o in self.normali if not str(o.get("clientOrderId", "")).startswith("tai")]
 
+    def annulla_ordini(self):                                     # solo gli ordini normali: stop e obiettivo restano
+        self.normali = [o for o in self.normali if not str(o.get("clientOrderId", "")).startswith("tai")]
+
     def chiudi(self, pos, cid):
         esito = None
         if pos and self.pos:                                      # come i conti veri: un esito solo se ha chiuso qualcosa
@@ -534,14 +537,14 @@ def test_chiudi_un_limite_eseguito_mentre_il_modello_pensa_chiude_la_posizione(t
 def test_annullo_del_limite_che_si_esegue_nel_frattempo_chiude(tmp_path):
     tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **LIMITE)])
     tr.passo()
-    vero_annulla = c.annulla_tutto
+    vero_annulla = c.annulla_ordini                            # dal 27 novembre si annulla prima il solo limite (problema 232)
 
     def annulla_ma_eseguito(*a):
         if not getattr(c, "_gia", False):                       # l'esecuzione arriva un attimo prima del primo annullamento
             c._gia = True
             _eseguito(c)
         vero_annulla()
-    c.annulla_tutto = annulla_ma_eseguito
+    c.annulla_ordini = annulla_ma_eseguito
     c.rifiuta_stop = True                                       # nessuno stop accettato nella modifica (problema 134)
     tr.chiama = lambda s, u: Esito(risposta("modifica", stop_prezzo=88500), "ok", {"input_tokens": 10})
     o.t = T0 + timedelta(minutes=15)
@@ -563,11 +566,12 @@ def test_il_fermo_non_entra_mai_in_git():
 def test_annullamento_del_limite_non_riuscito_l_operazione_resta_in_attesa(tmp_path):
     tr, c, chiamate, o = trader(tmp_path, [risposta("apri_lungo", **LIMITE), risposta("chiudi")])
     tr.passo()
-    c.annulla_tutto = lambda: None                              # Binance non annulla e annulla_tutto non lo dice
+    c.annulla_ordini = lambda: None                             # Binance non annulla e annulla_ordini non lo dice
     o.t = T0 + timedelta(minutes=15)
     tr.passo()
     st = tr.carica()
     assert st["aperta"] is not None and st["aperta"]["in_attesa"] and "non si è annullato" in st["ultimo_scarto"]
+    assert stop_sul_conto(c) == [88000]                          # lo stop del limite resta (problema 232)
 
 
 def test_la_prova_sul_demo_con_il_conto_finto_lascia_il_conto_pulito():
