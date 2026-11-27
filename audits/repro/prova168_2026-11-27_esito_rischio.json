@@ -1,0 +1,114 @@
+{
+ "B": {
+  "lorda_media": 1.9788364514504142,
+  "lorda_max": 2.0000000000000004,
+  "netta_min_max": [
+   -0.06916542732511419,
+   0.14426111344765288
+  ],
+  "peso_max_moneta": [
+   0.4475828380137619,
+   "2024-02-05",
+   "BLZUSDT"
+  ],
+  "giorni_con_una_moneta_oltre_10%": 692,
+  "giorni_con_una_moneta_oltre_20%": 56,
+  "monete_per_lato_min": [
+   9,
+   5
+  ],
+  "perdita_peggiore_possibile_nel_giorno": [
+   -0.6257778592865552,
+   "2025-10-10"
+  ],
+  "perdita_peggiore_di_una_moneta": [
+   -0.1329248083561791,
+   "2021-01-30",
+   "XRPUSDT",
+   -0.1590942045091066
+  ],
+  "giorni_peggio_possibile_oltre_-20%": 43
+ },
+ "G1": {
+  "lorda_media": 2.0,
+  "lorda_max": 2.000000000000001,
+  "netta_min_max": [
+   -6.869504964868156e-16,
+   5.551115123125783e-16
+  ],
+  "peso_max_moneta": [
+   0.43733790219596586,
+   "2024-02-05",
+   "BLZUSDT"
+  ],
+  "giorni_con_una_moneta_oltre_10%": 764,
+  "giorni_con_una_moneta_oltre_20%": 83,
+  "monete_per_lato_min": [
+   6,
+   5
+  ],
+  "perdita_peggiore_possibile_nel_giorno": [
+   -0.5989764159697814,
+   "2025-10-10"
+  ],
+  "perdita_peggiore_di_una_moneta": [
+   -0.13188196021902995,
+   "2021-01-30",
+   "XRPUSDT",
+   -0.1578460470217625
+  ],
+  "giorni_peggio_possibile_oltre_-20%": 44
+ },
+ "G1N": {
+  "lorda_media": 2.0,
+  "lorda_max": 2.000000000000001,
+  "netta_min_max": [
+   -0.2766617093004565,
+   0.5770444537906114
+  ],
+  "peso_max_moneta": [
+   0.4783176454671501,
+   "2024-02-05",
+   "BLZUSDT"
+  ],
+  "giorni_con_una_moneta_oltre_10%": 877,
+  "giorni_con_una_moneta_oltre_20%": 101,
+  "monete_per_lato_min": [
+   6,
+   5
+  ],
+  "perdita_peggiore_possibile_nel_giorno": [
+   -0.6328894712273744,
+   "2025-10-10"
+  ],
+  "perdita_peggiore_di_una_moneta": [
+   -0.11647761549077262,
+   "2021-01-30",
+   "XRPUSDT",
+   -0.139408992262509
+  ],
+  "giorni_peggio_possibile_oltre_-20%": 42
+ },
+ "B_giorni_sotto_-5%": {
+  "n": 4,
+  "date": [
+   "2021-01-30",
+   "2021-02-11",
+   "2021-02-18",
+   "2021-02-21"
+  ],
+  "valori": [
+   -0.08354154748123899,
+   -0.05427118726285449,
+   -0.05586261183152683,
+   -0.07918798528887545
+  ],
+  "giorno_dopo": [
+   -0.008003686675263648,
+   -0.009047778102675125,
+   0.01930084145602298,
+   0.01751368897049329
+  ]
+ },
+ "nota_liquidazione": "margine unico: con lorda 2 e mantenimento fra lo 0,4% e il 2,5% del nozionale la liquidazione vuole una perdita del conto fra il 95% e il 99%; confronto con la perdita peggiore possibile nel giorno"
+}

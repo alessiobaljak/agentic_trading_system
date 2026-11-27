@@ -1,0 +1,177 @@
+{
+ "2021-01-04": {
+  "B_1000_limite": {
+   "totale": 3.2984671275064943,
+   "discesa_max_sul_capitale": -0.32131433538904774,
+   "sharpe": 2.217609806015422,
+   "saltati": 110401,
+   "voluti": 153104
+  },
+  "B_1000_mercato": {
+   "totale": 3.16028868744284,
+   "discesa_max_sul_capitale": -0.32509089770254995,
+   "sharpe": 2.1242921721301906,
+   "saltati": 110401,
+   "voluti": 153104
+  },
+  "B_1000_limite_chiusure_libere": {
+   "totale": 3.23352056762186,
+   "discesa_max_sul_capitale": -0.3052867178130523,
+   "sharpe": 2.234420805902716,
+   "saltati": 76342,
+   "voluti": 144739
+  },
+  "A_quattro_da_250": {
+   "totale": 3.3260658151246476,
+   "discesa_max_sul_capitale": -0.2741678709394395,
+   "sharpe": 2.1504769342798173,
+   "F5_da_250": 3.0823813571811973,
+   "F5_discesa": -0.36609336800822856
+  },
+  "ricerca_B_stessi_giorni": {
+   "totale_somma": 3.1870634991118765,
+   "discesa_max": -0.2597964334636125,
+   "sharpe": 2.2100953335356825
+  }
+ },
+ "2024-01-01": {
+  "B_1000_limite": {
+   "totale": 1.484485294237656,
+   "discesa_max_sul_capitale": -0.24672593527950815,
+   "sharpe": 2.255801717639565,
+   "saltati": 56284,
+   "voluti": 77905
+  },
+  "B_1000_mercato": {
+   "totale": 1.4235625029747183,
+   "discesa_max_sul_capitale": -0.2526994594111889,
+   "sharpe": 2.1612583493597812,
+   "saltati": 56284,
+   "voluti": 77905
+  },
+  "B_1000_limite_chiusure_libere": {
+   "totale": 1.4569242842535668,
+   "discesa_max_sul_capitale": -0.2244742434863971,
+   "sharpe": 2.288000218135902,
+   "saltati": 37826,
+   "voluti": 72234
+  },
+  "A_quattro_da_250": {
+   "totale": 1.3768037201062362,
+   "discesa_max_sul_capitale": -0.26288001115509596,
+   "sharpe": 2.131433070255436,
+   "F5_da_250": 0.9690187099748818,
+   "F5_discesa": -0.3660933680082272
+  },
+  "ricerca_B_stessi_giorni": {
+   "totale_somma": 1.4692745726230263,
+   "discesa_max": -0.2160190385254489,
+   "sharpe": 2.295361282133628
+  }
+ },
+ "2025-01-06": {
+  "B_1000_limite": {
+   "totale": 0.7768207498064237,
+   "discesa_max_sul_capitale": -0.2467259352795077,
+   "sharpe": 1.966164589516439,
+   "saltati": 35893,
+   "voluti": 49328
+  },
+  "B_1000_mercato": {
+   "totale": 0.7387809654064893,
+   "discesa_max_sul_capitale": -0.2526994594111889,
+   "sharpe": 1.867975556480273,
+   "saltati": 35893,
+   "voluti": 49328
+  },
+  "B_1000_limite_chiusure_libere": {
+   "totale": 0.7830538776158885,
+   "discesa_max_sul_capitale": -0.22447424348639844,
+   "sharpe": 2.065019527955421,
+   "saltati": 23952,
+   "voluti": 45711
+  },
+  "A_quattro_da_250": {
+   "totale": 0.7070995474254126,
+   "discesa_max_sul_capitale": -0.2596028153979728,
+   "sharpe": 1.8997446569740606,
+   "F5_da_250": 0.40511611046710505,
+   "F5_discesa": -0.3663168213258876
+  },
+  "ricerca_B_stessi_giorni": {
+   "totale_somma": 0.8175932378001451,
+   "discesa_max": -0.21601903852544857,
+   "sharpe": 2.122341704964428
+  }
+ },
+ "2025-09-29": {
+  "B_1000_limite": {
+   "totale": 0.3826366388291131,
+   "discesa_max_sul_capitale": -0.2467329143526591,
+   "sharpe": 1.5455834422726553,
+   "saltati": 20379,
+   "voluti": 27486
+  },
+  "B_1000_mercato": {
+   "totale": 0.36286470125953557,
+   "discesa_max_sul_capitale": -0.25270643848434027,
+   "sharpe": 1.4660704592680847,
+   "saltati": 20379,
+   "voluti": 27486
+  },
+  "B_1000_limite_chiusure_libere": {
+   "totale": 0.379008909606185,
+   "discesa_max_sul_capitale": -0.22447424348639822,
+   "sharpe": 1.585441769828918,
+   "saltati": 13827,
+   "voluti": 25670
+  },
+  "A_quattro_da_250": {
+   "totale": 0.31701553533743415,
+   "discesa_max_sul_capitale": -0.2591725442592243,
+   "sharpe": 1.3557381988270016,
+   "F5_da_250": 0.1424585492737171,
+   "F5_discesa": -0.3649970742729145
+  },
+  "ricerca_B_stessi_giorni": {
+   "totale_somma": 0.40396923313500865,
+   "discesa_max": -0.21601903852544801,
+   "sharpe": 1.6496792064987749
+  }
+ },
+ "2026-01-05": {
+  "B_1000_limite": {
+   "totale": 0.16230818582263534,
+   "discesa_max_sul_capitale": -0.2467329143526591,
+   "sharpe": 0.833399932694816,
+   "saltati": 15050,
+   "voluti": 20233
+  },
+  "B_1000_mercato": {
+   "totale": 0.14911629318717762,
+   "discesa_max_sul_capitale": -0.25270643848434016,
+   "sharpe": 0.7658061022321315,
+   "saltati": 15050,
+   "voluti": 20233
+  },
+  "B_1000_limite_chiusure_libere": {
+   "totale": 0.172611521786878,
+   "discesa_max_sul_capitale": -0.22447424348639822,
+   "sharpe": 0.9240554111108735,
+   "saltati": 9893,
+   "voluti": 18524
+  },
+  "A_quattro_da_250": {
+   "totale": 0.2417779701550385,
+   "discesa_max_sul_capitale": -0.19890656815221264,
+   "sharpe": 1.3161158373142234,
+   "F5_da_250": 0.20802052968970758,
+   "F5_discesa": -0.18847280008642364
+  },
+  "ricerca_B_stessi_giorni": {
+   "totale_somma": 0.17794196682926106,
+   "discesa_max": -0.21601903852544913,
+   "sharpe": 0.9334313998505473
+  }
+ }
+}

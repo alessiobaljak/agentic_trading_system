@@ -1,0 +1,107 @@
+{
+ "A": {
+  "settimane": 300,
+  "annuo": 0.55284,
+  "sharpe": 2.11332,
+  "discesa_max": -0.25704,
+  "sortino": 4.23939,
+  "t_semplice": 5.07603,
+  "rapporto_robusto": 0.59174,
+  "t_robusto": 3.90471,
+  "durata_discesa_settimane": 50,
+  "quota_5_settimane_migliori": 0.21604163678140376,
+  "quota_3_mesi_migliori": 0.2780037138972454,
+  "per_clima": {
+   "rialzo": {
+    "settimane": 100,
+    "annuo": 0.941210446064686,
+    "sharpe": 2.869037618352356
+   },
+   "laterale": {
+    "settimane": 135,
+    "annuo": 0.3110512884780527,
+    "sharpe": 1.444189936647767
+   },
+   "ribasso": {
+    "settimane": 65,
+    "annuo": 0.4575130431557819,
+    "sharpe": 2.0663319009487355
+   }
+  }
+ },
+ "B": {
+  "settimane": 300,
+  "annuo": 0.55242,
+  "sharpe": 2.13691,
+  "discesa_max": -0.24931,
+  "sortino": 4.29287,
+  "t_semplice": 5.1327,
+  "rapporto_robusto": 0.59405,
+  "t_robusto": 3.95602,
+  "durata_discesa_settimane": 49,
+  "quota_5_settimane_migliori": 0.2095368199431089,
+  "quota_3_mesi_migliori": 0.2752055992527846,
+  "per_clima": {
+   "rialzo": {
+    "settimane": 100,
+    "annuo": 0.9370038611645058,
+    "sharpe": 2.9151416419441056
+   },
+   "laterale": {
+    "settimane": 135,
+    "annuo": 0.3166424438335386,
+    "sharpe": 1.4885543610601049
+   },
+   "ribasso": {
+    "settimane": 65,
+    "annuo": 0.45046439876675537,
+    "sharpe": 1.9993275003845599
+   }
+  }
+ },
+ "G1": {
+  "settimane": 300,
+  "annuo": 0.54086,
+  "sharpe": 1.96719,
+  "discesa_max": -0.28751,
+  "sortino": 3.83865,
+  "t_semplice": 4.72504,
+  "rapporto_robusto": 0.61984,
+  "t_robusto": 3.72002,
+  "durata_discesa_settimane": 46,
+  "quota_5_settimane_migliori": 0.21156382259649864,
+  "quota_3_mesi_migliori": 0.28552880994061886,
+  "per_clima": {
+   "rialzo": {
+    "settimane": 100,
+    "annuo": 0.8294270027659069,
+    "sharpe": 2.45724947031165
+   },
+   "laterale": {
+    "settimane": 135,
+    "annuo": 0.3809083342744882,
+    "sharpe": 1.6261547896653885
+   },
+   "ribasso": {
+    "settimane": 65,
+    "annuo": 0.42912085234105546,
+    "sharpe": 1.7779727225497588
+   }
+  }
+ },
+ "B_giorni": {
+  "giorni": 2100,
+  "quota_5_giorni_migliori": 0.12700067363248815,
+  "lordo_per_variazione_contro_spesa": null
+ },
+ "B_esposizione": {
+  "lorda_media": 1.9788364514504142,
+  "giorni_senza_posizioni": 0
+ },
+ "B_guadagno_e_spese_l_anno": {
+  "lordo": 0.34249815209562334,
+  "spese": 0.062060137511074545,
+  "funding_pagato": -0.2735039745468012
+ },
+ "definizione_clima": "rendimento del Bitcoin delle 13 settimane fino a quella compresa: sopra +20% rialzo, sotto -20% ribasso"
+}

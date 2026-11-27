@@ -1,0 +1,44 @@
+{
+ "giorni_moneta_riempiti": 237,
+ "file_scaricati_ora": 103,
+ "B_prima": {
+  "settimane": 300,
+  "annuo": 0.55242,
+  "sharpe": 2.13691,
+  "discesa_max": -0.24931,
+  "sortino": 4.29287,
+  "t_semplice": 5.1327,
+  "rapporto_robusto": 0.59405,
+  "t_robusto": 3.95602
+ },
+ "B_dopo": {
+  "settimane": 300,
+  "annuo": 0.55089,
+  "sharpe": 2.1305,
+  "discesa_max": -0.24931,
+  "sortino": 4.27925,
+  "t_semplice": 5.1173,
+  "rapporto_robusto": 0.59417,
+  "t_robusto": 3.94453
+ },
+ "G1_prima": {
+  "settimane": 300,
+  "annuo": 0.544,
+  "sharpe": 1.98152,
+  "discesa_max": -0.28751,
+  "sortino": 3.86592,
+  "t_semplice": 4.75945,
+  "rapporto_robusto": 0.61771,
+  "t_robusto": 3.74066
+ },
+ "G1_dopo": {
+  "settimane": 300,
+  "annuo": 0.54147,
+  "sharpe": 1.97344,
+  "discesa_max": -0.28751,
+  "sortino": 3.84448,
+  "t_semplice": 4.74004,
+  "rapporto_robusto": 0.61714,
+  "t_robusto": 3.7237
+ }
+}

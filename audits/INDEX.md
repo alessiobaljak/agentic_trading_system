@@ -3,6 +3,7 @@ Aggiornato: 2026-11-27. Leggere all'inizio di ogni invocazione questo file e `KN
 ## Stato degli audit per strategia
 | Strategia | Ultimo audit | Verdetto | Note |
 |---|---|---|---|
+| Prova 168: Q4, G1 + G11 + G1 neutra + F5 insieme (A e B) | 2026-11-27 | PASS tecnico A e B | rifatta identica (1e-16), taglio pulito; Alti: «sì» solo con la regola del 27 nov (scritta prima: 0,70/0,72), tutto a mercato 0,79, famiglia in V 0,81/0,82; concentrazione 44,8% |
 | Prova 28: K2, F5 + M7 + K2 (riesame) | 2026-11-11 | PASS tecnico | Alti: Sharpe corretto 0,75/0,47 con N = conto, 0,89/0,69 con N = gruppi; regole: «non candidate» |
 | Prova 113: N3G, monete gratis (riesame) | 2026-11-11 | PASS tecnico del «no» | corretta p 0,0268 (serve 0,01); Alto: eventi della 32 da rifare (19 persi); tocca anche N3 nel paper |
 | G1 (demo, candidata ai soldi veri; configurazione 280 USDT) | 2026-11-12 | PASS tecnico | Alti: esame 0,80 solo con il limite della ricerca (A 0,81, a mercato 0,77); GTC al mark; soglia cambiata dopo; moneta fino al 44% |

@@ -1,0 +1,182 @@
+{
+ "2025-10-10": {
+  "peggio_col_giornaliero": -0.6257778592865552,
+  "peggio_ora_per_ora": -0.4747015205446091,
+  "ora_peggiore": 21,
+  "minimo_alle_chiusure_orarie": -0.005918657323555026,
+  "netto_del_giorno": 0.05323371045360867,
+  "monete": 74,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2021-05-19": {
+  "peggio_col_giornaliero": -0.585606605450397,
+  "peggio_ora_per_ora": -0.3399869503384225,
+  "ora_peggiore": 12,
+  "minimo_alle_chiusure_orarie": -0.037042715373722786,
+  "netto_del_giorno": -0.010628184558615928,
+  "monete": 49,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2022-05-11": {
+  "peggio_col_giornaliero": -0.37138588661669786,
+  "peggio_ora_per_ora": -0.2571652556461543,
+  "ora_peggiore": 12,
+  "minimo_alle_chiusure_orarie": -0.05759910284332506,
+  "netto_del_giorno": -0.01708091875217898,
+  "monete": 65,
+  "senza_ore": 0,
+  "lorda": 1.983397164064852
+ },
+ "2021-09-07": {
+  "peggio_col_giornaliero": -0.3650070834286986,
+  "peggio_ora_per_ora": -0.16034167126728738,
+  "ora_peggiore": 15,
+  "minimo_alle_chiusure_orarie": -0.010185224492193426,
+  "netto_del_giorno": 0.015267142866670759,
+  "monete": 60,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2021-05-20": {
+  "peggio_col_giornaliero": -0.3554387787390463,
+  "peggio_ora_per_ora": -0.15243788128787666,
+  "ora_peggiore": 0,
+  "minimo_alle_chiusure_orarie": 0.0036655758888007473,
+  "netto_del_giorno": 0.03403162106359151,
+  "monete": 50,
+  "senza_ore": 0,
+  "lorda": 1.893849674317452
+ },
+ "2021-05-23": {
+  "peggio_col_giornaliero": -0.3369844738528449,
+  "peggio_ora_per_ora": -0.10458470780810214,
+  "ora_peggiore": 16,
+  "minimo_alle_chiusure_orarie": -0.00436196526532624,
+  "netto_del_giorno": 0.005511590050596446,
+  "monete": 53,
+  "senza_ore": 0,
+  "lorda": 1.8930193774787387
+ },
+ "2021-12-04": {
+  "peggio_col_giornaliero": -0.3359465517695458,
+  "peggio_ora_per_ora": -0.20497240858824115,
+  "ora_peggiore": 5,
+  "minimo_alle_chiusure_orarie": -0.0028861400303752446,
+  "netto_del_giorno": -0.0007077377439123527,
+  "monete": 78,
+  "senza_ore": 0,
+  "lorda": 1.9833316328656918
+ },
+ "2021-05-24": {
+  "peggio_col_giornaliero": -0.33271917175976334,
+  "peggio_ora_per_ora": -0.09746783822768329,
+  "ora_peggiore": 19,
+  "minimo_alle_chiusure_orarie": -0.027725207263071934,
+  "netto_del_giorno": -0.010727128701406638,
+  "monete": 50,
+  "senza_ore": 0,
+  "lorda": 2.0000000000000004
+ },
+ "2022-05-12": {
+  "peggio_col_giornaliero": -0.3103512836042309,
+  "peggio_ora_per_ora": -0.12254225223742558,
+  "ora_peggiore": 7,
+  "minimo_alle_chiusure_orarie": -0.04224271379599691,
+  "netto_del_giorno": -0.03215387916925037,
+  "monete": 65,
+  "senza_ore": 0,
+  "lorda": 1.9455733342176746
+ },
+ "2021-05-21": {
+  "peggio_col_giornaliero": -0.3081296964688953,
+  "peggio_ora_per_ora": -0.136954843891596,
+  "ora_peggiore": 14,
+  "minimo_alle_chiusure_orarie": -0.0015455039344941105,
+  "netto_del_giorno": 0.00030595724102306624,
+  "monete": 52,
+  "senza_ore": 0,
+  "lorda": 1.8935722717684245
+ },
+ "2021-02-23": {
+  "peggio_col_giornaliero": -0.2991230932891342,
+  "peggio_ora_per_ora": -0.11021111844962529,
+  "ora_peggiore": 8,
+  "minimo_alle_chiusure_orarie": 0.00405361692237139,
+  "netto_del_giorno": 0.01794522084139883,
+  "monete": 25,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2025-02-03": {
+  "peggio_col_giornaliero": -0.28643538353438863,
+  "peggio_ora_per_ora": -0.1628658059139078,
+  "ora_peggiore": 1,
+  "minimo_alle_chiusure_orarie": 0.0037082037222751934,
+  "netto_del_giorno": 0.026592580770325804,
+  "monete": 62,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2021-01-30": {
+  "peggio_col_giornaliero": -0.23064465161844683,
+  "peggio_ora_per_ora": -0.17962560566017405,
+  "ora_peggiore": 16,
+  "minimo_alle_chiusure_orarie": -0.08478618194281315,
+  "netto_del_giorno": -0.08354154748123899,
+  "monete": 20,
+  "senza_ore": 0,
+  "lorda": 1.971683363041456
+ },
+ "2021-02-21": {
+  "peggio_col_giornaliero": -0.1685869301259109,
+  "peggio_ora_per_ora": -0.09734184067681156,
+  "ora_peggiore": 22,
+  "minimo_alle_chiusure_orarie": -0.0792661527237478,
+  "netto_del_giorno": -0.07918798528887545,
+  "monete": 26,
+  "senza_ore": 0,
+  "lorda": 1.9072985022881848
+ },
+ "2021-02-18": {
+  "peggio_col_giornaliero": -0.13175890467811574,
+  "peggio_ora_per_ora": -0.07756953638452928,
+  "ora_peggiore": 23,
+  "minimo_alle_chiusure_orarie": -0.05762926393501882,
+  "netto_del_giorno": -0.05586261183152683,
+  "monete": 24,
+  "senza_ore": 0,
+  "lorda": 1.9572890148162758
+ },
+ "2021-02-11": {
+  "peggio_col_giornaliero": -0.23984637434892814,
+  "peggio_ora_per_ora": -0.12781851003689812,
+  "ora_peggiore": 16,
+  "minimo_alle_chiusure_orarie": -0.08978931837962024,
+  "netto_del_giorno": -0.05427118726285449,
+  "monete": 26,
+  "senza_ore": 0,
+  "lorda": 2.0
+ },
+ "2026-08-06": {
+  "peggio_col_giornaliero": -0.1079509532469997,
+  "peggio_ora_per_ora": -0.060431395337542895,
+  "ora_peggiore": 23,
+  "minimo_alle_chiusure_orarie": -0.04551068896103174,
+  "netto_del_giorno": -0.044287164801795814,
+  "monete": 64,
+  "senza_ore": 0,
+  "lorda": 1.997298240510346
+ },
+ "2026-09-11": {
+  "peggio_col_giornaliero": -0.12626744086619157,
+  "peggio_ora_per_ora": -0.058508075045647034,
+  "ora_peggiore": 22,
+  "minimo_alle_chiusure_orarie": -0.04284313644792806,
+  "netto_del_giorno": -0.04201189564296664,
+  "monete": 64,
+  "senza_ore": 0,
+  "lorda": 1.9840904605609806
+ }
+}

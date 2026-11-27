@@ -1,0 +1,406 @@
+{
+ "limite_al_tocco": {
+  "numeri": {
+   "G1": {
+    "settimane": 300,
+    "annuo": 0.544,
+    "sharpe": 1.98152,
+    "discesa_max": -0.28751,
+    "sortino": 3.86592,
+    "t_semplice": 4.75945,
+    "rapporto_robusto": 0.61771,
+    "t_robusto": 3.74066,
+    "spese_annue": 0.06352081260912633,
+    "quota_limite": 0.9787503097311107
+   },
+   "G11": {
+    "settimane": 300,
+    "annuo": 0.60776,
+    "sharpe": 2.06496,
+    "discesa_max": -0.28468,
+    "sortino": 4.18693,
+    "t_semplice": 4.95986,
+    "rapporto_robusto": 0.62682,
+    "t_robusto": 3.92682,
+    "spese_annue": 0.09966302389309645,
+    "quota_limite": 0.979392615687288
+   },
+   "G1N": {
+    "settimane": 300,
+    "annuo": 0.51627,
+    "sharpe": 1.92879,
+    "discesa_max": -0.23126,
+    "sortino": 3.91157,
+    "t_semplice": 4.63281,
+    "rapporto_robusto": 0.58595,
+    "t_robusto": 3.5463,
+    "spese_annue": 0.06259917705660416,
+    "quota_limite": 0.9786990438921025
+   },
+   "B": {
+    "settimane": 300,
+    "annuo": 0.55242,
+    "sharpe": 2.13691,
+    "discesa_max": -0.24931,
+    "sortino": 4.29287,
+    "t_semplice": 5.1327,
+    "rapporto_robusto": 0.59405,
+    "t_robusto": 3.95602,
+    "spese_annue": 0.061890109737071604,
+    "quota_limite": 0.979045665996862
+   },
+   "A": {
+    "settimane": 300,
+    "annuo": 0.55551,
+    "sharpe": 2.12556,
+    "discesa_max": -0.25704,
+    "sortino": 4.26385,
+    "t_semplice": 5.10542,
+    "rapporto_robusto": 0.59015,
+    "t_robusto": 3.92206
+   }
+  },
+  "esame": {
+   "168 A": {
+    "probabilita_in_vigore": 0.8466698602936433,
+    "t_robusto": 3.9220606315586855,
+    "settimane_efficaci": 177,
+    "esito": "PROMETTENTE",
+    "regola_fino_al_27_novembre": 0.7125116652136023,
+    "controllo_13": 0.8164476288888511,
+    "anni_composti_positivi": true,
+    "sharpe": 2.125555153408601,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.8156283691040944,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0403336220438484
+    }
+   },
+   "168 B": {
+    "probabilita_in_vigore": 0.8523501766377566,
+    "t_robusto": 3.9560248297323746,
+    "settimane_efficaci": 178,
+    "esito": "PROMETTENTE",
+    "regola_fino_al_27_novembre": 0.7221441643526305,
+    "controllo_13": 0.8205283933928722,
+    "anni_composti_positivi": true,
+    "sharpe": 2.136913897778389,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.8219694488305576,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0403336220438484
+    }
+   },
+   "_mazzo": {
+    "famiglie": 200,
+    "in_v": 149,
+    "dev_v": 0.5798021070150117
+   }
+  }
+ },
+ "limite_oltre_0,05%": {
+  "numeri": {
+   "G1": {
+    "settimane": 300,
+    "annuo": 0.48253,
+    "sharpe": 1.77823,
+    "discesa_max": -0.29963,
+    "sortino": 3.33407,
+    "t_semplice": 4.27116,
+    "rapporto_robusto": 0.61571,
+    "t_robusto": 3.35146,
+    "spese_annue": 0.1249875078882416,
+    "quota_limite": 0.9461366918154088
+   },
+   "G11": {
+    "settimane": 300,
+    "annuo": 0.51438,
+    "sharpe": 1.77453,
+    "discesa_max": -0.31494,
+    "sortino": 3.40632,
+    "t_semplice": 4.26229,
+    "rapporto_robusto": 0.62309,
+    "t_robusto": 3.36449,
+    "spese_annue": 0.19304257770746744,
+    "quota_limite": 0.9469476562434872
+   },
+   "G1N": {
+    "settimane": 300,
+    "annuo": 0.45585,
+    "sharpe": 1.72083,
+    "discesa_max": -0.25559,
+    "sortino": 3.3606,
+    "t_semplice": 4.13331,
+    "rapporto_robusto": 0.58642,
+    "t_robusto": 3.1652,
+    "spese_annue": 0.123018683685383,
+    "quota_limite": 0.9460170715243897
+   },
+   "B": {
+    "settimane": 300,
+    "annuo": 0.49186,
+    "sharpe": 1.92311,
+    "discesa_max": -0.26293,
+    "sortino": 3.70675,
+    "t_semplice": 4.61915,
+    "rapporto_robusto": 0.59412,
+    "t_robusto": 3.56039,
+    "spese_annue": 0.1224557680502149,
+    "quota_limite": 0.9461587161771587
+   },
+   "A": {
+    "settimane": 300,
+    "annuo": 0.50169,
+    "sharpe": 1.93978,
+    "discesa_max": -0.26845,
+    "sortino": 3.75098,
+    "t_semplice": 4.65921,
+    "rapporto_robusto": 0.58963,
+    "t_robusto": 3.5777
+   }
+  },
+  "esame": {
+   "168 A": {
+    "probabilita_in_vigore": 0.7426903823784367,
+    "t_robusto": 3.5776982574326026,
+    "settimane_efficaci": 177,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.74 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.5346309358876342,
+    "controllo_13": 0.718748104109399,
+    "anni_composti_positivi": true,
+    "sharpe": 1.9397842222741477,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.7021549349397223,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0315648347119692
+    }
+   },
+   "168 B": {
+    "probabilita_in_vigore": 0.7324175754090323,
+    "t_robusto": 3.5603922218183546,
+    "settimane_efficaci": 178,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.73 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.5178387635987186,
+    "controllo_13": 0.7086877573238635,
+    "anni_composti_positivi": true,
+    "sharpe": 1.9231073990290988,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.6910866554734323,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0315648347119692
+    }
+   },
+   "_mazzo": {
+    "famiglie": 200,
+    "in_v": 149,
+    "dev_v": 0.5798021070150117
+   }
+  }
+ },
+ "limite_oltre_0,10%": {
+  "numeri": {
+   "G1": {
+    "settimane": 300,
+    "annuo": 0.43025,
+    "sharpe": 1.58472,
+    "discesa_max": -0.31569,
+    "sortino": 2.89426,
+    "t_semplice": 3.80636,
+    "rapporto_robusto": 0.61649,
+    "t_robusto": 2.98864,
+    "spese_annue": 0.17726973398102105,
+    "quota_limite": 0.9093192751010364
+   },
+   "G11": {
+    "settimane": 300,
+    "annuo": 0.42616,
+    "sharpe": 1.47027,
+    "discesa_max": -0.3515,
+    "sortino": 2.70694,
+    "t_semplice": 3.53147,
+    "rapporto_robusto": 0.62723,
+    "t_robusto": 2.79684,
+    "spese_annue": 0.28126311814813476,
+    "quota_limite": 0.9095926040164393
+   },
+   "G1N": {
+    "settimane": 300,
+    "annuo": 0.40413,
+    "sharpe": 1.52319,
+    "discesa_max": -0.27609,
+    "sortino": 2.8921,
+    "t_semplice": 3.65859,
+    "rapporto_robusto": 0.58858,
+    "t_robusto": 2.80684,
+    "spese_annue": 0.17474120961470352,
+    "quota_limite": 0.9090800345189982
+   },
+   "B": {
+    "settimane": 300,
+    "annuo": 0.43825,
+    "sharpe": 1.7117,
+    "discesa_max": -0.2766,
+    "sortino": 3.20519,
+    "t_semplice": 4.11137,
+    "rapporto_robusto": 0.59589,
+    "t_robusto": 3.17372,
+    "spese_annue": 0.17606792993968948,
+    "quota_limite": 0.9088538082523604
+   },
+   "A": {
+    "settimane": 300,
+    "annuo": 0.45363,
+    "sharpe": 1.75325,
+    "discesa_max": -0.28085,
+    "sortino": 3.30487,
+    "t_semplice": 4.21117,
+    "rapporto_robusto": 0.59147,
+    "t_robusto": 3.23869
+   }
+  },
+  "esame": {
+   "168 A": {
+    "probabilita_in_vigore": 0.6139002665409745,
+    "t_robusto": 3.2386914090524748,
+    "settimane_efficaci": 177,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.61 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.35121452013481025,
+    "controllo_13": 0.6018734152524068,
+    "anni_composti_positivi": true,
+    "sharpe": 1.7532493367655488,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.5674227783883352,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0229201567719195
+    }
+   },
+   "168 B": {
+    "probabilita_in_vigore": 0.5831425890858192,
+    "t_robusto": 3.1737233736103945,
+    "settimane_efficaci": 179,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.58 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.31360089484900255,
+    "controllo_13": 0.5738507742363006,
+    "anni_composti_positivi": true,
+    "sharpe": 1.7117017461453088,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.5357907428165604,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.0229201567719195
+    }
+   },
+   "_mazzo": {
+    "famiglie": 200,
+    "in_v": 149,
+    "dev_v": 0.5798021070150117
+   }
+  }
+ },
+ "tutto_a_mercato": {
+  "numeri": {
+   "G1": {
+    "settimane": 300,
+    "annuo": 0.51226,
+    "sharpe": 1.86555,
+    "discesa_max": -0.29075,
+    "sortino": 3.59088,
+    "t_semplice": 4.48091,
+    "rapporto_robusto": 0.62032,
+    "t_robusto": 3.52919,
+    "spese_annue": 0.09525922927345014,
+    "quota_limite": 0.0
+   },
+   "G11": {
+    "settimane": 300,
+    "annuo": 0.55705,
+    "sharpe": 1.89452,
+    "discesa_max": -0.29007,
+    "sortino": 3.75855,
+    "t_semplice": 4.5505,
+    "rapporto_robusto": 0.63055,
+    "t_robusto": 3.61341,
+    "spese_annue": 0.15037100542245277,
+    "quota_limite": 0.0
+   },
+   "G1N": {
+    "settimane": 300,
+    "annuo": 0.48448,
+    "sharpe": 1.80952,
+    "discesa_max": -0.23915,
+    "sortino": 3.6193,
+    "t_semplice": 4.34633,
+    "rapporto_robusto": 0.58926,
+    "t_robusto": 3.33639,
+    "spese_annue": 0.09438716522548628,
+    "quota_limite": 0.0
+   },
+   "B": {
+    "settimane": 300,
+    "annuo": 0.52098,
+    "sharpe": 2.01403,
+    "discesa_max": -0.25292,
+    "sortino": 3.9895,
+    "t_semplice": 4.83754,
+    "rapporto_robusto": 0.59705,
+    "t_robusto": 3.73792,
+    "spese_annue": 0.09333681115525258,
+    "quota_limite": 0.0
+   },
+   "A": {
+    "settimane": 300,
+    "annuo": 0.52695,
+    "sharpe": 2.01618,
+    "discesa_max": -0.2603,
+    "sortino": 3.99503,
+    "t_semplice": 4.84272,
+    "rapporto_robusto": 0.59255,
+    "t_robusto": 3.7278
+   }
+  },
+  "esame": {
+   "168 A": {
+    "probabilita_in_vigore": 0.7913047116972451,
+    "t_robusto": 3.727801951940653,
+    "settimane_efficaci": 178,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.79 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.6112193331552547,
+    "controllo_13": 0.7630234221470045,
+    "anni_composti_positivi": true,
+    "sharpe": 2.0161830578486977,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.7541901652719132,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.035253405736652
+    }
+   },
+   "168 B": {
+    "probabilita_in_vigore": 0.790528579176435,
+    "t_robusto": 3.7379220567583444,
+    "settimane_efficaci": 179,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.79 sotto 0,80",
+    "regola_fino_al_27_novembre": 0.6090098443382497,
+    "controllo_13": 0.7616655166026688,
+    "anni_composti_positivi": true,
+    "sharpe": 2.0140270208042907,
+    "gruppo_n": 46,
+    "probabilita_famiglia_in_v": 0.7532650499113924,
+    "famiglia": {
+     "membri": 46,
+     "sharpe": 2.035253405736652
+    }
+   },
+   "_mazzo": {
+    "famiglie": 200,
+    "in_v": 149,
+    "dev_v": 0.5798021070150117
+   }
+  }
+ }
+}

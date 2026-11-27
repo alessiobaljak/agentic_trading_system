@@ -915,6 +915,10 @@ scrivono con e senza le serie a incasso quasi fisso.
   (129 serie su 290 ne hanno più delle settimane); (3) V che scarta le famiglie con il t semplice (−0,011). Le prove già fatte (153-169) e
   `corretto_rivisto`, `corretto_famiglie`, `centosesta.esito_regole` restano sulla regola di prima: una prova nuova che copia la 168 o la
   169 deve chiamare `asticella.esame`.
+  **Prova 168 dal revisore (27 novembre)**: PASS tecnico A e B, con tre domande per il proprietario: la famiglia della candidata in V
+  (0,810/0,822), il costo dei limiti nell'esame (tutto a mercato 0,791: no; 27% a mercato come sul demo 0,833/0,837), A o B per la
+  produzione (su un conto solo solo B). Prima di un paper di B nel bot: il codice di B, il controllo di parità giorno per giorno con
+  `centosesta.py` (e quello di G11, che manca), la quota vera di ordini a mercato di B, `SOMMA_PESI_MASSIMA` con la leva lorda 2,0000000000000004.
 * **esame-6**: N non conta le circa 60 idee del programma 5, il vecchio sistema automatico e i protocolli 1-4. Scrivere in `ASTICELLA.md`
   la scelta e il perché. Effetto stimato: fino a −0,05/−0,07 sul numero di G1 alla prova 57; nessun verdetto di oggi cambia.
 * **esame-9**: «ogni anno positivo» si misura sulla somma delle settimane, non sul conto composto, e un anno parziale conta qualunque sia

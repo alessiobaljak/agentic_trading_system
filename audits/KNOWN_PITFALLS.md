@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 27 novembre 2026 (F5 sul conto vero: voci 44-49; prima, il 15
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 27 novembre 2026 (prova 168: voci 50-52 e note alle voci 3, 26, 29, 49; F5 sul conto vero: voci 44-49; prima, il 15
 novembre, prova 157: margine delle coperture a pronti;
 prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
 
@@ -28,6 +28,9 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
    Il funding stimato cambia anche il **segnale** (funding dei 7 giorni), non solo il costo: prova 28, settimana del 12 ott
    2026 di K2 da +0,51% (stimato) a +5,76% (vero). Nei numeri da giudicare fermarsi all'ultima settimana tutta vera.
    Nei mesi coperti un giorno senza regolamento resta a zero (circa 350 giorni-moneta tenuti, 2022-2026).
+   27 nov 2026 (prova 168): le serie di G1, G11 e G1 neutra salvate il 25 ottobre (ingredienti della variante A) hanno il funding dal
+   1° al 4 ottobre 2026 stimato, anche nel segnale: ultima settimana di G1 +0,36% contro +1,08% vero (rifatta con ottobre stimato
+   +0,41%); `audits/repro/prova168_2026-11-27.py ultima`.
 12. **File di risultati usati come ingredienti e non rigenerati dopo una correzione.** `ventottesima.py:38-40` legge F5 e
     M7 da `risultati_ventiquattresima/` e `risultati_venticinquesima/`; `asticella.le_prove` legge le serie salvate (per la
     prova 28 quelle di prima della correzione delle parità, 1,720 e 2,107 contro 1,78 e 2,15 di oggi). Cercare:
@@ -110,6 +113,8 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     **27 nov 2026 (F5)**: il paper del bot conta a limite il 100% (66 su 66 il 16 novembre, 64 su 64 il 23); sul demo di G1 a mercato circa
     il 27% del valore in regime e il 60% alla partenza da vuoto (`gate2/reports/2026-11-12-G1-funding-commissioni.md:66-67`); F5 senza
     minimi 1,94 (al tocco) / 1,88 (a mercato) / 1,81 (oltre 0,05%: costo per unità 0,10%, più che a mercato) / 1,69 (0,10%).
+    **27 nov 2026 (prova 168)**: l'esame in vigore passa solo al tocco (A/B 0,847/0,852); tutto a mercato 0,791/0,791, oltre lo 0,05%
+    0,743/0,732, con il 27% a mercato del demo (media dei due costi, ottimistica) 0,833/0,837. Parti `costi`, `misto` dello script.
 28. **Conto a capitale fisso con i minimi: non neutrale e rumoroso** (prova 148): gli ordini saltati fanno derivare l'esposizione
     netta fra −20% e +25% (fino a +47%); la differenza con G1 e' rumore (+30 punti nel 2021, −15 nel 2025), il capitale non e'
     monotono (250 USDT 1,83, 225 USDT 1,89). Leggere ogni «x% di G1» con ±0,1 di Sharpe.
@@ -169,6 +174,8 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
 
 29. **Soglia dell'esame cambiata dopo il risultato** (G1): `PRIMA.md:27` diceva 0,95; dopo lo 0,86 la soglia e' passata a 0,90 e poi a
     0,80 (brief del 12 nov). Dirlo sempre accanto all'esito, con la soglia scritta prima e quella del brief.
+    27 nov 2026 (prova 168): non la soglia ma la regola (V simmetrica e settimane efficaci) decisa dopo i numeri: 0,702/0,722 con la
+    regola scritta nelle regole della prova, 0,842/0,852 con quella nuova.
 30. **L'esito dello Sharpe corretto dipende dall'«aggiunta» del 23 ottobre** (V senza i gruppi con t sotto −3): senza, G1 ha 0,0000
     invece di 0,87. Riportare tutti e due.
     Prova 161 (15 nov): 1,00 con l'aggiunta (asticella 1,885), 0,0000 senza (asticella 10,16), e 1,00 anche per «sempre dentro»: il
@@ -241,3 +248,15 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     12 novembre (G1, altro formato) e lo script l'ha letto come suo. Usare sempre una cartella di cache con il nome dell'audit; e con
     altre sessioni che modificano `research/` durante l'audit, provare il codice del commit copiato con `git archive` e un pannello
     congelato (`audits/repro/f5_conto_vero_2026-11-27.py --codice --pannello`).
+    **Attenzione** (27 nov): `costruisci_pannello` di un commit vecchio scrive in `seconda.PANNELLO`; con `research/data` collegata nella
+    copia del commit sovrascriverebbe il pannello vero: spostare `PANNELLO` prima della chiamata
+    (`audits/repro/prova168_pannello_commit_2026-11-27.py`, con il controllo che l'uscita non sia in `research/data`).
+50. **La V simmetrica toglie da V la famiglia della candidata** (esame dal 27 nov 2026; prova 168): la famiglia di G1 (46 serie, t sopra +3)
+    esce da V e la candidata si abbassa la soglia: 168 B 0,852 → 0,822 con la famiglia in V, A 0,842 → 0,810, G1 0,765 → 0,724. Riportare
+    sempre i due numeri: `audits/repro/prova168_2026-11-27.py esame` (`esame_con(..., famiglia_in_v=True)`).
+51. **Esito dell'esame che cambia nell'intorno anche con lo Sharpe stabile** (prova 168): con ±10% e ±20% dei parametri Sharpe di B fra 1,91
+    e 2,22 (nessun picco isolato), probabilità fra 0,72 e 0,89, 5 vicini su 24 sotto 0,80 (anche l'universo a 90 monete, −10%). Per un esito
+    a pochi centesimi dalla soglia rifare la probabilità nell'intorno con V e N fermi (`... sensi`).
+52. **Limite prudente ora per ora per il rischio nel giorno** (metodo, prova 168): tutti i lunghi al minimo e i corti al massimo della stessa
+    ora (B −47,5% il 10 ottobre 2025 alle 21:00) sta fra quello giornaliero (−62,6%) e le chiusure orarie (−0,6%); serve per lo stop del
+    conto, non decide la liquidazione (margine unico, lorda 2: circa −95%). `... ore_rischio`; il minuto del prezzo mark resta da misurare.
