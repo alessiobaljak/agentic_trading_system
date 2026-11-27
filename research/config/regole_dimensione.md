@@ -1,5 +1,11 @@
 # Regole di dimensione, leva, margine ed esecuzione del bot (Passo 0)
 
+> **Documento storico (nota del 27 novembre 2026).** Descrive il bot del 6 ottobre 2026, per il Passo 0 dei protocolli di
+> ricerca chiusi. Il bot è cambiato dopo: al 27 novembre 23 riferimenti su 55 non puntano più alla riga giusta e alcune parole
+> che qui si dicono assenti ci sono nel codice nuovo (il demo e F5). I quattro test che lo legavano alle righe di oggi sono
+> saltati con il motivo scritto (audit del 26-27 novembre, `audits/reports/2026-11-26-AUDIT_SISTEMA.md`). Per il bot di oggi
+> si legge il codice, non questo file.
+
 Fatti della sezione 3.2 del protocollo (versione 4.3), letti dal CODICE del bot il
 6 ottobre 2026. Ogni affermazione porta `file:riga` (righe del repository a quella
 data). Il test `research/src/tests/test_fatti.py` controlla che ogni riferimento

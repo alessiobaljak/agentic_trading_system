@@ -190,7 +190,10 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 * **Un numero va con la sua fonte.** "224 coppie a 1 pass" va bene se viene da un
   file o da un risultato ops; se viene da una stima, dillo.
 * Se la domanda e' una richiesta di modifica al codice, falla davvero: leggi, cambia,
-  lancia `python -m pytest tests/ -q`, committa. Poi riassumi cosa e' cambiato.
+  lancia `python -m pytest tests/ -q`, committa. Poi riassumi cosa e' cambiato. Se hai toccato `bot/`, `backtesting/` o
+  `research/src/`, lancia anche `python -m pytest research/src/tests -q`; dopo il push guarda l'esito dei test di GitHub
+  (`gh run list --workflow tests.yml --limit 2 -R alessiobaljak/agentic_trading_system`): dal 19 ottobre al 27 novembre 2026
+  erano rossi e nessuno se n'era accorto (audit del 26-27 novembre). Una libreria nuova della ricerca va in `requirements-ricerca.txt`.
 
 ## Subagent: quando usarli (`.claude/agents/`, dal 7 novembre 2026)
 

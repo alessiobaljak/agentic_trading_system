@@ -1,0 +1,6 @@
+# Librerie della ricerca, oltre a requirements.txt (dal 27 novembre 2026, audit del 26-27 novembre).
+# Le installano i test di GitHub (.github/workflows/tests.yml) e l'avvio delle sessioni (.claude/hooks/session-start.sh),
+# non la macchina del bot: così la .venv del bot non cambia. Senza numba i test di GitHub si fermavano dal 19 ottobre.
+# Chi aggiunge una libreria alla ricerca la scrive qui, con la versione, e non solo nell'avvio delle sessioni.
+numba==0.68.1          # motore dei backtest a indicatori (research/programma6/motore.py, seconda.py)
+scikit-learn==1.9.1    # terza prova e altri moduli della ricerca (research/programma6/terza.py)

@@ -16,6 +16,8 @@ import pytest
 
 from research.src import fatti
 
+STORICO = pytest.mark.skip(reason="research/config/regole_dimensione.md descrive il bot del 6 ottobre 2026 (documento storico dal 27 novembre, audit del 26-27 novembre): il bot è cambiato dopo e questo test lo legava alle righe di oggi")
+
 RADICE = Path(__file__).resolve().parents[3]
 DOCUMENTO = RADICE / "research" / "config" / "regole_dimensione.md"
 
@@ -169,6 +171,7 @@ def test_documento_cita_molti_riferimenti_e_tutti_esistono(documento):
     assert fatti.verifica_riferimenti(rifs, RADICE) == []
 
 
+@STORICO
 def test_documento_ancore_dicono_cio_che_il_documento_afferma(documento):
     # ogni ancora deve anche comparire nel documento: altrimenti il test
     # verificherebbe righe che nessuno cita
