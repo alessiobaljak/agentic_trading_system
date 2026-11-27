@@ -1,29 +1,29 @@
 {
- "portafoglio": 933.350641502148,
+ "portafoglio": 928.0302589516721,
  "posizione": null,
  "ordini": [
   {
-   "cid": "taio1795791625958",
+   "cid": "taio1795795214482",
    "lato": "corto",
-   "quantita": 0.03,
-   "prezzo": 59500.0,
+   "quantita": 0.029,
+   "prezzo": 60400.0,
    "leva": 5,
-   "messo_ms": 1795791647074
+   "messo_ms": 1795795240677
   }
  ],
  "algo": [
   {
-   "algoId": 93,
-   "cid": "tais1795791625958",
+   "algoId": 95,
+   "cid": "tais1795795214482",
    "tipo": "STOP_MARKET",
-   "prezzo": 59800.0,
+   "prezzo": 60900.0,
    "lato": "corto",
-   "messo_ms": 1795791648079
+   "messo_ms": 1795795241643
   }
  ],
  "leva": 5,
- "ultimo_minuto_ms": 1795791960000,
- "ultimo_funding_ms": 1795791991942,
+ "ultimo_minuto_ms": 1795795560000,
+ "ultimo_funding_ms": 1795795616662,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -404,9 +404,28 @@
    "cosa": "commissione",
    "importo": -1.073343,
    "come": "stop"
+  },
+  {
+   "ora_ms": 1795792336926,
+   "cosa": "commissione",
+   "importo": -0.357,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795792548633,
+   "cosa": "risultato",
+   "importo": -4.068848,
+   "prezzo": 59635.62827088043,
+   "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795792548633,
+   "cosa": "commissione",
+   "importo": -0.894534,
+   "come": "chiusa a mercato"
   }
  ],
- "prossimo_id": 94,
+ "prossimo_id": 96,
  "chiuse": [
   {
    "lato": "corto",
@@ -651,6 +670,24 @@
    "uscita": 61333.866,
    "come": "stop",
    "chiusa_ms": 1795785600000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.03,
+   "entrata": 59500.0,
+   "leva": 5,
+   "margine": 357.0,
+   "liquidazione": 71102.5,
+   "aperta_ms": 1795792260000,
+   "da_limite": true,
+   "cid": "taio1795791625958",
+   "spese_entrata": 0.35700000000000004,
+   "spese": 1.2515344240632065,
+   "funding": 0.0,
+   "risultato_prezzo": -4.068848126412849,
+   "uscita": 59635.62827088043,
+   "come": "chiusa a mercato",
+   "chiusa_ms": 1795792548633
   }
  ],
  "funding_applicati": [
