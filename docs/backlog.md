@@ -911,5 +911,14 @@ scrivono con e senza le serie a incasso quasi fisso.
   sola a 100 giorni, oppure i ribilanci dei paper in un filo separato. Cambio strutturale del ciclo del bot: live-path-reviewer e riavvio.
 * **salute-7**: il ciclo principale e la chiusura d'emergenza non hanno test; 252 usi di `inspect.getsource` in 82 file di test
   controllano il testo del codice, non quello che fa. Aggiungere almeno un test di `run()` con un orologio finto.
+* **Test di GitHub, dal secondo giro dell'audit (27 novembre)**: corretti subito i requisiti della ricerca (`requirements-ricerca.txt`), i
+  quattro test del documento storico, i tempi e i due lavori. Restano: **ci-6**, versioni fisse anche per la macchina del bot (un file di
+  vincoli con le versioni della sua .venv: live-path-reviewer e ok del proprietario), test anche su Python 3.12 (la macchina usa 3.12),
+  avvisi di sicurezza delle librerie (impostazione del repository: la accende il proprietario), poi aggiornare aiohttp, requests e jinja2;
+  **ci-7**, su GitHub far fallire invece di saltare i 63 test che si saltano se manca una libreria (per esempio con CI=1), con l'elenco dei
+  salti voluti; **ci-8**, i test del trader AI e delle azioni non li lancia GitHub (lo decidono quelle due sessioni); **ci-9**, da GitHub
+  Binance risponde 451: nello stato scrivere «non calcolato» invece di togliere il confronto con BTC, e nel controllo di connettività
+  segnare i due controlli di Binance come attesi (con la correzione dello stato); **ci-4**, per sapere in pochi minuti che la macchina è
+  ferma serve un servizio esterno che aspetta il battito (richiede una registrazione: decide il proprietario, prima dei soldi veri).
 * **Perché non subito**: cambi di regola dell'esame (decide il proprietario), scarichi grandi, prove nuove con le regole da scrivere,
   cambi strutturali del bot. Le altre correzioni dell'audit sono state fatte il 27 novembre (vedi il rapporto).
