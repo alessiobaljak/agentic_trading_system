@@ -12,10 +12,12 @@ on:
 # Dal 27 novembre 2026 (audit del 26-27 novembre): dal 19 ottobre ogni corsa si fermava mentre raccoglieva i test
 # (mancava numba), e nessuno se n'era accorto. Ora: le librerie della ricerca con la versione fissa
 # (requirements-ricerca.txt), due lavori in parallelo, un limite di tempo largo, una sola corsa per branch alla volta
-# (una nuova ferma la vecchia) e -rs, per vedere perché un test viene saltato.
+# e -rs, per vedere perché un test viene saltato. La corsa che gira finisce sempre; di quelle in attesa resta solo la
+# più nuova (con «cancel-in-progress: true» le spinte di tutte le sessioni, una ogni pochi minuti, fermavano ogni corsa
+# a metà: il 27 novembre le tre corse partite fra le 04:12 e le 04:22 sono state annullate tutte).
 concurrency:
   group: tests-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   pytest:
