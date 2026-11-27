@@ -151,6 +151,16 @@ def scambi(simbolo: str, inizio: datetime, fine: datetime, feed: str = "sip",
     return df.set_index("t")[["prezzo", "quantita"]]
 
 
+# Alpaca filtra le azioni societarie con start ed end sulla data di elaborazione (per i dividendi è quella di pagamento, settimane dopo lo
+# stacco): un dividendo staccato prima della fine e pagato dopo non arrivava mai (nel 2024 ne mancavano circa 111 su 1846, prova 40b;
+# audit del 27 novembre 2026). Si chiede fino a 120 giorni dopo la fine e si tengono le date di stacco fino alla fine.
+OLTRE_LA_FINE = timedelta(days=120)
+
+
+def _fine_della_richiesta(a):
+    return min(a + OLTRE_LA_FINE, datetime.now(timezone.utc).date())
+
+
 def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.DataFrame:
     """Frazionamenti (anche inversi), dividendi in contanti e scissioni, con la data di stacco.
 
@@ -161,8 +171,9 @@ def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.Data
     righe: list[dict] = []
     da = inizio.date() if isinstance(inizio, datetime) else inizio
     a = fine.date() if isinstance(fine, datetime) else fine
-    while da <= a:
-        fino = min(a, da + timedelta(days=360))
+    a_richiesta = _fine_della_richiesta(a)
+    while da <= a_richiesta:
+        fino = min(a_richiesta, da + timedelta(days=360))
         parametri = {"symbols": simbolo, "types": "forward_split,reverse_split,cash_dividend,spin_off",
                      "start": da.isoformat(), "end": fino.isoformat(), "limit": 1000}
         while True:
@@ -190,6 +201,7 @@ def azioni_societarie(simbolo: str, inizio: datetime, fine: datetime) -> pd.Data
     df["nuovo"] = df["nuovo"].fillna("")
     if not df.empty:
         df["data"] = pd.to_datetime(df["data"]).dt.date
+        df = df[df["data"] <= a]
         df = df.drop_duplicates().sort_values(["data", "tipo"]).reset_index(drop=True)
     return df
 
@@ -234,11 +246,12 @@ def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetim
     righe: dict[str, list[dict]] = {s: [] for s in simboli}
     da0 = inizio.date() if isinstance(inizio, datetime) else inizio
     a = fine.date() if isinstance(fine, datetime) else fine
+    a_richiesta = _fine_della_richiesta(a)
     for i in range(0, len(simboli), a_gruppi_di):
         gruppo = simboli[i:i + a_gruppi_di]
         da = da0
-        while da <= a:
-            fino = min(a, da + timedelta(days=360))
+        while da <= a_richiesta:
+            fino = min(a_richiesta, da + timedelta(days=360))
             parametri = {"symbols": ",".join(gruppo), "types": "forward_split,reverse_split,cash_dividend,spin_off",
                          "start": da.isoformat(), "end": fino.isoformat(), "limit": 1000}
             while True:
@@ -269,6 +282,7 @@ def azioni_societarie_di_piu(simboli: list[str], inizio: datetime, fine: datetim
         df["nuovo"] = df["nuovo"].fillna("")
         if not df.empty:
             df["data"] = pd.to_datetime(df["data"]).dt.date
+            df = df[df["data"] <= a]
             df = df.drop_duplicates().sort_values(["data", "tipo"]).reset_index(drop=True)
         out[s] = df
     return out

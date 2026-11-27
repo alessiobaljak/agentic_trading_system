@@ -41,7 +41,9 @@ export interface DatiAzioni {
   allarmi?: Record<string, { ora?: number; testo?: string } | null> | null;
 }
 
-const FUSO = 'Europe/Zurich';
+// i giorni delle azioni sono i giorni di borsa di New York: con l'ora svizzera il valore della sera (19:20 di New York, 1:20 in
+// Svizzera) finiva sul giorno dopo (audit del 27 novembre 2026)
+const FUSO = 'America/New_York';
 const VUOTO = 'La scheda delle azioni la riempie la sessione “trading stock”: nessun dato ancora su Firebase.';
 const coloreDi = (ordine?: number) => `var(--serie-${Math.min(7, Math.max(1, Math.round(ordine ?? 1)))})`;
 /** Firebase non accetta il punto nelle chiavi: i simboli arrivano con «_» al posto del «.» (NESN_SW → NESN.SW). */

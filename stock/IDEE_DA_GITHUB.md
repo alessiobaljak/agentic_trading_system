@@ -286,7 +286,10 @@ Nessuna di queste è nel registro, salvo dove è detto «parente di». Dati nost
   dei venditori di dati partono dal 2020 e sono ipotetici (https://www.quiverquant.com/strategies/s/Congress%20Buys).
 - **Entrate nell'S&P 500**: l'effetto è sceso sotto l'1% (Greenwood e Sammon, sopra); coerente con la prova 8.
 - **Strategie su opzioni, consigli degli analisti, flussi dei fondi**: servono dati a pagamento (OptionMetrics, IBES,
-  ANcerno) che non abbiamo.
+  ANcerno) che non abbiamo. **Superato in parte (audit del 27 novembre 2026):** gli indici delle strategie in opzioni della CBOE
+  sono gratuiti (PUT dal 1991, WPUT, CNDR, BXM) e Alpaca dà le opzioni dal febbraio 2024 (idee I62 e I64 del registro); i consigli
+  degli analisti sono stati provati con i titoli delle notizie (prova 53). Le N4, N8, N9 e N10 qui sopra sono entrate nel registro
+  come I69, I68, I70 e I71.
 - **Il flusso degli ordini dei piccoli risparmiatori** (Boehmer, Jones, Zhang, Zhang, Journal of Finance 76, 2021: chi è
   comprato dai piccoli fa circa 10 punti base meglio la settimana dopo): servirebbero tutti gli scambi con il prezzo al
   decimo di centesimo; l'algoritmo riconosce solo il 35% degli ordini dei piccoli secondo Barber e altri; 10 punti base a

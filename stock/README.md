@@ -15,12 +15,13 @@ toccando il resto della dashboard il meno possibile (solo per aggiungere la sche
 
 ## Cosa c'è (e cosa no)
 
-* Si parte da zero: niente dati, niente codice, niente strategie. Si porta dalle crypto solo il **metodo** e le **lezioni**
-  (`LEZIONI_DALLE_CRYPTO.md`).
+* Partita da zero il 24 ottobre 2026, portando dalle crypto solo il **metodo** e le **lezioni** (`LEZIONI_DALLE_CRYPTO.md`). Oggi:
+  53 prove sul passato (`stock/prove/`), il motore di prova (`stock/simulatore/`), i dati (`stock/dati/`, i prezzi mai nel
+  repository) e tre strategie sul conto demo di Alpaca (`stock/avanti/`: la prima candela, la miscela, la prova 45).
 * **Lo stato aggiornato** (decisioni del proprietario, cosa aspetta una risposta, cosa si può fare) è in `stock/STATO.md`; il metodo in
   `stock/METODO.md`; il confronto delle piattaforme in `stock/piattaforme.md`.
 * Il registro unico delle prove sulle azioni è `stock/REGISTRO.md` (un conto delle prove suo, che parte da zero).
-* Il paper si fa su un **conto demo vero** di una piattaforma (da scegliere: è il primo compito della sessione, con il proprietario).
+* Il paper si fa su un **conto demo vero**: dal 9 novembre 2026 quello di Alpaca (`stock/piattaforme.md`, `stock/avanti/REGOLE.md`).
 
 ## Regole che non si negoziano (le stesse delle crypto)
 

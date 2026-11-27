@@ -18,6 +18,13 @@ ci riusciamo la risposta onesta è «compra l'indice».
 Accanto all'asticella dell'indice resta quella delle crypto: lo Sharpe corretto per i tentativi, con il conto di tutte le prove (anche le
 bocciate) in `REGISTRO.md` (`LEZIONI_DALLE_CRYPTO.md`, punto 2).
 
+**Le prove che perdono di sicuro (27 novembre 2026, scritto prima della prova 54).** Come promette `LEZIONI_DALLE_CRYPTO.md` e come fanno
+le crypto (`research/programma6/ASTICELLA.md`, sezione 5), un gruppo di prove con il t dello Sharpe **sotto −3** (Sharpe giornaliero
+della sua serie media × √giorni) conta nel numero dei gruppi ma **non nella varianza**. Il codice lo aveva dimenticato: dalla prova 35
+(Sharpe −5,58 con i costi) la soglia chiedeva uno Sharpe annuo di circa 2,4-3 e lo Sharpe corretto usciva sempre 0,00 (audit,
+`AUDIT_2026-11-27.md`). Rifatto il conto, nessun esito già scritto cambia (il più alto è la miscela della prova 25: 0,37). Si riportano
+sempre i due valori; la regola vale dalla prova 54 e non rivalida le prove già viste.
+
 ## 2. I titoli **(approvato)**
 
 * **Per il paper e il conto vero:** le 10 azioni americane più scambiate, come chiesto. Sono anche le più economiche da comprare e

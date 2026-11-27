@@ -62,6 +62,9 @@ misura può restare ferma per settimane: un giudizio richiede anni, salvo un per
     fissa (decisione del 1° novembre).
 * Soldi veri mai, se non su richiesta esplicita, ripetuta e consapevole del proprietario.
 
+**Cosa il demo può dire (audit del 27 novembre 2026):** si opera solo nei giorni con la copertura sotto zero (sul passato il 4-11%
+dei giorni), cioè poche operazioni l'anno: il demo dice se ordini, aste e uscite funzionano come sul passato, non se la regola guadagna.
+
 ## Come gira
 
 `python -m stock.avanti.gamma auto` (lavoro di GitHub `.github/workflows/azioni_gamma.yml`, acceso solo se esiste
