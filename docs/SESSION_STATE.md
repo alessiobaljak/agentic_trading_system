@@ -3,7 +3,22 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
-## Compito in corso (17 novembre 2026, 12:30 UTC)
+## Compito in corso (27 novembre 2026, 02:40 UTC)
+- **Audit del sistema** (richiesta del proprietario del 26 novembre): 52 problemi confermati, rapporto
+  `audits/reports/2026-11-26-AUDIT_SISTEMA.md`, backlog P37. Corretti e committati: i fogli del mattino si fermano senza la raccolta
+  fresca, VVV nei fatti gravi del 26 (terza correzione), scout e routine con la decisione del 22 novembre, P18 e P28.
+  In corso il flusso «correzioni-audit-26nov» (wf_2957b2e1-ccc): scarico, motore (funding vero, azioni, rilanci, giorni a metà),
+  notizie (prova in avanti del 30 novembre, ore in UTC, PAROLE), balene (mercato di Hyperliquid, conti con posizioni, giudice),
+  esame (funzione unica e numeri accanto), registro, misure (idea 45); segreti e stato con live-path-reviewer (entrano senza riavvio);
+  bot (finestra degli ordini limite del paper, monete non disponibili sul demo, allarmi, lettura oraria, ordine dei giri, vecchio
+  sistema, Telegram) con live-path-reviewer: entra solo con il riavvio approvato dal proprietario; revisione di F5 (backtest-auditor).
+  In corso anche il secondo giro dell'audit (completezza, wf_cece32c1-27d ripreso). Dopo: test completi, commit, rapporto con gli
+  stati finali, righe dell'esame nel registro (162-169), risposta breve al proprietario con le due decisioni (esame e riavvio).
+- **Da fare dopo le correzioni del motore**: `python3 -m research.programma6.buchi_archivio --dal 2020-01-01` (buchi del 2022, P37).
+- **Giro delle 12:17**: rilanciare `bash research/programma6/paper/aggiorna.sh <S>/impronte_p6g` (l'archivio pubblica il giorno
+  prima fra le 08:44 e le 11:03: alle 06:13 manca sempre).
+
+## Compito precedente (17 novembre 2026, 12:30 UTC)
 - **Bot**: dal 16 novembre 07:36 UTC gira la fase 2 (versione 884b9b1a: conto vero spento, pulsante di approvazione, funding dei paper per
   regolamento); `DRY_RUN` vero. Demo di G1
   a 1.000 USDT dall'8 novembre (misura dei minimi a ogni ribilancio nel piano `research/programma7/MIGLIORARE_G1.md`, voce 8). Fase 2
