@@ -4,7 +4,7 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa e invarianti con file:riga (sezione 14: il conto vero, con F5 dal 25 nov; sezione 15: il trader AI).
+- `LIVE_PATH_MAP.md` — mappa e invarianti con file:riga (sezione 14: il conto vero, con F5 dal 25 nov; sezione 15: il trader AI, versione 8 `bcf284d`).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10. `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
@@ -14,15 +14,20 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
   `test_demo_binance.py` 4dceff5f, `state_snapshot.py` 81d0b974, `ops/gate_fermo` 292f24e2; gli altri come al primo giro). Chiusi 210,
   212, 214-216, 218; Bassi nuovi 219-221; aperti 211 Medio, 213, 217. Riavvio con l'ok di Alessio, dopo `/commands/bot_state`,
   `/positions`, `/ordini_limite` (lo «stato» non li legge). Prima: stato e segreti, secondo giro (`2026-11-27-stato_e_segreti-bis.md`).
-- **Numeri dei problemi**: trader AI fino al 202 (187 no); stato e segreti 203-207, 218; bot 210-217, 219-221 (208, 209 no); nuovi da 222.
-- Trader AI (area `trader_ai/`): quindici revisioni e due riesami in `trader_ai/revisioni/` (23-26 nov); nel registro di qui la settima
-  (condizioni per i soldi veri: 146, 147) e le ultime tre.
+- **Numeri dei problemi**: una serie sola fino al 202 (187 no). Il 26-27 nov **due serie si sono sovrapposte** e non si rinumerano: il
+  trader AI 203-267 (`trader_ai/revisioni/2026-11-26-sedicesima.md` → `2026-11-27-diciottesima.md`; 260-267 solo in `trader_ai/README.md`;
+  lì anche 207-212 del «secondo cercatore»), le revisioni crypto stato e segreti 203-207, 218 (`reports/2026-11-27-stato_e_segreti*.md`)
+  e bot 210-217, 219-221 (`reports/2026-11-27-bot*.md`; 208, 209 no). Fra 203 e 267 un numero si cita sempre con il rapporto («218 dello
+  stato», «213 del bot», «213 della diciassettesima»). **I problemi nuovi partono da 268, per tutte le aree.**
+- Trader AI (area `trader_ai/`): diciotto revisioni e tre riesami in `trader_ai/revisioni/` (23-27 nov); qui la settima (soldi veri: 146,
+  147) e dalla quindicesima. Versione 8 = `bcf284d`, codice uguale a quello approvato alla diciottesima (APPROVE con condizioni); fermo a
+  mano dal 26 nov, riavvio con «riparti» e l'ok di Alessio. Righe per `reviews/` dei rapporti applicate fino alla diciottesima (27 nov).
 - Conto vero su F5 (25 nov): `reports/2026-11-25-conto-vero-F5-2.md`, APPROVE per il commit del codice spento (`conto_vero.py` 4bb9935b,
   `demo_binance.py` b98074f6, `test_conto_vero_f5.py` 99c9fd1f). Per l'accensione: 54 (ii) Alto; 70, 180, 181 Medi; 78, 182, 183 Bassi
   (`reports/2026-11-12-conto-vero-versione-firebase-2.md`); dal 27 nov anche 211, 213, 219, 220; regole pubblicate e pulsanti provati,
   revisione nuova sul commit; rifare S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`) e `mutazioni2.py`.
 - Voci aperte: 9 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero fino all'accensione; trader AI settima; F5 secondo
-  giro; trader AI secondo riesame della quindicesima; stato e segreti bis fino al commit del bot; bot bis).
+  giro; trader AI diciottesima; stato e segreti bis fino al commit del bot; bot bis).
 
 ## Promemoria
 - Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero lo riusa con `HOST = "fapi.binance.com"`,
