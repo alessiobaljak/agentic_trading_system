@@ -4,3 +4,6 @@ in paper (ops 0601 e 0604): rumore, non informazione. Il paper resta acceso come
 (ingressi a limite dal 13 ott). La ricerca riparte con la seconda edizione del protocollo
 (research/PROTOCOLLO_2.md), quando il proprietario la approva. Per riaccendere il gate: togliere
 questo file con un commit.
+Dal riavvio del bot con il codice del 27 novembre 2026 (audit del 26 novembre, salute-4) questo file ferma anche il giro del
+vecchio sistema nel bot (regime, scansioni, pesi, controllo orario, ciclo di trading: bot/main.py, _vecchio_sistema_fermo),
+quando il vecchio paper non ha niente aperto. Paper, demo, conto vero ed eventi non c'entrano.

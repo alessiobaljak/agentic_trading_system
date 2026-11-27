@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import get_firebase, kw_chi, riga_letture
+from bot.core.gate_fermo import ricerca_ferma
 from bot.core.models import Direction, ExitReason, Regime, RiskSettings, epoch_utc
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
@@ -612,6 +613,16 @@ class TradingBot:
         self._versione: dict | None = None
         self._conti_giorno: dict[str, dict] = {}
         self._riga_giorno: dict = {"giorno": None, "verificato": False}
+        # L'EMERGENZA ANNUNCIATA UNA VOLTA (audit del 26 novembre 2026, salute-3): `_emergency_close` manda il Telegram e scrive su
+        # Firebase solo se chiude qualcosa o se l'emergenza e' nuova (un pulsante STOP premuto: `/commands/kill_switch` vero, letto
+        # da `bot_state`; oppure uno stato che passa a EMERGENCY mentre il bot gira). All'avvio un'emergenza gia' scritta non e'
+        # nuova: e' stata annunciata quando e' successa.
+        self._emergenza_annunciata = True
+        self._kill_switch_letto = False
+        # IL VECCHIO SISTEMA FERMO (audit del 26 novembre 2026, salute-4): l'ultimo stato stampato nel log (None = mai) e l'orologio
+        # del suo ramo orario (il contatore delle letture Firestore e lo stato «running» quando il vecchio sistema e' fermo)
+        self._vecchio_fermo_stampato: bool | None = None
+        self._orario_vecchio_fermo_at = 0.0
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -870,9 +881,17 @@ class TradingBot:
         La dashboard SCRIVE su Firebase e il bot LEGGE: non c'e' nessun canale
         diretto da tenere aperto, quindi il comando arriva anche se la VPS e' lenta
         o mezza bloccata. Il vecchio flag booleano continua a valere EMERGENCY.
+
+        Dal 27 novembre 2026 (audit del 26 novembre, salute-3) si ricorda anche se il flag booleano era vero (un pulsante STOP
+        premuto, da consumare) e, fuori dall'emergenza, che la prossima emergenza sara' nuova (`_emergency_close`).
         """
-        return kill_switch.resolve(self.fb.get_rtdb("/commands/bot_state"),
-                                   self.fb.get_rtdb("/commands/kill_switch"))
+        grezzo = self.fb.get_rtdb("/commands/bot_state")
+        legacy = self.fb.get_rtdb("/commands/kill_switch")
+        state = kill_switch.resolve(grezzo, legacy)
+        self._kill_switch_letto = bool(legacy)
+        if state is not BotState.EMERGENCY:
+            self._emergenza_annunciata = False
+        return state
 
     def kill_switch_active(self) -> bool:
         """Compatibilita': True quando lo stato blocca le nuove posizioni."""
@@ -1072,7 +1091,17 @@ class TradingBot:
     def _publish_avvio(self) -> None:
         """(25 set 2026) `/bot_status/avviato_at` come FIGLIO e l'anello `/avvii`
         degli ultimi 20 avvii: e' cio' che permette al controllo orario di contare
-        i riavvii delle 24 ore senza leggere il journal."""
+        i riavvii delle 24 ore senza leggere il journal.
+
+        Revisione del 27 novembre 2026, problema 218: anche `/bot_status/dry_run` (il valore di QUESTO processo), a ogni avvio.
+        Prima lo scriveva solo `refresh_regime`, nel giro del vecchio sistema: con il vecchio sistema fermo
+        (`_vecchio_sistema_fermo`) lo stato in cima (`scripts/state_snapshot.py`, `sezione_del_bot`) e la dashboard
+        (ReconcilerStatus.tsx) avrebbero mostrato il DRY_RUN del processo di prima. Si scrive, non si cambia: il valore resta
+        quello di `settings.DRY_RUN`."""
+        try:
+            self.fb.set_rtdb("/bot_status/dry_run", settings.DRY_RUN)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] DRY_RUN non scritto su RTDB: {exc}")
         try:
             self.fb.set_rtdb("/bot_status/avviato_at", self._avviato_at)
             ring = self.fb.get_rtdb("/avvii") or []
@@ -1277,13 +1306,22 @@ class TradingBot:
         richiede un gesto esplicito dalla dashboard, altrimenti un'emergenza
         rientrata in silenzio rimetterebbe il bot a operare senza che nessuno abbia
         deciso che si puo'.
+
+        Il messaggio e le tre scritture solo se ha chiuso qualcosa (posizioni o ordini limite) o se l'emergenza e' nuova: un
+        pulsante STOP appena premuto (il flag `/commands/kill_switch` vero, da consumare) o uno stato passato a EMERGENCY mentre il
+        bot gira (audit del 26 novembre 2026, salute-3: prima, con lo stato fermo in EMERGENCY, a ogni giro di 30-40 secondi
+        partivano un Telegram «EMERGENCY CLOSE, 0 posizioni» e tre scritture su Firebase).
         """
         prices = {s: p for s in list(self.executor.open_positions.keys())
                   if (p := self._mark_for(s)) is not None}
+        ordini = len(getattr(self.executor, "ordini_limite", None) or {})
         closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
         self._settle_realized()
         for t in closed:
             self._log_closed(t)
+        nuova = getattr(self, "_kill_switch_letto", False) or not getattr(self, "_emergenza_annunciata", True)
+        if not closed and not ordini and not nuova:
+            return                             # niente da chiudere ed emergenza gia' annunciata: nessun messaggio
         realized = sum(t.pnl for t in closed)
         self.notifier.send(
             f"🚨 <b>EMERGENCY CLOSE</b>\n{len(closed)} posizioni chiuse a mercato\n"
@@ -1295,6 +1333,8 @@ class TradingBot:
         self.fb.set_rtdb("/commands/kill_switch", False)
         self.fb.set_rtdb("/commands/bot_state", BotState.EMERGENCY.value)
         self.fb.set_rtdb("/bot_active", False)
+        self._emergenza_annunciata = True
+        self._kill_switch_letto = False
 
     def _tighten_stops_for_exit(self) -> None:
         """Livello 2: stop stretti a 0.3 ATR, uscita graduale.
@@ -2517,6 +2557,56 @@ class TradingBot:
         except Exception as exc:  # noqa: BLE001
             print(f"[rifiutati] passata degli scaduti saltata: {exc}")
 
+    def _vecchio_sistema_fermo(self) -> bool:
+        """IL VECCHIO SISTEMA FERMO (audit del 26 novembre 2026, salute-4). Con `ops/gate_fermo` (la ricerca del gate ferma dal 13
+        ottobre 2026; `GATE_FERMO_IGNORA=1` la riaccende) il giro del vecchio sistema non parte: niente regime, scansioni, verdetti
+        del trailing e dei rifiutati, pesi, controllo orario, ricarica del registro e ciclo di trading. Prima, ogni giorno, sei
+        scansioni da circa 154 secondi l'una tenevano fermo il ciclo (e con lui le protezioni del demo), con circa 3.400 richieste
+        a Binance e 3.900 letture Firestore che non servivano a niente (misure dell'audit sui log 0743-0775; le letture anche
+        nella riga «letture ultime 24 h» della risposta 0777: 3.915, tutte del vecchio sistema).
+
+        Solo se il vecchio paper non ha niente aperto: con posizioni o ordini limite aperti il giro resta quello di prima (stop,
+        take profit, scadenze vanno gestiti). Paper, demo, conto vero, eventi e battito non c'entrano: girano fuori da questo
+        giro e restano identici. Fail-open come `ricerca_ferma`: nel dubbio il vecchio giro parte, come prima. Il documento del
+        controllo orario (`dashboard/controllo`), senza il bot, lo ripubblica il ripiego di GitHub (`scripts/state_snapshot.py
+        --publish-controllo`, quando quello del bot ha piu' di 90 minuti), che rilegge da Firestore tutti i vecchi trade."""
+        try:
+            fermo = ricerca_ferma() is not None
+            if fermo and (getattr(self.executor, "open_positions", None) or getattr(self.executor, "ordini_limite", None)):
+                fermo = False
+        except Exception:  # noqa: BLE001
+            fermo = False
+        if fermo != getattr(self, "_vecchio_fermo_stampato", None):
+            self._vecchio_fermo_stampato = fermo
+            print("[main] vecchio sistema FERMO (ops/gate_fermo, nessuna posizione del vecchio paper): niente regime, scansioni, "
+                  "pesi, controllo orario e ciclo di trading; restano i suoi comandi dalla dashboard. Paper, demo, conto vero "
+                  "ed eventi girano come prima" if fermo else
+                  "[main] vecchio sistema acceso: regime, scansioni, pesi, controllo orario e ciclo di trading girano")
+        return fermo
+
+    def _giro_vecchio_fermo(self, now: float) -> None:
+        """Il giro del vecchio sistema quando e' fermo (`_vecchio_sistema_fermo`): restano i suoi comandi dalla dashboard, come
+        nel ciclo di trading (una richiesta di chiusura senza posizioni si azzera; il pulsante STOP si consuma e si conferma una
+        volta, `_emergency_close`), e una volta l'ora il contatore delle letture Firestore nel log, che misura il risparmio,
+        `/bot_status/state` («running») e `/bot_status/dry_run` (``settings.DRY_RUN``; revisione del 27 novembre 2026, problema
+        218): li scriveva `refresh_regime`; il chip «VIVO» in cima alla dashboard (TopVitals.tsx) vuole il primo, la riga
+        «DRY_RUN» in cima allo stato (scripts/state_snapshot.py) e la dashboard (ReconcilerStatus.tsx) il secondo; restano giusti
+        anche se qualcuno cancella `/bot_status` (scripts/reset_paper.py)."""
+        close_req = self.fb.get_rtdb("/commands/close_position") or {}
+        if isinstance(close_req, dict) and close_req:
+            self.fb.set_rtdb("/commands/close_position", None)
+        if self.bot_state() is BotState.EMERGENCY:
+            self._emergency_close()
+        if now - getattr(self, "_orario_vecchio_fermo_at", 0.0) >= 3600:
+            self._orario_vecchio_fermo_at = now
+            self.fb.set_rtdb("/bot_status/state", "running")
+            self.fb.set_rtdb("/bot_status/dry_run", settings.DRY_RUN)
+            try:
+                if hasattr(self.fb, "letture"):
+                    print(riga_letture(self.fb.letture(now)))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[firebase] contatore letture non stampato: {exc}")
+
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
         # il riconciliatore confronta il vecchio esecutore con Binance: con il ramo reale bloccato (executor.py, _init_binance) non c'e'
@@ -2543,72 +2633,78 @@ class TradingBot:
         while max_iterations is None or it < max_iterations:
             now = time.time()
             try:
-                # ricarica pesi + parametri ottimizzati (dal job notturno) ogni 6h
-                # rete di sicurezza: verdetto trailing (B1) ~ogni barra, cosi' i verdetti
-                # disponibili vengono scritti in fretta anche senza nuove chiusure.
-                if now - self.last_trailing_eval >= self._decision_interval_s:
-                    self.evaluate_pending_trailing(now)
-                    self.last_trailing_eval = now
-                    # e l'esito simulato dei segnali RIFIUTATI (26 set 2026, J6):
-                    # stessa fonte di candele, al massimo 20 chiamate per giro
-                    try:
-                        rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now,
-                                                  timeframes=self._timeframes_in_uso())
-                    except Exception as exc:  # noqa: BLE001
-                        print(f"[rifiutati] valutazione saltata: {exc}")
-                # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
-                # in prova (probation, tempo-dipendente) avanza anche senza chiusure.
-                # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade
-                # chiuso (vedi dopo trading_cycle).
-                # Il ramo orario ha un SUO orologio (`last_orario`): quello dei pesi
-                # viene azzerato dal ricalcolo dopo ogni chiusura, e con una
-                # chiusura all'ora il ramo non partiva mai -> il controllo orario
-                # e' rimasto fermo 2 h 43 la mattina del 25 set 2026 (screenshot
-                # del proprietario) mentre il bot era vivo e imparava a ogni trade.
-                if now - self.last_orario >= 3600:
-                    # la manutenzione delle letture PRIMA del controllo (28 set
-                    # 2026): la verifica giornaliera della cache dei trade deve
-                    # essere gia' fatta quando il controllo la pubblica
-                    self._manutenzione_oraria(now)
-                    # il prezzo di BTC all'inizio del paper (28 set 2026): una
-                    # volta sola, PRIMA del controllo che lo pubblica
-                    self._btc_inizio_paper(now)
-                    # `orario=True`: SOLO qui parte il controllo orario (mai dal
-                    # ricalcolo dopo ogni chiusura, qui sotto)
-                    self.refresh_weights(now, orario=True)
-                    self.last_weight_refresh = now
-                    self.last_orario = now
-                # ricarica il REGISTRO validato (coppie GATE 1 + specs generate +
-                # params) OGNI ORA: cosi' il bot aggancia in fretta le nuove coppie
-                # validate e il flag "ready" appena la copertura cresce, senza
-                # aspettare 6h. Costo trascurabile (pochi doc). L'orario override.
-                if now - self.last_adapt_reload >= settings.ADAPT_RELOAD_SECONDS:
-                    self.adaptation.load_weights()
-                    self.adaptation.load_params()
-                    self.adaptation.load_generated()
-                    # e il modello del selettore in ombra (25 set 2026): stesso
-                    # ritmo del registro, stesso «fail-open» (dentro ha il suo try)
-                    self._load_selettore()
-                    self.last_adapt_reload = now
-                # e fra un'ora e l'altra, APPENA il gate riscrive il registro
-                # (26 set 2026): una domanda al minuto, vedi il metodo
-                self._ricarica_registro_se_cambiato(now)
-                if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
-                    self.refresh_regime(now)
-                self.maybe_scan(now)
-                self.trading_cycle(now)
-                # LEARNING EVENT-DRIVEN: se in questo ciclo si e' chiuso un trade
-                # (determinato dalla strategia), ricalcola i pesi SUBITO invece di
-                # aspettare la finestra oraria -> adattamento immediato ad ogni esito.
-                if self._closed_this_cycle:
-                    # 1) assegna i verdetti trailing ora disponibili (premature/protected
-                    #    definitivi appena ci sono 2 candele dopo l'uscita), poi
-                    # 2) ricalcola i pesi + il trailing-keep con i dati freschi.
-                    self.evaluate_pending_trailing(time.time())
-                    self.last_trailing_eval = time.time()
-                    self.refresh_weights(time.time())
-                    self.last_weight_refresh = time.time()
-                    self._closed_this_cycle = False
+                # IL VECCHIO SISTEMA FERMO (audit del 26 novembre 2026, salute-4): con ops/gate_fermo e niente di aperto nel
+                # vecchio paper restano solo i suoi comandi dalla dashboard (`_vecchio_sistema_fermo`); paper, demo, conto vero,
+                # eventi e battito, qui sotto, non cambiano
+                if self._vecchio_sistema_fermo():
+                    self._giro_vecchio_fermo(now)
+                else:
+                    # ricarica pesi + parametri ottimizzati (dal job notturno) ogni 6h
+                    # rete di sicurezza: verdetto trailing (B1) ~ogni barra, cosi' i verdetti
+                    # disponibili vengono scritti in fretta anche senza nuove chiusure.
+                    if now - self.last_trailing_eval >= self._decision_interval_s:
+                        self.evaluate_pending_trailing(now)
+                        self.last_trailing_eval = now
+                        # e l'esito simulato dei segnali RIFIUTATI (26 set 2026, J6):
+                        # stessa fonte di candele, al massimo 20 chiamate per giro
+                        try:
+                            rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now,
+                                                      timeframes=self._timeframes_in_uso())
+                        except Exception as exc:  # noqa: BLE001
+                            print(f"[rifiutati] valutazione saltata: {exc}")
+                    # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
+                    # in prova (probation, tempo-dipendente) avanza anche senza chiusure.
+                    # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade
+                    # chiuso (vedi dopo trading_cycle).
+                    # Il ramo orario ha un SUO orologio (`last_orario`): quello dei pesi
+                    # viene azzerato dal ricalcolo dopo ogni chiusura, e con una
+                    # chiusura all'ora il ramo non partiva mai -> il controllo orario
+                    # e' rimasto fermo 2 h 43 la mattina del 25 set 2026 (screenshot
+                    # del proprietario) mentre il bot era vivo e imparava a ogni trade.
+                    if now - self.last_orario >= 3600:
+                        # la manutenzione delle letture PRIMA del controllo (28 set
+                        # 2026): la verifica giornaliera della cache dei trade deve
+                        # essere gia' fatta quando il controllo la pubblica
+                        self._manutenzione_oraria(now)
+                        # il prezzo di BTC all'inizio del paper (28 set 2026): una
+                        # volta sola, PRIMA del controllo che lo pubblica
+                        self._btc_inizio_paper(now)
+                        # `orario=True`: SOLO qui parte il controllo orario (mai dal
+                        # ricalcolo dopo ogni chiusura, qui sotto)
+                        self.refresh_weights(now, orario=True)
+                        self.last_weight_refresh = now
+                        self.last_orario = now
+                    # ricarica il REGISTRO validato (coppie GATE 1 + specs generate +
+                    # params) OGNI ORA: cosi' il bot aggancia in fretta le nuove coppie
+                    # validate e il flag "ready" appena la copertura cresce, senza
+                    # aspettare 6h. Costo trascurabile (pochi doc). L'orario override.
+                    if now - self.last_adapt_reload >= settings.ADAPT_RELOAD_SECONDS:
+                        self.adaptation.load_weights()
+                        self.adaptation.load_params()
+                        self.adaptation.load_generated()
+                        # e il modello del selettore in ombra (25 set 2026): stesso
+                        # ritmo del registro, stesso «fail-open» (dentro ha il suo try)
+                        self._load_selettore()
+                        self.last_adapt_reload = now
+                    # e fra un'ora e l'altra, APPENA il gate riscrive il registro
+                    # (26 set 2026): una domanda al minuto, vedi il metodo
+                    self._ricarica_registro_se_cambiato(now)
+                    if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
+                        self.refresh_regime(now)
+                    self.maybe_scan(now)
+                    self.trading_cycle(now)
+                    # LEARNING EVENT-DRIVEN: se in questo ciclo si e' chiuso un trade
+                    # (determinato dalla strategia), ricalcola i pesi SUBITO invece di
+                    # aspettare la finestra oraria -> adattamento immediato ad ogni esito.
+                    if self._closed_this_cycle:
+                        # 1) assegna i verdetti trailing ora disponibili (premature/protected
+                        #    definitivi appena ci sono 2 candele dopo l'uscita), poi
+                        # 2) ricalcola i pesi + il trailing-keep con i dati freschi.
+                        self.evaluate_pending_trailing(time.time())
+                        self.last_trailing_eval = time.time()
+                        self.refresh_weights(time.time())
+                        self.last_weight_refresh = time.time()
+                        self._closed_this_cycle = False
             except Exception as exc:  # noqa: BLE001
                 print(f"[main] errore nel ciclo: {exc}")
                 # contato: il controllo orario pubblica quanti nell'ultima ora
@@ -2632,14 +2728,32 @@ class TradingBot:
                 self.fb.set_rtdb("/bot_status/heartbeat", time.time())
             # il paper di F5 fuori dal ciclo di trading: un suo errore non lo tocca, e lo STOP del vecchio paper non lo
             # ferma (ha l'interruttore suo)
+            # L'ORDINE DEI GIRI (audit del 26 novembre 2026, ordini-7 e salute-2): ogni conto subito dopo il paper di cui esegue
+            # la decisione, prima degli altri paper. A mezzanotte ogni paper che ribilancia scarica le candele di circa 500
+            # contratti per 4-5 minuti: prima il demo aspettava anche G11 e G1 neutra e mandava gli ordini circa 9 minuti dopo il
+            # prezzo del paper di G1, e il lunedi' il conto vero sarebbe partito circa 14 minuti dopo il prezzo di F5 (00:23 contro
+            # 00:09; orari dei log 0727-0775 nell'audit). Il conto vero legge solo la decisione di F5 (data/paper_f5.json; niente
+            # eventi sul conto vero), il demo solo quella di G1 (data/paper_g1.json) e, con ops/demo_binance_eventi_acceso, le
+            # operazioni a eventi del giro prima, come prima (tests/test_main_audit.py).
             try:
                 self.paper_f5.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_f5] errore: {exc}")
             try:
+                if self.conto_vero is None:
+                    self.conto_vero = crea_conto_vero(self.fb)
+                if self.conto_vero is not None:
+                    self.conto_vero.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[conto_vero] errore: {exc}")
+            try:
                 self.paper_g1.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_g1] errore: {exc}")
+            try:
+                self.demo_g1.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[demo_binance] errore: {exc}")
             try:
                 self.paper_g11.tick(time.time())
             except Exception as exc:  # noqa: BLE001
@@ -2648,17 +2762,6 @@ class TradingBot:
                 self.paper_g1n.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_g1n] errore: {exc}")
-            try:
-                self.demo_g1.tick(time.time())
-            except Exception as exc:  # noqa: BLE001
-                print(f"[demo_binance] errore: {exc}")
-            try:
-                if self.conto_vero is None:
-                    self.conto_vero = crea_conto_vero(self.fb)
-                if self.conto_vero is not None:
-                    self.conto_vero.tick(time.time())
-            except Exception as exc:  # noqa: BLE001
-                print(f"[conto_vero] errore: {exc}")
             try:
                 self.paper_eventi.tick(time.time())
             except Exception as exc:  # noqa: BLE001

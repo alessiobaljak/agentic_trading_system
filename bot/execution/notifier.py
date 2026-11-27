@@ -1,5 +1,8 @@
-"""Alert Telegram: bot offline, liquidazione, daily loss > 3%, kill switch."""
+"""Alert Telegram: bot offline, liquidazione, daily loss > 3%, kill switch; da scripts/monitor.py anche gli allarmi
+di demo e conto vero."""
 from __future__ import annotations
+
+from urllib.parse import quote
 
 import requests
 
@@ -15,18 +18,56 @@ class TelegramNotifier:
     def enabled(self) -> bool:
         return bool(self.token and self.chat_id)
 
-    def send(self, text: str) -> None:
+    def send(self, text: str) -> bool:
+        """Manda il messaggio. Non solleva mai: True solo se Telegram l'ha accettato.
+
+        Audit del 26 novembre 2026 (salute-3): prima la risposta non si guardava, e un rifiuto (400 testo non valido, 403 chat
+        bloccata, 429 troppi messaggi) non lasciava nessuna traccia. Ora un rifiuto si scrive nel log con il codice e il motivo
+        dato da Telegram. Il token non va mai nel log (i log finiscono in ops/results, in un repository pubblico): un errore di rete
+        di `requests` puo' contenere l'indirizzo intero, con il token dentro."""
         if not self.enabled:
             print(f"[telegram:disabled] {text}")
-            return
+            return False
         try:
-            requests.post(
+            r = requests.post(
                 f"https://api.telegram.org/bot{self.token}/sendMessage",
                 json={"chat_id": self.chat_id, "text": text, "parse_mode": "HTML"},
                 timeout=8,
             )
         except Exception as exc:  # noqa: BLE001
-            print(f"[telegram] invio fallito: {exc}")
+            print(f"[telegram] invio fallito: {self._senza_token(exc)}")
+            return False
+        try:
+            if r.ok:
+                return True
+            print(f"[telegram] messaggio rifiutato da Telegram: HTTP {r.status_code} {self._motivo(r)}")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[telegram] risposta di Telegram non leggibile: {self._senza_token(exc)}")
+        return False
+
+    def _senza_token(self, testo) -> str:
+        """Il testo con il token sostituito (mai il token in un log). Non solleva: lo chiama anche chi gestisce un errore."""
+        try:
+            testo = str(testo)
+            if self.token:
+                for forma in (str(self.token), quote(str(self.token), safe="")):   # anche scritto come in un indirizzo
+                    testo = testo.replace(forma, "<token>")
+            return testo
+        except Exception:  # noqa: BLE001
+            return "(testo dell'errore non leggibile)"
+
+    def _motivo(self, r) -> str:
+        """Il motivo del rifiuto come lo dice Telegram (`description`, piu' l'attesa chiesta con il 429), al massimo
+        200 lettere."""
+        try:
+            dati = r.json()
+            motivo = str(dati.get("description") or "")
+            attesa = (dati.get("parameters") or {}).get("retry_after")
+            if attesa is not None:
+                motivo += f" (riprovare fra {attesa} s)"
+        except Exception:  # noqa: BLE001
+            motivo = str(getattr(r, "text", "") or "")
+        return self._senza_token(motivo)[:200]
 
     # alert tipizzati
     def bot_offline(self) -> None:

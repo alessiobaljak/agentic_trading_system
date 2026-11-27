@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 from urllib.parse import parse_qs, urlparse
@@ -193,6 +194,44 @@ def test_senza_chiave_non_chiama_binance(tmp_path, monkeypatch):
     assert fb.get_rtdb("/demo_binance/stato")["stato"].startswith("manca la chiave")
 
 
+def _cryptography_o_salta():
+    """La libreria di cifratura, o il test saltato con il motivo (audit del 26 novembre 2026, salute-10). In alcuni contenitori python3
+    è la 3.11 e carica la `cryptography` di sistema costruita per la 3.12: l'import muore con una PanicException di pyo3, che non è un
+    Exception (serve BaseException). Sulla macchina (.venv con python3.12) e nei test di GitHub si carica e il test gira.
+
+    Revisione del 27 novembre 2026, problema 215: con la variabile d'ambiente ``CI`` (GitHub la mette) il test FALLISCE invece di
+    saltare: se lì la libreria non si caricasse, la firma Ed25519 e RSA non sarebbe più provata da nessuna parte e la suite
+    resterebbe verde."""
+    try:
+        from cryptography.hazmat.primitives import hashes, serialization
+        from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except BaseException as exc:  # noqa: BLE001
+        motivo = (f"cryptography non si carica in questo ambiente ({type(exc).__name__}): la firma con le chiavi Ed25519 e RSA "
+                  f"non si può provare qui (requirements.txt la fissa; sulla macchina e su GitHub il test gira)")
+    else:
+        return hashes, serialization, ed25519, padding, rsa
+    if os.environ.get("CI"):
+        pytest.fail(f"{motivo}. Con la variabile CI (i test di GitHub) non si salta: la firma va provata almeno lì")
+    pytest.skip(motivo)
+
+
+def test_215_con_la_variabile_ci_la_libreria_che_non_si_carica_fa_fallire(monkeypatch):
+    """Problema 215: con ``CI`` una `cryptography` che non si carica fa fallire il test della firma; senza ``CI`` lo salta con il
+    motivo. L'import rotto si finge togliendo i moduli (``None`` in ``sys.modules`` fa fallire l'import)."""
+    import sys
+    for nome in ("cryptography", "cryptography.hazmat", "cryptography.hazmat.primitives",
+                 "cryptography.hazmat.primitives.asymmetric"):
+        monkeypatch.setitem(sys.modules, nome, None)
+    monkeypatch.setenv("CI", "true")
+    with pytest.raises(pytest.fail.Exception, match="variabile CI"):
+        _cryptography_o_salta()
+    monkeypatch.delenv("CI")
+    with pytest.raises(pytest.skip.Exception, match="non si carica"):
+        _cryptography_o_salta()
+
+
 def test_firma_dei_tre_tipi_di_chiave(tmp_path, monkeypatch):
     """La chiave generata dal sistema (HMAC) e quelle generate da sé (Ed25519, RSA) firmano in modo verificabile."""
     import base64
@@ -200,11 +239,9 @@ def test_firma_dei_tre_tipi_di_chiave(tmp_path, monkeypatch):
     import hmac
     from urllib.parse import unquote
 
-    from cryptography.hazmat.primitives import hashes, serialization
-    from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
-
     q = "symbol=BTCUSDT&timestamp=1"
-    assert dm.firmatore("segreto")(q) == hmac.new(b"segreto", q.encode(), hashlib.sha256).hexdigest()
+    assert dm.firmatore("segreto")(q) == hmac.new(b"segreto", q.encode(), hashlib.sha256).hexdigest()   # senza cryptography
+    hashes, serialization, ed25519, padding, rsa = _cryptography_o_salta()
     pem = lambda k: k.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,  # noqa: E731
                                     serialization.NoEncryption()).decode()
     ke = ed25519.Ed25519PrivateKey.generate()

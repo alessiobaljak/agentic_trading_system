@@ -1207,13 +1207,18 @@ def test_prima_accensione_lo_stop_non_chiude_le_posizioni_non_del_bot(tmp_path, 
 
 
 def test_il_bot_crea_e_fa_girare_il_conto_vero_accanto_al_demo():
+    """Il conto vero gira nel giro dei paper e del demo, con il suo try/except e la creazione riprovata a ogni giro. Dal 27 novembre
+    2026 (audit del 26 novembre, ordini-7) l'ordine dei giri in bot/main.py può cambiare (il conto vero subito dopo il paper di F5):
+    il test non guarda più se viene prima o dopo il demo, ma che stia nello stesso giro."""
     testo = (RADICE / "bot" / "main.py").read_text(encoding="utf-8")
     assert "self.conto_vero = crea_conto_vero(self.fb)" in testo
     assert "ContoVeroG1(" not in testo                 # mai creato direttamente: un errore fermerebbe demo e paper (problema 71)
-    i, j = testo.index("self.demo_g1.tick(time.time())"), testo.index("self.conto_vero.tick(time.time())")
-    assert 0 < j - i < 400                             # subito dopo il demo, con il suo try/except
-    assert "if self.conto_vero is None:" in testo[i:j]  # si riprova a ogni giro
-    assert 'print(f"[conto_vero] errore: {exc}")' in testo[j:j + 200]
+    j = testo.index("self.conto_vero.tick(time.time())")
+    prima = testo[max(0, j - 300):j]
+    assert "if self.conto_vero is None:" in prima and "self.conto_vero = crea_conto_vero(self.fb)" in prima   # si riprova
+    assert 'print(f"[conto_vero] errore: {exc}")' in testo[j:j + 200]                                       # il suo try/except
+    inizio, fine = testo.index("self.paper_f5.tick(time.time())"), testo.index("self.paper_eventi.tick(time.time())")
+    assert inizio < testo.index("self.demo_g1.tick(time.time())") < fine and inizio < j < fine   # lo stesso giro del demo
 
 
 def test_71_un_errore_nella_creazione_non_ferma_il_bot(capsys):

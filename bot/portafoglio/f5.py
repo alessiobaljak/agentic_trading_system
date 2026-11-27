@@ -25,6 +25,18 @@ Le funzioni pure (`universo`, `sigma_30`, `funding_7`, `pesi_banda`) rifanno que
 dati. Una differenza voluta: qui il funding dei 7 giorni e' la somma esatta, nella ricerca la differenza di due somme
 cumulate; alle parita' (molte monete al funding di base, 0,01% a regolamento) l'arrotondamento della ricerca decide l'ordine
 e qualche moneta al bordo della banda puo' cambiare.
+
+27 novembre 2026 (audit del 26 novembre), due cambi che valgono dal primo riavvio del bot con questo codice:
+
+* **la finestra degli ordini limite** (ordini-3): prima partiva dall'inizio del giro (``now``), cioè 3-4 minuti prima della lettura
+  del prezzo mark (lo scarico dei dati a mezzanotte), e il paper contava come eseguiti a limite anche ordini che il prezzo aveva
+  toccato solo prima di esistere (misura dell'audit: 0,6% di ordini non eseguiti contro 3,4-5,0% con la finestra giusta, circa 3-5
+  punti base del valore scambiato). Ora la finestra parte dal primo minuto pieno dopo la lettura dei prezzi e dura un'ora; ``now``
+  resta l'ora del funding. Per G1, G11, G1 neutra e F5 il metro del paper diventa un po' più severo da quel giorno: circa −0,01
+  punti al giorno per G1 (stima dell'audit), meno per F5, che scambia una volta a settimana;
+* **la lettura di ogni ora** (ordini-1, solo G1): a ogni ora piena l'equity, le quantità e il prezzo mark del mercato vero in
+  `/paper_g1/ore/{AAAA-MM-GG}/{HH}`, come il demo in `/demo_binance/ore` (`demo_binance.DemoG1.lettura_oraria`), per dividere la
+  differenza fra demo e paper. Solo scritture, nessun ordine.
 """
 from __future__ import annotations
 
@@ -64,10 +76,25 @@ FUNDING_IN_SOSPESO_MS = 2 * 3_600_000
 FUNDING_PER_REGOLAMENTO_MS = 26 * 3_600_000   # quanto si tiene nello stato il funding per regolamento e moneta (per Firebase)
 MONETE_DEL_FUNDING = 10                        # le monete più grandi per regolamento in /<ramo>/funding (con il totale)
 CHIAVE_REGOLAMENTO = "%Y-%m-%dT%H:%M"          # nello stato; su Firebase il percorso /<ramo>/funding/{AAAA-MM-GG}/{HH:MM}
+MINUTO_MS = 60_000
+ATTESA_LETTURA_S = 300                         # una lettura dell'ora non riuscita (Binance non risponde) si riprova dopo 5 minuti
 
 
 def scarto(simbolo: str) -> float:
     return SCARTO.get(simbolo, SCARTO_ALTRE)
+
+
+def inizio_della_finestra_ms(t: float) -> int:
+    """L'inizio della finestra di un ordine limite piazzato al prezzo letto all'istante ``t`` (secondi dall'epoca): il primo minuto pieno
+    da ``t`` in poi, perché contano solo le candele a 1 minuto aperte dopo la lettura del prezzo (audit del 26 novembre 2026,
+    ordini-3: prima la finestra partiva dall'inizio del giro, minuti prima del prezzo)."""
+    ms = int(round(float(t) * 1000))
+    return -(-ms // MINUTO_MS) * MINUTO_MS
+
+
+def cifre(x: float) -> float:
+    """Un numero con 10 cifre significative (le letture di ogni ora su Firebase restano piccole)."""
+    return float(f"{float(x):.10g}")
 
 
 def esito_limite(dq: float, p0: float, candele: list, a_mercato: float) -> tuple:
@@ -266,6 +293,7 @@ class PaperF5:
     RAMO, ETICHETTA, INTERRUTTORE_DI_SERIE, FILE_DI_SERIE = "/paper_f5", "paper_f5", INTERRUTTORE, FILE_STATO
     MISURA_SCARTI = False          # la misura dello scarto la fa una sola istanza (G1, ogni giorno)
     PUBBLICA_FUNDING = False       # il funding per regolamento e moneta su Firebase: solo G1 (il confronto con il demo)
+    LETTURA_ORARIA = False         # la lettura di ogni ora in /<ramo>/ore: solo G1, accanto a quella del demo (ordini-1)
 
     def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Optional[Path] = None,
                  interruttore: Optional[Path] = None, pausa_s: float = 0.1) -> None:
@@ -279,6 +307,11 @@ class PaperF5:
         self._ultimo_controllo_limite = 0.0
         self._ultimo_regolamento: dict = {}
         self._prova_fatta = False
+        # quanto passa dentro un giro (ordini-3: la lettura dei prezzi arriva minuti dopo l'inizio del giro); nei test uno finto
+        self.cronometro: Callable[[], float] = time.monotonic
+        self._giro: tuple = (None, 0.0)                 # (now del giro, cronometro all'inizio del giro)
+        self._ultima_ora_letta: Optional[int] = None    # l'ultima ora piena letta (ordini-1)
+        self._lettura_riprova_dopo = 0.0
 
     # ---- stato ----
     def acceso(self) -> bool:
@@ -312,9 +345,16 @@ class PaperF5:
         return int(now // 86400) == m
 
     def tick(self, now: float) -> None:
+        self._giro = (now, self.cronometro())
         if not self.acceso():
             return
         st = self.carica()
+        if st:
+            try:                                        # solo una lettura: un suo errore non tocca il resto del giro
+                self.lettura_oraria(st, now)
+            except Exception as exc:  # noqa: BLE001
+                self._lettura_riprova_dopo = now + ATTESA_LETTURA_S
+                print(f"[{self.ETICHETTA}] lettura dell'ora non riuscita, si riprova fra 5 minuti: {type(exc).__name__}: {exc}")
         m = self.giorno_di_decisione(int(now // 86400))
         dopo_le_5 = now >= m * 86400 + ORA_RIBILANCIO_S
         puo_provare = now - self._ultimo_tentativo >= ATTESA_DOPO_ERRORE_S
@@ -426,16 +466,23 @@ class PaperF5:
         return True
 
     def ribilancia(self, m: int, now: float, st: dict) -> dict:
+        # da quando contare il tempo del giro: dall'inizio di `tick` se questo ribilancio è del suo giro, altrimenti da qui
+        inizio = self._giro[1] if self._giro[0] == now else self.cronometro()
         if st.get("ordini"):
             if not self.chiudi_ordini(st, now):
                 return st                                   # gli ordini della settimana prima prima di tutto: si riprova
             st = self.carica()
         r = self.pesi_del_lunedi(m, st if st else self.banda_di_partenza(m))
         prezzi = self._prezzi_mark() if r is not None else {}
+        # l'ora della lettura dei prezzi (audit del 26 novembre 2026, ordini-3): ``now`` è l'inizio del giro, prima dello scarico dei
+        # dati (3-5 minuti a mezzanotte); la finestra degli ordini limite parte dal primo minuto pieno dopo questa lettura, così non
+        # conta i minuti in cui il prezzo dell'ordine non esisteva ancora. ``now`` resta l'ora del funding
+        letti = now + max(0.0, self.cronometro() - inizio)
         if r is None or not prezzi:
             print(f"[{self.ETICHETTA}] ribilancio rimandato di 30 minuti: dati di Binance non disponibili")
             return st
         pesi, lunghi, corti, n_uni = r
+        da_ms = inizio_della_finestra_ms(letti)
         if st:
             self._funding_regolati(st, prezzi, now)
         equity = self._equity(st, prezzi) if st else CAPITALE
@@ -460,7 +507,7 @@ class PaperF5:
               "funding_fino_ms": int(now * 1000), "costi_totali": float(st.get("costi_totali", 0.0)) + costo,
               "funding_totale": float(st.get("funding_totale", 0.0)), "ultima_valutazione": now,
               "universo": n_uni,
-              "ordini": {"da_ms": int(now * 1000), "fino_ms": int(now * 1000) + VALIDITA_LIMITE_MS,
+              "ordini": {"da_ms": da_ms, "fino_ms": da_ms + VALIDITA_LIMITE_MS,
                          "variazioni": variazioni, "costo_provvisorio": costo, "costo_a_mercato": a_mercato}}
         self._funding_dopo_il_ribilancio(st, vecchie, base_prima, prezzi_prima, now)
         self.salva(st)
@@ -474,10 +521,12 @@ class PaperF5:
                 "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now,
                 "funding_medio_7": getattr(self, "_funding_medio_7", None),
-                "neutralita": getattr(self, "_neutralita", None)})
+                "neutralita": getattr(self, "_neutralita", None),
+                "prezzi_letti": round(letti, 1), "ordini_limite_dal": da_ms // 1000})
             self.fb.set_rtdb(f"{self.RAMO}/posizioni", {s: round(w, 6) for s, w in pesi.items()})
         print(f"[{self.ETICHETTA}] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
-              f"costo {costo:.2f}, equity {equity - costo:.2f}")
+              f"costo {costo:.2f}, equity {equity - costo:.2f}; prezzi letti alle "
+              f"{time.strftime('%H:%M:%S', time.gmtime(letti))}, ordini limite dalle {time.strftime('%H:%M', time.gmtime(da_ms // 1000))}")
         self._pubblica(st, prezzi, now)
         self.misura_scarti(getattr(self, "_ultimo_universo", []), now)
         return st
@@ -645,6 +694,36 @@ class PaperF5:
                 "incassato": round(sum(monete.values()), 6), "monete": len(monete),
                 "maggiori": {s: round(v, 6) for s, v in grandi}, "aggiornato": now})
 
+    def lettura_oraria(self, st: dict, now: float) -> None:
+        """Una lettura a ogni ora piena (audit del 26 novembre 2026, ordini-1), fatta come quella del demo
+        (`demo_binance.DemoG1.lettura_oraria`): in `/<ramo>/ore/{AAAA-MM-GG}/{HH}` (UTC) l'equity, la quantità di ogni moneta e il prezzo
+        mark usato (quello del mercato vero, `/fapi/v1/premiumIndex`), con il funding e i costi contati fin lì. Al primo giro dopo
+        l'ora piena, una volta per ora (dopo un riavvio, se la lettura dell'ora c'è già, non si rifà). Solo scritture piccole, nessun
+        ordine e nessun cambio dello stato."""
+        if not self.LETTURA_ORARIA or self.fb is None or not st or now < self._lettura_riprova_dopo:
+            return
+        ora = int(now // 3600)
+        if self._ultima_ora_letta is not None and ora <= self._ultima_ora_letta:
+            return
+        quando = time.gmtime(ora * 3600)
+        percorso = f"{self.RAMO}/ore/{time.strftime('%Y-%m-%d', quando)}/{time.strftime('%H', quando)}"
+        if self._ultima_ora_letta is None and self.fb.get_rtdb(percorso):
+            self._ultima_ora_letta = ora                # riavvio nella stessa ora: la lettura c'è già
+            return
+        prezzi = self._prezzi_mark()
+        if not prezzi:
+            self._lettura_riprova_dopo = now + ATTESA_LETTURA_S
+            return
+        self._ultima_ora_letta = ora
+        quantita = {s: float(q) for s, q in (st.get("quantita") or {}).items() if q}
+        self.fb.set_rtdb(percorso, {
+            "ora": now, "equity": round(self._equity(st, prezzi), 4),
+            "quantita": {s: cifre(q) for s, q in sorted(quantita.items())},
+            "prezzi": {s: cifre(prezzi[s]) for s in sorted(quantita) if s in prezzi},
+            "funding_totale": round(float(st.get("funding_totale", 0.0)), 4),
+            "costi_totali": round(float(st.get("costi_totali", 0.0)), 4),
+            "ordini_in_attesa": len((st.get("ordini") or {}).get("variazioni") or {})})
+
     def valuta(self, now: float, st: dict) -> dict:
         prezzi = self._prezzi_mark()
         if not prezzi:
@@ -690,6 +769,7 @@ class PaperG1(PaperF5):
     FILE_DI_SERIE = RADICE / "data" / "paper_g1.json"
     MISURA_SCARTI = True
     PUBBLICA_FUNDING = True
+    LETTURA_ORARIA = True
 
     def giorno_di_decisione(self, giorno: int) -> int:
         return giorno
@@ -710,7 +790,7 @@ class PaperG1N(PaperG1):
     dell'universo del giorno) sia zero, entro 0,5-1,5. Interruttore `ops/paper_g1n_acceso`, stato in `data/paper_g1n.json` e su RTDB
     in `/paper_g1n`."""
     RAMO, ETICHETTA = "/paper_g1n", "paper_g1n"
-    MISURA_SCARTI = PUBBLICA_FUNDING = False
+    MISURA_SCARTI = PUBBLICA_FUNDING = LETTURA_ORARIA = False
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1n_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g1n.json"
 
@@ -750,7 +830,7 @@ class PaperG11(PaperG1):
     media dei ranghi di −funding dei 7 giorni e di −funding dell'ultimo giorno. Interruttore `ops/paper_g11_acceso`, stato in
     `data/paper_g11.json` e su RTDB in `/paper_g11`."""
     RAMO, ETICHETTA = "/paper_g11", "paper_g11"
-    MISURA_SCARTI = PUBBLICA_FUNDING = False
+    MISURA_SCARTI = PUBBLICA_FUNDING = LETTURA_ORARIA = False
     INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g11_acceso"
     FILE_DI_SERIE = RADICE / "data" / "paper_g11.json"
 

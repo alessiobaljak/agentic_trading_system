@@ -42,6 +42,24 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
   dopo (la mezzanotte): prima si chiude tutto, poi si riapre da zero, come farà il conto vero. I filtri degli ordini sono severi almeno come quelli del conto vero
   (`filtri_conto_vero.json`). All'avvio i valori della fase di prima (`giorni`, `diario`, `ribilanciamenti`) passano in
   `/demo_binance/fasi/`, così grafici e rapporti ripartono puliti. Togliere il file non fa tornare al conto intero.
+* **Dall'audit del 26 novembre 2026** (correzioni del 27 novembre, dal primo riavvio con questo codice):
+  * **le monete che il demo non può avere** (ordini-5): una moneta con lo stato diverso da TRADING nell'exchangeInfo del demo, o già
+    rifiutata dal demo con -1121 («Invalid symbol», al margine unico) o -4140 («Invalid symbol status for opening position»,
+    all'ordine), non si riprova ogni giorno: l'ordine che apre o aumenta si salta con il motivo scritto (le chiusure partono sempre),
+    e la moneta si riprova una volta a settimana. I pesi NON cambiano (il conto vero quelle monete le può comprare): le monete
+    restano fra gli obiettivi segnate «non disponibili sul demo», fuori dallo scarto del confronto di ogni ora, con il loro peso a
+    parte; al ribilancio vanno in ``monete_mancanti_sul_demo`` e, con il motivo, in ``non_disponibili_sul_demo``. Il conto vero non
+    salta niente (``SALTA_NON_DISPONIBILI``);
+  * **l'allarme `ordini_rifiutati`** (ordini-4, anche sul conto vero): moneta, errore, peso e decisioni di fila quando il peso
+    rifiutato supera l'1% del conto o una moneta è rifiutata per due decisioni di fila; i resti a mercato rifiutati dopo l'ora vanno
+    in `/<ramo>/ribilanciamenti/{chiave}/resti_rifiutati`, con lo stesso allarme;
+  * **la lettura di ogni ora** (ordini-1): a ogni ora piena l'equity, la quantità di ogni moneta e il prezzo mark del demo in
+    `/demo_binance/ore/{AAAA-MM-GG}/{HH}`, come il paper di G1 in `/paper_g1/ore` (i prezzi del mercato vero). Solo letture del conto
+    e scritture piccole, nessun ordine; il conto vero non la fa (``LETTURA_ORARIA``);
+  * **gli allarmi al telefono** (salute-6, voce P26 del backlog): ogni allarme nuovo del demo e del conto vero (fermo, stop, 418,
+    conto non vuoto da fermo, errori ripetuti, ordini rifiutati e gli altri tipi in `/<ramo>/allarmi`) va anche su Telegram con
+    `bot/execution/notifier` (`TelegramNotifier.send`, così com'è), una volta quando si accende e mai a ogni giro (lo stesso tipo al
+    massimo una volta all'ora), in un filo a parte: Telegram lento o giù non ferma le protezioni né gli ordini.
 """
 from __future__ import annotations
 
@@ -49,10 +67,12 @@ import base64
 import calendar
 import hashlib
 import hmac
+import html
 import json
 import math
 import os
 import re
+import threading
 import time
 from pathlib import Path
 from typing import Callable, Optional
@@ -111,6 +131,16 @@ FILE_RIPARTI = RADICE / "ops" / "demo_binance_riparti"
 FILE_CAPITALE = RADICE / "ops" / "demo_binance_capitale"
 FILE_FILTRI_VERI = Path(__file__).with_name("filtri_conto_vero.json")
 RAMI_DELLA_FASE = ("giorni", "diario", "ribilanciamenti")
+# audit del 26 novembre 2026 (correzioni del 27 novembre; vedi in cima)
+CODICI_NON_DISPONIBILE = (-1121, -4140)    # ordini-5: «Invalid symbol» (margine unico) e «Invalid symbol status for opening position»
+RIPROVA_NON_DISPONIBILE_S = 7 * 86400      # ordini-5: una moneta rifiutata così si riprova una volta a settimana, non ogni giorno
+DIMENTICA_NON_DISPONIBILE_S = 60 * 86400   # ordini-5: una moneta non più riprovata da 60 giorni esce dalla memoria
+SOGLIA_PESO_RIFIUTATO = 0.01               # ordini-4: l'allarme oltre l'1% del conto rifiutato in una decisione...
+DECISIONI_DI_FILA_PER_L_ALLARME = 2        # ... o con la stessa moneta rifiutata per due decisioni di fila
+ATTESA_LETTURA_S = 300                     # ordini-1: una lettura dell'ora non riuscita si riprova dopo 5 minuti
+AVVISO_STESSO_TIPO_S = 3600                # salute-6: lo stesso tipo di allarme al telefono al massimo una volta all'ora
+ERRORI_DI_FILA_PRIMA_DELL_ALLARME = 3      # salute-6: errori di fila nello stesso punto del giro prima dell'allarme «errori ripetuti»
+TELEFONO_CARATTERI = 900                   # salute-6: il testo dell'allarme al telefono, al massimo
 
 
 def _url(percorso: str) -> str:
@@ -185,6 +215,33 @@ def filtri(info: dict) -> dict:
         except (KeyError, TypeError, ValueError):
             continue
     return out
+
+
+def stati_non_scambiabili(info: dict) -> dict:
+    """{simbolo: stato} delle monete di exchangeInfo con uno stato scritto e diverso da TRADING (audit del 26 novembre 2026, ordini-5:
+    `filtri` non guarda lo stato). Una moneta senza lo stato scritto non c'è: vale come prima, scambiabile."""
+    out = {}
+    for x in (info or {}).get("symbols", []):
+        stato = x.get("status")
+        if x.get("symbol") and stato is not None and str(stato) != "TRADING":
+            out[x["symbol"]] = str(stato)
+    return out
+
+
+def codice_d_errore(testo) -> Optional[int]:
+    """Il codice d'errore di Binance nel testo di un errore (``... 400 {"code":-4140,"msg":"..."}``), se c'è."""
+    m = re.search(r'"code"\s*:\s*(-?\d+)', str(testo))
+    return int(m.group(1)) if m else None
+
+
+def errore_breve(testo, lunghezza: int = 100) -> str:
+    """Il codice e il messaggio di Binance di un errore («-4140 Invalid symbol status for opening position»), altrimenti l'inizio del
+    testo: per gli allarmi."""
+    t = str(testo)
+    codice, msg = codice_d_errore(t), re.search(r'"msg"\s*:\s*"([^"]*)"', t)
+    if codice is not None and msg:
+        return f"{codice} {msg.group(1)}"[:lunghezza]
+    return t[:lunghezza]
 
 
 def filtri_mercato(info: dict) -> dict:
@@ -398,6 +455,28 @@ def segreto_dall_ambiente() -> str:
     return os.environ.get("BINANCE_DEMO_API_SECRET", "").replace("\\n", "\n")
 
 
+def avviso_telegram(testo: str) -> None:
+    """Un messaggio al telefono del proprietario con `bot.execution.notifier` (`TelegramNotifier.send`, così com'è: il token e la chat
+    li legge lui da `bot.config`), in un filo a parte: Telegram lento (le letture scadono dopo 8 secondi, log del bot di ottobre) o
+    giù non ferma mai le protezioni né gli ordini (audit del 26 novembre 2026, salute-6). Nei test non parte niente. Non solleva mai;
+    nel log solo il tipo dell'errore (l'indirizzo di Telegram contiene il token)."""
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        print(f"[telefono] (nei test non parte) {testo[:200]}")
+        return
+
+    def manda() -> None:
+        try:
+            from bot.execution.notifier import TelegramNotifier
+            TelegramNotifier().send(testo)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[telefono] avviso non mandato ({type(exc).__name__})")
+
+    try:
+        threading.Thread(target=manda, name="avviso_telegram", daemon=True).start()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[telefono] avviso non mandato ({type(exc).__name__})")
+
+
 class LimiteBinance(Exception):
     """Binance risponde 429 (troppe richieste) o 418 (indirizzo bloccato) anche dopo i ritentativi. Non e' un RuntimeError apposta:
     non diventa il rifiuto di un ordine (il ciclo passerebbe all'ordine dopo, verso il blocco dell'indirizzo) ma ferma il giro, e
@@ -510,12 +589,29 @@ class DemoG1:
     MANCA_CHIAVE = "manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env)"
     CHIAVE_VALORE_VERO = "valore_vero_del_conto_demo"
     CHIAVE_ILLEGGIBILE = "chiave del conto demo non leggibile"
+    SALTA_NON_DISPONIBILI = True               # ordini-5: le monete che il demo non può avere si saltano (il conto vero no)
+    LETTURA_ORARIA = True                      # ordini-1: la lettura di ogni ora in /demo_binance/ore (il conto vero no)
+    CHI_AL_TELEFONO = "Demo di Binance"        # salute-6: il nome negli avvisi al telefono
 
     def __init__(self, fb, cliente: Optional[ClienteDemo] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_G1,
                  interruttore: Path = INTERRUTTORE, file_eventi: Path = FILE_EVENTI,
                  interruttore_eventi: Path = INTERRUTTORE_EVENTI, file_chiudi: Path = FILE_CHIUDI,
-                 file_riparti: Path = FILE_RIPARTI, file_capitale: Path = FILE_CAPITALE) -> None:
+                 file_riparti: Path = FILE_RIPARTI, file_capitale: Path = FILE_CAPITALE,
+                 avvisa: Optional[Callable[[str], None]] = None) -> None:
         self.fb = fb
+        # salute-6: gli allarmi nuovi anche al telefono (nei test un finto); in memoria l'ultima volta di ogni tipo e i segni di
+        # «già detto» di quelli che non passano da `_allarme`
+        self.avvisa: Callable[[str], None] = avvisa or avviso_telegram
+        self._telefonati: dict = {}                 # tipo -> l'ultima volta al telefono
+        self._telefono_di: dict = {}                # tipo -> quando l'allarme acceso adesso è andato al telefono
+        self._avvisato_418 = False
+        self._fermo_avvisato = None                 # l'ora del fermo il cui «conto non vuoto» è già andato al telefono
+        self._errori_di_fila: dict = {}             # dove -> errori di fila (protezioni, giro degli ordini)
+        self._errori_dal: dict = {}
+        self._errore_all_allarme: dict = {}
+        self._testo_errori: Optional[str] = None
+        self._ultima_ora_letta: Optional[int] = None   # ordini-1: l'ultima ora piena letta
+        self._lettura_riprova_dopo = 0.0
         self.file_capitale = Path(file_capitale)
         self._scarto = 0.0                          # valore vero del conto demo meno il valore del conto ridotto
         self._protezioni_ferme_fino = 0.0
@@ -579,14 +675,90 @@ class DemoG1:
         accesi = st.setdefault("allarmi", {})
         if testo:
             if accesi.get(tipo) != testo:
+                nuovo = tipo not in accesi
                 accesi[tipo] = testo
                 self._accesi.add(tipo)
-                self._scrivi(f"allarmi/{tipo}", {"ora": now, "testo": testo, **altro})
+                # salute-6: al telefono quando si accende, non quando cambia il testo; ``telefono`` nell'allarme dice quando il bot
+                # l'ha mandato (chi avvisa da fuori, scripts/monitor.py, può non rimandarlo)
+                manda = nuovo and self._puo_telefonare(tipo, now)
+                if manda:
+                    self._telefono_di[tipo] = now
+                elif nuovo:
+                    self._telefono_di.pop(tipo, None)
+                segno = {"telefono": self._telefono_di[tipo]} if tipo in self._telefono_di else {}
+                self._scrivi(f"allarmi/{tipo}", {"ora": now, "testo": testo, **altro, **segno})
                 print(f"[{self.NOME}] ALLARME ({tipo}): {testo}")
+                if manda:
+                    self._telefono(tipo, testo, now)
         elif tipo in accesi or tipo in self._accesi:
             accesi.pop(tipo, None)
             self._accesi.discard(tipo)
+            self._telefono_di.pop(tipo, None)
             self._scrivi(f"allarmi/{tipo}", None)
+
+    def _puo_telefonare(self, tipo: str, now: float) -> bool:
+        """Salute-6: lo stesso tipo di allarme al telefono al massimo una volta ogni ``AVVISO_STESSO_TIPO_S`` (un allarme che si spegne e
+        si riaccende non riempie il telefono)."""
+        ultimo = self._telefonati.get(tipo)
+        return ultimo is None or not 0 <= now - ultimo < AVVISO_STESSO_TIPO_S
+
+    def _telefono(self, tipo: str, testo: str, now: float) -> bool:
+        """Salute-6 (audit del 26 novembre 2026, voce P26 del backlog): l'allarme nuovo anche su Telegram (`avviso_telegram`). Chi
+        chiama lo fa quando l'allarme si accende, non a ogni giro; qui in più `_puo_telefonare`. Il testo è HTML (il notificatore
+        scrive con ``parse_mode`` HTML): i caratteri speciali si tolgono. Vero se il messaggio è partito. Non solleva mai."""
+        try:
+            if not self._puo_telefonare(tipo, now):
+                return False
+            self._telefonati[tipo] = now
+            self.avvisa(f"<b>{html.escape(self.CHI_AL_TELEFONO, quote=False)} ({html.escape(self.STRATEGIA, quote=False)})</b>: "
+                        f"allarme {html.escape(tipo.replace('_', ' '), quote=False)}\n"
+                        f"{html.escape(str(testo)[:TELEFONO_CARATTERI], quote=False)}")
+            return True
+        except Exception as exc:  # noqa: BLE001
+            print(f"[{self.NOME}] avviso al telefono non mandato ({type(exc).__name__})")
+            return False
+
+    def _errore_di_fila(self, now: float, dove: str, errore: Optional[str]) -> None:
+        """Salute-6: lo stesso punto del giro (``dove``: le protezioni, ogni minuto; il giro degli ordini, ogni 30 minuti) in errore per
+        ``ERRORI_DI_FILA_PRIMA_DELL_ALLARME`` giri di fila è l'allarme `errori_ripetuti`, anche al telefono; si toglie quando tutti i
+        punti tornano a riuscire (``errore`` None). Tutto in memoria e scritto diretto su Firebase, come i limiti di Binance: dopo un
+        errore lo stato non si salva (`carica` può aver dato {} con il file illeggibile). Non solleva mai."""
+        try:
+            n = self._errori_di_fila
+            if errore is None:
+                n.pop(dove, None)
+                self._errore_all_allarme.pop(dove, None)
+            else:
+                if not n.get(dove):
+                    self._errori_dal[dove] = now
+                n[dove] = n.get(dove, 0) + 1
+                if n[dove] >= ERRORI_DI_FILA_PRIMA_DELL_ALLARME:
+                    self._errore_all_allarme.setdefault(dove, str(errore))
+            attivi = sorted(d for d in self._errore_all_allarme if n.get(d, 0) >= ERRORI_DI_FILA_PRIMA_DELL_ALLARME)
+            testo = "; ".join(
+                f"{d}: in errore a ogni giro dalle {time.strftime('%H:%M UTC del %Y-%m-%d', time.gmtime(self._errori_dal[d]))} "
+                f"(allarme dopo {ERRORI_DI_FILA_PRIMA_DELL_ALLARME} errori di fila): {senza_firma(self._errore_all_allarme[d])[:150]}"
+                for d in attivi)
+            if testo:
+                if testo != self._testo_errori:
+                    manda = self._testo_errori is None and self._puo_telefonare("errori_ripetuti", now)
+                    if manda:
+                        self._telefono_di["errori_ripetuti"] = now
+                    elif self._testo_errori is None:
+                        self._telefono_di.pop("errori_ripetuti", None)
+                    self._accesi.add("errori_ripetuti")
+                    segno = {"telefono": self._telefono_di["errori_ripetuti"]} if "errori_ripetuti" in self._telefono_di else {}
+                    self._scrivi("allarmi/errori_ripetuti", {"ora": now, "testo": testo, "dove": attivi, **segno})
+                    print(f"[{self.NOME}] ALLARME (errori_ripetuti): {testo}")
+                    if manda:
+                        self._telefono("errori_ripetuti", testo, now)
+            elif "errori_ripetuti" in self._accesi:
+                self._accesi.discard("errori_ripetuti")
+                self._telefono_di.pop("errori_ripetuti", None)
+                self._scrivi("allarmi/errori_ripetuti", None)
+            self._testo_errori = testo or None
+        except Exception as exc:  # noqa: BLE001
+            print(f"[{self.NOME}] conto degli errori di fila non riuscito ({type(exc).__name__})")
 
     def _archivia_fase(self, nome: str) -> None:
         """I valori della fase di prima passano in `/demo_binance/fasi/{nome}/`; si cancellano solo dopo la copia."""
@@ -776,21 +948,32 @@ class DemoG1:
         fermo["riparti_pulito"] = self._pulisci_riparti(st)
         self._scrivi("fermo", fermo)
         self.salva(st)
+        # salute-6: il fermo (lo stop sul conto o il pulsante) al telefono, dopo le chiusure: l'avviso non le fa aspettare
+        tipo_telefono = "stop" if str(motivo).startswith("stop sul conto") else "fermo"
         try:
             equity, _, posizioni = self._conto(c)
             chiuse, errori = self._chiudi_posizioni(c, posizioni, anche=ultime)
         except Exception as exc:  # noqa: BLE001
             fermo["tentativi"], fermo["chiuse"] = 1, len(getattr(exc, "chiuse", []))
             fermo["errori"] = list(getattr(exc, "errori", [])) or [{"simbolo": "*", "errore": senza_firma(exc)[:200]}]
+            if self._puo_telefonare(tipo_telefono, now):
+                fermo["telefono"] = now                # il bot l'ha mandato al telefono (per chi avvisa da fuori)
             self._scrivi("fermo", fermo)
             self.salva(st)
-            print(f"[{self.NOME}] CHIUDI TUTTO interrotto ({motivo}): fermo segnato, si richiude dopo: {senza_firma(exc)[:150]}")
+            interrotta = senza_firma(exc)[:150]
+            print(f"[{self.NOME}] CHIUDI TUTTO interrotto ({motivo}): fermo segnato, si richiude dopo: {interrotta}")
+            self._telefono(tipo_telefono, f"fermo: {motivo}; chiusura interrotta ({interrotta}): si richiude ogni minuto "
+                                          f"finché il conto non è vuoto", now)
             raise
         fermo.update({"equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori, "tentativi": 1})
+        if self._puo_telefonare(tipo_telefono, now):
+            fermo["telefono"] = now
         self._scrivi("fermo", fermo)
         self._scrivi("stato", {"stato": f"fermo: {motivo}", "equity": round(equity, 2), "aggiornato": now,
                                "capitale_iniziale": float(st.get("capitale_iniziale", equity))})
         print(f"[{self.NOME}] CHIUSO TUTTO ({motivo}): {len(chiuse)} posizioni chiuse, {len(errori)} errori")
+        self._telefono(tipo_telefono, f"fermo: {motivo}; {len(chiuse)} posizioni chiuse, {len(errori)} errori; il conto resta "
+                                      f"fermo fino a «riparti»", now)
         return st
 
     # ---- il giro ----
@@ -822,6 +1005,7 @@ class DemoG1:
             st = self.conto_ridotto(c, st, now)
             st = self.protezioni(c, st, now)
             self._allarme(st, now, "limiti_binance", None)
+            self._avvisato_418 = False                 # salute-6: un 418 dopo questo giro buono va di nuovo al telefono
             self.salva(st)
         except LimiteBinance as exc:
             self._limite_di_binance(now, exc, "protezioni")
@@ -831,8 +1015,13 @@ class DemoG1:
             testo_errore = senza_firma(exc)
             print(f"[{self.NOME}] errore nelle protezioni, si riprova fra un minuto: {testo_errore}")
             self._scrivi("errore", {"testo": testo_errore[:300], "ora": now, "dove": "protezioni"})
+            self._errore_di_fila(now, "protezioni", testo_errore)
+            return
+        self._errore_di_fila(now, "protezioni", None)
+        if self._lettura_dell_ora(c, st, now):         # ordini-1: solo letture; True se Binance limita le richieste
             return
         if st.get("fermo"):
+            self._errore_di_fila(now, "giro degli ordini", None)   # da fermo quel giro non gira: non è più «in errore»
             return
         if now - self._ultimo_tentativo < ATTESA_DOPO_ERRORE_S and self._ultimo_tentativo:
             return
@@ -853,6 +1042,9 @@ class DemoG1:
             testo_errore = senza_firma(exc)
             print(f"[{self.NOME}] errore, si riprova fra 30 minuti: {testo_errore}")
             self._scrivi("errore", {"testo": testo_errore[:300], "ora": now})
+            self._errore_di_fila(now, "giro degli ordini", testo_errore)
+        else:
+            self._errore_di_fila(now, "giro degli ordini", None)
 
     def _ordini_nuovi_ammessi(self, c: ClienteDemo, st: dict, now: float) -> bool:
         """Se il giro può mandare ordini nuovi (il resto a mercato, il ribilancio di G1, gli eventi). Sul demo sempre; il conto vero
@@ -913,7 +1105,55 @@ class DemoG1:
                      f"(pulsante e stop sul conto fermi, resta solo la liquidazione di Binance) ({dove}): {testo_errore[:150]}")
         else:
             testo = f"Binance limita le richieste ({dove}): {testo_errore[:200]}"
-        self._scrivi("allarmi/limiti_binance", {"ora": now, "testo": testo, "riprende": now + attesa, "codice": exc.codice})
+        # salute-6: il blocco (418) al telefono una volta, fino al primo giro buono; il 429 resta solo su Firebase
+        manda = exc.codice == 418 and not self._avvisato_418 and self._puo_telefonare("blocco_418", now)
+        if exc.codice == 418:
+            self._avvisato_418 = True
+        self._scrivi("allarmi/limiti_binance", {"ora": now, "testo": testo, "riprende": now + attesa, "codice": exc.codice,
+                                                **({"telefono": now} if manda else {})})
+        if manda:
+            self._telefono("blocco_418", testo, now)
+
+    def _lettura_dell_ora(self, c: ClienteDemo, st: dict, now: float) -> bool:
+        """`lettura_oraria` senza fermare il giro: un errore si scrive nel log e la lettura si riprova dopo ``ATTESA_LETTURA_S``; con i
+        limiti di Binance vale `_limite_di_binance` e torna True (il giro si ferma lì, come per le protezioni)."""
+        try:
+            self.lettura_oraria(c, st, now)
+        except LimiteBinance as exc:
+            self._limite_di_binance(now, exc, "lettura dell'ora")
+            return True
+        except Exception as exc:  # noqa: BLE001
+            print(f"[{self.NOME}] lettura dell'ora non riuscita, si riprova fra 5 minuti: {senza_firma(exc)[:150]}")
+        return False
+
+    def lettura_oraria(self, c: ClienteDemo, st: dict, now: float) -> None:
+        """Ordini-1 (audit del 26 novembre 2026): una lettura a ogni ora piena, fatta come quella del paper di G1
+        (`f5.PaperF5.lettura_oraria`), in `/demo_binance/ore/{AAAA-MM-GG}/{HH}` (UTC): l'equity del conto (quella che usa il bot,
+        con il conto ridotto) e il valore vero, il saldo, la quantità di ogni moneta e il prezzo mark del demo (`demo-fapi`) delle
+        monete tenute o volute. Al primo giro dopo l'ora piena, una volta per ora (dopo un riavvio, se la lettura dell'ora c'è già,
+        non si rifà). Solo due letture del conto, nessun ordine e nessun cambio dello stato. Il conto vero non la fa."""
+        if not self.LETTURA_ORARIA or self.fb is None or now < self._lettura_riprova_dopo:
+            return
+        ora = int(now // 3600)
+        if self._ultima_ora_letta is not None and ora <= self._ultima_ora_letta:
+            return
+        quando = time.gmtime(ora * 3600)
+        percorso = f"ore/{time.strftime('%Y-%m-%d', quando)}/{time.strftime('%H', quando)}"
+        if self._ultima_ora_letta is None and self.fb.get_rtdb(f"/{self.NOME}/{percorso}"):
+            self._ultima_ora_letta = ora                # riavvio nella stessa ora: la lettura c'è già
+            return
+        self._lettura_riprova_dopo = now + ATTESA_LETTURA_S   # se una delle due letture non riesce, fra 5 minuti
+        equity, saldo, posizioni = self._conto(c)
+        prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") or []
+                  if float(x.get("markPrice") or 0) > 0}
+        self._lettura_riprova_dopo = 0.0
+        self._ultima_ora_letta = ora
+        monete = sorted(set(posizioni) | {s for s, q in (st.get("obiettivi") or {}).items() if q})
+        self._scrivi(percorso, {"ora": now, "equity": round(float(equity), 4), "saldo": round(float(saldo), 4),
+                                "valore_vero": round(float(self._valore_vero), 4),
+                                "quantita": {s: float(f"{float(q):.10g}") for s, q in sorted(posizioni.items())},
+                                "prezzi": {s: float(f"{prezzi[s]:.10g}") for s in monete if s in prezzi},
+                                "ordini_in_corso": len((st.get("ordini") or {}).get("lista") or [])})
 
     def _decisione_da_non_eseguire(self, st: dict, now: float, giorno: int, fuori: Optional[str]) -> bool:
         """Problemi 10, 12, 42 e 45: la decisione di G1 non si esegue (niente ordini nuovi, nemmeno quelli degli eventi) se è più
@@ -1040,6 +1280,7 @@ class DemoG1:
             fermo["vuoto"] = now
             self._scrivi("fermo", fermo)
             self._scrivi("allarme", None)
+            self._fermo_avvisato = None                # salute-6: se il conto torna non vuoto, di nuovo al telefono
         if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
             st["ultima_valutazione"] = now
             self._scrivi(f"giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(equity, 2))
@@ -1050,8 +1291,18 @@ class DemoG1:
         if fermo["tentativi"] >= TENTATIVI_PRIMA_DELL_ALLARME:
             allarme = {"ora": now, "testo": f"fermo ma {cosa} dopo {fermo['tentativi']} tentativi", "posizioni": posizioni,
                        "errori": fermo.get("errori") or []}
+            # salute-6: al telefono una volta per fermo, non ogni minuto (``telefono``: quando il bot l'ha mandato)
+            chiave, manda = ("fermo", fermo.get("ora")), False
+            if (self._fermo_avvisato or (None,))[0] != chiave:
+                manda = self._puo_telefonare("fermo_conto_non_vuoto", now)
+                self._fermo_avvisato = (chiave, now if manda else None)
+            if self._fermo_avvisato[1] is not None:
+                allarme["telefono"] = self._fermo_avvisato[1]
             self._scrivi("allarme", allarme)
             print(f"[{self.NOME}] ALLARME: {allarme['testo']}: {posizioni}")
+            if manda:
+                self._telefono("fermo_conto_non_vuoto", f"{allarme['testo']} (posizioni: {', '.join(posizioni) or 'nessuna'}); "
+                                                        f"il bot richiude ogni minuto", now)
 
     def _riparti_ammesso(self, c: ClienteDemo, st: dict, now: float) -> Optional[bool]:
         """Problemi 23 e 48: «riparti» riaccende il demo solo se il conto vale più del ``PAVIMENTO_RIPARTI`` del capitale di partenza
@@ -1267,8 +1518,15 @@ class DemoG1:
         equity, _, posizioni = self._conto(c)
         prezzi = {x["symbol"]: float(x["markPrice"]) for x in c.chiedi("GET", "/fapi/v1/premiumIndex") if float(x.get("markPrice") or 0) > 0}
         obiettivi = st["obiettivi"]
+        # ordini-5 (audit del 26 novembre 2026): le monete che il demo non può avere (e non ha) restano fra gli obiettivi ma fuori
+        # dallo scarto, con il loro peso a parte; una che il demo tiene davvero si confronta come le altre
+        try:
+            fuori = {s: v for s, v in (st.get("non_disponibili") or {}).items() if not float(posizioni.get(s, 0.0) or 0.0)}
+        except Exception:  # noqa: BLE001  (un dato rotto: il confronto di sempre, con tutte le monete)
+            fuori = {}
+        monete = (set(obiettivi) | set(posizioni)) - set(fuori)
         differenze, totale = [], 0.0
-        for s in sorted(set(obiettivi) | set(posizioni)):
+        for s in sorted(monete):
             if s not in prezzi or equity <= 0:
                 continue
             voluto, vero = float(obiettivi.get(s, 0.0)), float(posizioni.get(s, 0.0))
@@ -1277,8 +1535,12 @@ class DemoG1:
             if abs(scarto) > SOGLIA_CONFRONTO:
                 differenze.append({"simbolo": s, "voluto": round(voluto * prezzi[s] / equity, 4), "vero": round(vero * prezzi[s] / equity, 4),
                                    "scarto": round(scarto, 4)})
-        self._scrivi("confronto", {"ora": now, "differenze": differenze, "scarto_totale": round(totale, 4),
-                                   "monete": len(set(obiettivi) | set(posizioni))})
+        confronto = {"ora": now, "differenze": differenze, "scarto_totale": round(totale, 4), "monete": len(monete)}
+        if fuori:
+            pesi_fuori = {s: round(float((v if isinstance(v, dict) else {}).get("peso") or 0.0), 4) for s, v in sorted(fuori.items())}
+            confronto.update({"non_disponibili_sul_demo": pesi_fuori,
+                              "peso_non_disponibili": round(sum(abs(w) for w in pesi_fuori.values()), 4)})
+        self._scrivi("confronto", confronto)
         if differenze:
             print(f"[{self.NOME}] posizioni diverse da quelle volute: {[d['simbolo'] for d in differenze]}")
         return st
@@ -1330,7 +1592,22 @@ class DemoG1:
         saltati = sotto_il_minimo(pesi, posizioni, prezzi, equity, f) if solo is None else None
         if solo is not None:
             da_fare = [o for o in da_fare if o[0] in solo]
+        data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
+        # ordini-5 (audit del 26 novembre 2026): le monete che il demo non può avere (lo stato dell'exchangeInfo, o un -1121/-4140 già
+        # visto) non si riprovano ogni giorno; il conto vero non salta niente
+        memoria, non_disp = {}, {}
+        if self.SALTA_NON_DISPONIBILI:
+            try:
+                memoria = self._memoria_non_disponibili(st, now)
+                non_disp = self._non_disponibili(info, memoria, now)
+            except Exception as exc:  # noqa: BLE001  (un errore qui non ferma il ribilancio: si fa come prima, senza saltare)
+                memoria, non_disp = {}, {}
+                print(f"[{self.NOME}] monete non disponibili non calcolate, nessuna si salta: {type(exc).__name__}: {exc}")
+        saltate = []
         for s, lato, q, limite, riduce in da_fare:
+            if s in non_disp and not riduce:            # niente ordine che apre o aumenta; le chiusure e le riduzioni partono
+                saltate.append(s)
+                continue
             p = {"symbol": s, "side": lato, "type": "LIMIT", "timeInForce": "GTC", "quantity": testo(q), "price": testo(limite),
                  "newClientOrderId": id_ordine(giorno, s, int(now))}
             if riduce:
@@ -1344,27 +1621,145 @@ class DemoG1:
                     leve.add(s)
                 r = c.chiedi("POST", "/fapi/v1/order", p, firmata=True)
             except RuntimeError as exc:
-                rifiutati.append({"simbolo": s, "errore": str(exc)[:200]})
+                # ordini-4: il peso della variazione rifiutata, in frazione del conto (+ comprare, − vendere)
+                voce = {"simbolo": s, "errore": str(exc)[:200],
+                        "peso": round((q if lato == "BUY" else -q) * limite / equity, 4) if equity > 0 else 0.0}
+                codice = codice_d_errore(exc)
+                if self.SALTA_NON_DISPONIBILI and codice in CODICI_NON_DISPONIBILE:
+                    if s in memoria:                    # già nota e riprovata dopo una settimana: niente allarme di nuovo
+                        voce["gia_nota"] = True
+                    memoria[s] = {"codice": codice, "visto": now, "errore": errore_breve(exc, 120)}
+                    non_disp[s] = self._motivo_non_disponibile(memoria[s])
+                    voce["non_disponibile_sul_demo"] = True
+                rifiutati.append(voce)
                 continue
+            memoria.pop(s, None)                        # il demo l'ha presa: torna disponibile
             piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId")})
         obiettivi = {} if solo is None else {k: v for k, v in (st.get("obiettivi") or {}).items() if k not in solo}
         for s, w in pesi.items():
             if s in prezzi and (solo is None or s in solo) and w:
                 obiettivi[s] = float(w) * equity / prezzi[s]
         st["obiettivi"] = obiettivi
-        data = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
         chiave = data if solo is None else f"{time.strftime('%Y-%m-%d', time.gmtime(now))}-eventi-{time.strftime('%H%M', time.gmtime(now))}"
-        st.update({"ultimo_giorno": giorno, "leve": sorted(leve), "ordini": {"piazzati": now, "lista": piazzati, "chiave": chiave}})
+        st.update({"ultimo_giorno": giorno, "leve": sorted(leve),
+                   "ordini": {"piazzati": now, "lista": piazzati, "chiave": chiave, "decisione": data}})
         voluti = {s for s, w in pesi.items() if w and (solo is None or s in solo)}
         tenuti = {s for s, q in posizioni.items() if q and (solo is None or s in solo)}
-        self._scrivi(f"ribilanciamenti/{chiave}", {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
-                                                   "entrate": len(voluti - tenuti), "uscite": len(tenuti - voluti),
-                                                   "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now,
-                                                   "sotto_il_minimo": saltati,
-                                                   "solo_eventi": solo is not None})
-        cosa = f"decisione G1 del {data}" if solo is None else "operazioni a eventi cambiate"
-        print(f"[{self.NOME}] {cosa}: {len(piazzati)} ordini limite sul conto, {len(rifiutati)} rifiutati")
+        registro = {"ordini": len(piazzati), "equity": equity, "monete_mancanti_sul_demo": mancano,
+                    "entrate": len(voluti - tenuti), "uscite": len(tenuti - voluti),
+                    "rifiutati": rifiutati, "annullati_prima": aperti, "piazzati": now,
+                    "sotto_il_minimo": saltati,
+                    "solo_eventi": solo is not None}
+        if self.SALTA_NON_DISPONIBILI:
+            st["memoria_non_disponibili"] = memoria
+            try:
+                self._segna_non_disponibili(st, pesi, mancano, non_disp, solo)
+            except Exception as exc:  # noqa: BLE001  (solo il confronto di ogni ora ne dipende)
+                print(f"[{self.NOME}] monete non disponibili non segnate: {type(exc).__name__}: {exc}")
+            # le saltate fra le monete che sul demo non ci sono (così chi conta il paper senza di loro le trova), e con il motivo
+            registro["monete_mancanti_sul_demo"] = sorted(set(mancano) | set(saltate))
+            registro["non_disponibili_sul_demo"] = [{"simbolo": s, "motivo": non_disp.get(s), "peso": round(float(pesi.get(s) or 0.0), 4)}
+                                                    for s in sorted(saltate)]
+        self._scrivi(f"ribilanciamenti/{chiave}", registro)
+        self._rifiuti(st, now, data, [v for v in rifiutati if not v.get("gia_nota")], "ordini", da_capo=solo is None)
+        cosa = f"decisione {self.STRATEGIA} del {data}" if solo is None else "operazioni a eventi cambiate"
+        print(f"[{self.NOME}] {cosa}: {len(piazzati)} ordini limite sul conto, {len(rifiutati)} rifiutati"
+              + (f", {len(saltate)} saltati perché non disponibili sul demo ({', '.join(sorted(saltate))})" if saltate else ""))
         return st
+
+    # ---- ordini-5: le monete che il demo non può avere ----
+    @staticmethod
+    def _motivo_non_disponibile(v: dict) -> str:
+        visto = float(v.get("visto") or 0)
+        return (f"rifiutata dal demo ({v.get('errore')}) il {time.strftime('%Y-%m-%d', time.gmtime(visto))}: si salta fino al "
+                f"{time.strftime('%Y-%m-%d', time.gmtime(visto + RIPROVA_NON_DISPONIBILE_S))}, poi si riprova")
+
+    def _memoria_non_disponibili(self, st: dict, now: float) -> dict:
+        """Le monete rifiutate dal demo con un codice di ``CODICI_NON_DISPONIBILE`` (simbolo -> codice, ora, errore); quelle non più
+        riprovate da ``DIMENTICA_NON_DISPONIBILE_S`` escono."""
+        m = st.get("memoria_non_disponibili")
+        return {s: dict(v) for s, v in (m.items() if isinstance(m, dict) else ())
+                if isinstance(v, dict) and 0 <= now - float(v.get("visto") or 0) <= DIMENTICA_NON_DISPONIBILE_S}
+
+    def _non_disponibili(self, info: dict, memoria: dict, now: float) -> dict:
+        """{simbolo: motivo} delle monete che il demo non può avere adesso: lo stato diverso da TRADING nell'exchangeInfo del demo, o
+        un rifiuto con -1121/-4140 negli ultimi ``RIPROVA_NON_DISPONIBILE_S`` (dopo si riprova una volta)."""
+        out = {s: f"stato {stato} nell'exchangeInfo del demo" for s, stato in stati_non_scambiabili(info).items()}
+        for s, v in memoria.items():
+            if s not in out and 0 <= now - float(v.get("visto") or 0) < RIPROVA_NON_DISPONIBILE_S:
+                out[s] = self._motivo_non_disponibile(v)
+        return out
+
+    def _segna_non_disponibili(self, st: dict, pesi: dict, mancano: list, non_disp: dict, solo: Optional[set]) -> dict:
+        """Le monete con un peso che il demo non può avere (``st['non_disponibili']``: simbolo -> motivo e peso), per il confronto di
+        ogni ora: quelle che sul demo non ci sono (senza filtri), quelle saltate e quelle appena rifiutate con -1121/-4140. Con ``solo``
+        (gli eventi) cambiano solo quelle monete. I pesi non cambiano."""
+        nd = {} if solo is None else {k: v for k, v in (st.get("non_disponibili") or {}).items() if k not in solo}
+        motivi = {s: "non c'è nell'exchangeInfo del demo (o senza i filtri)" for s in mancano}
+        motivi.update(non_disp)
+        for s, motivo in motivi.items():
+            if pesi.get(s) and (solo is None or s in solo):
+                nd[s] = {"motivo": motivo, "peso": round(float(pesi[s]), 6)}
+        st["non_disponibili"] = nd
+        return nd
+
+    # ---- ordini-4: l'allarme degli ordini rifiutati ----
+    def _rifiuti(self, st: dict, now: float, decisione: str, nuovi: list, dove: str, da_capo: bool = False) -> None:
+        """Ordini-4 (audit del 26 novembre 2026; demo e conto vero): i rifiuti della decisione ``decisione`` (il giorno della decisione
+        della strategia; ``dove``: «ordini» al ribilancio, «resti» per i resti a mercato rifiutati dopo l'ora), le decisioni di fila di
+        ogni moneta rifiutata (``st['rifiuti']``) e l'allarme `ordini_rifiutati` (moneta, errore, peso, decisioni di fila) quando il
+        peso rifiutato supera ``SOGLIA_PESO_RIFIUTATO`` del conto o una moneta è rifiutata per ``DECISIONI_DI_FILA_PER_L_ALLARME``
+        decisioni di fila. Si rivaluta a ogni decisione (senza rifiuti così si toglie). ``da_capo``: un ribilancio intero ricomincia le
+        liste della decisione (una seconda prova dello stesso giorno non conta i rifiuti due volte). Non solleva mai: chi chiama ha già
+        mandato gli ordini, e un errore qui non deve lasciare il ribilancio a metà."""
+        try:
+            self._rifiuti_e_allarme(st, now, decisione, nuovi, dove, da_capo)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[{self.NOME}] allarme degli ordini rifiutati non calcolato: {type(exc).__name__}: {exc}")
+
+    def _rifiuti_e_allarme(self, st: dict, now: float, decisione: str, nuovi: list, dove: str, da_capo: bool) -> None:
+        r = st.get("rifiuti") if isinstance(st.get("rifiuti"), dict) else {}
+        if r.get("decisione") != decisione:
+            prima = r.get("decisione")
+            r = {"decisione": decisione, "prima": prima, "ordini": [], "resti": [],
+                 "di_fila": {s: v for s, v in (r.get("di_fila") or {}).items()
+                             if isinstance(v, dict) and prima and v.get("ultima") == prima}}
+        elif da_capo:
+            r["ordini"], r["resti"] = [], []
+        r[dove] = list(r.get(dove) or []) + [{**x, "dove": dove} for x in nuovi]
+        di_fila = r.setdefault("di_fila", {})
+        for x in nuovi:
+            s = x.get("simbolo")
+            v = di_fila.get(s) if isinstance(di_fila.get(s), dict) else {}
+            if v.get("ultima") == decisione:
+                continue
+            seguita = bool(r.get("prima")) and v.get("ultima") == r.get("prima")
+            di_fila[s] = {"decisioni": (int(v.get("decisioni") or 0) + 1) if seguita else 1, "ultima": decisione}
+        st["rifiuti"] = r
+        voci = list(r.get("ordini") or []) + list(r.get("resti") or [])
+        peso = sum(abs(float(x.get("peso") or 0.0)) for x in voci)
+
+        def di_fila_di(s) -> int:
+            return int((di_fila.get(s) or {}).get("decisioni") or 1)
+
+        if not voci or (peso <= SOGLIA_PESO_RIFIUTATO + 1e-12
+                        and all(di_fila_di(x.get("simbolo")) < DECISIONI_DI_FILA_PER_L_ALLARME for x in voci)):
+            self._allarme(st, now, "ordini_rifiutati", None)
+            return
+        ordinate = sorted(voci, key=lambda x: (-abs(float(x.get("peso") or 0.0)), str(x.get("simbolo"))))
+        pezzi = [f"{x.get('simbolo')} {100 * float(x.get('peso') or 0.0):+.2f}% ({errore_breve(x.get('errore'), 80)}"
+                 + (", resto a mercato" if x.get("dove") == "resti" else "") + f"), {di_fila_di(x.get('simbolo'))} "
+                 + ("decisione" if di_fila_di(x.get("simbolo")) == 1 else "decisioni di fila")
+                 + ("; sul demo da adesso si salta per 7 giorni" if x.get("non_disponibile_sul_demo") else "")
+                 for x in ordinate[:8]]
+        testo = (f"ordini rifiutati alla decisione di {self.STRATEGIA} del {decisione}: " + "; ".join(pezzi)
+                 + (f" e altri {len(voci) - 8}" if len(voci) > 8 else "")
+                 + f"; in tutto {100 * peso:.2f}% del conto (l'allarme scatta oltre l'1% o con la stessa moneta rifiutata per "
+                   f"{DECISIONI_DI_FILA_PER_L_ALLARME} decisioni di fila)")
+        self._allarme(st, now, "ordini_rifiutati", testo, decisione=decisione, peso_totale=round(peso, 4),
+                      monete=[{"simbolo": x.get("simbolo"), "errore": errore_breve(x.get("errore"), 120),
+                               "peso": round(float(x.get("peso") or 0.0), 4), "decisioni_di_fila": di_fila_di(x.get("simbolo")),
+                               "dove": x.get("dove")} for x in ordinate[:20]])
 
     def chiudi_ordini(self, c: ClienteDemo, st: dict, now: float) -> dict:
         """Dopo l'ora: gli ordini limite non eseguiti si annullano e quello che manca va a mercato. Quello che manca si calcola dalla
@@ -1401,7 +1796,7 @@ class DemoG1:
         if ordini.pop("bloccato_dal", None) is not None:   # controllo riuscito: il blocco è finito (problema 38)
             ordini.pop("bloccato_ultimo", None)
             self.salva(st)
-        _, _, posizioni = self._conto(c)
+        equity, _, posizioni = self._conto(c)
         obiettivi = st.get("obiettivi") or {}
         chiave = ordini.get("chiave") or time.strftime("%Y-%m-%d", time.gmtime(int(st["ultimo_giorno"]) * 86400))
         giro = int(float(ordini.get("piazzati", 0)))
@@ -1430,6 +1825,10 @@ class DemoG1:
                             ordini["a_mercato"] = int(ordini.get("a_mercato", 0)) + 1
                         except RuntimeError as exc:      # per esempio sotto il minimo dopo un'esecuzione parziale
                             print(f"[{self.NOME}] resto di {s} non inviato: {exc}")
+                            # ordini-4: il resto rifiutato si scrive (non si riprova fino alla decisione dopo) e conta per l'allarme
+                            ordini.setdefault("resti_rifiutati", []).append({
+                                "simbolo": s, "errore": str(exc)[:200],
+                                "peso": round((q if delta > 0 else -q) * p / equity, 4) if equity > 0 else 0.0})
             o["mercato_fatto"] = True
             self.salva(st)
         n = len(ordini["lista"])
@@ -1440,6 +1839,11 @@ class DemoG1:
         st["a_mercato"] = int(st.get("a_mercato", 0)) + a_mercato
         self._scrivi(f"ribilanciamenti/{chiave}/limite", {"ordini": n, "eseguiti_a_limite": eseguiti_limite, "a_mercato": a_mercato,
                                                           "controllato": now})
+        resti = list(ordini.get("resti_rifiutati") or [])
+        if resti:                                      # ordini-4: in /<ramo>/ribilanciamenti/{chiave}/resti_rifiutati, con l'allarme
+            self._scrivi(f"ribilanciamenti/{chiave}/resti_rifiutati", resti)
+            self._rifiuti(st, now, ordini.get("decisione")
+                          or time.strftime("%Y-%m-%d", time.gmtime(int(st.get("ultimo_giorno") or 0) * 86400)), resti, "resti")
         self._allarme(st, now, "ordini", None)        # il blocco è finito: l'allarme si toglie (problema 38)
         st.pop("ordini")
         return st

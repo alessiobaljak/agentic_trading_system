@@ -139,9 +139,13 @@ BATTITO_MASSIMO_S = 900
 
 
 def sezione_del_bot(fb) -> list:
-    """Lo stato, l'ultimo battito e il DRY_RUN dell'unico processo del bot (``bot/main.py``: scrive ``/bot_status`` e il battito a ogni
-    giro), che fa girare i paper, il demo e il conto vero. In cima allo stato: un bot bloccato o un DRY_RUN falso non si devono
-    leggere come un dato del vecchio sistema fermo (revisione del 27 novembre 2026, problema 203)."""
+    """Lo stato, l'ultimo battito e il DRY_RUN dell'unico processo del bot (``bot/main.py``), che fa girare i paper, il demo e il conto
+    vero. Il bot scrive il battito (``/bot_status/heartbeat``) a ogni giro; il resto di ``/bot_status`` no: con il vecchio sistema
+    acceso lo riscrive ``refresh_regime`` una volta l'ora (``state``, ``dry_run`` e gli altri campi); con il vecchio sistema fermo
+    (``ops/gate_fermo``, ``_vecchio_sistema_fermo``), dal riavvio con il codice del 27 novembre 2026, ``_publish_avvio`` scrive
+    ``dry_run`` a ogni avvio e ``_giro_vecchio_fermo`` ``state`` e ``dry_run`` una volta l'ora (revisione del 27 novembre 2026,
+    problema 218). In cima allo stato: un bot bloccato o un DRY_RUN falso non si devono leggere come un dato del vecchio sistema
+    fermo (revisione del 27 novembre 2026, problema 203)."""
     status = fb.get_rtdb("/bot_status") or {}
     status = status if isinstance(status, dict) else {}
     hb = status.get("heartbeat")

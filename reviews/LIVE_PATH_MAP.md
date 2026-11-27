@@ -21,14 +21,15 @@ dello stato (`scripts/state_snapshot.py:844-874` `SoloLettura`: solo GET su `use
 `time` del conto demo, con la chiave del demo, con la richiesta «stato»; finestra vietata 23:50-01:45 UTC `:830`, stop al primo 429/418
 `:862-869`, soglia del peso usato 600 `:822`, tetto 1.000 per sezione `:821`; righe del 17 nov); dal 14 nov (`96c6094`) `positionRisk`
 (`:817-818`, `sezione_pesi_g1_oggi`) e un solo cliente per le sezioni (`:120-126`); dal 17 nov (`d5c6708`, APPROVE) una terza sezione,
-`sezione_funding_demo_paper` (`:1194-1289`), che rilegge `income` FUNDING_FEE dei 3 giorni con lo stesso cliente (`:232`).
-`bot/risk/portafoglio.py` è una simulazione.
+`sezione_funding_demo_paper` (`:1194-1289`), che rilegge `income` FUNDING_FEE dei 3 giorni con lo stesso cliente (`:232`). **27 nov (non committato)**: anche `GET fapi.binance.com/fapi/v1/markPriceKlines` pubblico, senza chiave,
+al massimo 12 per stato, fuori dalle 23:50-01:45, stop al primo 429/418 (`state_snapshot.py:1020-1051`). `bot/risk/portafoglio.py` è una simulazione.
 
 ## 2. Il giro del bot (un solo filo)
 
 `main()` (`bot/main.py:2656-2659`): prima `controlla_avvio` (`config.py:787-800`), poi `TradingBot.run` (`main.py:2514`), un giro ogni 30
 secondi. In ordine: vecchio bot (scansione, `trading_cycle`), battito `/bot_status/heartbeat`, poi ognuno nel suo `try`: paper F5, G1,
-G11, G1N, **demo `:2643`** (fase 2: il conto vero subito dopo), paper degli eventi. Il demo aspetta la fine del vecchio ciclo e degli
+G11, G1N, **demo `:2643`**, conto vero, eventi. **27 nov (non committato, `reports/2026-11-27-bot.md`)**: F5, conto vero, G1, demo, G11, G1N,
+eventi (`main.py:2739-2766`); vecchio bot saltato con `ops/gate_fermo` e niente aperto nel vecchio paper (`:2560-2608`). Il demo aspetta degli
 scaricamenti dei paper (alla mezzanotte minuti); ogni chiamata a Firebase può durare fino a 120 s (nessun `httpTimeout`,
 `bot/core/firebase_client.py:420-425`). Unico avvio: `python -m bot.main`. Servizio (secondo `docs/hetzner_setup.md:117-118`):
 `Restart=always`, `RestartSec=10`: dopo un crash riparte con l'ultimo codice scaricato dal branch.
@@ -36,8 +37,8 @@ scaricamenti dei paper (alla mezzanotte minuti); ogni chiamata a Firebase può d
 ## 3. Paper, demo e conto vero
 
 - `DRY_RUN` e `BINANCE_TESTNET` con `_get_bool_sicuro` (`config.py:78-90`, usati a `:105`, `:110`): **solo «false»** li spegne;
-  assente, vuoto, errori di battitura → vero, con un avviso (`:88-89`). `BACKTEST_PARITY` vero solo con «true». Sulla macchina il bot
-  dichiarava `DRY_RUN: True` il 5 nov (`ops/results/0702-5nov-stato-entrate-demo-bis.md:17`).
+  assente, vuoto, errori di battitura → vero, con un avviso (`:88-89`). `BACKTEST_PARITY` vero solo con «true». `/bot_status/dry_run`
+  (stato, dashboard): dal riavvio col codice del 27 nov a ogni avvio e ogni ora col vecchio fermo (`main.py:1101-1104`, `:2603`).
 - Tarature (`carica_tuning`, `config.py:34-52`): tutto **tranne** `DRY_RUN`, `BINANCE_TESTNET`, `BACKTEST_PARITY` (`:30`) e i nomi con
   KEY, SECRET, TOKEN, PASSWORD, CREDENTIAL, FIREBASE (`:31`). Elenco di vietate, non di ammesse.
 - Avvio: in `1a8522f` (in funzione) `controlla_avvio` **rifiuta l'avvio con `DRY_RUN` falso** (problema 29; ferma anche il demo: 35).
@@ -129,6 +130,10 @@ lista; resto = obiettivo − posizione vera, `id_mercato` fisso (`:257-262`) con
 
 **Errori**: `ClienteDemo.chiedi` (`:446-487`): `timeout=15`, finestra 5 s, 429/418 ritentati e poi `LimiteBinance`, -1021 con l'ora di
 Binance riletta una volta (`:470`), errori senza firma (`senza_firma` `:123-127`). Nessun avviso sul telefono nel modulo.
+**27 nov (non committato)**: aperture e aumenti saltati sulle monete «non disponibili sul demo» (stato ≠ TRADING, o -1121/-4140 negli ultimi
+7 giorni; chiusure e riduzioni partono, `demo_binance.py:1608`; conto vero mai); allarme `ordini_rifiutati`; `/demo_binance/ore`; telefono.
+Telefono: per tipo, uno all'ora (`:699-719`), `telefono` scritto prima dell'invio (211). Monitor di GitHub, dal push: manda ciò che il bot non
+ha mandato, non il 429 né il riacceso entro l'ora da un invio visto (`scripts/monitor.py:123-177`, memoria `/monitor/telefono_del_bot`; 219, 220).
 **Conto ridotto**: valore = `totalMarginBalance` − scarto (`_conto` `:1146-1153`). Chi legge i rami del demo: dashboard `PaperBot.tsx`
 (fermo, confronto, stato, allarmi per tipo), fotografia `scripts/state_snapshot.py`.
 
@@ -161,13 +166,13 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
   `close_position`, i due comandi del demo, `close_position_meta`; dal 12 nov, non committati, i quattro del conto vero e `/azioni`),
   utenti segnaposto. **Pubblicate** (foto di Alessio, 12 nov, `docs/conto_vero.md:85-90`): chiuse e con il suo identificativo, ma senza
   i blocchi del demo e del conto vero (i loro pulsanti in dashboard sono rifiutati).
-- **La chiave di amministratore ignora le regole**: ce l'hanno il bot, `scripts/ops_agent.py:349-353` (riletto dal branch ogni minuto)
+- **La chiave di amministratore ignora le regole**: ce l'hanno il bot, `scripts/ops_agent.py:419-423` (27 nov; riletto dal branch ogni minuto)
   e i flussi di GitHub `connectivity.yml:24`, `monitoring.yml:24`, `learning.yml:25`, `snapshot.yml:33,43` (anche a ogni push).
 
 ## 11. Il canale `ops/`
 
-- `scripts/ops_agent.py` ogni minuto: `git fetch origin <branch>` e avanti veloce (`:473-477`; altrimenti rebase con annullo,
-  `:271-303`), richieste contro la lista bianca della macchina, oscuramento dei segreti, battito in `ops/heartbeat.md`. Committato: non
+- `scripts/ops_agent.py` ogni minuto: `git fetch origin <branch>` e avanti veloce (`:543-547`, 27 nov; altrimenti rebase con annullo,
+  `:341-373`), richieste contro la lista bianca della macchina, oscuramento dei segreti (27 nov: anche chiavi intere, `:50-146`), battito in `ops/heartbeat.md`. Committato: non
   scarica i tag (provato l'8 nov, git 2.43: 55); `ff89531` porta il tag del conto vero forzato, il cambio del 12 nov lo toglie. Lo script
   si rilegge a ogni giro: un suo cambio vale dal primo `git pull`, senza riavvio, e può fare qualunque cosa sulla macchina. La macchina segue
   `claude/brave-albattani-1b12fv`: ciò che si spinge lì entra in funzione al riavvio, anche dopo un crash.
@@ -181,8 +186,7 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
 `tests/test_conto_vero.py` (fase 2, secondo giro: 790 righe), `tests/test_sicurezza_avvio.py`, `tests/test_g1_poco_capitale.py`,
 `tests/test_demo_contro_paper.py`, `tests/test_paper_f5.py`, `tests/test_risk.py`, `tests/test_sizing.py`,
 `tests/test_kill_switch_levels.py`, `tests/test_reconciler.py`, `tests/test_live_orders.py`, `tests/test_execution.py`,
-`tests/test_strategie_restano_accese.py`. Suite intera l'8 nov con la fase 2 (secondo giro): `2681 passed, 1 failed` in 192 s (il fallito è il test
-della firma: libreria `cryptography` del contenitore rotta; passa con `PYTHONPATH=<cartella di lavoro>/cripto`).
+`tests/test_strategie_restano_accese.py`. Suite intera il 27 nov (secondo giro del bot): `3095 passed` in 200 s, firma Ed25519 e RSA compresa.
 
 ## 13. Punti noti aperti
 
@@ -191,7 +195,7 @@ dal primo avvio 11 (nessun avviso), 14 (stesso filo del vecchio bot), 17-20 e 24
 (`DRY_RUN` falso ferma anche il demo; chiuso al riavvio con `ff89531`). Fuori dal codice: chiavi vere non limitate all'indirizzo,
 prelievo non detto; regole pubblicate senza i comandi del demo e del conto vero; servizio che riparte da solo con l'ultimo codice
 spinto. Conto vero: 54 ii Alto, 70 Medio, 78 Basso (sezione 14). Paper: 83 Basso latente. Fotografia dello stato:
-89 chiuso (`96c6094`); 17 nov (`d5c6708`, APPROVE; 90-92 corretti dalla sessione principale) Bassi 90-94 (testi e conteggi della sezione del funding, letture doppie, test).
+89 chiuso (`96c6094`); 17 nov (`d5c6708`, APPROVE; 90-92 corretti dalla sessione principale) Bassi 90-94 (testi e conteggi della sezione del funding, letture doppie, test). 27 nov: 203-207 chiusi; 218 chiuso nel codice (dal riavvio); bot: 211 Medio, 213, 217, 219-221 Bassi aperti.
 Chiusi: 1-9, 12, 15, 21, 25-27, 29-33, 36-50; 10, 13, 16, 22 in parte; 23 come chiesto; 28 nel 13.
 
 ## 14. Il conto vero: fase 2 (`ff89531`), versione approvata su Firebase (`a267c40`), secondo giro del 12 nov non committato
@@ -260,14 +264,12 @@ Prima di qualunque uso con soldi veri: 146 e 147 (settima revisione) e una revis
 
 ## Storia degli invarianti
 
-- 7 nov 2026: nessun invariante cambiato; la proposta di leva 10 e perdita giornaliera dalla dashboard ha avuto REQUEST CHANGES.
-- 7 nov, primo avvio: mappati gli invarianti del demo (leva 5, stop −35%, pulsanti, margine unico, una posizione per moneta, capitale 1000).
+- 7 nov 2026: leva 10 e perdita giornaliera dalla dashboard: REQUEST CHANGES, niente cambiato; primo avvio: invarianti del demo mappati.
 - 7 nov, `9f47972c`: stop ogni minuto; pulsante e stop anche dopo un errore; chiusure da fermo ritentate; «riparti» solo pulito e
   consumato; resti dalla posizione vera con identificativo fisso; `DRY_RUN` spento solo da «false»; tarature senza modo, parità e
   segreti; vecchio ramo reale bloccato.
 - 7 nov, `5d5d26ad`: annullo rifiutato → giro fermo; niente mercato con ordini aperti; «riparti» a file; avvio rifiutato con `DRY_RUN`
-  falso in ogni caso.
-- 7 nov, `013f9426` (APPROVE): lettura degli ordini in errore da fermo non ferma le chiusure; allarme degli ordini bloccati.
+  falso in ogni caso. `013f9426` (APPROVE): lettura degli ordini in errore da fermo non ferma le chiusure; allarme degli ordini bloccati.
 - 8 nov, fase 1 (quattro giri, APPROVE al quarto; **committata come `1a8522f`**, riavvio delle 19:02 UTC con l'ok del proprietario):
   limiti nuovi del demo come costanti con test; 429/418 con attese; massimo dello stop anche su Firebase; stop anche al 65% del capitale
   della fase; fermo salvato prima delle chiusure; «riparti» a conto vuoto, sopra il pavimento e con la riapertura alla decisione di G1
@@ -282,15 +284,9 @@ Prima di qualunque uso con soldi veri: 146 e 147 (settima revisione) e una revis
 - 12 nov (non committato; APPROVE per il commit spento, REQUEST CHANGES per l'accensione): codice approvato dal tag a un commit su
   Firebase scritto dalla dashboard, letto davvero ogni minuto (Firebase muto = non approvato), valido senza riavvio; «riparti» del
   conto vero solo dalla dashboard in due passi, nessun file; l'agente non porta più il tag. Limiti fissi invariati.
-- 12 nov, `a267c40` (il cambio sopra, committato); secondo giro non committato (APPROVE per il commit): con Firebase muto vale
-  l'approvazione letta davvero negli ultimi 10 minuti (con git); da spento controllo ogni 10 minuti. Limiti fissi invariati.
-- 12 nov, notte (non committato, REQUEST CHANGES per l'82): funding dei paper per moneta e con i sospesi al ribilancio; il demo legge
-  dal paper di G1 solo `ultimo_lunedi` e `pesi` (`demo_binance.py:870-874`), invariato. Nessun invariante del percorso cambiato.
-- 14 nov (non committato; primo giro REQUEST CHANGES per l'84, secondo giro APPROVE): la funzione di sola lettura dello «stato» ammette anche `GET /fapi/v2/positionRisk`
-  del demo (peso 5). Nessun invariante del percorso degli ordini cambiato. Il funding dei paper è committato come `3624baa`.
-- 17 nov (non committato, APPROVE): lo «stato» legge una volta in più `income` FUNDING_FEE del demo (3 giorni) per il confronto
-  del funding per regolamento con il paper; stesso cliente, stessa finestra, stesso blocco. `96c6094` = sezione dei pesi approvata il 14 nov.
-  Nessun invariante del percorso degli ordini cambiato.
+- 12 nov, `a267c40` e `da91124`: con Firebase muto vale l'approvazione letta davvero negli ultimi 10 minuti; da spento ogni 10 minuti.
+- 12 nov, notte (REQUEST CHANGES per l'82; poi `3624baa`): funding dei paper per moneta; il demo legge solo `ultimo_lunedi` e `pesi`. Invariati.
+- 14 e 17 nov (APPROVE; `96c6094`, `d5c6708`): lo «stato» legge anche `positionRisk` e `income` FUNDING_FEE del demo. Ordini invariati.
 - 25 nov (non committato; secondo giro APPROVE per il commit): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
   F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
   pesi controllati solo al lunedì. Demo e limiti fissi invariati. Secondo giro: nessun invariante nuovo; strategia dichiarata da una costante di classe.
@@ -298,3 +294,7 @@ Prima di qualunque uso con soldi veri: 146 e 147 (settima revisione) e una revis
   APPROVE con condizioni per il simulato: rilettura della posizione, esito in errore senza azioni, limite che incrocia come a
   mercato, obiettivo di un limite all'esecuzione, stop e obiettivo del simulato per lato, messaggi fuori da `avanti/`. Secondo
   riesame (copia): chiusura registrata anche con l'annullamento in errore, ordini rimasti annullati prima di aprire. Valori invariati.
+- 27 nov (non committato, APPROVE con condizioni): demo, aperture saltate sulle monete non disponibili (chiusure no); paper, finestra degli ordini
+  limite dal minuto dopo i prezzi; giro F5, conto vero, G1, demo, G11, G1N, eventi; vecchio bot fermo con `ops/gate_fermo`; telefono. Limiti fissi invariati.
+- 27 nov, stato e agente (committati in `e824f22`; secondo giro APPROVE con condizioni): prezzi mark pubblici nello stato, oscuramento più forte. Ordini invariati.
+- 27 nov, secondo giro del bot (APPROVE con condizioni): monitor senza il 429 e il riacceso entro l'ora; `DRY_RUN` scritto all'avvio. Ordini invariati.

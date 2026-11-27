@@ -59,6 +59,11 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
   titolo), se i file caricati sono uguali a quel commit, il commit approvato letto e se coincidono; si scrive anche da spento.
 * **I limiti** sono le costanti qui sotto, ognuna fissata da un test di guardia (`tests/test_conto_vero.py`); i limiti fissi del
   vecchio sistema (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) non c'entrano e non si toccano.
+* **Dall'audit del 26 novembre 2026** (ereditato dal demo, `demo_binance.py`): l'allarme `ordini_rifiutati` (moneta, errore, peso,
+  decisioni di fila) quando il peso rifiutato a una decisione supera l'1% del conto o la stessa moneta è rifiutata per due decisioni
+  di fila (con F5 due lunedì), con i resti a mercato rifiutati in `/conto_vero/ribilanciamenti/{chiave}/resti_rifiutati`; ogni
+  allarme nuovo (fermo, stop, 418, conto non vuoto, errori ripetuti, ordini rifiutati, ordini vietati e gli altri) anche su Telegram,
+  una volta quando si accende. Il conto vero non salta le monete che il demo non può avere e non fa la lettura di ogni ora.
 """
 from __future__ import annotations
 
@@ -338,17 +343,23 @@ class ContoVeroG1(demo.DemoG1):
     MANCA_CHIAVE = f"manca la chiave del conto vero ({CHIAVE_ENV} e {SEGRETO_ENV} nell'ambiente del bot)"
     CHIAVE_ILLEGGIBILE = "chiave del conto vero non leggibile"
     CHIAVE_VALORE_VERO = "valore_vero_del_conto"
+    # audit del 26 novembre 2026 (correzioni del 27 novembre, `demo_binance.py` in cima): il conto vero non salta le monete che il demo
+    # non può avere (ogni rifiuto qui è vero e va nell'allarme `ordini_rifiutati`) e non fa la lettura di ogni ora del demo; gli
+    # allarmi nuovi vanno al telefono come quelli del demo
+    SALTA_NON_DISPONIBILI = False
+    LETTURA_ORARIA = False
+    CHI_AL_TELEFONO = "CONTO VERO di Binance"
 
     def __init__(self, fb, cliente: Optional[ClienteVero] = None, file_stato: Path = FILE_STATO, file_g1: Path = FILE_STRATEGIA,
                  interruttore: Path = INTERRUTTORE, file_chiudi: Path = FILE_CHIUDI,
                  file_capitale: Path = FILE_CAPITALE, verifica_codice: Optional[Callable[[], Optional[str]]] = None,
-                 radice: Path = RADICE) -> None:
+                 radice: Path = RADICE, avvisa: Optional[Callable[[str], None]] = None) -> None:
         if cliente is not None and not isinstance(cliente, ClienteVero):
             raise TypeError("il conto vero parla solo con ClienteVero (fapi.binance.com)")
         # nessun file per il «riparti» (12 novembre 2026): alla classe del demo va un file sempre vuoto, e `_comando_file` qui sotto
         # non lo guarda nemmeno
         super().__init__(fb, cliente=cliente, file_stato=file_stato, file_g1=file_g1, interruttore=interruttore,
-                         file_chiudi=file_chiudi, file_riparti=NESSUN_FILE, file_capitale=file_capitale)
+                         file_chiudi=file_chiudi, file_riparti=NESSUN_FILE, file_capitale=file_capitale, avvisa=avvisa)
         self.radice = Path(radice)
         self._versione: dict = {}                         # HEAD del repository all'avvio del processo (`commit_in_esecuzione`)
         self._approvata: Optional[str] = None             # il commit approvato letto da Firebase all'ultimo controllo
