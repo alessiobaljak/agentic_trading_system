@@ -864,8 +864,13 @@
   "mancava": 36.82,
   "ore_a_mezzanotte": 8.0,
   "rischio_pct": 1.71,
-  "in_attesa": true,
-  "inviato": "2026-11-27T16:00:39.722999+00:00"
+  "in_attesa": false,
+  "inviato": "2026-11-27T16:00:39.722999+00:00",
+  "eseguita": "2026-11-27T16:33:00+00:00",
+  "stop_iniziale": 60900.0,
+  "obiettivo_iniziale": 59050.0,
+  "spese_entrata": 0.35032,
+  "R": 15.9101
  },
  "inizio": {
   "giorno": "2026-11-25",
@@ -1031,7 +1036,7 @@
  "prossimo_n": 21,
  "discesa_dalle": "2026-11-27T00:00:08.442251+00:00",
  "massimo_giorno": 953.5326164446479,
- "discesa_max_giorno": 27.995271246699872,
+ "discesa_max_giorno": 28.406572580045918,
  "ultimo_costo_massimo": 0.4957,
  "stat_giorno": {
   "chiamate": 75,

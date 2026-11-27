@@ -1,16 +1,20 @@
 {
- "portafoglio": 928.0302589516721,
- "posizione": null,
- "ordini": [
-  {
-   "cid": "taio1795795214482",
-   "lato": "corto",
-   "quantita": 0.029,
-   "prezzo": 60400.0,
-   "leva": 5,
-   "messo_ms": 1795795240677
-  }
- ],
+ "portafoglio": 927.679938951672,
+ "posizione": {
+  "lato": "corto",
+  "quantita": 0.029,
+  "entrata": 60400.0,
+  "leva": 5,
+  "margine": 350.32000000000005,
+  "liquidazione": 72178.0,
+  "aperta_ms": 1795797180000,
+  "da_limite": true,
+  "cid": "taio1795795214482",
+  "spese_entrata": 0.35032,
+  "spese": 0.35032,
+  "funding": 0.0
+ },
+ "ordini": [],
  "algo": [
   {
    "algoId": 95,
@@ -19,11 +23,19 @@
    "prezzo": 60900.0,
    "lato": "corto",
    "messo_ms": 1795795241643
+  },
+  {
+   "algoId": 96,
+   "cid": "tait1795797253873",
+   "tipo": "TAKE_PROFIT_MARKET",
+   "prezzo": 59050.0,
+   "lato": "corto",
+   "messo_ms": 1795797257713
   }
  ],
  "leva": 5,
- "ultimo_minuto_ms": 1795797060000,
- "ultimo_funding_ms": 1795797097492,
+ "ultimo_minuto_ms": 1795797660000,
+ "ultimo_funding_ms": 1795797704576,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -423,9 +435,15 @@
    "cosa": "commissione",
    "importo": -0.894534,
    "come": "chiusa a mercato"
+  },
+  {
+   "ora_ms": 1795797255013,
+   "cosa": "commissione",
+   "importo": -0.35032,
+   "come": "limite eseguito"
   }
  ],
- "prossimo_id": 96,
+ "prossimo_id": 97,
  "chiuse": [
   {
    "lato": "corto",
