@@ -965,5 +965,8 @@ scrivono con e senza le serie a incasso quasi fisso.
   Binance risponde 451: nello stato scrivere «non calcolato» invece di togliere il confronto con BTC, e nel controllo di connettività
   segnare i due controlli di Binance come attesi (con la correzione dello stato); **ci-4**, per sapere in pochi minuti che la macchina è
   ferma serve un servizio esterno che aspetta il battito (richiede una registrazione: decide il proprietario, prima dei soldi veri).
+* **pandas 3** (27 novembre, dalla sessione del trading AI): `test_libro_squilibrio_e_liquidita_a_ore` (`research/programma5/strumenti/libro.py`,
+  `aggrega_giorno`) fallisce con pandas 3.0.5 e passa con la 2.2.2 fissata in `requirements.txt`. Da sistemare prima di passare a pandas 3;
+  gli altri moduli della ricerca non sono stati provati con la 3.
 * **Perché non subito**: cambi di regola dell'esame (decide il proprietario), scarichi grandi, prove nuove con le regole da scrivere,
   cambi strutturali del bot. Le altre correzioni dell'audit sono state fatte il 27 novembre (vedi il rapporto).

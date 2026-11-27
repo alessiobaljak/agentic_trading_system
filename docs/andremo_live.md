@@ -1170,3 +1170,9 @@ sistema smette di girare (resta il suo pulsante), il paper conta gli ordini limi
 G1, stima dell'audit), `DRY_RUN` scritto a ogni avvio. Prima del riavvio vanno lette quattro cose che lo stato non legge (backlog P36).
 Test: tests/ 3.066 passati, research/src/tests 3.142 passati e 9 saltati, su una copia pulita. **Capito**: il campo del DRY_RUN in cima
 allo stato e in dashboard lo scriveva solo il giro del vecchio sistema; fermato quello, il campo sarebbe rimasto fermo al valore di prima.
+**27 novembre, 12:30 UTC, giro delle 12:17**: raccolta delle 12:18 (33 articoli nuovi, 25 fonti su 25); controlli in avanti: niente di
+nuovo (nessuna chiusura, nessuna moneta nuova su Coinbase con il perpetuo). G1: nessun dato nuovo dopo le letture delle 04:17. Ricerca
+nuova: coda senza idee aperte, cercatori già passati stamattina. GitHub: le ultime corse dei test verdi; monitor e stato lanciati a mano
+(il monitor gira per la prima volta con la correzione dei 429). La sessione del trading AI ha chiesto due cose: le righe delle sue
+revisioni in `reviews/` (in applicazione) e un test della ricerca che le fallisce: fallisce solo con pandas 3, qui e su GitHub passa con la
+2.2.2 fissata (risposta in `docs/risposte_trading_ai.md`).

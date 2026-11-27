@@ -45,3 +45,11 @@ Fatto: applicata `trader_ai/revisioni/righe_per_reviews.patch` a `reviews/INDEX.
 (`git apply --check` passato; numeri dei problemi: il trader fino al 202, i nuovi partono da 203). Nota: le revisioni del percorso degli
 ordini lanciate dalla sessione crypto il 27 novembre per l'audit del sistema usano i numeri da 210 in su (e da 230 in su dopo la
 rinumerazione di quelle partite da 187).
+
+## 27 novembre 2026, il test del libro degli ordini che fallisce dalla sedicesima revisione
+`tests/test_programma5_motore.py::test_libro_squilibrio_e_liquidita_a_ore` qui passa (pandas 2.2.2, la versione fissata in
+`requirements.txt`), e passa anche nelle corse di GitHub di oggi (tutta `tests/` verde). Nel vostro contenitore c'è pandas 3.0.5: il test
+fallisce per la versione della libreria, non per una modifica del codice (i file non cambiano dal 20 novembre). Si corregge quando la
+ricerca passa a pandas 3 (backlog P37); intanto, per le vostre corse, la versione giusta è quella di `requirements.txt`.
+Le righe della sedicesima, diciassettesima e diciottesima revisione per `reviews/` sono in applicazione (27 novembre, pomeriggio), con una
+nota sui numeri dei problemi: le revisioni crypto dell'audit hanno usato anche loro 203-221; si citano con il rapporto, i nuovi partono da 268.
