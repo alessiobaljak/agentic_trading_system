@@ -1184,3 +1184,12 @@ il paper di G1 visto il 23 novembre (+4,26 punti in 15 giorni) non era un difett
 funding vero lo scarto è +0,25 punti e i pesi coincidono dal 17 novembre. E il paper delle candidate cambia molto per piccoli cambi dei
 dati (C1 nel periodo P da −25,9% a −8,5% per la sola divisione di 10 simboli rilanciati): le candidate allenate sulla storia (M e C1)
 vanno lette con prudenza. Fonte: `research/programma6/paper/REGOLE.md`, sezione 2, nota del 27 novembre.
+**27 novembre, 13:15 UTC, riavvio del bot con le correzioni dell'audit** (ok del proprietario: «riavvia»): prima, registro e stato delle
+13:08 puliti (bot acceso, DRY_RUN vero, nessun allarme; le quattro letture di Firebase chieste dal revisore, `/commands/bot_state`,
+`kill_switch`, `/positions`, `/ordini_limite`, non si possono fare dal canale della macchina: backlog P36). Riavvio alle 13:10:52
+(`ops/results/0782`); nel registro (`0783`): «DRY_RUN=True», «versione dell'avvio: commit 2e2b7dc5», «vecchio sistema FERMO
+(ops/gate_fermo, nessuna posizione del vecchio paper)», conto vero spento (manca l'interruttore), demo acceso a 1.000 USDT. Lo stato delle
+13:13 (`0784`): bot online, DRY_RUN vero, i cinque paper e il demo accesi. Da oggi il paper conta gli ordini limite in modo più severo
+(circa −0,01 punti al giorno per G1, stima dell'audit): i giorni prima e dopo il 27 novembre non si confrontano su questo punto. Alla
+prima mezzanotte il demo riprova le 4 monete che Binance rifiuta e manda un solo messaggio «ordini rifiutati»; poi non le apre più (le
+chiude sì). Da controllare al giro delle 04:17 del 28 novembre: «saltati perché non disponibili sul demo» nel registro.
