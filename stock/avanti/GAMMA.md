@@ -79,5 +79,9 @@ e dalla routine della sessione «trading stock» delle 13:30 di New York.
   parziali il guadagno è quello della parte chiusa; a ogni avvio le righe con un'uscita del giorno dopo arrivata tardi si completano;
   l'allarme delle posizioni rimaste esce prima del diario e si ripubblica dopo; la Plancia si aggiorna anche nei giorni senza
   operazione. Una posizione VOO rimasta si chiude con un ordine dal nome `gamma-rim-<giorno dell'ingresso>-<ora>`; nei giorni senza
-  ingresso della prova la posizione conta con il guadagno non realizzato (`REGOLE.md`, la stessa regola della prima candela). Nei giorni a
+  ingresso della prova la posizione conta con il guadagno non realizzato (`REGOLE.md`, la stessa regola della prima candela). **Non
+  chiudere VOO a mano dal sito di Alpaca**: si usa il comando «chiudi» del lavoro di GitHub (`azioni_gamma.yml`), che per una posizione
+  di un altro giorno usa il nome «gamma-rim-». Con una riga di un giorno prima ancora aperta la prova non entra, con l'allarme sulla
+  Plancia (come la prima candela); una riga con l'uscita fuori orario arrivata dopo il controllo di 60 secondi si completa al giro
+  dopo, prima dei valori di fine giornata. L'ingresso non si rimanda dopo le 15:35 (12:35 nei giorni corti). Nei giorni a
   chiusura anticipata la prova parte anche dalla routine delle 9:10 (prima nessun avvio arrivava in tempo per le 12:30).

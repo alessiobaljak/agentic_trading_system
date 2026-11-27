@@ -37,18 +37,29 @@ COLONNE = ["giorno", "simbolo", "lato", "quantita", "ingresso", "ora_ingresso", 
 
 # ---- il collegamento -------------------------------------------------------------------------------------------------
 
-TENTATIVI_RETE, TENTATIVI_429 = 3, 3
+TENTATIVI_RETE = 3
+ATTESE_429 = (5, 10, 20, 25)          # circa un minuto in tutto: il limite di Alpaca si conta al minuto (revisione, 27 novembre 2026)
+TENTATIVI_429 = len(ATTESE_429)
+PASSEGGERI = {500, 502, 503, 504}     # errori del server di Alpaca che di solito passano da soli
 
 
-def _richiesta(metodo: str, percorso: str, **kw) -> dict | list:
+def _scaduto(scadenza: pd.Timestamp | None, percorso: str) -> None:
+    if scadenza is not None and ny_adesso() > scadenza:
+        raise alpaca.ErroreAlpaca(f"tempo scaduto su {percorso.split('?')[0]} ({ny_adesso():%H:%M:%S}): l'ordine non si rimanda")
+
+
+def _richiesta(metodo: str, percorso: str, scadenza: pd.Timestamp | None = None, **kw) -> dict | list:
     """Una richiesta al conto demo. Un errore di rete si ritenta tre volte e poi diventa ErroreAlpaca (mai un'eccezione diversa a
-    metà di un giro di ordini). Una risposta 429 (troppe richieste: il limite è condiviso con la ricerca) si ritenta dopo qualche
-    secondo: Alpaca non l'ha eseguita. Un ordine nuovo (POST su /v2/orders) dopo un errore di rete si ritenta solo se ha il suo nome
-    unico (`client_order_id`), e prima si guarda per nome se il tentativo di prima è arrivato (audit del 27 novembre 2026): così non
-    si manda mai due volte lo stesso ordine."""
+    metà di un giro di ordini). Una risposta 429 (troppe richieste: il limite è condiviso con la ricerca) si ritenta per circa un
+    minuto: Alpaca non l'ha eseguita. Un errore passeggero del server (500, 502, 503, 504) si ritenta per le letture e per la
+    cancellazione di un ordine, che si possono ripetere senza danni (revisione separata del 27 novembre 2026: un solo 503 alle 15:55
+    lasciava le posizioni aperte). Un ordine nuovo (POST su /v2/orders) dopo un errore di rete o del server si ritenta solo se ha il
+    suo nome unico (`client_order_id`), e prima si guarda per nome se il tentativo di prima è arrivato: così non si manda mai due
+    volte lo stesso ordine. Con `scadenza` un ordine non si rimanda dopo quell'ora (dopo le 10:00 la prima candela non entra mai)."""
     ordine = metodo == "POST" and percorso.startswith("/v2/orders")
     nome = (kw.get("json") or {}).get("client_order_id") if ordine else None
-    rete = troppe = 0
+    ripetibile = metodo == "GET" or (metodo == "DELETE" and percorso.startswith("/v2/orders/"))
+    rete = troppe = server = 0
     while True:
         try:
             r = requests.request(metodo, f"{CONTO_URL}{percorso}", headers=alpaca._intestazioni(), timeout=30, **kw)
@@ -64,10 +75,22 @@ def _richiesta(metodo: str, percorso: str, **kw) -> dict | list:
                 gia = _ordine_per_nome(nome)
                 if gia is not None:
                     return gia
+                _scaduto(scadenza, percorso)
             continue
         if r.status_code == 429 and troppe < TENTATIVI_429:
+            time.sleep(ATTESE_429[troppe])
             troppe += 1
-            time.sleep(2 * troppe)
+            if ordine:
+                _scaduto(scadenza, percorso)
+            continue
+        if r.status_code in PASSEGGERI and (ripetibile or nome) and server < TENTATIVI_RETE - 1:
+            server += 1
+            time.sleep(2 * server)
+            if nome:
+                gia = _ordine_per_nome(nome)            # il server può aver eseguito l'ordine prima di sbagliare la risposta
+                if gia is not None:
+                    return gia
+                _scaduto(scadenza, percorso)
             continue
         break
     if r.status_code >= 400:
@@ -173,6 +196,29 @@ def righe_aperte_prima(oggi: str, diario: pd.DataFrame | None = None) -> list[st
         return []
     d = diario[(diario["giorno"].astype(str) < oggi) & diario["uscita"].astype(str).isin({"aperta", "parziale"})]
     return [f"{g} {s}" for g, s in zip(d["giorno"].astype(str), d["simbolo"].astype(str))]
+
+
+def giorni_senza_righe(oggi: str, diario: pd.DataFrame | None = None) -> list[str]:
+    """I giorni prima di oggi (fra gli ultimi 15 file dei giorni) con ordini mandati ma nessuna riga nel diario: il diario della sera
+    non è mai riuscito (revisione separata del 27 novembre 2026). Il loro guadagno mancherebbe al capitale virtuale."""
+    cartella = QUI / "giorni"
+    if not cartella.exists():
+        return []
+    if diario is None:
+        f = QUI / "diario.csv"
+        diario = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=COLONNE)
+    scritti = set(diario["giorno"].astype(str)) if len(diario) else set()
+    out = []
+    for f in sorted(cartella.glob("*.json"))[-15:]:
+        if f.stem >= oggi or f.stem in scritti:
+            continue
+        try:
+            ordini = json.loads(f.read_text()).get("ordini") or []
+        except ValueError:
+            continue
+        if any(o.get("id") or o.get("nome") for o in ordini):
+            out.append(f.stem)
+    return out
 
 
 # giorni in cui non si è seguita la regola (REGOLE.md, deviazioni): restano nel diario ma non contano nel giudizio
@@ -310,7 +356,7 @@ def apri() -> str:
         return f"gli ordini di oggi ci sono già ({f_oggi.name}): non si ripetono"
     simboli = elenco()
     completa_righe(oggi)
-    aperte = righe_aperte_prima(oggi)
+    aperte = righe_aperte_prima(oggi) + [f"{g} (giorno senza righe)" for g in giorni_senza_righe(oggi)]
     if aperte:
         # audit del 27 novembre 2026: con una riga di un altro giorno non completata il capitale virtuale è sbagliato (le quantità
         # verrebbero doppie o nulle): niente ordini, l'allarme sulla Plancia e il lavoro rosso
@@ -329,6 +375,7 @@ def apri() -> str:
     if ny_adesso() > s["apertura"] + pd.Timedelta(minutes=30):
         return f"troppo tardi ({ny_adesso():%H:%M} di New York): dopo le 10:00 non si entra, il giorno si salta"
     ordini = []
+    limite = s["apertura"] + pd.Timedelta(minutes=30)
     try:
         for sim in simboli:
             df = alpaca.barre_da_righe((j.get("bars") or {}).get(sim, []))
@@ -337,13 +384,18 @@ def apri() -> str:
             if p is None:
                 ordini.append({"simbolo": sim, "nota": "saltato: candela mancante o piatta"})
                 continue
+            # l'ora si ricontrolla prima di ogni ordine: con Alpaca che non risponde un titolo può costare minuti (revisione separata
+            # del 27 novembre 2026: senza, 8 ingressi partivano alle 10:05)
+            if ny_adesso() > limite:
+                ordini.append({"simbolo": sim, **p, "nota": f"saltato: troppo tardi ({ny_adesso():%H:%M:%S}), dopo le 10:00 non si entra"})
+                continue
             # il nome unico per giorno e titolo: Alpaca rifiuta un secondo ordine con lo stesso nome, anche se due lavori partono insieme
             nome = f"candela15-{oggi}-{sim}"
             corpo = {"symbol": sim, "qty": str(p["quantita"]), "side": p["lato"], "type": "market", "time_in_force": "day",
                      "order_class": "bracket", "take_profit": {"limit_price": f"{p['obiettivo']:.2f}"},
                      "stop_loss": {"stop_price": f"{p['stop']:.2f}"}, "client_order_id": nome}
             try:
-                o = _richiesta("POST", "/v2/orders", json=corpo)
+                o = _richiesta("POST", "/v2/orders", json=corpo, scadenza=limite)
             except alpaca.ErroreAlpaca as e:
                 try:
                     o = _ordine_per_nome(nome)    # già mandato (da un altro avvio, o da un tentativo andato a buon fine)?
@@ -514,22 +566,30 @@ def cosa_fare(adesso: pd.Timestamp, seduta: dict | None, ordini_di_oggi: bool, p
         # gli ordini fuori orario valgono fino alla fine del dopo borsa (4 ore dopo la chiusura, al massimo le 20:00 di New York; nei
         # giorni corti le 17:00): dopo si aspettano le 4:00 (audit del 27 novembre 2026)
         sera = min(chiusura + pd.Timedelta(hours=4), apertura.normalize() + pd.Timedelta(hours=20))
-        return "fuori_orario" if adesso < sera else "niente: posizioni aperte dopo le 20:00, si chiudono dalle 4:00"
+        return "fuori_orario" if adesso < sera else f"niente: posizioni aperte dopo le {sera:%H:%M}, si chiudono dalle 4:00"
     return "diario" if ordini_di_oggi and not diario_scritto else "niente: giornata chiusa"
 
 
 def auto() -> str:
     """Il comando di tutti gli avvii automatici: guarda l'orologio e il conto, e fa la cosa giusta per quest'ora. A seduta finita
     e senza posizioni scrive anche i valori di fine giornata delle due strategie del conto (stock/avanti/conto.py)."""
+    # la seduta di ieri si registra PRIMA del giro: un avvio del mattino aspetta le 9:45 dentro `apri` e a borsa aperta la riga non si
+    # scriverebbe più (revisione separata del 27 novembre 2026); quella di oggi dopo il giro, a posizioni chiuse
+    _registra(solo_giorni_prima=True)
     esito = _auto()
+    _registra()
+    return esito
+
+
+def _registra(solo_giorni_prima: bool = False) -> None:
     try:
         from stock.avanti import conto
-        g = seduta_da_registrare(ny_adesso())
-        if g is not None:
+        adesso = ny_adesso()
+        g = seduta_da_registrare(adesso)
+        if g is not None and (not solo_giorni_prima or g["giorno"] < adesso.date().isoformat()):
             print(conto.registra(g["giorno"], g["chiusura"]), flush=True)
     except Exception as e:  # noqa: BLE001 — la contabilità non deve mai far fallire gli ordini
         print(f"valori di fine giornata non scritti ({type(e).__name__}: {str(e)[:120]})", flush=True)
-    return esito
 
 
 def ultima_seduta_da_registrare(adesso: pd.Timestamp, sedute: list[dict]) -> dict | None:
@@ -579,12 +639,13 @@ def _auto() -> str:
             elenco()
         except Exception as e:  # noqa: BLE001
             print(f"elenco del mese non calcolato adesso ({type(e).__name__}: {str(e)[:120]}): si riprova alle 9:45", flush=True)
+        _registra(solo_giorni_prima=True)               # dopo `completa_righe` e prima dell'attesa delle 9:45
         return apri()
     if azione == "chiudi":
         return chiudi()
-    if azione.startswith("niente: posizioni aperte dopo le 20:00"):
-        print(_plancia({"posizioni_aperte": {"ora": int(time.time()), "testo": "posizioni della prima candela aperte dopo le 20:00: "
-                                                                                "si chiudono dalle 4:00 di New York"}}))
+    if azione.startswith("niente: posizioni aperte dopo le "):
+        print(_plancia({"posizioni_aperte": {"ora": int(time.time()), "testo": "prima candela: " + azione.removeprefix("niente: ")
+                                             + " di New York"}}))
         return azione
     if azione in ("chiudi_subito", "fuori_orario"):
         if not ordini_di_oggi:
@@ -594,6 +655,7 @@ def _auto() -> str:
             esito = chiudi(aspetta=False) if azione == "chiudi_subito" else chiudi_fuori_orario()
         # chiuse le posizioni rimaste: se è ancora in tempo per l'apertura di oggi, si prosegue con quella
         if cosa_fare(ny_adesso(), seduta_di_oggi(), (QUI / "giorni" / f"{oggi}.json").exists(), False, True) == "apri":
+            _registra(solo_giorni_prima=True)           # chiuse le rimaste, la riga di ieri si può scrivere prima dell'attesa
             return esito + "; " + apri()
         return esito
     if azione == "diario":
@@ -675,12 +737,13 @@ def giorno_d_ingresso(simbolo: str, q: float, prima_di: str) -> str | None:
     return max(giorni) if giorni else None
 
 
-def uscite_rimaste_per(prefisso: str, giorno: str, simbolo: str) -> list[dict]:
+def uscite_rimaste_per(prefisso: str, giorno: str, simbolo: str, testa: str | None = None) -> list[dict]:
     """Le chiusure di una posizione rimasta del giorno `giorno` su `simbolo` (ordini con il nome `prefisso`+giorno, mandati nei giorni
-    dopo), come esecuzioni: titolo, lato, quantità e prezzo medio eseguiti."""
+    dopo; o con il nome che comincia con `testa`), come esecuzioni: titolo, lato, quantità e prezzo medio eseguiti."""
+    testa = testa or f"{prefisso}{giorno}-"
     out = []
     for o in _ordini_dal(giorno, symbols=simbolo):
-        if str(o.get("client_order_id", "")).startswith(f"{prefisso}{giorno}-") and float(o.get("filled_qty") or 0) > 0:
+        if str(o.get("client_order_id", "")).startswith(testa) and float(o.get("filled_qty") or 0) > 0:
             out.append({"symbol": simbolo, "side": o["side"], "qty": o["filled_qty"], "price": o["filled_avg_price"],
                         "transaction_time": o.get("filled_at") or "", "order_id": o["id"]})
     return out
@@ -694,22 +757,43 @@ def chiudi_rimaste(oggi: str, in_seduta: bool) -> str:
     la miscela vendeva tutto (audit del 27 novembre 2026). Un giorno d'ingresso che non si trova ferma il giro con un errore."""
     if not in_seduta and not nelle_ore_fuori_seduta(ny_adesso()):
         return "niente: posizioni di un altro giorno, fuori dalle ore fuori seduta (si chiudono dalle 4:00)"
+    fine_seduta = None
+    if in_seduta:
+        try:
+            s = seduta_di_oggi()
+            fine_seduta = s["chiusura"] - pd.Timedelta(seconds=45) if s else None
+        except alpaca.ErroreAlpaca:
+            fine_seduta = None
     _cancella_ordini_candela(ferma_se_restano=True)
     fatti, giorni, ignoti = [], set(), []
     for p in _posizioni_candela():
         q, sim = float(p["qty"]), p["symbol"]
+        g = nome = None
         try:
             g = giorno_d_ingresso(sim, q, oggi)
             nome = f"{RIM}{g or 'ignoto'}-{sim}-{ny_adesso():%H%M%S}"
-            if in_seduta:
+            # a ridosso della fine della seduta un ordine a mercato resterebbe in coda fino a domani: si passa al limite fuori orario
+            if in_seduta and (fine_seduta is None or ny_adesso() < fine_seduta):
                 _richiesta("POST", "/v2/orders", json={"symbol": sim, "qty": str(abs(int(q))), "side": "sell" if q > 0 else "buy",
-                                                       "type": "market", "time_in_force": "day", "client_order_id": nome})
+                                                       "type": "market", "time_in_force": "day", "client_order_id": nome},
+                           scadenza=fine_seduta)
             else:
                 _ordine_limite_fuori_orario(sim, q, oggi, nome=nome)
             (giorni.add(g) if g else ignoti.append(sim))
             fatti.append(f"{sim} {-q:+g} (ingresso del {g or 'giorno non trovato'})")
         except Exception as e:  # noqa: BLE001 — un titolo rifiutato non deve lasciare gli altri senza ordine di chiusura
-            fatti.append(f"{sim} NON CHIUSO ({type(e).__name__}: {str(e)[:100]})")
+            # la risposta può essersi persa con l'ordine arrivato (un secondo invio riceve «nome già usato»): si cerca per nome
+            gia = None
+            if nome:
+                try:
+                    gia = _ordine_per_nome(nome)
+                except alpaca.ErroreAlpaca:
+                    gia = None
+            if gia is not None and gia.get("status") not in ("rejected", "canceled", "expired"):
+                (giorni.add(g) if g else ignoti.append(sim))
+                fatti.append(f"{sim} {-q:+g} (ingresso del {g or 'giorno non trovato'}; ordine trovato per nome dopo l'errore)")
+            else:
+                fatti.append(f"{sim} NON CHIUSO ({type(e).__name__}: {str(e)[:100]})")
     time.sleep(60)
     rimaste = [p["symbol"] for p in _posizioni_candela()]
     allarme = None
@@ -735,7 +819,8 @@ def completa_righe(oggi: str) -> list[str]:
         return []
     d = pd.read_csv(f)
     aperte = d[(d["giorno"].astype(str) <= oggi) & d["uscita"].astype(str).isin({"aperta", "parziale"})]
-    giorni = sorted(set(aperte["giorno"].astype(str)))[-15:]
+    # anche i giorni del tutto mancanti dal diario (il diario della sera non è mai riuscito: revisione del 27 novembre 2026)
+    giorni = sorted(set(aperte["giorno"].astype(str)) | set(giorni_senza_righe(oggi, d)))[-15:]
     for g in giorni:
         scrivi_diario(g)
     return giorni
@@ -769,13 +854,30 @@ def scrivi_diario(oggi: str) -> str:
     ingressi = {o["id"] for o in stato["ordini"] if o.get("id")}
     simboli = {o["simbolo"] for o in stato["ordini"] if o.get("id")}
     altri = {e["order_id"] for e in esecuzioni if e["symbol"] in simboli and e["order_id"] not in ingressi and e["order_id"] not in gambe}
-    altrui = {i for i in altri if str(_richiesta("GET", f"/v2/orders/{i}").get("client_order_id", "")).startswith(RIM)}
+    # anche le chiusure fuori orario di un altro giorno («candela-fo-<ieri>-»): se Alpaca data le esecuzioni in UTC, quella delle 19:30 di
+    # ieri cade fra le esecuzioni di oggi, e conterebbe due volte (revisione separata del 27 novembre 2026)
+    def _altrui(nome: str) -> bool:
+        return nome.startswith(RIM) or (nome.startswith("candela-fo-") and not nome.startswith(f"candela-fo-{oggi}-"))
+    altrui = {i for i in altri if _altrui(str(_richiesta("GET", f"/v2/orders/{i}").get("client_order_id", "")))}
     esecuzioni = [e for e in esecuzioni if e["order_id"] not in altrui]
     righe = operazioni_del_giorno(oggi, stato["ordini"], esecuzioni, gambe)
-    # le operazioni rimaste aperte: le loro chiusure dei giorni dopo, dal nome «candela-rim-{oggi}-{titolo}-»
-    extra = [e for r in righe if r.get("uscita") in ("aperta", "parziale") for e in uscite_rimaste_per(RIM, oggi, r["simbolo"])]
+    # le operazioni rimaste aperte: le loro chiusure dei giorni dopo, dal nome «candela-rim-{oggi}-{titolo}-»; e le chiusure fuori
+    # orario di oggi («candela-fo-{oggi}-{titolo}-») cercate per nome, per la parte che non è fra le esecuzioni del giorno (se Alpaca
+    # data le esecuzioni in UTC, quelle fra le 19:00 e le 20:00 d'inverno cadono nel giorno dopo: revisione del 27 novembre 2026)
+    extra, contate = [], {}
+    for e in esecuzioni:
+        contate[e["order_id"]] = contate.get(e["order_id"], 0.0) + float(e["qty"])
+    for r in righe:
+        if r.get("uscita") not in ("aperta", "parziale"):
+            continue
+        rim = uscite_rimaste_per(RIM, oggi, r["simbolo"])
+        gambe.update({e["order_id"]: "giorno dopo" for e in rim})
+        extra += rim
+        for e in uscite_rimaste_per("candela-fo-", oggi, r["simbolo"]):
+            resto = float(e["qty"]) - contate.get(e["order_id"], 0.0)
+            if resto > 1e-9:
+                extra.append({**e, "qty": resto})
     if extra:
-        gambe.update({e["order_id"]: "giorno dopo" for e in extra})
         righe = operazioni_del_giorno(oggi, stato["ordini"], esecuzioni + extra, gambe)
     f = QUI / "diario.csv"
     vecchio = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=COLONNE)
@@ -840,6 +942,19 @@ def chiudi_a_mano() -> str:
     return chiudi()
 
 
+def chiudi_fuori_orario_a_mano() -> str:
+    """Il comando «chiudi_fuori_orario» dato a mano: le posizioni di un altro giorno passano da `chiudi_rimaste`, con il nome
+    «candela-rim-» (revisione separata del 27 novembre 2026: con il nome «candela-fo-<oggi>» la riga del giorno dell'ingresso restava
+    aperta e la prima candela si fermava ogni giorno)."""
+    from stock.avanti import conto
+    oggi = ny_adesso().date().isoformat()
+    entrate = conto.classifica(_ordini_dal(oggi), oggi)["entrate_candela"]
+    pos = _posizioni_candela()
+    if pos and not any(p["symbol"] in entrate for p in pos):
+        return chiudi_rimaste(oggi, in_seduta=False)
+    return chiudi_fuori_orario()
+
+
 def controlla() -> str:
     c = _richiesta("GET", "/v2/account")
     return (f"conto demo raggiungibile: stato {c.get('status')}, valore {float(c['equity']):,.0f} dollari, moltiplicatore del margine "
@@ -850,5 +965,5 @@ def controlla() -> str:
 if __name__ == "__main__":
     comando = sys.argv[1] if len(sys.argv) > 1 else "controlla"
     funzioni = {"controlla": controlla, "elenco": lambda: ", ".join(elenco()), "apri": apri, "chiudi": chiudi_a_mano,
-                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia, "chiudi_fuori_orario": chiudi_fuori_orario, "auto": auto}
+                "riepilogo": scrivi_riepilogo, "diario": lambda: scrivi_diario(sys.argv[2]), "plancia": _plancia, "chiudi_fuori_orario": chiudi_fuori_orario_a_mano, "auto": auto}
     print(funzioni[comando]())

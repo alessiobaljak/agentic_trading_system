@@ -97,11 +97,17 @@ con il guadagno medio misurato fin lì. Soldi veri mai, se non su richiesta espl
     il suo guadagno non realizzato, e gli ordini «rim» restano fuori (prima il capitale virtuale del giorno dopo contava i soldi della
     vendita come guadagno). Finché una riga di un giorno prima resta «aperta» o «parziale» non partono ordini nuovi, con l'allarme sulla
     Plancia; a ogni avvio le righe aperte si ricalcolano, così un'uscita arrivata tardi le chiude da sola. **Non chiudere a mano dal sito
-    di Alpaca** (un ordine senza nome non si sa a chi attribuirlo): si usa il comando «chiudi» del lavoro di GitHub;
+    di Alpaca** (un ordine senza nome non si sa a chi attribuirlo): si usano i comandi «chiudi» o «chiudi_fuori_orario» del lavoro di
+    GitHub, che per una posizione di un altro giorno usano il nome «rim». Se una riga resta aperta lo stesso (una chiusura senza nome),
+    la sessione la completa a mano nel diario con i prezzi eseguiti presi dal conto, e lo scrive qui fra le deviazioni. Anche un giorno
+    con gli ordini ma senza nessuna riga nel diario ferma gli ordini nuovi finché il diario non si riscrive (succede da solo a ogni
+    avvio);
   * con uscite parziali il guadagno è quello della parte chiusa; dopo le 20:00 di New York niente ordini fuori orario (si aspettano le
     4:00); gli ordini d'emergenza hanno un nome unico; un ordine non si rimanda mai dopo un errore di rete senza averlo cercato per nome;
-    una risposta «troppe richieste» si ritenta; un ordine con la ricerca per nome fallita si scrive «da verificare» e il diario lo
-    ricerca (prima diventava «saltato»);
+    una risposta «troppe richieste» si ritenta per circa un minuto, un errore passeggero del server di Alpaca si ritenta sulle letture e
+    sulle cancellazioni; un ordine con la ricerca per nome fallita si scrive «da verificare» e il diario lo ricerca (prima diventava
+    «saltato»); l'ora delle 10:00 si ricontrolla prima di ogni ordine d'ingresso, e un ordine non si rimanda dopo le 10:00; un'uscita
+    fuori orario della sera si cerca anche per nome (se Alpaca la datasse nel giorno dopo in UTC);
   * l'elenco del mese si calcola prima dell'attesa delle 9:45; i membri dell'S&P 500 si aggiornano ogni mese (`membri.py`, il 27
     novembre: 7 entrati e 7 usciti rispetto al 30 settembre); un gruppo di titoli che fallisce si riprova un titolo alla volta;
   * l'interruttore `acceso_su_github` ferma anche gli avvii a mano con «auto»;

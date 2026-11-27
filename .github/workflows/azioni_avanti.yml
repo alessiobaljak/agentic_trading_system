@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
     inputs:
       comando:
-        description: "auto | controlla | plancia | elenco | apri | chiudi | chiudi_fuori_orario"
+        description: "auto | controlla | plancia | elenco | apri | chiudi | chiudi_fuori_orario | riepilogo"
         required: true
         default: auto
 

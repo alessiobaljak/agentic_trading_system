@@ -58,3 +58,34 @@ della prima candela con il codice nuovo), con un nuovo controllo separato:
   per sempre.
 
 Rapporti completi della revisione: nella cartella di lavoro della sessione (non nel repository); qui il riassunto.
+
+## Terzo giro: gli otto problemi medi
+
+Corretti tutti e otto, più sei bassi (il 429 ritentato per circa un minuto; una rimasta con la risposta persa cercata per nome; il
+limite fuori orario a ridosso della chiusura; un giorno senza righe nel diario che ferma gli ordini e si riscrive; la riga di ieri
+registrata prima dell'attesa delle 9:45; la fotografia del conto che si rilegge se le posizioni cambiano). Il comando «chiudi» c'è
+ora anche per la prova 45. Tre revisori separati (gli ordini, i conti, le regressioni) con verifica avversariale di ogni problema:
+ordini e conti **approvati**, con cinque problemi medi nuovi nelle correzioni stesse, due confermati da due scettici ciascuno:
+
+* con le esecuzioni datate in UTC, la vendita fuori orario delle 19:30 di ieri contava nel flusso di oggi (fino a 9'700 dollari di
+  errore della miscela) e due volte nel diario: ora il flusso di oggi conta solo le esecuzioni di ordini mandati oggi, e il diario
+  toglie gli ordini fuori orario di un altro giorno;
+* prova 45: la riga segnaposto di un giorno con l'ingresso eseguito non si rifaceva più: ora si rifà;
+* la riga di `valori.csv` della mattina dopo si poteva scrivere prima che il diario avesse le righe del giorno: ora aspetta;
+* alle 15:55 un errore 503 più lungo dei tentativi lasciava le posizioni aperte (c'era già prima).
+
+Il revisore delle regressioni e quattro verifiche si erano fermati per il limite d'uso: rifatti dopo le correzioni da tre revisori
+separati. Esito: regressioni **approvate** (nessun comportamento approvato peggiorato; il giro di oggi della prova 45 e il lunedì
+della prima candela giusti sul conto finto), conti **approvati** (le tre correzioni dei conti verificate con gli scenari), ordini
+**da cambiare** solo per la chiusura delle 15:55: il nuovo giro di tentativi poteva mandare chiusure a mercato dopo le 16:00. Quella
+parte **è stata tolta** e la chiusura delle 15:55 è quella approvata al secondo giro (un 503 breve ora si ritenta dentro
+`_richiesta`; un guasto più lungo lascia le posizioni alla chiusura fuori orario del giro dopo, come prima). La correzione esce dal
+commit e si rifà fuori dalle ore di borsa, con il suo controllo: controllare l'ora prima di ogni chiusura a mercato e, passate le
+15:59:15, chiudere fuori orario nello stesso giro.
+
+Restano da fare, scritti in `STATO.md`: quel giro di tentativi; un avvio della prova 45 prima dell'apertura anche d'estate (se il
+diario della sera fallisce, d'estate il primo avvio del mattino arriva dopo le 9:30 e la riga di `valori.csv` di quel giorno non si
+scrive più); il «giorno prima» del controllo di `registra` che non conosce le feste; qualche test in più sulle scadenze e sulle
+esclusioni per nome (le correzioni ci sono e gli scenari dei revisori le provano, ma togliendone una sola nessun test del repository
+se ne accorge). Il calo di 19,76 dollari della prima candela nella riga del 27 novembre di `valori.csv` sono le tasse sulle vendite
+stimate dal 12 al 25 novembre, tolte tutte insieme alla prima esecuzione: non è una perdita del giorno.
