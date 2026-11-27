@@ -108,10 +108,12 @@ def test_la_sola_lettura_ammette_positionrisk_solo_in_get():
     assert chiamate[0][0] == "GET" and chiamate[0][1].startswith("https://demo-fapi.binance.com/fapi/v2/positionRisk?")
 
 
-def test_la_sezione_e_in_fondo_allo_stato():
+def test_la_sezione_e_dopo_le_esecuzioni_del_demo_e_prima_del_vecchio_sistema():
+    # dal 27 novembre 2026 (audit del 26 novembre, salute-1) in fondo allo stato c'è il vecchio sistema, fermo dal 13 ottobre
     import inspect
     sorgente = inspect.getsource(ss.build)
-    assert sorgente.index("sezione_pesi_g1_oggi(fb, cliente=cliente_demo)") > sorgente.index("_calibration_section(fb)")
+    i = sorgente.index("sezione_pesi_g1_oggi(fb, cliente=cliente_demo)")
+    assert sorgente.index("sezione_demo_esecuzioni(fb, cliente=cliente_demo)") < i < sorgente.index("sezioni_vecchio_sistema(fb)")
 
 
 def test_il_segno_viene_dalla_quantita():

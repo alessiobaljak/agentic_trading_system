@@ -8,6 +8,11 @@ benissimo fino al giorno in cui esegue la cosa sbagliata.
 Le tre proprieta' da difendere: la lista bianca comanda (e non sta nel repo), non
 c'e' shell da iniettare, e niente segreti nelle risposte committate.
 """
+import base64
+import hashlib
+import json
+import time
+
 import pytest
 
 from scripts.ops_agent import (parse_allowlist, parse_request, redact, render,
@@ -102,12 +107,212 @@ def test_comments_and_blank_lines_are_ignored_in_a_request():
 # ---- niente segreti nelle risposte --------------------------------------- #
 def test_keys_are_redacted():
     """Il risultato finisce in un repo: un segreto committato e' compromesso per
-    sempre, anche se il commit viene poi rimosso."""
-    for veleno in ("BINANCE_API_SECRET=abc123xyz",
-                   "ANTHROPIC_API_KEY: sk-ant-0123456789abcdef0123",
-                   "password = hunter2",
-                   "-----BEGIN RSA PRIVATE KEY-----"):
-        assert "[OSCURATO]" in redact(veleno)
+    sempre, anche se il commit viene poi rimosso. Non basta che compaia «[OSCURATO]»:
+    il segreto non deve esserci piu' (audit del 26 novembre 2026, salute-5)."""
+    for veleno, segreto in (("BINANCE_API_SECRET=abc123xyz", "abc123xyz"),
+                            ("ANTHROPIC_API_KEY: sk-ant-0123456789abcdef0123", "0123456789abcdef"),
+                            ("password = hunter2", "hunter2"),
+                            ("-----BEGIN RSA PRIVATE KEY-----", "RSA PRIVATE KEY")):
+        uscita = redact(veleno)
+        assert "[OSCURATO]" in uscita and segreto not in uscita
+
+
+# ---- le chiavi private: via tutto il blocco, non solo la prima riga ------- #
+# Audit del 26 novembre 2026 (salute-5): redact toglieva solo la riga BEGIN, e il corpo
+# della chiave, cioe' il segreto, sarebbe finito nel repository pubblico. Le chiavi di
+# questi test sono FINTE: il corpo e' calcolato da una parola con sha256, e le righe
+# BEGIN ed END si compongono qui, cosi' nel file non c'e' niente che somigli a una chiave.
+GIORNALE = "Nov 27 12:00:00 Trading-Agent python3[1234]: "
+TIPI_DI_CHIAVE = ["PRIVATE KEY", "RSA PRIVATE KEY", "EC PRIVATE KEY", "DSA PRIVATE KEY",
+                  "ED25519 PRIVATE KEY", "OPENSSH PRIVATE KEY", "ENCRYPTED PRIVATE KEY",
+                  "PGP PRIVATE KEY BLOCK"]
+
+
+def _riga(quale: str, tipo: str) -> str:
+    return "-----" + quale + " " + tipo + "-----"
+
+
+def _corpo_finto(seme: str) -> list:
+    """Tre righe da 64 caratteri di base64 e un'ultima corta, come il corpo di un PEM."""
+    righe = [base64.b64encode(hashlib.sha256(f"{seme}-{i}".encode()).digest()
+                              + hashlib.sha256(f"{seme}-{i}-bis".encode()).digest()[:16]).decode()
+             for i in range(3)]
+    return righe + [base64.b64encode(hashlib.sha256(seme.encode()).digest()[:15]).decode()]
+
+
+def _pem(tipo: str, corpo: list, a_capo: str = "\n", fine: bool = True) -> str:
+    righe = [_riga("BEGIN", tipo)] + corpo + ([_riga("END", tipo)] if fine else [])
+    return a_capo.join(righe)
+
+
+def _pezzi_rimasti(corpo: list, uscita: str) -> list:
+    """I pezzi di 12 caratteri del corpo ancora leggibili nell'uscita: devono essere zero."""
+    tutto = "".join(corpo)
+    pezzi = (tutto[i:i + 12] for i in range(0, len(tutto) - 11, 4))
+    return [p for p in pezzi if p in uscita]
+
+
+def _forme(pem: str) -> dict:
+    """Le forme in cui una chiave puo' comparire nell'uscita di un comando."""
+    return {
+        "a capo veri": "prima\n" + pem + "\ndopo",
+        "a capo di Windows": "prima\r\n" + pem.replace("\n", "\r\n") + "\r\ndopo",
+        "JSON": json.dumps({"type": "service_account", "private_key": pem + "\n", "nota": "dopo"}),
+        "JSON dentro JSON": json.dumps({"risposta": json.dumps({"private_key": pem})}) + " dopo",
+        "NOME=valore con \\n": "BINANCE_DEMO_API_SECRET=" + pem.replace("\n", "\\n") + "\ndopo",
+        "repr di Python": f"errore leggendo {pem!r}: dopo",
+        "journalctl": "\n".join(GIORNALE + r for r in pem.split("\n")) + "\n" + GIORNALE + "dopo",
+    }
+
+
+@pytest.mark.parametrize("tipo", TIPI_DI_CHIAVE)
+@pytest.mark.parametrize("forma", list(_forme("x")))
+def test_the_whole_private_key_is_removed_not_only_its_first_line(tipo, forma):
+    """Prima si toglieva solo la riga BEGIN e il corpo restava, anche con gli a capo
+    scritti come \\n (il file di servizio di Firebase, BINANCE_DEMO_API_SECRET); con le
+    cifre nel nome (ED25519) non si toglieva nemmeno quella."""
+    corpo = _corpo_finto(tipo + forma)
+    uscita = redact(_forme(_pem(tipo, corpo))[forma])
+    assert "[OSCURATO]" in uscita
+    assert _pezzi_rimasti(corpo, uscita) == []
+    assert "dopo" in uscita   # cio' che segue la chiave resta leggibile
+
+
+@pytest.mark.parametrize("a_capo", ["\n", "\\n", "\r\n", "\\\\n"])
+def test_a_key_cut_before_its_end_loses_its_body_too(a_capo):
+    """Un'uscita tagliata (un timeout, un errore accorciato) puo' avere la riga BEGIN
+    senza la END: si toglie tutto cio' che puo' essere corpo, e quello che segue resta."""
+    corpo = _corpo_finto("tagliata" + a_capo)
+    uscita = redact("errore: " + _pem("ED25519 PRIVATE KEY", corpo, a_capo, fine=False)
+                    + "\n--- stderr ---\nTraceback (most recent call last):")
+    assert _pezzi_rimasti(corpo, uscita) == []
+    assert uscita.startswith("errore: [OSCURATO]")
+    assert "--- stderr ---\nTraceback (most recent call last):" in uscita
+
+
+def test_a_key_cut_at_the_top_by_journalctl_loses_its_long_lines():
+    """journalctl mostra le ultime righe, ognuna con data e processo davanti: la riga
+    BEGIN puo' restare fuori. Le righe lunghe del corpo vanno via lo stesso, perche'
+    sembrano una chiave; puo' restare solo l'ultima riga, quella corta."""
+    corpo = _corpo_finto("giornale")
+    uscita = redact("\n".join(GIORNALE + r for r in corpo[1:] + [_riga("END", "PRIVATE KEY")]))
+    for r in corpo[1:-1]:
+        assert r not in uscita
+    assert uscita.count("[OSCURATO]") == 2 and GIORNALE in uscita
+
+
+def test_the_firebase_service_account_loses_its_key_and_its_key_id():
+    """Il file di servizio di Firebase: `private_key_id` e il corpo di `private_key`
+    uscivano intatti (il nome «private_key» non era fra quelli cercati). Ora vanno via i
+    due valori, il resto resta, e il JSON resta valido."""
+    corpo = _corpo_finto("servizio")
+    servizio = {"type": "service_account", "project_id": "progetto-finto",
+                "private_key_id": hashlib.sha1(b"finto").hexdigest(),
+                "private_key": _pem("PRIVATE KEY", corpo) + "\n", "client_id": "1234567890"}
+    for testo in (json.dumps(servizio, indent=2), json.dumps(servizio), repr(servizio)):
+        uscita = redact(testo)
+        assert servizio["private_key_id"] not in uscita
+        assert _pezzi_rimasti(corpo, uscita) == []
+        assert "service_account" in uscita and "progetto-finto" in uscita
+        assert redact(uscita) == uscita   # ripassare non cambia niente (esporta_storia lo fa)
+    pulito = json.loads(redact(json.dumps(servizio, indent=2)))
+    assert pulito == {**servizio, "private_key_id": "[OSCURATO]", "private_key": "[OSCURATO]"}
+
+
+def test_quoted_secrets_lose_their_value_and_numbers_stay():
+    """«"NOME": "valore"» (un JSON, un dizionario di Python) non si vedeva per la
+    virgoletta dopo il nome. Si toglie il valore e il JSON resta valido (redact pulisce
+    anche i file di scripts/esporta_storia.py); i numeri restano, perche' un conteggio di
+    token e' una misura."""
+    dati = {"api_secret": "segretissimo", "bot_token": "777:XYZ", "secret_word": "due parole",
+            "tokens_in": 1200, "pnl": -1.5}
+    assert json.loads(redact(json.dumps(dati))) == {
+        "api_secret": "[OSCURATO]", "bot_token": "[OSCURATO]", "secret_word": "[OSCURATO]",
+        "tokens_in": 1200, "pnl": -1.5}
+    stampa = redact(repr(dati))
+    assert "segretissimo" not in stampa and "XYZ" not in stampa and "due parole" not in stampa
+    assert "1200" in stampa
+
+
+def test_a_long_random_sequence_goes_but_hashes_paths_and_numbers_stay():
+    """Una chiave senza il suo nome (64 caratteri come quelle di Binance, una riga di una
+    chiave privata) va via. Restano gli hash dei commit e dei file, i percorsi dei dati di
+    Binance, i numeri e i nomi lunghi: oscurarli renderebbe le risposte illeggibili."""
+    riga = base64.b64encode(hashlib.sha256(b"riga-finta").digest()
+                            + hashlib.sha256(b"riga-finta-2").digest()[:16]).decode()
+    alfanumerica = "".join(c for c in base64.b64encode(hashlib.sha512(b"chiave-finta").digest()).decode()
+                           if c.isalnum())[:64]
+    assert redact(f"firma con {alfanumerica} riga {riga} fine") == "firma con [OSCURATO] riga [OSCURATO] fine"
+    for testo in ("commit b665eac8a7afaf92dde8d3beaf9083048c02fc59",
+                  "sha256 " + hashlib.sha256(b"x").hexdigest(),
+                  "SHA1 " + hashlib.sha1(b"x").hexdigest().upper(),
+                  "scaricato data/futures/um/monthly/klines/BTCUSDT/1d/BTCUSDT-1d-2024-01.zip",
+                  "letto data/vault/BNBUSDT/markPriceKlines/1h/BNBUSDT",
+                  "research/programma6/CINQUANTAQUATTRESIMA",
+                  "ordine 12345678901234567890123456789012345678901234567890",
+                  GIORNALE + "G1 pesi BTCUSDT 0.05 ETHUSDT -0.05 1000SHIBUSDT 0.01"):
+        assert redact(testo) == testo
+
+
+def test_the_answer_file_never_contains_a_key_body():
+    """Dall'uscita del comando al file di risposta (oscuramento e taglio insieme)."""
+    corpo = _corpo_finto("risposta")
+    uscita = "avvio\n" + _pem("PRIVATE KEY", corpo) + "\nfine"
+    body = render("x.req", "log-bot", ["journalctl"], "",
+                  {"code": 0, "output": uscita, "seconds": 0.1}, "ora")
+    assert _pezzi_rimasti(corpo, body) == [] and "avvio" in body and "fine" in body
+
+
+def test_redaction_stays_fast_on_huge_or_hostile_output():
+    """redact gira su tutta l'uscita, prima del taglio: un'uscita grande non deve fermare
+    l'agente. Una riga di 40.000 lettere costava 52 secondi (la regola dei nomi ripartiva
+    da ogni lettera; misurato il 27 novembre 2026); migliaia di intestazioni senza fine
+    non devono far rileggere il testo a ogni intestazione."""
+    for testo in ("a" * 30_000, "token" * 20_000, _riga("BEGIN", "PRIVATE KEY") * 50_000,
+                  base64.b64encode(bytes(range(256)) * 3000).decode(),
+                  ('"' + "secret" * 100 + " ") * 2000):
+        inizio = time.time()
+        redact(testo)
+        assert time.time() - inizio < 3, testo[:40]
+
+
+def _cryptography():
+    """La libreria delle chiavi, se c'e' e funziona. In qualche ambiente si rompe gia'
+    all'import con un errore che non e' un Exception (PanicException): allora si salta."""
+    try:
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ec, ed25519, rsa
+    except BaseException as exc:  # noqa: BLE001
+        if isinstance(exc, (KeyboardInterrupt, SystemExit)):
+            raise
+        pytest.skip(f"cryptography non disponibile: {type(exc).__name__}")
+    return serialization, ec, ed25519, rsa
+
+
+@pytest.mark.parametrize("quale", ["ed25519", "ed25519 openssh", "rsa", "rsa tradizionale",
+                                   "ec", "rsa cifrata"])
+def test_real_keys_generated_here_leave_nothing_behind(quale):
+    """Chiavi vere generate qui in memoria e buttate via (come in tests/test_demo_binance.py),
+    in tutte le forme di `_forme`: del corpo non resta niente."""
+    serialization, ec, ed25519, rsa = _cryptography()
+    f, libera = serialization.PrivateFormat, serialization.NoEncryption()
+    nuova = {
+        "ed25519": lambda: (ed25519.Ed25519PrivateKey.generate(), f.PKCS8, libera),
+        "ed25519 openssh": lambda: (ed25519.Ed25519PrivateKey.generate(), f.OpenSSH, libera),
+        "rsa": lambda: (rsa.generate_private_key(public_exponent=65537, key_size=2048), f.PKCS8, libera),
+        "rsa tradizionale": lambda: (rsa.generate_private_key(public_exponent=65537, key_size=2048),
+                                     f.TraditionalOpenSSL, libera),
+        "ec": lambda: (ec.generate_private_key(ec.SECP256R1()), f.TraditionalOpenSSL, libera),
+        "rsa cifrata": lambda: (rsa.generate_private_key(public_exponent=65537, key_size=2048),
+                                f.TraditionalOpenSSL, serialization.BestAvailableEncryption(b"finta")),
+    }[quale]
+    chiave, formato, cifratura = nuova()
+    pem = chiave.private_bytes(serialization.Encoding.PEM, formato, cifratura).decode().strip()
+    corpo = [r for r in pem.split("\n")[1:-1] if r and ":" not in r]
+    for forma, testo in _forme(pem).items():
+        uscita = redact(testo)
+        assert _pezzi_rimasti(corpo, uscita) == [], forma
+        assert "dopo" in uscita, forma
 
 
 def test_every_flavour_of_github_token_is_redacted():

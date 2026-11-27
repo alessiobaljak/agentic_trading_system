@@ -50,11 +50,19 @@ TIMEOUT_S = float(os.getenv("OPS_TIMEOUT_S", "900"))
 # Cio' che non deve MAI finire in un file committato. Meglio oscurare qualche riga
 # innocua che pubblicare una chiave: un segreto finito in un repo e' compromesso
 # anche se il commit viene poi rimosso.
+# I nomi che dicono «qui c'e' un segreto». `private_key` (e quindi `private_key_id`) dal
+# 27 novembre 2026: sono i nomi del file di servizio di Firebase (audit del 26 novembre,
+# problema salute-5).
+_NOMI_SEGRETI = r"api[_-]?key|secret|token|password|passwd|credential|private[_-]?key"
 SECRET_RE = re.compile(
     r"(?i)("
-    r"[A-Za-z0-9_-]*(?:api[_-]?key|secret|token|password|passwd|credential)"
-    r"[A-Za-z0-9_-]*\s*[:=]\s*\S+"
-    r"|-----BEGIN [A-Z ]*PRIVATE KEY-----"
+    # NOME=valore e NOME: valore. La ricerca parte solo dall'inizio di una parola (il
+    # `(?<!...)`) e legge la parola una volta sola (il `(?=...)` controlla che contenga
+    # uno dei nomi): a parita' di nomi le parti oscurate sono le stesse di prima, ma una
+    # riga lunga senza separatori non costa piu' un tempo che cresce col quadrato della
+    # lunghezza (40.000 lettere di fila: 52 secondi prima, misurato il 27 novembre 2026).
+    r"(?<![A-Za-z0-9_-])(?=[A-Za-z0-9_-]*?(?:" + _NOMI_SEGRETI + r"))"
+    r"[A-Za-z0-9_-]+\s*[:=]\s*\S+"
     r"|sk-[A-Za-z0-9-]{16,}"
     # i token GitHub hanno prefissi diversi per tipo: ghp_ (classici), github_pat_
     # (fine-grained), piu' quelli di installazione e di refresh. Coprirne solo uno
@@ -69,11 +77,73 @@ SECRET_RE = re.compile(
     r"|://[^\s/:@]+:[^\s/@]+@"
     r")")
 
+# Le chiavi private (PEM, OpenSSH, PGP; RSA, EC, ED25519...): si toglie TUTTO il blocco,
+# dalla riga BEGIN alla riga END, perche' il segreto e' il corpo. Fino al 27 novembre 2026
+# si toglieva solo la riga BEGIN e il corpo restava (audit del 26 novembre, salute-5).
+# Fra le due righe si toglie qualunque carattere: vale anche con gli a capo scritti come
+# \n (un JSON, una riga NOME=valore) e con data e processo davanti a ogni riga
+# (journalctl). Se la riga END manca (testo tagliato) si toglie cio' che puo' essere
+# corpo: lettere, cifre, + / =, spazi, a capo e barre rovesce. La ricerca della riga END
+# non scavalca un'altra riga BEGIN: ogni carattere si guarda una volta sola, anche con
+# migliaia di intestazioni senza fine.
+_CHIAVE_PRIVATA_RE = re.compile(
+    r"-----BEGIN [A-Z0-9 ]{0,40}PRIVATE KEY(?: BLOCK)?-----"
+    r"(?:(?:(?!-----BEGIN ).)*?-----END [A-Z0-9 ]{0,40}PRIVATE KEY(?: BLOCK)?-----"
+    r"|[A-Za-z0-9+/=\s\\]*)",
+    re.IGNORECASE | re.DOTALL)
+
+# "NOME": "valore" e 'NOME': 'valore' (un JSON, un dizionario stampato da Python), che
+# SECRET_RE non vede per la virgoletta dopo il nome: si toglie il valore fra virgolette e
+# il testo resta un JSON valido (`redact` pulisce anche i file di scripts/esporta_storia.py).
+# I numeri restano: un conteggio di token e' una misura, non un segreto.
+_COPPIA_SEGRETA_RE = re.compile(
+    r"(?i)([\"'](?=[A-Za-z0-9_-]*?(?:" + _NOMI_SEGRETI + r"))[A-Za-z0-9_-]+[\"']\s*:\s*)"
+    r"(?:\"(?:[^\"\\\n]|\\.)*\"|'(?:[^'\\\n]|\\.)*')")
+
+# Una sequenza di 40 o piu' caratteri dell'alfabeto base64 che sembra una chiave casuale:
+# il corpo di una chiave rimasto senza le righe BEGIN ed END (journalctl mostra le ultime
+# righe), una chiave di Binance da 64 caratteri senza il suo nome. Comincia dopo un
+# carattere che non ne fa parte, o subito dopo un a capo scritto come \n (che resta).
+_SEQUENZA_LUNGA_RE = re.compile(
+    r"(?:(?<![A-Za-z0-9+/\\])|(?<=\\[nrt/]))[A-Za-z0-9+/]{40,}(?![A-Za-z0-9+/])")
+_ESADECIMALI = frozenset("0123456789abcdefABCDEF")
+
+
+def _tipo(c: str) -> int:
+    """0 maiuscola, 1 minuscola, 2 cifra (si chiama solo su lettere e cifre)."""
+    return 0 if c.isupper() else 1 if c.islower() else 2
+
+
+def _sembra_una_chiave(s: str) -> bool:
+    """Maiuscole, minuscole e cifre mescolate come in una chiave casuale. Restano gli hash
+    (dei commit, dei file: solo cifre esadecimali), i numeri, le parole e i percorsi: in un
+    percorso lettere e cifre stanno a blocchi (`data/futures/um/monthly/klines/BTCUSDT/1d/`),
+    in una chiave cambiano tipo quasi a ogni carattere. La soglia, un cambio ogni quattro
+    caratteri, e' misurata il 27 novembre 2026: nelle 777 risposte della macchina non toglie
+    niente; nei file di testo del repository toglie solo 9 identificativi casuali di IPFS (un
+    percorso dei dati di Binance arriva a un cambio ogni nove caratteri); toglie la riga del
+    segreto di 20.000 chiavi Ed25519 su 20.000 e 100.000 righe casuali da 64 caratteri su
+    100.000."""
+    if not (any(c.isupper() for c in s) and any(c.islower() for c in s)
+            and any(c.isdigit() for c in s)):
+        return False
+    if _ESADECIMALI.issuperset(s):
+        return False
+    cambi = sum(1 for a, b in zip(s, s[1:])
+                if a.isalnum() and b.isalnum() and _tipo(a) != _tipo(b))
+    return 4 * cambi >= len(s)
+
 
 def redact(text: str) -> str:
     """Oscura cio' che somiglia a un segreto. Non e' una garanzia — e' l'ultima
-    rete prima che qualcosa finisca in un repo."""
-    return SECRET_RE.sub("[OSCURATO]", text or "")
+    rete prima che qualcosa finisca in un repo. L'ordine conta: prima i blocchi delle
+    chiavi private (SECRET_RE taglierebbe `NOME=-----BEGIN` al primo spazio e il corpo
+    resterebbe), poi le coppie fra virgolette, i nomi e le sequenze lunghe."""
+    testo = _CHIAVE_PRIVATA_RE.sub("[OSCURATO]", text or "")
+    testo = _COPPIA_SEGRETA_RE.sub(r'\1"[OSCURATO]"', testo)
+    testo = SECRET_RE.sub("[OSCURATO]", testo)
+    return _SEQUENZA_LUNGA_RE.sub(
+        lambda m: "[OSCURATO]" if _sembra_una_chiave(m.group(0)) else m.group(0), testo)
 
 
 def truncate(text: str, limit: int = MAX_OUTPUT) -> str:

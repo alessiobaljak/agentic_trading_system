@@ -8,12 +8,13 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10. `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
-## Stato (aggiornato al 26 nov 2026)
-- **Ultima revisione**: secondo riesame della quindicesima (sezione «Secondo riesame» di `trader_ai/revisioni/2026-11-26-quindicesima.md`),
-  copia `.../scratchpad/wt2` su `c52fbab`: **APPROVE con condizioni** per commit e riavvio sul simulato (194-197 e N1-N5 chiusi; 198 Medio
-  solo demo; 202 Medio, test da aggiungere prima del commit; 199-201 Bassi). md5 al commit: `avvio.py` c19205d2, `messaggio.py` 0ca870c9,
-  `ripara.py` 4e1e13a9. Prove: `.../scratchpad/riesame2_v7/` (sessione 3e86fc2d; il primo riesame in `riesame_v7/`).
-- **Numeri dei problemi**: trader AI fino al 202 (187 non usato); i nuovi partono da 203.
+## Stato (aggiornato al 27 nov 2026)
+- **Ultima revisione**: stato e segreti, secondo giro (27 nov, `reports/2026-11-27-stato_e_segreti-bis.md`): APPROVE con condizioni per
+  il commit (md5 `state_snapshot.py` e6c2df30, `test_stato_audit.py` c2855ea6, agente c8d9f508); 203-207 chiusi; 218 Medio da correggere
+  prima del riavvio del bot con il vecchio sistema fermo. Bot del 27 nov (`reports/2026-11-27-bot.md`): APPROVE con condizioni (210 test
+  prima del commit; 211 e 213 prima del conto vero), non ancora committato. Prima: secondo riesame della quindicesima del trader AI
+  (`trader_ai/revisioni/2026-11-26-quindicesima.md`, APPROVE con condizioni).
+- **Numeri dei problemi**: trader AI fino al 202 (187 non usato); stato e segreti 203-207 e 218; bot del 27 nov 210-217 (208 e 209 non usati); i nuovi partono da 219.
 - Trader AI (area `trader_ai/`): quindici revisioni e due riesami in `trader_ai/revisioni/` (23-26 nov); 184-186 chiusi nel `f7fe784`. Nel registro
   di qui la settima (condizioni per i soldi veri: 146, 147) e le ultime tre.
 - Conto vero su F5 (25 nov): `reports/2026-11-25-conto-vero-F5-2.md`, APPROVE per il commit del codice spento; al commit confrontare

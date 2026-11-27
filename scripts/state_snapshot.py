@@ -11,6 +11,7 @@ Uso: python -m scripts.state_snapshot
 """
 from __future__ import annotations
 
+import calendar
 import math
 import os
 import time
@@ -32,6 +33,10 @@ def _ts(v) -> str:
 
 def _salute_registro(pairs: dict) -> list[str]:
     """IL REGISTRO STA ACCUMULANDO, O STA BUTTANDO VIA CIO' CHE TROVA?
+
+    Dal 27 novembre 2026 lo stato non stampa piu' queste righe: il GATE 1 e' fermo dal 13 ottobre e sta in una riga (audit del 26
+    novembre, salute-1). La funzione resta, gemella di bot.core.registry.salute_registro (tests/test_doc_gate.py,
+    tests/test_registry_capacity.py).
 
     Nasce dal difetto del 31 agosto, e serve a non farlo ripetere. Le coppie base
     erano cresciute oltre il tetto da sole, e il tetto cancellava tutte le GENERATE
@@ -77,33 +82,21 @@ def _salute_registro(pairs: dict) -> list[str]:
     return out
 
 
+# L'agente della macchina tiene al massimo 20.000 caratteri di ogni risposta e taglia il mezzo, tenendo testa e coda
+# (scripts/ops_agent.py, MAX_OUTPUT e truncate). Fino al 27 novembre 2026 lo «stato» ne faceva circa 51.700 e perdeva ogni giorno un
+# pezzo in più delle righe del demo, che si leggono solo sulla macchina (audit del 26 novembre, salute-1). Il resto dei 20.000 è il
+# margine per la riga «[firebase] connesso» e per gli avvisi stampati insieme.
+LIMITE_DELLA_RISPOSTA = 19_500
+GIORNI_TABELLE = 14               # le tabelle giornaliere: gli ultimi 14 giorni (i giorni prima sono nelle risposte «stato» di prima)
+
+
 def build() -> str:
     fb = get_firebase()
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    lines = [f"# Stato sistema (snapshot)", f"_Generato: {now}_", ""]
-
-    # --- stato bot (RTDB) ---
-    status = fb.get_rtdb("/bot_status") or {}
-    hb = status.get("heartbeat")
-    # 900s (era 180): il market scan tocca 200 coin con pacing e puo' durare
-    # minuti, durante i quali l'heartbeat non si aggiorna. A 180s il bot risultava
-    # "offline" mentre stava lavorando — falso allarme ricorrente. Il tick e' 30s,
-    # quindi 15 minuti di silenzio restano un segnale vero di blocco.
-    online = hb and (time.time() - float(hb) < 900)
-    equity = fb.get_rtdb("/account/equity")
-    eq_str = f"${float(equity):,.2f}" if equity is not None else "—"
-    lines += [
-        "## Bot",
-        f"- stato: **{status.get('state', '—')}** ({'🟢 online' if online else '🔴 offline'})",
-        f"- regime: {status.get('regime', '—')}",
-        f"- DRY_RUN: {status.get('dry_run', '—')}",
-        f"- equity: **{eq_str}**",
-        f"- ultimo heartbeat: {_ts(hb)}",
-        # sorgente prezzi: True = stream vivo (ogni variazione, in ordine);
-        # False = ripiego sulle candele 1m (tocchi si', ordine no)
-        f"- stream prezzi: {'🟢 attivo' if status.get('price_stream') else '🟡 candele REST'}",
-        "",
-    ]
+    # la salute della macchina in cima (audit del 26 novembre 2026, salute-8): disco, memoria, orologio
+    lines = [f"# Stato sistema (snapshot)", f"_Generato: {now}_", riga_della_macchina(), ""]
+    # il battito e il DRY_RUN dell'unico processo del bot, subito sotto la macchina (revisione del 27 novembre 2026, problema 203)
+    lines += sezione_del_bot(fb)
 
     # --- il paper di F5 eseguito dal bot (bot/portafoglio/f5.py, backlog P16) ---
     lines += sezione_paper_f5(fb)
@@ -124,6 +117,79 @@ def build() -> str:
     except Exception:  # noqa: BLE001  (il testo dell'errore di una chiave non si stampa)
         cliente_demo = None
     lines += sezione_demo_esecuzioni(fb, cliente=cliente_demo)
+    lines += sezione_pesi_g1_oggi(fb, cliente=cliente_demo)
+    lines += sezione_funding_demo_paper(fb, cliente=cliente_demo)
+
+    # --- il vecchio sistema, fermo dal 13 ottobre 2026 (ops/gate_fermo): in fondo (audit del 26 novembre 2026, salute-1) ---
+    testa, dettagli = sezioni_vecchio_sistema(fb)
+    testo = "\n".join(lines + testa + dettagli)
+    if len(testo) > LIMITE_DELLA_RISPOSTA and os.environ.get("GITHUB_ACTIONS") != "true":
+        # oltre il limite l'agente taglierebbe il mezzo in silenzio, cioè le righe del demo: restano fuori prima le sezioni del
+        # vecchio sistema, che non cambiano più e sono intere in docs/state.md (lo fa GitHub, dove lo stato è più corto). Su GitHub
+        # nessuno taglia la risposta e docs/state.md resta intero (revisione del 27 novembre 2026, problema 205)
+        fuori = len("\n".join(dettagli))
+        testo = "\n".join(lines + testa + [
+            f"- le altre sezioni del vecchio sistema ({fuori} caratteri) restano fuori: con loro lo stato "
+            f"passerebbe i {LIMITE_DELLA_RISPOSTA} caratteri e l'agente della macchina ne taglierebbe il mezzo; sono intere in "
+            f"docs/state.md (lo fa GitHub)", ""])
+    return testo
+
+
+BATTITO_MASSIMO_S = 900
+
+
+def sezione_del_bot(fb) -> list:
+    """Lo stato, l'ultimo battito e il DRY_RUN dell'unico processo del bot (``bot/main.py``: scrive ``/bot_status`` e il battito a ogni
+    giro), che fa girare i paper, il demo e il conto vero. In cima allo stato: un bot bloccato o un DRY_RUN falso non si devono
+    leggere come un dato del vecchio sistema fermo (revisione del 27 novembre 2026, problema 203)."""
+    status = fb.get_rtdb("/bot_status") or {}
+    status = status if isinstance(status, dict) else {}
+    hb = status.get("heartbeat")
+    # 900s (era 180): il market scan tocca 200 coin con pacing e puo' durare
+    # minuti, durante i quali l'heartbeat non si aggiorna. A 180s il bot risultava
+    # "offline" mentre stava lavorando — falso allarme ricorrente. Il tick e' 30s,
+    # quindi 15 minuti di silenzio restano un segnale vero di blocco.
+    try:
+        eta = time.time() - float(hb)
+    except (TypeError, ValueError):
+        eta = None
+    online = eta is not None and eta < BATTITO_MASSIMO_S
+    dry = status.get("dry_run", "—")
+    return [
+        "## Il bot (un solo processo: paper, demo e conto vero)",
+        f"- stato: **{status.get('state', '—')}** ("
+        + ("🟢 online" if online else "🔴 **offline**" + (f": nessun battito da {eta / 60:.0f} minuti" if eta is not None else "")) + ")",
+        f"- ultimo heartbeat: {_ts(hb)}",
+        f"- DRY_RUN: {dry}" + ("" if dry is True or dry == "—" else " **⚠️ non vero: i soldi veri non sono più bloccati dal DRY_RUN**"),
+        "",
+    ]
+
+
+def sezioni_vecchio_sistema(fb) -> tuple:
+    """Il vecchio sistema (gate, strategie, orchestratore), fermo dal 13 ottobre 2026 (``ops/gate_fermo``): la testa (regime, equity,
+    prezzi e GATE 1 in una riga) e le altre sezioni. In fondo allo stato; la tabella delle coppie validate del GATE 1 (249 righe, circa
+    33.000 caratteri) non si stampa più (audit del 26 novembre 2026, salute-1). Lo stato del processo, il battito e il DRY_RUN sono in
+    cima, in ``sezione_del_bot`` (revisione del 27 novembre 2026, problema 203)."""
+    status = fb.get_rtdb("/bot_status") or {}
+    status = status if isinstance(status, dict) else {}
+    equity = fb.get_rtdb("/account/equity")
+    eq_str = f"${float(equity):,.2f}" if equity is not None else "—"
+    # --- GATE 1: registro di validazione cumulativo, in una riga (quante coppie, quando) ---
+    reg = fb.get_doc("strategy_registry", "validated") or {}
+    pairs = decode_pairs(reg.get("pairs"))
+    validated = reg.get("validated", []) or []
+    testa = [
+        "## Vecchio sistema (fermo dal 13 ottobre)",
+        f"- regime: {status.get('regime', '—')}",
+        f"- equity: **{eq_str}**",
+        # sorgente prezzi: True = stream vivo (ogni variazione, in ordine);
+        # False = ripiego sulle candele 1m (tocchi si', ordine no)
+        f"- stream prezzi: {'🟢 attivo' if status.get('price_stream') else '🟡 candele REST'}",
+        f"- GATE 1: {len(validated)} coppie validate (>= {reg.get('min_passes', 3)} pass OOS) su {len(pairs)} nel registro, copertura "
+        f"{reg.get('coins_covered', 0)}/{reg.get('universe_size', 0)} crypto; aggiornato {_ts(reg.get('updated_at'))}",
+        "",
+    ]
+    lines = []
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -165,36 +231,6 @@ def build() -> str:
                          f"dell'equity su {len(risks)} posizioni")
         lines.append("")
 
-    # --- GATE 1: registro di validazione cumulativo ---
-    reg = fb.get_doc("strategy_registry", "validated") or {}
-    pairs = decode_pairs(reg.get("pairs"))
-    validated = reg.get("validated", []) or []
-    ready = reg.get("ready", False)
-    cov = reg.get("coverage", 0) * 100
-    target = reg.get("ready_fraction", 0.6) * 100
-    lines += [
-        "## GATE 1 — Validazione strategie",
-        f"- stato: **{'✅ SUPERATO — pronti per il paper trading' if ready else '🔄 in corso'}**",
-        f"- copertura universo: **{reg.get('coins_covered', 0)}/{reg.get('universe_size', 0)} "
-        f"crypto ({cov:.0f}%)** · obiettivo ≥ {target:.0f}%",
-        f"- coppie validate (>= {reg.get('min_passes', 3)} pass OOS): **{len(validated)}**",
-        f"- universo scansionato: {', '.join(reg.get('universe_coins', [])) or '—'}",
-        f"- aggiornato: {_ts(reg.get('updated_at'))}",
-        "",
-    ]
-    lines += _salute_registro(pairs)
-    if validated:
-        lines.append("### Strategie VALIDATE (operate dal bot)")
-        lines.append("| Coin | Strategia | Passes | PF | PnL OOS | Parametri |")
-        lines.append("|---|---|---|---|---|---|")
-        rows = sorted((pairs[k] for k in validated),
-                      key=lambda e: e.get("last_pnl_pct", 0), reverse=True)
-        for e in rows:
-            params = ", ".join(f"{k}={v}" for k, v in (e.get("last_params") or {}).items())
-            lines.append(f"| {e.get('symbol')} | {e.get('strategy')} | {e.get('pass_count')} | "
-                         f"{e.get('last_pf')} | {e.get('last_pnl_pct', 0)*100:.0f}% | {params} |")
-        lines.append("")
-
     # --- ultimo run (snapshot corrente) ---
     sp = fb.get_doc("strategy_params", "current") or {}
     # entries/passed sono CODIFICATI come stringa JSON (limite indici Firestore):
@@ -227,10 +263,74 @@ def build() -> str:
     lines += _closed_trades_section(fb, pairs)
     lines += _drift_section(fb)
     lines += _calibration_section(fb)
-    # in fondo: l'agente della macchina taglia le risposte oltre i 20.000 caratteri tenendo testa e coda (ops_agent.truncate)
-    lines += sezione_pesi_g1_oggi(fb, cliente=cliente_demo)
-    lines += sezione_funding_demo_paper(fb, cliente=cliente_demo)
-    return "\n".join(lines)
+    return testa, lines
+
+
+# ---- la salute della macchina in una riga (audit del 26 novembre 2026, salute-8): disco, memoria, orologio ----
+TEMPO_COMANDO_S = 5.0
+DISCO_QUASI_PIENO = 90            # % usata del disco oltre cui la riga lo dice in grassetto
+MEMORIA_QUASI_FINITA = 0.10       # memoria disponibile sotto il 10% del totale: in grassetto
+
+
+def _esegui_comando(comando: list) -> str:
+    """Un comando di sola lettura della macchina, senza shell, con un tempo massimo e la lingua C (le parole dell'uscita non
+    cambiano con la lingua della macchina). Un codice diverso da zero è un errore."""
+    import subprocess
+    p = subprocess.run(comando, capture_output=True, text=True, timeout=TEMPO_COMANDO_S, env={**os.environ, "LC_ALL": "C"})
+    if p.returncode != 0:
+        raise RuntimeError(f"codice {p.returncode}")
+    return p.stdout
+
+
+def _leggi_df(testo: str) -> str:
+    campi = testo.strip().splitlines()[1].split()          # Filesystem Size Used Avail Use% Mounted (df -P: una riga sola)
+    usato = int(campi[4].rstrip("%"))
+    riga = f"disco / libero {campi[3]} su {campi[1]} (usato {usato}%)"
+    return f"**{riga}: quasi pieno**" if usato >= DISCO_QUASI_PIENO else riga
+
+
+def _leggi_free(testo: str) -> str:
+    righe = [r.split() for r in testo.strip().splitlines()]
+    nomi = righe[0]                                         # total used free shared buff/cache available
+    mem = next(r for r in righe if r and r[0] == "Mem:")
+    valori = dict(zip(nomi, (int(x) for x in mem[1:])))
+    totale = valori["total"]
+    disponibile = valori.get("available", valori["free"])
+    swap = next((r for r in righe if r and r[0] == "Swap:"), None)
+    riga = f"memoria disponibile {disponibile} MB su {totale}" + (f", swap usata {int(swap[2])} MB su {int(swap[1])}" if swap else "")
+    return f"**{riga}: quasi finita**" if totale and disponibile < MEMORIA_QUASI_FINITA * totale else riga
+
+
+def _leggi_timedatectl(testo: str) -> str:
+    valori = {}
+    for r in testo.splitlines():
+        if ":" in r:
+            k, v = r.split(":", 1)
+            valori[k.strip().lower()] = v.strip()
+    sinc = next(v for k, v in valori.items() if k.endswith("synchronized"))     # «System clock synchronized» (prima «NTP synchronized»)
+    ntp = next((v for k, v in valori.items() if k in ("ntp service", "network time on")), None)
+    if sinc not in ("yes", "no"):
+        raise ValueError(sinc[:20])
+    riga = "orologio sincronizzato" if sinc == "yes" else "**orologio NON sincronizzato**"
+    return riga + (f" (NTP {ntp})" if ntp else "")
+
+
+def riga_della_macchina(esegui=None) -> str:
+    """Disco libero (``df -hP /``), memoria (``free -m``) e sincronizzazione dell'orologio (``timedatectl``) in una riga: il disco
+    pieno ferma in silenzio i file dei paper e il git pull, un orologio che salta fa rifiutare le richieste firmate. Un comando che
+    manca, va in errore o non risponde diventa «non letto»: lo stato non fallisce mai per questa riga. Su GitHub non si legge
+    (sarebbe la macchina di GitHub, non quella del bot)."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        return "- macchina: non letta qui (lo stato lo fa GitHub): disco, memoria e orologio sono nella risposta «stato» della macchina"
+    esegui = esegui or _esegui_comando
+    parti = []
+    for nome, comando, leggi in (("disco", ["df", "-hP", "/"], _leggi_df), ("memoria", ["free", "-m"], _leggi_free),
+                                 ("orologio", ["timedatectl"], _leggi_timedatectl)):
+        try:
+            parti.append(leggi(esegui(comando)))
+        except Exception as exc:  # noqa: BLE001  (comando assente, errore, tempo scaduto, uscita diversa: la riga non si rompe)
+            parti.append(f"{nome} non letto ({type(exc).__name__})")
+    return "- macchina: " + " · ".join(parti)
 
 
 def _autopsy_section(fb) -> list[str]:
@@ -640,7 +740,8 @@ def sezione_demo_binance(fb) -> list:
                      + (f"; monete che sul demo non ci sono: {', '.join(x['monete_mancanti_sul_demo'])}"
                         if x.get("monete_mancanti_sul_demo") else "")
                      + (f"; rifiutati {len(x['rifiutati'])}: " + "; ".join(f"{r.get('simbolo')} {str(r.get('errore'))[:80]}"
-                                                                         for r in x["rifiutati"][:3]) if x.get("rifiutati") else ""))
+                                                                         for r in x["rifiutati"][:3]) if x.get("rifiutati") else "")
+                     + _resti_rifiutati(x))
         rif = [r.get("simbolo") for r in (x.get("rifiutati") or []) if isinstance(r, dict) and r.get("simbolo")]
         rif += [m for m in (x.get("monete_mancanti_sul_demo") or []) if m not in rif]
         pos = fb.get_rtdb("/paper_g1/posizioni") or {}
@@ -683,10 +784,116 @@ def sezione_demo_binance(fb) -> list:
     return righe + [""]
 
 
+def strategia_del_conto_vero() -> str:
+    """La strategia che il conto vero esegue (``bot/portafoglio/conto_vero.py``, STRATEGIA: F5 dal 25 novembre 2026, decisione del
+    proprietario); vuota se il modulo non si legge."""
+    try:
+        from bot.portafoglio.conto_vero import STRATEGIA
+        return str(STRATEGIA)
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def strategia_del_processo(fb, nel_codice: str) -> tuple:
+    """La strategia che il processo del bot esegue sul conto vero: quella scritta dal conto vero al suo avvio
+    (``/conto_vero/avvio/strategia``), se l'avvio è di questo processo; altrimenti quella del codice sul disco. Fra un commit che
+    cambia la strategia e il riavvio i due sono diversi, e la nota lo dice (revisione del 27 novembre 2026, problema 207).
+    L'avvio è di un processo di prima se il suo commit non è quello che il processo di adesso scrive in ``/conto_vero/versione``
+    (HEAD all'avvio del processo): allora vale il codice. Restituisce la strategia e la nota (vuota se non serve)."""
+    av = fb.get_rtdb("/conto_vero/avvio")
+    nel_processo = str(av.get("strategia") or "") if isinstance(av, dict) else ""
+    if not nel_processo:
+        return nel_codice, ""
+    ver = fb.get_rtdb("/conto_vero/versione")
+    c_avvio, c_ora = av.get("commit_in_esecuzione"), (ver.get("commit") if isinstance(ver, dict) else None)
+    if c_avvio and c_ora and c_avvio != c_ora:
+        return nel_codice, ""
+    if nel_codice and nel_processo != nel_codice:
+        return nel_processo, (f"- **strategia: nel codice {nel_codice}, nel processo {nel_processo}** (avvio del conto vero del "
+                              f"{_ts(av.get('ora'))}): manca il riavvio")
+    return nel_processo, ""
+
+
+def _e_un_giorno(k) -> bool:
+    k = str(k)
+    return len(k) == 10 and k[4] == k[7] == "-" and (k[:4] + k[5:7] + k[8:]).isdigit()
+
+
+def _scaduti_senza_mercato(scaduti: dict) -> str:
+    return (f"ordini limite scaduti senza il resto a mercato ({_ts(scaduti.get('ora'))}): "
+            f"{len(scaduti.get('monete') or [])} monete, {str(scaduti.get('motivo'))[:80]}")
+
+
+def _resti_rifiutati(x: dict) -> str:
+    """I resti a mercato rifiutati di un ribilancio (``ribilanciamenti/{chiave}/resti_rifiutati``, scritti dal bot dal primo riavvio
+    con le correzioni del 27 novembre 2026, audit del 26 novembre, ordini-4): quanti, e i primi tre con il peso e l'errore."""
+    resti = x.get("resti_rifiutati") or []
+    resti = [r for r in (resti.values() if isinstance(resti, dict) else resti) if isinstance(r, dict)]
+    if not resti:
+        return ""
+    return f"; resti a mercato rifiutati {len(resti)}: " + "; ".join(
+        f"{r.get('simbolo')}" + (f" ({100 * float(r['peso']):+.2f}% del conto)" if _numero(r.get("peso")) else "")
+        + f" {str(r.get('errore'))[:80]}" for r in resti[:3])
+
+
+def righe_ultimo_ribilancio_vero(fb, strategia: str) -> list:
+    """L'ultimo ribilancio del conto vero (``/conto_vero/ribilanciamenti/{giorno}``, se c'è; audit del 26 novembre 2026, ordini-2 e
+    ordini-4): ordini, eseguiti a limite e a mercato, rifiutati con il loro peso nel paper della strategia, variazioni sotto il minimo
+    di Binance e il loro peso, ordini scaduti senza il resto a mercato, resti a mercato rifiutati; e le posizioni vere contro quelle
+    volute. L'ultimo è il giorno più alto fra le chiavi che hanno la forma di un giorno: la chiave «in_corso» (scritta quando manca la
+    chiave degli ordini, ``bot/portafoglio/conto_vero.py``) si mostra a parte (revisione del 27 novembre 2026, problema 206)."""
+    righe = []
+    rib = fb.get_rtdb("/conto_vero/ribilanciamenti")
+    chiavi = ([k for k, v in rib.items() if _e_un_giorno(k) and isinstance(v, dict) and not v.get("solo_eventi")]
+              if isinstance(rib, dict) else [])
+    if chiavi:
+        g = max(chiavi)
+        x = rib[g]
+        lim = x.get("limite") if isinstance(x.get("limite"), dict) else {}
+        sm = x.get("sotto_il_minimo") if isinstance(x.get("sotto_il_minimo"), dict) else None
+        rif = [r for r in x.get("rifiutati") or [] if isinstance(r, dict)]
+        ramo = {"F5": "/paper_f5", "G1": "/paper_g1"}.get(strategia)
+        pesi = (fb.get_rtdb(f"{ramo}/posizioni") if ramo and rif else None) or {}
+        pesi = pesi if isinstance(pesi, dict) else {}
+
+        def peso(s):
+            return f" ({100 * float(pesi[s]):+.2f}% in {strategia})" if _numero(pesi.get(s)) else ""
+        riga = (f"- ultimo ribilancio {g}: {x.get('ordini', 0)} ordini"
+                + (f", eseguiti a limite {lim.get('eseguiti_a_limite', 0)}, a mercato {lim.get('a_mercato', 0)}" if lim else "")
+                + (f"; sotto il minimo {sm.get('variazioni', 0)} variazioni "
+                   f"({100 * float(sm.get('valore_in_frazione_del_conto') or 0):.1f}% del conto)" if sm else "")
+                + f"; rifiutati {len(rif)}" + (": " + "; ".join(f"{r.get('simbolo')}{peso(r.get('simbolo'))} {str(r.get('errore'))[:80]}"
+                                                                  for r in rif[:3]) if rif else "")
+                + (f"; monete senza i filtri del conto vero: {', '.join(map(str, x['monete_mancanti_sul_demo']))}"
+                   if x.get("monete_mancanti_sul_demo") else ""))
+        scaduti = x.get("scaduti_senza_mercato")
+        if isinstance(scaduti, dict):
+            riga += "; " + _scaduti_senza_mercato(scaduti)
+        righe.append(riga + _resti_rifiutati(x))
+    in_corso = rib.get("in_corso") if isinstance(rib, dict) else None
+    if isinstance(in_corso, dict) and isinstance(in_corso.get("scaduti_senza_mercato"), dict):
+        righe.append("- ribilancio senza la chiave degli ordini («in_corso»): " + _scaduti_senza_mercato(in_corso["scaduti_senza_mercato"]))
+    cf = fb.get_rtdb("/conto_vero/confronto")
+    if isinstance(cf, dict) and cf:
+        dif = cf.get("differenze") or []
+        righe.append(f"- posizioni vere contro volute ({_ts(cf.get('ora'))}): {cf.get('monete', 0)} monete, scarto totale "
+                     f"{100 * float(cf.get('scarto_totale') or 0):.1f}% del conto; " + ("nessuna moneta oltre il 2%" if not dif else
+                     "oltre il 2%: " + ", ".join(f"{d.get('simbolo')} {100 * float(d.get('scarto') or 0):+.1f}%" for d in dif[:6])))
+    return righe
+
+
 def sezione_conto_vero(fb) -> list:
-    """Le righe di G1 sul conto vero di Binance (RTDB /conto_vero, `bot/portafoglio/conto_vero.py`, nasce spento): spento e perché,
-    oppure acceso con equity, stop sul conto, fermo e allarmi."""
-    titolo = "## G1 sul conto vero di Binance (soldi veri; nasce spento, si accende solo con il gesto del proprietario)"
+    """Le righe del conto vero di Binance (RTDB /conto_vero, `bot/portafoglio/conto_vero.py`, nasce spento): spento e perché,
+    oppure acceso con equity, stop sul conto, fermo, allarmi, l'ultimo ribilancio. Dal 25 novembre 2026 esegue F5 (salute-9); il
+    titolo dice la strategia del processo, se il conto vero l'ha scritta al suo avvio (problema 207)."""
+    try:
+        strategia, nota = strategia_del_processo(fb, strategia_del_conto_vero())
+    except Exception:  # noqa: BLE001  (un dato rotto non ferma lo stato)
+        strategia, nota = strategia_del_conto_vero(), ""
+    titolo = (f"## {strategia + ' sul conto vero' if strategia else 'Il conto vero'} di Binance "
+              "(soldi veri; nasce spento, si accende solo con il gesto del proprietario)")
+    titolo = [titolo, nota] if nota else [titolo]
+
     def allarmi_per_tipo() -> list:
         allarmi = fb.get_rtdb("/conto_vero/allarmi")
         return [f"- **ALLARME** {tipo.replace('_', ' ')} ({_ts(a.get('ora'))}): {a.get('testo')}"
@@ -696,8 +903,8 @@ def sezione_conto_vero(fb) -> list:
     st = st if isinstance(st, dict) else {}
     if not st:
         # problema 73 (revisione dell'8 novembre 2026): gli allarmi si vedono anche senza stato (la creazione non riuscita)
-        return [titolo, "- spento: nessuno stato scritto (il bot non lo ha ancora fatto girare)"] + allarmi_per_tipo() + [""]
-    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+        return titolo + ["- spento: nessuno stato scritto (il bot non lo ha ancora fatto girare)"] + allarmi_per_tipo() + [""]
+    righe = titolo + [f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
     if st.get("equity") is not None:
         righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
                      f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short")
@@ -711,6 +918,10 @@ def sezione_conto_vero(fb) -> list:
     if isinstance(allarme, dict) and allarme.get("testo"):
         righe.append(f"- **ALLARME** ({_ts(allarme.get('ora'))}): {allarme.get('testo')}")
     righe += allarmi_per_tipo()
+    try:
+        righe += righe_ultimo_ribilancio_vero(fb, strategia)
+    except Exception as exc:  # noqa: BLE001  (un dato rotto non ferma lo stato)
+        righe.append(f"- ultimo ribilancio: non letto ({type(exc).__name__})")
     err = fb.get_rtdb("/conto_vero/errore")
     if isinstance(err, dict) and err:
         righe.append(f"- ultimo errore ({_ts(err.get('ora'))}): `{str(err.get('testo', ''))[:200]}`")
@@ -770,20 +981,118 @@ def confronto_entrate(demo_diario: dict, paper_diario: dict, demo_giorni: dict |
     return [r for r in righe if any(r[k] is not None for k in ("demo_funding", "paper_funding"))]
 
 
-def sezione_demo_contro_paper(fb) -> list:
-    """G1 sul demo contro G1 nel paper, giorno per giorno (MIGLIORARE_G1.md, voce 1): quanto costa l'esecuzione vera."""
+def monete_mancanti_per_giorno(ribilanciamenti: dict, giorni: list) -> dict:
+    """Per ogni giorno, le monete del paper G1 che il demo non ha avuto: rifiutate o mancanti al ribilancio del demo di quel giorno, o
+    dell'ultimo prima se quel giorno il demo non ha ribilanciato (tiene le posizioni di prima). I ribilanci degli eventi non contano."""
+    decisioni = sorted((str(k), x) for k, x in (ribilanciamenti or {}).items()
+                       if isinstance(x, dict) and len(str(k)) == 10 and not x.get("solo_eventi"))
+    out = {}
+    for g in giorni:
+        prima = [x for k, x in decisioni if k <= g]
+        x = prima[-1] if prima else {}
+        m = {s for s in x.get("monete_mancanti_sul_demo") or [] if isinstance(s, str) and s}
+        m |= {r["simbolo"] for r in x.get("rifiutati") or [] if isinstance(r, dict) and isinstance(r.get("simbolo"), str)}
+        out[g] = m
+    return out
+
+
+def senza_le_monete_mancanti(righe: list, mancanti: dict, pesi: dict, rendimenti: dict) -> tuple:
+    """Il guadagno del paper sulle monete che il demo non ha, giorno per giorno: la somma di peso per rendimento del giorno; demo meno
+    paper senza quelle monete è la differenza più quel guadagno (audit del 26 novembre 2026, ordini-5). Il giorno senza un prezzo per
+    una delle sue monete resta None; una moneta senza un peso nel paper di oggi non si conta e va nell'elenco dei «senza peso»."""
+    out, senza_peso = {}, set()
+    for r in righe:
+        g, c = r["giorno"], 0.0
+        for s in sorted(mancanti.get(g) or ()):
+            w = pesi.get(s)
+            if not w:
+                senza_peso.add(s)
+                continue
+            x = (rendimenti.get(s) or {}).get(g)
+            if x is None:
+                c = None
+                break
+            c += w * x
+        out[g] = None if c is None else r["differenza"] + c
+    return out, senza_peso
+
+
+PREZZI_MARK_GIORNALIERI = "https://fapi.binance.com/fapi/v1/markPriceKlines"   # pubblico, peso 1 a richiesta (limit sotto 100)
+MONETE_DA_PREZZARE_MASSIME = 12
+
+
+def rendimenti_mark_giornalieri(simboli: list, da_giorno: str, now: float, http=None, dormi=time.sleep) -> tuple:
+    """Il rendimento di ogni giorno UTC dal prezzo mark pubblico di Binance (candele di un giorno: chiusura su apertura; per oggi
+    l'ultimo prezzo), una richiesta per moneta con una pausa. Al primo 429 o 418 nessuna richiesta parte più, come nelle altre letture
+    dello stato (problemi 80 e 84; revisione del 27 novembre 2026, problema 204): le monete rimaste restano non lette. Restituisce i
+    rendimenti, le monete non lette e il motivo dello stop (vuoto se non c'è stato)."""
+    if http is None:
+        import requests
+        http = requests.get
+    da_ms = calendar.timegm(time.strptime(da_giorno, "%Y-%m-%d")) * 1000
+    out, non_lette, fermo = {}, [], ""
+    for i, s in enumerate(simboli):
+        if i:
+            dormi(PAUSA_TRA_RICHIESTE_S)
+        try:
+            r = http(PREZZI_MARK_GIORNALIERI, params={"symbol": s, "interval": "1d", "startTime": da_ms, "endTime": int(now * 1000),
+                                                      "limit": 99}, timeout=10)
+            codice = getattr(r, "status_code", 200)
+            if codice in (418, 429):
+                attesa = (getattr(r, "headers", None) or {}).get("Retry-After")
+                fermo = f"Binance {codice}: letture fermate" + (f" (Retry-After {attesa} s)" if attesa is not None else "")
+                non_lette += list(simboli[i:])
+                break
+            if codice != 200:
+                raise RuntimeError(f"HTTP {codice}")
+            out[s] = {_giorno(int(k[0]) / 1000): float(k[4]) / float(k[1]) - 1 for k in r.json() if float(k[1]) > 0}
+        except Exception:  # noqa: BLE001  (una moneta non letta lascia «—» nei suoi giorni)
+            non_lette.append(s)
+    return out, non_lette, fermo
+
+
+def sezione_demo_contro_paper(fb, now: float | None = None, http=None, dormi=time.sleep) -> list:
+    """G1 sul demo contro G1 nel paper, giorno per giorno (MIGLIORARE_G1.md, voce 1): quanto costa l'esecuzione vera. Le tabelle
+    mostrano gli ultimi ``GIORNI_TABELLE`` giorni; il totale e la media restano su tutti i giorni."""
+    now = time.time() if now is None else float(now)
     titolo = "## G1: il demo contro il paper, giorno per giorno"
     righe = confronto_giorni(fb.get_rtdb("/demo_binance/giorni") or {}, fb.get_rtdb("/paper_g1/giorni") or {},
                              fb.get_rtdb("/paper_eventi/giorni") or {})
     if not righe:
         return [titolo, "- non ancora: servono almeno due giorni con il demo e il paper", ""]
+    mostrate = righe[-GIORNI_TABELLE:]
+    # demo meno paper senza le monete che il demo non ha (audit del 26 novembre 2026, ordini-5): i pesi del paper di oggi (quelli
+    # dei giorni passati non sono su Firebase) per i rendimenti del giorno dai prezzi pubblici; un errore lascia la colonna vuota
+    try:
+        pos = fb.get_rtdb("/paper_g1/posizioni")
+        pesi = {s: float(w) for s, w in (pos.items() if isinstance(pos, dict) else ()) if _numero(w) and math.isfinite(float(w))}
+        rib = fb.get_rtdb("/demo_binance/ribilanciamenti")
+        mancanti = monete_mancanti_per_giorno(rib if isinstance(rib, dict) else {}, [r["giorno"] for r in mostrate])
+        da_prezzare = sorted({s for m in mancanti.values() for s in m if pesi.get(s)})
+        rendimenti, nota_senza = {}, ""
+        if da_prezzare and nella_finestra_vietata(now):
+            nota_senza = "prezzi non letti: finestra del ribilancio (23:50-01:45 UTC)"
+        elif da_prezzare:
+            rendimenti, non_lette, fermo = rendimenti_mark_giornalieri(da_prezzare[:MONETE_DA_PREZZARE_MASSIME],
+                                                                       mostrate[0]["giorno"], now, http=http, dormi=dormi)
+            non_lette += da_prezzare[MONETE_DA_PREZZARE_MASSIME:]
+            nota_senza = "; ".join(x for x in (fermo, f"prezzi non letti: {', '.join(non_lette)}" if non_lette else "") if x)
+        senza, senza_peso = senza_le_monete_mancanti(mostrate, mancanti, pesi, rendimenti)
+    except Exception as exc:  # noqa: BLE001
+        senza, senza_peso, mancanti, pesi = {}, set(), None, {}
+        nota_senza = f"non letto ({type(exc).__name__})"
+    prima = len(righe) - len(mostrate)
     out = [titolo, "Equity a fine giorno (l'ultimo valore scritto). Dal 6 novembre il demo lavora come un conto ridotto (280 USDT, dall'8 novembre "
            "1.000), senza gli eventi; le fasi di prima sono in /demo_binance/fasi; con i minimi di Binance la differenza con il paper "
-           "oscilla di più (prova 148).", "",
-           "| giorno | demo | paper G1 | demo meno paper | eventi nel paper |", "|---|---|---|---|---|"]
-    for r in righe:
+           "oscilla di più (prova 148)." + (f" Gli ultimi {GIORNI_TABELLE} giorni: i {prima} prima sono nelle risposte «stato» di prima "
+                                            "e su Firebase." if prima else ""), "",
+           "| giorno | demo | paper G1 | demo meno paper | eventi nel paper | senza le monete che il demo non ha |",
+           "|---|---|---|---|---|---|"]
+    for r in mostrate:
         ev = f"{100 * r['eventi']:+.2f}%" if r["eventi"] is not None else "—"
-        out.append(f"| {r['giorno']} | {100 * r['demo']:+.2f}% | {100 * r['paper']:+.2f}% | {100 * r['differenza']:+.2f}% | {ev} |")
+        pulita = f"{100 * senza[r['giorno']]:+.2f}%" if senza.get(r["giorno"]) is not None else "—"
+        out.append(f"| {r['giorno']} | {100 * r['demo']:+.2f}% | {100 * r['paper']:+.2f}% | {100 * r['differenza']:+.2f}% | {ev} "
+                   f"| {pulita} |")
     tot_d = 1.0
     tot_p = 1.0
     for r in righe:
@@ -793,15 +1102,17 @@ def sezione_demo_contro_paper(fb) -> list:
     media = sum(dif) / len(dif)
     osc = (sum((x - media) ** 2 for x in dif) / (len(dif) - 1)) ** 0.5 if len(dif) > 1 else None
     out += ["", f"- dal {righe[0]['giorno']} ({len(righe)} giorni): demo {100 * (tot_d - 1):+.2f}%, paper {100 * (tot_p - 1):+.2f}%; "
-            f"differenza media al giorno {100 * media:+.3f}%" + (f", oscillazione {100 * osc:.3f}%" if osc is not None else ""), ""]
+            f"differenza media al giorno {100 * media:+.3f}%" + (f", oscillazione {100 * osc:.3f}%" if osc is not None else "")]
+    out += [_riga_senza_le_monete_mancanti(mostrate, senza, senza_peso, mancanti, pesi, nota_senza), ""]
     en = confronto_entrate(fb.get_rtdb("/demo_binance/diario") or {}, fb.get_rtdb("/paper_g1/diario") or {},
                            fb.get_rtdb("/demo_binance/giorni") or {})
     if en:
         pc = lambda x: f"{100 * x:+.3f}%" if x is not None else "—"  # noqa: E731
-        out += ["Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: + pagate; nel paper dal 6 novembre).",
+        out += ["Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: + pagate; nel paper dal 6 novembre)"
+                + (f"; gli ultimi {GIORNI_TABELLE} giorni." if len(en) > GIORNI_TABELLE else "."),
                 "", "| giorno | funding demo | funding paper | spese demo | spese paper |", "|---|---|---|---|---|"]
         out += [f"| {r['giorno']} | {pc(r['demo_funding'])} | {pc(r['paper_funding'])} | {pc(r['demo_spese'])} | {pc(r['paper_spese'])} |"
-                for r in en]
+                for r in en[-GIORNI_TABELLE:]]
         fu = [r["demo_funding_usdt"] for r in en if r["demo_funding_usdt"] is not None]
         sp = [r["demo_spese_usdt"] for r in en if r["demo_spese_usdt"] is not None]
         if fu:
@@ -809,6 +1120,31 @@ def sezione_demo_contro_paper(fb) -> list:
                     f"funding incassato {sum(fu):+,.2f} USDT, commissioni pagate {sum(sp):,.2f} USDT"]
         out.append("")
     return out
+
+
+def _riga_senza_le_monete_mancanti(mostrate: list, senza: dict, senza_peso: set, mancanti, pesi: dict, nota: str) -> str:
+    """La riga «demo meno paper senza le monete che il demo non ha» (audit del 26 novembre 2026, ordini-5): media e oscillazione nei
+    giorni della tabella, con e senza quelle monete, e a parte il loro peso nel paper di oggi."""
+    def media_osc(xs):
+        m = sum(xs) / len(xs)
+        return m, ((sum((x - m) ** 2 for x in xs) / (len(xs) - 1)) ** 0.5 if len(xs) > 1 else None)
+    titolo = "- demo meno paper senza le monete che il demo non ha"
+    if mancanti is None:                                    # un errore nel calcolo della colonna
+        return f"{titolo}: {nota}"
+    if not any(mancanti.values()):
+        return f"{titolo}: uguale (nei giorni della tabella il demo le ha avute tutte)"
+    oggi = mancanti.get(mostrate[-1]["giorno"]) or set()
+    peso = (f"; quelle di oggi pesano nel paper G1 il {100 * sum(abs(pesi.get(s, 0.0)) for s in oggi):.2f}% lordo del conto "
+            f"({len(oggi)} monete, elenco nella sezione del demo)" if oggi else "; oggi nessuna")
+    coppie = [(r["differenza"], senza[r["giorno"]]) for r in mostrate if senza.get(r["giorno"]) is not None]
+    if not coppie:
+        return f"{titolo}: non letto ({nota or 'nessun giorno con tutti i prezzi'})" + peso
+    (m0, o0), (m1, o1) = media_osc([a for a, _ in coppie]), media_osc([b for _, b in coppie])
+    return (f"{titolo} (ultima colonna; stima: pesi del paper di oggi, prezzi mark giornalieri di Binance, senza funding): in "
+            f"{len(coppie)} giorn{'o' if len(coppie) == 1 else 'i'} media al giorno {100 * m1:+.3f}% (con quelle monete {100 * m0:+.3f}%)"
+            + (f", oscillazione {100 * o1:.3f}% (con {100 * o0:.3f}%)" if o1 is not None else "") + peso
+            + (f"; senza un peso di oggi, non contate: {', '.join(sorted(senza_peso))}" if senza_peso else "")
+            + (f"; {nota}" if nota else ""))
 
 
 # ---- G1 sul demo: esecuzioni, commissioni e funding letti da Binance (backlog P33; gate2/reports/2026-11-12-G1-funding-commissioni.md) --
