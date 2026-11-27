@@ -91,6 +91,9 @@ Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.m
 - Allocatore: la miscela sopra i 500 USDT e la regola della sostituzione (`allocazione/REGOLE.md`).
 
 ## Prossimi passi
+- **Lunedì 30 novembre, prova 168 in avanti a tavolino** (esame nuovo del 27 novembre: passa, revisore PASS tecnico ma fragile):
+  A = media dei quattro paper (G1, G11, G1N, F5) dalle risposte «stato»; B con `research/programma7/centosesta.py` sui dati nuovi; nei numeri
+  del lunedì al proprietario. Niente codice nel bot finché i dati in avanti non lo chiedono (backlog P37).
 - **Lunedì 30 novembre, Hyperliquid**: al giro delle 00:17 la prima scelta nuova della mappa (circa 4 minuti) e delle balene:
   controllare `candidati_letti` in `liquidazioni_conti_2026-11-30.json` (nella prova 1.228) ed `esclusi_conto_a_leva_zero` in
   `scelti_balene_2026-11-30.json`; nel commit della raccolta aggiungere il file nuovo `hyperliquid/mercato_AAAA-MM.jsonl.gz`. Al giro

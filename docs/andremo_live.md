@@ -1193,3 +1193,10 @@ vanno lette con prudenza. Fonte: `research/programma6/paper/REGOLE.md`, sezione 
 (circa −0,01 punti al giorno per G1, stima dell'audit): i giorni prima e dopo il 27 novembre non si confrontano su questo punto. Alla
 prima mezzanotte il demo riprova le 4 monete che Binance rifiuta e manda un solo messaggio «ordini rifiutati»; poi non le apre più (le
 chiude sì). Da controllare al giro delle 04:17 del 28 novembre: «saltati perché non disponibili sul demo» nel registro.
+**27 novembre, 15:10 UTC, l'esame nuovo e la prova 168**: il proprietario ha scelto i due modi di contare proposti dall'audit (V
+simmetrica e settimane efficaci): sono l'esame in vigore (commit `5170860`, verifica indipendente «sì»). Passano la 168 A (0,842) e B
+(0,852), G11 (0,823, già nel paper) e la miscela F5+M7+K2 (0,829-0,866, resta a tavolino). Il revisore delle prove sulla 168: PASS tecnico
+A e B, ma il sì è fragile (con la famiglia della candidata in V 0,810/0,822; tutto a mercato 0,791; con il 27% a mercato come sul demo
+0,833/0,837). Decisione della sessione principale: misura in avanti a tavolino ogni lunedì (A dai quattro paper, B con `centosesta.py`),
+niente codice nuovo nel bot per ora. **Capito**: con le settimane contate per quello che valgono (legate fra loro) lo Sharpe che serve a
+una prova nuova scende da 2,27 a 1,96 su 300 settimane; la miscela delle quattro strategie in corso supera la soglia, ciascuna da sola no.
