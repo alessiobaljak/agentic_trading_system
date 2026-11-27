@@ -203,6 +203,18 @@ regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza
 
 **L'esame in una funzione sola** (27 novembre 2026, audit del 26 novembre): l'esame è `research/programma6/asticella.esame`. Dà il verdetto in vigore e accanto quattro numeri non ufficiali (le regole le decide il proprietario): (a) senza 157, 159 e 161; (b) V simmetrica senza la 157; (c) t robusto di Newey e West e settimane efficaci; (d) b e c insieme. Corretti i dati del mazzo: il t delle prove senza serie si calcola sulle loro settimane (la 151 e la 153 B entrano in V); la G10 ha le settimane ferme; le settimane vuote della 149 si tolgono coppia per coppia (queste ultime due senza effetto). Mazzo di oggi: 200 famiglie, 154 in V (erano 152), deviazione 0,6891 (era 0,6776). In vigore | a | b | c | d: 168 A 0,702 | 0,835 | 0,904 | 0,658 | 0,842; 168 B 0,722 | 0,849 | 0,913 | 0,675 | 0,852; 169 A 0,584 | 0,741 | 0,835 | 0,567 | 0,782; 169 B 0,692 | 0,828 | 0,899 | 0,658 | 0,851; la 162, la 163 e la 165 restano sotto 0,05 in ogni modo. Sullo stesso mazzo: G1 0,561, G1 neutra 0,508, G11 0,647, F5 0,506 (serie del mazzo, quella di prima delle parità), miscela F5+M7+K2 0,691 (misura del riesame). Verdetti invariati: tutti no. La 169 resta no anche per le sue regole (fallimento utile). Nella riga 168, «come G1 a 0,76» confronta due mazzi diversi: sullo stesso mazzo G1 valeva 0,593 (0,561 dopo le correzioni). G1 sul mazzo di quando è stata scelta (fino alla 57): 0,945, invariato. Tabella intera: `programma6/ESAME_NUMERI_2026-11-27.md`; numeri controllati da `tests/test_esame_unico.py`.
 
+**L'esame nuovo, decisione del proprietario** (27 novembre 2026, pomeriggio: «l'esame delle prove due modi di contare un pò più giusti usali»;
+`docs/decisioni_del_proprietario.md`, `programma6/ASTICELLA.md` sezione 7): da oggi la probabilità che non sia fortuna si calcola con la
+dispersione V simmetrica (senza la 157) e con le settimane efficaci (t robusto di Newey e West, 4 settimane); t robusto da 3, ogni anno
+positivo, 0,80, N = famiglie di oggi; la regola di prima è scritta accanto. Mazzo di oggi: N 200, in V 149, deviazione 0,5798. Con la
+regola nuova **passano l'esame la 168 A (0,842) e la 168 B (0,852)**, G11 (0,823) e la miscela F5+M7+K2 (0,866 con la serie del mazzo,
+0,829 con la misura del riesame); restano «no» la 169 A (0,782) e la 169 B (0,851, ma «no» per le sue regole scritte prima: fallimento
+utile), la 162, la 163 e la 165, G1 sul mazzo di oggi (0,765; per G1 vale lo 0,945 di quando è stata scelta, 0,931 con la regola nuova),
+G1 neutra (0,731) e F5 (0,729). **Riserva**: i due modi nascono dopo aver visto questi numeri; la 168 va dal revisore delle prove prima del
+paper. Il «sì» di G11 e della miscela dipende da una scelta ancora aperta (se la famiglia della candidata resta in V: G11 0,787, miscela del
+riesame 0,7998); la miscela resta misurata a tavolino ogni settimana. Lo Sharpe che serve oggi su 300 settimane: 1,96 (prima 2,27). Numeri
+rifatti da capo da un verificatore indipendente. Tabella: `programma6/ESAME_NUMERI_2026-11-27_REGOLA_NUOVA.md`.
+
 **L'asticella rivista** (22 ottobre, richiesta del proprietario; `programma6/ASTICELLA.md`, scritta prima del ricalcolo,
 risultati in `programma6/RISULTATI_ASTICELLA.md`). Lo Sharpe corretto si calcolava contando le 107 prove una per una; gli
 autori del metodo (López de Prado 2019, 2020) prescrivono di contare i **gruppi di prove simili** (correlazione dei rendimenti)

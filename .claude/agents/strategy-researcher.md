@@ -59,3 +59,4 @@ Alla sessione principale restituisci al massimo 30 righe: esito secondo l'esame 
 
 ## Lo Sharpe corretto (11 novembre 2026)
 Lo Sharpe corretto si calcola contando le **famiglie di prove simili** (gruppi per correlazione, `research/programma6/asticella.py`, `gruppi` con `TAGLIO`), non le prove una per una: decisione del proprietario dell'11 novembre 2026 («famiglie»). Esempio di calcolo: `audits/repro/prova28_2026-11-11.py`, voce 11.
+Dal 27 novembre 2026 (decisione del proprietario, `research/programma6/ASTICELLA.md`, sezione 7) il verdetto delle prove nuove è `asticella.esame(nuove, candidate)`, parte `in_vigore` (t robusto, settimane efficaci, V simmetrica senza le bocciate), non `corretto_famiglie` (la regola di prima, che si scrive accanto come numero non ufficiale).

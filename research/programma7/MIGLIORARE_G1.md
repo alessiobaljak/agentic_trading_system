@@ -524,6 +524,8 @@ venduta fino al 43,7% del capitale, 67 giorni con meno di 10 monete vendute; reg
 * **27 novembre 2026, l'esame delle varianti** (audit del 26 novembre, `research/programma6/ESAME_NUMERI_2026-11-27.md`): una variante
   di G1 si giudica con l'N di oggi (23 novembre). Oggi le serve uno Sharpe di 2,27 su 300 settimane per arrivare a 0,80 (2,09 senza le serie
   a incasso quasi fisso, 1,96 con la V simmetrica: regole non ufficiali, decide il proprietario); G1 ha 1,97 (`asticella.sharpe_minimo`).
+  **Dal 27 novembre, con l'esame deciso dal proprietario** (V simmetrica e settimane efficaci): 1,96 su 300 settimane con settimane non
+  legate, circa 2,06 per una variante con le settimane legate come G1 (`research/programma6/ESAME_NUMERI_2026-11-27_REGOLA_NUOVA.md`).
 
 ### Misura F5, pesi (25 novembre 2026, P36/180)
 Peso massimo per moneta al lunedì 43,7% (BLZ, 5 feb 2024), in settimana 44,9%: mai sopra il 60%. Somma dei pesi in settimana: massimo 397% (8 feb 2021), sopra 300% una volta,

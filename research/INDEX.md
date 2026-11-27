@@ -3,7 +3,7 @@
 Leggi questo file per primo; poi solo i file che servono al tuo compito, mai «tutto all'inizio».
 
 ## Dove siamo (12 novembre 2026)
-- Metodo in vigore: `programma7/METODO.md` (in giornata ed eventi; dal 27 novembre il verdetto con `programma6/asticella.esame`, `programma6/ASTICELLA.md` sezione 6), `programma6/METODO.md` (portafogli giornalieri e settimanali),
+- Metodo in vigore: `programma7/METODO.md` (in giornata ed eventi; dal 27 novembre il verdetto con `programma6/asticella.esame`, `programma6/ASTICELLA.md` sezione 7: V simmetrica e settimane efficaci), `programma6/METODO.md` (portafogli giornalieri e settimanali),
   `programma5/REGOLE.md` (a eventi, con la prova in avanti). Decisione del proprietario del 5 novembre: si migliora G1
   (`programma7/MIGLIORARE_G1.md`, voci 9-13 aperte, le porta avanti strategy-improver); dall'11 novembre la ricerca nuova va avanti
   a ogni giro: strategy-scout propone (`idee/LOG.md`), strategy-researcher esegue (prima in modalità verifica), backtest-auditor

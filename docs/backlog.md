@@ -909,6 +909,12 @@ scrivono con e senza le serie a incasso quasi fisso.
   **Rifatti il 27 novembre dopo le correzioni dei dati del mazzo** (`research/programma6/ESAME_NUMERI_2026-11-27.md`): (a) e (b) insieme,
   cioè (d): 168 B 0,852, miscela 0,829, G1 0,765 (0,773 con la misura del 12 novembre). Sharpe che serve su 300 settimane: 2,27 in vigore
   (era 2,21-2,23), 1,96 con la V simmetrica (era 1,90). Esame-6 ed esame-9 ora sono scritti in `ASTICELLA.md`, sezione 6.
+  **27 novembre, pomeriggio: il proprietario ha scelto (a) e (b) insieme** («usali»): sono l'esame in vigore (`asticella.esame`,
+  `ASTICELLA.md` sezione 7). Restano tre punti aperti, senza effetto sugli esiti di oggi salvo il primo: (1) tenere in V la famiglia della
+  candidata (G11 da 0,823 a 0,787, la miscela del riesame da 0,829 a 0,7998; la 168 passa lo stesso); (2) un tetto alle settimane efficaci
+  (129 serie su 290 ne hanno più delle settimane); (3) V che scarta le famiglie con il t semplice (−0,011). Le prove già fatte (153-169) e
+  `corretto_rivisto`, `corretto_famiglie`, `centosesta.esito_regole` restano sulla regola di prima: una prova nuova che copia la 168 o la
+  169 deve chiamare `asticella.esame`.
 * **esame-6**: N non conta le circa 60 idee del programma 5, il vecchio sistema automatico e i protocolli 1-4. Scrivere in `ASTICELLA.md`
   la scelta e il perché. Effetto stimato: fino a −0,05/−0,07 sul numero di G1 alla prova 57; nessun verdetto di oggi cambia.
 * **esame-9**: «ogni anno positivo» si misura sulla somma delle settimane, non sul conto composto, e un anno parziale conta qualunque sia

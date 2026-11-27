@@ -23,16 +23,18 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
 * Regole scritte prima del calcolo (un file per prova, la riga nel registro), una prova per volta, nel conto unico delle prove.
 * Le idee partono dai vantaggi che reggono (la direzione dal funding, gli eventi) e usano gli indicatori per **scegliere il
   momento** dell'entrata e dell'uscita dentro la giornata; le entrate e gli obiettivi a **ordine limite** dove si può.
-* Esame (*27 novembre 2026, audit del 26 novembre*: qui c'era ancora l'esame di ottobre, `terza.esito` con la soglia 0,95, che resta
-  solo per le prove già fatte con lui). Le misure sulle settimane con `terza.esame`; il verdetto con **`asticella.esame(nuove,
-  candidate)`** (`research/programma6/ASTICELLA.md`, sezione 6), l'esame in vigore dalle decisioni del 9, 11 e 23 novembre: netto
-  positivo, **ogni anno solare positivo**, **t dello Sharpe da 3** e **probabilità che non sia fortuna da 0,80** (lo Sharpe corretto,
-  con N = le famiglie di prove simili del mazzo di oggi e V senza le famiglie con il t sotto −3). Una strategia già scelta si giudica
-  con lo sconto una volta sola, con il mazzo di quando è stata scelta (G1: prova 57, 0,945), poi in avanti. La funzione scrive accanto,
-  **non ufficiali** finché il proprietario non decide, i numeri senza le serie a incasso quasi fisso (157, 159, 161), con la V
-  simmetrica senza la 157, con il t robusto e le settimane efficaci, le due cose insieme, e gli anni sul conto composto: vanno nel
-  risultato di ogni prova accanto al verdetto. Si riportano sempre quante operazioni al giorno, la durata media, la quota vinte,
-  vincita e perdita medie, i costi.
+* Esame (*27 novembre 2026*: qui c'era ancora l'esame di ottobre, `terza.esito` con la soglia 0,95, che resta solo per le prove già
+  fatte con lui). Le misure sulle settimane con `terza.esame`; il verdetto con **`asticella.esame(nuove, candidate)`**, parte
+  `in_vigore` (`research/programma6/ASTICELLA.md`, sezione 7), l'esame in vigore **dal 27 novembre 2026, decisione del proprietario**:
+  netto positivo, **ogni anno solare positivo**, **t robusto da 3** (Newey e West, 4 settimane di ritardo) e **probabilità che non sia
+  fortuna da 0,80** (lo Sharpe corretto sulle **settimane efficaci**, con N = le famiglie di prove simili del mazzo di oggi e la **V
+  simmetrica**: senza le famiglie con il t sotto −3 e sopra +3 e senza le serie bocciate dal revisore). Una candidata senza serie nel
+  mazzo si giudica sulle settimane semplici, e il risultato lo dice. Una strategia già scelta si giudica con lo sconto una volta sola,
+  con il mazzo di quando è stata scelta (G1: prova 57, 0,945 con la regola di allora), poi in avanti. La funzione scrive accanto,
+  **non ufficiali**, la regola fino al 27 novembre (V senza le sole perdenti, t e settimane semplici: `corretto_famiglie`, che non si usa
+  più per le prove nuove), i numeri senza le serie a incasso quasi fisso (157, 159, 161), il controllo con 13 ritardi e gli anni sul
+  conto composto: vanno nel risultato di ogni prova accanto al verdetto. Si riportano sempre quante operazioni al giorno, la durata
+  media, la quota vinte, vincita e perdita medie, i costi.
 * Ogni strategia promettente passa da un **revisore separato** prima di andare nel paper.
 
 ## 4. La coda delle idee (in quest'ordine; i dettagli si fissano nel file di ogni prova, prima del calcolo)

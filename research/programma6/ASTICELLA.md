@@ -3,10 +3,11 @@
 Scritto il 22 ottobre 2026, mattina, **prima di ricalcolare**, su richiesta del proprietario: «riguarda questa asticella
 [...] non sto dicendo di non avere un'asticella ma di essere sicuri che la stiamo usando nella maniera corretta».
 
-> **L'esame in vigore oggi** (27 novembre 2026) non è più quello delle sezioni 3-5 con la soglia 0,95: probabilità che non sia fortuna
-> da **0,80** (9 novembre), N = **famiglie** del mazzo completo (11 novembre), sconto **una volta sola** quando una strategia viene
-> scelta (23 novembre), t dello Sharpe da 3 e ogni anno positivo. È scritto in una funzione sola, `asticella.esame`, con accanto i
-> numeri non ufficiali da mostrare al proprietario: sezione 6. Le sezioni 1-5 restano com'erano, per la storia.
+> **L'esame in vigore oggi** (dal 27 novembre 2026, decisione del proprietario) è quello della **sezione 7**: probabilità che non sia
+> fortuna da **0,80** (9 novembre), N = **famiglie** del mazzo completo (11 novembre), sconto **una volta sola** quando una strategia
+> viene scelta (23 novembre), ogni anno positivo, e da oggi il **t robusto** da 3, la probabilità sulle **settimane efficaci** e la
+> **V simmetrica** senza le serie bocciate dal revisore. È scritto in una funzione sola, `asticella.esame`, con accanto la regola di
+> prima (sezione 6) come numero non ufficiale. Le sezioni 1-6 restano com'erano, per la storia.
 
 ## 1. Cosa abbiamo fatto finora
 
@@ -82,7 +83,9 @@ ma resta «non validata sul passato» e la sua prova resta il paper. La regola v
 ## 6. L'esame in vigore in una funzione sola, e i numeri accanto (27 novembre 2026, audit del 26 novembre)
 
 Scritto dopo l'audit del sistema (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`, problemi esame-1 … esame-10 e punti ciechi 1-2).
-**Nessuna regola dell'esame cambia qui**: i cambi di regola li decide il proprietario.
+**Nessuna regola dell'esame cambia qui**: i cambi di regola li decide il proprietario. *(Lo stesso giorno il proprietario ha deciso: il
+numero (d) qui sotto è diventato l'esame in vigore, sezione 7; quello che questa sezione chiama «in vigore» è da allora la «regola fino
+al 27 novembre», un numero non ufficiale accanto.)*
 
 **L'esame in vigore** (`asticella.esame`; decisioni del 9, 11 e 23 novembre in `docs/decisioni_del_proprietario.md`): una prova è
 «PROMETTENTE» se il netto è positivo, **ogni anno solare è positivo** (media delle settimane × 52, gli anni parziali compresi, come
@@ -139,3 +142,59 @@ sezioni separate. Contarle (come le prove 1 e 2B, ognuna una famiglia con il suo
 **Gli anni (esame-9)**: «ogni anno positivo» resta la media delle settimane × 52 per anno solare, con gli anni parziali qualunque sia la
 loro lunghezza (la prova 165 usava almeno 8 settimane). Una regola sola per gli anni parziali la decide il proprietario; intanto la
 funzione scrive accanto il conto composto.
+
+## 7. L'esame in vigore dal 27 novembre 2026, decisione del proprietario
+
+Le parole del proprietario (27 novembre 2026, testo intero in `docs/decisioni_del_proprietario.md`): «l'esame delle prove due modi di
+contatre un pò più giusti usali». I due modi sono quelli proposti dall'audit del 26 novembre e scritti nella sezione 6 come numeri non
+ufficiali (b) e (c); da oggi sono **insieme** l'esame in vigore, cioè il numero che la sezione 6 chiamava «(d)».
+
+**L'esame in vigore** (`asticella.esame`, parte `in_vigore`): una prova è «PROMETTENTE» se
+* il netto è positivo e **ogni anno solare è positivo** (media delle settimane × 52, gli anni parziali compresi: `per_anno`, come prima);
+* il **t robusto** di Newey e West con **4 settimane di ritardo** (Sharpe × √(settimane efficaci / 52)) è almeno **3**;
+* la **probabilità che non sia fortuna** (`terza.sharpe_corretto`) è almeno **0,80**, calcolata sulle **settimane efficaci** (settimane ×
+  varianza semplice / varianza di lungo periodo della serie della candidata, `rapporto_robusto`), con N = le **famiglie del mazzo di
+  oggi** (come prima) e la **V simmetrica senza le serie bocciate dal revisore**: fuori da V le famiglie con il t sotto −3 **e sopra +3**
+  (restano in N) e le serie della 157 (`BOCCIATE_DAL_REVISORE`, `audits/reports/2026-11-15-PROVA157.md`).
+
+Restano come prima: le soglie (t da 3, probabilità da 0,80), ogni anno positivo, N = famiglie di oggi, lo sconto **una volta sola** quando
+una strategia viene scelta (23 novembre: G1 alla prova 57, 0,945 con la regola di allora, 0,931 con questa), poi solo in avanti.
+**Una candidata senza serie** nel mazzo (nessuna serie, quindi niente t robusto) si giudica sulle **settimane semplici**, con la stessa V e
+lo stesso N, e il risultato lo dice (`settimane_usate`).
+
+**Accanto, NON ufficiali** (`non_ufficiali`, non decidono niente): la **regola fino al 27 novembre** (sezione 6: V senza le sole famiglie
+con il t sotto −3, t e probabilità sulle settimane semplici; è la probabilità di `corretto_famiglie`, che resta per le prove dalla 154
+alla 169 fatte con lei), con il suo esito; **(a)** la regola in vigore senza le serie a incasso quasi fisso (157, 159, 161); il **controllo
+con 13 ritardi**; ogni anno sul **conto composto**. `sharpe_minimo(settimane, v, N, rapporto=...)` dà lo Sharpe che serve con la regola in
+vigore (`v` = la V in vigore; per una serie senza settimane legate il rapporto è 1 e le settimane efficaci sono le settimane).
+
+**Effetto sul mazzo di oggi** (291 serie, 48 prove senza serie; tabella intera in `ESAME_NUMERI_2026-11-27_REGOLA_NUOVA.md`): N resta
+**200**; in V da 154 a **149** famiglie; deviazione di V da 0,6891 a **0,5798**; la fortuna da battere da 1,91 a **1,60** di Sharpe l'anno.
+Lo Sharpe che serve per 0,80 su 300 / 150 / 100 / 52 / 22 settimane: **1,96 / 2,11 / 2,23 / 2,48 / 2,98** per una serie con le settimane
+non legate (prima 2,27 / 2,42 / 2,53 / 2,79 / 3,30); per una serie con le settimane legate come G1 (rapporto 0,62) 2,06 / 2,25 / 2,40 /
+2,73 / 3,38, e il t robusto da 3 chiede 1,59 / 2,24 / 2,75 / 3,81 / 5,86. Con la regola nuova passano **168 A (0,842), 168 B (0,852),
+169 B (0,851), G11 (0,823) e la miscela F5 + M7 + K2 (0,866; 0,829 con la misura del suo riesame)**; non passano 169 A (0,782), G1 (0,765
+sul mazzo di oggi), G1 neutra (0,731), F5 (0,729) e le 162, 163, 165 (anni negativi, t sotto 3). La (a) sposta quasi niente (+0,0004):
+con la V simmetrica le famiglie della 159 e della 161 erano già fuori da V (t sopra +3) e la 157 è tolta come bocciata; cambia solo N
+(198).
+
+**Riserva, come nelle sezioni 4-6.** I due modi nascono **dopo** aver visto i numeri delle prove 162-169 (sezione 6 e
+`ESAME_NUMERI_2026-11-27.md`). Per questo il calcolo di oggi **non convalida da solo** le prove già viste che ora passano: la **168 (A e
+B) va dal revisore delle prove (backtest-auditor) prima del paper**. Fra le strategie, G11 è già nel paper e il suo stato non cambia; la
+miscela F5 + M7 + K2 (PASS tecnico al riesame, misurata a tavolino dall'11 novembre) ora passerebbe, ma un suo passaggio al paper passa
+prima dal revisore, con la stessa riserva. La **169 resta «no»**
+anche così: con le sue regole scritte prima (`CENTOSETTIMA_BIS.md`, l'esame di allora) era non promettente, e il fallimento utile scritto
+prima scatta (B guadagna su G1 1,97 punti l'anno ma i cambi di stato costano 1,32 l'anno, più della metà; A non guadagna su G1:
+`research/programma7/RISULTATI_CENTOSETTIMA_BIS.md`). La regola vale per giudicare le prove nuove, dalla 170 in poi.
+
+**Domande che restano al proprietario** (dalla sezione 6, non nella funzione): con la V simmetrica la famiglia di G1 (con la 168, la 169,
+G11, F5 e la miscela) esce da V perché il suo t è sopra +3, cioè è la candidata stessa ad abbassarsi la soglia; il verificatore
+dell'audit propone di tenere in V la famiglia della candidata. Con la regola in vigore (V simmetrica e settimane efficaci; verifica
+indipendente del 27 novembre) i numeri sarebbero: 168 A 0,810, 168 B 0,822, 169 B 0,818 (passano ancora), **G11 0,787 e la miscela
+misurata al riesame 0,7998 (non passerebbero più)**, la miscela con la serie del mazzo 0,838, G1 alla 57 0,896, G1 oggi 0,724. Quindi il
+«sì» di G11 e della miscela dipende da questa scelta; quello della 168 no. Altre due cose della verifica, senza effetto sugli esiti di
+oggi: nessun tetto alle settimane efficaci (129 serie del mazzo su 290 ne hanno più delle settimane, fino a 2,03 volte: una prova nuova
+con settimane che si alternano guadagnerebbe fino a circa il 40% sul t); V scarta le famiglie con il t semplice (con il t robusto
+rientrerebbe la 113 N3G, circa −0,011 su ogni candidata). Togliere da V anche la
+55 C3 non sposta niente: sta nella famiglia di G1, già fuori. Restano aperte anche le idee del programma 5 fuori dal mazzo e la regola
+sugli anni parziali (sezione 6).

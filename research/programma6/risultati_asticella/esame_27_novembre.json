@@ -1,0 +1,1951 @@
+{
+ "oggi": {
+  "in_vigore": {
+   "regola": "27 novembre 2026 (decisione del proprietario): N = famiglie del mazzo di oggi; V simmetrica (fuori le famiglie con il t sotto -3 e sopra +3) senza le serie bocciate dal revisore; t robusto di Newey e West con 4 settimane di ritardo e probabilita' sulle settimane efficaci; netto positivo, ogni anno positivo, t da 3, probabilita' da 0,80",
+   "serie": 291,
+   "senza_serie": 48,
+   "taglio": 0.5,
+   "ritardi": 4,
+   "bocciate": [
+    "157 A",
+    "157 B"
+   ],
+   "famiglie": 200,
+   "in_v": 149,
+   "deviazione_v": 0.5798021070150117,
+   "fuori_da_v_vincenti": [
+    [
+     "70 G12"
+    ],
+    [
+     "113 N3G"
+    ],
+    [
+     "159 A",
+     "159 B"
+    ],
+    [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    [
+     "97 CC",
+     "161 A",
+     "161 B"
+    ]
+   ]
+  },
+  "non_ufficiali": {
+   "regola_fino_al_27_novembre": {
+    "famiglie": 200,
+    "in_v": 154,
+    "deviazione_v": 0.6891352059364515
+   },
+   "a_senza_incasso_fisso": {
+    "tolte": [
+     "157 A",
+     "157 B",
+     "159 A",
+     "159 B",
+     "161 A",
+     "161 B"
+    ],
+    "serie": 285,
+    "famiglie": 198,
+    "in_v": 149,
+    "deviazione_v": 0.5802131891850769
+   }
+  },
+  "candidate": {
+   "162 A": {
+    "misure": {
+     "sharpe": 0.09158777026777482,
+     "settimane": 137.0,
+     "asimmetria": -0.8587448078041375,
+     "curtosi": 6.111573800582286,
+     "annuo": 0.000710919168752594
+    },
+    "serie": "162 A",
+    "gruppo": [
+     "162 A"
+    ],
+    "in_vigore": {
+     "probabilita": 0.011758678418513843,
+     "t": 0.13833794409540182,
+     "settimane_efficaci": 119,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.8659452584024018,
+     "ritardi": 4,
+     "t_semplice": 0.14866067413481443,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2024": -0.012207061017838227,
+      "2025": 0.012330310499584236,
+      "2026": 0.00013843814858613244
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: anni non positivi 2024; t robusto 0.14 sotto 3; probabilita' che non sia fortuna 0.01 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.0017623519543846766,
+      "t": 0.14866067413481443,
+      "settimane": 137.0,
+      "esito": "NON PROMETTENTE: anni non positivi 2024; t 0.15 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.01179413737969237,
+      "t": 0.13833794409540182,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.8470530815802839,
+      "settimane_efficaci": 116,
+      "t": 0.13682057500133515,
+      "probabilita": 0.012677620824677495,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2024": -0.01055539363780067,
+      "2025": 0.01238764172550244,
+      "2026": 9.410849860547188e-05
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "162 B": {
+    "misure": {
+     "sharpe": -6.232580150015836,
+     "settimane": 138.0,
+     "asimmetria": 1.4230063553915242,
+     "curtosi": 7.785582475653154,
+     "annuo": -0.055378872742035505
+    },
+    "serie": "162 B",
+    "gruppo": [
+     "162 B"
+    ],
+    "in_vigore": {
+     "probabilita": 1.944148661748698e-10,
+     "t": -9.350021835325027,
+     "settimane_efficaci": 117,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.8480349732426978,
+     "ritardi": 4,
+     "t_semplice": -10.153265517745108,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2024": -0.05397655199491315,
+      "2025": -0.04985639474290072,
+      "2026": -0.06417076300010142
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: netto non positivo; anni non positivi 2024,2025,2026; t robusto -9.35 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 8.09854895023934e-13,
+      "t": -10.153265517745108,
+      "settimane": 138.0,
+      "esito": "NON PROMETTENTE: netto non positivo; anni non positivi 2024,2025,2026; t -10.15 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 1.9518312350047009e-10,
+      "t": -9.350021835325027,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 1.3214669156427041,
+      "settimane_efficaci": 182,
+      "t": -11.671693941487417,
+      "probabilita": 2.690676725518924e-15,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2024": -0.04669335174637146,
+      "2025": -0.04869793690933155,
+      "2026": -0.0482064534149198
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "163 A": {
+    "misure": {
+     "sharpe": -0.3534432352622825,
+     "settimane": 172.0,
+     "asimmetria": -9.840194643199384,
+     "curtosi": 111.12064882624713,
+     "annuo": -0.09548850736227692
+    },
+    "serie": "163 A",
+    "gruppo": [
+     "163 A",
+     "163 B"
+    ],
+    "in_vigore": {
+     "probabilita": 1.822088174547749e-06,
+     "t": -0.6406003813118804,
+     "settimane_efficaci": 171,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.9931387665498229,
+     "ritardi": 4,
+     "t_semplice": -0.6428094097107439,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2023": 0.1487309005501962,
+      "2024": 0.07451795829429107,
+      "2025": -0.5143115873296966,
+      "2026": 0.0588748292594968
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: netto non positivo; anni non positivi 2025; t robusto -0.64 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 4.1174177098226575e-08,
+      "t": -0.6428094097107439,
+      "settimane": 172.0,
+      "esito": "NON PROMETTENTE: netto non positivo; anni non positivi 2025; t -0.64 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 1.8381977325235098e-06,
+      "t": -0.6406003813118804,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.9693335755017725,
+      "settimane_efficaci": 167,
+      "t": -0.6328763306284824,
+      "probabilita": 2.3708317310749474e-06,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2023": 0.07998399250774568,
+      "2024": 0.07872620751886639,
+      "2025": -0.49222243872562743,
+      "2026": 0.04622025506964622
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "163 B": {
+    "misure": {
+     "sharpe": 0.0634665539527337,
+     "settimane": 174.0,
+     "asimmetria": -0.7037330340124187,
+     "curtosi": 62.14172631059885,
+     "annuo": 0.021467522824218432
+    },
+    "serie": "163 B",
+    "gruppo": [
+     "163 A",
+     "163 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.0033826632627520603,
+     "t": 0.11239058406513344,
+     "settimane_efficaci": 163,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.9371823815796967,
+     "ritardi": 4,
+     "t_semplice": 0.11609616404337919,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2023": 0.2985757654844777,
+      "2024": 0.04071019443818771,
+      "2025": -0.17749624735308978,
+      "2026": 0.0537204082375218
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: anni non positivi 2025; t robusto 0.11 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.00040684155505384947,
+      "t": 0.11609616404337919,
+      "settimane": 174.0,
+      "esito": "NON PROMETTENTE: anni non positivi 2025; t 0.12 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.003396495884756805,
+      "t": 0.11239058406513344,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.7165102203758608,
+      "settimane_efficaci": 125,
+      "t": 0.0982718349067652,
+      "probabilita": 0.008909469386044417,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2023": 0.18041779041825934,
+      "2024": 0.04205268010627505,
+      "2025": -0.3190271196640245,
+      "2026": 0.04184342715064138
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "165 A": {
+    "misure": {
+     "sharpe": 0.1929290150272916,
+     "settimane": 124.0,
+     "asimmetria": -0.30642972693008924,
+     "curtosi": 5.19442699055035,
+     "annuo": 0.0901971365094057
+    },
+    "serie": "165 A",
+    "gruppo": [
+     "165 A",
+     "165 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.012358401562913266,
+     "t": 0.3096786232814101,
+     "settimane_efficaci": 134,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 1.080460811373165,
+     "ritardi": 4,
+     "t_semplice": 0.29792484209966424,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2024": 0.1493232062448363,
+      "2025": 0.3247077430874208,
+      "2026": -0.2619675078303582
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: anni non positivi 2026; t robusto 0.31 sotto 3; probabilita' che non sia fortuna 0.01 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.0043620060906654975,
+      "t": 0.29792484209966424,
+      "settimane": 124.0,
+      "esito": "NON PROMETTENTE: anni non positivi 2026; t 0.30 sotto 3; probabilita' che non sia fortuna 0.00 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.012397750946096811,
+      "t": 0.3096786232814101,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 1.2400060844156777,
+      "settimane_efficaci": 154,
+      "t": 0.3317558776535458,
+      "probabilita": 0.008003714592537254,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2024": 0.026588330690982875,
+      "2025": 0.19179800341165243,
+      "2026": -0.22172041823603517
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "165 B": {
+    "misure": {
+     "sharpe": 0.4816229382589482,
+     "settimane": 126.0,
+     "asimmetria": 0.04125900549892203,
+     "curtosi": 2.9547693216149407,
+     "annuo": 0.2414007965687699
+    },
+    "serie": "165 B",
+    "gruppo": [
+     "165 A",
+     "165 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.03279150418556041,
+     "t": 0.7916936764639358,
+     "settimane_efficaci": 141,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 1.1151488090890314,
+     "ritardi": 4,
+     "t_semplice": 0.7497056151327899,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2024": 0.03890978470802153,
+      "2025": 0.7885126567977493,
+      "2026": -0.2977272616472671
+     },
+     "ogni_anno_positivo": false,
+     "esito": "NON PROMETTENTE: anni non positivi 2026; t robusto 0.79 sotto 3; probabilita' che non sia fortuna 0.03 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.013595686225440731,
+      "t": 0.7497056151327899,
+      "settimane": 126.0,
+      "esito": "NON PROMETTENTE: anni non positivi 2026; t 0.75 sotto 3; probabilita' che non sia fortuna 0.01 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.032884201604103505,
+      "t": 0.7916936764639358,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 1.10399924472931,
+      "settimane_efficaci": 139,
+      "t": 0.787725948429355,
+      "probabilita": 0.03376997814149097,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2024": -0.050705911938293324,
+      "2025": 0.8782954869031638,
+      "2026": -0.255793800086756
+     },
+     "ogni_anno_positivo_composto": false
+    }
+   },
+   "168 A": {
+    "misure": {
+     "sharpe": 2.1133202874245183,
+     "settimane": 300.0,
+     "asimmetria": 0.7134656630675759,
+     "curtosi": 5.188888013785569,
+     "annuo": 0.5528377211871052
+    },
+    "serie": "168 A",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.8418951138898818,
+     "t": 3.904711424588583,
+     "settimane_efficaci": 178,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.5917378245679684,
+     "ritardi": 4,
+     "t_semplice": 5.076031140361863,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.2706911564369747,
+      "2022": 0.3078526550640644,
+      "2023": 0.1421743856748663,
+      "2024": 0.6272943472670065,
+      "2025": 0.6464036210244825,
+      "2026": 0.24395849755282098
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.7019972420314161,
+      "t": 5.076031140361863,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.70 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.842260393081949,
+      "t": 3.904711424588583,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.4611299736423465,
+      "settimane_efficaci": 138,
+      "t": 3.446957700411606,
+      "probabilita": 0.8110527755455214,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 2.302150228438879,
+      "2022": 0.32966120310337255,
+      "2023": 0.1274175021081736,
+      "2024": 0.8169585704236939,
+      "2025": 0.8727579007237545,
+      "2026": 0.17193004467581674
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "168 B": {
+    "misure": {
+     "sharpe": 2.1369138977783884,
+     "settimane": 300.0,
+     "asimmetria": 0.6827350162214783,
+     "curtosi": 4.948873934278044,
+     "annuo": 0.552424339846058
+    },
+    "serie": "168 B",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.8523501766377566,
+     "t": 3.9560248297323723,
+     "settimane_efficaci": 178,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.5940541843333377,
+     "ritardi": 4,
+     "t_semplice": 5.13270115937529,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.266134354124783,
+      "2022": 0.30622920069218207,
+      "2023": 0.14542537167188407,
+      "2024": 0.6393854605809388,
+      "2025": 0.6396512709708829,
+      "2026": 0.23725595577234787
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.7221555493180194,
+      "t": 5.13270115937529,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.72 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.8526985461383898,
+      "t": 3.9560248297323723,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.45759130581407553,
+      "settimane_efficaci": 137,
+      "t": 3.472041130541787,
+      "probabilita": 0.8205283933928722,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 2.2964216081020514,
+      "2022": 0.32651163622243873,
+      "2023": 0.13105839749827064,
+      "2024": 0.8402842505510979,
+      "2025": 0.8609678915083965,
+      "2026": 0.16771206458746368
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "169 A": {
+    "misure": {
+     "sharpe": 1.9895636221490902,
+     "settimane": 300.0,
+     "asimmetria": 0.5703856484615968,
+     "curtosi": 4.3664611009777055,
+     "annuo": 0.5269780127813064
+    },
+    "serie": "169 A",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.7820569806635056,
+     "t": 3.829372817863463,
+     "settimane_efficaci": 193,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6421281751599589,
+     "ritardi": 4,
+     "t_semplice": 4.778777245387436,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.0941738982311255,
+      "2022": 0.2635805782123825,
+      "2023": 0.15665058955215153,
+      "2024": 0.7071926627858123,
+      "2025": 0.6357679045509225,
+      "2026": 0.22572303175183642
+     },
+     "ogni_anno_positivo": true,
+     "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.78 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.5835133938490825,
+      "t": 4.778777245387436,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.58 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.7825144750706419,
+      "t": 3.829372817863463,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.522625092541858,
+      "settimane_efficaci": 157,
+      "t": 3.4547125353618773,
+      "probabilita": 0.7587615793487699,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 1.7919659874444815,
+      "2022": 0.27446304535329835,
+      "2023": 0.13693844101143338,
+      "2024": 0.9626533072722381,
+      "2025": 0.8492227073959293,
+      "2026": 0.15348618364172628
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "169 B": {
+    "misure": {
+     "sharpe": 2.1010925645600773,
+     "settimane": 300.0,
+     "asimmetria": 0.7271519551156786,
+     "curtosi": 5.017764586919249,
+     "annuo": 0.5605437180502837
+    },
+    "serie": "169 B",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.8506085991334862,
+     "t": 4.114795464993066,
+     "settimane_efficaci": 199,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6647957314149766,
+     "ritardi": 4,
+     "t_semplice": 5.046661100049016,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.2308035948434122,
+      "2022": 0.2933930779058357,
+      "2023": 0.1988890001577869,
+      "2024": 0.7418186381636153,
+      "2025": 0.6255766242643555,
+      "2026": 0.17221251639746682
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.6918267177125195,
+      "t": 5.046661100049016,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.69 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.8509822640990363,
+      "t": 4.114795464993066,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.5132475456699652,
+      "settimane_efficaci": 154,
+      "t": 3.6154934746159344,
+      "probabilita": 0.8194769169905043,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 2.1625216704189616,
+      "2022": 0.3152023966930735,
+      "2023": 0.18920390222705463,
+      "2024": 1.0373235540591041,
+      "2025": 0.8299192967592219,
+      "2026": 0.11034031133096822
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "57 G1": {
+    "misure": {
+     "sharpe": 1.967189368892449,
+     "settimane": 300.0,
+     "asimmetria": 0.5581776395972476,
+     "curtosi": 4.0946728647639805,
+     "annuo": 0.5408606026860507
+    },
+    "serie": "57 G1",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.7645625143543917,
+     "t": 3.7200155163578312,
+     "settimane_efficaci": 186,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6198395077998533,
+     "ritardi": 4,
+     "t_semplice": 4.725036027386135,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.0988454034346544,
+      "2022": 0.3122438396198632,
+      "2023": 0.0771447088739551,
+      "2024": 0.680370599091752,
+      "2025": 0.7249303747941456,
+      "2026": 0.2849742067788772
+     },
+     "ogni_anno_positivo": true,
+     "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.76 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.561456837386118,
+      "t": 4.725036027386135,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.56 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.765031982335769,
+      "t": 3.7200155163578312,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.49009201375198713,
+      "settimane_efficaci": 147,
+      "t": 3.3078357533735296,
+      "probabilita": 0.7390956215336861,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 1.7807618067301374,
+      "2022": 0.3285233178918432,
+      "2023": 0.05024437052678321,
+      "2024": 0.9078445658187406,
+      "2025": 1.0197149076605556,
+      "2026": 0.2080333287441709
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "88 G1N": {
+    "misure": {
+     "sharpe": 1.9132601990556704,
+     "settimane": 300.0,
+     "asimmetria": 0.8436994449148985,
+     "curtosi": 5.508773243241778,
+     "annuo": 0.5128190904257472
+    },
+    "serie": "88 G1N",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.730544665081472,
+     "t": 3.5247191246403986,
+     "settimane_efficaci": 176,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.5882785924021517,
+     "ritardi": 4,
+     "t_semplice": 4.59550235135307,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.247645723647256,
+      "2022": 0.1646213690970963,
+      "2023": 0.11132082645546332,
+      "2024": 0.6762466099763246,
+      "2025": 0.574254738414667,
+      "2026": 0.228636887257074
+     },
+     "ogni_anno_positivo": true,
+     "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.73 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.5076948269714088,
+      "t": 4.59550235135307,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.51 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.7310490655360409,
+      "t": 3.5247191246403986,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.43328355957643416,
+      "settimane_efficaci": 130,
+      "t": 3.0249562507712926,
+      "probabilita": 0.7010969302263845,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 2.2339501651282814,
+      "2022": 0.1475127636542506,
+      "2023": 0.09613324838978765,
+      "2024": 0.9004849034441633,
+      "2025": 0.7460257270127195,
+      "2026": 0.1531185021319934
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "69 G11": {
+    "misure": {
+     "sharpe": 2.049616589205972,
+     "settimane": 300.0,
+     "asimmetria": 0.9018193001250303,
+     "curtosi": 5.800066818053828,
+     "annuo": 0.6033683766462965
+    },
+    "serie": "69 G11",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.8225868467065143,
+     "t": 3.902504956103367,
+     "settimane_efficaci": 189,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6283820351161723,
+     "ritardi": 4,
+     "t_semplice": 4.9230198065674795,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.5096713995676865,
+      "2022": 0.43753775258617883,
+      "2023": 0.07325505208652351,
+      "2024": 0.4942739875185192,
+      "2025": 0.7807635512522311,
+      "2026": 0.23461918896900522
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.6465720816203511,
+      "t": 4.9230198065674795,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.65 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.8230019056186983,
+      "t": 3.902504956103367,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.4639637584180823,
+      "settimane_efficaci": 139,
+      "t": 3.3533092890282514,
+      "probabilita": 0.7860340534154564,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 3.0825962370073423,
+      "2022": 0.5024053306316953,
+      "2023": 0.048598832378779155,
+      "2024": 0.5776097836360425,
+      "2025": 1.1224006120299244,
+      "2026": 0.16482730296208015
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "24 F5": {
+    "misure": {
+     "sharpe": 1.9125832249892722,
+     "settimane": 301.0,
+     "asimmetria": 0.2274362906779066,
+     "curtosi": 5.525803320506882,
+     "annuo": 0.5681664866749822
+    },
+    "serie": "24 F5",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.7293694938535634,
+     "t": 3.8280575848361287,
+     "settimane_efficaci": 208,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6920748826458019,
+     "ritardi": 4,
+     "t_semplice": 4.601526402990182,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.2261204859534351,
+      "2022": 0.3820642418709019,
+      "2023": 0.27840152338842206,
+      "2024": 0.7201807050851337,
+      "2025": 0.5158078154708572,
+      "2026": 0.1981010913027376
+     },
+     "ogni_anno_positivo": true,
+     "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.73 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.5064189912566004,
+      "t": 4.601526402990182,
+      "settimane": 301.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.51 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.7298731729415081,
+      "t": 3.8280575848361287,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.6215410675203363,
+      "settimane_efficaci": 187,
+      "t": 3.6277456747389683,
+      "probabilita": 0.7187359940122368,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 2.089963108615054,
+      "2022": 0.43421125216709466,
+      "2023": 0.28514895222678005,
+      "2024": 0.9653783906757976,
+      "2025": 0.6291325203243607,
+      "2026": 0.12627240346051094
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "28 F5+M7+K2": {
+    "misure": {
+     "sharpe": 2.1610383568357596,
+     "settimane": 301.0,
+     "asimmetria": 0.26553534289423214,
+     "curtosi": 7.122257419285615,
+     "annuo": 0.48047236925175074
+    },
+    "serie": "28 F5+M7+K2",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.866496841594496,
+     "t": 4.438788692245588,
+     "settimane_efficaci": 219,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.7288544997357679,
+     "ritardi": 4,
+     "t_semplice": 5.199290115550419,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 0.7459749728513458,
+      "2022": 0.5127890359038612,
+      "2023": 0.1430461168633182,
+      "2024": 0.43006343913998324,
+      "2025": 0.6371795022317525,
+      "2026": 0.39503400555358587
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.7244151448755742,
+      "t": 5.199290115550419,
+      "settimane": 301.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.72 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.8668269505564006,
+      "t": 4.438788692245588,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.6184385506130572,
+      "settimane_efficaci": 186,
+      "t": 4.088766673847435,
+      "probabilita": 0.8467337800879934,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 1.0156206103764345,
+      "2022": 0.6393971457402392,
+      "2023": 0.1337026274338693,
+      "2024": 0.498187837859017,
+      "2025": 0.8501826992983073,
+      "2026": 0.33437180306077763
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "miscela riesame": {
+    "misure": {
+     "sharpe": 2.1511,
+     "settimane": 251.0,
+     "asimmetria": -0.3397,
+     "curtosi": 3.7322,
+     "annuo": 0.4348
+    },
+    "serie": "28 F5+M7+K2",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.8290459642268361,
+     "t": 4.034746085019803,
+     "settimane_efficaci": 183,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.7288544997357679,
+     "ritardi": 4,
+     "t_semplice": 4.726022546476867,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 0.7459749728513458,
+      "2022": 0.5127890359038612,
+      "2023": 0.1430461168633182,
+      "2024": 0.43006343913998324,
+      "2025": 0.6371795022317525,
+      "2026": 0.39503400555358587
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.6910720806610319,
+      "t": 4.726022546476867,
+      "settimane": 251.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.69 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.8293852380927329,
+      "t": 4.034746085019803,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.6184385506130572,
+      "settimane_efficaci": 155,
+      "t": 3.7165849680308765,
+      "probabilita": 0.8090069266130402,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 1.0156206103764345,
+      "2022": 0.6393971457402392,
+      "2023": 0.1337026274338693,
+      "2024": 0.498187837859017,
+      "2025": 0.8501826992983073,
+      "2026": 0.33437180306077763
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "G1 misura 12 novembre": {
+    "misure": {
+     "sharpe": 1.9815328145615034,
+     "settimane": 300.0,
+     "asimmetria": 0.5446190246495367,
+     "curtosi": 4.0440874732458525,
+     "annuo": 0.5408606026860507
+    },
+    "serie": "57 G1",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "45 I1",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1",
+     "61 F5T",
+     "61 G1T",
+     "63 G6",
+     "63 G1+G6",
+     "69 G11",
+     "86 F5N",
+     "88 G1N",
+     "89 F5C",
+     "92 G1 clima",
+     "92 F5 clima",
+     "93 G1-S",
+     "94 G1N-S",
+     "124 G1M",
+     "142 G1S",
+     "148 B",
+     "152 V1",
+     "152 V2",
+     "152 V3",
+     "155 A",
+     "155 B",
+     "156 A",
+     "156 B",
+     "158 A",
+     "158 B",
+     "160 A",
+     "160 B",
+     "168 A",
+     "168 B",
+     "169 A",
+     "169 B"
+    ],
+    "in_vigore": {
+     "probabilita": 0.7729074892193575,
+     "t": 3.7471394126591613,
+     "settimane_efficaci": 186,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6198395077998533,
+     "ritardi": 4,
+     "t_semplice": 4.759487869498974,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.0988454034346544,
+      "2022": 0.3122438396198632,
+      "2023": 0.0771447088739551,
+      "2024": 0.680370599091752,
+      "2025": 0.7249303747941456,
+      "2026": 0.2849742067788772
+     },
+     "ogni_anno_positivo": true,
+     "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.77 sotto 0,80"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.5755605482940008,
+      "t": 4.759487869498974,
+      "settimane": 300.0,
+      "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.58 sotto 0,80",
+      "passerebbe": false
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.7733669561413119,
+      "t": 3.7471394126591613,
+      "passerebbe": false
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.49009201375198713,
+      "settimane_efficaci": 147,
+      "t": 3.331954307062838,
+      "probabilita": 0.7469430824657741,
+      "passerebbe": false
+     },
+     "per_anno_composto": {
+      "2021": 1.7807618067301374,
+      "2022": 0.3285233178918432,
+      "2023": 0.05024437052678321,
+      "2024": 0.9078445658187406,
+      "2025": 1.0197149076605556,
+      "2026": 0.2080333287441709
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   }
+  }
+ },
+ "fino_alla_57": {
+  "in_vigore": {
+   "regola": "27 novembre 2026 (decisione del proprietario): N = famiglie del mazzo di oggi; V simmetrica (fuori le famiglie con il t sotto -3 e sopra +3) senza le serie bocciate dal revisore; t robusto di Newey e West con 4 settimane di ritardo e probabilita' sulle settimane efficaci; netto positivo, ogni anno positivo, t da 3, probabilita' da 0,80",
+   "serie": 102,
+   "senza_serie": 18,
+   "taglio": 0.5,
+   "ritardi": 4,
+   "bocciate": [],
+   "famiglie": 65,
+   "in_v": 57,
+   "deviazione_v": 0.518395337526509,
+   "fuori_da_v_vincenti": [
+    [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1"
+    ]
+   ]
+  },
+  "non_ufficiali": {
+   "regola_fino_al_27_novembre": {
+    "famiglie": 65,
+    "in_v": 58,
+    "deviazione_v": 0.5667005295936921
+   },
+   "a_senza_incasso_fisso": {
+    "tolte": [],
+    "serie": 102,
+    "famiglie": 65,
+    "in_v": 57,
+    "deviazione_v": 0.518395337526509
+   }
+  },
+  "candidate": {
+   "G1 misura 12 novembre": {
+    "misure": {
+     "sharpe": 1.9815328145615034,
+     "settimane": 300.0,
+     "asimmetria": 0.5446190246495367,
+     "curtosi": 4.0440874732458525,
+     "annuo": 0.5408606026860507
+    },
+    "serie": "57 G1",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1"
+    ],
+    "in_vigore": {
+     "probabilita": 0.9312642987608806,
+     "t": 3.7471394126591613,
+     "settimane_efficaci": 186,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6198395077998533,
+     "ritardi": 4,
+     "t_semplice": 4.759487869498974,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.0988454034346544,
+      "2022": 0.3122438396198632,
+      "2023": 0.0771447088739551,
+      "2024": 0.680370599091752,
+      "2025": 0.7249303747941456,
+      "2026": 0.2849742067788772
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.945143820324706,
+      "t": 4.759487869498974,
+      "settimane": 300.0,
+      "esito": "PROMETTENTE",
+      "passerebbe": true
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.9312642987608806,
+      "t": 3.7471394126591613,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.49009201375198713,
+      "settimane_efficaci": 147,
+      "t": 3.331954307062838,
+      "probabilita": 0.9064926945961425,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 1.7807618067301374,
+      "2022": 0.3285233178918432,
+      "2023": 0.05024437052678321,
+      "2024": 0.9078445658187406,
+      "2025": 1.0197149076605556,
+      "2026": 0.2080333287441709
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   },
+   "57 G1": {
+    "misure": {
+     "sharpe": 1.967189368892449,
+     "settimane": 300.0,
+     "asimmetria": 0.5581776395972476,
+     "curtosi": 4.0946728647639805,
+     "annuo": 0.5408606026860507
+    },
+    "serie": "57 G1",
+    "gruppo": [
+     "6 F2",
+     "8 F3",
+     "12 K1",
+     "15 F3+M1",
+     "19 P1",
+     "19 P2",
+     "24 F5",
+     "25 F5+M7",
+     "28 K2",
+     "28 F5+M7+K2",
+     "42 F6",
+     "48 R1",
+     "55 C3",
+     "56 F9",
+     "57 G1"
+    ],
+    "in_vigore": {
+     "probabilita": 0.9277024938689621,
+     "t": 3.7200155163578312,
+     "settimane_efficaci": 186,
+     "settimane_usate": "efficaci (Newey e West, 4 settimane di ritardo)",
+     "rapporto": 0.6198395077998533,
+     "ritardi": 4,
+     "t_semplice": 4.725036027386135,
+     "v": "simmetrica, senza le serie bocciate dal revisore",
+     "per_anno": {
+      "2021": 1.0988454034346544,
+      "2022": 0.3122438396198632,
+      "2023": 0.0771447088739551,
+      "2024": 0.680370599091752,
+      "2025": 0.7249303747941456,
+      "2026": 0.2849742067788772
+     },
+     "ogni_anno_positivo": true,
+     "esito": "PROMETTENTE"
+    },
+    "non_ufficiali": {
+     "regola_fino_al_27_novembre": {
+      "probabilita": 0.9412728489553391,
+      "t": 4.725036027386135,
+      "settimane": 300.0,
+      "esito": "PROMETTENTE",
+      "passerebbe": true
+     },
+     "a_senza_incasso_fisso": {
+      "probabilita": 0.9277024938689621,
+      "t": 3.7200155163578312,
+      "passerebbe": true
+     },
+     "controllo_13_ritardi": {
+      "ritardi": 13,
+      "rapporto": 0.49009201375198713,
+      "settimane_efficaci": 147,
+      "t": 3.3078357533735296,
+      "probabilita": 0.902516633976937,
+      "passerebbe": true
+     },
+     "per_anno_composto": {
+      "2021": 1.7807618067301374,
+      "2022": 0.3285233178918432,
+      "2023": 0.05024437052678321,
+      "2024": 0.9078445658187406,
+      "2025": 1.0197149076605556,
+      "2026": 0.2080333287441709
+     },
+     "ogni_anno_positivo_composto": true
+    }
+   }
+  }
+ },
+ "sharpe_che_serve": {
+  "regola nuova": {
+   "famiglie": 200,
+   "in_v": 149,
+   "deviazione_v": 0.5798021070150117,
+   "fortuna": 1.6034565869066209,
+   "rapporto": 1.0,
+   "sharpe_per_0_80": {
+    "300": 1.9608660860348144,
+    "150": 2.111192181735452,
+    "100": 2.2278003866516443,
+    "52": 2.4780179024070974,
+    "22": 2.9833308534069323
+   },
+   "sharpe_per_t_3": {
+    "300": 1.2489995996796797,
+    "150": 1.7663521732655694,
+    "100": 2.1633307652783937,
+    "52": 3.0,
+    "22": 4.6122366887148445
+   }
+  },
+  "regola nuova, settimane legate come G1": {
+   "famiglie": 200,
+   "in_v": 149,
+   "deviazione_v": 0.5798021070150117,
+   "fortuna": 1.6034565869066209,
+   "rapporto": 0.6198395077998533,
+   "sharpe_per_0_80": {
+    "300": 2.0586603743832756,
+    "150": 2.2514317027576074,
+    "100": 2.4017741260028194,
+    "52": 2.731918593826532,
+    "22": 3.376564420155168
+   },
+   "sharpe_per_t_3": {
+    "300": 1.5864364223016512,
+    "150": 2.243559904261646,
+    "100": 2.7477884864042554,
+    "52": 3.8104970314846645,
+    "22": 5.858304736950858
+   }
+  },
+  "(a) regola nuova senza 157, 159, 161": {
+   "famiglie": 198,
+   "in_v": 149,
+   "deviazione_v": 0.5802131891850769,
+   "fortuna": 1.6026863077808136,
+   "rapporto": 1.0,
+   "sharpe_per_0_80": {
+    "300": 1.9600907694643548,
+    "150": 2.110414214995902,
+    "100": 2.227020149466735,
+    "52": 2.4772321650517375,
+    "22": 2.9825314288933464
+   },
+   "sharpe_per_t_3": {
+    "300": 1.2489995996796797,
+    "150": 1.7663521732655694,
+    "100": 2.1633307652783937,
+    "52": 3.0,
+    "22": 4.6122366887148445
+   }
+  },
+  "regola fino al 27 novembre": {
+   "famiglie": 200,
+   "in_v": 154,
+   "deviazione_v": 0.6891352059364515,
+   "fortuna": 1.9058198855414719,
+   "rapporto": 1.0,
+   "sharpe_per_0_80": {
+    "300": 2.2653554209136413,
+    "150": 2.416784100029407,
+    "100": 2.534331837759612,
+    "52": 2.7868121138397752,
+    "22": 3.2977088147504197
+   },
+   "sharpe_per_t_3": {
+    "300": 1.2489995996796797,
+    "150": 1.7663521732655694,
+    "100": 2.1633307652783937,
+    "52": 3.0,
+    "22": 4.6122366887148445
+   }
+  }
+ }
+}

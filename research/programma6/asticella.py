@@ -2,6 +2,11 @@
 Sharpe dei gruppi (López de Prado 2019 e 2020), accanto al calcolo di prima e al t dello Sharpe contro 3,0 (Harvey, Liu e
 Zhu 2016).
 
+**L'esame in vigore e' `esame`** (dal 27 novembre 2026, decisione del proprietario; ASTICELLA.md, sezione 7): netto positivo, ogni anno
+positivo, t robusto di Newey e West (``RITARDI`` settimane) da 3 e probabilita' che non sia fortuna da 0,80 con le settimane efficaci,
+N = famiglie del mazzo di oggi e V simmetrica senza le serie ``BOCCIATE_DAL_REVISORE``. Accanto, non ufficiale, la regola fino al 27
+novembre (V senza le sole perdenti, t e settimane semplici: e' quella di `corretto_famiglie`, che resta per le prove gia' fatte con lei).
+
 Uso: python3 -m research.programma6.asticella
 """
 from __future__ import annotations
@@ -28,13 +33,16 @@ QUI = Path(__file__).parent
 RIS = QUI / "risultati_asticella"
 MIN_COMUNI, TAGLIO, ALTRI_TAGLI = 52, 0.5, (0.3, 0.7)
 T_PERDENTI, SETTIMANE_PROGRAMMA = -3.0, 300
-# L'esame in vigore (`esame`): probabilita' che non sia fortuna da 0,80 (9 novembre), t dello Sharpe da 3, ogni anno positivo.
+# L'esame in vigore (`esame`): probabilita' che non sia fortuna da 0,80 (9 novembre), t da 3, ogni anno positivo. Dal 27 novembre 2026
+# (decisione del proprietario, ASTICELLA.md, sezione 7) il t e' quello robusto di Newey e West con RITARDI settimane, la probabilita' si
+# calcola sulle settimane efficaci e V e' simmetrica (fuori anche le famiglie con il t sopra +3) senza le serie dei calcoli bocciati dal
+# revisore (FAIL, audits/reports/2026-11-15-PROVA157.md). RITARDI_CONTROLLO: il controllo accanto, non ufficiale.
 SOGLIA_PROBABILITA, SOGLIA_T = 0.80, 3.0
-# I numeri NON ufficiali accanto (`esame`; ASTICELLA.md, sezione 6): le prove a incasso quasi fisso (backlog P34, 15 novembre), le
-# serie dei calcoli bocciati dal revisore (FAIL, audits/reports/2026-11-15-PROVA157.md), i ritardi di Newey e West (base, controllo).
-INCASSO_FISSO = (157, 159, 161)
 BOCCIATE_DAL_REVISORE = ("157 A", "157 B")
 RITARDI, RITARDI_CONTROLLO = 4, 13
+# Accanto, NON ufficiali (`esame`): la regola fino al 27 novembre (V senza le sole perdenti, t e settimane semplici) e (a) senza le prove
+# a incasso quasi fisso (backlog P34, 15 novembre).
+INCASSO_FISSO = (157, 159, 161)
 
 
 class Solo(float):
@@ -199,7 +207,8 @@ def per_v(gr: list, soli: list, escludi_perdenti: bool, simmetrica: bool = False
     """Gli Sharpe dei gruppi che entrano in V. Con ``escludi_perdenti`` (ASTICELLA.md, sezione 5) i gruppi con il t dello
     Sharpe sotto -3 restano in N ma non in V. Per le prove senza serie il t si calcola sulle loro settimane (``Solo.settimane``,
     dal 27 novembre 2026); un numero semplice vale 300 settimane, quelle del programma (le prove 1 e 2B, che lo coprono tutto).
-    ``simmetrica`` (NON ufficiale, ASTICELLA.md, sezione 6): fuori da V anche i gruppi con il t sopra +3."""
+    ``simmetrica``: fuori da V anche i gruppi con il t sopra +3 (in vigore dal 27 novembre 2026, decisione del proprietario,
+    ASTICELLA.md, sezione 7; fino ad allora solo un numero non ufficiale)."""
     tutti = [(g["sharpe"], g["settimane"]) for g in gr] + [(float(x), getattr(x, "settimane", SETTIMANE_PROGRAMMA)) for x in soli]
     if not escludi_perdenti:
         return [sr for sr, _ in tutti]
@@ -436,11 +445,14 @@ def mazzo(nuove: dict | None = None, fino_alla: int | None = None) -> tuple:
 
 
 def corretto_famiglie(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
-    """La probabilita' dell'esame di oggi (decisione dell'11 novembre): lo Sharpe corretto con N = famiglie di prove simili e V con
-    l'aggiunta del 23 ottobre, sul mazzo completo (``mazzo``) piu' le serie ``nuove`` = {nome: serie settimanale netta}.
-    ``candidate`` = {nome: {"sharpe", "settimane", "asimmetria", "curtosi"}}. Dal 27 novembre 2026 l'esame intero (probabilita', t,
-    ogni anno positivo, verdetto e i numeri non ufficiali accanto) e' `esame`, che da' la stessa probabilita'; questa resta per le
-    prove che la chiamano gia'."""
+    """**La regola fino al 27 novembre 2026, non l'esame in vigore.** La probabilita' dell'esame dall'11 al 27 novembre: lo Sharpe
+    corretto con N = famiglie di prove simili e V con l'aggiunta del 23 ottobre (fuori le sole famiglie con il t sotto -3), sulle
+    settimane semplici, sul mazzo completo (``mazzo``) piu' le serie ``nuove`` = {nome: serie settimanale netta}. ``candidate`` =
+    {nome: {"sharpe", "settimane", "asimmetria", "curtosi"}}; il "t" e' quello semplice.
+
+    Resta per le prove gia' fatte con lei (dalla 154 alla 169) e per rifarne i numeri. **Le prove nuove chiamano `esame`**, l'esame in
+    vigore dal 27 novembre (decisione del proprietario, ASTICELLA.md, sezione 7), che scrive questo numero accanto come «regola fino al
+    27 novembre» (non ufficiale)."""
     serie, soli = mazzo(nuove)
     gr = gruppi(serie, taglio)
     sr_g, sr_v = per_v(gr, soli, False), per_v(gr, soli, True)
@@ -455,7 +467,7 @@ def corretto_famiglie(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> d
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
-# L'esame in vigore in una funzione sola, con i numeri non ufficiali accanto (27 novembre 2026; ASTICELLA.md, sezione 6)
+# L'esame in vigore in una funzione sola, con i numeri non ufficiali accanto (ASTICELLA.md, sezioni 6 e 7; dal 27 novembre 2026)
 # ---------------------------------------------------------------------------------------------------------------------------------
 
 def _numero_prova(nome: str) -> int | None:
@@ -504,9 +516,10 @@ def per_anno_composto(x: pd.Series) -> dict:
     return {int(a): float(v) for a, v in ((1 + x).groupby(anni).prod() - 1).items()}
 
 
-def verdetto(annuo: float, anni: dict, t: float, probabilita: float) -> str:
-    """Il verdetto dell'esame in vigore: «PROMETTENTE» se il netto e' positivo, ogni anno e' positivo, il t e' da 3 e la probabilita'
-    che non sia fortuna e' da 0,80; altrimenti «NON PROMETTENTE» con i motivi (come `programma7.centosesta.esito_regole`)."""
+def verdetto(annuo: float, anni: dict, t: float, probabilita: float, quale_t: str = "t") -> str:
+    """Il verdetto dell'esame: «PROMETTENTE» se il netto e' positivo, ogni anno e' positivo, il t e' da 3 e la probabilita' che non sia
+    fortuna e' da 0,80; altrimenti «NON PROMETTENTE» con i motivi (come `programma7.centosesta.esito_regole`). ``quale_t`` e' il nome
+    del t nei motivi («t robusto» per l'esame in vigore dal 27 novembre 2026 su una candidata con la serie)."""
     m = []
     if not annuo > 0:
         m.append("netto non positivo")
@@ -516,7 +529,7 @@ def verdetto(annuo: float, anni: dict, t: float, probabilita: float) -> str:
     elif neg:
         m.append("anni non positivi " + ",".join(map(str, neg)))
     if not t >= SOGLIA_T:
-        m.append(f"t {t:.2f} sotto 3")
+        m.append(f"{quale_t} {t:.2f} sotto 3")
     if not probabilita >= SOGLIA_PROBABILITA:
         m.append(f"probabilita' che non sia fortuna {probabilita:.2f} sotto 0,80")
     return "PROMETTENTE" if not m else "NON PROMETTENTE: " + "; ".join(m)
@@ -536,23 +549,41 @@ def _senza(gr: list, serie: dict, via) -> list:
     return out
 
 
+REGOLA_IN_VIGORE = ("27 novembre 2026 (decisione del proprietario): N = famiglie del mazzo di oggi; V simmetrica (fuori le famiglie con il "
+                    "t sotto -3 e sopra +3) senza le serie bocciate dal revisore; t robusto di Newey e West con 4 settimane di ritardo e "
+                    "probabilita' sulle settimane efficaci; netto positivo, ogni anno positivo, t da 3, probabilita' da 0,80")
+SETTIMANE_EFFICACI = f"efficaci (Newey e West, {RITARDI} settimane di ritardo)"
+SETTIMANE_SEMPLICI = ("semplici: la candidata non ha una serie nel mazzo, quindi niente t robusto (t e probabilita' sulle settimane "
+                      "semplici)")
+
+
+def _robusto(x, settimane: float, sharpe_: float, ritardi: int) -> dict:
+    """Le settimane efficaci (le ``settimane`` per `rapporto_robusto` della serie ``x``, almeno 3) e il t robusto."""
+    r = rapporto_robusto(x, ritardi)
+    return {"ritardi": ritardi, "rapporto": r, "settimane_efficaci": max(3, int(round(settimane * r))),
+            "t": sharpe_ * math.sqrt(settimane * r / 52)}
+
+
 def esame(nuove: dict | None = None, candidate=None, taglio: float = TAGLIO, base: tuple | None = None) -> dict:
-    """**L'esame in vigore** in una funzione sola (27 novembre 2026; backlog P34 e P37, audit del 26 novembre, esame-10) e accanto i
-    numeri NON ufficiali da mostrare al proprietario finche' non decide (ASTICELLA.md, sezione 6). Qui le regole non cambiano.
+    """**L'esame in vigore** in una funzione sola, con accanto i numeri NON ufficiali (ASTICELLA.md, sezioni 6 e 7).
 
-    In vigore (decisioni del 9, 11 e 23 novembre, `docs/decisioni_del_proprietario.md`): «PROMETTENTE» se il netto e' positivo, ogni
-    anno solare e' positivo (`per_anno`), il t dello Sharpe (Sharpe per la radice di settimane/52) e' da 3 e la probabilita' che non
-    sia fortuna (`terza.sharpe_corretto`: N = famiglie del mazzo di oggi, V senza le famiglie con il t sotto -3) e' da 0,80. La
-    probabilita' e' la stessa di `corretto_famiglie`. Una strategia gia' scelta (G1: prova 57, 0,945) si giudica con lo sconto una
-    volta sola, quando e' stata scelta (23 novembre): il numero sul mazzo di oggi per lei e' solo un confronto.
+    In vigore dal 27 novembre 2026 (decisione del proprietario, `docs/decisioni_del_proprietario.md`; prima le decisioni del 9, 11 e 23
+    novembre): «PROMETTENTE» se il netto e' positivo, ogni anno solare e' positivo (`per_anno`), il **t robusto** di Newey e West
+    (``RITARDI`` settimane: Sharpe per la radice di settimane efficaci/52) e' da 3 e la **probabilita' che non sia fortuna**
+    (`terza.sharpe_corretto` sulle **settimane efficaci**, N = famiglie del mazzo di oggi, V **simmetrica**: senza le famiglie con il
+    t sotto -3 e sopra +3, e senza le serie ``BOCCIATE_DAL_REVISORE``) e' da 0,80. Settimane efficaci = settimane per
+    `rapporto_robusto` della serie della candidata. Una candidata **senza serie** nel mazzo (niente t robusto) si giudica sulle
+    settimane semplici, con la stessa V e lo stesso N, e il risultato lo dice (``settimane_usate``). Una strategia gia' scelta (G1:
+    prova 57, 0,945 con la regola di allora) si giudica con lo sconto una volta sola, quando e' stata scelta (23 novembre): il numero
+    sul mazzo di oggi per lei e' solo un confronto.
 
-    Accanto, NON ufficiali (non decidono niente; ognuno cambia una regola sola rispetto a quella in vigore):
-    (a) senza le serie a incasso quasi fisso (le prove ``INCASSO_FISSO``, backlog P34, 15 novembre): famiglie rifatte senza di loro;
-    (b) V simmetrica (fuori da V anche le famiglie con il t sopra +3; restano in N) e senza le serie ``BOCCIATE_DAL_REVISORE``;
-    (c) il t robusto di Newey e West (``RITARDI`` settimane; ``RITARDI_CONTROLLO`` come controllo) e la probabilita' con le
-        settimane efficaci (settimane per `rapporto_robusto`, sulla serie della candidata) al posto delle settimane;
-    (d) (b) e (c) insieme.
-    Piu' ogni anno sul conto composto (`per_anno_composto`), solo da mostrare.
+    Accanto, NON ufficiali (non decidono niente):
+    * ``regola_fino_al_27_novembre``: V senza le sole famiglie con il t sotto -3, t e probabilita' sulle settimane semplici (la stessa
+      probabilita' di `corretto_famiglie`), con il suo esito;
+    * ``a_senza_incasso_fisso``: la regola in vigore con le famiglie rifatte senza le serie a incasso quasi fisso (``INCASSO_FISSO``,
+      backlog P34, 15 novembre);
+    * ``controllo_13_ritardi``: la regola in vigore con ``RITARDI_CONTROLLO`` settimane di ritardo;
+    * ogni anno sul conto composto (`per_anno_composto`), solo da mostrare.
 
     ``nuove``: {nome: serie settimanale netta} da aggiungere al mazzo (la prova appena calcolata; a parita' di nome sostituiscono).
     ``candidate``: i nomi da giudicare (misure dalla loro serie nel mazzo con `terza.numeri_settimana`, anni con `per_anno`) oppure
@@ -572,14 +603,15 @@ def esame(nuove: dict | None = None, candidate=None, taglio: float = TAGLIO, bas
         candidate = {n: None for n in candidate}
     nomi, R = correlazioni(serie)
     gr = gruppi(serie, taglio, (nomi, R))
-    sr_n, sr_v = per_v(gr, soli, False), per_v(gr, soli, True)
-    N = len(sr_n)
+    N = len(per_v(gr, soli, False))
+    gr_b = _senza(gr, serie, BOCCIATE_DAL_REVISORE)
+    sr_v = per_v(gr_b, soli, True, simmetrica=True)                                                  # V in vigore
+    sr_v_prima = per_v(gr, soli, True)                                                               # V fino al 27 novembre
     k = [i for i, n in enumerate(nomi) if _numero_prova(n) not in INCASSO_FISSO]                      # (a)
     nomi_a = [nomi[i] for i in k]
     gr_a = gruppi({n: serie[n] for n in nomi_a}, taglio, (nomi_a, R[np.ix_(k, k)]))
-    sr_n_a, sr_v_a = per_v(gr_a, soli, False), per_v(gr_a, soli, True)
-    gr_b = _senza(gr, serie, BOCCIATE_DAL_REVISORE)                                                    # (b)
-    sr_v_b = per_v(gr_b, soli, True, simmetrica=True)
+    N_a = len(per_v(gr_a, soli, False))
+    sr_v_a = per_v(_senza(gr_a, serie, BOCCIATE_DAL_REVISORE), soli, True, simmetrica=True)
 
     def mazzo_di(n_, v_):
         return {"famiglie": n_, "in_v": len(v_), "deviazione_v": float(np.std(v_, ddof=1)), "v": [float(x) for x in v_]}
@@ -587,11 +619,12 @@ def esame(nuove: dict | None = None, candidate=None, taglio: float = TAGLIO, bas
     def tv(g):
         return g["sharpe"] * math.sqrt(g["settimane"] / 52)
 
-    out = {"in_vigore": {"serie": len(serie), "senza_serie": len(soli), "taglio": taglio, **mazzo_di(N, sr_v)},
-           "a_senza_incasso_fisso": {"tolte": [n for n in nomi if n not in set(nomi_a)], "serie": len(nomi_a),
-                                     **mazzo_di(len(sr_n_a), sr_v_a)},
-           "b_v_simmetrica_senza_bocciate": {"bocciate": [n for n in BOCCIATE_DAL_REVISORE if n in serie], **mazzo_di(N, sr_v_b),
-                                             "fuori_da_v_vincenti": [g["membri"] for g in gr_b if tv(g) > -T_PERDENTI]},
+    out = {"in_vigore": {"regola": REGOLA_IN_VIGORE, "serie": len(serie), "senza_serie": len(soli), "taglio": taglio, "ritardi": RITARDI,
+                         "bocciate": [n for n in BOCCIATE_DAL_REVISORE if n in serie], **mazzo_di(N, sr_v),
+                         "fuori_da_v_vincenti": [g["membri"] for g in gr_b if tv(g) > -T_PERDENTI]},
+           "non_ufficiali": {"regola_fino_al_27_novembre": mazzo_di(N, sr_v_prima),
+                             "a_senza_incasso_fisso": {"tolte": [n for n in nomi if n not in set(nomi_a)], "serie": len(nomi_a),
+                                                       **mazzo_di(N_a, sr_v_a)}},
            "gruppi": gr, "candidate": {}}
     for nome, date in candidate.items():
         chi = (date or {}).get("serie", nome)                       # la serie del mazzo della candidata (di norma, il suo nome)
@@ -602,48 +635,56 @@ def esame(nuove: dict | None = None, candidate=None, taglio: float = TAGLIO, bas
         annuo = float(mis["annuo"])
         anni = mis.get("per_anno")
         anni = {int(a): float(v) for a, v in anni.items()} if isinstance(anni, dict) else (per_anno(x) if x is not None else {})
-        t = sh * math.sqrt(w / 52)
-        p = te.sharpe_corretto(sh, w, asim, curt, sr_v, 52, n_prove=N)
-        p_a = te.sharpe_corretto(sh, w, asim, curt, sr_v_a, 52, n_prove=len(sr_n_a))
-        p_b = te.sharpe_corretto(sh, w, asim, curt, sr_v_b, 52, n_prove=N)
-        resto = annuo > 0 and bool(anni) and all(v > 0 for v in anni.values())        # le condizioni che (a)-(d) non cambiano
-        c = {"a_senza_incasso_fisso": {"probabilita": p_a, "passerebbe": bool(resto and t >= SOGLIA_T and p_a >= SOGLIA_PROBABILITA)},
-             "b_v_simmetrica_senza_bocciate": {"probabilita": p_b,
-                                               "passerebbe": bool(resto and t >= SOGLIA_T and p_b >= SOGLIA_PROBABILITA)},
-             "c_t_robusto": None, "d_b_e_c": None}
+        ogni_anno = bool(anni) and all(v > 0 for v in anni.values())
+        resto = annuo > 0 and ogni_anno                                     # le condizioni che i numeri accanto non cambiano
+        t_semplice = sh * math.sqrt(w / 52)
         if x is not None:
-            rob = {}
-            for L in (RITARDI, RITARDI_CONTROLLO):
-                r = rapporto_robusto(x, L)
-                w_eff = max(3, int(round(w * r)))
-                rob[L] = {"ritardi": L, "rapporto": r, "settimane_efficaci": w_eff, "t": sh * math.sqrt(w * r / 52),
-                          "probabilita": te.sharpe_corretto(sh, w_eff, asim, curt, sr_v, 52, n_prove=N),
-                          "probabilita_d": te.sharpe_corretto(sh, w_eff, asim, curt, sr_v_b, 52, n_prove=N)}
-            b4, b13 = rob[RITARDI], rob[RITARDI_CONTROLLO]
-            c["c_t_robusto"] = {**{k_: b4[k_] for k_ in ("ritardi", "rapporto", "settimane_efficaci", "t", "probabilita")},
-                                "controllo": {k_: b13[k_] for k_ in ("ritardi", "rapporto", "settimane_efficaci", "t", "probabilita")},
-                                "passerebbe": bool(resto and b4["t"] >= SOGLIA_T and b4["probabilita"] >= SOGLIA_PROBABILITA)}
-            c["d_b_e_c"] = {"probabilita": b4["probabilita_d"], "controllo": b13["probabilita_d"],
-                            "passerebbe": bool(resto and b4["t"] >= SOGLIA_T and b4["probabilita_d"] >= SOGLIA_PROBABILITA)}
+            rob = _robusto(x, w, sh, RITARDI)
+            w_uso, t_uso, quale_t, usate = rob["settimane_efficaci"], rob["t"], "t robusto", SETTIMANE_EFFICACI
+        else:
+            rob = {"ritardi": None, "rapporto": 1.0, "settimane_efficaci": w, "t": t_semplice}
+            w_uso, t_uso, quale_t, usate = w, t_semplice, "t", SETTIMANE_SEMPLICI
+        p = te.sharpe_corretto(sh, w_uso, asim, curt, sr_v, 52, n_prove=N)
+        p_prima = te.sharpe_corretto(sh, w, asim, curt, sr_v_prima, 52, n_prove=N)
+        p_a = te.sharpe_corretto(sh, w_uso, asim, curt, sr_v_a, 52, n_prove=N_a)
+        esito_prima = verdetto(annuo, anni, t_semplice, p_prima)
+        c = {"regola_fino_al_27_novembre": {"probabilita": p_prima, "t": t_semplice, "settimane": w, "esito": esito_prima,
+                                            "passerebbe": esito_prima == "PROMETTENTE"},
+             "a_senza_incasso_fisso": {"probabilita": p_a, "t": t_uso,
+                                       "passerebbe": bool(resto and t_uso >= SOGLIA_T and p_a >= SOGLIA_PROBABILITA)},
+             "controllo_13_ritardi": None}
+        if x is not None:
+            b13 = _robusto(x, w, sh, RITARDI_CONTROLLO)
+            b13["probabilita"] = te.sharpe_corretto(sh, b13["settimane_efficaci"], asim, curt, sr_v, 52, n_prove=N)
+            b13["passerebbe"] = bool(resto and b13["t"] >= SOGLIA_T and b13["probabilita"] >= SOGLIA_PROBABILITA)
+            c["controllo_13_ritardi"] = b13
             comp = per_anno_composto(x)
             c["per_anno_composto"], c["ogni_anno_positivo_composto"] = comp, all(v > 0 for v in comp.values())
         out["candidate"][nome] = {
-            "misure": {"sharpe": sh, "settimane": w, "asimmetria": asim, "curtosi": curt, "annuo": annuo}, "serie": chi,
+            "misure": {"sharpe": sh, "settimane": w, "asimmetria": asim, "curtosi": curt, "annuo": annuo},
+            "serie": chi if x is not None else None,
             "gruppo": next((g["membri"] for g in gr if chi in g["membri"]), [chi]),
-            "in_vigore": {"probabilita": p, "t": t, "per_anno": anni,
-                          "ogni_anno_positivo": bool(anni) and all(v > 0 for v in anni.values()), "esito": verdetto(annuo, anni, t, p)},
+            "in_vigore": {"probabilita": p, "t": t_uso, "settimane_efficaci": w_uso, "settimane_usate": usate,
+                          "rapporto": rob["rapporto"], "ritardi": rob["ritardi"], "t_semplice": t_semplice,
+                          "v": "simmetrica, senza le serie bocciate dal revisore", "per_anno": anni, "ogni_anno_positivo": ogni_anno,
+                          "esito": verdetto(annuo, anni, t_uso, p, quale_t)},
             "non_ufficiali": c}
     return out
 
 
-def sharpe_minimo(settimane: float, v: list, n_prove: int, probabilita: float = SOGLIA_PROBABILITA) -> float:
+def sharpe_minimo(settimane: float, v: list, n_prove: int, probabilita: float = SOGLIA_PROBABILITA, rapporto: float = 1.0) -> float:
     """Lo Sharpe che serve, con rendimenti normali (asimmetria 0, curtosi 3), per arrivare a ``probabilita`` su ``settimane`` con
-    la dispersione ``v`` e N = ``n_prove`` (audit del 26 novembre, punti ciechi 1). Accanto vale anche il t da 3: Sharpe almeno
-    3 per la radice di 52/settimane."""
+    la dispersione ``v`` e N = ``n_prove`` (audit del 26 novembre, punti ciechi 1).
+
+    Con l'esame in vigore dal 27 novembre 2026: ``v`` = la V in vigore (``esame(...)["in_vigore"]["v"]``) e ``rapporto`` = il
+    `rapporto_robusto` della serie: la probabilita' si calcola sulle settimane efficaci (le ``settimane`` per ``rapporto``, arrotondate
+    e almeno 3, come in `esame`). Per una serie senza settimane legate il rapporto e' 1 e le settimane efficaci sono le settimane.
+    Accanto vale anche il t (robusto) da 3: Sharpe almeno 3 per la radice di 52/(settimane per ``rapporto``)."""
+    w = settimane if rapporto == 1.0 else max(3, int(round(settimane * rapporto)))
     lo, hi = -5.0, 20.0
     for _ in range(100):
         mid = (lo + hi) / 2
-        if te.sharpe_corretto(mid, settimane, 0.0, 3.0, v, 52, n_prove=n_prove) < probabilita:
+        if te.sharpe_corretto(mid, w, 0.0, 3.0, v, 52, n_prove=n_prove) < probabilita:
             lo = mid
         else:
             hi = mid

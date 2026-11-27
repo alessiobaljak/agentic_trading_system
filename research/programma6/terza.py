@@ -372,8 +372,10 @@ def esito(e: dict, dsr: float) -> str:
     costi doppi, trimestri, piu' del Bitcoin. Resta solo per le prove gia' fatte con lui (49 moduli del programma 7, l'ultimo la 145).
 
     **Non e' l'esame in vigore**: dal 9, 11 e 23 novembre 2026 la soglia e' 0,80 (la «probabilita' che non sia fortuna»), N = le
-    famiglie del mazzo di oggi, con ogni anno positivo e il t dello Sharpe da 3; lo scrive `research.programma6.asticella.esame`
-    (ASTICELLA.md, sezione 6), con i numeri non ufficiali accanto. Nota del 27 novembre 2026 (audit del 26 novembre, esame-10)."""
+    famiglie del mazzo di oggi, con ogni anno positivo e il t dello Sharpe da 3; dal 27 novembre (decisione del proprietario) il t e'
+    quello robusto, la probabilita' conta le settimane efficaci e V e' simmetrica senza le serie bocciate dal revisore. Lo scrive
+    `research.programma6.asticella.esame` (ASTICELLA.md, sezioni 6 e 7), con i numeri non ufficiali accanto. Nota del 27 novembre 2026
+    (audit del 26 novembre, esame-10)."""
     if not e["boot"]["basso"] > 0:
         return "netto con l'intervallo non sopra zero"
     if not dsr >= 0.95:

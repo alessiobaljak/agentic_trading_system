@@ -48,8 +48,9 @@ ragioni economiche (chi paga per una posizione affollata, flussi forzati, eventi
 3. Per ogni idea scrivi le regole come le prove recenti (esempio: `research/programma7/OTTANTASETTESIMA.md`): dati, universo,
    segnale, esecuzione all'apertura dopo il segnale, costi confermati dal proprietario (0,05% a mercato, 0,02% con ordine limite,
    scarto 0,01% su BTC, ETH e SOL e 0,02% sulle altre, funding vero), periodo, quante varianti e perché, l'esame (Sharpe corretto da
-   0,80, ogni anno positivo, t da 3; regole approvate dal proprietario il 9 novembre; verdetto con `asticella.esame(nuove,
-   candidate)` di `research/programma6/asticella.py`, che scrive accanto i numeri non ufficiali (a)-(d)), cosa si consegna.
+   0,80, ogni anno positivo, t da 3; dal 27 novembre, decisione del proprietario, t robusto, settimane efficaci e V simmetrica senza le
+   bocciate: `research/programma6/ASTICELLA.md`, sezione 7; verdetto con `asticella.esame(nuove, candidate)["candidate"][nome]["in_vigore"]`
+   di `research/programma6/asticella.py`, che scrive accanto, non ufficiale, la regola fino al 27 novembre), cosa si consegna.
 4. Non guardi risultati dell'idea prima di scrivere le regole: niente medie, niente grafici del segnale.
 
 ## Regole dei token

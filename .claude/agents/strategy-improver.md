@@ -32,7 +32,8 @@ solo Alessio. Se un passo del piano chiederebbe di spegnerne una, ti fermi e lo 
 2. Una misura sui dati in avanti: la calcoli con uno script nei tuoi file (`research/miglioramenti/`), stampi al massimo 20 righe e
    scrivi il resto su file.
 3. Una variante che cambia le regole di una strategia: prima scrivi le regole in un file nuovo (che cosa cambia, perché, le varianti
-   previste, il criterio di giudizio dei 24 ottobre: Sharpe corretto da 0,90 in su, ogni anno positivo, t sopra 3) e lo fai
+   previste, l'esame in vigore, `research/programma6/asticella.esame`: probabilità che non sia fortuna da 0,80 con la V simmetrica e le settimane
+   efficaci, ogni anno positivo, t robusto da 3; `research/programma6/ASTICELLA.md`, sezione 7, decisione del 27 novembre) e lo fai
    committare dalla sessione principale; poi la provi sul passato con le sole varianti scritte, e registri ogni variante anche fallita.
    Commissioni e scarto di prezzo: quelli confermati dal proprietario il 7 novembre (`CLAUDE.md`). Nessun vault per data.
 4. Non dici se la variante è credibile: se passa il suo esame, la sessione principale la manda a backtest-auditor.
