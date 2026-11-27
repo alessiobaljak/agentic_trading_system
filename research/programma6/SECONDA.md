@@ -136,3 +136,20 @@ NETUSDT, TERUSDT, TWSTUSDT, KORUUSDT, CRMLUSDT, CBRSUSDT, DRAMUSDT, INTWUSDT, AG
 nell'universo delle prove sul passato** (verificato settimana per settimana sulle prime 100 e 200: zero settimane), quindi i
 risultati già scritti non cambiano; si tolgono da qui in avanti (`ESCLUSI` in `seconda.py`). Il paper elenca ogni settimana le
 monete nuove nell'universo, da controllare.
+
+**Aggiunta del 27 novembre 2026 (audit del 26 novembre).** Oltre all'elenco per nome, la tabella toglie i giorni dei contratti che
+oggi non sono monete secondo il tipo ufficiale di Binance (`tipi_contratto.json` da exchangeInfo, `tipi_contratto.e_moneta_ricerca`:
+non PERPETUAL, o underlyingType diverso da COIN, o TradFi, come il bot; in più resta moneta un perpetuo di pre-mercato su una moneta,
+senza TradFi né Pre-IPO, come vuole la regola di N3 in `paper/REGOLE.md`, sezione 11) dal loro onboardDate in poi: 70 simboli del
+pannello (66 azioni, 2 di pre-mercato Pre-IPO, 1 indice, 1 di Hong Kong); il perpetuo di pre-mercato su una moneta PREDICTUSDT
+resta. I giorni di prima restano (ANTUSDT, MDTUSDT e NUUSDT erano monete). Un simbolo rilanciato (onboardDate dopo almeno 7 giorni
+senza scambi: AIA, BNX, CTK, CVC, CVX, LIT, MAVIA, PUMP, SLP, TLM) è un contratto nuovo dal suo onboardDate; la parte di prima resta
+come `<SIMBOLO>_prima_del_<giorno>`. I file di una colonna si trovano con `seconda.simbolo_base(nome, pan["rilanci"])` (simbolo di
+base e giorni che le spettano): lo usano `scarico_metrics`, `undicesima.pannello_metrics` ed `esecuzione.ore_di`, quindi la parte di
+prima ha i dati sulle posizioni e le candele a 1 ora del simbolo di base fino al rilancio; `scarico_metrics` scrive anche
+`data/p6m/<SIMBOLO>_prima_del_<giorno>.pkl` per chi legge il file col nome della colonna (`quattordicesima._taker_ls`). Le prove
+vecchie che leggono altri file per nome, se si rifanno su questa tabella, lasciano senza quei dati la parte di prima: per loro
+`simbolo_base` o `costruisci_pannello(separa_rilanci=False)`. Il controllo dei dati `seconda.aperture_lontane(pan)` elenca le
+aperture lontane più del 20% dalla chiusura prima (da 13 a 4 con la separazione). Effetto su G1 della prova 57 (fino al 4 ottobre
+2026): i non monete nessuno; i rilanci Sharpe da 1,9815 a 1,9846, rendimento da +54,400% a +54,366% l'anno (57 settimane, −0,19
+punti).

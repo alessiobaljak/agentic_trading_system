@@ -35,18 +35,47 @@ COLONNE = ["sum_open_interest_value", "count_toptrader_long_short_ratio", "sum_t
 
 
 def giorni_che_servono(pan: dict) -> dict:
+    """{simbolo dei file: giorni}. 27 novembre 2026 (audit del 26 novembre, secondo ritocco): i file si chiedono col simbolo di
+    base (``seconda.simbolo_base``): la colonna vecchia di un rilancio (``<SIMBOLO>_prima_del_<giorno>``) chiede a <SIMBOLO> i
+    soli giorni prima del rilancio, il contratto nuovo i soli giorni dal rilancio. Prima si chiedevano 1.430 giorni con nomi che
+    l'archivio non conosce (404, pkl vuoti, paper fermo)."""
     ps = te.pannello_settimane(pan, log=lambda x: None, indicatori_si=False)
     lun = ps["lunedi"] - pan["t0"]
-    out = {}
+    per_colonna = {}
     for k in np.flatnonzero(ps["lunedi"] >= DAL + 30):
         for j in np.flatnonzero(ps["U"][k]):
-            out.setdefault(ps["simboli"][j], set()).update(range(lun[k] - 30 + pan["t0"], lun[k] + pan["t0"]))
+            per_colonna.setdefault(ps["simboli"][j], set()).update(range(lun[k] - 30 + pan["t0"], lun[k] + pan["t0"]))
     # anche gli ultimi 31 giorni delle monete dell'universo dell'ultima settimana (per le posizioni di adesso nel paper)
     T = pan["close"].shape[0]
     if len(ps["U"]):
         for j in np.flatnonzero(ps["U"][-1]):
-            out.setdefault(ps["simboli"][j], set()).update(range(T - 31 + pan["t0"], T + pan["t0"]))
+            per_colonna.setdefault(ps["simboli"][j], set()).update(range(T - 31 + pan["t0"], T + pan["t0"]))
+    out = {}
+    for s, gg in per_colonna.items():
+        base, dal, al = sc.simbolo_base(s, pan.get("rilanci"))
+        gg = {g for g in gg if (dal is None or g >= dal) and (al is None or g < al)}
+        if gg:
+            out.setdefault(base, set()).update(gg)
     return out
+
+
+def colonne_vecchie(pan: dict) -> list:
+    """Scrive in ``DATI`` il file di ogni colonna vecchia di un rilancio del pannello (``<SIMBOLO>_prima_del_<giorno>.pkl``): il
+    file di <SIMBOLO> fino al giorno prima del rilancio. Cosi' i lettori che prendono il file col nome della colonna
+    (``quattordicesima._taker_ls``) hanno gli stessi dati di quando il simbolo era una colonna sola (27 novembre 2026, secondo
+    ritocco dell'audit del 26 novembre). Ritorna le colonne scritte."""
+    scritte = []
+    for s in pan["simboli"]:
+        base, _, al = sc.simbolo_base(s)
+        f = DATI / f"{base}.pkl"
+        if al is None or not f.exists():
+            continue
+        d = pd.read_pickle(f)
+        d = d[d.index < al]
+        if len(d) and len(d.columns):
+            d.to_pickle(DATI / f"{s}.pkl")
+            scritte.append(s)
+    return scritte
 
 
 def riassunto(grezzo: bytes) -> dict:
@@ -90,8 +119,9 @@ def una_moneta(s: str, giorni: set) -> dict:
     righe = {g: r for g, r, _ in esiti if r}
     nuovi = pd.DataFrame.from_dict(righe, orient="index") if righe else pd.DataFrame()
     tutto = pd.concat([fatto, nuovi]).sort_index() if len(nuovi) else fatto
-    DATI.mkdir(parents=True, exist_ok=True)
-    tutto.to_pickle(dest)
+    if len(tutto.columns):                  # niente pkl vuoti (nessun giorno con il file): pannello_metrics non avrebbe colonne
+        DATI.mkdir(parents=True, exist_ok=True)
+        tutto.to_pickle(dest)
     return {"giorni": int(len(tutto)), "impronte": sorted(x for _, _, x in esiti if x)}
 
 
@@ -114,6 +144,9 @@ def main() -> int:
             leggero = {k: {kk: vv for kk, vv in v.items() if kk != "elenco"} for k, v in imp.items()}
             pieno.write_text(json.dumps(imp, indent=0, sort_keys=True))
             dest.write_text(json.dumps(leggero, indent=0, sort_keys=True))
+    vecchie = colonne_vecchie(pan)
+    print(f"[metrics] colonne vecchie dei rilanci (file del simbolo di base fino al rilancio): {len(vecchie)}"
+          + (f" ({', '.join(vecchie)})" if vecchie else ""), flush=True)
     return 0
 
 

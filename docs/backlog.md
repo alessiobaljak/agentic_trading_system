@@ -968,5 +968,14 @@ scrivono con e senza le serie a incasso quasi fisso.
 * **pandas 3** (27 novembre, dalla sessione del trading AI): `test_libro_squilibrio_e_liquidita_a_ore` (`research/programma5/strumenti/libro.py`,
   `aggrega_giorno`) fallisce con pandas 3.0.5 e passa con la 2.2.2 fissata in `requirements.txt`. Da sistemare prima di passare a pandas 3;
   gli altri moduli della ricerca non sono stati provati con la 3.
+* **Motore della ricerca, dopo la correzione del 27 novembre** (funding vero, non monete fuori, rilanci divisi; due verifiche indipendenti):
+  (a) `quattordicesima._taker_ls` legge per nome: oggi coperto dai file `p6m/<SIMBOLO>_prima_del_*.pkl` (copie, scritte ogni mattina);
+  più pulito con `simbolo_base` (3 righe). (b) Le prove vecchie che leggono o scaricano per nome dal pannello danno dati vuoti alle parti
+  vecchie dei rilanci se si rifanno: non misurato. (c) M1, M6, M7, M8 e C1 si spostano molto per un cambio piccolo dei dati (C1 nel
+  periodo P da −25,85% a −8,55% per la sola divisione di 10 rilanci; M8 −34,90 punti sul passato senza i file delle colonne vecchie):
+  da sapere quando si leggono. (d) Il bot tratta i perpetui di pre-mercato su una moneta (PREDICTUSDT) come non monete, la ricerca no
+  (`tipi_contratto.e_moneta_ricerca`, regola scritta della sezione 11 del paper): allinearlo vuol dire cambiare il bot, quindi
+  live-path-reviewer e l'ok del proprietario. (e) Le misure delle voci 9 e 11 di G1 vanno rifatte con il funding vero. (f)
+  `tipi_contratto.json` cambia in git ogni giorno per la sola data (Basso).
 * **Perché non subito**: cambi di regola dell'esame (decide il proprietario), scarichi grandi, prove nuove con le regole da scrivere,
   cambi strutturali del bot. Le altre correzioni dell'audit sono state fatte il 27 novembre (vedi il rapporto).

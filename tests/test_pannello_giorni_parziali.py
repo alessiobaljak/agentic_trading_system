@@ -27,3 +27,12 @@ def test_giorni_completi_e_piccole_differenze_restano():
 
 def test_monete_nuove_che_entrano_non_contano_come_parziale():
     assert giorni_parziali_in_coda(_prezzi([8, 9, 10, 10])) == 0
+
+
+def test_due_giorni_a_meta_simili_si_tolgono_entrambi():
+    # audit del 26 novembre 2026 (motore-5): confrontando solo col giorno prima, due giorni a meta' di fila restavano
+    assert giorni_parziali_in_coda(_prezzi([10, 10, 5, 5])) == 2
+    assert giorni_parziali_in_coda(_prezzi([715, 715, 603, 550], monete=715)) == 2
+    assert giorni_parziali_in_coda(_prezzi([715, 715, 603, 600], monete=715)) == 2
+    assert giorni_parziali_in_coda(_prezzi([715, 715, 300, 280], monete=715)) == 2
+    assert giorni_parziali_in_coda(_prezzi([715, 715, 603], monete=715)) == 1

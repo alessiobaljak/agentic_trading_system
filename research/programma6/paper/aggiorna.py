@@ -1,5 +1,6 @@
-"""Programma 6, il paper delle candidate (paper/REGOLE.md): ricostruisce la tabella con i dati nuovi, stima il funding dei
-giorni non ancora nell'archivio dall'indice del premio orario, ricalcola F2, C1 e A1 con lo stesso codice delle prove e
+"""Programma 6, il paper delle candidate (paper/REGOLE.md): ricostruisce la tabella con i dati nuovi (dal 27 novembre 2026 con il
+funding vero dell'interfaccia pubblica dopo l'ultimo file mensile, ``funding_api.py``), stima dall'indice del premio orario il
+funding dei soli giorni ancora senza il dato vero, ricalcola F2, C1 e A1 con lo stesso codice delle prove e
 scrive il periodo P (dal 20 ottobre 2026) e le posizioni di adesso in ``PAPER.md`` e ``paper.json``.
 
 Uso: python3 -m research.programma6.paper.aggiorna   (dopo ``scarico_giorni`` con P6_PREMIO=1)
@@ -56,20 +57,27 @@ def funding_da_premio(p: pd.Series) -> pd.Series:
 
 
 def applica_stima(pan: dict) -> dict:
-    """Sostituisce, moneta per moneta, il funding dei giorni dopo l'ultimo regolamento dell'archivio con la stima dal
-    premio (dove c'e'). Ritorna, per moneta, il primo giorno stimato."""
+    """Mette la stima dal premio (dove c'e') nei giorni in cui il pannello non ha il funding vero, ne' dall'archivio mensile ne'
+    dall'interfaccia pubblica di Binance (``pan["funding_stimato"]``): il funding vero resta dove c'e'.
+
+    Correzione del 27 novembre 2026 (audit del 26 novembre, motore-1): prima si stimavano tutti i giorni dopo l'ultimo
+    regolamento dell'archivio, e l'ultimo giorno del mese restava senza il regolamento delle 00:00 del giorno dopo. Un pannello
+    salvato prima (senza ``funding_stimato``) si rifa' dai file (``seconda.rifai_funding``). Ritorna, per moneta, il primo giorno
+    stimato dal premio."""
+    if "funding_stimato" not in pan:
+        sc.rifai_funding(pan)
     stimati = {}
-    T = pan["close"].shape[0]
-    for j, s in enumerate(pan["simboli"]):
-        fv = sc.funding_giorni(s)
-        ultimo = int(fv.index.max()) if len(fv) else None
-        st = funding_da_premio(premio_ore(s))
-        if ultimo is None or st.empty:
-            continue
-        st = st[(st.index > ultimo) & (st.index >= pan["t0"]) & (st.index < pan["t0"] + T)]
+    t0 = pan["t0"]
+    M = pan["funding_stimato"]
+    for j in np.flatnonzero(M.any(axis=0)):
+        s = pan["simboli"][j]
+        st = funding_da_premio(premio_ore(sc.simbolo_base(s)[0]))      # la colonna vecchia di un rilancio: il file di base
         if st.empty:
             continue
-        pan["funding"][st.index.to_numpy() - pan["t0"], j] = st.to_numpy()
+        st = st[st.index.isin(np.flatnonzero(M[:, j]) + t0)]
+        if st.empty:
+            continue
+        pan["funding"][st.index.to_numpy() - t0, j] = st.to_numpy()
         stimati[s] = sc.data(int(st.index.min()))
     return stimati
 
@@ -357,17 +365,43 @@ def universi_con_settimana_in_corso(pan: dict, psw: dict) -> tuple:
     return np.array(lunedi, dtype=np.int64), np.vstack(U)
 
 
+def stato_funding(pan: dict, dal: int = INIZIO_GIORNI) -> dict:
+    """Quanti giorni del periodo P sono ancora senza il funding vero (REGOLE.md, sezione 2: nel rapporto si dice quali giorni sono
+    ancora stimati)."""
+    M = pan["funding_stimato"][max(0, dal - pan["t0"]):]
+    giorni = np.flatnonzero(M.any(axis=1)) + max(0, dal - pan["t0"]) + pan["t0"]
+    return {"giorni_moneta": int(M.sum()), "monete": int(M.any(axis=0).sum()),
+            "giorni": [sc.data(int(g)) for g in giorni][-10:]}
+
+
 def esegui(log=print) -> dict:
+    # audit del 26 novembre 2026: i tipi dei contratti (per togliere quelli che non sono monete) e il funding vero dopo l'ultimo
+    # file mensile, dall'interfaccia pubblica di Binance; se non si raggiunge, il pannello usa i file gia' scaricati
+    from research.programma6 import funding_api, tipi_contratto
+    for passo in (tipi_contratto.main, funding_api.main):
+        try:
+            passo()
+        except Exception as ex:                       # noqa: BLE001  (un'interfaccia irraggiungibile non ferma il paper)
+            log(f"[paper] {passo.__module__} non aggiornato ({ex})")
     pan = sc.costruisci_pannello(log=lambda x: None)
     # i dati sulle posizioni dei giorni nuovi (per K1), con la tabella appena ricostruita
     from research.programma6 import scarico_metrics
     scarico_metrics.main()
     stimati = applica_stima(pan)
     ultimo = sc.data(pan["t0"] + pan["close"].shape[0] - 1)
-    log(f"[paper] dati fino al {ultimo}; funding stimato per {len(stimati)} monete")
+    sf = stato_funding(pan)
+    coda = pan.get("giorni_in_coda_tolti", [])
+    log(f"[paper] dati fino al {ultimo}; funding senza il dato vero in {sf['giorni_moneta']} giorni-moneta del periodo P, "
+        f"stimato dal premio per {len(stimati)} monete; giorni in coda tolti perche' pubblicati a meta': {len(coda)}"
+        + (" (PIU' DI 2, DA CONTROLLARE)" if len(coda) > 2 else ""))
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
-    res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
+    res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None,
+           "funding_senza_dato_vero": sf,
+           "controllo_dati": {"aperture_lontane": sc.aperture_lontane(pan), "non_monete_tolte": len(pan["non_monete"]),
+                              "rilanci": pan["rilanci"], "rilanci_non_separati": pan.get("rilanci_non_separati", {}),
+                              "giorni_in_coda_tolti": coda},
+           "candidate": {}}
     for nome in ("F3", "F5", "K1", "K2", "M1", "M6", "M7", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
@@ -533,6 +567,26 @@ def rapporto(r: dict) -> str:
                  or "nessun evento ancora") + ".",
               "", "**Entrate nell'universo nelle ultime 4 settimane** (da controllare che siano monete): "
               + (", ".join(r.get("nuove_nell_universo", [])) or "nessuna") + "."]
+    sf, cd = r.get("funding_senza_dato_vero"), r.get("controllo_dati")
+    if sf is not None:
+        righe += ["", "**Funding senza il dato vero** (né dall'archivio mensile né dall'interfaccia pubblica di Binance) nel periodo "
+                  f"P: {sf['giorni_moneta']} giorni-moneta, {sf['monete']} monete"
+                  + (f" (ultimi giorni: {', '.join(sf['giorni'])})" if sf["giorni"] else "") + "."]
+    if cd is not None:
+        al = sorted(cd["aperture_lontane"], key=lambda x: x["giorno"])
+        righe += ["", f"**Controllo dei dati**: {len(al)} aperture lontane più del 20% dalla chiusura prima in tutto il pannello"
+                  + (" (le ultime: " + ", ".join(f"{x['simbolo']} {x['giorno']} {100 * x['variazione']:+.0f}%" for x in al[-5:]) + ")"
+                     if al else "")
+                  + f"; contratti che non sono monete tolti dal loro onboardDate: {cd['non_monete_tolte']}; simboli rilanciati "
+                  "tenuti separati: " + (", ".join(f"{k} dal {v}" for k, v in sorted(cd["rilanci"].items())) or "nessuno")
+                  + ("; simboli rilanciati ancora uniti al vecchio contratto (separazione spenta): "
+                     + ", ".join(f"{k} dal {v}" for k, v in sorted(cd["rilanci_non_separati"].items()))
+                     if cd.get("rilanci_non_separati") else "") + "."]
+        coda = cd.get("giorni_in_coda_tolti")
+        if coda is not None:
+            righe += ["", f"**Giorni in coda tolti** perché l'archivio li ha pubblicati solo in parte: {len(coda)}"
+                      + (f" ({', '.join(coda)})" if coda else "")
+                      + (". **Più di 2: da controllare** (monete sparite insieme dall'archivio?)" if len(coda) > 2 else "") + "."]
     return "\n".join(righe) + "\n"
 
 

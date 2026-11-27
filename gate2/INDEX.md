@@ -21,3 +21,11 @@
 1. Pannello: `research/data/p6g_pannello.pkl` (arriva al 20 nov; il funding dopo il 31 ott e' stima con applica_stima, non vero).
 2. `python3 -m` ... vedi l'intestazione degli script in `exports/` (eseguire con la radice del repo nel percorso).
 3. Serie del paper e del demo: tabella «G1: il demo contro il paper» delle risposte `ops/results/*stato*.md` (usare l'ultima per ogni giorno).
+4. **Dal 27 novembre 2026** (audit del 26 novembre, correzione del motore): il pannello ha il funding vero dell'interfaccia dopo il 31
+   ottobre; `applica_stima` mette la stima solo nei giorni senza dato vero (controllare `pan["funding_stimato"]` nei giorni confrontati).
+   Il «Problema Alto 1» del 23 novembre (ricerca contro paper +5,53 punti in 12 giorni) veniva dal funding stimato della ricerca, non dal
+   paper: col funding vero, 9-20 novembre ricerca +4,56 contro paper +5,17 (+0,61), 9-23 novembre +1,48 contro +1,73 (+0,25), giorno per
+   giorno fra −0,56 e +0,51; i pesi coincidono dal 17 novembre. I non monete sono fuori dal pannello e i simboli rilanciati sono divisi
+   (`<SIMBOLO>_prima_del_<giorno>`): G1 di novembre non cambia. Il confronto del 30 novembre si fa sul pannello nuovo, e la riga del 23
+   novembre in `RECON_LOG.md` si chiude con questa causa. Le misure già scritte delle voci 9 e 11 di G1 sono fatte con la stima: vanno
+   rifatte (fonte: rapporto della correzione, numeri rifatti dal verificatore).

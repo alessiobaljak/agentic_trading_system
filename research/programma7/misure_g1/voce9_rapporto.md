@@ -74,3 +74,12 @@ Nessuna regola nuova: lo scarto da conto piccolo è il previsto e non costa visi
 (1) il funding vero di novembre nel pannello (appena esce il file mensile) e capire il residuo ricerca-paper, poi rilanciare questo script; (2) per i prossimi
 scarti, una riga della macchina con lo scarto per moneta intero (non solo oltre il 2%) per chiudere il «non spiegato».
 Resta ferma la voce 5 del piano: una banda più larga si prova nel conto solo se questa misura, con dati veri, mostra un costo.
+
+## Nota del 27 novembre 2026 (audit del 26 novembre: il funding vero nel pannello)
+Dal 27 novembre il pannello ha il funding vero dell'interfaccia pubblica di Binance dopo l'ultimo file mensile, e `applica_stima(pan)` stima
+dal premio solo i giorni ancora senza il dato vero (`pan["funding_stimato"]`). I risultati qui sopra e in `voce9_risultati.json` sono fatti con
+la stima dal premio: rilanciando lo script, «funding corretto con applica_stima» va letto «funding vero dell'interfaccia». Il controllo
+«funding BTC 1-11 novembre grezzo / con stima» (`voce9_scarto_conto_piccolo.py`, righe 41-43): sul pannello ricostruito dal 27 novembre le
+due righe sono uguali, tutte e due il funding vero (BTC non è in `funding_stimato` e `applica_stima` non lo tocca); solo su un pannello
+salvato prima del 27 novembre la riga «grezzo» è la media dei 90 giorni. Per confrontare di nuovo la media dei 90 giorni col funding vero:
+`seconda.funding_giorni(s, api=False)` o `seconda.colonna_funding(seconda.fonti_funding(s, api=False), ...)`.

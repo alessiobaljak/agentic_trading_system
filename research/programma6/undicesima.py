@@ -30,11 +30,19 @@ def pannello_metrics(pan: dict) -> dict:
     T, S = pan["close"].shape
     out = {k: np.full((T, S), np.nan) for k in ("oi", "grandi", "tutti")}
     for j, s in enumerate(pan["simboli"]):
-        f = DATI_M / f"{s}.pkl"
+        # 27 novembre 2026 (audit del 26 novembre, secondo ritocco): il file e' quello del simbolo di base; la colonna vecchia di
+        # un rilancio (<SIMBOLO>_prima_del_<giorno>) prende solo i giorni prima del rilancio, il contratto nuovo solo quelli dal
+        # rilancio (``seconda.simbolo_base``); un pkl senza le colonne (come li scriveva scarico_metrics) si salta
+        base, dal, al = sc.simbolo_base(s, pan.get("rilanci"))
+        f = DATI_M / f"{base}.pkl"
         if not f.exists():
             continue
         d = pd.read_pickle(f)
-        d = d[(d.index >= pan["t0"]) & (d.index < pan["t0"] + T)]
+        if not {"oi_valore_fine", "sum_toptrader_long_short_ratio", "count_long_short_ratio"} <= set(d.columns):
+            continue
+        da = pan["t0"] if dal is None else max(pan["t0"], dal)
+        a = pan["t0"] + T if al is None else min(pan["t0"] + T, al)
+        d = d[(d.index >= da) & (d.index < a)]
         r = d.index.to_numpy() - pan["t0"]
         out["oi"][r, j] = d["oi_valore_fine"].to_numpy(float)
         out["grandi"][r, j] = d["sum_toptrader_long_short_ratio"].to_numpy(float)

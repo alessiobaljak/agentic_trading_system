@@ -25,12 +25,12 @@ Leggi questo file per primo; poi solo i file che servono al tuo compito, mai «t
 
 ## Dati (`data/`, 17 GB, fuori da git: mai con Read, solo con script)
 - Pannello giornaliero con funding di tutti i perpetui in USDT: `programma6.seconda.pannello()`.
-  **Attenzione al funding recente**: dopo l'ultimo file mensile dell'archivio (oggi il 31 ottobre) il pannello mette la media dei 90
-  giorni prima, lo stesso numero ogni giorno (`seconda.riempi_funding`): per confronti con il paper o il demo su quei giorni si usa
-  `programma6/paper/aggiorna.applica_stima(pan)` (la stima dall'indice del premio). Trovato il 13 novembre con la voce 9 di G1.
+  **Funding recente (dal 27 novembre 2026)**: dopo l'ultimo file mensile il pannello ha il funding vero dell'interfaccia pubblica di Binance (`programma6/funding_api.py`,
+  scaricato ogni mattina da `paper/aggiorna.py`; dove ci sono tutti e due vince l'archivio). I giorni ancora senza il dato vero sono in `pan["funding_stimato"]` (media dei 90 giorni);
+  `paper/aggiorna.applica_stima(pan)` stima dal premio solo quelli e su un pannello salvato prima rifà il funding vero. Prima (13 novembre) si stimava tutto dopo l'archivio.
 - Candele da 1 minuto delle 100 monete: `programma5.strumenti.motore5.minuti()`; a 1 ora: `programma6.esecuzione.ore_di()`.
-- L'ultimo giorno pubblicato a metà dall'archivio non entra nel pannello (`seconda.giorni_parziali_in_coda`). Contratti su azioni:
-  la ricerca li deve riconoscere dal tipo ufficiale di Binance, non dal nome (backlog P32).
+- Il pannello toglie i giorni in coda pubblicati a metà (`seconda.giorni_parziali_in_coda`, `pan["giorni_in_coda_tolti"]`) e i contratti che non sono monete per tipo ufficiale
+  (`programma6/tipi_contratto.e_moneta_ricerca`, `pan["non_monete"]`). Rilanci (LIT e altri 9, `pan["rilanci"]`): parte di prima `<SIMBOLO>_prima_del_<giorno>`, file con `seconda.simbolo_base` (SECONDA.md, sez. 9).
 - Giorni mancanti nell'archivio di Binance (il 28 ottobre 2026): `programma6/buchi_archivio.py`, `programma5/strumenti/buchi_archivio_minuti.py`.
 - Paper del programma 6: `programma6/paper/funding_medio.py` misura ogni settimana dal 30 novembre l'idea 45 (REGOLE.md del paper, sezione 18).
 - Notizie dal 30 ottobre 2026 (`notizie/`, regole `notizie/REGOLE.md`); la prova in avanti `notizie/prova_avanti.py` gira il lunedì dopo il conto a tavolino (primo numero il 7 dicembre).

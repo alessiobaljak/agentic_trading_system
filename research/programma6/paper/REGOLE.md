@@ -49,6 +49,21 @@ prove). Verdetto come le altre (sezione 3).
   premio orario con la formula di Binance (premio medio dell'intervallo più l'interesse dello 0,01% riportato entro
   ±0,05%), tre intervalli al giorno. Quando esce il file del mese si ricalcola tutto con il funding vero: il risultato che
   conta è quello col funding vero. Nel rapporto si dice quali giorni sono ancora stimati.
+* **27 novembre 2026 (audit del 26 novembre).** Il funding dei giorni dopo l'ultimo file mensile non si stima più dall'indice del
+  premio: ogni mattina, prima di ricostruire la tabella, si scarica il funding vero dall'interfaccia pubblica di Binance
+  (`/fapi/v1/fundingRate`, `funding_api.py`); quando esce il file del mese vince l'archivio. La stima dal premio resta solo per i
+  giorni ancora senza il dato vero (`funding_stimato`), che il rapporto conta nella riga «Funding senza il dato vero». Il 31 ottobre
+  prende anche il regolamento delle 00:00 del 1° novembre. Dalla stessa data la tabella toglie i contratti che non sono monete dal
+  loro onboardDate (il tipo ufficiale di Binance: la regola del bot più i perpetui di pre-mercato su una moneta, sezione 11) e tiene
+  separati i simboli rilanciati: contratto nuovo dal onboardDate, la parte di prima come `<SIMBOLO>_prima_del_<giorno>`, con i dati
+  sulle posizioni e le candele a 1 ora del simbolo di base fino al rilancio (SECONDA.md, sezione 9). Il rapporto dice quanti giorni
+  in coda la tabella ha tolto perché l'archivio li ha pubblicati a metà (riga «Giorni in coda tolti», `controllo_dati.giorni_in_coda_tolti`
+  in paper.json; con più di 2 la riga lo segnala). Numeri del periodo P rifatti il 27 novembre (dati fino al 25 novembre; prima →
+  dopo, rendimento totale): F5 +5,56% → +7,70%, K2 +3,98% → +8,01%, F3 +2,61% → +5,60%, K1 −0,16% → +4,90%, F2 +0,67% → +3,44%,
+  M7 −0,43% → −3,09%, M1 −11,86% → −5,96%, C1 −25,89% → −8,55%, F5 + M7 + K2 +3,69% → +5,66%. F, K ed EWIL cambiano per il solo
+  funding vero; M e C1 anche per i rilanci, perché si allenano sulla storia (prima il contratto nuovo entrava nell'universo con la
+  storia del vecchio). Gli eventi N3 restano quelli pubblicati; l'evento E4 cambia di poco (r28 da 0,2553 a 0,2565). Fonte: rapporto della correzione «motore» del 27 novembre (giri con il
+  codice di prima, con i rilanci uniti e con i rilanci separati, sugli stessi dati).
 * Il rapporto (`PAPER.md`, `paper.json`) dice per ogni candidata: il rendimento del periodo P, settimana per settimana o
   giorno per giorno, lo Sharpe da quando è partito, il confronto col Bitcoin, e **le posizioni di adesso** (cosa terrebbe la
   regola nella settimana o nel giorno in corso).
@@ -143,6 +158,12 @@ moneta (titolo con il simbolo, senza «TradFi» né «Pre-IPO»). Due misure in 
   (+3,8%). Con meno di 30 eventi a 52 settimane il verdetto si rimanda a 104.
 * Il calcolo in avanti si aggiunge al paper prima del primo esito possibile (un evento del 21 ottobre si chiude al più tardi
   il 27 novembre).
+* **27 novembre 2026 (audit del 26 novembre).** La tabella della ricerca toglie i contratti che non sono monete con il tipo
+  ufficiale di Binance (`tipi_contratto.json`). Un perpetuo di pre-mercato su una moneta (contractType PERPETUAL, underlyingType
+  PREMARKET, senza TradFi né Pre-IPO: oggi solo PREDICTUSDT) resta una moneta, come vuole la regola di questa sezione (annuncio di
+  moneta). Per questo l'evento N3-Binance «PREDICTUSDT dal 1° novembre» resta, e PREDICT_USDT di Gate.io non è un evento (perpetuo
+  su Binance dal 25 ottobre). Il bot (sezione 14) toglie i contratti di pre-mercato (`f5.contratti_monete`) e non ha aperto
+  PREDICTUSDT: è una differenza nota fra il calcolo e l'esecuzione del bot e non cambia il verdetto, che resta su questo calcolo.
 
 ## 12. M7 + M8 come informazione (21 ottobre 2026, mattina, prima della prima settimana misurata)
 

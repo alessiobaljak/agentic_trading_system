@@ -37,16 +37,22 @@ def ore_di(s: str) -> pd.DataFrame:
 
     Correzione del 25 ottobre 2026 (revisione della prova 105): prima, se le barre esistevano, i file mensili non si leggevano mai, e
     per 14 monete le cui barre cominciano il 1° settembre 2023 (CRV, SUSHI, COTI, SHIB, ZEN, CVC, GALA, SAND, CELR, INJ, HBAR, LDO,
-    LIT, EGLD) le ore prima di quella data mancavano anche quando i file erano stati scaricati."""
-    b = d6.barre(s, "1h")
-    z = qa.ore(s)
+    LIT, EGLD) le ore prima di quella data mancavano anche quando i file erano stati scaricati.
+
+    27 novembre 2026 (audit del 26 novembre, secondo ritocco): la colonna vecchia di un simbolo rilanciato,
+    ``<SIMBOLO>_prima_del_<giorno>``, ha le candele di <SIMBOLO> fino all'ultima ora prima del rilancio (``seconda.simbolo_base``);
+    prima non trovava nessun file e le sue variazioni di peso si contavano a mercato."""
+    base, _, al = sc.simbolo_base(s)
+    b = d6.barre(base, "1h")
+    z = qa.ore(base)
     if b.empty:
-        return z
-    out = b[["open", "high", "low", "close"]].astype(float).copy()
-    out.index = (b["minuto"].to_numpy() // 60).astype(np.int64)
-    if z.empty:
-        return out
-    return out.combine_first(z[["open", "high", "low", "close"]]).sort_index()
+        out = z
+    else:
+        out = b[["open", "high", "low", "close"]].astype(float).copy()
+        out.index = (b["minuto"].to_numpy() // 60).astype(np.int64)
+        if not z.empty:
+            out = out.combine_first(z[["open", "high", "low", "close"]]).sort_index()
+    return out if al is None or out.empty else out[out.index < al * 24]
 
 
 def esegui() -> dict:

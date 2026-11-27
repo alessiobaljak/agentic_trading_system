@@ -23,6 +23,8 @@ import pandas as pd
 from numba import njit
 
 from research.programma5.strumenti import motore5 as m5
+from research.programma6 import funding_api as fa
+from research.programma6 import tipi_contratto as tc
 from research.programma6.motore import TAKER
 from research.src.dati import funding_da_zip
 
@@ -37,6 +39,19 @@ VOL_OBIETTIVO, MOLT_MAX = 0.25, 2.0
 N_A, N_B = 20, 50
 VOLUME_MIN, STORIA_MIN, GIORNI_VOLUME, GIORNI_VOL = 2e6, 365, 30, 90
 PROVE_PROGRAMMA = 21          # SECONDA.md, sezione 7: 9 + 3 + 9
+# audit del 26 novembre 2026, motore-4: un simbolo rilanciato (onboardDate dopo almeno 7 giorni senza scambi) e' un contratto
+# nuovo; la parte di prima resta nel pannello con questo nome in coda (per esempio LITUSDT_prima_del_2025-12-23)
+GIORNI_MORTI, SUFFISSO_VECCHIO = 7, "_prima_del_"
+# 27 novembre 2026 (audit del 26 novembre, secondo ritocco dopo il controllo indipendente): la separazione dei rilanci e'
+# ACCESA. Prima, con i lettori che prendevano i file per nome, le colonne <SIMBOLO>_prima_del_<giorno> facevano scrivere a
+# scarico_metrics pkl vuoti (1.430 richieste a vuoto), poi pannello_metrics si rompeva (KeyError 'oi_valore_fine') e il paper
+# delle candidate si fermava; e le parti vecchie perdevano i dati sulle posizioni (K1, K2, M). Ora scarico_metrics chiede i file
+# del simbolo di base (``simbolo_base``), non scrive pkl vuoti e tiene in research/data/p6m anche il file di ogni colonna vecchia
+# (il file di base fino al giorno prima del rilancio: lo leggono per nome quattordicesima._taker_ls e gli altri lettori);
+# pannello_metrics ed esecuzione.ore_di (candele a 1 ora) leggono il simbolo di base, e pannello_metrics salta un pkl senza
+# colonne. False: i rilanci restano uniti e sono in ``pan["rilanci_non_separati"]``.
+SEPARA_RILANCI = True
+SALTO_APERTURA = 0.20        # nel controllo dei dati: apertura lontana piu' del 20% dalla chiusura della candela prima
 
 # SECONDA.md, sezione 9: i contratti che non sono una moneta
 from research.programma6.esclusi import ESCLUSI  # noqa: E402  (spostati nel file senza dipendenze)
@@ -73,16 +88,92 @@ def candele(simbolo: str) -> pd.DataFrame:
     return df[["open", "high", "low", "close", "volume", "quote_volume", "taker_buy_quote_volume"]].astype(float)
 
 
-def funding_giorni(simbolo: str) -> pd.Series:
-    """La somma dei tassi di funding per giorno di tenuta (sezione 3 di SECONDA.md)."""
+def _per_giorno(df: pd.DataFrame) -> pd.Series:
+    """La somma dei tassi per giorno di tenuta: il regolamento delle 00:00 lo paga chi ha tenuto il giorno prima."""
+    if df.empty:
+        return pd.Series(dtype=float)
+    tenuta = (df["ts"].to_numpy(np.int64) // 60_000 - 1) // 1440
+    return pd.Series(df["tasso"].to_numpy(float), index=tenuta).groupby(level=0).sum()
+
+
+def _regolamenti(simbolo: str, api: bool = True) -> tuple:
+    """I regolamenti (ts in ms, tasso) dell'archivio mensile; quelli dell'interfaccia pubblica (``funding_api.py``) che l'archivio
+    non ha (stesso minuto: vince l'archivio); il primo giorno di tenuta dell'interfaccia e l'ultimo completo (o None)."""
     righe = []
     for p in sorted((DATI / simbolo / "funding").glob("*.zip")):
         righe += funding_da_zip(p)
-    if not righe:
-        return pd.Series(dtype=float)
-    df = pd.DataFrame(righe, columns=["ts", "ore", "tasso"]).drop_duplicates("ts")
-    tenuta = (df["ts"].to_numpy() // 60_000 - 1) // 1440
-    return pd.Series(df["tasso"].to_numpy(float), index=tenuta).groupby(level=0).sum()
+    arch = pd.DataFrame(righe, columns=["ts", "ore", "tasso"]).drop_duplicates("ts")[["ts", "tasso"]]
+    arch = arch.astype({"ts": np.int64, "tasso": float})
+    if not api:
+        return arch, arch.iloc[:0], None, None
+    a, fino = fa.leggi(DATI / simbolo / fa.CARTELLA)
+    if not len(a) or fino is None:
+        return arch, arch.iloc[:0], None, None
+    da = int((a["ts"].min() // 60_000 - 1) // 1440)
+    nuovi = a[~np.isin(a["ts"].to_numpy() // 60_000, arch["ts"].to_numpy() // 60_000)]
+    return arch, nuovi, da, fa.ultimo_giorno_completo(fino)
+
+
+def funding_giorni(simbolo: str, api: bool = True) -> pd.Series:
+    """La somma dei tassi di funding per giorno di tenuta (sezione 3 di SECONDA.md): l'archivio mensile e, dopo il suo ultimo
+    regolamento, l'interfaccia pubblica di Binance (audit del 26 novembre 2026); ``api=False`` per il solo archivio."""
+    arch, nuovi, _, _ = _regolamenti(simbolo, api)
+    return _per_giorno(pd.concat([arch, nuovi], ignore_index=True) if len(nuovi) else arch)
+
+
+def fonti_funding(simbolo: str, api: bool = True) -> dict:
+    """Il funding di una moneta per giorno di tenuta e da dove viene: i giorni dei regolamenti dell'archivio e la finestra dei
+    giorni completi dell'interfaccia (``api_da``-``api_a``, o None)."""
+    arch, nuovi, da, a = _regolamenti(simbolo, api)
+    somme = _per_giorno(pd.concat([arch, nuovi], ignore_index=True) if len(nuovi) else arch)
+    giorni_arch = np.unique((arch["ts"].to_numpy(np.int64) // 60_000 - 1) // 1440)
+    return {"somme": somme, "archivio": giorni_arch, "api_da": da, "api_a": a}
+
+
+def _taglia_fonti(fo: dict, da: int | None = None, a: int | None = None) -> dict:
+    """Le fonti del funding ristrette ai giorni da ``da`` (compreso) ad ``a`` (escluso)."""
+    s, g = fo["somme"], fo["archivio"]
+    lo, hi = (-np.inf if da is None else da), (np.inf if a is None else a)
+    out = {"somme": s[(s.index >= lo) & (s.index < hi)], "archivio": g[(g >= lo) & (g < hi)], "api_da": None, "api_a": None}
+    if fo["api_da"] is not None:
+        api_da, api_a = max(fo["api_da"], lo), min(fo["api_a"], hi - 1)
+        if api_da <= api_a:
+            out["api_da"], out["api_a"] = int(api_da), int(api_a)
+    return out
+
+
+def colonna_funding(fo: dict, t0: int, T: int, close: np.ndarray, volume: np.ndarray) -> tuple:
+    """La colonna del funding di una moneta nel pannello e i giorni ancora stimati (senza tutti i regolamenti veri).
+
+    Coperti: i giorni di un mese con almeno un regolamento dell'archivio, fino all'ultimo (come prima), e la finestra dei giorni
+    completi dell'interfaccia pubblica. Gli altri giorni con la candela prendono la media dei 90 giorni coperti prima
+    (``riempi_funding``) e si segnano come stimati; si segna anche l'ultimo giorno dell'archivio se la moneta scambia il giorno
+    dopo e l'interfaccia non lo copre (manca il regolamento delle 00:00, che sta nel file del mese dopo). I giorni a volume zero
+    sono di una moneta tolta dal listino: funding zero, non stimati (``controllo_zombi.py``)."""
+    giorni = np.arange(T) + t0
+    f = fo["somme"]
+    f = f[(f.index >= t0) & (f.index < t0 + T)]
+    col = np.zeros(T)
+    col[f.index.to_numpy() - t0] = f.to_numpy()
+    arch = fo["archivio"]
+    arch = arch[(arch >= t0) & (arch < t0 + T)]
+    coperti = np.zeros(T, bool)
+    if len(arch):
+        mesi = pd.to_datetime(giorni * 86400, unit="s").to_period("M")
+        mesi_f = set(pd.to_datetime(arch * 86400, unit="s").to_period("M"))
+        coperti = np.array([m in mesi_f for m in mesi]) & (giorni <= arch.max())
+    if fo["api_da"] is not None:
+        coperti |= (giorni >= fo["api_da"]) & (giorni <= fo["api_a"])
+    c_ok = np.isfinite(close)
+    zero = c_ok & (np.nan_to_num(volume) == 0)
+    out = np.where(zero, 0.0, riempi_funding(col, c_ok, coperti))
+    parziale = np.zeros(T, bool)
+    if len(arch):
+        u = int(arch.max()) - t0
+        api = fo["api_da"] is not None and fo["api_da"] <= u + t0 <= fo["api_a"]
+        if u + 1 < T and c_ok[u + 1] and np.nan_to_num(volume[u + 1]) > 0 and not api:
+            parziale[u] = True
+    return out, c_ok & ~zero & (~coperti | parziale)
 
 
 def riempi_funding(f: np.ndarray, c_ok: np.ndarray, coperti: np.ndarray) -> np.ndarray:
@@ -100,58 +191,160 @@ def riempi_funding(f: np.ndarray, c_ok: np.ndarray, coperti: np.ndarray) -> np.n
     return out
 
 
-def costruisci_pannello(simboli=None, log=print) -> dict:
+def rilancio(c: pd.DataFrame, onboard: int, giorni_morti: int = GIORNI_MORTI):
+    """Se il simbolo e' stato rilanciato (audit del 26 novembre 2026, motore-4: le candele prima del giorno ``onboard`` di
+    exchangeInfo finiscono con almeno ``giorni_morti`` giorni a volume zero o senza candela, e dal giorno ``onboard`` si scambia),
+    la parte di prima, il vecchio contratto (vuota se non ha mai scambiato); altrimenti None."""
+    prima, dopo = c[c.index < onboard], c[c.index >= onboard]
+    if prima.empty or dopo.empty or not (dopo["quote_volume"].to_numpy() > 0).any():
+        return None
+    attivi = prima.index[prima["quote_volume"].to_numpy() > 0]
+    ultimo = int(attivi.max()) if len(attivi) else int(prima.index.min()) - 1
+    if onboard - 1 - ultimo < giorni_morti:
+        return None
+    return prima if len(attivi) else prima.iloc[:0]
+
+
+def simbolo_base(nome: str, rilanci: dict | None = None) -> tuple:
+    """Per una colonna del pannello: il simbolo dei suoi file (candele, funding, dati sulle posizioni, candele a 1 ora) e i giorni
+    ``[dal, al)`` che le spettano (None = senza limite). La parte vecchia di un simbolo rilanciato, ``<SIMBOLO>_prima_del_<giorno>``,
+    legge i file di <SIMBOLO> fino al giorno prima del rilancio; il contratto nuovo (in ``rilanci``, simbolo -> giorno) dal giorno
+    del rilancio; ogni altra colonna i propri file, senza limiti (audit del 26 novembre 2026, ritocco del 27 novembre)."""
+    if SUFFISSO_VECCHIO in nome:
+        base, g = nome.split(SUFFISSO_VECCHIO, 1)
+        return base, None, giorno(*map(int, g.split("-")))
+    if rilanci and nome in rilanci:
+        return nome, giorno(*map(int, rilanci[nome].split("-"))), None
+    return nome, None, None
+
+
+def aperture_lontane(pan: dict, soglia: float = SALTO_APERTURA) -> list:
+    """Il controllo dei dati (audit del 26 novembre 2026, motore-4): le aperture lontane piu' di ``soglia`` dalla chiusura della
+    candela prima (il giorno prima, o l'ultima candela prima di un buco). Di solito e' un contratto rilanciato a un altro prezzo,
+    che il pannello deve tenere separato."""
+    O, C, t0 = pan["open"], pan["close"], pan["t0"]
+    out = []
+    for j, s in enumerate(pan["simboli"]):
+        ok = np.flatnonzero(np.isfinite(C[:, j]) & np.isfinite(O[:, j]))
+        if len(ok) < 2:
+            continue
+        a, b = ok[:-1], ok[1:]
+        with np.errstate(all="ignore"):
+            r = O[b, j] / C[a, j] - 1
+        for k in np.flatnonzero(np.isfinite(r) & (np.abs(r) > soglia)):
+            out.append({"simbolo": s, "giorno": data(int(b[k]) + t0), "chiusura_prima": float(C[a[k], j]),
+                        "apertura": float(O[b[k], j]), "variazione": round(float(r[k]), 4),
+                        "giorni_senza_candela": int(b[k] - a[k] - 1)})
+    return out
+
+
+def costruisci_pannello(simboli=None, log=print, tipi=None, separa_rilanci=None) -> dict:
+    """Il pannello giornaliero di tutti i perpetui in USDT (``PANNELLO``).
+
+    Audit del 26 novembre 2026: (1) il funding dopo l'ultimo file mensile viene dall'interfaccia pubblica (``funding_api.py``),
+    e i giorni ancora senza il funding vero sono in ``funding_stimato``; (2) i giorni di un contratto che oggi non e' una moneta
+    (``tipi_contratto.json``) si tolgono dal suo onboardDate in poi (``non_monete``); (3) con ``separa_rilanci`` (di norma
+    ``SEPARA_RILANCI``, acceso dal secondo ritocco del 27 novembre) un simbolo rilanciato diventa un contratto nuovo dal suo
+    onboardDate, e la parte di prima resta come ``<SIMBOLO>_prima_del_<giorno>`` (``rilanci``); spento, i rilanci trovati restano
+    uniti e sono in ``rilanci_non_separati``. I giorni tolti in coda perche' pubblicati solo in parte sono in ``giorni_in_coda_tolti``."""
+    if separa_rilanci is None:
+        separa_rilanci = SEPARA_RILANCI
     if simboli is None:
-        simboli = sorted(p.name for p in DATI.iterdir() if p.is_dir() and p.name not in ESCLUSI)
-    serie, fund = {}, {}
+        # una cartella col nome di una colonna vecchia (scritta per errore da un lettore per nome) non e' un simbolo
+        simboli = sorted(p.name for p in DATI.iterdir() if p.is_dir() and p.name not in ESCLUSI and SUFFISSO_VECCHIO not in p.name)
+    if tipi is None:
+        tipi = tc.leggi()
+        if not tipi:
+            log("[pannello] manca tipi_contratto.json: i contratti che non sono monete si tolgono solo per nome")
+    serie, fund, non_monete, rilanci, non_separati = {}, {}, {}, {}, {}
     for s in simboli:
         c = candele(s)
+        if not len(c):
+            continue
+        fo = fonti_funding(s)
+        t = tipi.get(s) or {}
+        if t.get("onboardDate"):
+            onb = int(t["onboardDate"]) // 86_400_000
+            if not tc.e_moneta_ricerca(t):
+                if (c.index >= onb).any():
+                    non_monete[s] = data(onb)
+                c, fo = c[c.index < onb], _taglia_fonti(fo, None, onb)
+            else:
+                vecchio = rilancio(c, onb)
+                if vecchio is not None and not separa_rilanci:
+                    non_separati[s] = data(onb)
+                elif vecchio is not None:
+                    rilanci[s] = data(onb)
+                    if len(vecchio):
+                        serie[s + SUFFISSO_VECCHIO + data(onb)] = vecchio
+                        fund[s + SUFFISSO_VECCHIO + data(onb)] = _taglia_fonti(fo, None, onb)
+                    c, fo = c[c.index >= onb], _taglia_fonti(fo, onb, None)
         if len(c):
-            serie[s], fund[s] = c, funding_giorni(s)
+            serie[s], fund[s] = c, fo
+    if non_monete or rilanci or non_separati:
+        log(f"[pannello] contratti che non sono monete, tolti dal loro onboardDate: {len(non_monete)}; rilanci separati: "
+            + (", ".join(f"{k} dal {v}" for k, v in sorted(rilanci.items())) or "nessuno")
+            + ("; rilanci trovati e lasciati uniti (SEPARA_RILANCI spento): "
+               + ", ".join(f"{k} dal {v}" for k, v in sorted(non_separati.items())) if non_separati else ""))
     t0 = min(int(c.index.min()) for c in serie.values())
     t1 = max(int(c.index.max()) for c in serie.values())
     T, nomi = t1 - t0 + 1, sorted(serie)
     P = {k: np.full((T, len(nomi)), np.nan)
          for k in ("open", "high", "low", "close", "quote_volume", "taker_buy_quote_volume")}
     F = np.zeros((T, len(nomi)))
+    M = np.zeros((T, len(nomi)), bool)
     for j, s in enumerate(nomi):
         c = serie[s]
         r = c.index.to_numpy() - t0
         for k in P:
             P[k][r, j] = c[k].to_numpy()
-        f = fund[s]
-        f = f[(f.index >= t0) & (f.index <= t1)]
-        col = np.zeros(T)
-        col[f.index.to_numpy() - t0] = f.to_numpy()
-        # giorni coperti: quelli di un mese che ha almeno un regolamento
-        coperti = np.zeros(T, bool)
-        if len(f):
-            mesi = pd.to_datetime((np.arange(T) + t0) * 86400, unit="s").to_period("M")
-            mesi_f = set(pd.to_datetime((f.index.to_numpy()) * 86400, unit="s").to_period("M"))
-            coperti = np.array([m in mesi_f for m in mesi]) & (np.arange(T) <= f.index.max() - t0)
-        F[:, j] = riempi_funding(col, np.isfinite(P["close"][:, j]), coperti)
         # i giorni a volume zero sono di una moneta tolta dal listino (prezzo fermo): nessun funding (controllo_zombi.py)
-        F[:, j] = np.where(np.isfinite(P["close"][:, j]) & (np.nan_to_num(P["quote_volume"][:, j]) == 0), 0.0, F[:, j])
+        F[:, j], M[:, j] = colonna_funding(fund[s], t0, T, P["close"][:, j], P["quote_volume"][:, j])
         log(f"[pannello] {s}")
     tolti = giorni_parziali_in_coda(P["close"])
+    in_coda = [data(t0 + T - tolti + i) for i in range(tolti)]
     if tolti:
         # l'archivio pubblico di Binance pubblica un giorno nuovo moneta per moneta, nel corso di ore: un ultimo giorno con i prezzi
         # di una parte delle monete non e' un giorno vero (10 novembre 2026: l'8 novembre c'era per 232 monete su circa 715, e le
         # decisioni del lunedi' 9 si facevano su quel giorno a meta'); si usa dal giro in cui e' completo
-        log(f"[pannello] tolti {tolti} giorni in coda pubblicati solo in parte")
+        log(f"[pannello] tolti {tolti} giorni in coda pubblicati solo in parte ({', '.join(in_coda)})"
+            + (": PIU' DI 2, DA CONTROLLARE (monete sparite dall'archivio?)" if tolti > 2 else ""))
         P = {k: v[:-tolti] for k, v in P.items()}
-        F = F[:-tolti]
-    pan = {"t0": t0, "simboli": nomi, **P, "funding": F}
+        F, M = F[:-tolti], M[:-tolti]
+    pan = {"t0": t0, "simboli": nomi, **P, "funding": F, "funding_stimato": M, "non_monete": non_monete,
+           "rilanci": rilanci, "rilanci_non_separati": non_separati, "giorni_in_coda_tolti": in_coda}
+    salti = aperture_lontane(pan)
+    if salti:
+        log(f"[pannello] controllo dei dati: {len(salti)} aperture lontane piu' del {100 * SALTO_APERTURA:.0f}% dalla chiusura "
+            "prima: " + ", ".join(f"{x['simbolo']} {x['giorno']} {100 * x['variazione']:+.0f}%" for x in salti[:10]))
     pd.to_pickle(pan, PANNELLO)
     return pan
 
 
-def giorni_parziali_in_coda(close: np.ndarray, quota: float = 0.9) -> int:
-    """Quanti ultimi giorni del pannello hanno i prezzi di meno del ``quota`` delle monete del giorno prima (pubblicati solo in
-    parte dall'archivio di Binance); il primo giorno non si tocca."""
+def rifai_funding(pan: dict) -> None:
+    """Rifa' dai file il funding e i giorni stimati di un pannello salvato prima del 27 novembre 2026 (senza ``funding_stimato``):
+    cosi' anche un pannello vecchio ha il funding vero dell'interfaccia dove c'e'."""
+    T = pan["close"].shape[0]
+    M = np.zeros(pan["close"].shape, bool)
+    for j, s in enumerate(pan["simboli"]):
+        base, dal, al = simbolo_base(s, pan.get("rilanci"))
+        fo = fonti_funding(base) if dal is None and al is None else _taglia_fonti(fonti_funding(base), dal, al)
+        pan["funding"][:, j], M[:, j] = colonna_funding(fo, pan["t0"], T, pan["close"][:, j], pan["quote_volume"][:, j])
+    pan["funding_stimato"] = M
+
+
+def giorni_parziali_in_coda(close: np.ndarray, quota: float = 0.9, finestra: int = 10) -> int:
+    """Quanti ultimi giorni del pannello hanno i prezzi di meno del ``quota`` delle monete di un giorno completo (pubblicati solo
+    in parte dall'archivio di Binance); il primo giorno non si tocca.
+
+    Il riferimento di ogni giorno in coda e' il massimo di monete dei ``finestra`` giorni prima: con il solo giorno prima, due
+    giorni a meta' di fila restavano tutti e due (audit del 26 novembre 2026: [715, 715, 603, 550] dava 0)."""
     n = np.isfinite(close).sum(axis=1)
     tolti, T = 0, len(n)
-    while T - tolti >= 2 and n[T - tolti - 1] < quota * n[T - tolti - 2]:
+    while T - tolti >= 2:
+        i = T - tolti - 1
+        if not n[i] < quota * n[max(0, i - finestra): i].max():
+            break
         tolti += 1
     return tolti
 
