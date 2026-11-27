@@ -1,0 +1,43 @@
+{
+ "O00": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "H00": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "L00": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "C00": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "O01": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "H01": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "L01": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "O02": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "O04": {
+  "coppie_tenute_senza": 0,
+  "coppie_tenute": 15211
+ },
+ "apertura_ora_contro_giorno": {
+  "coppie": 15211,
+  "oltre_0,1%": 0,
+  "massimo": 0.0
+ }
+}

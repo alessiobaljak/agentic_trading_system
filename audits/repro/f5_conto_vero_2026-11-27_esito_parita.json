@@ -1,0 +1,8 @@
+{
+ "lunedi": 307,
+ "lunedi_con_pesi_diversi": 0,
+ "universi_diversi": 0,
+ "differenza_massima": 1.1102230246251565e-16,
+ "esempi": [],
+ "nota": "il bot riceve qui gli stessi dati del pannello (funding del pannello, primo giorno = prima candela); le differenze di dati vere (onboardDate, contratti in chiusura, tipo del sottostante, funding sommato senza arrotondamento) non sono in questo confronto"
+}

@@ -865,6 +865,16 @@ scrivono con e senza le serie a incasso quasi fisso.
   sopra il lunedì salta la settimana); le decisioni per il proprietario delle revisioni (età di 194 ore, nessuno stop per posizione, F5 mai
   su un demo) e i vecchi 54 (ii), 70, 78.
 * **Perché non subito**: il conto vero è spento e i soldi veri si accendono solo quando il proprietario lo chiede.
+* **27 novembre 2026, revisione del revisore delle prove** (`audits/reports/2026-11-27-F5_CONTO_VERO.md`): **FAIL per F5 a 280-300 USDT,
+  PASS tecnico a 1.000 USDT**. La strategia in sé è pulita (rifatta identica, Sharpe 1,88, nessun dato del futuro, paper del bot uguale alla
+  ricerca in 307 lunedì su 307). Ma con i minimi veri di Binance (`bot/portafoglio/filtri_conto_vero.json`) a 280 USDT il conto rifiuterebbe
+  il 61% delle variazioni: Sharpe 1,40-1,57, 2026 fra −5% e +1% l'anno, discesa −32/−33%; a 1.000 USDT 1,69-1,93, ogni anno positivo. In più
+  il bot non chiude le posizioni rimaste sotto il minimo (`demo_binance.py:280` e `:1420`, anche quelle che Binance accetterebbe come «solo
+  riduzione»): a 280 USDT circa 7 per lunedì, e una sola (TUT, +1.049% in una settimana nell'agosto 2026) costa il 13,8% del conto. Lo stesso
+  salto c'è sul demo di G1 a 1.000 USDT (da misurare quanto pesa). Prima di accendere: una prova con le regole scritte prima su F5 a 280 e
+  300 USDT (filtri di oggi, partenza vuota di lunedì, limiti con margini, chiusure come il bot e «solo riduzione»); la correzione delle
+  chiusure sotto il minimo (percorso degli ordini: live-path-reviewer, poi l'ok del proprietario al riavvio); le decisioni del proprietario
+  (quale N per l'esame: 24 → 0,96, 56 → 0,90, oggi → 0,51; la taglia, oggi il codice si ferma a 300; lo stop a −35%; i limiti fissi).
 
 ### P37. Dall'audit del sistema del 26 novembre: le cose trovate e non fatte subito — trovata il 26-27 novembre 2026 (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`)
 * **Per il proprietario (cambiano l'esame, decide lui)**: (a) la dispersione V dell'asticella toglie solo le prove perdenti (t sotto −3)

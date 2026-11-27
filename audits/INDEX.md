@@ -1,9 +1,8 @@
 # Indice della memoria dell'auditor (massimo 40 righe)
-Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KNOWN_PITFALLS.md`; il resto solo se serve.
+Aggiornato: 2026-11-27. Leggere all'inizio di ogni invocazione questo file e `KNOWN_PITFALLS.md`; il resto solo se serve.
 ## Stato degli audit per strategia
 | Strategia | Ultimo audit | Verdetto | Note |
 |---|---|---|---|
-| BTCORA (collaudo, `research/prova_finta_audit/`) | 2026-11-07 | FAIL | prova finta per collaudare l'audit; sguardo nel futuro e funding assente |
 | Prova 28: K2, F5 + M7 + K2 (riesame) | 2026-11-11 | PASS tecnico | Alti: Sharpe corretto 0,75/0,47 con N = conto, 0,89/0,69 con N = gruppi; regole: «non candidate» |
 | Prova 113: N3G, monete gratis (riesame) | 2026-11-11 | PASS tecnico del «no» | corretta p 0,0268 (serve 0,01); Alto: eventi della 32 da rifare (19 persi); tocca anche N3 nel paper |
 | G1 (demo, candidata ai soldi veri; configurazione 280 USDT) | 2026-11-12 | PASS tecnico | Alti: esame 0,80 solo con il limite della ricerca (A 0,81, a mercato 0,77); GTC al mark; soglia cambiata dopo; moneta fino al 44% |
@@ -12,7 +11,8 @@ Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KN
 | Mazzo dello Sharpe corretto (`asticella.py`, `78235da`) | 2026-11-12 | FAIL del mazzo | numeri rifatti identici; 27 varianti senza serie tolte, 81-82 senza filtro, conferme dentro; corretti G1 0,733, miscela 0,797/0,802 |
 | Prova 157: CB, funding coperto su BTC ed ETH | 2026-11-15 | FAIL del calcolo | margine senza perdite chiuse: 9 e 5 liquidazioni; con margine possibile 7,3%/7,4% (non 10,5%), dal 2022 circa 4%; rifatta come 161 |
 | Prova 161: CM, funding coperto con il margine vero (la 157 rifatta) | 2026-11-15 | PASS tecnico | Alti: settimane legate (t corretto 2,4-3,2, Sharpe l'anno ~0,9-1,0); bot senza pronti e trasferimenti; dal 2022 ~3%, ultimi 12 mesi ~1,3% |
-| G11, G1N, F5, eventi (paper); vecchie `bot/strategies/` (ferme dal 13 ott) | mai | — | solo elenco con lo stato al prossimo avvio completo |
+| F5 nel conto vero (prova 24; 280, 300 e 1.000 USDT) | 2026-11-27 | FAIL a 280-300; PASS tecnico a 1.000 | filtri veri a 280: 1,40-1,57, 2026 fra −5% e +1%, discesa −32/−33%; sotto il minimo non chiude (TUT −13,8%); per Alessio: N dell'esame (24: 0,96; 56: 0,90; oggi 0,51), taglia (codice a 300), chiusure «solo riduzione», costo dei limiti, stop −35% |
+| G11, G1N, eventi (paper); vecchie `bot/strategies/` (ferme dal 13 ott) | mai | — | solo elenco con lo stato al prossimo avvio completo |
 
 ## Cosa contiene ogni file
 - `KNOWN_PITFALLS.md`: errori del repo, con file e schema da cercare (sempre). `AUDIT_LOG.md`: una riga per audit.
@@ -23,7 +23,7 @@ Aggiornato: 2026-11-15. Leggere all'inizio di ogni invocazione questo file e `KN
   `cache <cartella>`, poi `numeri`, `copertura`, `allinea`, `eventi`, `sensi`, `regola_scritta`, `fino57`, `varianti_g1`);
   `prova157_2026-11-15.py` (coperture: `scarica <cartella>`, `dati`, `rifai`, `margine`, `filtri`, `extra`, `esempio`); `prova161_2026-11-15.py`
   (simulatore ora per ora dalle regole; `rifai` prima, poi `indipendente`, `margine`, `sensi`, `misure`, `robustezza_t`, `filtri`, `corretti`,
-  `tasso_base`, `limiti_bot`).
+  `tasso_base`, `limiti_bot`); `f5_conto_vero_2026-11-27.py` (F5 sul conto vero: `--codice`, `--pannello`; `base` e `ore` prima).
 
 ## Decisioni aperte per Alessio
 - (7 nov) Minimo di anni e di operazioni; perdita giornaliera del 5% da simulare o no. (11 nov) Riesame che rende candidata una

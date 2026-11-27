@@ -1,0 +1,642 @@
+{
+ "giorno_peggiore": {
+  "valore": -0.10137369572158758,
+  "giorno": "2021-02-11"
+ },
+ "giorni_sotto_-5%": 11,
+ "giorni_sotto_-10%": 1,
+ "limite_prudente_nel_giorno": {
+  "valore": -0.6005231974944616,
+  "giorno": "2025-10-10"
+ },
+ "peggiori_5_limite_prudente": {
+  "2025-10-10": -0.6005,
+  "2021-05-19": -0.5759,
+  "2021-02-13": -0.4209,
+  "2021-09-07": -0.352,
+  "2021-05-24": -0.3208
+ },
+ "peso_massimo_al_lunedi": 0.43733790219596586,
+ "lunedi_oltre_0,60": 0,
+ "lunedi_somma_oltre_2": 0,
+ "peso_massimo_con_la_deriva": {
+  "valore": 0.4484747009167119,
+  "giorno": "2024-02-08"
+ },
+ "giorni_con_una_moneta_oltre_0,30": 25,
+ "lunedi_con_meno_di_10_per_lato": 12,
+ "moneta_piu_pesante": {
+  "simbolo": "BLZUSDT",
+  "lunedi": "2024-02-05",
+  "peso": -0.43733790219596586
+ },
+ "settimana_peggiore": {
+  "valore": -0.1471151700195376,
+  "lunedi": "2024-02-26"
+ },
+ "discesa_massima_in_USDT_con_280": -75.19469522777888,
+ "stop: ricerca, senza minimi": {
+  "valore": null,
+  "peggio_nel_giorno": "2021-02-05",
+  "discesa_massima_giornaliera": -0.28154785196430643,
+  "giorno_della_discesa_massima": "2024-03-24",
+  "discesa_massima_con_il_peggio_nel_giorno": -0.6070253770298879,
+  "settimana_peggiore": -0.14711516931443475,
+  "fino_al": "2026-11-22",
+  "partenze_ogni_trimestre": {
+   "2021-01-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-02-05",
+    "discesa_giornaliera": -0.2815
+   },
+   "2021-04-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-05-19",
+    "discesa_giornaliera": -0.2815
+   },
+   "2021-07-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-09-07",
+    "discesa_giornaliera": -0.2815
+   },
+   "2021-10-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2815
+   },
+   "2022-01-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2815
+   },
+   "2022-04-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2815
+   },
+   "2022-07-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2815
+   },
+   "2022-10-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2815
+   },
+   "2023-01-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2815
+   },
+   "2023-04-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2815
+   },
+   "2023-07-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2815
+   },
+   "2023-10-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2815
+   },
+   "2024-01-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-03-05",
+    "discesa_giornaliera": -0.2583
+   },
+   "2024-04-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2024-07-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2024-09-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2024-12-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2025-03-31": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2025-06-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2025-09-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2583
+   },
+   "2025-12-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2026-08-06",
+    "discesa_giornaliera": -0.2583
+   }
+  },
+  "partenze_con_lo_stop_nel_giorno": 21,
+  "partenze": 21
+ },
+ "stop: 280 USDT, limite oltre 0,05%": {
+  "valore": null,
+  "peggio_nel_giorno": "2021-02-05",
+  "discesa_massima_giornaliera": -0.29725422486213626,
+  "giorno_della_discesa_massima": "2021-02-21",
+  "discesa_massima_con_il_peggio_nel_giorno": -0.5996378649292422,
+  "settimana_peggiore": -0.17437131072148668,
+  "fino_al": "2026-11-22",
+  "partenze_ogni_trimestre": {
+   "2021-01-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-02-05",
+    "discesa_giornaliera": -0.2973
+   },
+   "2021-04-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-05-19",
+    "discesa_giornaliera": -0.2938
+   },
+   "2021-07-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2865
+   },
+   "2021-10-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2845
+   },
+   "2022-01-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2871
+   },
+   "2022-04-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3028
+   },
+   "2022-07-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2985
+   },
+   "2022-10-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3065
+   },
+   "2023-01-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2835
+   },
+   "2023-04-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3046
+   },
+   "2023-07-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2023-12-31",
+    "discesa_giornaliera": -0.3023
+   },
+   "2023-10-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2455
+   },
+   "2024-01-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-03-03",
+    "discesa_giornaliera": -0.3098
+   },
+   "2024-04-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2458
+   },
+   "2024-07-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2645
+   },
+   "2024-09-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2365
+   },
+   "2024-12-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-07-11",
+    "discesa_giornaliera": -0.2612
+   },
+   "2025-03-31": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.3309
+   },
+   "2025-06-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.1937
+   },
+   "2025-09-29": {
+    "stop_fine_giorno": "2026-08-31",
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.3566
+   },
+   "2025-12-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": null,
+    "discesa_giornaliera": -0.1841
+   }
+  },
+  "partenze_con_lo_stop_nel_giorno": 20,
+  "partenze": 21
+ },
+ "stop: 280 USDT, a mercato": {
+  "valore": null,
+  "peggio_nel_giorno": "2021-02-05",
+  "discesa_massima_giornaliera": -0.2914463204887491,
+  "giorno_della_discesa_massima": "2021-02-21",
+  "discesa_massima_con_il_peggio_nel_giorno": -0.6054808052532639,
+  "settimana_peggiore": -0.17597567894366,
+  "fino_al": "2026-11-22",
+  "partenze_ogni_trimestre": {
+   "2021-01-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-02-05",
+    "discesa_giornaliera": -0.2914
+   },
+   "2021-04-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-05-19",
+    "discesa_giornaliera": -0.2879
+   },
+   "2021-07-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2793
+   },
+   "2021-10-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2023-12-31",
+    "discesa_giornaliera": -0.2793
+   },
+   "2022-01-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2768
+   },
+   "2022-04-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2983
+   },
+   "2022-07-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2963
+   },
+   "2022-10-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2979
+   },
+   "2023-01-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3092
+   },
+   "2023-04-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2967
+   },
+   "2023-07-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2023-12-31",
+    "discesa_giornaliera": -0.2981
+   },
+   "2023-10-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2387
+   },
+   "2024-01-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-03-03",
+    "discesa_giornaliera": -0.3047
+   },
+   "2024-04-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2403
+   },
+   "2024-07-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.247
+   },
+   "2024-09-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2408
+   },
+   "2024-12-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2601
+   },
+   "2025-03-31": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.3351
+   },
+   "2025-06-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.1972
+   },
+   "2025-09-29": {
+    "stop_fine_giorno": "2026-08-19",
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.3685
+   },
+   "2025-12-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": null,
+    "discesa_giornaliera": -0.195
+   }
+  },
+  "partenze_con_lo_stop_nel_giorno": 20,
+  "partenze": 21
+ },
+ "stop: 280 USDT, chiusure libere, limite oltre 0,05%": {
+  "valore": null,
+  "peggio_nel_giorno": "2021-02-05",
+  "discesa_massima_giornaliera": -0.30053503534375015,
+  "giorno_della_discesa_massima": "2024-03-24",
+  "discesa_massima_con_il_peggio_nel_giorno": -0.6019031756934545,
+  "settimana_peggiore": -0.17087315998433492,
+  "fino_al": "2026-11-22",
+  "partenze_ogni_trimestre": {
+   "2021-01-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-02-05",
+    "discesa_giornaliera": -0.3005
+   },
+   "2021-04-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-05-19",
+    "discesa_giornaliera": -0.3069
+   },
+   "2021-07-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3013
+   },
+   "2021-10-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2913
+   },
+   "2022-01-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2023-12-31",
+    "discesa_giornaliera": -0.3014
+   },
+   "2022-04-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3185
+   },
+   "2022-07-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3314
+   },
+   "2022-10-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3168
+   },
+   "2023-01-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3312
+   },
+   "2023-04-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3164
+   },
+   "2023-07-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3277
+   },
+   "2023-10-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2929
+   },
+   "2024-01-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-03-05",
+    "discesa_giornaliera": -0.2584
+   },
+   "2024-04-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2519
+   },
+   "2024-07-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2383
+   },
+   "2024-09-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2253
+   },
+   "2024-12-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2192
+   },
+   "2025-03-31": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2123
+   },
+   "2025-06-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2027
+   },
+   "2025-09-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2063
+   },
+   "2025-12-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": null,
+    "discesa_giornaliera": -0.1785
+   }
+  },
+  "partenze_con_lo_stop_nel_giorno": 20,
+  "partenze": 21
+ },
+ "stop: 1000 USDT, limite oltre 0,05%": {
+  "valore": null,
+  "peggio_nel_giorno": "2021-02-05",
+  "discesa_massima_giornaliera": -0.2912286719260474,
+  "giorno_della_discesa_massima": "2024-03-24",
+  "discesa_massima_con_il_peggio_nel_giorno": -0.6057538931051927,
+  "settimana_peggiore": -0.14881275560849888,
+  "fino_al": "2026-11-22",
+  "partenze_ogni_trimestre": {
+   "2021-01-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-02-05",
+    "discesa_giornaliera": -0.2912
+   },
+   "2021-04-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-05-19",
+    "discesa_giornaliera": -0.2904
+   },
+   "2021-07-05": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2021-09-07",
+    "discesa_giornaliera": -0.2954
+   },
+   "2021-10-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2994
+   },
+   "2022-01-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.3015
+   },
+   "2022-04-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.3011
+   },
+   "2022-07-04": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.296
+   },
+   "2022-10-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2022-11-08",
+    "discesa_giornaliera": -0.2981
+   },
+   "2023-01-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.3028
+   },
+   "2023-04-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2931
+   },
+   "2023-07-03": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2929
+   },
+   "2023-10-02": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-01-03",
+    "discesa_giornaliera": -0.2957
+   },
+   "2024-01-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2024-03-05",
+    "discesa_giornaliera": -0.2627
+   },
+   "2024-04-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2622
+   },
+   "2024-07-01": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2615
+   },
+   "2024-09-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2587
+   },
+   "2024-12-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2557
+   },
+   "2025-03-31": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2464
+   },
+   "2025-06-30": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.2486
+   },
+   "2025-09-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2025-10-10",
+    "discesa_giornaliera": -0.245
+   },
+   "2025-12-29": {
+    "stop_fine_giorno": null,
+    "stop_nel_giorno": "2026-08-06",
+    "discesa_giornaliera": -0.2477
+   }
+  },
+  "partenze_con_lo_stop_nel_giorno": 21,
+  "partenze": 21
+ },
+ "liquidazione": {
+  "margine": "CROSSED (demo_binance._margine_unico)",
+  "leva": 5,
+  "esposizione_lorda": 2.0,
+  "mantenimento_ipotesi": [
+   0.004,
+   0.025
+  ],
+  "perdita_che_liquida_ipotesi": [
+   0.95,
+   0.992
+  ],
+  "perdita_peggiore_prudente_nel_giorno": -0.6005231974944616
+ }
+}

@@ -1,0 +1,269 @@
+{
+ "monete_tenute": 435,
+ "giorni_moneta_tenuti": 106477,
+ "buchi_tenuti": {
+  "monete": 35,
+  "giorni_moneta": 97,
+  "per_giorno": {
+   "2022-02-26": 20,
+   "2022-02-27": 20,
+   "2022-04-01": 26,
+   "2022-04-02": 26,
+   "2023-02-01": 1,
+   "2023-02-02": 1,
+   "2023-02-03": 1,
+   "2023-02-04": 1,
+   "2023-02-05": 1
+  }
+ },
+ "giorni_fermi_tenuti": {
+  "giorni_moneta": 82,
+  "monete": [
+   "AGIXUSDT",
+   "BAKEUSDT",
+   "BNXUSDT",
+   "BTTUSDT",
+   "FTMUSDT",
+   "FTTUSDT",
+   "HIFIUSDT",
+   "IPUSDT",
+   "LUNAUSDT",
+   "MATICUSDT",
+   "MKRUSDT",
+   "OMNIUSDT",
+   "OMUSDT",
+   "SRMUSDT",
+   "TONUSDT",
+   "VANRYUSDT",
+   "VIDTUSDT",
+   "WAVESUSDT"
+  ]
+ },
+ "rendimenti_anomali_tenuti": [
+  [
+   "CVCUSDT",
+   "2021-09-04",
+   1.3784
+  ],
+  [
+   "LUNAUSDT",
+   "2022-05-11",
+   -0.9377
+  ],
+  [
+   "LUNAUSDT",
+   "2022-05-12",
+   -0.9927
+  ],
+  [
+   "FTTUSDT",
+   "2022-11-08",
+   -0.7521
+  ],
+  [
+   "FTTUSDT",
+   "2022-11-09",
+   -0.674
+  ],
+  [
+   "REEFUSDT",
+   "2024-10-15",
+   -0.6276
+  ],
+  [
+   "VIDTUSDT",
+   "2025-04-12",
+   -0.8239
+  ],
+  [
+   "OMUSDT",
+   "2025-04-13",
+   -0.8389
+  ],
+  [
+   "JELLYJELLYUSDT",
+   "2025-11-03",
+   2.3405
+  ],
+  [
+   "JELLYJELLYUSDT",
+   "2025-11-06",
+   -0.6436
+  ],
+  [
+   "PIPPINUSDT",
+   "2025-11-24",
+   1.3137
+  ],
+  [
+   "SIRENUSDT",
+   "2026-03-22",
+   1.4501
+  ],
+  [
+   "SIRENUSDT",
+   "2026-03-25",
+   1.026
+  ],
+  [
+   "SIRENUSDT",
+   "2026-03-28",
+   1.0698
+  ],
+  [
+   "SIRENUSDT",
+   "2026-03-31",
+   -0.6709
+  ],
+  [
+   "SIRENUSDT",
+   "2026-04-04",
+   2.689
+  ],
+  [
+   "ARIAUSDT",
+   "2026-04-14",
+   -0.8512
+  ],
+  [
+   "SIRENUSDT",
+   "2026-04-16",
+   1.5152
+  ],
+  [
+   "SIRENUSDT",
+   "2026-04-17",
+   -0.6559
+  ],
+  [
+   "TRADOORUSDT",
+   "2026-04-24",
+   -0.8973
+  ],
+  [
+   "HUSDT",
+   "2026-06-08",
+   -0.8942
+  ],
+  [
+   "ESPORTSUSDT",
+   "2026-06-11",
+   1.3535
+  ],
+  [
+   "HUSDT",
+   "2026-06-11",
+   1.2813
+  ],
+  [
+   "ESPORTSUSDT",
+   "2026-06-13",
+   -0.7897
+  ],
+  [
+   "SIRENUSDT",
+   "2026-06-13",
+   -0.7478
+  ],
+  [
+   "ESPORTSUSDT",
+   "2026-06-17",
+   1.6946
+  ],
+  [
+   "ESPORTSUSDT",
+   "2026-06-18",
+   -0.7682
+  ],
+  [
+   "VELVETUSDT",
+   "2026-06-27",
+   1.2982
+  ],
+  [
+   "VELVETUSDT",
+   "2026-07-02",
+   -0.6909
+  ],
+  [
+   "LABUSDT",
+   "2026-07-04",
+   1.6087
+  ],
+  [
+   "EVAAUSDT",
+   "2026-07-07",
+   1.6417
+  ],
+  [
+   "LABUSDT",
+   "2026-07-08",
+   -0.7823
+  ],
+  [
+   "HEIUSDT",
+   "2026-08-05",
+   1.0784
+  ],
+  [
+   "ACEUSDT",
+   "2026-08-14",
+   1.0778
+  ],
+  [
+   "VELVETUSDT",
+   "2026-08-24",
+   -0.7663
+  ],
+  [
+   "AKEUSDT",
+   "2026-09-18",
+   1.1793
+  ]
+ ],
+ "candele_incoerenti_tenute": 0,
+ "file_grezzi": {
+  "doppioni": 0,
+  "fuori_ordine_fra_file": 0,
+  "non_mezzanotte_utc": 0,
+  "monete_con_doppioni_o_ore": {}
+ },
+ "funding": {
+  "giorni_moneta_tenuti_senza_dato_vero": 47,
+  "monete_con_giorni_stimati": 11,
+  "esempi": {
+   "IPUSDT": 7,
+   "KEEPUSDT": 6,
+   "MKRUSDT": 6,
+   "OMNIUSDT": 6,
+   "OMUSDT": 6,
+   "TONUSDT": 5,
+   "LUNAUSDT": 3,
+   "BAKEUSDT": 2,
+   "DODOUSDT": 2,
+   "HIFIUSDT": 2,
+   "VANRYUSDT": 2
+  },
+  "giorni_veri_diversi_dal_pannello": 45,
+  "regolamenti_oltre_un_minuto_dall_ora": 0,
+  "intervalli_fra_regolamenti_ore": {
+   "1": 56071,
+   "2": 2491,
+   "3": 31,
+   "4": 1061145,
+   "5": 1,
+   "6": 3,
+   "8": 974578,
+   "504": 1,
+   "955": 1,
+   "4500": 1,
+   "11736": 1
+  },
+  "ultimo_giorno_di_tenuta_con_dato_vero": "2026-10-31"
+ },
+ "periodo_dichiarato": {
+  "regole": "VENTIQUATTRESIMA.md sezione 3: dal 4 gennaio 2021, nessuna fine scritta",
+  "mazzo": "asticella.periodo: dal 4 gennaio 2021 al 5 ottobre 2026",
+  "decisione_25_novembre": "300 settimane al 4 ottobre (ultimo lunedi' 28 settembre)"
+ }
+}

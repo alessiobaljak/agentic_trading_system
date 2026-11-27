@@ -1,0 +1,191 @@
+{
+ "differenza_dalla_ricerca_per_anno_in_punti": {
+  "2021": {
+   "mai_aperte": -7.32,
+   "polvere": 3.56,
+   "taglia": 12.46
+  },
+  "2022": {
+   "mai_aperte": 11.46,
+   "polvere": -0.26,
+   "taglia": -4.81
+  },
+  "2023": {
+   "mai_aperte": -7.34,
+   "polvere": -1.15,
+   "taglia": -5.19
+  },
+  "2024": {
+   "mai_aperte": -8.29,
+   "polvere": 0.47,
+   "taglia": 1.18
+  },
+  "2025": {
+   "mai_aperte": -5.9,
+   "polvere": -0.7,
+   "taglia": -6.72
+  },
+  "2026": {
+   "mai_aperte": -10.53,
+   "polvere": -16.49,
+   "taglia": 9.59
+  }
+ },
+ "polvere_media_per_lunedi": {
+  "corte": 3.647840531561462,
+  "lunghe": 3.435215946843854
+ },
+ "casi_peggiori_della_polvere_nel_2026": [
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-08-03",
+   "moneta": "TUTUSDT",
+   "valore_usdt": -3.69,
+   "rendimento_settimana": 10.492,
+   "punti_del_capitale": -13.82
+  },
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-06-01",
+   "moneta": "ETHUSDT",
+   "valore_usdt": 18.06,
+   "rendimento_settimana": -0.158,
+   "punti_del_capitale": -1.02
+  },
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-04-20",
+   "moneta": "NAORISUSDT",
+   "valore_usdt": -4.63,
+   "rendimento_settimana": 0.621,
+   "punti_del_capitale": -1.01
+  },
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-08-03",
+   "moneta": "TSTUSDT",
+   "valore_usdt": -2.44,
+   "rendimento_settimana": 0.969,
+   "punti_del_capitale": -0.86
+  },
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-04-13",
+   "moneta": "DENTUSDT",
+   "valore_usdt": 4.85,
+   "rendimento_settimana": -0.462,
+   "punti_del_capitale": -0.81
+  },
+  {
+   "cosa": "polvere",
+   "lunedi": "2026-01-19",
+   "moneta": "RESOLVUSDT",
+   "valore_usdt": -4.6,
+   "rendimento_settimana": 0.289,
+   "punti_del_capitale": -0.65
+  }
+ ],
+ "TUT_nella_settimana_del_3_agosto_2026": {
+  "2026-08-03": [
+   0.01757,
+   0.0224,
+   0.01704,
+   0.02038,
+   17.9
+  ],
+  "2026-08-04": [
+   0.02038,
+   0.02442,
+   0.02033,
+   0.02157,
+   33.3
+  ],
+  "2026-08-05": [
+   0.02156,
+   0.02973,
+   0.02114,
+   0.02865,
+   24.2
+  ],
+  "2026-08-06": [
+   0.02866,
+   0.03133,
+   0.02427,
+   0.0245,
+   23.8
+  ],
+  "2026-08-07": [
+   0.02449,
+   0.04047,
+   0.02407,
+   0.03895,
+   62.0
+  ],
+  "2026-08-08": [
+   0.03896,
+   0.11734,
+   0.03553,
+   0.10907,
+   844.4
+  ],
+  "2026-08-09": [
+   0.1091,
+   0.33733,
+   0.0927,
+   0.20192,
+   2295.6
+  ],
+  "2026-08-10": [
+   0.20191,
+   0.25,
+   0.10666,
+   0.10779,
+   887.6
+  ]
+ },
+ "partenza 29 settembre 2025, bot (chiusure sotto il minimo saltate)": {
+  "massimo": 1.1671,
+  "giorno_del_massimo": "2025-11-03",
+  "minimo": 0.7509,
+  "giorno_del_minimo": "2026-08-31",
+  "discesa": -0.3566,
+  "valore_finale": 1.0726,
+  "fino_al": "2026-11-22",
+  "settimane_peggiori": {
+   "2026-08-03": -0.1643,
+   "2026-06-01": -0.1015,
+   "2026-04-27": -0.0566,
+   "2025-11-17": -0.0526
+  }
+ },
+ "partenza 29 settembre 2025, chiusure libere": {
+  "massimo": 1.2322,
+  "giorno_del_massimo": "2026-03-24",
+  "minimo": 0.978,
+  "giorno_del_minimo": "2026-08-18",
+  "discesa": -0.2063,
+  "valore_finale": 1.3585,
+  "fino_al": "2026-11-22",
+  "settimane_peggiori": {
+   "2026-06-01": -0.0937,
+   "2026-08-10": -0.0558,
+   "2026-04-27": -0.0493,
+   "2025-11-17": -0.0455
+  }
+ },
+ "partenza 29 settembre 2025, senza minimi": {
+  "massimo": 1.4018,
+  "giorno_del_massimo": "2026-03-24",
+  "minimo": 1.0359,
+  "giorno_del_minimo": "2026-08-19",
+  "discesa": -0.261,
+  "valore_finale": 1.56,
+  "fino_al": "2026-11-22",
+  "settimane_peggiori": {
+   "2026-06-01": -0.1082,
+   "2026-06-22": -0.0839,
+   "2026-08-10": -0.0572,
+   "2026-04-13": -0.0489
+  }
+ }
+}
