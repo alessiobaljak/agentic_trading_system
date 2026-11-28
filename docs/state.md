@@ -1,57 +1,57 @@
 # Stato sistema (snapshot)
-_Generato: 2026-11-28 06:53 UTC_
+_Generato: 2026-11-28 08:21 UTC_
 - macchina: non letta qui (lo stato lo fa GitHub): disco, memoria e orologio sono nella risposta «stato» della macchina
 
 ## Il bot (un solo processo: paper, demo e conto vero)
 - stato: **running** (🟢 online)
-- ultimo heartbeat: 2026-11-28 06:53 UTC
+- ultimo heartbeat: 2026-11-28 08:21 UTC
 - DRY_RUN: True
 
 ## Paper F5 (strategie nuove, eseguito dal bot)
-- stato: **acceso** (2026-11-28 06:46 UTC)
+- stato: **acceso** (2026-11-28 07:46 UTC)
 - prova a secco (2026-10-25 08:29 UTC, pesi del 2026-10-19): universo 100, 20 long, 20 short; pesi maggiori CRVUSDT -6.3%, ETHFIUSDT -6.2%, LITUSDT -6.0%, MORPHOUSDT -7.9%, POLUSDT +6.3%, TRXUSDT +38.1%, WLFIUSDT -14.2%, XMRUSDT -11.7%, ZECUSDT -5.8%, ZENUSDT -6.6%
-- equity: **$11,678.09** su $10,000 (+16.78%) · costi $12.65 · funding pagato $-555.03
+- equity: **$11,638.70** su $10,000 (+16.39%) · costi $12.65 · funding pagato $-555.03
 - posizioni: 31 long, 28 short · ultimo ribilancio 2026-11-23
 - ordini limite: 309 eseguiti su 309 · tutto a mercato sarebbe costato $44.04 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -14.2%, XMRUSDT -7.3%, HYPEUSDT -7.0%, TRXUSDT +7.0%, RENDERUSDT -6.3%, FARTCOINUSDT -5.9%, XPLUSDT -5.6%, XLMUSDT +5.6%, ASTERUSDT -5.5%, BCHUSDT +5.2%
 
 ## Paper G1 (F5 decisa ogni giorno, eseguito dal bot)
-- stato: **acceso** (2026-11-28 06:07 UTC)
+- stato: **acceso** (2026-11-28 08:07 UTC)
 - prova a secco (2026-10-23 20:32 UTC, pesi del 2026-10-23): universo 100, 20 long, 20 short; pesi maggiori 1000BONKUSDT +8.6%, ACEUSDT +7.3%, ALGOUSDT +7.5%, ASTERUSDT -11.2%, ATOMUSDT +7.4%, PENGUUSDT -6.6%, POLUSDT +9.6%, STXUSDT +6.4%, WLFIUSDT -10.5%, XMRUSDT -11.2%
-- equity: **$11,439.46** su $10,000 (+14.39%) · costi $37.41 · funding pagato $-534.54
+- equity: **$11,362.60** su $10,000 (+13.63%) · costi $37.41 · funding pagato $-533.41
 - posizioni: 29 long, 29 short · ultimo ribilancio 2026-11-28
 - ordini limite: 1970 eseguiti su 1980 · tutto a mercato sarebbe costato $103.13 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -7.4%, TRXUSDT +7.3%, HYPEUSDT -6.5%, AEROUSDT -6.5%, 1000SHIBUSDT +6.2%, RENDERUSDT -5.8%, XMRUSDT -5.8%, XLMUSDT +5.7%, FARTCOINUSDT -5.6%, BCHUSDT +5.5%
 
 ## Paper G11 (G1 con il funding fresco, a confronto con G1)
-- stato: **acceso** (2026-11-28 06:12 UTC)
+- stato: **acceso** (2026-11-28 08:12 UTC)
 - prova a secco (2026-10-23 20:36 UTC, pesi del 2026-10-23): universo 100, 20 long, 20 short; pesi maggiori ACEUSDT +7.4%, ADAUSDT +9.6%, ASTERUSDT -11.3%, ATOMUSDT +7.4%, AVAXUSDT +8.8%, PENGUUSDT -6.6%, POLUSDT +9.7%, WLFIUSDT -10.5%, XMRUSDT -11.3%, ZENUSDT -6.2%
-- equity: **$11,602.04** su $10,000 (+16.02%) · costi $47.67 · funding pagato $-506.09
+- equity: **$11,497.95** su $10,000 (+14.98%) · costi $47.67 · funding pagato $-504.65
 - posizioni: 29 long, 26 short · ultimo ribilancio 2026-11-28
 - ordini limite: 2050 eseguiti su 2057 · tutto a mercato sarebbe costato $142.33 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -8.8%, HYPEUSDT -7.7%, AEROUSDT -7.7%, TRXUSDT +7.1%, XMRUSDT -6.9%, FARTCOINUSDT -6.6%, XPLUSDT -6.1%, MEGAUSDT -5.9%, GRASSUSDT -5.7%, XLMUSDT +5.5%
 
 ## Paper G1N (G1 neutra al mercato, a confronto con G1; per i soldi veri resta G1, revisione del 29 ottobre)
-- stato: **acceso** (2026-11-28 06:16 UTC)
+- stato: **acceso** (2026-11-28 08:16 UTC)
 - prova a secco (2026-10-25 08:33 UTC, pesi del 2026-10-25): universo 100, 20 long, 20 short; pesi maggiori ALGOUSDT +6.1%, ASTERUSDT -8.9%, ATOMUSDT +5.7%, BTCUSDT -15.2%, LABUSDT -4.9%, POLUSDT +8.3%, TRXUSDT +45.0%, WLFIUSDT -9.4%, XMRUSDT -7.8%, ZENUSDT -5.2%
-- equity: **$11,745.35** su $10,000 (+17.45%) · costi $37.83 · funding pagato $-538.47
+- equity: **$11,685.54** su $10,000 (+16.86%) · costi $37.83 · funding pagato $-537.30
 - posizioni: 29 long, 29 short · ultimo ribilancio 2026-11-28
 - ordini limite: 1865 eseguiti su 1872 · tutto a mercato sarebbe costato $94.28 · in attesa del controllo dell'ora: 0
 - pesi maggiori: WLFIUSDT -7.4%, TRXUSDT +7.3%, HYPEUSDT -6.5%, AEROUSDT -6.5%, 1000SHIBUSDT +6.2%, RENDERUSDT -5.8%, XMRUSDT -5.8%, XLMUSDT +5.7%, FARTCOINUSDT -5.6%, BCHUSDT +5.5%
 
 ## Paper N3 ed E4 (eventi, eseguito dal bot)
-- stato: **acceso** (2026-11-28 06:04 UTC)
+- stato: **acceso** (2026-11-28 08:05 UTC)
 - equity: **$10,313.71** su $10,000 (+3.14%) · aperte N3 0, E4 0 · chiuse 1, media +62.74% a operazione · E4 in attesa 0
 
 ## G1 sul conto demo di Binance (ordini veri, soldi finti)
-- stato: **acceso** (2026-11-28 06:03 UTC)
-- equity: **$1,067.24** su $1,000.00 (+6.72%) · posizioni 27 long, 25 short · ordini limite eseguiti 825 su 877 · in attesa 0
-- conto ridotto: il demo lavora come un conto di $1,000 (prova 148, il capitale del proprietario); valore vero del conto demo $5,415.15
+- stato: **acceso** (2026-11-28 08:03 UTC)
+- equity: **$1,060.80** su $1,000.00 (+6.08%) · posizioni 27 long, 25 short · ordini limite eseguiti 825 su 877 · in attesa 0
+- conto ridotto: il demo lavora come un conto di $1,000 (prova 148, il capitale del proprietario); valore vero del conto demo $5,408.71
 - ultima decisione 2026-11-28: 10 ordini, eseguiti a limite 7, a mercato 2; sotto il minimo 42 variazioni (8.6% del conto); monete che sul demo non ci sono: EVAAUSDT, IRYSUSDT, LITUSDT, PIEVERSEUSDT, UAIUSDT
 - peso nel paper G1 delle monete rifiutate o mancanti sul demo (MIGLIORARE_G1.md, voce 4): EVAAUSDT -1.00%, IRYSUSDT +2.20%, LITUSDT +3.13%, PIEVERSEUSDT -1.74%, UAIUSDT -1.42%
-- stop sul conto: si chiude tutto sotto $695.80 (il più alto fra −35% dal massimo, $1,070.46, e il 65% del capitale di partenza); ora -0.30% dal massimo
-- margine (2026-11-28 06:03 UTC): unico su tutte le monete
-- posizioni vere contro volute (2026-11-28 06:03 UTC): 53 monete, scarto totale 8.2% del conto; nessuna moneta oltre il 2%
+- stop sul conto: si chiude tutto sotto $695.80 (il più alto fra −35% dal massimo, $1,070.46, e il 65% del capitale di partenza); ora -0.90% dal massimo
+- margine (2026-11-28 08:03 UTC): unico su tutte le monete
+- posizioni vere contro volute (2026-11-28 08:03 UTC): 53 monete, scarto totale 8.3% del conto; nessuna moneta oltre il 2%
 - ultimo errore (2026-11-25 17:36 UTC): `HTTPSConnectionPool(host='demo-fapi.binance.com', port=443): Read timed out. (read timeout=15)`
 
 ## G1: il demo contro il paper, giorno per giorno
@@ -72,9 +72,9 @@ Equity a fine giorno (l'ultimo valore scritto). Dal 6 novembre il demo lavora co
 | 2026-11-25 | -1.39% | -2.07% | +0.68% | +0.00% | — |
 | 2026-11-26 | +2.87% | +3.01% | -0.14% | +0.00% | — |
 | 2026-11-27 | +2.69% | +3.17% | -0.48% | +0.00% | — |
-| 2026-11-28 | +3.63% | +3.21% | +0.42% | +0.00% | — |
+| 2026-11-28 | +3.00% | +2.52% | +0.49% | +0.00% | — |
 
-- dal 2026-11-09 (20 giorni): demo +7.24%, paper +9.31%; differenza media al giorno -0.098%, oscillazione 0.596%
+- dal 2026-11-09 (20 giorni): demo +6.59%, paper +8.58%; differenza media al giorno -0.095%, oscillazione 0.599%
 - demo meno paper senza le monete che il demo non ha (ultima colonna; stima: pesi del paper di oggi, prezzi mark giornalieri di Binance, senza funding): in 1 giorno media al giorno +0.312% (con quelle monete +0.312%); quelle di oggi pesano nel paper G1 il 9.47% lordo del conto (5 monete, elenco nella sezione del demo); senza un peso di oggi, non contate: 龙虾USDT; prezzi non letti: EVAAUSDT, IRYSUSDT, LITUSDT, PIEVERSEUSDT, UAIUSDT
 
 Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: + pagate; nel paper dal 6 novembre); gli ultimi 14 giorni.
@@ -94,9 +94,9 @@ Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: 
 | 2026-11-25 | +0.113% | +0.104% | +0.004% | +0.003% |
 | 2026-11-26 | +0.115% | +0.094% | +0.001% | +0.003% |
 | 2026-11-27 | +0.138% | +0.089% | +0.002% | +0.003% |
-| 2026-11-28 | +0.029% | +0.026% | +0.005% | +0.018% |
+| 2026-11-28 | +0.032% | +0.016% | +0.005% | +0.018% |
 
-- sul demo, dal 2026-11-07 (22 giorni): funding incassato +33.78 USDT, commissioni pagate 1.81 USDT
+- sul demo, dal 2026-11-07 (22 giorni): funding incassato +33.81 USDT, commissioni pagate 1.81 USDT
 
 ## F5 sul conto vero di Binance (soldi veri; nasce spento, si accende solo con il gesto del proprietario)
 - stato: **spento: manca l'interruttore ops/conto_vero_acceso** (2026-11-28 06:33 UTC)
@@ -105,7 +105,7 @@ Funding e spese veri, in % dell'equity del giorno (funding: + incassato; spese: 
 - non letto: manca la chiave del conto demo (BINANCE_DEMO_API_KEY nel .env; c'è solo sulla macchina)
 
 ## G1 oggi, moneta per moneta: paper e demo (sola lettura)
-Letto il 2026-11-28 06:53 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,067.24 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
+Letto il 2026-11-28 08:21 UTC. In % del conto, paper/demo; + comprato, − venduto. Paper G1: `/paper_g1/posizioni` (l'ultimo ribilancio, ai prezzi di allora); demo: `positionRisk`, valore della posizione ai prezzi di adesso sull'equity del conto ridotto (1,060.80 USDT). La differenza mescola esecuzione e movimento dei prezzi dal ribilancio (problema 87): lo scarto di esecuzione allo stesso prezzo è il confronto del bot, nella sezione del demo.
 - demo: non letto: manca la chiave del conto demo (c'è solo sulla macchina)
 - WLFIUSDT -7.44/— · TRXUSDT +7.32/— · HYPEUSDT -6.51/— · AEROUSDT -6.49/— · 1000SHIBUSDT +6.20/— · RENDERUSDT -5.82/—
 - XMRUSDT -5.81/— · XLMUSDT +5.68/— · FARTCOINUSDT -5.56/— · BCHUSDT +5.54/— · XPLUSDT -5.13/— · ASTERUSDT -5.11/—
@@ -144,13 +144,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| consistency | 17 | 1.3% |
-| pf_ex_top | 3 | 0.2% |
-| regime | 22 | 1.7% |
-| holdout | 1 | 0.1% |
 | recovery | 64 | 4.8% |
-| total_return | 1207 | 91.4% |
+| pf_ex_top | 3 | 0.2% |
 | trades | 6 | 0.5% |
+| holdout | 1 | 0.1% |
+| regime | 22 | 1.7% |
+| total_return | 1207 | 91.4% |
+| consistency | 17 | 1.3% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -158,19 +158,19 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| consistency | 589 | 1.7% |
-| pf_ex_top | 242 | 0.7% |
-| regime | 2815 | 8.3% |
-| holdout | 153 | 0.5% |
 | recovery | 2737 | 8.1% |
-| total_return | 26463 | 78.0% |
+| pf_ex_top | 242 | 0.7% |
 | trades | 936 | 2.8% |
+| consistency | 589 | 1.7% |
+| regime | 2815 | 8.3% |
+| total_return | 26463 | 78.0% |
+| holdout | 153 | 0.5% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-11-28 06:00 UTC · coppie validate: **278** · GATE 1 pronto: True
+- ultimo giro: 2026-11-28 08:02 UTC · coppie validate: **278** · GATE 1 pronto: True
 - tasso di passaggio misurato: **0.320%**
 
 **Parametri modificati rispetto ai default:**
