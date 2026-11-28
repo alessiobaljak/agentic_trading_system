@@ -218,3 +218,15 @@ dopo il rapporto dell'audit del 26 novembre (`audits/reports/2026-11-26-AUDIT_SI
 * **Il riavvio del bot** con le correzioni dell'audit (commit `16c5712`): approvato. Con il riavvio il vecchio sistema (fermo dal 13
   ottobre) smette di girare nel bot quando il vecchio paper non ha niente aperto; resta il suo pulsante, e per riaccenderlo si toglie
   `ops/gate_fermo`.
+
+
+## 28 novembre 2026: il conto vero torna a G1, con 250 dollari
+Le parole del proprietario: «ok per cui ora cosa accendiamo in produzione live G1 o F5 ho 250 USD» e, dopo la risposta (con 250-300 USDT
+F5 si vede rifiutare circa 6 variazioni su 10 per i minimi di Binance e nel 2026 fa fra −5% e +1%, `audits/reports/2026-11-27-F5_CONTO_VERO.md`;
+G1 a 280 USDT con i minimi veri ha fatto +57,8% l'anno con ogni anno positivo, `audits/reports/2026-11-12-G1_CONTO_VERO.md`): «se mi dici che
+con 250USD è meglio G1 procedi». Cosa cambia:
+* Il **conto vero** (spento) eseguirà **G1** al posto di F5 (annulla la scelta del 25 novembre); capitale **250 USDT**. F5 resta nel paper.
+* Prima dell'accensione: il codice rivisto da live-path-reviewer (G1 al posto di F5, le correzioni rimaste dall'audit), la revisione di G1 a
+  250 USDT come la esegue il bot (backtest-auditor), il confronto di paper e demo (gate2-reconciler) e l'allocatore, con il modello più
+  potente; poi le cose che deve fare il proprietario (`docs/conto_vero.md`) e la sua richiesta esplicita di accendere. `DRY_RUN` resta vero
+  fino ad allora.

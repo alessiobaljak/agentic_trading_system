@@ -70,6 +70,8 @@ programmi 5, 6 e 7 con il registro unico `research/REGISTRO.md`; da dove cominci
 * **27 novembre**: «l'esame delle prove due modi di contare un pò più giusti usali»: dispersione V simmetrica e settimane efficaci (t
   robusto) insieme, la regola di prima accanto; le prove già viste che ora passano vanno dal revisore prima del paper. Riavvio del bot con
   le correzioni dell'audit approvato (il vecchio sistema smette di girare nel bot).
+* **28 novembre**: «se mi dici che con 250USD è meglio G1 procedi»: il conto vero (spento) torna a **G1** al posto di F5, capitale
+  250 USDT; prima dell'accensione le revisioni e la sua richiesta esplicita.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
