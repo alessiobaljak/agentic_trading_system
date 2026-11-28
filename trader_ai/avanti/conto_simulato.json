@@ -17,25 +17,25 @@
  "ordini": [],
  "algo": [
   {
-   "algoId": 97,
-   "cid": "tais1795824001980",
+   "algoId": 99,
+   "cid": "tais1795827617741",
    "tipo": "STOP_MARKET",
-   "prezzo": 60250.0,
+   "prezzo": 60060.0,
    "lato": "corto",
-   "messo_ms": 1795824028276
+   "messo_ms": 1795827637650
   },
   {
-   "algoId": 98,
-   "cid": "tait1795824001980",
+   "algoId": 100,
+   "cid": "tait1795827617741",
    "tipo": "TAKE_PROFIT_MARKET",
-   "prezzo": 59050.0,
+   "prezzo": 59380.0,
    "lato": "corto",
-   "messo_ms": 1795824029569
+   "messo_ms": 1795827638939
   }
  ],
  "leva": 5,
- "ultimo_minuto_ms": 1795827060000,
- "ultimo_funding_ms": 1795827106537,
+ "ultimo_minuto_ms": 1795827660000,
+ "ultimo_funding_ms": 1795827701483,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -450,7 +450,7 @@
    "funding_ms": 1795824000000
   }
  ],
- "prossimo_id": 99,
+ "prossimo_id": 101,
  "chiuse": [
   {
    "lato": "corto",
