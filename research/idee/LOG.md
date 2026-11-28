@@ -189,3 +189,10 @@ file delle prove; la riga nel registro la scrive la sessione principale.
   account), lo scalping con l'apprendimento automatico (133 e 153), il contrario dei trader a leva di Hyperliquid (idea 135, in avanti).
   **Lezione**: `registro --cerca` legge solo le prove, non la coda delle idee: tre scout su tre non hanno visto idee già in coda (135, 150).
   Nessuna riga nella sezione 1 del registro.
+
+- 28 novembre 2026 (giro delle 08:17, dati nuovi dal 27 novembre): **nessuna idea con un perché forte, nessuna regola scritta** (esito valido). Controllato con
+  `--cerca` e con la coda: (1) il mercato di Hyperliquid salvato a ogni giro ha 9 istantanee (un giorno): interesse aperto, funding e premio sono già
+  coperti dalle prove 135 (HL), 137 (HLI), 163 (AF) e dall'interesse aperto di 11, 63, 80; senza storia non si arriva a t da 3, si può solo seguire in avanti;
+  (2) i prezzi dei mercati di previsione dentro lo stesso file (id con «#», prezzi come 0,11/0,89) sono dati nuovi ma partono dal 27 novembre e sono pochi eventi
+  indipendenti (stesso limite di Polymarket, 26 novembre); (3) il funding vero dell'interfaccia di Binance (`funding_api.py`) è una correzione del dato di G1, non
+  un segnale; (4) i fogli dei fatti gravi sono già la misura in avanti di `FATTI_GRAVI.md`. Nessuna riga di registro.
