@@ -449,3 +449,25 @@ def test_il_comando_chiudi_fuori_orario_passa_dalla_scelta_delle_rimaste():
     import inspect
     assert '"chiudi_fuori_orario": chiudi_fuori_orario_a_mano' in inspect.getsource(av)
     assert '"chiudi": chiudi_a_mano' in inspect.getsource(ga)
+
+
+# ---- la seduta prima dal calendario (28 novembre 2026) ---------------------------------------------------------------
+
+def test_la_seduta_prima_di_registra_viene_dal_calendario():
+    sedute = [{"apertura": pd.Timestamp(f"{g} 09:30", tz=NY), "chiusura": pd.Timestamp(f"{g} 16:00", tz=NY)}
+              for g in ("2026-11-25", "2026-11-28")]                            # in mezzo la festa (finta) del 26-27
+    g = av.ultima_seduta_da_registrare(pd.Timestamp("2026-11-28 17:00", tz=NY), sedute)
+    assert g["giorno"] == "2026-11-28" and g["prima"] == "2026-11-25"
+
+
+def test_registra_guarda_la_seduta_prima_del_calendario(monkeypatch, tmp_path):
+    monkeypatch.setattr(conto, "QUI", tmp_path)
+    monkeypatch.setattr(conto, "VALORI", tmp_path / "valori.csv")
+    monkeypatch.setattr(conto, "DIARIO_GAMMA", tmp_path / "gamma_diario.csv")
+    # la riga aperta è del 25 novembre; il 26 è festa: con il giorno feriale prima (il 26) non si vedrebbe
+    pd.DataFrame([{"giorno": "2026-11-25", "uscita": "aperta", "guadagno": float("nan")}]).to_csv(tmp_path / "gamma_diario.csv",
+                                                                                                    index=False)
+    pd.DataFrame(columns=av.COLONNE).to_csv(tmp_path / "diario.csv", index=False)
+    monkeypatch.setattr(av, "_richiesta", lambda m, p, **k: [])
+    monkeypatch.setattr(ga, "riga_mancante", lambda g: False)
+    assert "righe aperte" in conto.registra("2026-11-27", prima="2026-11-25")

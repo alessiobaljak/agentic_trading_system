@@ -496,9 +496,8 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   provata delle opzioni (I62).
 * **Gli archivi delle azioni societarie** rinnovati sul lavoro della ricerca (`rinnova_azioni`, lanciato il 27 novembre); il risultato
   in `prove/RINNOVO_AZIONI_risultati.md`.
-* **Le correzioni dell'audit che toccano gli ordini**: fatte e approvate il 27 novembre (tre giri di revisione). Restano, fuori dalle
-  ore di borsa e con il loro controllo separato (`avanti/REVISIONE_AUDIT.md`, fine): alla chiusura delle 15:55 i tentativi dopo un
-  guasto più lungo di Alpaca, con l'ora controllata prima di ogni chiusura a mercato; un avvio della prova 45 prima dell'apertura anche
-  d'estate; il «giorno prima» di `registra` con le feste; i test che mancano sulle scadenze e sulle esclusioni per nome.
+* **Le correzioni dell'audit che toccano gli ordini**: fatte e approvate il 27 e 28 novembre (quattro giri di revisione,
+  `avanti/REVISIONE_AUDIT.md`). La chiusura delle 15:55 dopo un guasto lungo di Alpaca resta com'è (la copre la routine delle 15:20 di
+  New York); restano solo alcuni test in più sulle esclusioni per nome della prova 45.
 * ~~Verificare il salto di NVDA e il dividendo in più di QQQ~~ (fatto il 27 novembre: veri). Lo scarto nei primi e negli ultimi
   minuti ora si misura sul demo (`avanti/resoconto.md`).

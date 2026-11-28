@@ -587,7 +587,7 @@ def _registra(solo_giorni_prima: bool = False) -> None:
         adesso = ny_adesso()
         g = seduta_da_registrare(adesso)
         if g is not None and (not solo_giorni_prima or g["giorno"] < adesso.date().isoformat()):
-            print(conto.registra(g["giorno"], g["chiusura"]), flush=True)
+            print(conto.registra(g["giorno"], g["chiusura"], prima=g.get("prima")), flush=True)
     except Exception as e:  # noqa: BLE001 — la contabilità non deve mai far fallire gli ordini
         print(f"valori di fine giornata non scritti ({type(e).__name__}: {str(e)[:120]})", flush=True)
 
@@ -603,7 +603,9 @@ def ultima_seduta_da_registrare(adesso: pd.Timestamp, sedute: list[dict]) -> dic
     dopo = [x for x in sedute if x["apertura"] > ultima["chiusura"]]
     if dopo and adesso >= dopo[0]["apertura"]:
         return None
-    return {"giorno": ultima["apertura"].date().isoformat(), "chiusura": ultima["chiusura"]}
+    prima = [x for x in sedute if x["chiusura"] < ultima["apertura"]]
+    return {"giorno": ultima["apertura"].date().isoformat(), "chiusura": ultima["chiusura"],
+            "prima": prima[-1]["apertura"].date().isoformat() if prima else None}
 
 
 def seduta_da_registrare(adesso: pd.Timestamp) -> dict | None:

@@ -89,3 +89,18 @@ scrive più); il «giorno prima» del controllo di `registra` che non conosce le
 esclusioni per nome (le correzioni ci sono e gli scenari dei revisori le provano, ma togliendone una sola nessun test del repository
 se ne accorge). Il calo di 19,76 dollari della prima candela nella riga del 27 novembre di `valori.csv` sono le tasse sulle vendite
 stimate dal 12 al 25 novembre, tolte tutte insieme alla prima esecuzione: non è una perdita del giorno.
+
+## Quarto giro (28 novembre 2026): la chiusura delle 15:55 resta com'è
+
+Rifatti i tentativi della chiusura delle 15:55 dopo un guasto lungo di Alpaca, con l'ora controllata prima di ogni giro: un revisore
+separato li ha **bocciati di nuovo** (due problemi alti). Con il limite «troppe richieste» ritentato per un minuto le chiusure a mercato
+potevano ancora partire dopo le 16:00; e se Alpaca esegue lentamente (più di circa un minuto) il giro dopo cancellava chiusure buone e
+chiudeva tutto fuori orario, peggio di oggi. **Decisione: la chiusura delle 15:55 resta quella approvata al secondo giro.** Un guasto
+lungo alle 15:55 è già coperto: il lavoro finisce rosso (senza allarme sulla Plancia), e la routine delle 15:20 di New York, che aspetta le 16:03 e
+guarda l'esito, lo riavvia; a seduta finita il giro chiude fuori orario (fino alle 20:00). Un guasto breve lo ritenta già `_richiesta`.
+
+Approvate e salvate: la seduta prima del controllo di `registra` presa dal calendario di Alpaca (le feste); un avvio di notte della
+prova 45 (le 7:10 UTC, cioè le 2:10 di New York d'inverno e le 3:10 d'estate), prima del primo giro del mattino della prima candela,
+così una riga della prova 45 rimasta indietro si completa prima dei valori di fine giornata (il revisore: alle 12:10 UTC, come era
+scritto, arrivava troppo tardi).
+

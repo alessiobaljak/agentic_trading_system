@@ -270,7 +270,7 @@ def leggi_valori() -> pd.DataFrame:
     return pd.read_csv(VALORI) if VALORI.exists() else pd.DataFrame(columns=COLONNE)
 
 
-def registra(giorno: str, chiusura: pd.Timestamp | None = None) -> str:
+def registra(giorno: str, chiusura: pd.Timestamp | None = None, prima: str | None = None) -> str:
     """Scrive la riga di fine giornata, una volta sola per giorno e solo a prima candela senza posizioni. Dal 27 novembre 2026
     (audit): le posizioni della miscela e della prova 45 si valutano alla chiusura ufficiale del giorno, non ai prezzi del dopo borsa
     dell'ora in cui parte il lavoro; per questo si aspettano 20 minuti dopo la fine della seduta. Con posizioni rimaste da un altro
@@ -289,7 +289,8 @@ def registra(giorno: str, chiusura: pd.Timestamp | None = None) -> str:
         return f"valori del {giorno} non scritti: la prova 45 ha ancora ordini aperti"
     # con una riga «aperta» o «parziale» del giorno (o di quello prima) nei diari di questo lavoro la riga sarebbe sbagliata per sempre:
     # si aspetta che il lavoro che l'ha chiusa salvi (revisione separata del 27 novembre 2026); una riga ferma da più giorni non blocca
-    prima = (pd.Timestamp(giorno) - pd.offsets.BDay(1)).date().isoformat()
+    # la seduta prima dal calendario di Alpaca (`prima`), che conosce le feste; senza, il giorno feriale prima
+    prima = prima or (pd.Timestamp(giorno) - pd.offsets.BDay(1)).date().isoformat()
     for f, chi in ((QUI / "diario.csv", "della prima candela"), (DIARIO_GAMMA, "della prova 45")):
         d = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=["giorno", "uscita"])
         if len(d) and "uscita" in d.columns:
