@@ -730,7 +730,8 @@ def pubblica(allarme: dict | None = None) -> str:
              "vendute": sum(1 for p in v["posizioni_gamma"] if float(p["qty"]) < 0), "aggiornato": int(time.time()),
              "pesi": {plancia.chiave(p["symbol"]): round(float(p["market_value"]) / valore, 4) for p in v["posizioni_gamma"]} or None,
              "giorni": conto.giorni("gamma") or None, "primo_giorno_dal_capitale": True,
-             "operazioni": plancia.operazioni_recenti(fatte) or None}
+             # anche i giorni senza ingresso, con il perché (richiesta del proprietario del 28 novembre 2026)
+             "operazioni": plancia.operazioni_recenti(d) or None}
         agg = {"battito": int(time.time()), f"strategie/{ID}": s, "allarmi/posizioni_aperte_gamma": allarme}
         errore = plancia.scrivi(agg)
         return errore or f"Plancia: pubblicata la prova 45 (valore {valore:,.2f} dollari)"
