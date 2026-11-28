@@ -884,7 +884,6 @@
   }
  ],
  "note": [
-  "28/11 01:30 Lascio il limite lungo a 60000 con stop a 59790 e obiettivo a 60380. La 15m delle 01:15 ha fatto un nuovo massimo a 60185, poi è stata respinta sull'EMA50 15m (60135) e chiude a 60090 con il 56% di acquisti: è un rifiuto, non un'inversione. La 30m delle 01:00 chiude a 60090, sopra l'EMA21 30m (60059), con il 59% di acquisti, e l'istogramma MACD 30m cresce da quattro candele. Sul 5m il prezzo ritraccia verso l'EMA21 (59973) con volume in calo (0,55x): è un ritest sano. Il limite a 60000 sta sul livello rotto e sul VWAP del giorno (60002), dove ha senso comprare senza inseguire. Lo stop a 59790 resta sotto lo sweep 59803. L'idea è smentita se una 15m chiude sotto 59870 con vendite.",
   "28/11 01:45 Lascio il limite lungo a 60000, con stop a 59790 e obiettivo a 60380. La 15m delle 01:30 fa un nuovo massimo a 60205 e chiude a 60150 con il 58% di acquisti. È la prima chiusura sopra l'EMA50 15m (60136). Sul 5m il ritracciamento si è fermato a 60079 ed è un minimo crescente. Le EMA 5m sono in ordine, ma l'istogramma MACD 5m cala da due candele e il volume è basso (0,64x), quindi un ritest più profondo verso EMA21 5m e il VWAP (60022) resta possibile. Non inseguo a 60155 sotto l'EMA50 30m (60402): lo stop sarebbe troppo lontano rispetto all'obiettivo. Non annullo neppure per alzare il limite a 60080, perché perderei una chiamata e il rapporto rischio/rendimento peggiorerebbe. Se il prezzo r…",
   "28/11 02:00 Lascio il limite lungo a 60000, con stop a 59790 e obiettivo a 60380. Il prezzo mark è 60168 e si comprime fra 60079 e 60205 da quattro 15m. La 15m delle 01:45 chiude a 60159 con il 40% di acquisti e volume 0,63x: è una pausa sotto il massimo delle 15:30 (60225), non un'inversione. Sul 5m l'istogramma MACD cala da quattro candele (15,7→6,8). Con volume basso un ritest del VWAP (60035) e del livello rotto 60000 resta probabile. Il 30m migliora: il prezzo è sopra l'EMA21 (60068) e l'istogramma cresce da quattro candele. Comprare qui, sotto 60225 e l'EMA50 30m (60393), vorrebbe dire inseguire con un rendimento troppo piccolo. Se una 15m chiude sopra 60225 con volume, valuterò di annullare e ri…",
   "28/11 02:15 Lascio il limite lungo a 60000, con stop 59790 e obiettivo 60380. La 15m delle 02:00 ha fatto un massimo a 60236, poco sopra il massimo delle 15:30 (60225), ma ha chiuso sotto, a 60210, con volume 0,94x e il 52% di acquisti: la rottura non è confermata. Il prezzo si comprime da cinque 15m fra 60079 e 60236, con minimi crescenti sul 5m (60079, 60105, 60122). L'istogramma MACD 15m e 30m cresce, ma il 5m è piatto, con volume 0,5x. Sopra ci sono l'EMA50 30m (60393) e il massimo più basso 60537. Comprare qui vorrebbe dire inseguire sotto una resistenza. Se una 15m chiude sopra 60240 con volume, annullo e rimetto il limite più in alto, sul ritest di 60100-60150.",
@@ -893,14 +892,15 @@
   "28/11 03:00 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60380. Il prezzo mark è 59940. La 15m delle 02:45 ha fatto un minimo a 59908 e ha chiuso a 59940 con il 49% di acquisti: le vendite della 02:30 (26%) non hanno avuto seguito. Le due 5m delle 02:50 e 02:55 hanno il 56% di acquisti, ma l'istogramma MACD 5m è fermo intorno a -35. Ci sono segnali deboli: la 30m delle 02:30 chiude con il 35% di acquisti, sotto l'EMA21 30m (60060), e l'istogramma MACD 30m cala per la prima volta (92→80). L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870, e lo sweep 59803 regge. Il prezzo sta sopra la media di Bollinger 15m (59929) e vicino all'EMA21 15m (59982). Non stringo lo stop, che s…",
   "28/11 03:15 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60380. Il prezzo mark è 59966. La 15m delle 03:00 chiude a 59967 con il 48% di acquisti e volume 0,82x. È stata respinta a 60000, sul livello rotto, ma il minimo 59920 sta sopra quello della 02:45 (59908). Le vendite della 02:30 non hanno seguito. Il prezzo sta fra l'EMA21 15m (59981) e la media di Bollinger (59945). Sul 5m l'istogramma MACD migliora da quattro candele (-34,5 → -24,4) e la 5m delle 03:10 ha il 68% di acquisti. Restano due punti deboli: il VWAP (60036) e l'EMA21 5m (60022) fanno da tetto, e l'istogramma MACD 30m cala. L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870 e lo sweep 59803 regge. Non strin…",
   "28/11 03:30 . Il lungo da 60000 è sotto pressione: mark 59884. La 15m delle 03:15 chiude sul minimo con il 39% di acquisti, sotto VWAP (60030), EMA21 15m e media di Bollinger. Sul 5m i massimi scendono (60000, 59967, 59951, 59924) e l'RSI è a 36. L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870 e lo sweep 59803 regge. Chiudere costa -8,19 contro -12,89 allo stop; con il prezzo appoggiato al supporto e l'istogramma MACD 30m ancora positivo, tenere ha un valore atteso migliore. Lo stop resta a 59790, sotto lo sweep, perché stringerlo lo metterebbe nel rumore. Abbasso invece l'obiettivo a 60220, sotto il doppio rifiuto 60236-60243, perché 60380 richiede di rompere una resistenza già…",
-  "28/11 03:45 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60220. La 15m delle 03:30 ha fatto un minimo a 59864, appena sotto 59870, ma ha chiuso a 59948 con il 59% di acquisti. È un rifiuto chiuso del supporto e non una chiusura sotto: l'invalidazione non è scattata e lo sweep 59803 regge. Sul 5m l'istogramma MACD migliora da quattro candele (-21 → -9,5), l'RSI sale da 36 a 45 e le ultime due 5m hanno il 70-74% di acquisti, anche se con volume basso. Restano come tetto il VWAP (60026) e le EMA21/50 5m (59980); l'istogramma MACD 30m cala ancora (67,6), ma resta positivo e la 30m in corso ha il 59% di acquisti. Non stringo lo stop, che finirebbe nel rumore. Se il prezzo riconquista il VWAP con u…"
+  "28/11 03:45 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60220. La 15m delle 03:30 ha fatto un minimo a 59864, appena sotto 59870, ma ha chiuso a 59948 con il 59% di acquisti. È un rifiuto chiuso del supporto e non una chiusura sotto: l'invalidazione non è scattata e lo sweep 59803 regge. Sul 5m l'istogramma MACD migliora da quattro candele (-21 → -9,5), l'RSI sale da 36 a 45 e le ultime due 5m hanno il 70-74% di acquisti, anche se con volume basso. Restano come tetto il VWAP (60026) e le EMA21/50 5m (59980); l'istogramma MACD 30m cala ancora (67,6), ma resta positivo e la 30m in corso ha il 59% di acquisti. Non stringo lo stop, che finirebbe nel rumore. Se il prezzo riconquista il VWAP con u…",
+  "28/11 04:00 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il supporto ha retto. La 15m delle 03:45 ha fatto un minimo crescente a 59904, sopra 59864, e chiude a 60000 con il 74% di acquisti. La 30m delle 03:30 chiude a 60000 con il 68% di acquisti. Sul 5m la 03:55 sale con volume 2,19x e l'86% di acquisti, e l'istogramma MACD 5m torna positivo dopo quattro candele in miglioramento. Il prezzo ha riconquistato le EMA21/50 5m (59975) e l'EMA21 15m (59973). Resta come tetto il VWAP (60023), poi l'EMA21 30m (60040) e il doppio rifiuto 60236-60243. Il pareggio netto è a 60048. Non sposto lo stop: lo sweep 59803 è ancora l'invalidazione. Se una 15m chiude sopra 60100 con acquisti, alzo lo sto…"
  ],
  "estraneo": null,
  "giorno": "2026-11-28",
  "conto_mezzanotte": 942.4995047474505,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-28T03:45:18.658628+00:00",
+ "ultima": "2026-11-28T04:00:27.370986+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
  "approccio": "Seguo la struttura 15m: compro con un limite il ritest di una rottura confermata, oppure vendo i rimbalzi profondi sotto le resistenze del 30m. Lo stop va oltre lo sweep e l'obiettivo sotto i rifiuti.",
@@ -940,7 +940,7 @@
   "spese_entrata": 0.6,
   "R": 12.8936,
   "escursione": [
-   31.0,
+   39.30000000000291,
    136.40000000000146
   ],
   "funding": 0.0
@@ -1119,14 +1119,14 @@
  "discesa_max_giorno": 14.319562992940064,
  "ultimo_costo_massimo": 0.4979,
  "stat_giorno": {
-  "chiamate": 17,
-  "costo": 1.087764,
+  "chiamate": 18,
+  "costo": 1.139995,
   "esiti": {
-   "ok": 17
+   "ok": 18
   },
-  "durata_tot": 195.5,
+  "durata_tot": 204.5,
   "durata_max": 18.0,
-  "uscita_tot": 16458
+  "uscita_tot": 17179
  },
  "costo_medio_ieri": 0.06043974666666667,
  "prezzo_inizio_giorno": 59893.96962319,
