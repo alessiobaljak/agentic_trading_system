@@ -26,6 +26,7 @@ export interface Risposta {
   approccio?: string;
   diario?: string;
   lezione?: string | null;
+  sveglia?: { sopra?: number | null; sotto?: number | null; entro_minuti?: number } | null;
 }
 
 /** Una riga del diario: una chiamata al modello (con `stato` e `motivo`) o un evento del programma (con `evento`). */
@@ -88,7 +89,7 @@ export interface Aperta {
 export interface Stato {
   giorno?: string;
   conto_mezzanotte?: number;
-  inizio?: { giorno?: string; conto?: number };
+  inizio?: { giorno?: string; conto?: number; ora?: string; prima?: { giorno?: string; conto?: number; fine?: number } | null };
   aperta?: Aperta | null;
   operazioni?: Operazione[];
   note?: string[];
@@ -262,3 +263,7 @@ export const prezzoBtc = (x: number | null | undefined): string =>
   x == null || !Number.isFinite(x) ? '—' : x.toLocaleString('it-IT', { maximumFractionDigits: 1 });
 
 export const coloreDi = (x?: number | null) => (x == null ? undefined : x > 0.0049 ? 'var(--su-testo)' : x < -0.0049 ? 'var(--giu-testo)' : undefined);
+
+/** L'ora della ripartenza da 1.000 USDT se è avvenuta oggi (comando «azzera» del trader): quel giorno «oggi» conta da lì. */
+export const ripartenzaDiOggi = (st: Stato | null | undefined): string | null =>
+  st?.inizio?.prima && st.inizio.ora && st.inizio.giorno === st.giorno ? st.inizio.ora : null;

@@ -208,17 +208,34 @@ def scheda_corta(o: dict) -> str:
             f"{_p(o.get('uscita'))} {o.get('come', '-')} {o['risultato']:+.2f}{r}" + (f", {d:.0f} min" if d is not None else ""))
 
 
+def _ripartenza_di_oggi(m: "Memoria") -> Optional[str]:
+    """L'ora della ripartenza da 1.000 USDT se è avvenuta oggi (avvio.Trader.azzera; diciannovesima revisione, problema 269)."""
+    ini = m.inizio or {}
+    return ini.get("ora") if ini.get("prima") and ini.get("giorno") == m.giorno else None
+
+
 def blocco_stabile(m: Memoria) -> str:
     """La memoria che cambia solo quando un'operazione si chiude (o a mezzanotte): va nella cache da un'ora."""
     ops = m.operazioni
+    prima = m.inizio.get("prima") or None
+    ripartita = ""
+    if prima:
+        # il proprietario, 28 novembre 2026: «riparti da 1000 USD» (avvio.Trader.azzera); la memoria di prima resta
+        ripartita = (f"; il conto è ripartito da {m.inizio.get('conto', 0):.0f} USDT quel giorno: prima, dal "
+                     f"{_data(prima.get('giorno') or '-')}, era arrivato a {prima.get('fine') or 0:.2f}; le operazioni di prima restano "
+                     f"qui sotto")
     righe = ["# La tua memoria (cambia solo quando un'operazione si chiude)",
              f"prova iniziata il {_data(m.inizio.get('giorno', '-'))} con {m.inizio.get('conto', 0):.0f} USDT, su un conto "
-             f"simulato con i prezzi veri di Binance", "",
+             f"simulato con i prezzi veri di Binance{ripartita}", "",
              "## Bilancio delle operazioni chiuse (netto = prezzo + spese + funding)"]
     ieri = (date.fromisoformat(m.giorno) - timedelta(days=1)).isoformat() if m.giorno else ""
-    righe.append(riga_bilancio(f"oggi ({_data(m.giorno)})", [o for o in ops if str(o.get("chiusa", ""))[:10] == m.giorno]))
+    ripartenza = _ripartenza_di_oggi(m)
+    oggi = [o for o in ops if str(o.get("chiusa", ""))[:10] == m.giorno and (not ripartenza or str(o.get("chiusa", "")) > ripartenza)]
+    righe.append(riga_bilancio(f"oggi ({_data(m.giorno)}{', dalla ripartenza' if ripartenza else ''})", oggi))
     righe.append(riga_bilancio(f"ieri ({_data(ieri)})", [o for o in ops if str(o.get("chiusa", ""))[:10] == ieri]))
     tutte = "dall'inizio" if not ops or ops[0].get("n") in (1, None) else f"ultime {len(ops)} in memoria"
+    if prima and tutte == "dall'inizio":
+        tutte = "dall'inizio, anche prima della ripartenza"
     righe.append(riga_bilancio(tutte, ops))
     righe += ["", "## Le tue lezioni (scritte da te; restano anche nei giorni dopo)"]
     fisse = [x for x in m.lezioni if x.get("fissata")][-LEZIONI_MOSTRATE:]
@@ -328,8 +345,11 @@ def blocco_conto(c: Conto, prezzo: float, aperta: Optional[dict], m: Memoria, mo
     netto = guadagno_netto(c)
     ob = obiettivo_usdt(c)
     chiusura = f", {netto:+.2f} se chiudi adesso (spese di chiusura tolte)" if c.spese_chiusura else ""
-    righe = [f"conto {c.conto:.2f} USDT (disponibile {c.disponibile:.2f}); da mezzanotte UTC {guadagno:+.2f}{chiusura}; obiettivo "
-             f"del giorno ({OBIETTIVO_GIORNO_QUOTA:.0%} del conto a mezzanotte, {c.conto_mezzanotte:.2f}, contato dopo le spese di "
+    ripartenza = _ripartenza_di_oggi(m)
+    da = f"dalla ripartenza delle {_hm(ripartenza)} UTC" if ripartenza else "da mezzanotte UTC"
+    base = "del conto alla ripartenza" if ripartenza else "del conto a mezzanotte"
+    righe = [f"conto {c.conto:.2f} USDT (disponibile {c.disponibile:.2f}); {da} {guadagno:+.2f}{chiusura}; obiettivo "
+             f"del giorno ({OBIETTIVO_GIORNO_QUOTA:.0%} {base}, {c.conto_mezzanotte:.2f}, contato dopo le spese di "
              f"chiusura) {ob:.2f}: mancano {max(0.0, round(ob, 2) - round(netto, 2)):.2f}"]
     ini = m.inizio.get("conto")
     if ini:

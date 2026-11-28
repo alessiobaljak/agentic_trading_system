@@ -13,6 +13,14 @@ from pydantic import BaseModel, Field
 Azione = Literal["aspetta", "apri_lungo", "apri_corto", "chiudi", "modifica"]
 
 
+# versione 9, 28 novembre 2026: quando richiamare il modello lo decide lui (sveglia.py); la descrizione qui sotto la legge il modello
+class Sveglia(BaseModel):
+    """Quando vuoi essere richiamato."""
+    sopra: Optional[float] = Field(None, description="richiamami appena il prezzo mark arriva a questo prezzo o sopra (facoltativo)")
+    sotto: Optional[float] = Field(None, description="richiamami appena il prezzo mark arriva a questo prezzo o sotto (facoltativo)")
+    entro_minuti: int = Field(description="richiamami comunque dopo questi minuti, da 1 a 240")
+
+
 class Risposta(BaseModel):
     azione: Azione
     margine_usdt: Optional[float] = Field(None, description="aprire: USDT del conto messi come margine")
@@ -31,3 +39,5 @@ class Risposta(BaseModel):
                                                      "cosa è successo, che cosa cambi (circa 300 caratteri); resta nella tua "
                                                      "memoria anche nei giorni dopo")
     diario: str = Field(description="cosa vedi e perché decidi così, circa 600 caratteri")
+    sveglia: Optional[Sveglia] = Field(None, description="quando vuoi essere richiamato: un prezzo sopra, un prezzo sotto e un "
+                                                         "tempo massimo; senza, vieni richiamato a ogni candela da 15 minuti chiusa")

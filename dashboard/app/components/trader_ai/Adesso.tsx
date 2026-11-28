@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Suggerimento, giornoBreve, useAdesso } from '../comuni';
 import {
-  AZIONE, LATO, TETTO_DOLLARI, coloreDi, eChiamata, numeriDiAdesso, ora, prezzoBtc, secondi, usd, usePrezzoBtc,
+  AZIONE, LATO, TETTO_DOLLARI, coloreDi, eChiamata, numeriDiAdesso, ora, prezzoBtc, ripartenzaDiOggi, secondi, usd, usePrezzoBtc,
   type DatiTrader, type RigaDiario,
 } from './dati';
 
@@ -78,13 +78,15 @@ function ContoDelGiorno({ d, conto }: { d: DatiTrader; conto: number | null }) {
   const st = d.stato ?? {};
   const giorno = st.giorno ?? '';
   const mezzanotte = st.conto_mezzanotte ?? null;
+  const ripartenza = ripartenzaDiOggi(st);
   const punti = useMemo(() => {
     const out = d.diario
-      .filter((r: RigaDiario) => eChiamata(r) && typeof r.conto === 'number' && r.ora.startsWith(giorno))
+      .filter((r: RigaDiario) => eChiamata(r) && typeof r.conto === 'number' && r.ora.startsWith(giorno)
+        && (!ripartenza || r.ora > ripartenza))
       .map((r) => ({ t: secondi(r.ora) ?? 0, conto: r.conto as number }));
     if (conto != null) out.push({ t: Date.now() / 1000, conto });
     return out;
-  }, [d.diario, giorno, conto]);
+  }, [d.diario, giorno, conto, ripartenza]);
   if (mezzanotte == null || punti.length < 2) {
     return <p className="cr-sotto" style={{ margin: 0 }}>La curva del giorno si disegna dalla seconda chiamata.</p>;
   }
@@ -107,7 +109,7 @@ function ContoDelGiorno({ d, conto }: { d: DatiTrader; conto: number | null }) {
             <YAxis stroke="var(--asse)" tick={{ fill: 'var(--text-faint)', fontSize: 11 }} tickLine={false} width={48} domain={dominio}
               tickFormatter={(v: number) => usd(v, 0)} allowDecimals={false} />
             <ReferenceLine y={mezzanotte} stroke="var(--asse)" strokeDasharray="4 4"
-              label={{ value: 'mezzanotte', position: 'insideBottomLeft', fill: 'var(--text-faint)', fontSize: 11 }} />
+              label={{ value: ripartenza ? 'ripartenza' : 'mezzanotte', position: 'insideBottomLeft', fill: 'var(--text-faint)', fontSize: 11 }} />
             {mostraTraguardo && (
               <ReferenceLine y={traguardo} stroke="var(--text-faint)" strokeDasharray="2 4"
                 label={{ value: '+3%', position: 'insideTopLeft', fill: 'var(--text-faint)', fontSize: 11 }} />
@@ -135,7 +137,7 @@ function ContoDelGiorno({ d, conto }: { d: DatiTrader; conto: number | null }) {
         </ResponsiveContainer>
       </div>
       <p className="cr-sotto" style={{ margin: '6px 0 0' }}>
-        Il conto (USDT) a ogni chiamata al modello da mezzanotte UTC; l&apos;ultimo punto è adesso. Tratteggio: il conto di mezzanotte e
+        Il conto (USDT) a ogni chiamata al modello {ripartenza ? 'dalla ripartenza' : 'da mezzanotte UTC'}; l&apos;ultimo punto è adesso. Tratteggio: il conto di {ripartenza ? 'partenza' : 'mezzanotte'} e
         il 3%{mostraTraguardo ? '' : ' (fuori scala)'}.
       </p>
     </>
@@ -154,6 +156,12 @@ function descriviRisposta(r: RigaDiario): string {
   } else if (x.azione === 'modifica') {
     if (x.stop_prezzo) pezzi.push(`stop a ${prezzoBtc(x.stop_prezzo)}`);
     if (x.obiettivo_prezzo) pezzi.push(`obiettivo a ${prezzoBtc(x.obiettivo_prezzo)}`);
+  }
+  const s = x.sveglia;
+  if (s) {
+    const quando = [s.sotto != null ? `sotto ${prezzoBtc(s.sotto)}` : null, s.sopra != null ? `sopra ${prezzoBtc(s.sopra)}` : null,
+      s.entro_minuti != null ? `entro ${s.entro_minuti} min` : null].filter(Boolean).join(', ');
+    pezzi.push(`richiamami: ${quando}`);
   }
   return pezzi.join(' · ');
 }
@@ -193,16 +201,19 @@ export default function Adesso({ d }: { d: DatiTrader }) {
       <section className="cr-pannello">
         <div className="cr-pannello-testa">
           <h2>Oggi</h2>
-          <span className="cr-pannello-destra">dalla mezzanotte UTC (le 01:00 da noi)</span>
+          <span className="cr-pannello-destra">{ripartenzaDiOggi(st) ? `dalla ripartenza da 1000 delle ${ora(ripartenzaDiOggi(st))}`
+            : 'dalla mezzanotte UTC (le 01:00 da noi)'}</span>
         </div>
         <div className="cr-riquadri">
           <Riquadro nome="Conto adesso" valore={`${usd(n.conto)} USDT`}
             sotto={n.pos ? 'con l\'operazione aperta al prezzo di adesso' : 'niente di aperto'} />
           <Riquadro nome="Oggi" valore={`${usd(n.oggi, 2, true)} USDT`} colore={coloreDi(n.oggi)}
             sotto={n.oggi != null && n.mezzanotte ? `${usd((n.oggi / n.mezzanotte) * 100, 2, true)}% · a mezzanotte ${usd(n.mezzanotte)}` : undefined} />
-          <Riquadro nome="Obiettivo del 3%" valore={raggiunto ? 'raggiunto' : `${usd(n.obiettivo)} USDT`}
+          <Riquadro nome="Obiettivo di oggi: il 3%" valore={raggiunto ? 'raggiunto' : `${usd(n.obiettivo)} USDT`}
             sotto={raggiunto ? `alle ${ora(st.obiettivo_ora)}: fermo fino a mezzanotte UTC`
-              : n.oggi != null && n.obiettivo != null ? `mancano ${usd(Math.max(0, n.obiettivo - n.oggi))}` : undefined} />
+              : n.oggi != null && n.obiettivo != null && n.mezzanotte != null
+                ? `da ${usd(n.mezzanotte)} (${ripartenzaDiOggi(st) ? 'la ripartenza' : 'fine di ieri'}) a ${usd(n.mezzanotte + n.obiettivo)}: da adesso servono ${usd(Math.max(0, n.obiettivo - n.oggi))}`
+                : undefined} />
           <Riquadro nome="Dall'inizio della prova" valore={`${usd(n.dallInizio, 2, true)} USDT`} colore={coloreDi(n.dallInizio)}
             sotto={n.inizio ? `partito con ${usd(n.inizio, 0)} il ${giornoBreve(st.inizio?.giorno)}` : undefined} />
           <Riquadro nome="Chiamate al modello oggi" valore={String(chiamate.length)}

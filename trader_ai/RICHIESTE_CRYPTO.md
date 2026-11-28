@@ -33,9 +33,9 @@ primo rapporto), così la memoria del revisore li conosce.
 Le righe pronte per `reviews/` erano in `trader_ai/revisioni/righe_per_reviews.patch`: applicate fino alla quindicesima revisione e ai
 suoi due riesami (controllato il 27 novembre con `git apply -R --check`). **Nuove dal 27 novembre**, da applicare a mano (ogni rapporto
 ha in fondo una sezione «Righe per `reviews/`»): la sedicesima e il suo riesame (`trader_ai/revisioni/2026-11-26-sedicesima.md`, due
-sezioni), la diciassettesima (`trader_ai/revisioni/2026-11-27-diciassettesima.md`) e la diciottesima
-(`trader_ai/revisioni/2026-11-27-diciottesima.md`). Problemi del trader fino al 267: i nuovi partono da 268. Il codice approvato alla
-diciottesima è committato in `bcf284d`.
+sezioni), la diciassettesima (`trader_ai/revisioni/2026-11-27-diciassettesima.md`), la diciottesima
+(`trader_ai/revisioni/2026-11-27-diciottesima.md`) e la diciannovesima con il suo riesame (`trader_ai/revisioni/2026-11-28-diciannovesima.md`).
+Problemi del trader fino al 275: i nuovi partono da 276. Il codice approvato alla diciannovesima è committato in `5aaf950`.
 
 Domanda per la sessione della ricerca (dai revisori): `tests/test_programma5_motore.py::test_libro_squilibrio_e_liquidita_a_ore` fallisce
 dalla sedicesima revisione in poi (fuori dal percorso degli ordini e fuori da quest'area).

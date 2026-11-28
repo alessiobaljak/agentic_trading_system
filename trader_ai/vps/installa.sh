@@ -88,7 +88,8 @@ case "${1:-installa}" in
     systemctl is-active --quiet trader-ai.service && { echo "[trader-ai] il trader è acceso: prima «ferma»"; exit 1; }
     ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.prova )
     exit $? ;;
-  chiudi|riparti)
+  chiudi|riparti|azzera)
+    # azzera: il conto simulato torna a 1.000 USDT (il proprietario, 28 novembre 2026); solo dopo «chiudi», con il trader fermo
     ( set -a; . "$ENVF"; set +a; export TRADER_AI_DATI="$DATI/trader_ai/avanti"; cd "$DEST" && .venv/bin/python -m trader_ai.avvio "$1" )
     exit $? ;;
   togli)
@@ -97,7 +98,7 @@ case "${1:-installa}" in
     systemctl daemon-reload
     echo "[trader-ai] servizio e timer tolti. Restano $DEST e $ENVF: cancellali a mano se non servono più."; exit 0 ;;
   installa) ;;
-  *) echo "uso: installa.sh [installa|avvia|ferma|stato|chiavi|togli]"; exit 2 ;;
+  *) echo "uso: installa.sh [installa|avvia|ferma|stato|chiavi|chiudi|riparti|azzera|togli]"; exit 2 ;;
 esac
 
 if [ ! -d "$DEST/.git" ]; then
