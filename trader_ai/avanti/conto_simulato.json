@@ -1,29 +1,11 @@
 {
- "portafoglio": 932.4432409512505,
+ "portafoglio": 925.3202425887507,
  "posizione": null,
- "ordini": [
-  {
-   "cid": "taio1795866305591",
-   "lato": "corto",
-   "quantita": 0.05,
-   "prezzo": 59250.0,
-   "leva": 10,
-   "messo_ms": 1795866328669
-  }
- ],
- "algo": [
-  {
-   "algoId": 120,
-   "cid": "tais1795866305591",
-   "tipo": "STOP_MARKET",
-   "prezzo": 59345.0,
-   "lato": "corto",
-   "messo_ms": 1795866329665
-  }
- ],
+ "ordini": [],
+ "algo": [],
  "leva": 10,
- "ultimo_minuto_ms": 1795866660000,
- "ultimo_funding_ms": 1795866704843,
+ "ultimo_minuto_ms": 1795867260000,
+ "ultimo_funding_ms": 1795867280649,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -525,21 +507,29 @@
    "cosa": "commissione",
    "importo": -1.485649,
    "come": "obiettivo"
+  },
+  {
+   "ora_ms": 1795867279355,
+   "cosa": "commissione",
+   "importo": -0.5925,
+   "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795867279355,
+   "cosa": "risultato",
+   "importo": -5.046725,
+   "prezzo": 59350.934499999996,
+   "come": "stop"
+  },
+  {
+   "ora_ms": 1795867279355,
+   "cosa": "commissione",
+   "importo": -1.483773,
+   "come": "stop"
   }
  ],
  "prossimo_id": 121,
  "chiuse": [
-  {
-   "lato": "corto",
-   "quantita": 0.04,
-   "entrata": 58450.0,
-   "leva": 5,
-   "margine": 467.6,
-   "liquidazione": 69847.75,
-   "aperta_ms": 1795618860000,
-   "da_limite": true,
-   "chiusa_ms": 1795618860000
-  },
   {
    "lato": "corto",
    "quantita": 0.021,
@@ -825,6 +815,24 @@
    "uscita": 59425.942,
    "come": "obiettivo",
    "chiusa_ms": 1795860480000
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.05,
+   "entrata": 59250.0,
+   "leva": 10,
+   "margine": 296.25,
+   "liquidazione": 64878.750000000015,
+   "aperta_ms": 1795867200000,
+   "da_limite": true,
+   "cid": "taio1795866305591",
+   "spese_entrata": 0.5925,
+   "spese": 2.0762733625000003,
+   "funding": 0.0,
+   "risultato_prezzo": -5.046724999999788,
+   "uscita": 59350.934499999996,
+   "come": "stop",
+   "chiusa_ms": 1795867200000
   }
  ],
  "funding_applicati": [
