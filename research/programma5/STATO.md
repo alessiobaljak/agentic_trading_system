@@ -175,6 +175,10 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   programma 6: dati fino al 25 novembre, scarico completo al primo giro con la correzione (884 monete attive, nessuna senza il 25; il
   calcolo, fermato dal limite di tempo dei comandi alle 07:30, è stato rifatto alle 11:18-11:38); le 25 monete entrate nell'universo sono
   tutte monete (exchangeInfo, «COIN»).
+  Aggiornamento del 28 novembre (dati fino al 26 novembre): M-001c 559 (già bocciata, −0,76% a trade); M-002 4.087 (p 0,24) e M-003
+  1.685 (p 0,99) non passano; seconda tornata in corso: N-001 127 (−2,70%), N-002 171 (+0,16%, p 0,35), N-003 106 (−1,48%). Paper del
+  programma 6: dati fino al 26 novembre, il primo giro con il motore nuovo (funding vero per 645 monete, 0 errori; 70 non monete tolte;
+  0 giorni in coda tolti; scarico completo, 884 monete); le 25 monete entrate nell'universo sono tutte monete (exchangeInfo, «COIN»).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 
