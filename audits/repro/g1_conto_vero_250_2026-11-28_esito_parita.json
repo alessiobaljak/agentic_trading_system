@@ -1,0 +1,428 @@
+{
+ "giorni": 60,
+ "universo_uguale": 60,
+ "diff_max_G1": 4.163336342344337e-17,
+ "giorni_con_lati_cambiati": 0,
+ "righe": [
+  {
+   "giorno": "2021-03-03",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 4.163336342344337e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-05-17",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-06-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-07-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-09-19",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2021-11-21",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-01-26",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-03-11",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-03-24",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-05-15",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-06-10",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-07-04",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-07-19",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-08-26",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-11-30",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-12-02",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-12-09",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2022-12-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-03-16",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-03-22",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-05-07",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.734723475976807e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-06-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 4.163336342344337e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-07-02",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-08-19",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-09-17",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-09-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2023-10-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-01-10",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-01-26",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-01-30",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-02-16",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-02-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-05-18",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-05-27",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-07-11",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-08-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-09-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-11-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 6.938893903907228e-18,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-12-01",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-12-02",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2024-12-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-02-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-02-24",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-04-30",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-06-18",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-07-12",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-07-22",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-08-06",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-09-21",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-12-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2025-12-08",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-03-05",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-03-17",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-03-22",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.0816681711721685e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-03-31",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-05-18",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 1.3877787807814457e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-06-14",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-06-28",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-08-16",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  },
+  {
+   "giorno": "2026-08-29",
+   "universo_uguale": true,
+   "diff_universo": 0,
+   "diff_max_G1": 2.7755575615628914e-17,
+   "lati_cambiati": 0
+  }
+ ]
+}

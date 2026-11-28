@@ -1,0 +1,57 @@
+{
+ "G1 250 bot oggi (limite al tocco)": {
+  "probabilita_in_vigore": 0.9186177935689562,
+  "probabilita_famiglia_in_v": 0.8748625105275898,
+  "famiglia": {
+   "membri": 16,
+   "sharpe": 1.8800613855214723
+  },
+  "famiglie": 65,
+  "controllo_13_ritardi": 0.9125015484412767,
+  "anni_composti_positivi": true
+ },
+ "G1 250 solo riduzione (limite al tocco)": {
+  "probabilita_in_vigore": 0.9278708579505544,
+  "probabilita_famiglia_in_v": 0.8879041400969916,
+  "famiglia": {
+   "membri": 16,
+   "sharpe": 1.8816124766874434
+  },
+  "famiglie": 65,
+  "controllo_13_ritardi": 0.9209583218432197,
+  "anni_composti_positivi": true
+ },
+ "G1 250 bot oggi (tutto a mercato)": {
+  "probabilita_in_vigore": 0.9140431006795624,
+  "probabilita_famiglia_in_v": 0.8680652943222401,
+  "famiglia": {
+   "membri": 16,
+   "sharpe": 1.8779254842464883
+  },
+  "famiglie": 65,
+  "controllo_13_ritardi": 0.9084861256077681,
+  "anni_composti_positivi": true
+ },
+ "G1 250 bot oggi (limite oltre 0,05%)": {
+  "probabilita_in_vigore": 0.8787365143863601,
+  "probabilita_famiglia_in_v": 0.8242985381885135,
+  "famiglia": {
+   "membri": 16,
+   "sharpe": 1.8715175275301397
+  },
+  "famiglie": 65,
+  "controllo_13_ritardi": 0.8710567806407561,
+  "anni_composti_positivi": true
+ },
+ "G1 ricerca senza minimi (limite al tocco)": {
+  "probabilita_in_vigore": 0.9316235140768957,
+  "probabilita_famiglia_in_v": 0.8948376208865472,
+  "famiglia": {
+   "membri": 16,
+   "sharpe": 1.877556400583906
+  },
+  "famiglie": 65,
+  "controllo_13_ritardi": 0.907335084327165,
+  "anni_composti_positivi": true
+ }
+}

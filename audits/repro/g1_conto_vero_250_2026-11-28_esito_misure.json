@@ -1,0 +1,101 @@
+{
+ "bot_oggi_tetto": {
+  "giorni": 2100,
+  "giorni_con_ordini": 2084,
+  "quota_dei_5_giorni_migliori": 0.15770644776983392,
+  "quota_dei_3_mesi_migliori": 0.29800559178408326,
+  "mesi_migliori": {
+   "2021-04": 0.47117325335416865,
+   "2021-07": 0.2511756499389779,
+   "2021-03": 0.2387382650126427
+  },
+  "esposizione_lorda_media": 1.8621289862310413,
+  "giorni_con_posizioni": 2100,
+  "rendimento_medio_al_giorno": 0.0015357448616859619,
+  "spese_medie_al_giorno": 0.00012368861808379034,
+  "clima": {
+   "rialzo": {
+    "giorni": 582,
+    "annuo": 0.37878984929846593,
+    "sharpe_giornaliero": 1.1370635187773697
+   },
+   "ribasso": {
+    "giorni": 443,
+    "annuo": 0.31118619515688045,
+    "sharpe_giornaliero": 1.0801866262880424
+   },
+   "laterale": {
+    "giorni": 1075,
+    "annuo": 0.7617090788242648,
+    "sharpe_giornaliero": 2.7621201794576153
+   }
+  },
+  "definizione_clima": "Bitcoin: apertura di oggi contro quella di 30 giorni prima; oltre +10% rialzo, sotto -10% ribasso"
+ },
+ "solo_riduzione_chiusure_tetto": {
+  "giorni": 2100,
+  "giorni_con_ordini": 2083,
+  "quota_dei_5_giorni_migliori": 0.1547764722359549,
+  "quota_dei_3_mesi_migliori": 0.29206054458680525,
+  "mesi_migliori": {
+   "2021-04": 0.46917900054034295,
+   "2021-07": 0.2545306496255826,
+   "2021-03": 0.2387382650126427
+  },
+  "esposizione_lorda_media": 1.818785180376498,
+  "giorni_con_posizioni": 2100,
+  "rendimento_medio_al_giorno": 0.0015692243938180994,
+  "spese_medie_al_giorno": 0.00012349718358283836,
+  "clima": {
+   "rialzo": {
+    "giorni": 582,
+    "annuo": 0.43185792565719283,
+    "sharpe_giornaliero": 1.2964240888300378
+   },
+   "ribasso": {
+    "giorni": 443,
+    "annuo": 0.28784002468461856,
+    "sharpe_giornaliero": 1.0208233712528665
+   },
+   "laterale": {
+    "giorni": 1075,
+    "annuo": 0.7664707480872567,
+    "sharpe_giornaliero": 2.783889909111533
+   }
+  },
+  "definizione_clima": "Bitcoin: apertura di oggi contro quella di 30 giorni prima; oltre +10% rialzo, sotto -10% ribasso"
+ },
+ "ricerca_senza_minimi_composto": {
+  "giorni": 2100,
+  "giorni_con_ordini": 2100,
+  "quota_dei_5_giorni_migliori": 0.15393956304243583,
+  "quota_dei_3_mesi_migliori": 0.2929533253638605,
+  "mesi_migliori": {
+   "2021-04": 0.42198194942878214,
+   "2024-12": 0.2696479162189875,
+   "2024-11": 0.22707532762399046
+  },
+  "esposizione_lorda_media": 1.9983758711605688,
+  "giorni_con_posizioni": 2100,
+  "rendimento_medio_al_giorno": 0.0014933391280654547,
+  "spese_medie_al_giorno": 0.00017564745016454783,
+  "clima": {
+   "rialzo": {
+    "giorni": 582,
+    "annuo": 0.34219755769244276,
+    "sharpe_giornaliero": 1.1170980019661678
+   },
+   "ribasso": {
+    "giorni": 443,
+    "annuo": 0.27947076389676434,
+    "sharpe_giornaliero": 1.0510786656641187
+   },
+   "laterale": {
+    "giorni": 1075,
+    "annuo": 0.7643534090036301,
+    "sharpe_giornaliero": 2.939100448378869
+   }
+  },
+  "definizione_clima": "Bitcoin: apertura di oggi contro quella di 30 giorni prima; oltre +10% rialzo, sotto -10% ribasso"
+ }
+}

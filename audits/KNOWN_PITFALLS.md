@@ -1,7 +1,7 @@
 # Errori ricorrenti di questo repo (catalogo dell'auditor)
 
 Ogni voce: cosa succede, dove è stato trovato, come cercarlo. La lista cresce e non si accorcia; oltre le 300 righe si
-raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 27 novembre 2026 (prova 168: voci 50-52 e note alle voci 3, 26, 29, 49; F5 sul conto vero: voci 44-49; prima, il 15
+raggruppano gli errori simili senza toglierne nessuno. Aggiornato il 28 novembre 2026 (G1 a 250 USDT: voci 53-56; prima il 27 novembre, prova 168: voci 50-52 e note alle voci 3, 26, 29, 49; F5 sul conto vero: voci 44-49; prima, il 15
 novembre, prova 157: margine delle coperture a pronti;
 prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
 
@@ -152,6 +152,25 @@ prova 161: settimane legate fra loro, limiti del bot su una gamba sola).
     e «meno variazioni sotto il minimo»; con i filtri veri a 280 USDT 1,40-1,57 (81-84% del suo Sharpe; G1 nella prova 148 il 96%),
     2026 fra −5% e +1% l'anno, discesa −32/−33%; a 1.000 USDT regge. Il numero di variazioni saltate (61% contro 90%) non dice l'effetto.
     Cercare: proposte o decisioni per capitali sotto i 1.000 USDT senza una prova a capitale dichiarato con le regole scritte prima.
+
+53. **Il capitale del conto vero simulato in un modo solo** (G1 a 250 USDT, 28 nov 2026): oltre 600 USDT di valore il conto vero non manda
+    ordini (`conto_vero.py:127,811`) finché non c'è un capitale nuovo, che chiude tutto e riapre da zero (`demo_binance.parti_da_zero`).
+    Simulato come una riduzione senza chiusura G1 fa 1,75, come il bot (chiusura e riapertura) 1,91; capitale fisso 250 1,86, che si compone
+    senza tetto 1,95; capitali fissi da 200 a 400 fra 1,56 e 1,88, non in ordine. Riportare sempre le basi (fissa, tetto come il bot,
+    composta) e leggere ogni differenza sotto 0,15 come rumore. `audits/repro/g1_conto_vero_250_2026-11-28.py conto`, `rumore`.
+54. **«Chiusure solo riduzione» con due significati** (prova 148 contro questo audit): la A2 della 148 permette sotto il valore minimo
+    tutte le riduzioni (`ottantaseiesima.py:81-82`) e conclude «permettere le chiusure peggiora» (1,83 contro 1,90); permettendo solo le
+    chiusure a zero il conto migliora in 8 capitali su 9 (da +0,01 a +0,11) e la polvere sparisce. Cercare: `riduce` contro `obi == 0` nei
+    simulatori; dire sempre quale delle due.
+55. **Monete col minimo alto sotto-tenute nei conti piccoli** (G1 a 250 USDT): il Bitcoin (50 USDT, passo 0,001) è tenuto per il 7,7% del
+    peso voluto, ETH, BCH, LTC, ETC e LINK (20 USDT) per il 45%, le altre per il 90%; sono le monete meno volatili, cioè quelle col peso
+    più grande nell'inverso della volatilità, e il conto si sposta sulle più volatili. Esposizione netta fino a −45%/+40% (G1 la tiene a
+    zero): settimana peggiore −13,0% contro −7,5% (21-27 marzo 2022, netta fra −17% e −38%). Misura: `... mancanti`.
+56. **Demo a un capitale diverso da quello del conto vero** (G1, 28 nov 2026): il demo gira a 1.000 USDT, il conto vero a 250; a 1.000 il
+    portafoglio vero si scosta da quello voluto di circa il 10% del conto, a 250 di circa il 45%, e lo scarto giornaliero dalla ricerca
+    raddoppia o triplica. La prova in avanti del demo non misura la configurazione da promuovere. Controllo utile: il simulatore a 1.000
+    dalla partenza dell'8 novembre rifà gli ordini «sotto il minimo» del demo (23 nov 34 contro 31, 26 nov 52 contro 48;
+    `ops/results/*stato*.md`, riga «ultima decisione»): convalida il simulatore sul bot vero (`... avanti`).
 
 ## Misure
 

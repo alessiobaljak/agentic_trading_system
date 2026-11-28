@@ -1,0 +1,246 @@
+{
+ "bot_oggi | limite_al_tocco": {
+  "partenze": 296,
+  "con_stop": 0,
+  "con_stop_entro_un_anno": 0,
+  "date_dello_stop": [],
+  "partenze_con_stop_entro_un_anno": [],
+  "minimo_primo_anno_peggiore": -0.20753020371979325,
+  "quota_partenze_in_perdita_dopo_un_anno": 0.11065573770491803,
+  "partenze_peggiori": [
+   {
+    "partenza": "2023-11-20",
+    "stop": null,
+    "un_anno": 0.40846840667234696,
+    "minimo_primo_anno": -0.20753020371979325
+   },
+   {
+    "partenza": "2023-11-06",
+    "stop": null,
+    "un_anno": 0.21199756593963115,
+    "minimo_primo_anno": -0.20718608677879624
+   },
+   {
+    "partenza": "2026-01-19",
+    "stop": null,
+    "un_anno": 0.12335420947291498,
+    "minimo_primo_anno": -0.20568110644447513
+   },
+   {
+    "partenza": "2023-11-13",
+    "stop": null,
+    "un_anno": 0.2942714486871527,
+    "minimo_primo_anno": -0.20493426775466528
+   },
+   {
+    "partenza": "2023-09-04",
+    "stop": null,
+    "un_anno": 0.11960213078890192,
+    "minimo_primo_anno": -0.20203966083188774
+   },
+   {
+    "partenza": "2021-08-02",
+    "stop": null,
+    "un_anno": 0.19479121717602021,
+    "minimo_primo_anno": -0.19330212247760892
+   }
+  ]
+ },
+ "bot_oggi | tutto_a_mercato": {
+  "partenze": 296,
+  "con_stop": 0,
+  "con_stop_entro_un_anno": 0,
+  "date_dello_stop": [],
+  "partenze_con_stop_entro_un_anno": [],
+  "minimo_primo_anno_peggiore": -0.21368576228325586,
+  "quota_partenze_in_perdita_dopo_un_anno": 0.12704918032786885,
+  "partenze_peggiori": [
+   {
+    "partenza": "2023-11-20",
+    "stop": null,
+    "un_anno": 0.4032824312787213,
+    "minimo_primo_anno": -0.21368576228325586
+   },
+   {
+    "partenza": "2023-11-06",
+    "stop": null,
+    "un_anno": 0.20065863404538398,
+    "minimo_primo_anno": -0.2099823252557873
+   },
+   {
+    "partenza": "2023-11-13",
+    "stop": null,
+    "un_anno": 0.2899140519680772,
+    "minimo_primo_anno": -0.20986535921971572
+   },
+   {
+    "partenza": "2023-09-04",
+    "stop": null,
+    "un_anno": 0.11823080143094233,
+    "minimo_primo_anno": -0.20582765927749358
+   },
+   {
+    "partenza": "2021-07-26",
+    "stop": null,
+    "un_anno": 0.2374836281970647,
+    "minimo_primo_anno": -0.2011636805224214
+   },
+   {
+    "partenza": "2021-01-18",
+    "stop": null,
+    "un_anno": -0.005630128145591828,
+    "minimo_primo_anno": -0.19865233674010874
+   }
+  ]
+ },
+ "solo_riduzione_chiusure | limite_al_tocco": {
+  "partenze": 296,
+  "con_stop": 0,
+  "con_stop_entro_un_anno": 0,
+  "date_dello_stop": [],
+  "partenze_con_stop_entro_un_anno": [],
+  "minimo_primo_anno_peggiore": -0.1944489851994723,
+  "quota_partenze_in_perdita_dopo_un_anno": 0.08196721311475409,
+  "partenze_peggiori": [
+   {
+    "partenza": "2023-11-20",
+    "stop": null,
+    "un_anno": 0.4677809879657724,
+    "minimo_primo_anno": -0.1944489851994723
+   },
+   {
+    "partenza": "2026-01-19",
+    "stop": null,
+    "un_anno": 0.14955801808861557,
+    "minimo_primo_anno": -0.19207486040708333
+   },
+   {
+    "partenza": "2021-03-29",
+    "stop": null,
+    "un_anno": -0.07716089444992225,
+    "minimo_primo_anno": -0.1919785978067018
+   },
+   {
+    "partenza": "2023-11-13",
+    "stop": null,
+    "un_anno": 0.32531296230789586,
+    "minimo_primo_anno": -0.1917357402931552
+   },
+   {
+    "partenza": "2021-03-15",
+    "stop": null,
+    "un_anno": -0.002291169645863511,
+    "minimo_primo_anno": -0.18871236143875758
+   },
+   {
+    "partenza": "2021-07-26",
+    "stop": null,
+    "un_anno": 0.24718534434799944,
+    "minimo_primo_anno": -0.18823839537287868
+   }
+  ]
+ },
+ "solo_riduzione_chiusure | tutto_a_mercato": {
+  "partenze": 296,
+  "con_stop": 0,
+  "con_stop_entro_un_anno": 0,
+  "date_dello_stop": [],
+  "partenze_con_stop_entro_un_anno": [],
+  "minimo_primo_anno_peggiore": -0.2016868277033821,
+  "quota_partenze_in_perdita_dopo_un_anno": 0.11475409836065574,
+  "partenze_peggiori": [
+   {
+    "partenza": "2023-11-20",
+    "stop": null,
+    "un_anno": 0.43554600268886956,
+    "minimo_primo_anno": -0.2016868277033821
+   },
+   {
+    "partenza": "2023-11-13",
+    "stop": null,
+    "un_anno": 0.32405268459890757,
+    "minimo_primo_anno": -0.19982784543322474
+   },
+   {
+    "partenza": "2021-07-26",
+    "stop": null,
+    "un_anno": 0.2313795073222078,
+    "minimo_primo_anno": -0.1982835110558847
+   },
+   {
+    "partenza": "2021-03-29",
+    "stop": null,
+    "un_anno": -0.07670393382848317,
+    "minimo_primo_anno": -0.19276660342110685
+   },
+   {
+    "partenza": "2021-07-19",
+    "stop": null,
+    "un_anno": 0.21915475449166166,
+    "minimo_primo_anno": -0.19125420824591322
+   },
+   {
+    "partenza": "2021-03-22",
+    "stop": null,
+    "un_anno": -0.00476991424197537,
+    "minimo_primo_anno": -0.18988814051860592
+   }
+  ]
+ },
+ "discese_oltre_15%_bot_oggi": [
+  {
+   "minimo": "2024-03-31",
+   "profondita": -0.2867914413450844,
+   "fine": "2024-09-30"
+  },
+  {
+   "minimo": "2021-02-21",
+   "profondita": -0.2162170676925217,
+   "fine": "2021-03-17"
+  },
+  {
+   "minimo": "2026-08-19",
+   "profondita": -0.19436006337518863,
+   "fine": "2026-09-27"
+  },
+  {
+   "minimo": "2021-09-28",
+   "profondita": -0.15388118589903288,
+   "fine": "2021-11-25"
+  }
+ ],
+ "limite_prudente_nel_giorno": {
+  "peggiore": -0.4739860748220385,
+  "giorno": "2025-10-10",
+  "quantile_1%": -0.23268893325818382,
+  "giorni_sotto_-20%": 31,
+  "giorni_sotto_-35%": 2
+ },
+ "discesa_prudente_dal_massimo": {
+  "peggiore": -0.4799914887187837,
+  "giorno": "2025-10-10",
+  "giorni_oltre_-35%": 15,
+  "giorni": [
+   "2021-02-13",
+   "2021-02-22",
+   "2021-02-23",
+   "2021-05-19",
+   "2021-09-07",
+   "2024-01-03",
+   "2024-03-05",
+   "2024-03-20",
+   "2024-03-27",
+   "2024-04-01",
+   "2024-04-12",
+   "2024-04-13",
+   "2024-06-07",
+   "2025-10-10",
+   "2026-08-22"
+  ]
+ },
+ "liquidazione": {
+  "lorda_media": 1.8621289862310413,
+  "lorda_massima": 2.2577843921284995,
+  "nota": "margine unico: con lorda 2 il mantenimento (circa 0,4-1% del nozionale per moneta piccola, da verificare) e' circa 1-2% del conto; la liquidazione chiede una perdita del 98% circa del conto, lo stop a -35% viene prima"
+ }
+}

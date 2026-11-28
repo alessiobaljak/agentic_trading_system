@@ -230,3 +230,6 @@ con 250USD è meglio G1 procedi». Cosa cambia:
   250 USDT come la esegue il bot (backtest-auditor), il confronto di paper e demo (gate2-reconciler) e l'allocatore, con il modello più
   potente; poi le cose che deve fare il proprietario (`docs/conto_vero.md`) e la sua richiesta esplicita di accendere. `DRY_RUN` resta vero
   fino ad allora.
+* Il proprietario, subito dopo: «solo una nota non è il valore esatto, il sistema deve leggere quello che il valore in binance future»:
+  il capitale non si scrive a mano, il bot lo legge dal saldo del portafoglio dei future del conto vero (con il tetto di sicurezza nel
+  codice: sopra il tetto non usa mai di più).

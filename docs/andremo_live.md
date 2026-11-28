@@ -1221,3 +1221,11 @@ demo +4,21%, paper +6,57%. **Capito oggi**: con la finestra degli ordini limite 
 dell'esecuzione tutta a mercato (G11 4,75 contro 3,04): in un giorno l'attesa del limite è costata più del mercato; da misurare su più
 giorni prima di concludere (voce 2 del piano di G1). Controlli in avanti: niente di nuovo. GitHub: test in corso (una corsa in attesa annullata
 perché ne è arrivata una più nuova, come previsto); monitor e stato lanciati a mano.
+**28 novembre, 08:40 UTC, giro delle 08:17 e conto vero su G1**: raccolta delle 08:17 (26 articoli nuovi, 24 fonti su 25); controlli in
+avanti: niente di nuovo; GitHub verde, monitor e stato lanciati a mano. Il proprietario ha scelto G1 per il conto vero con il saldo
+vero dei future (circa 250 USDT). Il revisore delle prove su G1 a 250 USDT come lo esegue il bot: PASS tecnico (1,91, +55,9% l'anno,
+discesa −27,8%; 1,94 con le chiusure «solo riduzione»), ma il demo a 1.000 non prova i 250 (portafoglio vero lontano da quello voluto
+del 45% del conto al giorno, settimana peggiore −13,0% contro −7,5%): proposto al proprietario il demo a 250. Il codice del conto vero su
+G1 (saldo letto da Binance sotto il tetto di 300, chiusure «solo riduzione», 211, 213, 219, 220) è dal revisore del percorso degli ordini,
+non committato. Cercatore di idee del giro delle 08:17 lanciato. **Capito**: con 250 USDT G1 non è più neutra al mercato (esposizione netta
+fra −45% e +40%): il rischio del conto piccolo non è il rendimento medio ma la forma del portafoglio.

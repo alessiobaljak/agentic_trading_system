@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 import time
 from datetime import date, datetime, timezone
@@ -351,6 +352,42 @@ def auto() -> str:
     return azione
 
 
+VIVI_O_IN_ATTESA = {"new", "accepted", "pending_new", "accepted_for_bidding", "held", "partially_filled"}
+PERCHE = {"vigilia": "banca centrale, la vigilia (comprare)", "giorno": "banca centrale, il giorno del comunicato (vendere)"}
+
+
+def operazioni(ordini: list[dict], giorni: int = 30) -> dict[str, list[dict]]:
+    """Gli ordini della miscela per la scheda delle operazioni della Plancia (funzione pura; richiesta del proprietario del 28
+    novembre 2026: «rivedi la scheda per far vedere tutte le strategie»). Un ordine eseguito va nel giorno di New York della sua
+    esecuzione; uno ancora in attesa o morto nel giorno in cui è partito, con lo stato nella nota. Il perché viene dal nome
+    dell'ordine: la sera di un giorno, o la regola della banca centrale. Solo gli ultimi `giorni` giorni con ordini."""
+    out: dict[str, list[dict]] = {}
+    for o in ordini:
+        cid = str(o.get("client_order_id", ""))
+        if not cid.startswith("miscela-"):
+            continue
+        sera = re.match(r"^miscela-sera-(\d{4}-\d{2}-\d{2})", cid)
+        fed = re.match(r"^miscela-fed-([a-z]+)-(\d{4}-\d{2}-\d{2})", cid)
+        perche = (f"decisa la sera del {sera.group(1)}" if sera else PERCHE.get(fed.group(1), "banca centrale") if fed else "")
+        eseguite = float(o.get("filled_qty") or 0)
+        quando = o.get("filled_at") if eseguite > 0 else o.get("submitted_at")
+        if not quando:
+            continue
+        giorno = pd.Timestamp(quando).tz_convert(av.NY).date().isoformat()
+        stato = str(o.get("status", ""))
+        riga = {"simbolo": o.get("symbol", ""), "lato": o.get("side", ""), "genere": "ordine",
+                "quantita": eseguite if eseguite > 0 else float(o.get("qty") or 0)}
+        if eseguite > 0:
+            riga.update({"ingresso": float(o["filled_avg_price"]), "ora_ingresso": o.get("filled_at")})
+            nota = perche + ("; eseguito in parte" if stato == "partially_filled" else "")
+        else:
+            nota = "; ".join(x for x in (perche, "in attesa dell'apertura" if stato in VIVI_O_IN_ATTESA else f"non eseguito ({stato})") if x)
+        riga["nota"] = nota
+        out.setdefault(giorno, []).append(riga)
+    tenuti = sorted(out)[-giorni:]
+    return {g: sorted(out[g], key=lambda r: (r.get("ora_ingresso") or "", r["simbolo"])) for g in tenuti}
+
+
 def pubblica() -> str:
     try:
         from stock.avanti import plancia
@@ -368,6 +405,13 @@ def pubblica() -> str:
              "comprate": sum(1 for p in v["posizioni_miscela"] if float(p["qty"]) > 0), "vendute": 0, "aggiornato": adesso,
              "pesi": {plancia.chiave(p["symbol"]): round(float(p["market_value"]) / valore, 4) for p in v["posizioni_miscela"]} or None,
              "giorni": conto.giorni("miscela") or None, "primo_giorno_dal_capitale": True}
+        try:                                       # le operazioni della scheda: un errore qui non toglie il resto
+            dopo = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=45)).isoformat()
+            ordini = av._richiesta("GET", "/v2/orders", params={"status": "all", "limit": 500, "after": dopo, "direction": "desc",
+                                                                "symbols": ",".join(conto.SIMBOLI_MISCELA)})
+            s["operazioni"] = operazioni(ordini) or None
+        except Exception as e:  # noqa: BLE001
+            print(f"Plancia: operazioni della miscela non lette ({type(e).__name__}: {str(e)[:120]})", flush=True)
         errore = plancia.scrivi({"battito": adesso, f"strategie/{ID}": s})
         return errore or f"Plancia: pubblicata la miscela (valore {valore:,.2f} dollari)"
     except Exception as e:  # noqa: BLE001

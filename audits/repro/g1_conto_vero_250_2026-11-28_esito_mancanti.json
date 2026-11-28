@@ -1,0 +1,97 @@
+{
+ "per_gruppo": {
+  "minimo 20-50 USDT": {
+   "peso_voluto_medio": 0.13817508674329718,
+   "peso_tenuto_medio": 0.08818204169438583,
+   "coperto_dal_voluto": 0.45119761847707507
+  },
+  "minimo 5 USDT": {
+   "peso_voluto_medio": 1.861824913256703,
+   "peso_tenuto_medio": 1.7739469445366558,
+   "coperto_dal_voluto": 0.9026590140854648
+  }
+ },
+ "monete_piu_scoperte": [
+  {
+   "simbolo": "BTCUSDT",
+   "minimo": 50.0,
+   "peso_voluto_medio": 0.0334467265164496,
+   "coperto": 0.07744242247462392
+  },
+  {
+   "simbolo": "BCHUSDT",
+   "minimo": 20.0,
+   "peso_voluto_medio": 0.03638334004195201,
+   "coperto": 0.6745897341934984
+  },
+  {
+   "simbolo": "LINKUSDT",
+   "minimo": 20.0,
+   "peso_voluto_medio": 0.016226327318352055,
+   "coperto": 0.39365247041886964
+  },
+  {
+   "simbolo": "ETCUSDT",
+   "minimo": 20.0,
+   "peso_voluto_medio": 0.015951531699589183,
+   "coperto": 0.415147597726115
+  },
+  {
+   "simbolo": "ETHUSDT",
+   "minimo": 20.0,
+   "peso_voluto_medio": 0.023044531278045587,
+   "coperto": 0.6191018142322524
+  },
+  {
+   "simbolo": "AVAXUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.014362953920022263,
+   "coperto": 0.43516858441284917
+  },
+  {
+   "simbolo": "AAVEUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.015227688728125209,
+   "coperto": 0.5464890040467704
+  },
+  {
+   "simbolo": "AXSUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.0259503745342409,
+   "coperto": 0.7362897199746565
+  },
+  {
+   "simbolo": "YFIUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.007630111200737118,
+   "coperto": 0.2672921093299141
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "minimo": 20.0,
+   "peso_voluto_medio": 0.013122629888908706,
+   "coperto": 0.6045710275416238
+  },
+  {
+   "simbolo": "KSMUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.007846075224745782,
+   "coperto": 0.4924407536492027
+  },
+  {
+   "simbolo": "UNIUSDT",
+   "minimo": 5.0,
+   "peso_voluto_medio": 0.012734447500397055,
+   "coperto": 0.7374459117455708
+  }
+ ],
+ "giorni_fino_a_600": {
+  "partenze": 296,
+  "arrivate": 206,
+  "quantili_10_50_90": [
+   270.5,
+   652.0,
+   1136.5
+  ]
+ }
+}
