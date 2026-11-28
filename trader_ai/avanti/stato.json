@@ -821,10 +821,69 @@
    "r": -0.51,
    "favore_r": 0.07,
    "contro_r": 0.76
+  },
+  {
+   "n": 21,
+   "aperta": "2026-11-27T16:00:14.482000+00:00",
+   "tipo": "limite",
+   "eseguita": "2026-11-27T16:33:00+00:00",
+   "chiusa": "2026-11-28T01:10:00+00:00",
+   "lato": "corto",
+   "leva": 5,
+   "quantita": 0.029,
+   "entrata": 60400.0,
+   "uscita": 60066.006,
+   "uscita_stimata": false,
+   "come": "stop spostato da te",
+   "stop_iniziale": 60900.0,
+   "obiettivo_iniziale": 59050.0,
+   "spostamenti": [
+    {
+     "ora": "2026-11-28T00:00:01.980971+00:00",
+     "campo": "stop",
+     "da": 60900.0,
+     "a": 60250.0,
+     "prima_dell_esecuzione": false
+    },
+    {
+     "ora": "2026-11-28T01:00:17.741671+00:00",
+     "campo": "stop",
+     "da": 60250.0,
+     "a": 60060.0,
+     "prima_dell_esecuzione": false
+    },
+    {
+     "ora": "2026-11-28T01:00:17.741671+00:00",
+     "campo": "obiettivo",
+     "da": 59050.0,
+     "a": 59380.0,
+     "prima_dell_esecuzione": false
+    }
+   ],
+   "atr15": 397.6245,
+   "motivo": "Ultima chiamata del giorno, nessuna posizione, mancano 36,81. Il rimbalzo dal martello di capitolazione (58750) rallenta: le 5m hanno volume 0,2-0,5x, la 15m delle 15:45 chiude con il 45% di acquisti e il prezzo resta compresso fra 59917 e 60225. Il 15m e il 30m sono ancora ribassisti: le EMA sono…",
+   "approccio": "Seguo la struttura 15m: dopo un crollo con volume vendo il rimbalzo solo su un ritracciamento profondo o sotto una resistenza dinamica, con lo stop sopra il livello rotto, senza inseguire e senza vendere sui minimi.",
+   "margine": 352.0,
+   "giorno_prima": -8.71,
+   "mancava": 36.82,
+   "ore_a_mezzanotte": 8.0,
+   "rischio_pct": 1.71,
+   "nota": null,
+   "inviato": "2026-11-27T16:00:39.722999+00:00",
+   "cid": "taio1795795214482",
+   "come_stimato": false,
+   "spese_entrata": 0.35032,
+   "spese": 1.221277,
+   "funding": 0.144496,
+   "risultato_prezzo": 9.685826,
+   "risultato": 8.61,
+   "R": 15.9101,
+   "r": 0.54,
+   "favore_r": 1.69,
+   "contro_r": 0.25
   }
  ],
  "note": [
-  "27/11 15:15 Il corto a 59500 è stato eseguito su una 5m (15:10) che non era un rimbalzo debole. È salita di 500 punti, da 59127 a 59632, con il 63% di acquisti e volume 2,1x. La 15m delle 15:00 chiude a 59632 con una lunga ombra da 58750: è un martello di capitolazione, con RSI 15m da 10 a 23. La 5m in corso spinge a 59765 con il 68% di acquisti e il prezzo mark è 59748, a 50 punti dallo stop 59800. Il rimbalzo dopo un crollo di 2600 punti tende a ritracciare verso il 38-50% (59770-60080) e verso EMA21 5m (60355). Lo stop verrà quasi certamente preso. Chiudo adesso a -8,89 invece di -10,43. Il piano: lascio sviluppare il rimbalzo e cerco il corto più in alto, a 60080-60360 (50% del crollo, EMA21 5m, ar…",
   "27/11 15:16 Nessuna posizione. Il corto a 59500 è chiuso a -5,32. Il prezzo mark è 59481. Il rimbalzo si è fermato a 59765 e la 5m in corso torna a 59460 con il 45% di acquisti. La 15m delle 15:00 è un martello di capitolazione (ombra fino a 58750, volume 6x). L'RSI 15m è a 23 e l'istogramma MACD peggiora ancora. Siamo nel mezzo, fra il minimo e i ritracciamenti, quindi non ho un vantaggio. Mancano 36,8 per l'obiettivo e restano circa 5 chiamate: non forzo con operazioni a caso, perché sarebbero la quarta perdita di fila. Il piano corto: un rimbalzo verso 59900-60360 (minimo di ieri rotto, 50% del crollo, EMA21 5m) che venga respinto con una 5m chiusa debole. A quel punto stop sopra il massimo del rifi…",
   "27/11 15:30 Nessuna posizione, prezzo mark 59792. Dopo il martello di capitolazione a 58750 il rimbalzo ha fatto minimi crescenti sul 5m (58750, 59374, 59710). Si è fermato due volte sotto il minimo di ieri rotto (59866-59880): è il primo livello da vendere. Il rifiuto però non è chiaro. La 5m delle 15:25 chiude a metà con il 46% di acquisti, la 15m delle 15:15 chiude in alto con il 54%, l'istogramma MACD 5m migliora verso l'incrocio e l'RSI 5m è a 36. Vendere adesso vorrebbe dire anticipare il segnale, come nell'operazione #20, e rischiare la quarta perdita di fila. Il piano corto ha due strade. Se la 15m delle 15:30 chiude sotto 59700 con vendite, apro un corto a mercato con stop sopra 59920 e obiett…",
   "27/11 15:45 Nessuna posizione, prezzo mark 60135. Il rimbalzo dal martello di capitolazione (58750) fa ancora minimi crescenti sul 5m (59374, 59710, 59856, 59929). Ha ripreso il minimo di ieri rotto (59877) e ora sta sul 50% del crollo (60082) e su EMA21 5m (60161). La 5m delle 15:40 ha un massimo più basso (60190 contro 60225) con il 40% di acquisti, ma l'istogramma MACD 5m cresce e l'interesse aperto sale (+1,3%): c'è spazio per una ricopertura. Il rifiuto quindi non è confermato, e vendere ora ripeterebbe l'errore dell'operazione #20. Anche comprare a metà rimbalzo non ha vantaggio. Il piano per le ultime due chiamate ha due strade. Se la 15m delle 15:45 chiude sotto 59930 con vendite, apro un corto…",
@@ -833,72 +892,19 @@
   "28/11 00:15 Tengo il corto da 60400 senza cambiare niente. Il prezzo mark è 59946 e il netto attuale è +11,92. Il rimbalzo asiatico continua a volume basso. La 15m delle 00:00 è arrivata a 59984 con il 52% di acquisti. L'istogramma MACD 15m e 30m cresce e l'RSI 5m è a 64, quindi c'è ancora spinta verso l'alto. Sopra però ci sono resistenze: EMA21 30m a 60086, il massimo delle 19:30 a 60038, EMA50 15m a 60168 e il massimo delle 15:30 a 60225. Lo stop a 60250 sta sopra tutto quel gruppo e garantisce comunque +3,10. Stringerlo adesso vorrebbe dire metterlo nel rumore, cioè l'errore delle operazioni passate. Il 30m resta ribassista, con le EMA sopra il prezzo e i massimi decrescenti 60537 e 60038. L'obiett…",
   "28/11 00:30 Tengo il corto da 60400 senza modifiche. Il prezzo mark è 59960 e il netto attuale è +11,52. Il rimbalzo asiatico resta lento e con volume basso (0,36-0,62x sul 5m). Si ferma sotto 60000: la 15m delle 00:15 ha toccato 59996 e ha chiuso a 59958 con il 44% di acquisti. Sul 5m l'istogramma MACD cala da quattro candele (19→12,8): la spinta si esaurisce. Sopra il prezzo ci sono EMA21 30m (60074), il massimo delle 19:30 (60038), EMA50 15m (60160) e il massimo delle 15:30 (60225). Lo stop a 60250 sta oltre tutto questo gruppo e garantisce +3,10. Il 30m resta ribassista: le EMA sono sopra il prezzo e i massimi scendono. L'obiettivo 59050 basterebbe per il traguardo del giorno. Se una 15m viene resp…",
   "28/11 00:45 Tengo il corto da 60400 senza modifiche. Il prezzo mark è 59952 e il netto attuale è +11,74. Il rimbalzo asiatico resta compresso sotto 60000: tre 15m di fila (00:00, 00:15, 00:30) hanno massimi fra 59984 e 59996 e chiusure piatte a 59951-59958. Gli acquisti calano (52%, 44%, 38%). Sul 5m l'istogramma MACD scende da sei candele (12,8→5,5): la spinta si esaurisce. Il volume è basso (0,45x sul 15m). Sopra il prezzo restano EMA21 30m (60074), il massimo delle 19:30 (60038), EMA50 15m (60152) e il massimo delle 15:30 (60225). Lo stop a 60250 sta oltre tutto il gruppo e garantisce +3,10: stringerlo ora vorrebbe dire metterlo nel rumore. Il 30m resta ribassista, con le EMA sopra il prezzo e i mas…",
-  "28/11 01:00 Il corto da 60400 vale +14,46 netti. Il rimbalzo asiatico è stato respinto tre volte sotto 60000 (59984, 59996, 59994). La 15m delle 00:45 chiude sul minimo a 59870 con il 26% di acquisti e la 30m con il 31%. Sul 5m il MACD è passato negativo e l'RSI è a 49. Il prezzo è sotto EMA9/21 5m. Sopra 59996 ora c'è una resistenza strutturale confermata, insieme al massimo delle 19:30 (60038). Abbasso quindi lo stop a 60060, oltre quel gruppo e a circa 1,4 ATR15 dal prezzo, non nel rumore: allo stop incasso circa +8,5. Porto l'obiettivo a 59380, sotto i minimi di ieri sera (59472-59553). A quel livello il netto basta per il traguardo del giorno (servono circa 27,3), mentre 59050 era più lontano del…"
+  "28/11 01:00 Il corto da 60400 vale +14,46 netti. Il rimbalzo asiatico è stato respinto tre volte sotto 60000 (59984, 59996, 59994). La 15m delle 00:45 chiude sul minimo a 59870 con il 26% di acquisti e la 30m con il 31%. Sul 5m il MACD è passato negativo e l'RSI è a 49. Il prezzo è sotto EMA9/21 5m. Sopra 59996 ora c'è una resistenza strutturale confermata, insieme al massimo delle 19:30 (60038). Abbasso quindi lo stop a 60060, oltre quel gruppo e a circa 1,4 ATR15 dal prezzo, non nel rumore: allo stop incasso circa +8,5. Porto l'obiettivo a 59380, sotto i minimi di ieri sera (59472-59553). A quel livello il netto basta per il traguardo del giorno (servono circa 27,3), mentre 59050 era più lontano del…",
+  "28/11 01:11 Nessuna posizione. Il corto è chiuso a +8,61 e mancano 34,13. Il prezzo mark è 60045. La 15m in corso ha fatto uno sweep a 59803 e poi ha rotto il triplo massimo 59996 fino a 60124, con il 62% di acquisti e la 5m a volume 4,8x. La rottura però non è confermata da una 15m chiusa. Sopra ci sono l'EMA50 15m (60141), il massimo delle 15:30 (60225), l'EMA50 30m (60415) e il massimo più basso 60537, mentre il 30m resta ribassista. Comprare qui vorrebbe dire inseguire sotto una resistenza; vendere vorrebbe dire andare contro un impulso fresco. Ho due piani. Se la 15m chiude sopra 60000 e il ritest tiene, compro un limite vicino a 60000 con stop sotto 59870. Se il prezzo sale verso 60400-60500 e vi…"
  ],
  "estraneo": null,
  "giorno": "2026-11-28",
  "conto_mezzanotte": 942.4995047474505,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-28T01:00:17.741671+00:00",
+ "ultima": "2026-11-28T01:11:16.915104+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
- "approccio": "Seguo la struttura 15m dopo il crollo: vendo i rimbalzi profondi sotto le resistenze dinamiche e, con il guadagno in mano, alzo lo stop solo oltre l'ultima resistenza strutturale confermata, non dentro il rumore.",
- "aperta": {
-  "aperta": "2026-11-27T16:00:14.482000+00:00",
-  "tipo": "limite",
-  "lato": "corto",
-  "leva": 5,
-  "entrata": 60400.0,
-  "quantita": 0.029,
-  "cid": "taio1795795214482",
-  "stop": 60060.0,
-  "obiettivo": 59380.0,
-  "spostamenti": [
-   {
-    "ora": "2026-11-28T00:00:01.980971+00:00",
-    "campo": "stop",
-    "da": 60900.0,
-    "a": 60250.0,
-    "prima_dell_esecuzione": false
-   },
-   {
-    "ora": "2026-11-28T01:00:17.741671+00:00",
-    "campo": "stop",
-    "da": 60250.0,
-    "a": 60060.0,
-    "prima_dell_esecuzione": false
-   },
-   {
-    "ora": "2026-11-28T01:00:17.741671+00:00",
-    "campo": "obiettivo",
-    "da": 59050.0,
-    "a": 59380.0,
-    "prima_dell_esecuzione": false
-   }
-  ],
-  "approccio": "Seguo la struttura 15m: dopo un crollo con volume vendo il rimbalzo solo su un ritracciamento profondo o sotto una resistenza dinamica, con lo stop sopra il livello rotto, senza inseguire e senza vendere sui minimi.",
-  "motivo": "Ultima chiamata del giorno, nessuna posizione, mancano 36,81. Il rimbalzo dal martello di capitolazione (58750) rallenta: le 5m hanno volume 0,2-0,5x, la 15m delle 15:45 chiude con il 45% di acquisti e il prezzo resta compresso fra 59917 e 60225. Il 15m e il 30m sono ancora ribassisti: le EMA sono…",
-  "atr15": 397.6245,
-  "conto_prima": 928.0302589516721,
-  "margine": 352.0,
-  "giorno_prima": -8.71,
-  "mancava": 36.82,
-  "ore_a_mezzanotte": 8.0,
-  "rischio_pct": 1.71,
-  "in_attesa": false,
-  "inviato": "2026-11-27T16:00:39.722999+00:00",
-  "eseguita": "2026-11-27T16:33:00+00:00",
-  "stop_iniziale": 60900.0,
-  "obiettivo_iniziale": 59050.0,
-  "spese_entrata": 0.35032,
-  "R": 15.9101,
-  "escursione": [
-   928.3000000000029,
-   137.0
-  ],
-  "funding": 0.14449573782837186
- },
+ "approccio": "Seguo la struttura 15m: vendo i rimbalzi profondi sotto le resistenze dinamiche del 30m e compro solo il ritest di una rottura confermata da una 15m chiusa; stop oltre il livello strutturale successivo, non appena sopra un massimo ovvio.",
+ "aperta": null,
  "inizio": {
   "giorno": "2026-11-25",
   "conto": 1000.0
@@ -1055,25 +1061,32 @@
    "ora": "2026-11-27T15:16:19.314193+00:00",
    "dopo": 20,
    "giorno_netto": -8.71,
-   "fissata": false,
+   "fissata": true,
    "testo": "Prevedevo che il rimbalzo verso 59500, dopo il crollo, fosse debole e venisse respinto sotto i massimi 5m decrescenti. Invece il limite è stato eseguito da una 5m di ricopertura: +500 punti, 63% di acquisti, sopra un martello 15m di capitolazione con RSI 10. Sono uscito a -0,51 R con il prezzo a 50 punti dallo stop. Cambio così: dopo una capitolazione (volume oltre 5x e RSI sotto 15) non metto li…"
+  },
+  {
+   "ora": "2026-11-28T01:11:16.915104+00:00",
+   "dopo": 21,
+   "giorno_netto": -5.86,
+   "fissata": false,
+   "testo": "Prevedevo che il rimbalzo asiatico, respinto tre volte sotto 60000, ripartisse verso 59380. Invece la 5m delle 01:00 ha fatto uno sweep a 59803 e poi è salita a 60124 con volume 4,8x, prendendo lo stop a 60060 e chiudendo a +8,61. Abbassare lo stop ha protetto il guadagno, ma l'ho messo appena sopra un triplo massimo ovvio e un numero tondo, dove gli stop vengono cacciati. D'ora in poi lo stop pr…"
   }
  ],
  "versione_memoria": 7,
- "prossimo_n": 21,
+ "prossimo_n": 22,
  "discesa_dalle": "2026-11-28T00:00:01.980971+00:00",
  "massimo_giorno": 944.5638665954405,
- "discesa_max_giorno": 2.80616398543998,
- "ultimo_costo_massimo": 0.4971,
+ "discesa_max_giorno": 7.926336318870085,
+ "ultimo_costo_massimo": 0.4918,
  "stat_giorno": {
-  "chiamate": 5,
-  "costo": 0.36166,
+  "chiamate": 6,
+  "costo": 0.473831,
   "esiti": {
-   "ok": 5
+   "ok": 6
   },
-  "durata_tot": 59.8,
+  "durata_tot": 76.8,
   "durata_max": 18.0,
-  "uscita_tot": 4963
+  "uscita_tot": 6405
  },
  "costo_medio_ieri": 0.06043974666666667,
  "prezzo_inizio_giorno": 59893.96962319,
