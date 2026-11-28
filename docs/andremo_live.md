@@ -1210,3 +1210,6 @@ monitor e stato lanciati a mano. **Capito**: il riavvio ha tolto il rumore del v
 nuovo. G1: nessun dato nuovo dopo le 16:23 (il prossimo passo vero è alla mezzanotte: il primo ribilancio del demo con le correzioni, da
 leggere alle 04:17). Ricerca nuova: coda senza idee aperte, niente da lanciare. GitHub: ultime tre corse verdi; monitor e stato lanciati a
 mano; battito della macchina alle 20:02. Niente di nuovo capito in questo giro.
+**28 novembre, 00:25 UTC, giro delle 00:17**: raccolta delle 00:18 (50 articoli nuovi, 24 fonti su 25); controlli in avanti: niente di
+nuovo. G1: il primo ribilancio della mezzanotte con le correzioni dell'audit si legge alle 04:17 (registro e stato). Ricerca nuova: coda
+senza idee aperte. GitHub: ultime tre corse verdi; monitor e stato lanciati a mano; battito della macchina alle 00:04. Niente di nuovo capito.
