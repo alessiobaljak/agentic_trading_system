@@ -3,27 +3,27 @@
  "posizione": null,
  "ordini": [
   {
-   "cid": "taio1795853705968",
+   "cid": "taio1795856489271",
    "lato": "corto",
    "quantita": 0.05,
-   "prezzo": 59760.0,
+   "prezzo": 59640.0,
    "leva": 5,
-   "messo_ms": 1795853730873
+   "messo_ms": 1795856510973
   }
  ],
  "algo": [
   {
-   "algoId": 112,
-   "cid": "tais1795854607984",
+   "algoId": 113,
+   "cid": "tais1795856489271",
    "tipo": "STOP_MARKET",
-   "prezzo": 59910.0,
+   "prezzo": 59720.0,
    "lato": "corto",
-   "messo_ms": 1795854625805
+   "messo_ms": 1795856511922
   }
  ],
  "leva": 5,
- "ultimo_minuto_ms": 1795855260000,
- "ultimo_funding_ms": 1795855314764,
+ "ultimo_minuto_ms": 1795856460000,
+ "ultimo_funding_ms": 1795856511605,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -508,7 +508,7 @@
    "come": "chiusa a mercato"
   }
  ],
- "prossimo_id": 113,
+ "prossimo_id": 114,
  "chiuse": [
   {
    "lato": "corto",
