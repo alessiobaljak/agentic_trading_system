@@ -1,11 +1,29 @@
 {
  "portafoglio": 923.8223895012505,
  "posizione": null,
- "ordini": [],
- "algo": [],
+ "ordini": [
+  {
+   "cid": "taio1795853705968",
+   "lato": "corto",
+   "quantita": 0.05,
+   "prezzo": 59760.0,
+   "leva": 5,
+   "messo_ms": 1795853730873
+  }
+ ],
+ "algo": [
+  {
+   "algoId": 111,
+   "cid": "tais1795853705968",
+   "tipo": "STOP_MARKET",
+   "prezzo": 59910.0,
+   "lato": "corto",
+   "messo_ms": 1795853731845
+  }
+ ],
  "leva": 5,
- "ultimo_minuto_ms": 1795853460000,
- "ultimo_funding_ms": 1795853517731,
+ "ultimo_minuto_ms": 1795854060000,
+ "ultimo_funding_ms": 1795854106562,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -490,7 +508,7 @@
    "come": "chiusa a mercato"
   }
  ],
- "prossimo_id": 111,
+ "prossimo_id": 112,
  "chiuse": [
   {
    "lato": "corto",
