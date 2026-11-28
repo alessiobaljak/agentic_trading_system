@@ -9,8 +9,10 @@
 5. quando il guadagno da mezzanotte, tolte le spese di chiusura, arriva al 3% (al centesimo) chiude tutto; si ferma fino alla
    mezzanotte dopo solo se il 3% c'è ancora sul conto dopo la chiusura (se no chiama subito il modello), e toglie il fermo se
    durante il fermo il conto scende sotto il 3% (versione 8, `REGOLE.md`);
-6. a ogni candela da 15 minuti chiusa chiama il modello (se il tetto di spesa lo permette) ed esegue la decisione accettata, dopo aver
-   riletto il prezzo e ricontrollato la decisione; se lo stop viene rifiutato dopo l'apertura, chiude subito.
+6. chiama il modello quando lo chiede la sua sveglia (un prezzo sopra o sotto, un tempo massimo: dalla versione 9 lo decide lui), quando
+   un suo ordine limite si esegue e a mezzanotte UTC; senza sveglia a ogni candela da 15 minuti chiusa (se il tetto di spesa lo
+   permette); esegue la decisione accettata, dopo aver riletto il prezzo e ricontrollato la decisione; se lo stop viene rifiutato
+   dopo l'apertura, chiude subito.
 
 Dal 26 novembre 2026 (controllo del 26 novembre, `trader_ai/revisioni/2026-11-26-controllo-istruzioni-e-dati.md`): un ordine limite in
 attesa non è un'operazione aperta; un limite eseguito e chiuso fra due controlli si registra (e chiama subito il modello); uscita, modo,
@@ -27,7 +29,6 @@ from __future__ import annotations
 import fcntl
 import hashlib
 import json
-import math
 import os
 import re
 import subprocess
@@ -232,6 +233,8 @@ class Trader:
         richiama_giorno = st.pop("richiama_giorno", None)
         chiusa = None
         a = st.get("aperta")
+        limite_prima = bool(a and a.get("in_attesa"))                     # per la chiamata quando il limite si esegue (versione 9)
+        giorno_nuovo = False
         if a and pos is not None and a.get("inviata"):                     # risposta persa ma ordine eseguito: è nostra
             self._eseguito(a, self._esito_o_niente(a), ora, pos)          # con entrata, ora, spese e 1 R (revisione, 197)
             self.evento(ora, "apertura eseguita anche se la risposta si era persa")
@@ -265,6 +268,7 @@ class Trader:
         # mezzanotte UTC: dopo aver registrato le chiusure trovate in questo passo, così un'operazione chiusa nell'ultimo minuto del
         # giorno entra nel resoconto del suo giorno (revisione del 26 novembre 2026, S6)
         if st.get("giorno") != giorno:
+            giorno_nuovo = bool(st.get("giorno"))
             if st.get("giorno"):
                 self.resoconto(st, st["giorno"], s["conto"], prezzo)
             g = st.get("stat_giorno") or {}
@@ -372,9 +376,18 @@ class Trader:
             return
         st["esaurito"] = False
 
-        motivo = sveglia.motivo(ora, datetime.fromisoformat(st["ultima"]) if st.get("ultima") else None, chiusa)
-        if richiama and not chiusa:
-            motivo = richiama
+        # quando chiamare: le chiusure e i richiami subito; poi la sveglia del modello (versione 9), o senza sveglia le candele da 15
+        # minuti; con la sveglia anche quando un suo ordine limite si esegue e a mezzanotte UTC
+        sv = st.get("sveglia")
+        motivo = sveglia.motivo(ora, datetime.fromisoformat(st["ultima"]) if st.get("ultima") else None, chiusa, sv, prezzo)
+        if not chiusa:
+            aperta_ora = st.get("aperta")
+            if richiama:
+                motivo = richiama
+            elif sv is not None and limite_prima and aperta_ora and not aperta_ora.get("in_attesa"):
+                motivo = f"il tuo ordine limite si è eseguito a {aperta_ora['entrata']:g}"
+            elif sv is not None and giorno_nuovo:
+                motivo = "mezzanotte UTC: giorno nuovo, obiettivo nuovo"
         if motivo is None:
             self.salva(st)
             return
@@ -423,6 +436,11 @@ class Trader:
         if ris.esito is not None:
             st.pop("tetto_ieri", None)                                    # detto una volta, alla prima chiamata del giorno
         r = ris.esito.risposta if ris.esito else None
+        # la sveglia per la chiamata dopo (versione 9): quella della risposta letta, anche se la decisione è stata scartata; senza
+        # risposta (tetto, errore, risposta non letta) nessuna: valgono le candele da 15 minuti
+        st["sveglia"], note_sveglia = sveglia.nuova(ora, prezzo, r.sveglia if r is not None else None)
+        if note_sveglia:
+            st["nota_sveglia"] = "; ".join(note_sveglia)
         if r is not None:
             if r.cambio_approccio:
                 st["cambi_approccio"] = st.get("cambi_approccio", 0) + 1
@@ -483,15 +501,16 @@ class Trader:
         medio = (g["costo"] / g["chiamate"]) if g.get("chiamate") else (st.get("costo_medio_ieri") or 0.06)
         riserva = st.get("ultimo_costo_massimo") or 0.45
         quante = int(max(0.0, rimasto - riserva) / max(medio, 0.001)) + 1
-        alla_mezzanotte = math.ceil((mezzanotte_dopo(ora) - ora).total_seconds() / 900)
-        if quante >= alla_mezzanotte:
-            testo = "bastano fino a mezzanotte UTC con il ritmo di oggi"
-        else:
-            ultima = ora + timedelta(minutes=15 * (quante - 1))
-            testo = (f"circa {quante} rimaste oggi, questa compresa: l'ultima verso le {ultima:%H:%M} UTC; poi niente chiamate fino "
-                     f"a mezzanotte UTC e l'operazione aperta resta solo con il suo stop e il suo obiettivo")
+        minuti = max(0, int((mezzanotte_dopo(ora) - ora).total_seconds() // 60))
+        # il ritmo lo sceglie il modello con la sveglia (versione 9): niente ora dell'ultima, il numero e quanto manca a mezzanotte
+        testo = (f"circa {quante} rimaste oggi con il costo medio di oggi, questa compresa; mezzanotte UTC fra {minuti // 60} h "
+                 f"{minuti % 60:02d}; finite le chiamate, niente chiamate fino a mezzanotte UTC e l'operazione aperta resta solo con il "
+                 f"suo stop e il suo obiettivo")
         if st.get("tetto_ieri"):
             testo += f"; ieri il tetto è finito alle {_hm_iso(st['tetto_ieri'])} UTC e non sei stato chiamato fino a mezzanotte"
+        nota = st.pop("nota_sveglia", None)
+        if nota:
+            testo += f"; la tua sveglia di prima: {nota}"
         return testo
 
     def _salva_messaggio(self, ora: datetime, motivo: str, impronta: str, stabile: str, variabile: str, ris) -> None:
@@ -1079,6 +1098,36 @@ class Trader:
         self.f_fermo.unlink(missing_ok=True)
         self.evento(self.ora(), "riparti")
 
+    def azzera(self, capitale: float = CAPITALE_PROVA, attesa_blocco_s: float = 30.0) -> float:
+        """Riparte da 1.000 USDT (il proprietario, 28 novembre 2026: «per favore riparti da 1000 USD»). Solo sul conto simulato, con
+        il trader fermo a mano («chiudi» prima) e niente di aperto sul conto. Il portafoglio torna al capitale; nello stato la prova
+        riparte da oggi (inizio, conto della mezzanotte, discesa, niente fermo, niente sveglia). La memoria (operazioni, lezioni, note)
+        resta: è quello che il modello ha imparato. Ritorna il conto di prima."""
+        if not hasattr(self.c, "azzera"):
+            raise SystemExit("solo il conto simulato si può rimettere a 1.000 USDT")
+        if not self.fermo_a_mano():
+            raise SystemExit("prima «chiudi»: il trader deve essere fermo a mano")
+        with bloccato(BLOCCO, attesa_blocco_s):
+            if self.c.posizioni_tutte() or self.c.ordini_tutti():
+                raise SystemExit("sul conto c'è ancora qualcosa di aperto: prima «chiudi»")
+            st = self.carica() or self.stato_nuovo()
+            if st.get("aperta"):
+                # «chiudi» con il blocco occupato non l'ha registrata: si perderebbe dalla memoria e dal resoconto (diciannovesima
+                # revisione, problema 268)
+                raise SystemExit("nello stato c'è ancora un'operazione da registrare: rilancia «chiudi», poi «azzera»")
+            ora = self.ora()
+            prima = self.c.azzera(capitale)
+            vecchio = st.get("inizio") or {}
+            st["inizio"] = {"giorno": ora.strftime("%Y-%m-%d"), "ora": ora.isoformat(), "conto": capitale,
+                            "prima": {"giorno": vecchio.get("giorno"), "conto": vecchio.get("conto"), "fine": round(prima, 2)}}
+            st.update(conto_mezzanotte=capitale, massimo_giorno=capitale, discesa_max_giorno=0.0, discesa_dalle=ora.isoformat(),
+                      fermo_fino=None, obiettivo_ora=None, aperta=None, sveglia=None, esaurito=False)
+            for k in ("fermi_tolti", "richiama", "richiama_giorno", "nota_sveglia"):
+                st.pop(k, None)
+            self.evento(ora, f"ripartito da {capitale:.0f} USDT", conto_prima=round(prima, 2))
+            self.salva(st)
+        return prima
+
     def resoconto(self, st: dict, giorno: str, conto_fine: Optional[float] = None, prezzo_fine: Optional[float] = None,
                   conto_inizio: Optional[float] = None, rifatto: bool = False) -> Path:
         """Il resoconto del giorno per il proprietario (REGOLE.md, sezione 7; controllo del 26 novembre 2026, punto 2.6): il risultato
@@ -1087,6 +1136,11 @@ class Trader:
         ops = [o for o in st["operazioni"] if str(o.get("chiusa", "")).startswith(giorno)]
         spesa = self.budget.speso(datetime.fromisoformat(giorno + "T12:00:00+00:00"))
         corrente = not rifatto
+        ini_prova = st.get("inizio") or {}
+        ripartenza = (ini_prova.get("ora") if corrente and ini_prova.get("prima") and ini_prova.get("giorno") == giorno else None)
+        if ripartenza:
+            # il giorno della ripartenza da 1.000 USDT: i numeri da quell'ora (diciannovesima revisione, problema 269)
+            ops = [o for o in ops if str(o.get("chiusa", "")) > ripartenza]
         if conto_inizio is None and corrente:
             conto_inizio = st.get("conto_mezzanotte")
         g = (st.get("stat_giorno") or {}) if corrente else {}
@@ -1098,6 +1152,10 @@ class Trader:
             righe += ["Rifatto il 26 novembre 2026 dopo la ricostruzione della memoria dal conto simulato (controllo del 26 novembre: "
                       "uscite vere e un'operazione che mancava). I numeri che il programma non aveva salvato sono «non registrato».",
                       ""]
+        if ripartenza:
+            fine_prima = (ini_prova.get("prima") or {}).get("fine")
+            righe += [f"Ripartito da {ini_prova.get('conto', 0):.0f} USDT alle {_hm_iso(ripartenza)} UTC (prima il conto era a "
+                      f"{soldi(fine_prima)}): conto e operazioni qui sotto sono da quell'ora; spesa e chiamate di tutto il giorno.", ""]
         risultato = (conto_fine - conto_inizio) if conto_fine is not None and conto_inizio is not None else None
         if risultato is not None:
             righe.append(f"* Conto: da {conto_inizio:.2f} a {conto_fine:.2f} USDT, {risultato:+.2f} ({risultato / conto_inizio * 100:+.2f}%); "
@@ -1208,8 +1266,12 @@ def main(argv: list) -> int:
         trader.chiudi_tutto_e_ferma() if comando == "chiudi" else trader.riparti()
         print(f"[trader_ai] {comando}: fatto")
         return 0
+    if comando == "azzera":
+        prima = trader.azzera()
+        print(f"[trader_ai] conto da {prima:.2f} a {CAPITALE_PROVA:.0f} USDT; il trader resta fermo fino a «riparti»")
+        return 0
     if comando != "gira":
-        print("uso: python -m trader_ai.avvio controlla|gira|chiudi|riparti")
+        print("uso: python -m trader_ai.avvio controlla|gira|chiudi|riparti|azzera")
         return 2
     client = crea_client()
     trader.chiama = lambda system, utente: chiama(client, system, utente)

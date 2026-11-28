@@ -430,6 +430,19 @@ class ContoSimulato:
             self._aggiorna(self.ora_ms())
             self.s["ordini"], self.s["algo"] = [], []
 
+    def azzera(self, capitale: float) -> float:
+        """Il portafoglio torna al capitale (il proprietario, 28 novembre 2026: «riparti da 1000 USD»), solo senza niente di aperto;
+        resta un movimento «azzeramento» con la differenza. Ritorna il portafoglio di prima."""
+        with self._stato():
+            self._aggiorna(self.ora_ms())
+            if self.s["posizione"] is not None or self.s["ordini"] or self.s["algo"]:
+                raise RuntimeError("sul conto simulato c'è ancora qualcosa di aperto")
+            prima = self.s["portafoglio"]
+            self._movimento("azzeramento", capitale - prima)
+            self.s["portafoglio"] = capitale
+            self.s["tolti"] = []
+            return prima
+
     def annulla_ordini(self) -> None:
         """Annulla i soli ordini limite; stop e obiettivo restano (diciassettesima revisione del trader, problema 232). Prima i
         minuti già chiusi, con l'ordine ancora al suo posto, come in `annulla_tutto`."""

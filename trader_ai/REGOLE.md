@@ -1,4 +1,15 @@
-# Le regole del trader AI (versione 8, 26 novembre 2026: le tre decisioni del proprietario; versione 7, 26 novembre 2026: dati e istruzioni corretti dopo il controllo del 26 novembre; versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+# Le regole del trader AI (versione 9, 28 novembre 2026: quando richiamarlo lo decide il modello, e la ripartenza da 1.000 USDT; versione 8, 26 novembre 2026: le tre decisioni del proprietario; versione 7, 26 novembre 2026: dati e istruzioni corretti dopo il controllo del 26 novembre; versione 5, 25 novembre 2026: obiettivo del giorno al 3%; versione 4, 24 novembre 2026, prima di ogni chiamata al modello)
+
+**Versione 9, quando richiamarlo lo decide il modello** (28 novembre 2026). Il proprietario: «perché non facciamo gestire all'AI quando
+vuole fare la chiamata [...] il sistema è come se fosse sempre in ascolto e analizza sempre e poi decide quando è meglio entrare»; poi
+«non voglio limitare il modello nel decidere quando entrare oppure perdere opportunità» e «fai quello che fa in modo di [non] farci
+perdere opportunità». In ogni risposta il modello mette una sveglia (`sveglia`: un prezzo `sopra`, un prezzo `sotto`, `entro_minuti`
+da 1 a 240); il programma guarda il prezzo ogni 30 secondi e lo chiama appena il prezzo ci arriva o il tempo passa, e comunque subito
+quando un'operazione si chiude, quando un suo ordine limite si esegue e a mezzanotte UTC. Fra due chiamate della sveglia passa almeno
+un minuto. Senza sveglia vale la regola di prima, una chiamata a ogni candela da 15 minuti chiusa. Il tetto di 5 dollari al giorno resta.
+Lo stesso giorno: «per favore riparti da 1000 USD»: il comando `azzera` (con il trader fermo a mano) rimette il conto simulato a
+1.000 USDT e fa ripartire la prova da quel giorno; la memoria del modello (operazioni, lezioni, note) resta. E il 3% resta contato sul
+conto della mezzanotte UTC di ogni giorno, cioè sulla fine del giorno prima (non sui 1.000 di partenza).
 
 **Versione 8, le tre decisioni del proprietario** (26 novembre 2026, «sì alle tre decisioni, procedi», sulle proposte 5.1-5.3 del
 controllo): (1) il tetto resta 5 dollari il primo giorno; si misura quanto costa una chiamata a sforzo alto e fino a che ora bastano,
@@ -64,7 +75,10 @@ l'obiettivo (TP), quando chiudere. Quando il conto ha guadagnato **il 3% del con
 **si ferma fino alla mezzanotte UTC** (l'una di notte in Svizzera d'inverno).
 
 ## 2. Quando viene chiamato
-* **A ogni candela da 15 minuti chiusa** (:00, :15, :30, :45 UTC), con o senza un'operazione aperta;
+* **Quando lo chiede la sua sveglia** (dalla versione 9, 28 novembre 2026): il prezzo mark arriva al suo `sopra` o al suo `sotto`, o
+  passano i suoi `entro_minuti` (da 1 a 240); fra due chiamate della sveglia almeno un minuto. Con la sveglia anche **quando un suo
+  ordine limite si esegue** e **a mezzanotte UTC**. Senza sveglia (prima chiamata, risposta non letta, tetto finito): **a ogni candela
+  da 15 minuti chiusa** (:00, :15, :30, :45 UTC), con o senza un'operazione aperta, come fino alla versione 8;
 * **subito quando un'operazione si chiude** (stop, obiettivo o liquidazione sul conto), per decidere cosa fare dopo; dal 26 novembre
   anche quando la chiude il modello stesso o quando annulla un ordine limite (al passo dopo, entro 30 secondi), e quando un limite si
   esegue e si chiude fra due controlli.
@@ -120,6 +134,8 @@ Hyperliquid raccolti dalla ricerca). Il codice di `trader_ai/` non importa nient
 * `approccio`: in una frase, il metodo che sta usando adesso, senza i livelli di prezzo di oggi.
 * `cambio_approccio`: vero se ha deciso di cambiare metodo, con `perche` (entra nelle lezioni).
 * `lezione` (dal 26 novembre): quando è chiamato per un'operazione chiusa, che cosa aveva previsto, che cosa è successo e che cosa cambia.
+* `sveglia` (dalla versione 9): quando richiamarlo, `sopra` e `sotto` (prezzi mark, facoltativi) ed `entro_minuti` (da 1 a 240); un
+  prezzo già superato non si mette e il modello lo legge alla chiamata dopo.
 * `diario`: cosa vede e perché decide così (circa 600 caratteri). Le lunghezze sono indicazioni: l'API non le controlla e il programma
   taglia i testi quando li salva (prima un diario di 601 caratteri buttava via la decisione). La leva è un numero intero.
 * Rifiuto, risposta fuori schema, tagliata o errore del servizio: nessuna operazione nuova; si riprova alla candela dopo.
@@ -176,3 +192,4 @@ chiavi del proprietario → ok del proprietario al primo avvio.
 | 6 | 26 novembre 2026 | il 3% è un obiettivo obbligatorio, non un tetto; a ogni chiamata il bilancio di oggi (direzioni, vinte e perse, prezzo da mezzanotte); sforzo di ragionamento «high» e risposta fino a 16.000 token (il proprietario: «non si deve fermare finché non ha raggiunto il 3% [...] l'AI deve sapere se il primo trade è fallito [...] che cosa hai creato come AI se non pensa») |
 | 7 | 26 novembre 2026 | dopo il controllo del 26 novembre: ordine limite in attesa detto come tale; limite eseguito e chiuso fra due controlli registrato; stop e obiettivo solo per il loro lato; uscite, spese e funding dal conto; memoria ricostruita; scheda di ogni operazione, lezioni che restano, bilancio con il netto diviso; candela in corso, livelli, orari, premio, interesse aperto in 1 e 4 ore; chiamate rimaste invece dei dollari; richiamo dopo un «chiudi»; risposte non lette dette al modello; cache da un'ora e ragionamento riassunto; istruzioni sulla meccanica degli ordini e sulle spese (nessun consiglio di strategia) |
 | 8 | 26 novembre 2026 | le tre decisioni del proprietario: tetto di 5 dollari confermato per il primo giorno, da misurare; obiettivo e «impara» senza maiuscole; il 3% contato dopo le spese di chiusura, e il fermo solo se dopo la chiusura il guadagno sul conto arriva al 3%; 27 novembre (riesame della sedicesima): centesimo sempre, limite in attesa annullato con la chiusura se si esegue, fermo tolto se il conto scende sotto il 3%, stato salvato prima della chiamata |
+| 9 | 28 novembre 2026 | quando richiamarlo lo decide il modello (sveglia a prezzo e a tempo, da 1 a 240 minuti; chiamate anche quando un suo limite si esegue e a mezzanotte), conto simulato rimesso a 1.000 USDT con il comando `azzera`, salvataggio dei dati ogni 10 minuti per la plancia |

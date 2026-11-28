@@ -30,7 +30,8 @@ risultato oscilla, non chi è bravo.
 ## Il piano (versione 3, 23 novembre 2026; le regole sono in `REGOLE.md`)
 Il proprietario sceglie la moneta (BTC) e gli intervalli (5, 15, 30 minuti); il modello decide entrata, leva, stop, obiettivo e uscita,
 con l'obiettivo del 3% al giorno (dal 25 novembre; prima 50 USDT; dal 26 novembre contato dopo le spese di chiusura), poi si ferma
-fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al giorno.
+fino a mezzanotte UTC. Chiamato quando lo chiede la sua sveglia (dal 28 novembre; prima ogni 15 minuti) e a ogni chiusura; tetto di 5
+dollari al giorno.
 1. Fatto: decisione, limiti, tetto, obiettivo, indicatori, messaggio, memoria, collegamento al conto demo suo (`conto_demo.py`), il
    programma che gira ogni 30 secondi (`avvio.py`), l'installazione sulla macchina (`vps/installa.sh`, `vps/salva.sh`); test con conto
    e modello finti. Revisioni del percorso degli ordini in `revisioni/`.
@@ -53,6 +54,10 @@ fino a mezzanotte UTC. Chiamato ogni 15 minuti e a ogni chiusura; tetto di 5 al 
    prima il solo limite e lo stop resta finché non si sa se si è eseguito; il resoconto dice quando il fermo si è tolto; il comando
    «chiudi» registra anche un'operazione chiusa da sola sul conto e non ancora vista; un motivo salvato prima di mezzanotte e
    chiamato dopo lo dice. Revisione: `revisioni/2026-11-27-diciottesima.md`.
+
+7. 28 novembre 2026, versione 9 (`REGOLE.md`): quando richiamarlo lo decide il modello, con una sveglia a prezzo e a tempo (da 1 a
+   240 minuti), più le chiamate quando un suo limite si esegue e a mezzanotte; il conto simulato riparte da 1.000 USDT (`installa.sh
+   azzera`, con il trader fermo a mano); la memoria del modello resta. Revisione: `revisioni/2026-11-28-diciannovesima.md`.
 
 Le versioni 1 e 2 (ogni 4 ore con 12 monete; poi monete e momenti scelti dal modello) sono state scartate prima di ogni chiamata. Fatto
 misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti, per questo il trader gira sulla macchina.

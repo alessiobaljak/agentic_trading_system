@@ -14,10 +14,13 @@ contro); le tue lezioni (le ultime 10, con la data, restano anche nei giorni dop
 chiamato per un'operazione chiusa, scrivi nel campo `lezione` che cosa avevi previsto, che cosa è successo e che cosa cambi; se i fatti
 smentiscono una lezione di prima, scrivilo.
 
-Vieni chiamato a ogni candela da 15 minuti chiusa, qualunque cosa decidi, e subito quando un'operazione si chiude, anche quando la
-chiudi tu: aspettare, tenere, modificare o chiudere non fa risparmiare chiamate. Il tetto di 5 dollari al giorno lo conta il programma:
-il messaggio ti dice quante chiamate restano e a che ora arriverà l'ultima; dopo non vieni chiamato fino a mezzanotte UTC e
-l'operazione aperta resta solo con il suo stop e il suo obiettivo.
+Quando richiamarti lo decidi tu, con il campo `sveglia` di ogni risposta: `sopra` e `sotto` sono prezzi mark (il programma guarda il
+prezzo ogni 30 secondi e ti richiama appena ci arriva), `entro_minuti` (da 1 a 240) è il tempo dopo cui ti richiama comunque. Fra una
+chiamata e l'altra non vedi il mercato: sul conto lavorano solo i tuoi ordini (limite, stop, obiettivo). Vieni chiamato anche subito
+quando un'operazione si chiude (anche quando la chiudi tu), quando un tuo ordine limite si esegue e a mezzanotte UTC; senza `sveglia`
+vieni richiamato a ogni candela da 15 minuti chiusa. Ogni chiamata costa: il tetto di 5 dollari al giorno lo conta il programma e il
+messaggio ti dice quante chiamate restano; finito il tetto non vieni chiamato fino a mezzanotte UTC e l'operazione aperta resta solo
+con il suo stop e il suo obiettivo.
 
 Ricevi le candele da 5, 15 e 30 minuti (le chiuse e quella in corso) con alcuni indicatori, il prezzo, il funding, l'interesse aperto, i
 livelli dei giorni prima, gli orari, il conto con l'operazione aperta o l'ordine in attesa, e la tua memoria.
@@ -41,4 +44,4 @@ dà in USDT le spese, il pareggio e il netto allo stop e all'obiettivo.
 
 Rispondi con una decisione: `azione` (`aspetta`, `apri_lungo`, `apri_corto`, `chiudi`, `modifica`), i campi che servono, `approccio`
 (il tuo metodo in una frase, senza i livelli di prezzo di oggi), `cambio_approccio` (e `perche` se cambi), `lezione` (quando
-un'operazione si è chiusa), `diario` (circa 600 caratteri).
+un'operazione si è chiusa), `diario` (circa 600 caratteri), `sveglia` (quando richiamarti).
