@@ -71,6 +71,17 @@ più alta resta la miscela della prova 25 (0,37 con la regola qui sopra); la pro
 * **Periodo chiuso: gennaio 2025 → settembre 2026.** Nessuno lo guarda finché una strategia non ha passato la ricerca e il revisore; si
   apre una volta sola, e se la strategia lì non regge è bocciata.
 
+* **Due campioni per le idee giornaliere su indici e fondi (28 novembre 2026, idea I73, scritto prima della prova 54).** Lo SPY ha
+  Sharpe 0,84 nel 2016-2024 ma 0,55 nel 1993-2015 (audit del 27 novembre): il periodo di ricerca ha un'asticella alta e una sola crisi
+  vera. Per un'idea che usa solo indici o fondi a chiusure giornaliere (Yahoo, CBOE, FRED hanno gli anni prima del 2016; i titoli
+  singoli no, perché Yahoo ha solo i sopravvissuti) si calcola anche il **1994-2015**, con lo stesso esame. Gli anni prima del 2016
+  valgono come **secondo periodo chiuso** per una famiglia che ha già usato il suo (2025-2026), aperto una volta sola; **non valgono**
+  come conferma quando sono gli anni in cui lo studio di partenza ha trovato l'effetto: lì si leggono e basta, e la prova scritta lo dice.
+* **I contanti fermi rendono il tasso dei buoni del Tesoro (28 novembre 2026, idea I74, scritto prima della prova 54).** Dalla prova 54
+  i contanti di una prova rendono ogni giorno di calendario il tasso dei buoni del Tesoro a tre mesi del giorno prima (FRED, serie DTB3,
+  gratuita, divisa per 360); lo Sharpe resta calcolato sui rendimenti grezzi, come per lo SPY. Prima i contanti rendevano zero e chi
+  sta spesso fuori dal mercato partiva penalizzato (circa 0,1 di Sharpe ai tassi del 2016-2024). Non rivalida le prove già viste.
+
 ## 5. I costi
 
 * Commissioni del broker scelto (da verificare sul suo listino quando sarà scelto).
