@@ -4,7 +4,7 @@ Memoria del revisore `live-path-reviewer` (istruzioni in `.claude/agents/live-pa
 invocazione, insieme a `LIVE_PATH_MAP.md`.
 
 ## File
-- `LIVE_PATH_MAP.md` — mappa e invarianti con file:riga (sezione 14: il conto vero, di nuovo G1 dal 28 nov; sezione 15: il trader AI, `bcf284d`).
+- `LIVE_PATH_MAP.md` — mappa e invarianti con file:riga (sezione 14: il conto vero, di nuovo G1 dal 28 nov; sezione 15: il trader AI, versione 9 `5aaf950`).
 - `REVIEW_LOG.md` — una riga per revisione; voci aperte e ultime 10. `ARCHIVE.md` — revisioni più vecchie, chiuse.
 - `reports/` — un rapporto completo per revisione.
 
@@ -13,17 +13,23 @@ invocazione, insieme a `LIVE_PATH_MAP.md`.
   APPROVE con una condizione (test del 274 nel commit, testo nel rapporto; impronte `demo_binance.py` 3cac1aeb, `test_conto_vero_g1.py`
   fdc96df8, `docs/conto_vero.md` dfd87e2d). 269 chiuso nel codice; nuovi 274 Medio, 275 Basso. Prima: `reports/2026-11-28-conto-vero-G1.md`
   (APPROVE con condizioni per il commit spento, REQUEST CHANGES per l'accensione; 268-273; tre test del 270 aggiunti in HEAD).
+- **Ultima del trader AI** (stesso giorno, prima: `5aaf950` alle 08:27 UTC; il riesame del 269 è su `3c0df1b`, 08:46): diciannovesima e riesame
+  (`trader_ai/revisioni/2026-11-28-diciannovesima.md`; area `trader_ai/`, diciannove revisioni e quattro riesami dal 23 nov): APPROVE con
+  condizioni per la versione 9 (sveglia decisa dal modello, «azzera» a 1.000); riesame: 268, 269 chiusi, aperti 270 e 274 in parte, 271-273,
+  275 Bassi; md5 `avvio.py` 3e7b1218, `messaggio.py` 4970115b, `sveglia.py` 6d281f39, uguali in `5aaf950`. Non ancora caricata: gira la 8
+  dal 28 nov 06:33 UTC (`5b7dde6e`, codice uguale a `bcf284d`); la 9, «azzera» e «riparti» con l'ok di Alessio e la procedura del riesame.
 - **Bot**: `16c5712` committato e riavviato il 27 nov (risposta 0782); aperti 217, 221 Bassi.
 - **Conto vero, per l'accensione**: 54 (ii) Alto; 70, 268, 270, 274 Medi; 78, 271-273, 275, 217, 221 Bassi; regole di Firebase pubblicate e pulsanti
   provati; la «solo riduzione» sotto il minimo vista sul demo; rifare S1b, S2b, S4 (`giro12nov/test_prove_12nov.py`) e `mutazioni2.py`;
   revisione nuova sul commit dell'accensione.
-- **Numeri dei problemi**: una serie sola fino al 202 (187 no). Il 26-27 nov due serie si sono sovrapposte e non si rinumerano: trader AI
-  203-267 (`trader_ai/revisioni/`, 260-267 solo in `trader_ai/README.md`), crypto stato e segreti 203-207, 218 e bot 210-217, 219-221
-  (`reports/2026-11-27-*.md`). Fra 203 e 267 un numero si cita con il rapporto. **Dal 28 nov serie unica da 268; il prossimo è 276.**
-- Trader AI (area `trader_ai/`): diciotto revisioni e tre riesami in `trader_ai/revisioni/` (23-27 nov); versione 8 = `bcf284d`,
-  APPROVE con condizioni alla diciottesima; fermo a mano dal 26 nov, riavvio con «riparti» e l'ok di Alessio.
-- Voci aperte: 9 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero 12 nov fino all'accensione; trader AI settima;
-  trader AI diciottesima; conto vero su G1 del 28 nov e riesame del 269; il resto chiuso o superato).
+- **Numeri dei problemi**: una serie sola fino al 202 (187 no). Due sovrapposizioni, che non si rinumerano: il 26-27 nov trader AI 203-267
+  (`trader_ai/revisioni/`, 260-267 solo in `trader_ai/README.md`), crypto stato e segreti 203-207, 218 e bot 210-217, 219-221
+  (`reports/2026-11-27-*.md`); il 28 nov **268-275 in tutte e due**: trader AI nella diciannovesima e nel suo riesame, crypto nel conto vero su
+  G1 e nel riesame del 269 (`reports/2026-11-28-conto-vero-G1*.md`). Fra 203 e 275 un numero si cita sempre con il suo rapporto. **I nuovi
+  partono da 276, per tutte le aree.**
+  Proposta (da decidere; non per i rapporti già scritti): dal 276 una lettera dell'area davanti al numero, C crypto e T trader AI (C276, T276).
+- Voci aperte: 8 (proposta mai applicata; primo avvio; correzioni 25-31; conto vero 12 nov fino all'accensione; trader AI settima;
+  trader AI diciannovesima e riesame; conto vero su G1 del 28 nov; riesame del 269; il resto chiuso o superato).
 
 ## Promemoria
 - Prove a mano con il Binance finto di `tests/test_demo_binance.py` (`_Demo`; il conto vero con `_Vero`, `_conto`, `_Fb`, `_riga` di

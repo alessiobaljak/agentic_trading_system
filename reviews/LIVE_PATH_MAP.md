@@ -1,16 +1,15 @@
 # Mappa del percorso degli ordini
 
-Prima versione: 7 nov 2026 (`b29f5713`, primo avvio, `reports/2026-11-07-primo-avvio.md`). **Riscritta l'8 nov sul codice committato
-`1a8522f`** (fase 1 del conto vero, approvata al quarto giro, in funzione dal riavvio delle 19:02 UTC). Righe di `demo_binance.py` nelle
-sezioni 7-8 per `1a8522f` (nel `ff89531` `_da_fermo` è a `:974`, `protezioni` a `:951`). Fase 2: `ff89531` (uguale alle copie riviste; al
-12 nov non ancora caricata dal bot, riavvio con l'ok di Alessio); versione approvata su Firebase (12 nov, poi `a267c40`, `da91124`): sezione 14.
+Prima versione: 7 nov 2026 (`b29f5713`, primo avvio, `reports/2026-11-07-primo-avvio.md`). **Riscritta l'8 nov sul `1a8522f`** (fase 1
+del conto vero, quarto giro, in funzione dal riavvio delle 19:02 UTC); righe di `demo_binance.py` delle sezioni 7-8 di `1a8522f` (nel
+`ff89531` `_da_fermo` `:974`, `protezioni` `:951`). Fase 2 `ff89531` (contenuta in `16c5712`, in funzione); approvazione su Firebase: sezione 14.
 
 ## 1. Chi manda ordini (grep del 7 nov; ricontrollato l'8 nov sulla fase 2: nessun altro client firmato, python-binance solo in `scripts/verify_keys.py`)
 
 | Parte | Dove | Verso dove | Acceso da |
 |---|---|---|---|
 | G1 sul conto demo | `bot/portafoglio/demo_binance.py` (`DemoG1`, `ClienteDemo`) | solo `demo-fapi.binance.com` | file `ops/demo_binance_acceso` + chiavi `BINANCE_DEMO_*` |
-| Conto vero (**spento**; F5 dal 25 nov, `03ee29e`; dal 28 nov, non committato: **di nuovo G1**, sezione 14) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + codice approvato (tag; dal 12 nov, non committato: Firebase) + saldo USDT leggibile (dal 28 nov) + chiavi (sezione 14) |
+| Conto vero (**spento**; F5 dal 25 nov, `03ee29e`; dal 28 nov, `34989ea` e `b9959ac`: **di nuovo G1**, sezione 14) | `bot/portafoglio/conto_vero.py` (`ContoVeroG1`, `ClienteVero`) | solo `fapi.binance.com` | interruttore + `DRY_RUN` falso + codice approvato (tag; dal 12 nov, non committato: Firebase) + saldo USDT leggibile (dal 28 nov) + chiavi (sezione 14) |
 | Vecchio esecutore, ramo reale | `bot/execution/executor.py` | **nessuno: bloccato dal `9f47972c`** | `_init_binance` non crea il client e rimette `dry_run` vero (`executor.py:244-254`) |
 
 Solo lettura, nessun ordine: i paper `bot/portafoglio/f5.py` (F5, G1, G11, G1N) e `eventi.py` (dati pubblici da `fapi.binance.com`,
@@ -26,7 +25,7 @@ al massimo 12 per stato, fuori dalle 23:50-01:45, stop al primo 429/418 (`state_
 
 `main()` (`bot/main.py:2656-2659`): prima `controlla_avvio` (`config.py:787-800`), poi `TradingBot.run` (`main.py:2514`), un giro ogni 30
 secondi. In ordine: vecchio bot (scansione, `trading_cycle`), battito `/bot_status/heartbeat`, poi ognuno nel suo `try`: paper F5, G1,
-G11, G1N, demo, conto vero, eventi. Dal 27 nov (`16c5712`): F5, conto vero, G1, demo, G11, G1N, eventi; **28 nov (non committato)**: F5,
+G11, G1N, demo, conto vero, eventi. Dal 27 nov (`16c5712`): F5, conto vero, G1, demo, G11, G1N, eventi; **28 nov (`34989ea`)**: F5,
 G1, conto vero, demo, G11, G1N, eventi (`main.py:2739-2766`); vecchio bot saltato con `ops/gate_fermo` e niente aperto nel vecchio paper (`:2560-2608`). Il demo aspetta degli
 scaricamenti dei paper (alla mezzanotte minuti); ogni chiamata a Firebase può durare fino a 120 s (nessun `httpTimeout`,
 `bot/core/firebase_client.py:420-425`). Unico avvio: `python -m bot.main`. Servizio (secondo `docs/hetzner_setup.md:117-118`):
@@ -39,9 +38,8 @@ scaricamenti dei paper (alla mezzanotte minuti); ogni chiamata a Firebase può d
   (stato, dashboard): dal riavvio col codice del 27 nov a ogni avvio e ogni ora col vecchio fermo (`main.py:1101-1104`, `:2603`).
 - Tarature (`carica_tuning`, `config.py:34-52`): tutto **tranne** `DRY_RUN`, `BINANCE_TESTNET`, `BACKTEST_PARITY` (`:30`) e i nomi con
   KEY, SECRET, TOKEN, PASSWORD, CREDENTIAL, FIREBASE (`:31`). Elenco di vietate, non di ammesse.
-- Avvio: in `1a8522f` (in funzione) `controlla_avvio` **rifiuta l'avvio con `DRY_RUN` falso** (problema 29; ferma anche il demo: 35).
-  Da `ff89531` (`config.py:791-813`) con `DRY_RUN` falso il bot parte sempre (senza interruttore il conto vero fa solo le protezioni),
-  salvo `BACKTEST_PARITY` vero: 35 chiuso al riavvio che carica `ff89531`.
+- Avvio (`controlla_avvio`, `config.py:791-813`, da `ff89531`, in funzione con `16c5712`): con `DRY_RUN` falso il bot parte sempre (senza
+  interruttore il conto vero fa solo le protezioni), salvo `BACKTEST_PARITY` vero (rifiutato); fino a `1a8522f` lo rifiutava (29; 35 chiuso).
 - Con `DRY_RUN` falso nel vecchio sistema (verificato l'8 nov): esecutore sempre in prova (`executor.py:244-254`); riconciliatore acceso
   (`reconciler.py:230-239`, `main.py:2515`) ma senza client «irraggiungibile» (`main.py:1204-1205`) → solo `exchange_down`/`wait`, nessuna azione
   (`reconciler.py:93-100`, `main.py:1235-1255`); Telegram «🔴 LIVE» sulle operazioni del vecchio paper (`main.py:1442`, `:1488`, `:1548`,
@@ -129,8 +127,8 @@ lista; resto = obiettivo − posizione vera, `id_mercato` fisso (`:257-262`) con
 **Errori**: `ClienteDemo.chiedi` (`:446-487`): `timeout=15`, finestra 5 s, 429/418 ritentati e poi `LimiteBinance`, -1021 con l'ora di
 Binance riletta una volta (`:470`), errori senza firma (`senza_firma` `:123-127`). Nessun avviso sul telefono nel modulo.
 **27 nov (non committato)**: aperture e aumenti saltati sulle monete «non disponibili sul demo» (stato ≠ TRADING, o -1121/-4140 negli ultimi
-7 giorni; chiusure e riduzioni partono, `demo_binance.py:1608`; conto vero mai); allarme `ordini_rifiutati`; `/demo_binance/ore`; telefono.
-Telefono: per tipo, uno all'ora; **28 nov (non committato)**: `telefono` solo a invio riuscito, segnato dal giro (`demo_binance.py:790-869`),
+7 giorni; chiusure e riduzioni partono (sulle monete non disponibili), `demo_binance.py:1608`; conto vero mai); allarme `ordini_rifiutati`; `/demo_binance/ore`; telefono.
+Telefono: per tipo, uno all'ora; **28 nov (`34989ea`)**: `telefono` solo a invio riuscito, segnato dal giro (`demo_binance.py:790-869`),
 fermo e stop sempre (`:156`), 429 oltre 30 minuti una volta (`:1281-1311`); monitor per tipo, 429 dopo 30 minuti (`monitor.py:135-224`).
 **28 nov, minimi (demo e conto vero)**: sotto il valore minimo parte «solo riduzione» solo la **chiusura intera** (`ordine_saltato` `:347-355`,
 `:382`, `:407`, resto `:2053`; riduzioni saltate, 269 chiuso, 3cac1aeb); inversione su moneta in sola riduzione → solo la chiusura (`:1813-1860`).
@@ -147,8 +145,6 @@ fermo e stop sempre (`:156`), 429 oltre 30 minuti una volta (`:1281-1311`); moni
 | Demo, da fermo | conto rimasto aperto, ordini rimasti | sì | richiuso ogni minuto, allarme al terzo tentativo, anche con la lettura degli ordini in errore |
 | Conto vero (fase 2) | RTDB `/commands/conto_vero_chiudi_tutto`, file `ops/conto_vero_chiudi_tutto`, stop | file sì | come il demo; anche spento, se acceso una volta e non vuoto (53); pulsante in dashboard e regola nel repository dal 12 nov (non committati; regole non pubblicate) |
 | Vecchio bot | RTDB `/commands/kill_switch` e `/commands/bot_state` (`kill_switch.py:40-59`) | **no** | valutato dopo tre uscite anticipate del giro; chiude solo posizioni di prova |
-
-Con `DRY_RUN` falso il bot committato non parte: nessun pulsante del demo funziona (Problema 35).
 
 ## 9. Vecchio ramo reale (`bot/execution/executor.py`): **bloccato dal `9f47972c`**
 `_init_binance` (`:244-254`) non crea il client e rimette `dry_run` vero; test `tests/test_sicurezza_avvio.py`. Il codice sotto resta,
@@ -182,7 +178,7 @@ impostato, nessun identificativo d'ordine. Tutte le chiamate passano da `self.dr
 (fase 2, secondo giro: 790 righe), `tests/test_sicurezza_avvio.py`, `tests/test_g1_poco_capitale.py`, `tests/test_demo_contro_paper.py`,
 `tests/test_paper_f5.py`, `tests/test_risk.py`, `tests/test_sizing.py`, `tests/test_kill_switch_levels.py`, `tests/test_reconciler.py`,
 `tests/test_live_orders.py`, `tests/test_execution.py`, `tests/test_strategie_restano_accese.py`; trader AI `trader_ai/tests/` (sezione 15).
-Suite intera il 28 nov (conto vero su G1, non committato): `3131 passed` in 175 s; nuovo `tests/test_conto_vero_g1.py` (32).
+Suite intera il 28 nov (conto vero su G1, `34989ea`): `3131 passed` in 175 s; nuovo `tests/test_conto_vero_g1.py` (32).
 
 ## 13. Punti noti aperti
 Demo (`1a8522f`): Bassi 51 («riparti» controllato prima della richiusura) e 52 (tentativi che non crescono con un «riparti» in attesa);
@@ -226,14 +222,14 @@ Rapporti: `reports/2026-11-08-fase2-conto-vero*.md`, `reports/2026-11-12-conto-v
   disattivati da spento), dati da `lib/strategie.ts:259-268`.
 - Test di guardia del 54 (secondo giro): nessun file fuori da conto vero, test e dashboard nomina i quattro comandi; non vede la costante importata (78).
 - Problemi aperti: 54 (ii) Alto; 70, 268 (dashboard dice F5), 269, 270 Medi; 78, 271-273 Bassi. Chiusi: 53, 55, 57, 59, 60 (nel codice), 61-68, 71-77; 56, 58, 69 come scelto.
-- 25-28 nov: F5 (`03ee29e`, 194 ore, il lunedì; 180-182 superati). **28 nov (non committato, `reports/2026-11-28-conto-vero-G1.md`)**: di nuovo
+- 25-28 nov: F5 (`03ee29e`, 194 ore, il lunedì; 180-182 superati). **28 nov (`34989ea`, `reports/2026-11-28-conto-vero-G1.md`)**: di nuovo
   **G1** (`conto_vero.py:152-155`: `paper_g1.json`, 26 h). **Capitale** = min(saldo USDT `walletBalance` della riga USDT letto dopo le chiusure,
   300, file facoltativo) a ogni fase nuova (`:874-889`); saldo illeggibile o ≤ 0 → niente ordini (`:919-921`). Fase nuova (`_fase_dal_saldo`
   `:625-662`): prima accensione, prelievo, numero nuovo o file tolto; mai dopo stop e «riparti». **Prelievo** (riga USDT, `:956-971`): niente
   ordini subito, alla decisione dopo chiude tutto e riparte dal saldo; prelievo e valore oltre 600 non fermano la fase nuova, gli altri motivi
   sì (`:941`, `:980-999`, `blocco_duro`); pavimento tenuto con il prelievo (`:800-809`). Senza test: 270.
 
-## 15. Il trader AI (area `trader_ai/`, dal 23 nov; versione 8 committata come `bcf284d`, approvata alla diciottesima; righe di `bcf284d`)
+## 15. Il trader AI (area `trader_ai/`, dal 23 nov; versione 9 = `5aaf950`, diciannovesima e riesame; righe di `bcf284d`, della 9 nei suoi punti)
 Programma suo sulla macchina (`trader_ai/vps/installa.sh`); dati in `/opt/trader-ai-dati` (solo `trader_ai/avanti` va in git, `vps/salva.sh`),
 messaggi interi in `.../trader_ai/messaggi_modello` (`avvio.py:59-60`, `:123`, `:1206`). Dal 24 nov **conto simulato** (`conto_simulato.py`:
 solo GET pubblici su `fapi.binance.com`, nessuna chiave, `:42`, `:62-78`); demo suo pronto ma spento (`conto_demo.py`: solo
@@ -255,10 +251,17 @@ solo GET pubblici su `fapi.binance.com`, nessuna chiave, `:42`, `:62-78`); demo 
   fermo tolto se durante il fermo il conto scende sotto il 3% senza niente di aperto (`:290-308`); limite in attesa annullato come dal
   modello (`:314-321`); stato e motivo salvati dopo ogni chiusura del programma (`_ricorda` `:144-156`, `:260-263`, `_chiudi_ora`
   `:751-760`); nessuna perdita massima; tetto di 5 dollari prima di ogni chiamata (`costi.py:22`, `giro.py:33-44`);
+* quando chiamare (versione 9): sveglia in ogni risposta (`schema.py:17-21`, `:42-43`), salvata con la risposta letta anche se scartata,
+  tolta senza (`avvio.py:438-443`); prezzo mark sopra o sotto, 1-240 minuti, almeno uno (`sveglia.py:21-22`, `:53-74`); in più limite
+  eseguito e mezzanotte (`avvio.py:383-390`; buco 271); senza sveglia ogni candela da 15 minuti; chiusure e richiami subito; freno solo il tetto;
+* «azzera» (`avvio.py:1101-1129`, `conto_simulato.py:433-445`, `installa.sh:91-94`): solo simulato, fermo a mano, niente di aperto (due
+  controlli), sotto il blocco, rifiutato con un'operazione da registrare nello stato (268); inizio, mezzanotte e discesa nuovi, memoria tenuta;
+  quel giorno resoconto e messaggio dalla ripartenza (`messaggio.py:211-214`, `:232-234`, `:348-353`; 269); restano 270 in parte, 273, 275;
 * esito dal conto (`conto_simulato.py:310-331`; demo `conto_demo.py:162-182`, solo «eseguito»); chiusura registrata anche con l'annullamento
   in errore (`avvio.py:666-670`); uscita stimata corretta (`:673-693`); memoria ricostruita una volta senza l'operazione aperta (201).
-Aperti (elenco in `trader_ai/README.md`): Bassi 173, 175, 200, 201, 240-245, 260-267; Medi solo demo 198, 199. Prima di un demo anche
-212 misurato, 234, 242, la prova di `allOpenOrders` e una revisione nuova; prima dei soldi veri 146 e 147 (settima) e una revisione nuova.
+Gira la 8 (`5b7dde6e`, 28 nov 06:33 UTC); la 9 con l'ok di Alessio (procedura del riesame). Aperti (`README.md`; i 268-275 del trader non
+sono quelli del conto vero): Bassi 173, 175, 200, 201, 240-245, 260-267, 270 e 274 in parte, 271-273, 275; Medi solo demo 198, 199. Prima
+di un demo 212 misurato, 234, 242, la prova di `allOpenOrders`, una revisione nuova; prima dei soldi veri 146, 147 (settima), una revisione nuova.
 
 ## Storia degli invarianti
 - 7 nov 2026: leva 10 e perdita giornaliera dalla dashboard: REQUEST CHANGES, niente cambiato; primo avvio: invarianti del demo mappati.
@@ -267,34 +270,31 @@ Aperti (elenco in `trader_ai/README.md`): Bassi 173, 175, 200, 201, 240-245, 260
   segreti; vecchio ramo reale bloccato.
 - 7 nov, `5d5d26ad`: annullo rifiutato → giro fermo; niente mercato con ordini aperti; «riparti» a file; avvio rifiutato con `DRY_RUN`
   falso in ogni caso. `013f9426` (APPROVE): lettura degli ordini in errore da fermo non ferma le chiusure; allarme degli ordini bloccati.
-- 8 nov, fase 1 (quattro giri, APPROVE al quarto; **committata come `1a8522f`**, riavvio delle 19:02 UTC con l'ok del proprietario):
-  limiti nuovi del demo come costanti con test; 429/418 con attese; massimo dello stop anche su Firebase; stop anche al 65% del capitale
-  della fase; fermo salvato prima delle chiusure; «riparti» a conto vuoto, sopra il pavimento e con la riapertura alla decisione di G1
-  dopo; capitale non oltre il saldo; chiusure in 20 pezzi; -1021 con l'ora di Binance. Limiti fissi invariati.
-- 8 nov, fase 2 non committata (REQUEST CHANGES): **invariante cambiato**, con `DRY_RUN` falso il bot parte se c'è l'interruttore del
-  conto vero; nuovi: G1 sul conto vero con quattro condizioni, freno del cliente, limiti propri con test. Limiti fissi invariati.
-- 8 nov, fase 2 secondo giro (REQUEST CHANGES): con `DRY_RUN` vero ordini «solo riduzione» al conto vero se acceso una volta e non
-  vuoto; con `DRY_RUN` falso il bot parte sempre; codice approvato su tutti i file caricati; valore = capitale + redditi; «riparti»
-  del conto vero solo da file; demo: stato salvato dopo `parti_da_zero`. Limiti fissi invariati.
-- 8 nov, fase 2 terzo giro (APPROVE per il commit spento): stop spento prima della prima accensione; blocco per prelievo con
-  tolleranza e tre letture; redditi con ritardo e sovrapposizione. Limiti fissi invariati.
-- 12 nov (non committato; APPROVE per il commit spento, REQUEST CHANGES per l'accensione): codice approvato dal tag a un commit su
-  Firebase scritto dalla dashboard, letto davvero ogni minuto (Firebase muto = non approvato), valido senza riavvio; «riparti» del
-  conto vero solo dalla dashboard in due passi, nessun file; l'agente non porta più il tag. Limiti fissi invariati.
-- 12 nov, `a267c40` e `da91124`: con Firebase muto vale l'approvazione letta davvero negli ultimi 10 minuti; da spento ogni 10 minuti.
+- 8 nov, fase 1 (APPROVE al quarto giro, **`1a8522f`**, riavvio 19:02 UTC): limiti del demo come costanti con test; 429/418 con attese; massimo dello
+  stop anche su Firebase; stop anche al 65% del capitale della fase; fermo salvato prima delle chiusure; «riparti» a conto vuoto, sopra il pavimento,
+  riapertura alla decisione di G1 dopo; capitale non oltre il saldo; chiusure in 20 pezzi; -1021 con l'ora di Binance. Limiti fissi invariati.
+- 8 nov, fase 2 (tre giri: REQUEST CHANGES, REQUEST CHANGES, APPROVE per il commit spento): **invariante cambiato**, con `DRY_RUN` falso il bot parte,
+  prima con l'interruttore del conto vero, dal secondo giro sempre; nuovi: G1 sul conto vero con quattro condizioni, freno del cliente, limiti propri
+  con test; con `DRY_RUN` vero ordini «solo riduzione» al conto vero se acceso una volta e non vuoto; codice approvato su tutti i file caricati;
+  valore = capitale + redditi; «riparti» del conto vero solo da file; demo: stato salvato dopo `parti_da_zero`; al terzo giro stop spento prima della
+  prima accensione, blocco per prelievo con tolleranza e tre letture, redditi con ritardo e sovrapposizione. Limiti fissi invariati.
+- 12 nov (`a267c40`, `da91124`; APPROVE per il commit spento, REQUEST CHANGES per l'accensione): codice approvato dal tag a un commit su
+  Firebase scritto dalla dashboard, letto davvero ogni minuto, valido senza riavvio; Firebase muto: vale la lettura vera degli ultimi 10 minuti;
+  da spento ogni 10 minuti; «riparti» del conto vero solo dalla dashboard in due passi, nessun file; l'agente senza tag. Limiti fissi invariati.
 - 12 nov, notte (REQUEST CHANGES per l'82; poi `3624baa`): funding dei paper per moneta; il demo legge solo `ultimo_lunedi` e `pesi`. Invariati.
 - 14 e 17 nov (APPROVE; `96c6094`, `d5c6708`): lo «stato» legge anche `positionRisk` e `income` FUNDING_FEE del demo. Ordini invariati.
 - 25 nov (non committato; secondo giro APPROVE per il commit): **invarianti cambiati** del conto vero: fonte della decisione da G1 (ogni giorno) a
   F5 (ogni lunedì); età massima da 26 a 194 ore; attese fino al lunedì (fino a 7 giorni); posizioni tenute 7 giorni con i limiti dei
   pesi controllati solo al lunedì. Demo e limiti fissi invariati. Secondo giro: nessun invariante nuovo; strategia dichiarata da una costante di classe.
-- 26 nov, trader AI versione 7 (`c52fbab`, `82baadc`): riesami APPROVE con condizioni per il simulato (188 e seguenti). Valori invariati.
-- 26-27 nov, trader AI versione 8 (`bcf284d`; dalla sedicesima alla diciottesima, APPROVE con condizioni): **invarianti cambiati**, il 3%
-  dopo le spese di chiusura e al centesimo; fermo solo con il 3% letto sul conto dopo la chiusura, se no si continua; fermo tolto se il
-  conto ci scende sotto durante il fermo. **Rafforzato**: lo stop resta mentre si annulla un limite; il «chiudi» del trader registra le
-  chiusure non viste. Tetto di 5 dollari, leva, stop obbligatorio e limiti fissi invariati.
-- 27 nov (non committato, APPROVE con condizioni): demo, aperture saltate sulle monete non disponibili (chiusure no); paper, finestra degli ordini
-  limite dal minuto dopo i prezzi; giro F5, conto vero, G1, demo, G11, G1N, eventi; vecchio bot fermo con `ops/gate_fermo`; telefono. Limiti fissi invariati.
-- 27 nov, stato e agente (committati in `e824f22`; secondo giro APPROVE con condizioni): prezzi mark pubblici nello stato, oscuramento più forte. Ordini invariati.
-- 27 nov, secondo giro del bot (APPROVE con condizioni): monitor senza il 429 e il riacceso entro l'ora; `DRY_RUN` scritto all'avvio. Ordini invariati.
-- 28 nov (non committato; APPROVE con condizioni per il commit spento): **invarianti cambiati**: conto vero su G1 (26 h), capitale dal saldo
-  USDT con tetto 300, prelievo → fase nuova alla decisione dopo; demo e conto vero, chiusure e riduzioni sotto il minimo «solo riduzione». Limiti fissi invariati.
+- 26-27 nov, trader AI: versione 7 (`c52fbab`, `82baadc`; APPROVE con condizioni per il simulato, 188 e seguenti) a valori invariati; versione 8
+  (`bcf284d`; sedicesima-diciottesima, APPROVE con condizioni): **invarianti cambiati**, il 3% dopo le spese di chiusura e al centesimo; fermo solo
+  con il 3% letto sul conto dopo la chiusura, se no si continua; fermo tolto se il conto ci scende sotto durante il fermo. **Rafforzato**: lo stop
+  resta mentre si annulla un limite; il «chiudi» del trader registra le chiusure non viste. Tetto, leva, stop obbligatorio e limiti fissi invariati.
+- 27 nov (`16c5712`, APPROVE con condizioni): demo, aperture saltate sulle monete non disponibili (chiusure no); paper, ordini limite dal minuto dopo
+  i prezzi; giro F5, conto vero, G1, demo, G11, G1N, eventi; vecchio bot fermo con `ops/gate_fermo`; telefono; monitor senza il 429 e il riacceso
+  entro l'ora; `DRY_RUN` scritto all'avvio; stato e agente (`e824f22`): prezzi mark pubblici, oscuramento più forte. Limiti fissi e ordini invariati.
+- 28 nov, trader AI versione 9 (`5aaf950`; diciannovesima e riesame, APPROVE con condizioni): **invariante cambiato**, il ritmo delle chiamate
+  lo decide il modello (1-240 minuti, almeno uno; limite eseguito e mezzanotte), freno solo il tetto di 5 dollari; **nuovo** il conto simulato
+  rimesso a 1.000 USDT con il fermo a mano («azzera»). Stop, leva, 3%, «chiudi» e limiti fissi invariati.
+- 28 nov (`34989ea` e `b9959ac`; APPROVE con condizioni per il commit spento): **invarianti cambiati**: conto vero su G1 (26 h), capitale dal saldo
+  USDT con tetto 300, prelievo → fase nuova alla decisione dopo; demo e conto vero, sotto il minimo solo la chiusura intera con «solo riduzione» (`b9959ac`, 269). Limiti fissi invariati.
