@@ -930,7 +930,6 @@
   }
  ],
  "note": [
-  "28/11 03:00 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60380. Il prezzo mark è 59940. La 15m delle 02:45 ha fatto un minimo a 59908 e ha chiuso a 59940 con il 49% di acquisti: le vendite della 02:30 (26%) non hanno avuto seguito. Le due 5m delle 02:50 e 02:55 hanno il 56% di acquisti, ma l'istogramma MACD 5m è fermo intorno a -35. Ci sono segnali deboli: la 30m delle 02:30 chiude con il 35% di acquisti, sotto l'EMA21 30m (60060), e l'istogramma MACD 30m cala per la prima volta (92→80). L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870, e lo sweep 59803 regge. Il prezzo sta sopra la media di Bollinger 15m (59929) e vicino all'EMA21 15m (59982). Non stringo lo stop, che s…",
   "28/11 03:15 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60380. Il prezzo mark è 59966. La 15m delle 03:00 chiude a 59967 con il 48% di acquisti e volume 0,82x. È stata respinta a 60000, sul livello rotto, ma il minimo 59920 sta sopra quello della 02:45 (59908). Le vendite della 02:30 non hanno seguito. Il prezzo sta fra l'EMA21 15m (59981) e la media di Bollinger (59945). Sul 5m l'istogramma MACD migliora da quattro candele (-34,5 → -24,4) e la 5m delle 03:10 ha il 68% di acquisti. Restano due punti deboli: il VWAP (60036) e l'EMA21 5m (60022) fanno da tetto, e l'istogramma MACD 30m cala. L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870 e lo sweep 59803 regge. Non strin…",
   "28/11 03:30 . Il lungo da 60000 è sotto pressione: mark 59884. La 15m delle 03:15 chiude sul minimo con il 39% di acquisti, sotto VWAP (60030), EMA21 15m e media di Bollinger. Sul 5m i massimi scendono (60000, 59967, 59951, 59924) e l'RSI è a 36. L'invalidazione però non è scattata: nessuna 15m ha chiuso sotto 59870 e lo sweep 59803 regge. Chiudere costa -8,19 contro -12,89 allo stop; con il prezzo appoggiato al supporto e l'istogramma MACD 30m ancora positivo, tenere ha un valore atteso migliore. Lo stop resta a 59790, sotto lo sweep, perché stringerlo lo metterebbe nel rumore. Abbasso invece l'obiettivo a 60220, sotto il doppio rifiuto 60236-60243, perché 60380 richiede di rompere una resistenza già…",
   "28/11 03:45 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60220. La 15m delle 03:30 ha fatto un minimo a 59864, appena sotto 59870, ma ha chiuso a 59948 con il 59% di acquisti. È un rifiuto chiuso del supporto e non una chiusura sotto: l'invalidazione non è scattata e lo sweep 59803 regge. Sul 5m l'istogramma MACD migliora da quattro candele (-21 → -9,5), l'RSI sale da 36 a 45 e le ultime due 5m hanno il 70-74% di acquisti, anche se con volume basso. Restano come tetto il VWAP (60026) e le EMA21/50 5m (59980); l'istogramma MACD 30m cala ancora (67,6), ma resta positivo e la 30m in corso ha il 59% di acquisti. Non stringo lo stop, che finirebbe nel rumore. Se il prezzo riconquista il VWAP con u…",
@@ -939,17 +938,18 @@
   "28/11 04:30 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il prezzo mark è 60006, appena sotto il VWAP (60023) e il pareggio netto (60048). La 15m delle 04:15 chiude a 60006 con il 45% di acquisti e volume 0,42x. Il minimo 59988 sta sopra le EMA21 15m (59979) e sopra il livello rotto: è una pausa a basso volume del sabato asiatico, non un rifiuto. Il MACD 15m è appena sopra il segnale. Sul 5m l'istogramma resta positivo ma cala (13,4→10,7) e le EMA sono in ordine rialzista. Il tetto resta l'EMA21 30m (60037) e poi l'EMA50 15m (60092). L'invalidazione è ancora lo sweep 59803: stringere lo stop lo metterebbe nel rumore. Se una 15m chiude sopra 60100 con acquisti, alzo lo stop sotto 59900…",
   "28/11 04:45 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il prezzo mark è 59988. La 15m delle 04:30 ha fatto uno sweep a 59906 e ha chiuso a 60000, con il 44% di acquisti. È un altro minimo crescente sopra 59864 e 59884, e la chiusura resta sul livello rotto e sopra l'EMA21 15m (59981). Il MACD 15m è appena sopra il segnale. Sul 5m le EMA sono in ordine rialzista e l'istogramma è positivo ma cala; il volume è basso, come sempre nell'Asia di sabato. Il tetto restano il VWAP (60022), l'EMA21 30m (60037) e l'EMA50 15m (60089); l'istogramma MACD 30m cala ma resta positivo. Non stringo lo stop, perché sotto 59864 c'è solo rumore. Se una 15m chiude sopra 60100 con acquisti, porto lo stop so…",
   "28/11 05:00 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il prezzo mark è 59939. La 15m delle 04:45 chiude a 59970 con il 38% di acquisti e volume 0,40x. Il minimo 59954 è sopra quelli di prima (59864, 59904, 59906), quindi la serie di minimi crescenti regge. L'istogramma MACD 15m però è appena girato negativo (-1,4) e sul 5m cala verso zero. La 5m in corso spinge giù con un volume minimo. Siamo dentro la compressione 59864-60060 del sabato asiatico, a volume molto basso. L'invalidazione resta una chiusura 15m sotto 59864 oppure lo sweep 59803. Stringere lo stop vorrebbe dire metterlo nel rumore, e chiudere ora costerebbe -5,4 su un segnale che non è rotto. Non cambio nulla.",
-  "28/11 05:09 . Lo stop del lungo è scattato e la compressione 59864-60060 si è rotta al ribasso. La 5m in corso ha volume circa 7x e il 39% di acquisti, ha rotto lo sweep 59803 e ha fatto un nuovo minimo del giorno a 59712. Il 30m resta sotto EMA21 (60031) ed EMA50 (60305) e il MACD 15m è girato negativo. Non vendo a mercato sul minimo. Metto un limite corto a 59860, sul ritest del livello rotto 59864. Lo stop è a 60010, sopra le EMA 5m/15m (59980) e il tetto 60000. L'obiettivo è 59580, sopra il minimo di ieri sera 59553 e la zona 59678-59692. Il valore è di circa 2400. Alla 15m delle 05:15 controllo la chiusura: se rientra sopra 59803 con acquisti, annullo."
+  "28/11 05:09 . Lo stop del lungo è scattato e la compressione 59864-60060 si è rotta al ribasso. La 5m in corso ha volume circa 7x e il 39% di acquisti, ha rotto lo sweep 59803 e ha fatto un nuovo minimo del giorno a 59712. Il 30m resta sotto EMA21 (60031) ed EMA50 (60305) e il MACD 15m è girato negativo. Non vendo a mercato sul minimo. Metto un limite corto a 59860, sul ritest del livello rotto 59864. Lo stop è a 60010, sopra le EMA 5m/15m (59980) e il tetto 60000. L'obiettivo è 59580, sopra il minimo di ieri sera 59553 e la zona 59678-59692. Il valore è di circa 2400. Alla 15m delle 05:15 controllo la chiusura: se rientra sopra 59803 con acquisti, annullo.",
+  "28/11 05:15 . La 15m delle 05:00 conferma la rottura: chiude a 59757 sotto lo sweep 59803, con volume 3,25x e il 43% di acquisti. Il MACD 15m è sotto il segnale (-16 di istogramma) e l'RSI scende a 38. Il 30m resta sotto EMA21 (60031) ed EMA50 (60305). Sul 5m l'RSI è a 29 e la 05:10 ha il 55% di acquisti: un rimbalzo tecnico verso il livello rotto 59860 è plausibile, ed è lì che voglio vendere, non qui sul minimo. Tengo il limite corto a 59860 con stop 60010 sopra il tetto 60000 e le EMA 5m/15m, e obiettivo 59580 sopra la zona 59553-59580. Allargare lo stop sopra 60060 porterebbe il rapporto sotto 1, quindi lo lascio. Se una 15m richiude sopra 59900 con acquisti, annullo l'ordine."
  ],
  "estraneo": null,
  "giorno": "2026-11-28",
  "conto_mezzanotte": 942.4995047474505,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-28T05:09:08.390342+00:00",
+ "ultima": "2026-11-28T05:15:18.945541+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
- "approccio": "Seguo la struttura 15m: dopo la rottura di un range con volume vendo con un limite il ritest del livello rotto, con lo stop sopra le EMA e la metà del range, oppure compro il ritest di una rottura rialzista confermata.",
+ "approccio": "Seguo la struttura 15m: dopo la rottura di un range con volume vendo con un limite il ritest del livello rotto, con lo stop sopra le EMA e il tetto del range, oppure compro il ritest di una rottura rialzista confermata.",
  "aperta": {
   "aperta": "2026-11-28T05:09:08.390342+00:00",
   "tipo": "limite",
@@ -1152,16 +1152,16 @@
  "discesa_dalle": "2026-11-28T00:00:01.980971+00:00",
  "massimo_giorno": 944.5638665954405,
  "discesa_max_giorno": 21.014562992940114,
- "ultimo_costo_massimo": 0.4928,
+ "ultimo_costo_massimo": 0.4978,
  "stat_giorno": {
-  "chiamate": 23,
-  "costo": 1.461194,
+  "chiamate": 24,
+  "costo": 1.521034,
   "esiti": {
-   "ok": 23
+   "ok": 24
   },
-  "durata_tot": 257.3,
+  "durata_tot": 270.9,
   "durata_max": 21.1,
-  "uscita_tot": 21425
+  "uscita_tot": 22542
  },
  "costo_medio_ieri": 0.06043974666666667,
  "prezzo_inizio_giorno": 59893.96962319,
