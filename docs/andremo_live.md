@@ -1213,3 +1213,11 @@ mano; battito della macchina alle 20:02. Niente di nuovo capito in questo giro.
 **28 novembre, 00:25 UTC, giro delle 00:17**: raccolta delle 00:18 (50 articoli nuovi, 24 fonti su 25); controlli in avanti: niente di
 nuovo. G1: il primo ribilancio della mezzanotte con le correzioni dell'audit si legge alle 04:17 (registro e stato). Ricerca nuova: coda
 senza idee aperte. GitHub: ultime tre corse verdi; monitor e stato lanciati a mano; battito della macchina alle 00:04. Niente di nuovo capito.
+**28 novembre, 04:35 UTC, giro delle 04:17**: raccolta delle 04:18 (24 articoli nuovi, 24 fonti su 25), poi i fogli: fatti gravi (KGEN su
+per Upbit, BABY giù per il −31% del Bitcoin depositato su Babylon; XMR e HYPE già segnati, regola 5) e voce 14 (un «sì», HYPE). Il primo
+ribilancio dopo il riavvio (`ops/results/0787`, `0788`): il demo decide 15 secondi dopo il paper (prima 9-14 minuti), 0 ordini rifiutati
+e le 4 monete che Binance rifiutava saltate senza errori, scarto fra posizioni vere e volute dal 14,7% all'8,6% del conto. Dal 9 novembre
+demo +4,21%, paper +6,57%. **Capito oggi**: con la finestra degli ordini limite più severa, il paper di G1 ha pagato 2,05 contro 1,71
+dell'esecuzione tutta a mercato (G11 4,75 contro 3,04): in un giorno l'attesa del limite è costata più del mercato; da misurare su più
+giorni prima di concludere (voce 2 del piano di G1). Controlli in avanti: niente di nuovo. GitHub: test in corso (una corsa in attesa annullata
+perché ne è arrivata una più nuova, come previsto); monitor e stato lanciati a mano.
