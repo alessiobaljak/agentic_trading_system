@@ -1235,3 +1235,8 @@ nella revisione delle prove), e i problemi 211, 213, 219, 220 chiusi; due giri d
 l'accensione mancano 54 ii, 70 e le cose del proprietario). La dashboard dice G1 sul conto vero. Niente riavvio: lo approva il
 proprietario. **Capito**: con 250 USDT conviene chiudere le posizioni piccole rimaste, non ridurle: ridurle sotto il minimo costa più delle
 spese che fa risparmiare (+57,1% l'anno contro +51,8%).
+**28 novembre, 12:30 UTC, giro delle 12:17**: raccolta delle 12:19 (52 articoli nuovi, 25 fonti su 25); controlli in avanti: niente di
+nuovo. G1: il conto vero su G1 è salvato e spento; aspetta il sì del proprietario al demo a 250 USDT e al riavvio. Ricerca nuova: coda
+senza idee aperte (il cercatore di stamattina non ha trovato idee con un perché forte). GitHub: ultime tre corse verdi; monitor e stato
+lanciati a mano; battito della macchina alle 12:11. La sessione del trading AI ha chiesto le righe della diciannovesima revisione in
+`reviews/` (in applicazione: le due serie di numeri dei problemi si sono sovrapposte di nuovo, 268-275). Niente di nuovo capito.
