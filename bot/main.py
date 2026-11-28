@@ -503,7 +503,7 @@ class TradingBot:
         self.demo_g1 = DemoG1(self.fb)
         # G1 sul conto vero di Binance (fase 2 del piano, docs/conto_vero.md): NASCE SPENTO. Ordini veri solo con l'interruttore
         # ops/conto_vero_acceso, DRY_RUN falso, il codice della versione approvata dal proprietario su Firebase (dalla dashboard)
-        # e un capitale fino a 300 USDT; parla solo
+        # e il capitale letto dal saldo USDT dei future, al massimo 300 USDT (28 novembre 2026); parla solo
         # con fapi.binance.com. Creato senza poter fermare il bot (problema 71): se la creazione fallisce, demo e paper partono lo
         # stesso e si riprova a ogni giro
         self.conto_vero = crea_conto_vero(self.fb)
@@ -2732,13 +2732,18 @@ class TradingBot:
             # la decisione, prima degli altri paper. A mezzanotte ogni paper che ribilancia scarica le candele di circa 500
             # contratti per 4-5 minuti: prima il demo aspettava anche G11 e G1 neutra e mandava gli ordini circa 9 minuti dopo il
             # prezzo del paper di G1, e il lunedi' il conto vero sarebbe partito circa 14 minuti dopo il prezzo di F5 (00:23 contro
-            # 00:09; orari dei log 0727-0775 nell'audit). Il conto vero legge solo la decisione di F5 (data/paper_f5.json; niente
-            # eventi sul conto vero), il demo solo quella di G1 (data/paper_g1.json) e, con ops/demo_binance_eventi_acceso, le
+            # 00:09; orari dei log 0727-0775 nell'audit). Il conto vero legge solo la decisione di G1 (data/paper_g1.json, di
+            # nuovo dal 28 novembre 2026, decisione del proprietario; dal 25 al 28 quella di F5; niente eventi sul conto vero): gira
+            # subito dopo il paper di G1, prima del demo, che legge lo stesso file e, con ops/demo_binance_eventi_acceso, le
             # operazioni a eventi del giro prima, come prima (tests/test_main_audit.py).
             try:
                 self.paper_f5.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_f5] errore: {exc}")
+            try:
+                self.paper_g1.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[paper_g1] errore: {exc}")
             try:
                 if self.conto_vero is None:
                     self.conto_vero = crea_conto_vero(self.fb)
@@ -2746,10 +2751,6 @@ class TradingBot:
                     self.conto_vero.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[conto_vero] errore: {exc}")
-            try:
-                self.paper_g1.tick(time.time())
-            except Exception as exc:  # noqa: BLE001
-                print(f"[paper_g1] errore: {exc}")
             try:
                 self.demo_g1.tick(time.time())
             except Exception as exc:  # noqa: BLE001

@@ -1,0 +1,65 @@
+# Prove del revisore del 28 novembre 2026 (problema 270), da copiare in tests/test_conto_vero_g1.py.
+# Passano sul codice di oggi (conto_vero.py bf5d78c8) e cadono con le mutazioni M1, M4 (la prima) e M3 (la seconda).
+# Non è un file di test di proposito: dentro reviews/ pytest lo raccoglierebbe.
+
+from bot.portafoglio import conto_vero as cv
+from tests import test_conto_vero as T
+from tests.test_demo_binance import _attese, _post
+
+G2 = (T.GIORNO + 2) * 86400.0 + 400
+G3 = (T.GIORNO + 3) * 86400.0 + 400
+
+
+def _prelievo(tmp_path, monkeypatch, motivo):
+    _attese(monkeypatch)
+    finto = T._Vero()
+    finto.equity, finto.posizioni_vive = "280", True
+    d, fb, finto = T._conto(tmp_path, monkeypatch, finto, capitale=None, codice=lambda: motivo[0])
+    T._fino_alla_decisione_dopo(d, tmp_path)
+    d.tick(T.DOPO + 3700)
+    finto.equity = "180"
+    finto.entrate.append(T._riga("TRANSFER", -100.0, dopo_s=3750))
+    for k in range(3):
+        d.tick(T.DOPO + 3800 + 60 * k)
+    assert d.carica()["fase_nuova"]["perche"] == "prelievo"
+    return d, fb, finto
+
+
+def test_prelievo_e_versione_non_approvata_alla_decisione_niente_fase_nuova(tmp_path, monkeypatch):   # M1, M4
+    motivo = [None]
+    d, fb, finto = _prelievo(tmp_path, monkeypatch, motivo)
+    motivo[0] = "nessuna versione approvata dal proprietario"
+    d.tick(T.DOPO + 4200)
+    n = len(_post(finto))
+    T._decisione(tmp_path, T.GIORNO + 2)
+    d.tick(G2)
+    d.tick(G2 + 60)
+    assert _post(finto)[n:] == []
+    assert d.carica().get("blocco_duro") is True
+    motivo[0] = None
+    d.tick(G2 + 4000)
+    d.tick(G2 + 4100)
+    assert [q for q in _post(finto)[n:] if q.get("reduceOnly") != "true"] == []
+    T._decisione(tmp_path, T.GIORNO + 3)
+    d.tick(G3)
+    assert [q for q in _post(finto)[n:] if q.get("reduceOnly") != "true"]
+    assert fb.get_rtdb("/conto_vero/conto_ridotto")["capitale"] == 180.0
+
+
+def test_prelievo_poi_fermo_sotto_il_pavimento_riparti_rifiutato(tmp_path, monkeypatch):   # M3
+    d, fb, finto = _prelievo(tmp_path, monkeypatch, [None])
+    fb.proprietario(cv.COMANDO_CHIUDI, True)
+    d.tick(T.DOPO + 4200)
+    d.tick(T.DOPO + 4300)
+    assert d.carica().get("fermo")
+    finto.entrate.append(T._riga("REALIZED_PNL", -110.0, dopo_s=4250))
+    finto.equity = "70"
+    for k in range(3):
+        d.tick(T.DOPO + 4400 + 60 * k)
+    st = d.carica()
+    assert st.get("capitale_in_attesa") == 300.0 and st["fase_nuova"]["perche"] == "prelievo"
+    T._riparti_in_due_passi(fb)
+    d.tick(T.DOPO + 4700)
+    d.tick(T.DOPO + 4800)
+    assert d.carica().get("fermo")
+    assert "non sopra il 65%" in fb.get_rtdb("/conto_vero/allarmi/riparti")["testo"]

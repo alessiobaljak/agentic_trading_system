@@ -443,10 +443,10 @@ def test_il_conto_vero_mostra_l_ultimo_ribilancio():
                            "sotto_il_minimo": {"variazioni": 15, "valore_in_frazione_del_conto": 0.203},
                            "limite": {"ordini": 36, "eseguiti_a_limite": 33, "a_mercato": 2},
                            "scaduti_senza_mercato": {"ora": ORA, "monete": ["BUSDT", "CUSDT"], "motivo": "versione non approvata"}}},
-        "/paper_f5/posizioni": {"LITUSDT": 0.031, "AUSDT": -0.012},
+        "/paper_g1/posizioni": {"LITUSDT": 0.031, "AUSDT": -0.012},
         "/conto_vero/confronto": {"ora": ORA, "monete": 38, "scarto_totale": 0.11, "differenze": [{"simbolo": "LITUSDT", "scarto": -0.031}]}})))
     assert ("- ultimo ribilancio 2026-11-30: 36 ordini, eseguiti a limite 33, a mercato 2; sotto il minimo 15 variazioni (20.3% del "
-            "conto); rifiutati 2: LITUSDT (+3.10% in F5) POST /fapi/v1/order: 400 {\"code\":-4140}; AUSDT (-1.20% in F5) margine; "
+            "conto); rifiutati 2: LITUSDT (+3.10% in G1) POST /fapi/v1/order: 400 {\"code\":-4140}; AUSDT (-1.20% in G1) margine; "
             "monete senza i filtri del conto vero: NUOVAUSDT; ordini limite scaduti senza il resto a mercato (2026-11-27 04:18 UTC): "
             "2 monete, versione non approvata") in testo
     assert "- posizioni vere contro volute (2026-11-27 04:18 UTC): 38 monete, scarto totale 11.0% del conto; oltre il 2%: LITUSDT -3.1%" in testo

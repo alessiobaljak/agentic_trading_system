@@ -179,7 +179,7 @@ export default function ComandiContoVero({ stato, spento, dati }: {
             {confermato ? (
               <p className="cr-riga cr-esito attesa">
                 <span aria-hidden="true">…</span> Riparti confermato: il bot lo esegue entro un minuto, se il conto è vuoto e sopra il
-                65% del capitale; poi riapre alla prossima decisione di F5 (il lunedì).
+                65% del capitale; poi riapre alla prossima decisione di G1 (la mezzanotte UTC).
               </p>
             ) : !richiesto ? (
               <button className="btn" disabled={spento || !codice}
@@ -190,7 +190,7 @@ export default function ComandiContoVero({ stato, spento, dati }: {
               <div className="cr-conferma" role="alertdialog" aria-label="conferma riparti del conto vero">
                 <p className="cr-riga" style={{ margin: 0 }}>
                   Passo 2 di 2. Confermi? Il conto vero fermo dal {oraItaliana(fermo.ora)} riparte e <b>riapre le posizioni con soldi
-                  veri</b> alla prossima decisione di F5 (il lunedì alle 00:05 UTC, fino a 7 giorni dopo).
+                  veri</b> alla prossima decisione di G1 (la mezzanotte UTC, verso le 00:10).
                 </p>
                 <div className="cr-pulsanti">
                   <button className="btn" onClick={() => scrivi(

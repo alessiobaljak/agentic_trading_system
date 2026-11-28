@@ -365,7 +365,7 @@ def test_ordini_4_e_5_il_conto_vero_non_salta_e_l_allarme_conta_le_decisioni(tmp
     al = fb.get_rtdb("/conto_vero/allarmi/ordini_rifiutati")
     assert al["decisione"] == "2026-10-26" and "2 decisioni di fila" in al["testo"] and "si salta" not in al["testo"]
     mandati = _di(avvisi, "ordini rifiutati")
-    assert len(mandati) == 1 and mandati[0].startswith("<b>CONTO VERO di Binance (F5)</b>")
+    assert len(mandati) == 1 and mandati[0].startswith("<b>CONTO VERO di Binance (G1)</b>")
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
@@ -463,7 +463,7 @@ def test_salute_6_il_conto_vero_manda_i_suoi_allarmi_al_telefono(tmp_path, monke
     d.tick(T.MEZZOGIORNO)
     d.tick(T.MEZZOGIORNO + 60)
     vietati = _di(avvisi, "ordini vietati")
-    assert len(vietati) == 1 and vietati[0].startswith("<b>CONTO VERO di Binance (F5)</b>")
+    assert len(vietati) == 1 and vietati[0].startswith("<b>CONTO VERO di Binance (G1)</b>")
     assert fb.get_rtdb("/conto_vero/allarmi/ordini_vietati")["telefono"] == T.MEZZOGIORNO
 
 
@@ -554,21 +554,29 @@ def test_210_chiusura_dopo_un_4140_ricordato_parte_con_solo_riduzione(tmp_path):
     assert fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-25")["non_disponibili_sul_demo"] == []
 
 
-def test_213_com_e_oggi_l_inversione_su_una_moneta_non_disponibile_si_salta_intera(tmp_path):
-    """DESCRIVE UN DIFETTO NOTO (problema 213, da correggere prima di accendere il conto vero): un'inversione (da corto a lungo) è
-    UN ordine solo, senza «solo riduzione» (``ordini_del_giorno``); su una moneta che il demo salta si salta intero, anche la parte
-    che chiude, e senza allarme: il corto resta aperto. Quando il 213 sarà corretto (una chiusura «solo riduzione» più un ordine che
-    apre), questo test va cambiato insieme al codice."""
+def test_213_l_inversione_su_una_moneta_non_disponibile_chiude_con_solo_riduzione_e_non_apre(tmp_path):
+    """Problema 213, corretto il 28 novembre 2026 (prima questo test descriveva il difetto: l'inversione si saltava intera e il corto
+    restava aperto, senza allarme). `ordini_del_giorno` dà ancora un ordine solo (100 per chiudere + 60 per aprire); sulla moneta che
+    si può solo ridurre il ribilancio manda solo la chiusura, con «solo riduzione», e niente apertura nel verso nuovo; la moneta resta
+    fra le saltate. Dopo l'ora il resto a mercato chiude quello che manca e non apre (senza il segno ``solo_riduzione`` sarebbe un
+    acquisto di 160 senza «solo riduzione»)."""
     assert dm.ordini_del_giorno({"B": 0.3}, {"B": -100.0}, {"B": 50.0}, 10000.0, {"B": (0.01, 0.001, 0.001, 5.0)}) == [
         ("B", "BUY", pytest.approx(160.0), 50.0, False)]                              # 100 per chiudere + 60 per aprire, un ordine
     finto = _DemoStati(stati={"BUSDT": "SETTLING"})
     finto.posizioni = {"AUSDT": 0.0, "BUSDT": -100.0}
     d, fb = _demo_semplice(tmp_path, finto, pesi={"AUSDT": 0.5, "BUSDT": 0.3})
     d.tick(T0)
-    assert _ordini_di(finto, "BUSDT") == []                                           # nessun ordine: il corto resta aperto
+    o = _ordini_di(finto, "BUSDT")
+    assert len(o) == 1 and o[0]["side"] == "BUY" and o[0]["type"] == "LIMIT" and o[0].get("reduceOnly") == "true", o
+    assert float(o[0]["quantity"]) == pytest.approx(100.0)                            # solo la chiusura del corto
     rib = fb.get_rtdb("/demo_binance/ribilanciamenti/2026-10-24")
-    assert [x["simbolo"] for x in rib["non_disponibili_sul_demo"]] == ["BUSDT"]
-    assert fb.get_rtdb("/demo_binance/allarmi/ordini_rifiutati") is None              # nessun allarme
+    assert [x["simbolo"] for x in rib["non_disponibili_sul_demo"]] == ["BUSDT"]       # l'apertura del lungo saltata
+    assert [x for x in d.carica()["ordini"]["lista"] if x["simbolo"] == "BUSDT"][0]["solo_riduzione"] is True
+    n = len(finto.chiamate)
+    d.tick(T0 + 3601)                                                                # dopo l'ora: il limite non eseguito
+    m = [q for q in _ordini_di(finto, "BUSDT", n) if q["type"] == "MARKET"]
+    assert len(m) == 1 and m[0]["side"] == "BUY" and m[0].get("reduceOnly") == "true"
+    assert float(m[0]["quantity"]) == pytest.approx(100.0)                            # chiude e non apre
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------

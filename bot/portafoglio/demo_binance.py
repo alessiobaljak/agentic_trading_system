@@ -60,6 +60,20 @@ decide Binance, non la nostra ipotesi. Il confronto fra i due dice quanto ci ill
     conto non vuoto da fermo, errori ripetuti, ordini rifiutati e gli altri tipi in `/<ramo>/allarmi`) va anche su Telegram con
     `bot/execution/notifier` (`TelegramNotifier.send`, così com'è), una volta quando si accende e mai a ogni giro (lo stesso tipo al
     massimo una volta all'ora), in un filo a parte: Telegram lento o giù non ferma le protezioni né gli ordini.
+* **Dal 28 novembre 2026** (demo e conto vero; audit di F5 del 27 novembre, problema Alto 2, e revisione del 27 novembre,
+  `reviews/reports/2026-11-27-bot*.md`, problemi 211, 213, 219 e 220; dal primo riavvio con questo codice):
+  * **le chiusure e le riduzioni sotto il valore minimo** di Binance partono, con «solo riduzione» (Binance le esenta dal valore
+    minimo, dal testo del suo errore -4164: da confermare sul demo); prima restavano aperte. Sotto la quantità minima no; un'apertura
+    o un aumento sotto il minimo si saltano come prima;
+  * **l'inversione su una moneta che si può solo ridurre** (sul demo le non disponibili, per tutti e due lo stato diverso da TRADING;
+    o rifiutata da Binance con -4140): prima la chiusura con «solo riduzione», niente apertura nel verso nuovo (213);
+  * **il segno `telefono`** si scrive nell'allarme solo quando Telegram ha accettato il messaggio (211): l'esito torna dal filo e lo
+    segna il giro dopo; un invio non riuscito non lascia il segno (lo manda il monitor di GitHub) e non conta per il limite di uno
+    all'ora;
+  * **un 429 di Binance che dura** oltre ``LIMITE_429_AL_TELEFONO_S`` (30 minuti, senza un giro di protezioni riuscito) va al
+    telefono una volta (219); il nodo dice da quando (``dal``);
+  * **il fermo** (pulsante e stop sul conto) va sempre al telefono, senza il limite di uno all'ora; gli altri tipi lo tengono,
+    e il monitor fa lo stesso per tipo (220).
 """
 from __future__ import annotations
 
@@ -139,6 +153,8 @@ SOGLIA_PESO_RIFIUTATO = 0.01               # ordini-4: l'allarme oltre l'1% del 
 DECISIONI_DI_FILA_PER_L_ALLARME = 2        # ... o con la stessa moneta rifiutata per due decisioni di fila
 ATTESA_LETTURA_S = 300                     # ordini-1: una lettura dell'ora non riuscita si riprova dopo 5 minuti
 AVVISO_STESSO_TIPO_S = 3600                # salute-6: lo stesso tipo di allarme al telefono al massimo una volta all'ora
+SEMPRE_AL_TELEFONO = ("fermo", "stop")     # 220: il fermo (pulsante e stop sul conto) va sempre al telefono, senza quel limite
+LIMITE_429_AL_TELEFONO_S = 1800            # 219: un 429 di Binance che dura oltre 30 minuti va al telefono, una volta
 ERRORI_DI_FILA_PRIMA_DELL_ALLARME = 3      # salute-6: errori di fila nello stesso punto del giro prima dell'allarme «errori ripetuti»
 TELEFONO_CARATTERI = 900                   # salute-6: il testo dell'allarme al telefono, al massimo
 
@@ -304,13 +320,14 @@ def con_tetto(q: float, massimo: float, passo: float) -> float:
     return arrotonda(massimo, passo, "giu")
 
 
-def id_ordine(giorno: int, simbolo: str, tentativo: int = 0) -> str:
+def id_ordine(giorno: int, simbolo: str, tentativo: int = 0, chiusura: bool = False) -> str:
     """L'identificativo dell'ordine per Binance (ammessi solo ``.A-Za-z0-9:/_-``, al massimo 36): le monete con il nome in altri
     caratteri (per esempio 币安人生USDT) prendono un'impronta del nome. Il 24 ottobre il primo ribilancio sul demo si e' fermato qui,
     e il secondo tentativo dello stesso giorno con «ClientOrderId is duplicated»: per questo c'e' anche il tentativo (i secondi
-    dell'ora, modulo 100.000)."""
+    dell'ora, modulo 100.000). ``chiusura``: la chiusura «solo riduzione» mandata dopo un'inversione rifiutata (213), con un
+    identificativo diverso da quello dell'inversione."""
     nome = simbolo if re.fullmatch(r"[.A-Za-z0-9:/_-]+", simbolo) else "h" + hashlib.sha1(simbolo.encode()).hexdigest()[:12]
-    return f"g1d-{giorno}-{tentativo % 100_000}-{nome}"[:36]
+    return f"{'g1c' if chiusura else 'g1d'}-{giorno}-{tentativo % 100_000}-{nome}"[:36]
 
 
 def id_mercato(chiave: str, simbolo: str, giro: int = 0) -> str:
@@ -321,9 +338,34 @@ def id_mercato(chiave: str, simbolo: str, giro: int = 0) -> str:
     return f"g1m-{chiave}-{int(giro) % 100000}-{nome}"[:36]
 
 
+def riduce_soltanto(attuale: float, obiettivo: float) -> bool:
+    """Vero se portare la posizione ``attuale`` a ``obiettivo`` la chiude o la riduce dallo stesso lato (mai un'apertura, un aumento
+    o un'inversione): l'ordine può avere «solo riduzione»."""
+    return obiettivo == 0.0 or (attuale != 0 and (attuale > 0) == (obiettivo > 0) and abs(obiettivo) < abs(attuale))
+
+
+def ordine_saltato(q: float, p: float, qmin: float, vmin: float, riduce: bool) -> bool:
+    """Se una variazione di ``q`` al prezzo ``p`` non diventa un ordine: sotto la quantità minima (o zero) sempre; sotto il valore
+    minimo solo se apre o aumenta. Una chiusura o una riduzione sotto il valore minimo parte con «solo riduzione» (28 novembre 2026,
+    audit di F5 del 27 novembre, problema Alto 2: prima restava aperta; a 280 USDT circa 7 posizioni a settimana, e TUT il 3 agosto
+    2026 costava il 13,8% del conto in una settimana). Binance esenta la «solo riduzione» dal valore minimo secondo il testo del suo
+    errore -4164 («unless you choose reduce only»): se la rifiutasse, il rifiuto va fra i rifiutati con il suo peso."""
+    return q <= 0 or q < qmin or (q * p < vmin and not riduce)
+
+
+def quantita_che_chiude(attuale: float, lato: str, passo: float, qmin: float) -> Optional[float]:
+    """Problema 213: la quantità che chiude la posizione ``attuale`` quando l'ordine ``lato`` (senza «solo riduzione») la inverte,
+    arrotondata al passo; None se l'ordine non è un'inversione (apre o aumenta) o se la chiusura resta sotto la quantità minima."""
+    if not attuale or (attuale > 0) == (lato == "BUY"):
+        return None
+    q = arrotonda(abs(float(attuale)), passo, "giu")
+    return q if q > 0 and q >= qmin else None
+
+
 def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> list:
     """Gli ordini per portare le posizioni ai pesi: [(simbolo, lato, quantita', prezzo limite, riduce)]. Le quantita' sono
-    arrotondate al passo verso zero; si salta cio' che resta sotto la quantita' o il valore minimo."""
+    arrotondate al passo verso zero; si salta cio' che resta sotto la quantita' minima, e sotto il valore minimo solo se apre o
+    aumenta (`ordine_saltato`: le chiusure e le riduzioni partono con «solo riduzione»)."""
     out = []
     for s in sorted(set(pesi) | {k for k, v in posizioni.items() if v}):
         if s not in prezzi or s not in f:
@@ -334,30 +376,33 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
         obiettivo = float(pesi.get(s, 0.0)) * equity / p
         delta = obiettivo - attuale
         q = arrotonda(abs(delta), passo, "giu")
-        if q < qmin or q * p < vmin:
+        riduce = riduce_soltanto(attuale, obiettivo)
+        if ordine_saltato(q, p, qmin, vmin, riduce):
             continue
         lato = "BUY" if delta > 0 else "SELL"
         limite = arrotonda(p, tick, "giu" if lato == "BUY" else "su")
-        riduce = obiettivo == 0.0 or (attuale != 0 and (attuale > 0) == (obiettivo > 0) and abs(obiettivo) < abs(attuale))
         out.append((s, lato, q, limite, bool(riduce)))
     return out
 
 
 def sotto_il_minimo(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> dict:
     """Le variazioni volute che non diventano ordini perché restano sotto la quantità o il valore minimo (le stesse regole di
-    `ordini_del_giorno`). La prova 148 se le aspetta con 280 USDT: circa 9 su 10 (`research/programma7/RISULTATI_OTTANTASEIESIMA.md`).
-    Si contano solo le differenze da un centesimo in su."""
+    `ordini_del_giorno`: dal 28 novembre 2026 le chiusure e le riduzioni sotto il valore minimo partono e non si contano qui). La
+    prova 148 se le aspetta con 280 USDT: circa 9 su 10 (`research/programma7/RISULTATI_OTTANTASEIESIMA.md`). Si contano solo le
+    differenze da un centesimo in su."""
     n, valore = 0, 0.0
     for s in sorted(set(pesi) | {k for k, v in posizioni.items() if v}):
         if s not in prezzi or s not in f:
             continue
         _, passo, qmin, vmin = f[s]
         p = prezzi[s]
-        delta = float(pesi.get(s, 0.0)) * equity / p - float(posizioni.get(s, 0.0))
+        attuale = float(posizioni.get(s, 0.0))
+        obiettivo = float(pesi.get(s, 0.0)) * equity / p
+        delta = obiettivo - attuale
         if abs(delta) * p < 0.01:
             continue
         q = arrotonda(abs(delta), passo, "giu")
-        if q < qmin or q * p < vmin:
+        if ordine_saltato(q, p, qmin, vmin, riduce_soltanto(attuale, obiettivo)):
             n += 1
             valore += abs(delta) * p
     return {"variazioni": n, "valore_in_frazione_del_conto": round(valore / equity, 4) if equity > 0 else 0.0}
@@ -421,6 +466,23 @@ def entrate_del_conto(c, da_ms: int, a_ms: int) -> dict:
     return out
 
 
+def saldo_usdt(conto) -> Optional[float]:
+    """Il saldo del portafoglio dei future in USDT: ``walletBalance`` della riga USDT di ``assets`` in `/fapi/v2/account` (i versamenti
+    più gli utili e le perdite realizzati, il funding e le commissioni; senza gli utili non realizzati, che sono in ``marginBalance``,
+    e senza togliere il margine impegnato, come fa ``availableBalance``). Solo la riga USDT, non ``totalWalletBalance``: con il
+    margine a più valute quello conta anche le altre monete del portafoglio. None se la riga non c'è o il numero non si legge. Il
+    conto vero ne prende il capitale di ogni fase (28 novembre 2026, il proprietario: «il sistema deve leggere il valore in Binance
+    future», `conto_vero.py`)."""
+    try:
+        for a in (conto or {}).get("assets") or []:
+            if isinstance(a, dict) and a.get("asset") == "USDT":
+                v = float(a.get("walletBalance"))
+                return v if math.isfinite(v) else None
+    except (TypeError, ValueError, AttributeError):
+        return None
+    return None
+
+
 def somma_pesi(*pesi: dict) -> dict:
     out: dict = {}
     for w in pesi:
@@ -455,26 +517,39 @@ def segreto_dall_ambiente() -> str:
     return os.environ.get("BINANCE_DEMO_API_SECRET", "").replace("\\n", "\n")
 
 
-def avviso_telegram(testo: str) -> None:
+def avviso_telegram(testo: str, esito: Optional[Callable[[bool], None]] = None) -> None:
     """Un messaggio al telefono del proprietario con `bot.execution.notifier` (`TelegramNotifier.send`, così com'è: il token e la chat
     li legge lui da `bot.config`), in un filo a parte: Telegram lento (le letture scadono dopo 8 secondi, log del bot di ottobre) o
     giù non ferma mai le protezioni né gli ordini (audit del 26 novembre 2026, salute-6). Nei test non parte niente. Non solleva mai;
-    nel log solo il tipo dell'errore (l'indirizzo di Telegram contiene il token)."""
+    nel log solo il tipo dell'errore (l'indirizzo di Telegram contiene il token). ``esito`` (problema 211): chiamato nel filo, a invio
+    finito, con vero solo se Telegram ha accettato il messaggio (`send` vero); nei test con falso (non è partito niente)."""
+
+    def di(ok: bool) -> None:
+        if esito is not None:
+            try:
+                esito(bool(ok))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[telefono] esito dell'avviso non registrato ({type(exc).__name__})")
+
     if os.environ.get("PYTEST_CURRENT_TEST"):
         print(f"[telefono] (nei test non parte) {testo[:200]}")
+        di(False)
         return
 
     def manda() -> None:
+        ok = False
         try:
             from bot.execution.notifier import TelegramNotifier
-            TelegramNotifier().send(testo)
+            ok = TelegramNotifier().send(testo) is True
         except Exception as exc:  # noqa: BLE001
             print(f"[telefono] avviso non mandato ({type(exc).__name__})")
+        di(ok)
 
     try:
         threading.Thread(target=manda, name="avviso_telegram", daemon=True).start()
     except Exception as exc:  # noqa: BLE001
         print(f"[telefono] avviso non mandato ({type(exc).__name__})")
+        di(False)
 
 
 class LimiteBinance(Exception):
@@ -603,8 +678,13 @@ class DemoG1:
         # «già detto» di quelli che non passano da `_allarme`
         self.avvisa: Callable[[str], None] = avvisa or avviso_telegram
         self._telefonati: dict = {}                 # tipo -> l'ultima volta al telefono
-        self._telefono_di: dict = {}                # tipo -> quando l'allarme acceso adesso è andato al telefono
+        self._telefono_di: dict = {}                # tipo -> quando l'allarme acceso adesso è arrivato al telefono (invio riuscito)
+        self._attesa_telefono: dict = {}            # 211: tipo dell'allarme -> l'ora dell'invio partito, finché non se ne sa l'esito
+        self._esiti_telefono: list = []             # 211: (tipo, nodo, ora, riuscito) dal filo dell'invio; li segna il giro
+        self._scritti: dict = {}                    # 211: l'ultimo valore scritto di ogni allarme (per aggiungere `telefono`)
         self._avvisato_418 = False
+        self._avvisato_429 = False                  # 219: il 429 che dura è già andato al telefono in questa serie di limiti
+        self._limiti_dal: Optional[float] = None    # 219: il primo limite di Binance dopo l'ultimo giro di protezioni riuscito
         self._fermo_avvisato = None                 # l'ora del fermo il cui «conto non vuoto» è già andato al telefono
         self._errori_di_fila: dict = {}             # dove -> errori di fila (protezioni, giro degli ordini)
         self._errori_dal: dict = {}
@@ -626,6 +706,7 @@ class DemoG1:
         self._massimo_scritto: Optional[float] = None
         self._avviato = False                       # il log d'avvio (problema 22)
         self._valore_vero: Optional[float] = None   # il valore vero del conto all'ultima lettura (problema 41)
+        self._saldo_usdt: Optional[float] = None    # il saldo del portafoglio in USDT all'ultima lettura (`saldo_usdt`)
 
     # ---- stato ----
     def _livello_di_stop(self, st: dict) -> float:
@@ -679,44 +760,121 @@ class DemoG1:
                 accesi[tipo] = testo
                 self._accesi.add(tipo)
                 # salute-6: al telefono quando si accende, non quando cambia il testo; ``telefono`` nell'allarme dice quando il bot
-                # l'ha mandato (chi avvisa da fuori, scripts/monitor.py, può non rimandarlo)
+                # l'ha mandato (chi avvisa da fuori, scripts/monitor.py, può non rimandarlo): dal 28 novembre 2026 (problema 211) solo
+                # dopo che Telegram l'ha accettato, scritto dal giro dopo l'esito (`_esiti_del_telefono`)
                 manda = nuovo and self._puo_telefonare(tipo, now)
-                if manda:
-                    self._telefono_di[tipo] = now
-                elif nuovo:
+                if nuovo:
                     self._telefono_di.pop(tipo, None)
+                    self._attesa_telefono.pop(tipo, None)
                 segno = {"telefono": self._telefono_di[tipo]} if tipo in self._telefono_di else {}
                 self._scrivi(f"allarmi/{tipo}", {"ora": now, "testo": testo, **altro, **segno})
                 print(f"[{self.NOME}] ALLARME ({tipo}): {testo}")
                 if manda:
-                    self._telefono(tipo, testo, now)
+                    self._telefono(tipo, testo, now, nodo=("allarmi", tipo))
         elif tipo in accesi or tipo in self._accesi:
             accesi.pop(tipo, None)
             self._accesi.discard(tipo)
             self._telefono_di.pop(tipo, None)
+            self._attesa_telefono.pop(tipo, None)
             self._scrivi(f"allarmi/{tipo}", None)
 
     def _puo_telefonare(self, tipo: str, now: float) -> bool:
         """Salute-6: lo stesso tipo di allarme al telefono al massimo una volta ogni ``AVVISO_STESSO_TIPO_S`` (un allarme che si spegne e
-        si riaccende non riempie il telefono)."""
+        si riaccende non riempie il telefono). Il fermo (``SEMPRE_AL_TELEFONO``: il pulsante e lo stop sul conto) sempre: ogni fermo
+        è un fatto nuovo, anche un secondo stop dopo un «riparti» nella stessa ora (problema 220)."""
+        if tipo in SEMPRE_AL_TELEFONO:
+            return True
         ultimo = self._telefonati.get(tipo)
         return ultimo is None or not 0 <= now - ultimo < AVVISO_STESSO_TIPO_S
 
-    def _telefono(self, tipo: str, testo: str, now: float) -> bool:
+    def _telefono(self, tipo: str, testo: str, now: float, nodo: Optional[tuple] = None) -> bool:
         """Salute-6 (audit del 26 novembre 2026, voce P26 del backlog): l'allarme nuovo anche su Telegram (`avviso_telegram`). Chi
         chiama lo fa quando l'allarme si accende, non a ogni giro; qui in più `_puo_telefonare`. Il testo è HTML (il notificatore
-        scrive con ``parse_mode`` HTML): i caratteri speciali si tolgono. Vero se il messaggio è partito. Non solleva mai."""
+        scrive con ``parse_mode`` HTML): i caratteri speciali si tolgono. Vero se il messaggio è partito. Non solleva mai.
+        Problema 211: ``nodo`` dice dove va il segno `telefono` quando l'invio riesce (``("allarmi", tipo)``, ``("fermo", ora del
+        fermo)``, ``("allarme", chiave del fermo)``). L'esito arriva dal filo di `avviso_telegram` (con un altro notificatore, come nei
+        test, subito: riuscito se non torna falso e non solleva) e lo segna il giro (`_esiti_del_telefono`)."""
         try:
             if not self._puo_telefonare(tipo, now):
                 return False
             self._telefonati[tipo] = now
-            self.avvisa(f"<b>{html.escape(self.CHI_AL_TELEFONO, quote=False)} ({html.escape(self.STRATEGIA, quote=False)})</b>: "
-                        f"allarme {html.escape(tipo.replace('_', ' '), quote=False)}\n"
-                        f"{html.escape(str(testo)[:TELEFONO_CARATTERI], quote=False)}")
+            if nodo and nodo[0] == "allarmi":
+                self._attesa_telefono[nodo[1]] = now
+
+            def esito(ok: bool, tipo=tipo, nodo=nodo, ora=now) -> None:
+                self._esiti_telefono.append((tipo, nodo, ora, bool(ok)))   # dal filo: solo questo, i nodi li scrive il giro
+
+            messaggio = (f"<b>{html.escape(self.CHI_AL_TELEFONO, quote=False)} ({html.escape(self.STRATEGIA, quote=False)})</b>: "
+                         f"allarme {html.escape(tipo.replace('_', ' '), quote=False)}\n"
+                         f"{html.escape(str(testo)[:TELEFONO_CARATTERI], quote=False)}")
+            if self.avvisa is avviso_telegram:
+                avviso_telegram(messaggio, esito)
+                return True
+            try:
+                r = self.avvisa(messaggio)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[{self.NOME}] avviso al telefono non mandato ({type(exc).__name__})")
+                esito(False)
+                return False
+            esito(r is not False)
             return True
         except Exception as exc:  # noqa: BLE001
             print(f"[{self.NOME}] avviso al telefono non mandato ({type(exc).__name__})")
             return False
+
+    def _esiti_del_telefono(self) -> None:
+        """Problema 211 (revisione del 27 novembre 2026): gli esiti degli invii al telefono finiti, segnati dal giro (mai dal filo
+        dell'invio: i nodi li scrive solo il giro). Invio riuscito: `telefono` nel nodo, se l'allarme è ancora quello mandato (acceso,
+        non spento e riacceso nel frattempo). Invio non riuscito: nessun segno (il monitor di GitHub lo manda, `scripts/monitor.py`) e
+        il limite di uno all'ora di quel tipo si toglie (un allarme che si spegne e si riaccende si rimanda). Non solleva mai."""
+        while self._esiti_telefono:
+            try:
+                tipo, nodo, ora, ok = self._esiti_telefono.pop(0)
+                if not ok:
+                    if self._telefonati.get(tipo) == ora:
+                        self._telefonati.pop(tipo, None)
+                    if nodo and nodo[0] == "allarmi" and self._attesa_telefono.get(nodo[1]) == ora:
+                        self._attesa_telefono.pop(nodo[1], None)
+                    print(f"[{self.NOME}] avviso al telefono non arrivato ({tipo}): nessun segno «telefono», lo manda il monitor")
+                    continue
+                self._segna_telefono(nodo, ora)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[{self.NOME}] esito dell'avviso al telefono non segnato ({type(exc).__name__})")
+
+    def _segna_telefono(self, nodo: Optional[tuple], ora: float) -> None:
+        """Problema 211: `telefono` (l'ora dell'invio riuscito) nel nodo dell'allarme mandato, se è ancora acceso e lo stesso."""
+        if not nodo:
+            return
+        dove, chiave = nodo
+        if dove == "allarmi":
+            if self._attesa_telefono.get(chiave) != ora:
+                return                                  # spento, o riacceso con un altro invio, dopo questo
+            self._attesa_telefono.pop(chiave, None)
+            self._telefono_di[chiave] = ora
+            scritto = self._scritti.get(f"allarmi/{chiave}")
+            if isinstance(scritto, dict) and scritto.get("testo"):
+                self._scrivi(f"allarmi/{chiave}", {**scritto, "telefono": ora})
+        elif dove == "fermo":
+            st = self.carica()
+            fermo = st.get("fermo")
+            if isinstance(fermo, dict) and fermo.get("ora") == chiave:
+                fermo["telefono"] = ora
+                self.salva(st)
+                self._scrivi("fermo", fermo)
+        elif dove == "allarme":
+            if self._fermo_avvisato and self._fermo_avvisato[0] == chiave:
+                self._fermo_avvisato = (chiave, ora)
+                scritto = self._scritti.get("allarme")
+                if isinstance(scritto, dict) and scritto.get("testo"):
+                    self._scrivi("allarme", {**scritto, "telefono": ora})
+
+    def _ricorda_scritto(self, ramo: str, valore) -> None:
+        """Problema 211: l'ultimo valore scritto degli allarmi (`allarmi/<tipo>` e `allarme`), per riscriverli con `telefono`."""
+        if ramo == "allarme" or ramo.startswith("allarmi/"):
+            if valore is None:
+                self._scritti.pop(ramo, None)
+            else:
+                self._scritti[ramo] = valore
 
     def _errore_di_fila(self, now: float, dove: str, errore: Optional[str]) -> None:
         """Salute-6: lo stesso punto del giro (``dove``: le protezioni, ogni minuto; il giro degli ordini, ogni 30 minuti) in errore per
@@ -742,19 +900,19 @@ class DemoG1:
             if testo:
                 if testo != self._testo_errori:
                     manda = self._testo_errori is None and self._puo_telefonare("errori_ripetuti", now)
-                    if manda:
-                        self._telefono_di["errori_ripetuti"] = now
-                    elif self._testo_errori is None:
+                    if self._testo_errori is None:              # si accende: il segno `telefono` solo a invio riuscito (211)
                         self._telefono_di.pop("errori_ripetuti", None)
+                        self._attesa_telefono.pop("errori_ripetuti", None)
                     self._accesi.add("errori_ripetuti")
                     segno = {"telefono": self._telefono_di["errori_ripetuti"]} if "errori_ripetuti" in self._telefono_di else {}
                     self._scrivi("allarmi/errori_ripetuti", {"ora": now, "testo": testo, "dove": attivi, **segno})
                     print(f"[{self.NOME}] ALLARME (errori_ripetuti): {testo}")
                     if manda:
-                        self._telefono("errori_ripetuti", testo, now)
+                        self._telefono("errori_ripetuti", testo, now, nodo=("allarmi", "errori_ripetuti"))
             elif "errori_ripetuti" in self._accesi:
                 self._accesi.discard("errori_ripetuti")
                 self._telefono_di.pop("errori_ripetuti", None)
+                self._attesa_telefono.pop("errori_ripetuti", None)
                 self._scrivi("allarmi/errori_ripetuti", None)
             self._testo_errori = testo or None
         except Exception as exc:  # noqa: BLE001
@@ -788,7 +946,7 @@ class DemoG1:
             if st.get("capitale_in_attesa") != voluto:
                 st["capitale_in_attesa"] = voluto
                 self._scrivi("capitale_in_attesa", {"capitale": voluto, "chiesto": now})
-                print(f"[{self.NOME}] capitale nuovo {voluto:g} USDT: parte alla prossima decisione di G1, dal conto vuoto")
+                print(f"[{self.NOME}] capitale nuovo {voluto:g} USDT: parte alla prossima decisione di {self.STRATEGIA}, dal conto vuoto")
         elif st.pop("capitale_in_attesa", None) is not None:
             self._scrivi("capitale_in_attesa", None)
         self._scarto = float(cr["valore_vero_all_avvio"]) - float(cr["capitale"]) if cr else 0.0
@@ -797,6 +955,19 @@ class DemoG1:
     @staticmethod
     def _capitale_oltre_il_saldo(voluto: float) -> str:
         return f"capitale {voluto:g} USDT nel file, sopra il valore vero del conto"
+
+    # ---- il capitale di una fase nuova: sul demo il numero del file; il conto vero (`conto_vero.py`) lo legge dal saldo ----
+    def _capitale_oltre_il_valore(self, voluto: float, vero_prima: float) -> bool:
+        """`parti_da_zero`, prima di chiudere: vero se il capitale voluto supera il valore vero del conto (problema 41)."""
+        return voluto > vero_prima
+
+    def _capitale_dopo_le_chiusure(self, voluto: float) -> float:
+        """`parti_da_zero`, dopo le chiusure: il capitale della fase nuova (sul demo quello voluto)."""
+        return voluto
+
+    def _dati_della_fase(self, voluto: float) -> dict:
+        """`parti_da_zero`: i campi in più della fase nuova in `/<ramo>/conto_ridotto` (sul demo nessuno)."""
+        return {}
 
     def parti_da_zero(self, c: ClienteDemo, st: dict, now: float) -> dict:
         """Alla decisione di G1, se c'è un capitale in attesa: annulla gli ordini, chiude tutte le posizioni a mercato (le spese vanno
@@ -809,7 +980,7 @@ class DemoG1:
         scarto_prima, self._scarto = self._scarto, 0.0
         self._conto(c)
         vero_prima = float(self._valore_vero)
-        if float(voluto) > vero_prima:                 # problema 41: prima di chiudere niente, il capitale contro il valore vero
+        if self._capitale_oltre_il_valore(float(voluto), vero_prima):   # problema 41: prima di chiudere, contro il valore vero
             self._scarto = scarto_prima
             self.capitale_errato = self._capitale_oltre_il_saldo(float(voluto))
             self._allarme(st, now, "capitale", f"{self.capitale_errato}: resta il capitale in corso", file=self.file_capitale.name,
@@ -832,20 +1003,21 @@ class DemoG1:
             time.sleep(ATTESA_DOPO_CHIUSURA_S)
         self._conto(c)
         vero = float(self._valore_vero)
+        capitale = self._capitale_dopo_le_chiusure(float(voluto))   # sul demo il numero del file; il conto vero lo legge dal saldo
         data = time.strftime("%Y-%m-%d", time.gmtime(now))
         prima = f"capitale_{float(cr['capitale']):g}" if cr else "conto_intero"
         self._archivia_fase(f"{prima}_fino_al_{data}".replace(".", "_"))
-        cr = {"capitale": float(voluto), "valore_vero_all_avvio": vero, "dal": now, "data": data, "da_zero": True,
-              "chiuse_prima": len(chiuse), "errori_di_chiusura": errori}
+        cr = {"capitale": capitale, "valore_vero_all_avvio": vero, "dal": now, "data": data, "da_zero": True,
+              "chiuse_prima": len(chiuse), "errori_di_chiusura": errori, **self._dati_della_fase(float(voluto))}
         st["conto_ridotto"] = cr
-        st["capitale_iniziale"] = float(voluto)
-        self._fissa_massimo(st, float(voluto), now, nuova_serie=True)
+        st["capitale_iniziale"] = capitale
+        self._fissa_massimo(st, capitale, now, nuova_serie=True)
         for k in ("obiettivi", "ultima_valutazione", "capitale_in_attesa"):
             st.pop(k, None)
-        self._scarto = vero - float(voluto)
+        self._scarto = vero - capitale
         self._scrivi("conto_ridotto", cr)
         self._scrivi("capitale_in_attesa", None)
-        print(f"[{self.NOME}] conto ridotto da zero: {voluto:g} USDT (chiuse {len(chiuse)} posizioni, {len(errori)} errori; "
+        print(f"[{self.NOME}] conto ridotto da zero: {capitale:g} USDT (chiuse {len(chiuse)} posizioni, {len(errori)} errori; "
               f"valore vero {vero:,.2f})")
         self.salva(st)          # revisione dell'8 novembre 2026, problema 62: un errore nel ribilancio dopo non la ripete
         return st
@@ -878,6 +1050,7 @@ class DemoG1:
         tmp.replace(self.file_stato)
 
     def _scrivi(self, ramo: str, valore) -> None:
+        self._ricorda_scritto(ramo, valore)
         if self.fb is not None:
             self.fb.set_rtdb(f"/{self.NOME}/{ramo}", valore)
 
@@ -948,7 +1121,8 @@ class DemoG1:
         fermo["riparti_pulito"] = self._pulisci_riparti(st)
         self._scrivi("fermo", fermo)
         self.salva(st)
-        # salute-6: il fermo (lo stop sul conto o il pulsante) al telefono, dopo le chiusure: l'avviso non le fa aspettare
+        # salute-6: il fermo (lo stop sul conto o il pulsante) al telefono, dopo le chiusure: l'avviso non le fa aspettare. Sempre, senza
+        # il limite di uno all'ora (220); `telefono` nel fermo solo quando Telegram l'ha accettato (211, `_esiti_del_telefono`)
         tipo_telefono = "stop" if str(motivo).startswith("stop sul conto") else "fermo"
         try:
             equity, _, posizioni = self._conto(c)
@@ -956,28 +1130,32 @@ class DemoG1:
         except Exception as exc:  # noqa: BLE001
             fermo["tentativi"], fermo["chiuse"] = 1, len(getattr(exc, "chiuse", []))
             fermo["errori"] = list(getattr(exc, "errori", [])) or [{"simbolo": "*", "errore": senza_firma(exc)[:200]}]
-            if self._puo_telefonare(tipo_telefono, now):
-                fermo["telefono"] = now                # il bot l'ha mandato al telefono (per chi avvisa da fuori)
             self._scrivi("fermo", fermo)
             self.salva(st)
             interrotta = senza_firma(exc)[:150]
             print(f"[{self.NOME}] CHIUDI TUTTO interrotto ({motivo}): fermo segnato, si richiude dopo: {interrotta}")
             self._telefono(tipo_telefono, f"fermo: {motivo}; chiusura interrotta ({interrotta}): si richiude ogni minuto "
-                                          f"finché il conto non è vuoto", now)
+                                          f"finché il conto non è vuoto", now, nodo=("fermo", now))
             raise
         fermo.update({"equity": round(equity, 2), "chiuse": len(chiuse), "errori": errori, "tentativi": 1})
-        if self._puo_telefonare(tipo_telefono, now):
-            fermo["telefono"] = now
         self._scrivi("fermo", fermo)
         self._scrivi("stato", {"stato": f"fermo: {motivo}", "equity": round(equity, 2), "aggiornato": now,
                                "capitale_iniziale": float(st.get("capitale_iniziale", equity))})
         print(f"[{self.NOME}] CHIUSO TUTTO ({motivo}): {len(chiuse)} posizioni chiuse, {len(errori)} errori")
         self._telefono(tipo_telefono, f"fermo: {motivo}; {len(chiuse)} posizioni chiuse, {len(errori)} errori; il conto resta "
-                                      f"fermo fino a «riparti»", now)
+                                      f"fermo fino a «riparti»", now, nodo=("fermo", now))
         return st
 
     # ---- il giro ----
     def tick(self, now: float) -> None:
+        """Il giro di ogni minuto (`_giro`); prima e dopo, gli esiti degli avvisi al telefono già finiti (problema 211)."""
+        self._esiti_del_telefono()
+        try:
+            self._giro(now)
+        finally:
+            self._esiti_del_telefono()
+
+    def _giro(self, now: float) -> None:
         if not self.acceso():
             return
         try:
@@ -1006,6 +1184,7 @@ class DemoG1:
             st = self.protezioni(c, st, now)
             self._allarme(st, now, "limiti_binance", None)
             self._avvisato_418 = False                 # salute-6: un 418 dopo questo giro buono va di nuovo al telefono
+            self._avvisato_429, self._limiti_dal = False, None   # 219: la serie dei limiti di Binance finisce qui
             self.salva(st)
         except LimiteBinance as exc:
             self._limite_di_binance(now, exc, "protezioni")
@@ -1099,20 +1278,37 @@ class DemoG1:
         print(f"[{self.NOME}] limiti di Binance ({dove}): {testo_errore}; nessuna richiesta per {attesa:.0f} secondi")
         self._scrivi("errore", {"testo": testo_errore[:300], "ora": now, "dove": dove})
         self._accesi.add("limiti_binance")
+        if self._limiti_dal is None:                   # 219: la serie comincia qui e finisce al primo giro di protezioni riuscito
+            self._limiti_dal = now
+        dura_s = now - self._limiti_dal
         if exc.codice == 418:
             fino = time.strftime("%H:%M:%S UTC del %Y-%m-%d", time.gmtime(now + attesa))
             testo = (f"indirizzo bloccato da Binance (418) fino alle {fino}: fino ad allora il bot non può proteggere il conto "
                      f"(pulsante e stop sul conto fermi, resta solo la liquidazione di Binance) ({dove}): {testo_errore[:150]}")
         else:
             testo = f"Binance limita le richieste ({dove}): {testo_errore[:200]}"
-        # salute-6: il blocco (418) al telefono una volta, fino al primo giro buono; il 429 resta solo su Firebase
-        manda = exc.codice == 418 and not self._avvisato_418 and self._puo_telefonare("blocco_418", now)
+            if dura_s >= LIMITE_429_AL_TELEFONO_S:
+                testo = (f"Binance limita le richieste da {dura_s / 60:.0f} minuti (dalle "
+                         f"{time.strftime('%H:%M UTC', time.gmtime(self._limiti_dal))}): pulsante e stop sul conto quasi sempre fermi "
+                         f"({dove}): {testo_errore[:150]}")
+        # salute-6: il blocco (418) al telefono una volta, fino al primo giro buono; il 429 resta solo su Firebase, ma se dura oltre
+        # ``LIMITE_429_AL_TELEFONO_S`` senza un giro di protezioni riuscito va al telefono una volta (219)
+        tipo_telefono = None
         if exc.codice == 418:
+            if not self._avvisato_418 and self._puo_telefonare("blocco_418", now):
+                tipo_telefono = "blocco_418"
             self._avvisato_418 = True
+        elif dura_s >= LIMITE_429_AL_TELEFONO_S:
+            if not self._avvisato_429 and self._puo_telefonare("limiti_429", now):
+                tipo_telefono = "limiti_429"
+            self._avvisato_429 = True
+        if tipo_telefono:                              # un invio nuovo: il segno di prima non vale più (211)
+            self._telefono_di.pop("limiti_binance", None)
+        segno = {"telefono": self._telefono_di["limiti_binance"]} if "limiti_binance" in self._telefono_di else {}
         self._scrivi("allarmi/limiti_binance", {"ora": now, "testo": testo, "riprende": now + attesa, "codice": exc.codice,
-                                                **({"telefono": now} if manda else {})})
-        if manda:
-            self._telefono("blocco_418", testo, now)
+                                                "dal": self._limiti_dal, **segno})
+        if tipo_telefono:
+            self._telefono(tipo_telefono, testo, now, nodo=("allarmi", "limiti_binance"))
 
     def _lettura_dell_ora(self, c: ClienteDemo, st: dict, now: float) -> bool:
         """`lettura_oraria` senza fermare il giro: un errore si scrive nel log e la lettura si riprova dopo ``ATTESA_LETTURA_S``; con i
@@ -1171,7 +1367,7 @@ class DemoG1:
         else:
             vecchia = None
         self._allarme(st, now, "decisione_g1", vecchia)
-        self._allarme(st, now, "pesi", fuori and f"pesi di G1 fuori dai limiti, niente ordini: {fuori}")
+        self._allarme(st, now, "pesi", fuori and f"pesi di {self.STRATEGIA} fuori dai limiti, niente ordini: {fuori}")
         return bool(vecchia or fuori)
 
     def _ambiente(self, now: float) -> dict:
@@ -1239,7 +1435,7 @@ class DemoG1:
                 st["riparti_attende_g1"] = True
                 self._fissa_massimo(st, self._conto(c)[0], now, nuova_serie=True)   # lo stop si misura dalla ripartenza
                 self._scrivi("fermo", None)
-                print(f"[{self.NOME}] ripartito: si riapre alla prossima decisione di G1")
+                print(f"[{self.NOME}] ripartito: si riapre alla prossima decisione di {self.STRATEGIA}")
                 return st
         if now - float(fermo.get("ultimo_controllo", 0)) < OGNI_CONTROLLO_STOP_S:
             return st
@@ -1291,18 +1487,19 @@ class DemoG1:
         if fermo["tentativi"] >= TENTATIVI_PRIMA_DELL_ALLARME:
             allarme = {"ora": now, "testo": f"fermo ma {cosa} dopo {fermo['tentativi']} tentativi", "posizioni": posizioni,
                        "errori": fermo.get("errori") or []}
-            # salute-6: al telefono una volta per fermo, non ogni minuto (``telefono``: quando il bot l'ha mandato)
+            # salute-6: al telefono una volta per fermo, non ogni minuto (``telefono``: quando il bot l'ha mandato, dal 28 novembre 2026
+            # solo dopo che Telegram l'ha accettato, problema 211)
             chiave, manda = ("fermo", fermo.get("ora")), False
             if (self._fermo_avvisato or (None,))[0] != chiave:
                 manda = self._puo_telefonare("fermo_conto_non_vuoto", now)
-                self._fermo_avvisato = (chiave, now if manda else None)
+                self._fermo_avvisato = (chiave, None)
             if self._fermo_avvisato[1] is not None:
                 allarme["telefono"] = self._fermo_avvisato[1]
             self._scrivi("allarme", allarme)
             print(f"[{self.NOME}] ALLARME: {allarme['testo']}: {posizioni}")
             if manda:
                 self._telefono("fermo_conto_non_vuoto", f"{allarme['testo']} (posizioni: {', '.join(posizioni) or 'nessuna'}); "
-                                                        f"il bot richiude ogni minuto", now)
+                                                        f"il bot richiude ogni minuto", now, nodo=("allarme", chiave))
 
     def _riparti_ammesso(self, c: ClienteDemo, st: dict, now: float) -> Optional[bool]:
         """Problemi 23 e 48: «riparti» riaccende il demo solo se il conto vale più del ``PAVIMENTO_RIPARTI`` del capitale di partenza
@@ -1450,6 +1647,7 @@ class DemoG1:
         posizioni = {x["symbol"]: float(x["positionAmt"]) for x in conto.get("positions", []) if float(x.get("positionAmt") or 0)}
         self._valore_vero = float(conto["totalMarginBalance"])   # senza lo scarto del conto ridotto (problema 41)
         self._saldo_vero = float(conto["totalWalletBalance"])
+        self._saldo_usdt = saldo_usdt(conto)        # il saldo del portafoglio in USDT (il capitale del conto vero, 28 novembre 2026)
         self._leve_vere ={x["symbol"]: float(x["leverage"]) for x in conto.get("positions", [])
                            if x["symbol"] in posizioni and x.get("leverage") not in (None, "")}   # problema 22
         return (*self._valori(self._valore_vero, self._saldo_vero), posizioni)
@@ -1603,11 +1801,32 @@ class DemoG1:
             except Exception as exc:  # noqa: BLE001  (un errore qui non ferma il ribilancio: si fa come prima, senza saltare)
                 memoria, non_disp = {}, {}
                 print(f"[{self.NOME}] monete non disponibili non calcolate, nessuna si salta: {type(exc).__name__}: {exc}")
+        # problema 213 (revisione del 27 novembre 2026): le monete che si possono solo ridurre, cioè quelle che il demo salta e, per
+        # tutti e due i conti, quelle con lo stato diverso da TRADING nell'exchangeInfo: un'inversione lì diventa la sola chiusura
+        try:
+            stati = stati_non_scambiabili(info)
+        except Exception:  # noqa: BLE001  (un dato rotto: si guarda solo la lista del demo)
+            stati = {}
         saltate = []
         for s, lato, q, limite, riduce in da_fare:
-            if s in non_disp and not riduce:            # niente ordine che apre o aumenta; le chiusure e le riduzioni partono
-                saltate.append(s)
-                continue
+            attuale = float(posizioni.get(s, 0.0) or 0.0)
+            solo_chiusura = False
+            if not riduce and (s in non_disp or s in stati):
+                chiusura = quantita_che_chiude(attuale, lato, f[s][1], f[s][2])
+                if chiusura is None and s in non_disp:  # niente ordine che apre o aumenta; le chiusure e le riduzioni partono
+                    saltate.append(s)
+                    continue
+                if chiusura is not None:
+                    # 213: un'inversione su una moneta che si può solo ridurre: prima la chiusura con «solo riduzione», e niente
+                    # apertura nel verso nuovo (prima si saltava intera sul demo, e sul conto vero Binance la rifiutava: la posizione
+                    # restava aperta nel verso sbagliato)
+                    if s in non_disp:
+                        saltate.append(s)
+                    else:
+                        rifiutati.append({"simbolo": s, "errore": f"moneta in sola riduzione (stato {stati[s]} nell'exchangeInfo): "
+                                                                  f"chiusa con «solo riduzione», niente apertura nel verso nuovo",
+                                          "peso": round(float(pesi.get(s) or 0.0), 4), "chiusa_con_solo_riduzione": chiusura})
+                    q, riduce, solo_chiusura = chiusura, True, True
             p = {"symbol": s, "side": lato, "type": "LIMIT", "timeInForce": "GTC", "quantity": testo(q), "price": testo(limite),
                  "newClientOrderId": id_ordine(giorno, s, int(now))}
             if riduce:
@@ -1625,6 +1844,18 @@ class DemoG1:
                 voce = {"simbolo": s, "errore": str(exc)[:200],
                         "peso": round((q if lato == "BUY" else -q) * limite / equity, 4) if equity > 0 else 0.0}
                 codice = codice_d_errore(exc)
+                # 213: un'inversione rifiutata perché la moneta si può solo ridurre (-4140): subito la chiusura con «solo riduzione»
+                chiusura = None if riduce else quantita_che_chiude(attuale, lato, f[s][1], f[s][2])
+                if codice == -4140 and chiusura is not None:
+                    pc = dict(p, quantity=testo(chiusura), reduceOnly="true",
+                              newClientOrderId=id_ordine(giorno, s, int(now), chiusura=True))
+                    try:
+                        rc = c.chiedi("POST", "/fapi/v1/order", pc, firmata=True)
+                        piazzati.append({"simbolo": s, "lato": lato, "quantita": chiusura, "limite": limite, "riduce": True,
+                                         "id": rc.get("orderId"), "solo_riduzione": True})
+                        voce["chiusa_con_solo_riduzione"] = chiusura
+                    except RuntimeError as exc_chiusura:
+                        voce["chiusura_rifiutata"] = str(exc_chiusura)[:200]
                 if self.SALTA_NON_DISPONIBILI and codice in CODICI_NON_DISPONIBILE:
                     if s in memoria:                    # già nota e riprovata dopo una settimana: niente allarme di nuovo
                         voce["gia_nota"] = True
@@ -1633,8 +1864,10 @@ class DemoG1:
                     voce["non_disponibile_sul_demo"] = True
                 rifiutati.append(voce)
                 continue
-            memoria.pop(s, None)                        # il demo l'ha presa: torna disponibile
-            piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId")})
+            if not riduce:                              # il demo ha preso un ordine che apre: torna disponibile (una chiusura
+                memoria.pop(s, None)                    # «solo riduzione» passa anche su una moneta che si può solo ridurre)
+            piazzati.append({"simbolo": s, "lato": lato, "quantita": q, "limite": limite, "riduce": riduce, "id": r.get("orderId"),
+                             **({"solo_riduzione": True} if solo_chiusura else {})})
         obiettivi = {} if solo is None else {k: v for k, v in (st.get("obiettivi") or {}).items() if k not in solo}
         for s, w in pesi.items():
             if s in prezzi and (solo is None or s in solo) and w:
@@ -1810,12 +2043,14 @@ class DemoG1:
                 passo, qmin = max(passo, passo_m), max(qmin, qmin_m)
                 p = prezzi[s]
                 voluto, attuale = float(obiettivi.get(s, 0.0)), float(posizioni.get(s, 0.0))
+                if o.get("solo_riduzione"):           # 213: su una moneta che si può solo ridurre il resto chiude, non apre
+                    voluto = 0.0
                 delta = voluto - attuale
                 q = con_tetto(arrotonda(abs(delta), passo, "giu"), qmax_m, passo)
-                if q > 0 and q >= qmin and q * p >= vmin:
+                riduce = riduce_soltanto(attuale, voluto)
+                if not ordine_saltato(q, p, qmin, vmin, riduce):   # una chiusura o una riduzione anche sotto il valore minimo
                     cid = id_mercato(chiave, s, giro)
                     if not self._ordine_esiste(c, s, cid):
-                        riduce = voluto == 0.0 or (attuale != 0 and (attuale > 0) == (voluto > 0) and abs(voluto) < abs(attuale))
                         par = {"symbol": s, "side": "BUY" if delta > 0 else "SELL", "type": "MARKET", "quantity": testo(q),
                                "newClientOrderId": cid}
                         if riduce:

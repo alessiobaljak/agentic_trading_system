@@ -32,7 +32,8 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
       davvero da Firebase negli ultimi ``APPROVAZIONE_SENZA_RISPOSTA_S`` (10 minuti; problema 74: un buco di pochi secondi non fa
       saltare il ribilancio né lo lascia a metà), sempre con il confronto di git; oltre, niente ordini nuovi finché non risponde
       (`leggi_rtdb_davvero`: l'ultimo valore noto del client non vale mai);
-  (d) un capitale in `ops/conto_vero_capitale`: un numero positivo non oltre `CAPITALE_MASSIMO` e non oltre il saldo vero.
+  (d) il capitale letto da Binance (28 novembre 2026, sotto): il saldo del portafoglio USDT dei future leggibile e sopra zero, e il
+      file facoltativo `ops/conto_vero_capitale`, se c'è, un numero positivo fino a `CAPITALE_MASSIMO`.
   Senza una delle quattro niente ordini nuovi, con l'allarme `ordini_vietati`, e il cliente rifiuta ogni ordine che non sia «solo
   riduzione». Le protezioni (stop sul conto, pulsante, chiusure da fermo, margine unico) restano attive. **Senza (a) o (b)** (problema
   53): se il conto vero non è mai stato acceso, nessuna richiesta a Binance e nessuna chiave letta; se è stato acceso, le protezioni
@@ -45,7 +46,20 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
 * **Il valore del conto** (problema 58): il capitale più i redditi del conto da quando la fase è partita (utili e perdite realizzati,
   funding, commissioni: `REDDITI_DEL_CONTO`, letti da `/fapi/v1/income`), più gli utili non realizzati; non il saldo. Versamenti,
   prelievi e ogni altro movimento non cambiano il valore (si scrivono in `/conto_vero/movimenti_non_contati`); un saldo vero sotto il
-  valore del bot (un prelievo) ferma gli ordini nuovi.
+  valore del bot (un prelievo) ferma gli ordini nuovi e fa partire una fase nuova alla decisione di G1 dopo (sotto).
+* **Il capitale** (28 novembre 2026, il proprietario: «250 non è il valore esatto, il sistema deve leggere il valore in Binance
+  future»): non si scrive più a mano. Ogni fase parte dal conto vuoto alla decisione di G1 (`parti_da_zero`, dopo le chiusure) con
+  il capitale = il più basso fra il saldo del portafoglio dei future in USDT (`demo.saldo_usdt`: ``walletBalance`` della riga USDT
+  di `/fapi/v2/account`, non il margine disponibile né gli utili non realizzati), `CAPITALE_MASSIMO` (il tetto del codice) e il
+  numero del file `ops/conto_vero_capitale`, che resta solo come limite più basso facoltativo. Saldo sopra il tetto: il conto
+  lavora con il tetto e lo scrive nel log e in `/conto_vero/conto_ridotto` (``limitato_dal_tetto``). Saldo non letto o a zero:
+  niente ordini nuovi. **Una fase nuova parte** (il bot rilegge il saldo) solo: alla prima accensione; dopo un prelievo (il saldo
+  vero sotto il valore del bot in ``LETTURE_SALDO_SOTTO`` letture: niente ordini nuovi subito, e alla decisione di G1 dopo chiude
+  tutto e riparte con il saldo che c'è); con un numero nuovo nel file (o il file tolto), la richiesta esplicita del proprietario.
+  **Non** dopo uno stop e «riparti»: le perdite sono già nel valore del bot (che a conto vuoto è il saldo vero) e il pavimento del
+  65% resta sul capitale di partenza della fase (decisione dell'8 novembre 2026); sotto il pavimento serve la sua richiesta. **Non**
+  dopo un versamento: il bot non usa mai più soldi da solo; il versamento entra alla fase nuova dopo. Il prelievo e il valore oltre
+  ``VALORE_MASSIMO_PER_ORDINI`` non fermano la partenza della fase nuova (che chiude tutto e riparte da zero); gli altri motivi sì.
 * **Lo stato perso** (problema 57): senza `data/conto_vero.json` (o con il file illeggibile) dopo un'accensione già avvenuta (Firebase
   `/conto_vero/acceso_dal` o `/conto_vero/fermo`) il conto parte fermo: chiusure fino al conto vuoto, poi serve «riparti». Se lo
   stato locale non dice niente e Firebase non risponde, niente prima accensione finché non risponde (problema 66).
@@ -61,12 +75,13 @@ revisione dell'8 novembre 2026 (`reviews/reports/2026-11-08-fase2-conto-vero.md`
   vecchio sistema (`bot/risk/hard_limits.py`, `circuit_breakers.py`, `kill_switch.py`) non c'entrano e non si toccano.
 * **Dall'audit del 26 novembre 2026** (ereditato dal demo, `demo_binance.py`): l'allarme `ordini_rifiutati` (moneta, errore, peso,
   decisioni di fila) quando il peso rifiutato a una decisione supera l'1% del conto o la stessa moneta è rifiutata per due decisioni
-  di fila (con F5 due lunedì), con i resti a mercato rifiutati in `/conto_vero/ribilanciamenti/{chiave}/resti_rifiutati`; ogni
+  di fila (con G1 due giorni), con i resti a mercato rifiutati in `/conto_vero/ribilanciamenti/{chiave}/resti_rifiutati`; ogni
   allarme nuovo (fermo, stop, 418, conto non vuoto, errori ripetuti, ordini rifiutati, ordini vietati e gli altri) anche su Telegram,
   una volta quando si accende. Il conto vero non salta le monete che il demo non può avere e non fa la lettura di ogni ora.
 """
 from __future__ import annotations
 
+import json
 import math
 import os
 import re
@@ -123,17 +138,21 @@ ERRORI_REDDITI_PRIMA_DELL_ALLARME = 3  # letture dei redditi fallite di fila pri
 
 # ---- i limiti del conto vero: ognuno ha il suo test di guardia in tests/test_conto_vero.py ----
 LEVA = 5                               # come il demo e la ricerca (prova 56): i due lati insieme fanno il 200% del capitale
-CAPITALE_MASSIMO = 300.0               # USDT: il capitale del proprietario è 250 euro, 280 USDT (prova 148); sopra, il file non vale
+CAPITALE_MASSIMO = 300.0               # USDT: il tetto del capitale. Il capitale è il saldo USDT letto da Binance (28 novembre 2026, il
+                                       # proprietario ne ha circa 250), al massimo questo; sopra, il bot lavora con il tetto
 VALORE_MASSIMO_PER_ORDINI = 2 * CAPITALE_MASSIMO   # oltre (con i guadagni), niente ordini nuovi: serve un capitale nuovo
 STOP_CONTO = 0.35                      # il proprietario, 1° novembre 2026: chiude tutto a −35% dal massimo del conto
 PAVIMENTO_RIPARTI = 0.65               # lo stop scatta anche sotto il 65% del capitale di partenza; «riparti» non riaccende lì sotto
 SOMMA_PESI_MASSIMA = 2.0               # G1 ha i due lati da 1 ciascuno; niente eventi qui (revisione con le skill: «non oltre il 200%»)
 PESO_MASSIMO_MONETA = 0.60             # il peso più alto di G1 sul passato è il 47,8% (BLZ, 5 febbraio 2024, docs/backlog.md)
-# 25 novembre 2026, il proprietario: «metti F5 come candidata per il conto piccolo»: il conto vero esegue F5 (lo stesso motore di G1,
-# deciso il lunedì) leggendo lo stato del paper di F5 (stesso formato: `ultimo_lunedi`, `pesi`); il demo resta su G1.
-STRATEGIA = "F5"
-FILE_STRATEGIA = RADICE / "data" / "paper_f5.json"
-ETA_MASSIMA_DECISIONE_S = 8 * 86400 + 2 * 3600   # F5 decide il lunedì alle 00:05 UTC; oltre 8 giorni e 2 ore il paper si è fermato
+# 28 novembre 2026, il proprietario: «se mi dici che con 250USD è meglio G1 procedi» (`docs/decisioni_del_proprietario.md`): il conto
+# vero torna a G1 (annulla la scelta di F5 del 25 novembre) e legge lo stato del paper di G1, lo stesso file del demo. Il codice resta
+# generico: la strategia, il suo file e l'età massima della decisione sono questi tre (i test di F5 lo provano con una sottoclasse,
+# `tests/test_conto_vero_f5.py`).
+STRATEGIA = "G1"
+FILE_STRATEGIA = demo.FILE_G1                     # data/paper_g1.json, scritto da `f5.PaperG1`
+ETA_MASSIMA_DECISIONE_S = 26 * 3600    # G1 decide ogni giorno alle 00:05 UTC; una decisione più vecchia non si esegue
+QUANDO_DECIDE = "la mezzanotte UTC, alle 00:05"   # nel log dell'accensione
 # problema 64: «saldo vero sotto il valore del bot» (un prelievo) ferma gli ordini nuovi solo oltre lo 0,5% del valore (almeno 1 USDT)
 # e in 3 letture di fila a un minuto l'una dall'altra. Con 280 USDT la tolleranza è 1,40: un giro di funding di G1 (40 monete, 560
 # USDT lordi, 0,01%) muove 0,06 USDT, le commissioni di un ribilancio intero (circa 150 USDT a 0,05%) 0,08; un utile o una perdita
@@ -336,8 +355,8 @@ class ContoVeroG1(demo.DemoG1):
     FILE_COMANDI_DI_SERIE = (FILE_CHIUDI,)
     LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO = LEVA, STOP_CONTO, PAVIMENTO_RIPARTI, CAPITALE_MASSIMO
     SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA = SOMMA_PESI_MASSIMA, PESO_MASSIMO_MONETA
-    STRATEGIA = STRATEGIA                       # F5 dal 25 novembre 2026 (decisione del proprietario)
-    ETA_MASSIMA_DECISIONE_S = ETA_MASSIMA_DECISIONE_S
+    STRATEGIA = STRATEGIA                       # G1 (di nuovo dal 28 novembre 2026, decisione del proprietario; F5 dal 25 al 28)
+    ETA_MASSIMA_DECISIONE_S, QUANDO_DECIDE = ETA_MASSIMA_DECISIONE_S, QUANDO_DECIDE
     VALORE_MASSIMO_PER_ORDINI = VALORE_MASSIMO_PER_ORDINI
     TOLLERANZA_SALDO, TOLLERANZA_SALDO_MINIMA, LETTURE_SALDO_SOTTO = TOLLERANZA_SALDO, TOLLERANZA_SALDO_MINIMA, LETTURE_SALDO_SOTTO
     MANCA_CHIAVE = f"manca la chiave del conto vero ({CHIAVE_ENV} e {SEGRETO_ENV} nell'ambiente del bot)"
@@ -394,6 +413,9 @@ class ContoVeroG1(demo.DemoG1):
         self._redditi = 0.0                               # i redditi del conto dalla partenza della fase (problema 58)
         self._redditi_letti = 0.0
         self._dry_run_letto: tuple = (object(), True)
+        self._solo_della_fase = False                     # 28 novembre 2026: i motivi del blocco li toglie una fase nuova
+        self._saldo_della_fase: Optional[float] = None    # il saldo USDT letto per la fase nuova (`_capitale_dopo_le_chiusure`)
+        self._info_capitale: Optional[dict] = None        # il capitale della fase in corso, per `/conto_vero/stato`
         self.orologio: Callable[[], float] = time.time   # l'ora vera (problema 65); nei test un orologio finto
 
     # ---- niente eventi sul conto vero ----
@@ -434,6 +456,7 @@ class ContoVeroG1(demo.DemoG1):
         return self._cliente
 
     def tick(self, now: float) -> None:
+        self._esiti_del_telefono()                     # problema 211: anche da spento, quando il giro del demo qui sotto non parte
         self._controlla_versione(now)                  # anche da spento: la dashboard mostra la versione prima dell'accensione
         motivo = self.motivo_spento()
         self._motivo_spento_ora = motivo
@@ -510,6 +533,7 @@ class ContoVeroG1(demo.DemoG1):
             return
         blocco = self._blocco_del_codice()
         v = {"commit": self._versione.get("commit"), "data": self._versione.get("data"), "titolo": self._versione.get("titolo"),
+             "strategia": self.STRATEGIA,             # problema 183: la strategia che questo codice esegue
              "pulito": self._codice_all_avvio is None, "motivo": self._codice_all_avvio, "approvata": self._approvata,
              "coincidono": blocco is None, "blocco": blocco}
         v = {k: x for k, x in v.items() if x is not None}
@@ -578,10 +602,13 @@ class ContoVeroG1(demo.DemoG1):
         return self._firebase_letto is not None
 
     def _scrivi(self, ramo: str, valore) -> None:
+        self._ricorda_scritto(ramo, valore)            # problema 211, come il demo
         if ramo in ("acceso_dal", "fermo") and isinstance(valore, dict) and valore:
             self._firebase_letto = valore
         if ramo == "stato" and isinstance(valore, dict) and valore.get("stato") == "acceso" and self._blocco_ora:
             valore = {**valore, "stato": f"solo protezioni, niente ordini nuovi: {self._blocco_ora}"}
+        if ramo == "stato" and isinstance(valore, dict) and valore.get("equity") is not None and self._info_capitale:
+            valore = {**valore, "capitale_della_fase": self._info_capitale}   # 28 novembre 2026: saldo letto, tetto, limitato
         if self.fb is None:                            # come il demo (`DemoG1._scrivi`), più l'esito del fermo
             return
         arrivata = self.fb.set_rtdb(f"/{self.NOME}/{ramo}", valore) is not False
@@ -591,8 +618,47 @@ class ContoVeroG1(demo.DemoG1):
     # ---- lo stato perso (57) e il valore del conto (58), a ogni giro prima delle protezioni ----
     def conto_ridotto(self, c: ClienteVero, st: dict, now: float) -> dict:
         st = self._stato_perso(c, st, now)
-        st = super().conto_ridotto(c, st, now)
+        st = self._fase_dal_saldo(st, now)
         self._aggiorna_redditi(c, st, now)
+        return st
+
+    def _fase_dal_saldo(self, st: dict, now: float) -> dict:
+        """28 novembre 2026 (in cima, «Il capitale»): al posto del capitale del file del demo (`DemoG1.conto_ridotto`), se serve una
+        fase nuova. ``capitale_in_attesa`` è il tetto della fase nuova (`CAPITALE_MASSIMO`, o il numero più basso del file); il
+        capitale lo fissa `parti_da_zero` dal saldo dopo le chiusure, alla decisione di G1. Una fase nuova serve alla prima
+        accensione (nessuna fase), dopo un prelievo (``st['prelievo']``, da `motivo_niente_ordini`) e con un numero nuovo nel file
+        (o il file tolto). Un file che non vale (`capitale_errato`) ferma gli ordini nuovi (`motivo_niente_ordini`) e non cambia
+        niente qui."""
+        limite = self.capitale_voluto()
+        self._allarme(st, now, "capitale", self.capitale_errato and (
+            f"{self.capitale_errato}: niente ordini nuovi finché il file non si corregge o si toglie (il capitale è il saldo letto "
+            f"da Binance; il file è solo un limite più basso facoltativo)"), file=self.file_capitale.name)
+        cr = st.get("conto_ridotto")
+        self._scarto = float(cr["valore_vero_all_avvio"]) - float(cr["capitale"]) if cr else 0.0
+        if self.capitale_errato:
+            return st
+        if not cr:
+            perche = "prima fase"
+        elif st.get("prelievo"):
+            perche = "prelievo"
+        elif limite != cr.get("limite_del_file"):
+            perche = "file tolto" if limite is None else f"numero nuovo nel file ({limite:g})"
+        else:
+            perche = None
+        if perche is None:
+            if st.pop("capitale_in_attesa", None) is not None:
+                self._scrivi("capitale_in_attesa", None)
+            st.pop("fase_nuova", None)
+            return st
+        tetto = min(self.CAPITALE_MASSIMO, limite) if limite is not None else self.CAPITALE_MASSIMO
+        if st.get("capitale_in_attesa") != tetto or (st.get("fase_nuova") or {}).get("perche") != perche:
+            st["capitale_in_attesa"] = tetto
+            st["fase_nuova"] = {"perche": perche, "chiesta": now}
+            self._scrivi("capitale_in_attesa", {"capitale": tetto, "tetto": tetto, "perche": perche, "chiesto": now,
+                                                "nota": f"il capitale sarà il saldo USDT dei future alla decisione di "
+                                                        f"{self.STRATEGIA} dopo, al massimo {tetto:g}"})
+            print(f"[{self.NOME}] fase nuova ({perche}): alla prossima decisione di {self.STRATEGIA} si parte dal conto vuoto con "
+                  f"il saldo USDT dei future letto da Binance, al massimo {tetto:g} USDT")
         return st
 
     def _stato_perso(self, c: ClienteVero, st: dict, now: float) -> dict:
@@ -630,8 +696,10 @@ class ContoVeroG1(demo.DemoG1):
         ``ERRORI_REDDITI_PRIMA_DELL_ALLARME`` errori di fila scrive l'allarme `redditi`; i limiti di Binance risalgono."""
         cr = st.get("conto_ridotto")
         if not cr:
-            self._capitale_cr, self._redditi = None, 0.0
+            self._capitale_cr, self._redditi, self._info_capitale = None, 0.0, None
             return
+        self._info_capitale = {k: cr.get(k) for k in ("capitale", "saldo_usdt_letto", "tetto", "tetto_del_codice", "limite_del_file",
+                                                       "limitato_dal_tetto", "perche", "data") if k in cr}
         r = st.get("redditi")
         if not isinstance(r, dict) or r.get("fase") != cr.get("dal") or "inizio_ms" not in r:
             inizio = int(float(cr.get("dal") or now) * 1000)
@@ -729,6 +797,17 @@ class ContoVeroG1(demo.DemoG1):
             return False
         return chiesto is True and isinstance(conferma, str) and conferma == atteso
 
+    def _riparti_ammesso(self, c: ClienteVero, st: dict, now: float) -> Optional[bool]:
+        """Come il demo; ma la fase nuova chiesta da un prelievo (28 novembre 2026) non vale come il capitale nuovo del proprietario:
+        sotto il pavimento del 65% il «riparti» resta rifiutato (serve la sua richiesta, un numero nuovo nel file)."""
+        if (st.get("fase_nuova") or {}).get("perche") == "prelievo" and st.get("capitale_in_attesa") is not None:
+            tetto = st.pop("capitale_in_attesa")
+            try:
+                return super()._riparti_ammesso(c, st, now)
+            finally:
+                st["capitale_in_attesa"] = tetto
+        return super()._riparti_ammesso(c, st, now)
+
     def _riparti(self, st: dict) -> bool:
         """Come il demo (la richiesta si consuma con la scrittura del falso confermata, altrimenti niente «riparti»); in più si
         toglie la conferma: vale una volta sola."""
@@ -762,11 +841,17 @@ class ContoVeroG1(demo.DemoG1):
         return base + (margine - saldo), base
 
     def parti_da_zero(self, c: ClienteVero, st: dict, now: float) -> dict:
-        """Come il demo; i redditi della fase nuova si contano da dopo le chiusure della fase di prima."""
+        """Come il demo, con il capitale letto dal saldo (28 novembre 2026: `_capitale_dopo_le_chiusure`); i redditi della fase nuova
+        si contano da dopo le chiusure della fase di prima."""
         prima = st.get("conto_ridotto")
+        perche = (st.get("fase_nuova") or {}).get("perche") if st.get("capitale_in_attesa") else None
         st = super().parti_da_zero(c, st, now)
         cr = st.get("conto_ridotto")
         if cr is not None and cr is not prima:
+            cr["perche"] = perche
+            for k in ("prelievo", "saldo_sotto", "fase_nuova"):
+                st.pop(k, None)
+            self._scrivi("conto_ridotto", cr)
             # problema 65: l'ora vera dopo le chiusure (e l'attesa che le segue), nell'ora di Binance: le righe delle chiusure della
             # fase di prima hanno un'ora più bassa e restano fuori
             inizio = int(self.orologio() * 1000) + int(getattr(c, "scarto_ora_ms", 0) or 0)
@@ -775,6 +860,38 @@ class ContoVeroG1(demo.DemoG1):
             self._capitale_cr, self._redditi = float(cr["capitale"]), 0.0
             self.salva(st)
         return st
+
+    # ---- il capitale della fase nuova dal saldo di Binance (28 novembre 2026), per `DemoG1.parti_da_zero` ----
+    def _capitale_oltre_il_valore(self, voluto: float, vero_prima: float) -> bool:
+        """Prima delle chiusure: senza un saldo USDT leggibile e sopra zero la fase nuova non parte (niente chiusure, niente ordini;
+        il giro riprova dopo l'attesa degli errori). Il confronto con il valore vero non serve: il capitale non supera mai il saldo
+        letto dopo le chiusure."""
+        if self._saldo_usdt is None or not self._saldo_usdt > 0:
+            raise RuntimeError(f"saldo del portafoglio USDT dei future non letto o a zero ({self._saldo_usdt}): la fase nuova non "
+                               f"parte, niente ordini")
+        return False
+
+    def _capitale_dopo_le_chiusure(self, voluto: float) -> float:
+        """Il capitale della fase nuova: il saldo USDT del portafoglio dei future letto adesso, dopo le chiusure, al massimo ``voluto``
+        (il tetto: `CAPITALE_MASSIMO` o il numero più basso del file). Saldo sopra il tetto: si lavora con il tetto, e lo dicono il log
+        e `/conto_vero/conto_ridotto` (non si usa mai di più). Saldo non letto o a zero: errore, la fase non parte."""
+        saldo = self._saldo_usdt
+        if saldo is None or not saldo > 0:
+            raise RuntimeError(f"saldo del portafoglio USDT dei future non letto o a zero dopo le chiusure ({saldo}): la fase "
+                               f"nuova non parte, niente ordini")
+        self._saldo_della_fase = float(saldo)
+        capitale = min(float(voluto), float(saldo))
+        if saldo > voluto:
+            print(f"[{self.NOME}] saldo del portafoglio USDT {saldo:,.2f} sopra il tetto di {voluto:g}: il conto vero lavora con "
+                  f"{capitale:g} USDT (non usa mai di più)")
+        else:
+            print(f"[{self.NOME}] capitale della fase nuova: il saldo del portafoglio USDT, {capitale:,.2f} (tetto {voluto:g})")
+        return capitale
+
+    def _dati_della_fase(self, voluto: float) -> dict:
+        saldo = float(self._saldo_della_fase or 0.0)
+        return {"saldo_usdt_letto": round(saldo, 8), "tetto": float(voluto), "tetto_del_codice": self.CAPITALE_MASSIMO,
+                "limite_del_file": self.capitale_voluto(), "limitato_dal_tetto": saldo > float(voluto)}
 
     # ---- (c) e (d): niente ordini nuovi, le protezioni restano ----
     def motivo_niente_ordini(self, c: ClienteVero, st: dict, now: float) -> Optional[str]:
@@ -791,29 +908,40 @@ class ContoVeroG1(demo.DemoG1):
         if not st.get("acceso_dal") and not self._mai_acceso_detto_da_firebase():
             ragioni.append("Firebase non risponde e lo stato locale non dice se il conto vero è già stato acceso: niente prima "
                            "accensione finché non risponde")
-        voluto = self.capitale_voluto()
+        # (d) il capitale (28 novembre 2026): dal saldo USDT del portafoglio dei future; il file, se c'è, è solo un limite più basso
+        self.capitale_voluto()                         # un file che non vale: `capitale_errato`
         cr = st.get("conto_ridotto")
-        if self._valore_vero is None:
+        if self._valore_vero is None or self._saldo_usdt is None:
             self._conto(c)                             # il saldo vero, prima di qualunque ordine
-        if voluto is None:
-            ragioni.append(self.capitale_errato or f"manca il capitale (ops/{self.file_capitale.name}, un numero fino a "
-                                                   f"{self.CAPITALE_MASSIMO:g} USDT)")
-        elif voluto > float(self._valore_vero) and not (cr and float(cr.get("capitale") or 0) == voluto):
-            ragioni.append(f"capitale {voluto:g} USDT oltre il saldo vero del conto ({float(self._valore_vero):,.2f} USDT)")
+        if self.capitale_errato:
+            ragioni.append(self.capitale_errato)
+        saldo = self._saldo_usdt
+        if saldo is None or not saldo > 0:
+            ragioni.append(f"il saldo del portafoglio USDT dei future non si legge o è zero ({saldo}): il capitale non si può "
+                           f"leggere da Binance")
+        della_fase = []                                # i motivi che una fase nuova toglie (non ne fermano la partenza)
         if cr:
             cap = float(cr.get("capitale") or 0)
             valore, base = self._valori(float(self._valore_vero), float(self._saldo_vero))
             if self._saldo_sotto(st, now, base):
-                ragioni.append(f"il saldo vero del conto ({float(self._saldo_vero):,.2f} USDT) è sotto il valore del bot "
-                               f"({base:,.2f}) in {self.LETTURE_SALDO_SOTTO} letture di fila: un prelievo? serve un capitale nuovo")
+                if not st.get("prelievo"):
+                    st["prelievo"] = {"visto": now, "saldo": saldo, "valore_del_bot": round(base, 2)}
+                    self._fase_dal_saldo(st, now)      # la fase nuova si chiede subito
+                della_fase.append(f"il saldo vero del conto ({float(self._saldo_conto()):,.2f} USDT) è sotto il valore del bot "
+                                  f"({base:,.2f}) in {self.LETTURE_SALDO_SOTTO} letture di fila: un prelievo? alla prossima "
+                                  f"decisione di {self.STRATEGIA} il bot chiude tutto, rilegge il saldo di Binance e riparte da zero")
+            elif "saldo_sotto" not in st and st.pop("prelievo", None):
+                print(f"[{self.NOME}] il saldo vero è tornato al valore del bot: niente fase nuova per il prelievo")
             if not 0 < cap <= self.CAPITALE_MASSIMO:
                 ragioni.append(f"capitale in corso {cap:g} USDT fuori dal tetto di {self.CAPITALE_MASSIMO:g}")
             elif valore > self.VALORE_MASSIMO_PER_ORDINI:
-                ragioni.append(f"il conto del bot vale {valore:,.2f} USDT, oltre {self.VALORE_MASSIMO_PER_ORDINI:g}: serve un "
-                               f"capitale nuovo")
+                della_fase.append(f"il conto del bot vale {valore:,.2f} USDT, oltre {self.VALORE_MASSIMO_PER_ORDINI:g}: serve una "
+                                  f"fase nuova (un numero nuovo nel file ops/{self.file_capitale.name}: il bot rilegge il saldo e "
+                                  f"riparte da zero, al massimo con {self.CAPITALE_MASSIMO:g})")
+        self._solo_della_fase = bool(della_fase) and not ragioni
         if st.get("acceso_dal"):
             self._allarme(st, now, "conto_non_vuoto", None)
-        elif not ragioni:                              # problema 59: alla prima accensione il conto dei future dev'essere vuoto
+        elif not ragioni and not della_fase:           # problema 59: alla prima accensione il conto dei future dev'essere vuoto
             _, _, posizioni = self._conto(c)
             aperti = sorted({o["symbol"] for o in c.chiedi("GET", "/fapi/v1/openOrders", firmata=True) or []})
             non_vuoto = None
@@ -822,13 +950,19 @@ class ContoVeroG1(demo.DemoG1):
                              f"ordini aperti: {', '.join(aperti) or 'nessuno'}): niente ordini finché il proprietario non lo svuota")
                 ragioni.append(non_vuoto)
             self._allarme(st, now, "conto_non_vuoto", non_vuoto)   # con altri motivi resta com'era all'ultimo controllo
-        return "; ".join(ragioni) or None
+            self._solo_della_fase = False
+        return "; ".join(ragioni + della_fase) or None
+
+    def _saldo_conto(self) -> float:
+        """Il saldo vero per il controllo del prelievo: quello del portafoglio in USDT (`demo.saldo_usdt`), se si legge; altrimenti
+        ``totalWalletBalance``. Il capitale viene dalla riga USDT: il prelievo si misura sulla stessa."""
+        return float(self._saldo_usdt if self._saldo_usdt is not None else self._saldo_vero)
 
     def _saldo_sotto(self, st: dict, now: float, base: float) -> bool:
         """Problema 64: vero se il saldo vero è sotto il valore del bot di oltre la tolleranza in ``LETTURE_SALDO_SOTTO`` letture di fila,
         a un minuto l'una dall'altra (il saldo si rilegge ogni minuto); una lettura nella tolleranza azzera il conto."""
         tolleranza = max(self.TOLLERANZA_SALDO_MINIMA, self.TOLLERANZA_SALDO * base)
-        if float(self._saldo_vero) >= base - tolleranza:
+        if self._saldo_conto() >= base - tolleranza:
             st.pop("saldo_sotto", None)
             return False
         sotto = st.setdefault("saldo_sotto", {"dal": now, "volte": 0, "ultima": 0.0})
@@ -838,12 +972,20 @@ class ContoVeroG1(demo.DemoG1):
 
     def _ordini_nuovi_ammessi(self, c: ClienteVero, st: dict, now: float) -> bool:
         st.setdefault("entrate_chiuse_fino", int(now // 86400) - 1)   # funding e commissioni dal primo giorno di questo conto
+        self._solo_della_fase = False
         if self._motivo_spento_ora:
             motivo = self._motivo_spento_ora
             self._vuoto_da_spento(c, st, now)
         else:
             st.pop("spento_vuoto", None)
             motivo = self.motivo_niente_ordini(c, st, now)
+            if motivo and self._solo_della_fase and self._fase_nuova_adesso(st):
+                # 28 novembre 2026: il prelievo o il valore oltre il massimo non fermano la fase nuova, che a questa decisione chiude
+                # tutto, rilegge il saldo di Binance e riparte da zero (`parti_da_zero`); ogni altro motivo la ferma
+                print(f"[{self.NOME}] fase nuova alla decisione di {self.STRATEGIA} ({motivo}): si chiude tutto, si rilegge il saldo "
+                      f"e si riparte da zero")
+                motivo = None
+                st.pop("blocco", None)
         self._blocco_ora = motivo
         c.blocco = motivo
         self._allarme(st, now, "ordini_vietati", motivo and (
@@ -851,21 +993,37 @@ class ContoVeroG1(demo.DemoG1):
         if motivo:
             if st.get("blocco") != motivo:
                 print(f"[{self.NOME}] niente ordini nuovi: {motivo}")
+            if not self._solo_della_fase:
+                st["blocco_duro"] = True               # un motivo che la fase nuova non toglie
+            elif st.pop("blocco_duro", None):          # tolto quello: la fase nuova aspetta la decisione dopo (mai a metà giornata)
+                st["ultimo_giorno"] = max(int(st.get("ultimo_giorno") or 0), self._giorno_g1(now))
             st["blocco"] = motivo
             if st.get("ordini") and now >= float(st["ordini"]["piazzati"]) + demo.VALIDITA_LIMITE_S:
                 self._ordini_scaduti_senza_mercato(c, st, now)
             return False
         if "blocco" in st or not st.get("acceso_dal"):
-            # l'accensione: si compra solo alla prima decisione della strategia dopo (per F5 il lunedì alle 00:05 UTC), mai a metà settimana
+            # l'accensione: si compra solo alla prima decisione della strategia dopo (per G1 la mezzanotte UTC), mai a metà giornata
             st.pop("blocco", None)
+            st.pop("blocco_duro", None)
             giorno = self._giorno_g1(now)
             st["ultimo_giorno"] = max(int(st.get("ultimo_giorno") or 0), giorno)
             st["acceso_dal"] = now
             dopo = time.strftime("%Y-%m-%d", time.gmtime(giorno * 86400))
             self._scrivi("acceso_dal", {"ora": now, "compra_alla_decisione_di_g1_dopo_il": dopo})
-            quando = "il lunedì alle 00:05 UTC" if self.STRATEGIA == "F5" else "la mezzanotte UTC"
-            print(f"[{self.NOME}] acceso: ordini solo dalla prima decisione di {self.STRATEGIA} dopo quella del {dopo} ({quando})")
+            print(f"[{self.NOME}] acceso: ordini solo dalla prima decisione di {self.STRATEGIA} dopo quella del {dopo} "
+                  f"({self.QUANDO_DECIDE})")
         return True
+
+    def _fase_nuova_adesso(self, st: dict) -> bool:
+        """Vero se a questo giro parte la fase nuova chiesta (``capitale_in_attesa``): una decisione della strategia nuova nel file,
+        nessun ribilancio in corso e nessun blocco per un motivo che la fase nuova non toglie."""
+        if not st.get("capitale_in_attesa") or st.get("ordini") or st.get("blocco_duro"):
+            return False
+        try:
+            giorno = int(json.loads(self.file_g1.read_text(encoding="utf-8")).get("ultimo_lunedi", 0))
+        except Exception:  # noqa: BLE001
+            return False
+        return giorno > int(st.get("ultimo_giorno") or 0)
 
     def _vuoto_da_spento(self, c: ClienteVero, st: dict, now: float) -> None:
         """Senza interruttore o con `DRY_RUN` vero, ogni minuto: se Binance dice il conto vuoto (niente posizioni, niente ordini
@@ -924,6 +1082,8 @@ class ContoVeroG1(demo.DemoG1):
                     "codice_all_avvio": self._codice_all_avvio or "uguale al commit in esecuzione",
                     "valore_massimo_per_ordini": self.VALORE_MASSIMO_PER_ORDINI,
                     "valore": "capitale più redditi del conto (versamenti e prelievi esclusi)",
+                    "capitale": (f"il saldo USDT del portafoglio dei future (walletBalance) all'inizio di ogni fase, al massimo "
+                                 f"{self.CAPITALE_MASSIMO:g} e il numero facoltativo in ops/{self.file_capitale.name}"),
                     "riparti": "in due passi dalla dashboard (richiesta e conferma), nessun file"})
         return amb
 

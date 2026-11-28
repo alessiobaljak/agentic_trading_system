@@ -38,6 +38,9 @@ class _Vero(_Demo):
         super().__init__(simboli)
         self.non_realizzato = 0.0
         self.redditi_rotti = False                     # /fapi/v1/income senza il tipo risponde con un errore (prova q7)
+        # il saldo del portafoglio in USDT (la riga USDT di `assets`, da cui il conto vero legge il capitale dal 28 novembre 2026):
+        # None = lo stesso di totalWalletBalance; «manca» = nessuna riga USDT; altrimenti il valore scritto così
+        self.saldo_usdt = None
 
     def __call__(self, metodo, url, headers=None, timeout=None):
         u = urlparse(url)
@@ -54,6 +57,11 @@ class _Vero(_Demo):
         r = super().__call__(metodo, url, headers, timeout)
         if u.path == "/fapi/v2/account":
             r.dati["totalWalletBalance"] = str(float(self.equity) - self.non_realizzato)
+            if self.saldo_usdt != "manca":
+                saldo = r.dati["totalWalletBalance"] if self.saldo_usdt is None else str(self.saldo_usdt)
+                r.dati["assets"] = [{"asset": "BNB", "walletBalance": "1.5"},
+                                    {"asset": "USDT", "walletBalance": saldo, "marginBalance": str(self.equity),
+                                     "availableBalance": str(float(self.equity) / 2)}]
         return r
 
 
@@ -168,8 +176,9 @@ def test_i_limiti_del_conto_vero_sono_fissati():
     assert cv.PAVIMENTO_RIPARTI == 0.65
     assert cv.SOMMA_PESI_MASSIMA == 2.0
     assert cv.PESO_MASSIMO_MONETA == 0.60
-    assert cv.ETA_MASSIMA_DECISIONE_S == 8 * 86400 + 2 * 3600      # F5, decisa il lunedì (25 novembre 2026)
-    assert cv.STRATEGIA == "F5" and cv.FILE_STRATEGIA.name == "paper_f5.json"
+    assert cv.ETA_MASSIMA_DECISIONE_S == 26 * 3600                  # G1, decisa ogni giorno (di nuovo dal 28 novembre 2026)
+    assert cv.STRATEGIA == "G1" and cv.FILE_STRATEGIA == dm.FILE_G1 and cv.FILE_STRATEGIA.name == "paper_g1.json"
+    assert cv.ContoVeroG1.STRATEGIA == "G1" and cv.ContoVeroG1.QUANDO_DECIDE == cv.QUANDO_DECIDE
     assert (cv.TOLLERANZA_SALDO, cv.TOLLERANZA_SALDO_MINIMA, cv.LETTURE_SALDO_SOTTO) == (0.005, 1.0, 3)          # problema 64
     assert (cv.RITARDO_REDDITI_S, cv.SOVRAPPOSIZIONE_REDDITI_S, cv.ERRORI_REDDITI_PRIMA_DELL_ALLARME) == (60, 900, 3)
     assert cv.PERCORSI_DEGLI_ORDINI == ("bot/portafoglio", "bot/execution", "bot/risk", "bot/config.py", "bot/main.py")
@@ -215,9 +224,13 @@ def test_solo_l_indirizzo_vero(monkeypatch):
 
 @pytest.mark.parametrize("manca", ["nessuna", "interruttore", "dry_run", "dry_run_scritto_male", "codice", "capitale"])
 def test_senza_una_delle_quattro_condizioni_nessun_ordine(tmp_path, monkeypatch, manca):
-    """(a) l'interruttore, (b) DRY_RUN falso, (c) il codice della versione approvata, (d) il capitale: se ne manca una, nessuna
-    richiesta di ordine nemmeno alla decisione di G1 dopo l'accensione; con tutte e quattro gli ordini partono (il controllo)."""
-    d, fb, finto = _conto(tmp_path, monkeypatch, acceso=manca != "interruttore",
+    """(a) l'interruttore, (b) DRY_RUN falso, (c) il codice della versione approvata, (d) il capitale (dal 28 novembre 2026 il saldo
+    USDT del portafoglio letto da Binance: qui la riga USDT manca): se ne manca una, nessuna richiesta di ordine nemmeno alla decisione
+    di G1 dopo l'accensione; con tutte e quattro gli ordini partono (il controllo)."""
+    finto = _Vero()
+    if manca == "capitale":
+        finto.saldo_usdt = "manca"
+    d, fb, finto = _conto(tmp_path, monkeypatch, finto, acceso=manca != "interruttore",
                           dry_run={"dry_run": "true", "dry_run_scritto_male": "treu"}.get(manca, "false"),
                           capitale=None if manca == "capitale" else "280",
                           codice=(lambda: "nessuna versione approvata dal proprietario") if manca == "codice" else None)
@@ -371,17 +384,20 @@ def test_codice_non_approvato_all_avvio_serve_un_riavvio(tmp_path, monkeypatch):
     assert "serve un riavvio" in fb.get_rtdb("/conto_vero/allarmi/ordini_vietati")["testo"]
 
 
-@pytest.mark.parametrize("capitale,saldo,atteso", [("300", "10000", None), ("280", "280", None),
+@pytest.mark.parametrize("capitale,saldo,atteso", [("300", "10000", 300.0), ("280", "280", 280.0),
                                                    ("301", "10000", "fuori dai limiti"), ("1e3", "10000", "fuori dai limiti"),
                                                    ("0", "10000", "fuori dai limiti"), ("-5", "10000", "fuori dai limiti"),
-                                                   ("abc", "10000", "non numerico"), ("280", "200", "oltre il saldo vero")])
+                                                   ("abc", "10000", "non numerico"), ("280", "200", 200.0)])
 def test_capitale_oltre_300_o_oltre_il_saldo_rifiutato(tmp_path, monkeypatch, capitale, saldo, atteso):
+    """Il file del capitale dal 28 novembre 2026 è solo un limite più basso facoltativo: un numero che non vale (oltre 300, zero,
+    negativo, non numerico) ferma gli ordini; un numero sopra il saldo vale il saldo (prima: rifiutato)."""
     finto = _Vero()
     finto.equity = saldo
     d, fb, finto = _conto(tmp_path, monkeypatch, finto, capitale=capitale)
     _fino_alla_decisione_dopo(d, tmp_path)
-    if atteso is None:                                 # fino a 300 e fino al saldo: gli ordini partono
+    if not isinstance(atteso, str):                    # fino a 300: gli ordini partono, con il più basso fra saldo e file
         assert {q["symbol"] for q in _aperture(finto)} == {"AUSDT", "BUSDT"}
+        assert fb.get_rtdb("/conto_vero/conto_ridotto")["capitale"] == atteso
         return
     assert _scritture(finto) == []
     assert atteso in fb.get_rtdb("/conto_vero/allarmi/ordini_vietati")["testo"]

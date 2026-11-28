@@ -789,8 +789,8 @@ def sezione_demo_binance(fb) -> list:
 
 
 def strategia_del_conto_vero() -> str:
-    """La strategia che il conto vero esegue (``bot/portafoglio/conto_vero.py``, STRATEGIA: F5 dal 25 novembre 2026, decisione del
-    proprietario); vuota se il modulo non si legge."""
+    """La strategia che il conto vero esegue (``bot/portafoglio/conto_vero.py``, STRATEGIA: G1, di nuovo dal 28 novembre 2026; F5 dal
+    25 al 28 novembre; decisioni del proprietario); vuota se il modulo non si legge."""
     try:
         from bot.portafoglio.conto_vero import STRATEGIA
         return str(STRATEGIA)
@@ -888,8 +888,9 @@ def righe_ultimo_ribilancio_vero(fb, strategia: str) -> list:
 
 def sezione_conto_vero(fb) -> list:
     """Le righe del conto vero di Binance (RTDB /conto_vero, `bot/portafoglio/conto_vero.py`, nasce spento): spento e perché,
-    oppure acceso con equity, stop sul conto, fermo, allarmi, l'ultimo ribilancio. Dal 25 novembre 2026 esegue F5 (salute-9); il
-    titolo dice la strategia del processo, se il conto vero l'ha scritta al suo avvio (problema 207)."""
+    oppure acceso con equity, il capitale della fase (dal saldo USDT letto da Binance, dal 28 novembre 2026), stop sul conto, fermo,
+    allarmi, l'ultimo ribilancio. Esegue G1 (di nuovo dal 28 novembre 2026; F5 dal 25 al 28, salute-9); il titolo dice la strategia
+    del processo, se il conto vero l'ha scritta al suo avvio (problema 207)."""
     try:
         strategia, nota = strategia_del_processo(fb, strategia_del_conto_vero())
     except Exception:  # noqa: BLE001  (un dato rotto non ferma lo stato)
@@ -912,6 +913,12 @@ def sezione_conto_vero(fb) -> list:
     if st.get("equity") is not None:
         righe.append(f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale_iniziale') or 0):,.2f} "
                      f"({100 * float(st.get('rendimento') or 0):+.2f}%) · posizioni {st.get('long', 0)} long, {st.get('short', 0)} short")
+    cap = st.get("capitale_della_fase")
+    if isinstance(cap, dict) and _numero(cap.get("capitale")):
+        righe.append(f"- capitale della fase: ${float(cap['capitale']):,.2f}, dal saldo USDT dei future letto da Binance"
+                     + (f" (${float(cap['saldo_usdt_letto']):,.2f}" if _numero(cap.get("saldo_usdt_letto")) else " (")
+                     + (f"; tetto ${float(cap['tetto']):,.0f}" if _numero(cap.get("tetto")) else "")
+                     + ("; **limitato dal tetto**" if cap.get("limitato_dal_tetto") else "") + ")")
     if st.get("stop_a") is not None:
         righe.append(f"- stop sul conto: si chiude tutto sotto ${float(st['stop_a']):,.2f}; ora "
                      f"{100 * float(st.get('dal_massimo') or 0):+.2f}% dal massimo")

@@ -3,8 +3,10 @@
 Il proprietario, 8 novembre 2026: «procedi anche con il setup del trade live e nel caso dimmi cosa devo fare io su firebase o altri
 spazi che non puoi fare tu, se puoi fare tu procedi». Il piano viene da `docs/backlog.md`, voce P26 e le sue aggiunte. **Preparare
 non è accendere**: il codice del conto vero nasce spento e si accende solo con la richiesta esplicita, ripetuta e consapevole del
-proprietario (la regola di `DRY_RUN` in `CLAUDE.md`). Strategia: G1, con 250 euro (280 USDT, prova 148), partenza da conto vuoto alla
-mezzanotte UTC, eventi spenti.
+proprietario (la regola di `DRY_RUN` in `CLAUDE.md`). Strategia: G1 (di nuovo dal 28 novembre 2026; dal 25 al 28 novembre F5),
+partenza da conto vuoto alla mezzanotte UTC, eventi spenti. Capitale (28 novembre 2026, il proprietario: «il sistema deve leggere il
+valore in Binance future»): il saldo USDT del portafoglio dei future letto da Binance a ogni fase nuova (circa 250 USDT), al massimo
+300 USDT, il tetto nel codice; il file `ops/conto_vero_capitale` non serve più (se c'è, è solo un limite più basso facoltativo).
 
 **28 novembre 2026** (decisione del proprietario, `docs/decisioni_del_proprietario.md`): dopo il passaggio a F5 del 25 novembre, il
 conto vero **torna a G1**, con **250 USDT**. In corso: il codice (G1 al posto di F5, le chiusure sotto il minimo con «solo riduzione», i
@@ -46,10 +48,13 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
 4. **Le decisioni sì o no** (tutte quelle chieste dal revisore; fra parentesi cosa fa oggi il codice):
    a. spento con posizioni aperte, il bot manda solo ordini di chiusura anche con `DRY_RUN` vero (sì nel codice; è un'eccezione alla
       regola «in paper nessun ordine al conto vero» e serve il suo sì);
-   b. i limiti: capitale 300 USDT, valore massimo 600 prima di fermare gli ordini nuovi, posizioni al massimo il 200% del conto, 60%
-      per moneta, leva 5, stop a −35% dal massimo con il pavimento al 65% del capitale, decisione della strategia non più vecchia di 26
-      ore per G1, di 8 giorni e 2 ore per F5 (dal 25 novembre 2026 il conto vero esegue F5, decisione del proprietario);
-   c. un prelievo ferma gli ordini nuovi finché non si scrive un capitale nuovo (che chiude tutto e riapre alla mezzanotte);
+   b. i limiti: capitale al massimo 300 USDT (il saldo letto da Binance; sopra, il bot lavora con 300 e lo scrive), valore massimo
+      600 prima di fermare gli ordini nuovi, posizioni al massimo il 200% del conto, 60% per moneta, leva 5, stop a −35% dal massimo con
+      il pavimento al 65% del capitale, decisione di G1 non più vecchia di 26 ore (G1 di nuovo dal 28 novembre 2026);
+   c. un prelievo ferma gli ordini nuovi e alla decisione di G1 dopo il bot chiude tutto, rilegge il saldo e riparte da zero con quello
+      (dal 28 novembre 2026; prima restava fermo finché non si scriveva un capitale nuovo, e nemmeno quello lo sbloccava). Un versamento
+      non si usa da solo: entra alla fase nuova dopo (un numero nuovo nel file, o un prelievo). Dopo uno stop e «riparti» il capitale non
+      si rilegge: il pavimento del 65% resta sul capitale di partenza (sotto serve un numero nuovo nel file, cioè la sua richiesta);
    d. ogni commit che tocca un file caricato dal bot ferma gli ordini nuovi finché la versione non è riapprovata, e un ribilancio in
       corso resta a metà; l'alternativa è tenere il codice dei soldi veri separato dalle varianti del paper (non fatto);
    e. se lo stato si perde dopo un'accensione, il bot chiude tutto a mercato e aspetta un «riparti» (costa le spese di chiusura);
@@ -65,7 +70,12 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
    j. «almeno 10 monete per lato» (revisione con le skill) e gli avvisi sul telefono: non applicati al conto vero;
    k. le scelte della fase 1 già in funzione sul demo e mai confermate una per una: stop anche al 65% del capitale, «riparti» solo a
       conto vuoto con la riapertura alla mezzanotte, una moneta oltre il 60% fa saltare la decisione del giorno, il blocco di Binance
-      rispettato per intero.
+      rispettato per intero;
+   l. dal 28 novembre 2026 (demo e conto vero): le chiusure e le riduzioni sotto il valore minimo di Binance partono con «solo
+      riduzione» (prima restavano aperte: audit di F5 del 27 novembre, TUT −13,8% del conto in una settimana); che Binance le accetti
+      sotto i 5 USDT lo dice solo il testo del suo errore -4164: da vedere sul demo alla prima mezzanotte dopo il riavvio
+      (`/demo_binance/ribilanciamenti/{giorno}/rifiutati`). L'inversione su una moneta che si può solo ridurre manda solo la chiusura.
+      Gli avvisi al telefono: il segno «telefono» solo a invio riuscito, il 429 che dura oltre 30 minuti una volta, il fermo sempre.
    Chiusa: lo Sharpe corretto 0,86 di G1 (il proprietario ha approvato la soglia di 0,80 il 9 novembre, contata per famiglie l'11).
 5. **FATTO il 16 novembre 2026, 07:36 UTC** (ok del proprietario «ok riavvio», richiesta 0747, versione 884b9b1a; conto vero spento,
    `DRY_RUN` vero; paper e demo ripartiti, `ops/results/0753-16nov-stato-un-ora-dopo-riavvio.md`). **Il riavvio che carica la fase 2** sulla macchina (il bot gira ancora il codice della fase 1; il conto vero resta spento): con il
@@ -127,3 +137,10 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
   costanti e nomi a pezzi), 70 (Medio, decisione del proprietario), il pulsante «Revoca» e il verdetto del revisore accanto ad
   «Approva», le regole pubblicate con i pulsanti provati fino in fondo, una revisione nuova. Il bot carica questo codice al riavvio,
   con l'ok del proprietario.
+* 28 novembre 2026: **il conto vero torna a G1** (decisione del proprietario: «se mi dici che con 250USD è meglio G1 procedi») e **il
+  capitale si legge da Binance** («250 non è il valore esatto, il sistema deve leggere il valore in Binance future»): il saldo USDT
+  del portafoglio dei future (``walletBalance`` della riga USDT, non il margine disponibile) a ogni fase nuova, al massimo 300 USDT.
+  Nello stesso gruppo, non committato, da rivedere con live-path-reviewer: le chiusure sotto il minimo con «solo riduzione» (audit di
+  F5, Alto 2), i problemi 211, 213, 219 e 220 delle revisioni del 27 novembre e i testi «F5» rimasti (183); il giro del conto vero
+  subito dopo il paper di G1 (`bot/main.py`). Spento; `DRY_RUN` vero. Restano per l'accensione i punti già scritti qui sopra e nel
+  backlog (P36), la revisione di G1 a 250 USDT come la esegue il bot (backtest-auditor), gate2-reconciler e l'allocatore.

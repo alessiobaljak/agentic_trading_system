@@ -22,6 +22,14 @@ fuori dal telefono di proposito (bot/portafoglio/demo_binance.py, salute-6):
   ha mandato al telefono lo stesso allarme: e' il limite di uno all'ora del bot. L'ora dell'ultimo invio del bot si ricorda in
   /monitor/telefono_del_bot (dal campo `telefono` visto acceso a un giro del monitor). Se il monitor non ha visto quell'invio
   (l'allarme si e' acceso e spento fra due suoi giri), non lo sa e l'allarme riacceso parte.
+
+Revisione del 27 novembre 2026, secondo giro (reviews/reports/2026-11-27-bot-bis.md), corretti il 28 novembre:
+* problema 219: un 429 che dura oltre `LIMITE_429_S` (30 minuti, come `LIMITE_429_AL_TELEFONO_S` del bot) si manda, una volta finche'
+  resta acceso: da quando dura lo dice il nodo (`dal`, scritto dal bot dal 28 novembre) o, se manca, la prima volta che il monitor
+  l'ha visto (/monitor/limiti_429_visti);
+* problema 220: il limite di uno all'ora si conta per tipo di avviso del bot, come fa il bot (`_tipo_dell_avviso`: il nodo
+  `limiti_binance` ha due tipi, il blocco 418 e il 429 che dura), e non vale per il fermo: un fermo nuovo senza `telefono` parte
+  sempre (anche il bot lo manda sempre, `SEMPRE_AL_TELEFONO`).
 """
 from __future__ import annotations
 
@@ -48,6 +56,10 @@ NODO_TELEFONO_DEL_BOT = "/monitor/telefono_del_bot"
 STESSO_TIPO_S = 3600
 #: quanto si ricorda l'ora di un invio del bot (basta che superi l'ora del limite anche con i giri del monitor in ritardo)
 MEMORIA_TELEFONO_S = 2 * 86400
+#: problema 219: un 429 acceso da oltre questo si manda (bot/portafoglio/demo_binance.py, LIMITE_429_AL_TELEFONO_S; un test li confronta)
+LIMITE_429_S = 1800
+#: problema 219: la prima volta che il monitor ha visto acceso ogni 429 (per i nodi senza `dal`): {chiave: ora}
+NODO_429_VISTI = "/monitor/limiti_429_visti"
 
 
 def _ora(ts) -> str:
@@ -116,18 +128,48 @@ def _nodi_accesi(fb) -> dict[str, tuple[str, str, dict]]:
 
 
 #: i due motivi per cui il bot tiene fuori dal telefono un allarme di proposito (problema 212)
-FUORI_429 = "un 429 di Binance: il bot lo tiene solo su Firebase"
+FUORI_429 = "un 429 di Binance da meno di 30 minuti: il bot lo tiene solo su Firebase"
 FUORI_UNO_ALL_ORA = "il bot lo ha mandato meno di un'ora prima: il suo limite di uno all'ora"
 
 
-def _tenuto_fuori_dal_bot(chiave: str, nodo: dict, telefono_del_bot: dict) -> str | None:
+def _e_un_429(chiave: str, nodo: dict) -> bool:
+    return chiave.endswith("-allarmi-limiti_binance") and _numero(nodo.get("codice")) == 429
+
+
+def _tipo_dell_avviso(chiave: str, nodo: dict) -> str | None:
+    """Problema 220: la chiave del limite di uno all'ora, per tipo di avviso come nel bot (bot/portafoglio/demo_binance.py). Per gli
+    allarmi in `allarmi/<tipo>` e per `allarme` (il conto non vuoto da fermo) e' il nodo; `limiti_binance` ha due tipi, il blocco
+    (418) e il 429 che dura, e il codice li separa; il fermo non ha il limite (None): il bot lo manda sempre."""
+    if chiave.endswith("-fermo"):
+        return None
+    if chiave.endswith("-allarmi-limiti_binance"):
+        codice = _numero(nodo.get("codice"))
+        return f"{chiave}-{int(codice)}" if codice is not None else chiave
+    return chiave
+
+
+def _dal_429(chiave: str, nodo: dict, visti_429: dict) -> float | None:
+    """Problema 219: da quando dura il 429 di questo nodo: il `dal` scritto dal bot o la prima volta che il monitor l'ha visto, il
+    piu' vecchio dei due."""
+    ore = [x for x in (_numero(nodo.get("dal")), _numero(visti_429.get(chiave))) if x is not None]
+    return min(ore) if ore else None
+
+
+def _tenuto_fuori_dal_bot(chiave: str, nodo: dict, telefono_del_bot: dict, now: float | None = None,
+                          visti_429: dict | None = None) -> str | None:
     """Problema 212: perche' il bot ha tenuto fuori dal telefono di proposito questo allarme (acceso e senza `telefono`), o None.
-    Un 429 di `limiti_binance` (``FUORI_429``); oppure lo stesso allarme mandato dal bot meno di ``STESSO_TIPO_S`` prima
-    (``FUORI_UNO_ALL_ORA``, il limite di uno all'ora). L'ora dell'allarme e' quella dell'ultima riscrittura, quindi non prima
-    dell'accensione: se dice meno di un'ora, il bot l'ha di sicuro saltato per il limite."""
-    if chiave.endswith("-allarmi-limiti_binance") and _numero(nodo.get("codice")) == 429:
-        return FUORI_429
-    ultimo, ora = _numero(telefono_del_bot.get(chiave)), _numero(nodo.get("ora"))
+    Un 429 di `limiti_binance` che dura da meno di ``LIMITE_429_S`` (``FUORI_429``; problema 219: oltre si manda); oppure lo stesso
+    tipo di avviso mandato dal bot meno di ``STESSO_TIPO_S`` prima (``FUORI_UNO_ALL_ORA``, il limite di uno all'ora; problema 220:
+    per tipo, e mai per il fermo). L'ora dell'allarme e' quella dell'ultima riscrittura, quindi non prima dell'accensione: se dice
+    meno di un'ora, il bot l'ha di sicuro saltato per il limite."""
+    if _e_un_429(chiave, nodo):
+        dal = _dal_429(chiave, nodo, visti_429 or {})
+        if now is None or dal is None or now - dal < LIMITE_429_S:
+            return FUORI_429
+    tipo = _tipo_dell_avviso(chiave, nodo)
+    if tipo is None:
+        return None
+    ultimo, ora = _numero(telefono_del_bot.get(tipo)), _numero(nodo.get("ora"))
     if ultimo is not None and ora is not None and 0 <= ora - ultimo < STESSO_TIPO_S:
         return FUORI_UNO_ALL_ORA
     return None
@@ -148,15 +190,20 @@ def avvisa_allarmi(fb, notifier, now: float | None = None) -> int:
     del_bot_prima = dict(del_bot_prima) if isinstance(del_bot_prima, dict) else {}
     del_bot = {k: v for k, v in del_bot_prima.items()
                if _numero(v) is not None and now - float(v) <= MEMORIA_TELEFONO_S}
+    visti_prima = fb.get_rtdb(NODO_429_VISTI)
+    visti_prima = dict(visti_prima) if isinstance(visti_prima, dict) else {}
+    visti_429 = {k: (visti_prima[k] if _numero(visti_prima.get(k)) is not None else now)        # problema 219
+                 for k, (_, _, nodo) in accesi.items() if _e_un_429(k, nodo)}
     dopo: dict[str, str] = {}
     mandati = 0
     for chiave, (firma, testo, nodo) in accesi.items():
         dal_bot = bool(nodo.get("telefono"))
         quando = _numero(nodo.get("telefono"))
-        gia = _numero(del_bot.get(chiave))
-        if quando is not None and (gia is None or quando > gia):
-            del_bot[chiave] = quando
-        perche = None if dal_bot or prima.get(chiave) == firma else _tenuto_fuori_dal_bot(chiave, nodo, del_bot)
+        tipo = _tipo_dell_avviso(chiave, nodo)                                                  # problema 220
+        gia = _numero(del_bot.get(tipo)) if tipo else None
+        if tipo and quando is not None and (gia is None or quando > gia):
+            del_bot[tipo] = quando
+        perche = None if dal_bot or prima.get(chiave) == firma else _tenuto_fuori_dal_bot(chiave, nodo, del_bot, now, visti_429)
         if prima.get(chiave) == firma or dal_bot:
             dopo[chiave] = firma
         elif perche is not None:
@@ -173,6 +220,8 @@ def avvisa_allarmi(fb, notifier, now: float | None = None) -> int:
         fb.set_rtdb(NODO_AVVISATI, dopo or None)
     if del_bot != del_bot_prima:
         fb.set_rtdb(NODO_TELEFONO_DEL_BOT, del_bot or None)
+    if visti_429 != visti_prima:
+        fb.set_rtdb(NODO_429_VISTI, visti_429 or None)
     print(f"[monitor] allarmi accesi di demo e conto vero: {len(accesi)} ({mandati} mandati ora)")
     return mandati
 

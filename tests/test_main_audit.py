@@ -299,25 +299,25 @@ def _bot_run(monkeypatch, fermo, posizioni: dict | None = None, valori: dict | N
 
 
 def test_l_ordine_dei_giri_ogni_conto_subito_dopo_il_suo_paper(monkeypatch):
-    """ordini-7: prima F5, G1, G11, G1 neutra, demo, conto vero, eventi (il demo aspettava G11 e G1 neutra, 9-14 minuti a
-    mezzanotte)."""
+    """ordini-7: ogni conto subito dopo il paper che esegue (il demo aspettava G11 e G1 neutra, 9-14 minuti a mezzanotte). Dal 28
+    novembre 2026 il conto vero esegue di nuovo G1: subito dopo il paper di G1, prima del demo (dal 25 al 28 era dopo il paper di F5)."""
     b = _bot_run(monkeypatch, fermo=True)
     TradingBot.run(b, max_iterations=1, sleep_s=0)
-    assert b.ordine == ["paper_f5", "conto_vero", "paper_g1", "demo_g1", "paper_g11", "paper_g1n", "paper_eventi"]
+    assert b.ordine == ["paper_f5", "paper_g1", "conto_vero", "demo_g1", "paper_g11", "paper_g1n", "paper_eventi"]
     b = _bot_run(monkeypatch, fermo=False)            # lo stesso ordine con il vecchio sistema acceso
     TradingBot.run(b, max_iterations=1, sleep_s=0)
-    assert b.ordine == ["paper_f5", "conto_vero", "paper_g1", "demo_g1", "paper_g11", "paper_g1n", "paper_eventi"]
+    assert b.ordine == ["paper_f5", "paper_g1", "conto_vero", "demo_g1", "paper_g11", "paper_g1n", "paper_eventi"]
 
 
 def test_ogni_conto_legge_solo_la_decisione_del_paper_che_lo_precede():
-    """Il conto vero esegue F5 (il file che il paper di F5 scrive, niente eventi), il demo esegue G1 (il file del paper di G1):
-    nessuno dei due legge un file di G11, di G1 neutra o degli eventi del giro in corso."""
+    """Il conto vero esegue G1 (dal 28 novembre 2026: il file che il paper di G1 scrive, lo stesso del demo; niente eventi), il demo
+    esegue G1: nessuno dei due legge un file di F5, di G11, di G1 neutra o degli eventi del giro in corso."""
     from bot.portafoglio import conto_vero, demo_binance
     from bot.portafoglio.f5 import PaperF5, PaperG1, PaperG11, PaperG1N
-    assert conto_vero.FILE_STRATEGIA == PaperF5.FILE_DI_SERIE and conto_vero.STRATEGIA == "F5"
+    assert conto_vero.FILE_STRATEGIA == PaperG1.FILE_DI_SERIE and conto_vero.STRATEGIA == "G1"
     assert demo_binance.FILE_G1 == PaperG1.FILE_DI_SERIE
     assert conto_vero.ContoVeroG1.eventi_accesi(None) is False and conto_vero.ContoVeroG1.eventi_aperti(None) == {}
-    for altro in (PaperG11.FILE_DI_SERIE, PaperG1N.FILE_DI_SERIE):
+    for altro in (PaperF5.FILE_DI_SERIE, PaperG11.FILE_DI_SERIE, PaperG1N.FILE_DI_SERIE):
         assert altro not in (conto_vero.FILE_STRATEGIA, demo_binance.FILE_G1)
 
 
@@ -529,13 +529,14 @@ def test_212_monitor_non_manda_cio_che_il_bot_salta_per_il_limite_di_uno_all_ora
     monitor.avvisa_allarmi(fb, tg, now=NOW + 7300)
     fb.set_rtdb("/demo_binance/allarmi/pesi", {"ora": NOW + 7400, "testo": "pesi fuori dai limiti"})
     assert monitor.avvisa_allarmi(fb, tg, now=NOW + 7500) == 1
-    # un fermo nuovo entro l'ora dal fermo mandato dal bot, senza `telefono`: non si manda
+    # un fermo nuovo entro l'ora dal fermo mandato dal bot, senza `telefono`: dal 28 novembre 2026 (problema 220) si manda, il fermo
+    # non ha il limite di uno all'ora (nemmeno nel bot); il fermo non entra nella memoria degli invii del bot
     fb.set_rtdb("/demo_binance/fermo", {"motivo": "stop sul conto", "ora": NOW, "telefono": NOW})
     monitor.avvisa_allarmi(fb, tg, now=NOW + 7600)
     fb.set_rtdb("/demo_binance/fermo", {"motivo": "stop sul conto", "ora": NOW + 1200})
-    assert monitor.avvisa_allarmi(fb, tg, now=NOW + 7700) == 0 and len(tg.messaggi) == 1
+    assert monitor.avvisa_allarmi(fb, tg, now=NOW + 7700) == 1 and len(tg.messaggi) == 2
     # la memoria degli invii del bot dura due giorni, poi esce
-    assert set(fb.get_rtdb(monitor.NODO_TELEFONO_DEL_BOT)) == {"demo_binance-allarmi-pesi", "demo_binance-fermo"}
+    assert set(fb.get_rtdb(monitor.NODO_TELEFONO_DEL_BOT)) == {"demo_binance-allarmi-pesi"}
     fb.set_rtdb("/demo_binance/fermo", None)
     fb.set_rtdb("/demo_binance/allarmi/pesi", None)
     monitor.avvisa_allarmi(fb, tg, now=NOW + 3 * 86400)

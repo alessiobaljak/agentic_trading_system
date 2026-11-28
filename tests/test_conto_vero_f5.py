@@ -1,5 +1,9 @@
-"""Il conto vero esegue F5 (decisione del proprietario del 25 novembre 2026): il ciclo del lunedì, l'età della decisione, il file letto
-e il passaggio dal vero PaperF5 al conto vero. Dalle prove di live-path-reviewer del 25 novembre (`reviews/reports/2026-11-25-conto-vero-F5.md`)."""
+"""Il conto vero con una strategia decisa il lunedì (F5): il ciclo del lunedì, l'età della decisione, il file letto e il passaggio dal
+vero PaperF5 al conto vero. Dalle prove di live-path-reviewer del 25 novembre (`reviews/reports/2026-11-25-conto-vero-F5.md`).
+
+Dal 28 novembre 2026 il conto vero esegue di nuovo G1 (decisione del proprietario, `docs/decisioni_del_proprietario.md`): questi test
+restano come prova che il codice è generico, con una sottoclasse che ha la strategia, il file e l'età della decisione di F5 com'erano
+dal 25 al 28 novembre (`_ContoVeroF5`). Se un giorno il conto vero tornasse a F5, bastano quei tre valori (e i test di guardia)."""
 from __future__ import annotations
 
 import tests.conftest  # noqa: F401  (stesso isolamento della suite: prima di ogni import di bot)
@@ -19,7 +23,18 @@ from tests.test_paper_f5 import _Finto
 M0 = 20780                                    # lunedì 23 novembre 2026
 M1, M2, M3 = M0 + 7, M0 + 14, M0 + 21
 assert f5.lunedi_di(M0) == M0 and f5.lunedi_di(M0 + 3) == M0
-ETA = cv.ETA_MASSIMA_DECISIONE_S
+_ORIGINALE = cv.ContoVeroG1
+
+
+class _ContoVeroF5(_ORIGINALE):
+    """Il conto vero come era dal 25 al 28 novembre 2026: F5, decisa il lunedì alle 00:05 UTC, letta da data/paper_f5.json."""
+    STRATEGIA = "F5"
+    ETA_MASSIMA_DECISIONE_S = 8 * 86400 + 2 * 3600   # oltre 8 giorni e 2 ore il paper di F5 si è fermato
+    QUANDO_DECIDE = "il lunedì alle 00:05 UTC"
+
+
+FILE_F5 = f5.FILE_STATO                        # data/paper_f5.json, il file del paper di F5
+ETA = _ContoVeroF5.ETA_MASSIMA_DECISIONE_S
 
 
 def _f5(tmp_path, lunedi, pesi=None):
@@ -33,7 +48,9 @@ def _limiti(finto, da=0):
 
 
 def _conto_f5(tmp_path, monkeypatch, finto=None, codice=None, lunedi_nel_file=M0):
+    monkeypatch.setattr(cv, "ContoVeroG1", _ContoVeroF5)      # `T._conto` costruisce la sottoclasse di F5
     d, fb, finto = T._conto(tmp_path, monkeypatch, finto, codice=codice)
+    assert isinstance(d, _ContoVeroF5)
     _f5(tmp_path, lunedi_nel_file)                      # _conto scrive la decisione di G1 del 24 ottobre: la si sostituisce
     return d, fb, finto
 
@@ -160,17 +177,18 @@ def test_p5_blocco_sopra_il_lunedi_salta_la_settimana(tmp_path, monkeypatch):
     assert len(_limiti(finto)) == n + 2
 
 
-# ---- P6: il costruttore di serie legge F5, il demo resta su G1; il log d'avvio dice la strategia ----
+# ---- P6: di serie il conto vero legge G1 (28 novembre 2026), come il demo; il log d'avvio dice la strategia ----
 def test_p6_file_di_serie(tmp_path, monkeypatch):
-    assert cv.ContoVeroG1(T._Fb(), verifica_codice=lambda: None).file_g1 == cv.FILE_STRATEGIA
-    assert cv.ContoVeroG1(T._Fb(), verifica_codice=lambda: None).file_g1.name == "paper_f5.json"
+    assert _ORIGINALE(T._Fb(), verifica_codice=lambda: None).file_g1 == cv.FILE_STRATEGIA == dm.FILE_G1
+    assert cv.FILE_STRATEGIA == f5.PaperG1.FILE_DI_SERIE and cv.FILE_STRATEGIA.name == "paper_g1.json"   # il file che scrive PaperG1
     assert dm.DemoG1(T._Fb()).file_g1.name == "paper_g1.json"
-    assert cv.FILE_STRATEGIA == f5.FILE_STATO           # lo stesso file che scrive PaperF5
+    assert FILE_F5.name == "paper_f5.json" and FILE_F5 != cv.FILE_STRATEGIA
+    assert dm.DemoG1.STRATEGIA == "G1" and _ORIGINALE.STRATEGIA == "G1" and _ORIGINALE.ETA_MASSIMA_DECISIONE_S == 26 * 3600
     d, fb, finto = _conto_f5(tmp_path, monkeypatch)
     d.tick(_giorno(M0 + 2, 12))
     avvio = fb.get_rtdb("/conto_vero/avvio")
     assert avvio["strategia"] == "F5" and avvio["file_della_decisione"] == "g1.json"   # il file della prova (tmp)
-    assert dm.DemoG1.STRATEGIA == "G1" and cv.ContoVeroG1.STRATEGIA == "F5"
+    assert avvio["eta_massima_decisione_ore"] == 194
 
 
 # ---- P8: dal vero PaperF5 (Binance finto dei suoi test) al conto vero ----
@@ -192,7 +210,7 @@ def test_p8_dal_paper_di_f5_vero_al_conto_vero(tmp_path, monkeypatch):
     (tmp_path / "conto_vero_acceso").write_text("si")
     (tmp_path / "conto_vero_capitale").write_text("280")
     fb = T._Fb()
-    d = cv.ContoVeroG1(fb, cliente=cv.ClienteVero("chiave", "segreto", http=vero), file_stato=tmp_path / "st.json",
+    d = _ContoVeroF5(fb, cliente=cv.ClienteVero("chiave", "segreto", http=vero), file_stato=tmp_path / "st.json",
                        file_g1=tmp_path / "g1.json", interruttore=tmp_path / "conto_vero_acceso", file_chiudi=tmp_path / "chiudi",
                        file_capitale=tmp_path / "conto_vero_capitale", verifica_codice=lambda: None)
     T._orologio_del_giro(d)

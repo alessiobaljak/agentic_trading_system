@@ -58,9 +58,9 @@ export const STRATEGIE: DefStrategia[] = [
     descrizione: 'G1 con ordini veri sul conto demo di Binance: soldi finti, ordini e prezzi veri.',
   },
   {
-    ramo: 'conto_vero', pagina: 'contovero', breve: 'Conto vero', nome: 'F5 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
+    ramo: 'conto_vero', pagina: 'contovero', breve: 'Conto vero', nome: 'G1 sul conto vero', tipo: 'vero', base: 'capitale_iniziale', colore: 'var(--serie-7)',
     primoGiornoDallaBase: true, unita: 'USDT',
-    descrizione: 'F5 (il motore di G1 deciso il lunedì) con soldi veri sul conto di Binance; dal 25 novembre 2026 al posto di G1.',
+    descrizione: 'G1 con soldi veri sul conto di Binance, con il saldo dei future letto da Binance (dal 28 novembre 2026 di nuovo G1; dal 25 al 28 novembre era F5).',
   },
   {
     ramo: 'paper_g1', pagina: 'g1', breve: 'G1', nome: 'G1', tipo: 'paper', base: 'capitale', colore: 'var(--serie-1)', primoGiornoDallaBase: false,

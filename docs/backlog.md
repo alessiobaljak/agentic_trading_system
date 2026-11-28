@@ -897,6 +897,16 @@ scrivono con e senza le serie a incasso quasi fisso.
   Per il riavvio servono quattro letture che lo «stato» non fa: `/commands/bot_state` (atteso «emergency»), `/commands/kill_switch`
   (atteso falso), `/positions` e `/ordini_limite` (attesi vuoti): una voce nuova di sola lettura nello stato, da far rivedere, oppure la
   console di Firebase del proprietario.
+* **28 novembre 2026, il conto vero torna a G1 e il capitale si legge da Binance** (decisioni del proprietario del 28 novembre): nel
+  codice (non ancora committato né rivisto) G1 al posto di F5 (file del paper di G1, 26 ore, testi, `/conto_vero/versione` con la
+  strategia, il giro subito dopo il paper di G1), il capitale = il saldo USDT del portafoglio dei future a ogni fase nuova (al massimo
+  300; il file diventa un limite più basso facoltativo; un prelievo fa ripartire da zero alla decisione dopo), le chiusure sotto il
+  minimo con «solo riduzione» (Alto 2 dell'audit di F5), 211, 213, 219, 220 e 183. **Restano**: la revisione di live-path-reviewer e
+  l'ok del proprietario al riavvio; i testi «F5» della dashboard (`ComandiContoVero.tsx`: «la prossima decisione di F5 (il lunedì)»;
+  `strategie.ts`: «F5 sul conto vero»), non toccati (area della dashboard); 217 e 221; che Binance accetti la «solo riduzione» sotto
+  i 5 USDT (da leggere sul demo alla prima mezzanotte dopo il riavvio); un caso raro da decidere: un prelievo e poi uno stop prima
+  della decisione (la fase nuova del prelievo parte con il saldo che resta e il pavimento si rifà su quello); i punti 180 e 181 erano
+  di F5 (pesi fermi 7 giorni, blocco sopra il lunedì) e con G1 contano meno, da richiudere nella revisione.
 
 ### P37. Dall'audit del sistema del 26 novembre: le cose trovate e non fatte subito — trovata il 26-27 novembre 2026 (`audits/reports/2026-11-26-AUDIT_SISTEMA.md`)
 * **Per il proprietario (cambiano l'esame, decide lui)**: (a) la dispersione V dell'asticella toglie solo le prove perdenti (t sotto −3)
