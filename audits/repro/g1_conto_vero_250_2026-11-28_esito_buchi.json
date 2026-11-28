@@ -1,0 +1,30 @@
+{
+ "fonte": "www.binance.com/fapi/v1/klines 1d, nella cache",
+ "file_scaricati_ora": 97,
+ "errori": 0,
+ "giorni_moneta_riempiti": 237,
+ "prima": {
+  "ricerca": {
+   "sharpe": 1.9846162558821674,
+   "annuo": 0.5436743498167634,
+   "discesa_max": -0.28749646899684145
+  },
+  "conto_250_bot_oggi": {
+   "sharpe": 1.9081827057231946,
+   "annuo": 0.55901112965369,
+   "discesa_max": -0.27771261522072577
+  }
+ },
+ "dopo": {
+  "ricerca": {
+   "sharpe": 1.9765212090794053,
+   "annuo": 0.5411457888335622,
+   "discesa_max": -0.28749646899684156
+  },
+  "conto_250_bot_oggi": {
+   "sharpe": 1.9249182435430572,
+   "annuo": 0.5597957222132235,
+   "discesa_max": -0.2870495311189676
+  }
+ }
+}

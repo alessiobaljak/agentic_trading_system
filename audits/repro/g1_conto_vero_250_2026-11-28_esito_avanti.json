@@ -1,0 +1,244 @@
+{
+ "ultimo_giorno": "2026-11-26",
+ "funding_stimato_dopo_il_4_ottobre": 0,
+ "dal 5 ottobre": {
+  "ricerca_limite": 0.07536188403977584,
+  "ricerca_mercato": 0.06979805610526069,
+  "giorni": 53,
+  "conto 250 saltate limite": 0.11389593081614335,
+  "conto 250 saltate mercato": 0.10955944760636505,
+  "conto 250 chiusure limite": 0.1179952954478567,
+  "conto 250 chiusure mercato": 0.11649625592320056,
+  "conto 1000 saltate limite": 0.08717828970398656,
+  "conto 1000 saltate mercato": 0.08121131899464817,
+  "conto 1000 chiusure limite": 0.08771101123874647,
+  "conto 1000 chiusure mercato": 0.08135707042605911
+ },
+ "dal 9 novembre": {
+  "ricerca_limite": 0.01895106840125438,
+  "ricerca_mercato": 0.018341387887040428,
+  "giorni": 18,
+  "conto 250 saltate limite": 0.017907016453249103,
+  "conto 250 saltate mercato": 0.017068099604759635,
+  "conto 250 chiusure limite": 0.012738302308164418,
+  "conto 250 chiusure mercato": 0.011946415517822606,
+  "conto 1000 saltate limite": -0.005624792617946128,
+  "conto 1000 saltate mercato": -0.0068005820733217925,
+  "conto 1000 chiusure limite": -0.00575112976832004,
+  "conto 1000 chiusure mercato": -0.0069137768477679495
+ },
+ "giorni": {
+  "2026-11-09": {
+   "demo": 0.88,
+   "paper": 0.78,
+   "ricerca": 0.413,
+   "conto_250": 0.068,
+   "conto_1000": 0.407,
+   "saltati_250": 19,
+   "voluti_250": 57,
+   "saltati_1000": 3
+  },
+  "2026-11-10": {
+   "demo": -0.13,
+   "paper": -0.22,
+   "ricerca": -0.009,
+   "conto_250": 0.239,
+   "conto_1000": -0.305,
+   "saltati_250": 56,
+   "voluti_250": 58,
+   "saltati_1000": 51
+  },
+  "2026-11-11": {
+   "demo": -1.25,
+   "paper": -1.38,
+   "ricerca": -1.235,
+   "conto_250": 1.197,
+   "conto_1000": -1.024,
+   "saltati_250": 54,
+   "voluti_250": 58,
+   "saltati_1000": 50
+  },
+  "2026-11-12": {
+   "demo": 0.08,
+   "paper": 0.37,
+   "ricerca": 0.172,
+   "conto_250": 0.602,
+   "conto_1000": 0.122,
+   "saltati_250": 54,
+   "voluti_250": 55,
+   "saltati_1000": 48
+  },
+  "2026-11-13": {
+   "demo": 1.69,
+   "paper": 2.84,
+   "ricerca": 2.733,
+   "conto_250": 0.03,
+   "conto_1000": 1.517,
+   "saltati_250": 49,
+   "voluti_250": 55,
+   "saltati_1000": 40
+  },
+  "2026-11-14": {
+   "demo": 2.26,
+   "paper": 3.51,
+   "ricerca": 3.171,
+   "conto_250": 3.358,
+   "conto_1000": 2.807,
+   "saltati_250": 52,
+   "voluti_250": 53,
+   "saltati_1000": 46
+  },
+  "2026-11-15": {
+   "demo": -0.27,
+   "paper": -0.58,
+   "ricerca": -0.569,
+   "conto_250": -0.72,
+   "conto_1000": -0.652,
+   "saltati_250": 43,
+   "voluti_250": 54,
+   "saltati_1000": 10
+  },
+  "2026-11-16": {
+   "demo": 1.37,
+   "paper": 1.49,
+   "ricerca": 1.506,
+   "conto_250": 0.059,
+   "conto_1000": 1.293,
+   "saltati_250": 41,
+   "voluti_250": 62,
+   "saltati_1000": 31
+  },
+  "2026-11-17": {
+   "demo": -0.79,
+   "paper": -0.17,
+   "ricerca": -0.401,
+   "conto_250": -1.145,
+   "conto_1000": -0.432,
+   "saltati_250": 53,
+   "voluti_250": 60,
+   "saltati_1000": 44
+  },
+  "2026-11-18": {
+   "demo": -0.99,
+   "paper": -1.5,
+   "ricerca": -1.225,
+   "conto_250": -0.388,
+   "conto_1000": -1.426,
+   "saltati_250": 58,
+   "voluti_250": 58,
+   "saltati_1000": 48
+  },
+  "2026-11-19": {
+   "demo": -1.11,
+   "paper": -1.13,
+   "ricerca": -1.135,
+   "conto_250": -1.557,
+   "conto_1000": -1.407,
+   "saltati_250": 56,
+   "voluti_250": 59,
+   "saltati_1000": 42
+  },
+  "2026-11-20": {
+   "demo": 1.88,
+   "paper": 1.16,
+   "ricerca": 1.217,
+   "conto_250": 1.212,
+   "conto_1000": 1.293,
+   "saltati_250": 56,
+   "voluti_250": 60,
+   "saltati_1000": 51
+  },
+  "2026-11-21": {
+   "demo": -3.13,
+   "paper": -3.07,
+   "ricerca": -2.764,
+   "conto_250": -1.614,
+   "conto_1000": -2.656,
+   "saltati_250": 56,
+   "voluti_250": 59,
+   "saltati_1000": 38
+  },
+  "2026-11-22": {
+   "demo": -2.09,
+   "paper": -1.33,
+   "ricerca": -1.844,
+   "conto_250": -1.93,
+   "conto_1000": -1.86,
+   "saltati_250": 57,
+   "voluti_250": 59,
+   "saltati_1000": 51
+  },
+  "2026-11-23": {
+   "demo": 1.71,
+   "paper": 0.96,
+   "ricerca": 1.49,
+   "conto_250": 1.931,
+   "conto_1000": 1.662,
+   "saltati_250": 57,
+   "voluti_250": 65,
+   "saltati_1000": 34
+  },
+  "2026-11-24": {
+   "demo": -0.59,
+   "paper": 0.23,
+   "ricerca": -0.095,
+   "conto_250": -0.402,
+   "conto_1000": -0.39,
+   "saltati_250": 58,
+   "voluti_250": 60,
+   "saltati_1000": 48
+  },
+  "2026-11-25": {
+   "demo": -1.39,
+   "paper": -2.07,
+   "ricerca": -2.321,
+   "conto_250": -1.878,
+   "conto_1000": -2.147,
+   "saltati_250": 59,
+   "voluti_250": 62,
+   "saltati_1000": 57
+  },
+  "2026-11-26": {
+   "demo": 2.87,
+   "paper": 3.01,
+   "ricerca": 3.041,
+   "conto_250": 2.916,
+   "conto_1000": 2.861,
+   "saltati_250": 58,
+   "voluti_250": 60,
+   "saltati_1000": 52
+  }
+ },
+ "somme_sui_giorni_comuni": {
+  "giorni": 18,
+  "da": "2026-11-09",
+  "a": "2026-11-26",
+  "demo": 0.007718951354341641,
+  "paper": 0.026560087970901813,
+  "ricerca": 0.018931832458358278,
+  "conto_250": 0.0178910829120007,
+  "conto_1000": -0.005634140844869795
+ },
+ "differenze_al_giorno_punti": {
+  "demo_meno_conto_1000": [
+   0.07427777777777779,
+   0.37044675819015443
+  ],
+  "paper_meno_ricerca": [
+   0.04194444444444446,
+   0.2738716900564553
+  ],
+  "conto_250_meno_ricerca": [
+   -0.009277777777777755,
+   1.0571606147409567
+  ]
+ },
+ "partenza_9_novembre_250": {
+  "voluti": 57,
+  "saltati": 19,
+  "valore_saltato": 0.2737646251504502,
+  "lorda": 1.7010463252,
+  "netta": -0.055744958000000025,
+  "monete": 38
+ }
+}

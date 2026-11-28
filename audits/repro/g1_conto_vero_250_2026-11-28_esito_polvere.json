@@ -1,0 +1,318 @@
+{
+ "saltate | limite": {
+  "coppie_giorno_di_polvere": 5106,
+  "al_giorno": 2.4314285714285715,
+  "valore_medio_in_frazione_del_conto": 0.03325437303705736,
+  "valore_massimo": 0.2909236784875282,
+  "giorno_valore_massimo": "2026-08-13",
+  "effetto_annuo": -0.010598128223677571,
+  "giorno_peggiore": [
+   "2026-05-05",
+   -0.013246203699766108
+  ],
+  "peggiori": [
+   {
+    "giorno": "2026-02-05",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 18.62,
+    "rendimento": -0.1478,
+    "effetto_sul_conto": -0.00935
+   },
+   {
+    "giorno": "2026-09-24",
+    "simbolo": "LTCUSDT",
+    "valore_usdt": -18.23,
+    "rendimento": 0.1638,
+    "effetto_sul_conto": -0.00874
+   },
+   {
+    "giorno": "2026-05-05",
+    "simbolo": "FHEUSDT",
+    "valore_usdt": -4.12,
+    "rendimento": 0.5731,
+    "effetto_sul_conto": -0.00855
+   },
+   {
+    "giorno": "2026-08-21",
+    "simbolo": "LINKUSDT",
+    "valore_usdt": -16.67,
+    "rendimento": 0.122,
+    "effetto_sul_conto": -0.00716
+   },
+   {
+    "giorno": "2026-09-30",
+    "simbolo": "MOVRUSDT",
+    "valore_usdt": -3.03,
+    "rendimento": 0.7418,
+    "effetto_sul_conto": -0.00648
+   },
+   {
+    "giorno": "2026-09-06",
+    "simbolo": "LINKUSDT",
+    "valore_usdt": -18.79,
+    "rendimento": 0.0981,
+    "effetto_sul_conto": -0.00631
+   },
+   {
+    "giorno": "2022-07-18",
+    "simbolo": "ETHUSDT",
+    "valore_usdt": -14.72,
+    "rendimento": 0.1807,
+    "effetto_sul_conto": -0.00612
+   },
+   {
+    "giorno": "2026-08-12",
+    "simbolo": "BRUSDT",
+    "valore_usdt": -2.3,
+    "rendimento": 0.776,
+    "effetto_sul_conto": -0.00604
+   }
+  ],
+  "migliori": [
+   {
+    "giorno": "2021-06-21",
+    "simbolo": "LTCUSDT",
+    "valore_usdt": -9.76,
+    "rendimento": -0.1971,
+    "effetto_sul_conto": 0.00868
+   },
+   {
+    "giorno": "2025-03-05",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 17.31,
+    "rendimento": 0.2231,
+    "effetto_sul_conto": 0.00853
+   },
+   {
+    "giorno": "2026-02-06",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 15.87,
+    "rendimento": 0.1531,
+    "effetto_sul_conto": 0.0083
+   },
+   {
+    "giorno": "2026-08-16",
+    "simbolo": "PORTALUSDT",
+    "valore_usdt": 4.54,
+    "rendimento": 0.5202,
+    "effetto_sul_conto": 0.00826
+   },
+   {
+    "giorno": "2022-07-16",
+    "simbolo": "ETCUSDT",
+    "valore_usdt": 17.6,
+    "rendimento": 0.149,
+    "effetto_sul_conto": 0.006
+   }
+  ],
+  "eventi_oltre_0,2%": 197,
+  "monete_piu_lunghe": [
+   [
+    "FTTUSDT",
+    681
+   ],
+   [
+    "MAVUSDT",
+    357
+   ],
+   [
+    "BOMEUSDT",
+    319
+   ],
+   [
+    "LTCUSDT",
+    279
+   ],
+   [
+    "TUTUSDT",
+    275
+   ],
+   [
+    "SQDUSDT",
+    255
+   ],
+   [
+    "ETHUSDT",
+    210
+   ],
+   [
+    "BCHUSDT",
+    185
+   ]
+  ]
+ },
+ "saltate | mercato": {
+  "coppie_giorno_di_polvere": 4633,
+  "al_giorno": 2.2061904761904763,
+  "valore_medio_in_frazione_del_conto": 0.02980437190467856,
+  "valore_massimo": 0.2444122134176911,
+  "giorno_valore_massimo": "2026-08-13",
+  "effetto_annuo": -0.009459629156409306,
+  "giorno_peggiore": [
+   "2024-11-06",
+   -0.010184525900034165
+  ],
+  "peggiori": [
+   {
+    "giorno": "2026-02-05",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 18.09,
+    "rendimento": -0.1478,
+    "effetto_sul_conto": -0.0095
+   },
+   {
+    "giorno": "2026-05-05",
+    "simbolo": "FHEUSDT",
+    "valore_usdt": -4.22,
+    "rendimento": 0.5731,
+    "effetto_sul_conto": -0.00894
+   },
+   {
+    "giorno": "2026-09-24",
+    "simbolo": "LTCUSDT",
+    "valore_usdt": -17.55,
+    "rendimento": 0.1638,
+    "effetto_sul_conto": -0.00876
+   },
+   {
+    "giorno": "2026-08-12",
+    "simbolo": "BRUSDT",
+    "valore_usdt": -2.55,
+    "rendimento": 0.776,
+    "effetto_sul_conto": -0.00693
+   },
+   {
+    "giorno": "2026-09-30",
+    "simbolo": "MOVRUSDT",
+    "valore_usdt": -2.98,
+    "rendimento": 0.7418,
+    "effetto_sul_conto": -0.00661
+   },
+   {
+    "giorno": "2026-05-09",
+    "simbolo": "PTBUSDT",
+    "valore_usdt": -4.31,
+    "rendimento": 0.3996,
+    "effetto_sul_conto": -0.00592
+   },
+   {
+    "giorno": "2022-07-18",
+    "simbolo": "ETHUSDT",
+    "valore_usdt": -13.38,
+    "rendimento": 0.1807,
+    "effetto_sul_conto": -0.00573
+   },
+   {
+    "giorno": "2026-08-21",
+    "simbolo": "LTCUSDT",
+    "valore_usdt": -13.57,
+    "rendimento": 0.113,
+    "effetto_sul_conto": -0.00562
+   }
+  ],
+  "migliori": [
+   {
+    "giorno": "2021-06-21",
+    "simbolo": "LTCUSDT",
+    "valore_usdt": -9.76,
+    "rendimento": -0.1971,
+    "effetto_sul_conto": 0.00871
+   },
+   {
+    "giorno": "2025-03-05",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 16.35,
+    "rendimento": 0.2231,
+    "effetto_sul_conto": 0.00869
+   },
+   {
+    "giorno": "2026-02-06",
+    "simbolo": "BCHUSDT",
+    "valore_usdt": 15.42,
+    "rendimento": 0.1531,
+    "effetto_sul_conto": 0.00844
+   },
+   {
+    "giorno": "2026-08-16",
+    "simbolo": "PORTALUSDT",
+    "valore_usdt": 4.37,
+    "rendimento": 0.5202,
+    "effetto_sul_conto": 0.00826
+   },
+   {
+    "giorno": "2026-08-20",
+    "simbolo": "ONGUSDT",
+    "valore_usdt": 3.94,
+    "rendimento": 0.4558,
+    "effetto_sul_conto": 0.00703
+   }
+  ],
+  "eventi_oltre_0,2%": 169,
+  "monete_piu_lunghe": [
+   [
+    "FTTUSDT",
+    689
+   ],
+   [
+    "ETHUSDT",
+    323
+   ],
+   [
+    "FORMUSDT",
+    301
+   ],
+   [
+    "LTCUSDT",
+    279
+   ],
+   [
+    "TUTUSDT",
+    276
+   ],
+   [
+    "BCHUSDT",
+    202
+   ],
+   [
+    "BNXUSDT",
+    201
+   ],
+   [
+    "DENTUSDT",
+    179
+   ]
+  ]
+ },
+ "chiusure | limite": {
+  "coppie_giorno_di_polvere": 0,
+  "al_giorno": 0.0,
+  "valore_medio_in_frazione_del_conto": 0.0,
+  "valore_massimo": 0.0,
+  "giorno_valore_massimo": "2021-01-04",
+  "effetto_annuo": 0.0,
+  "giorno_peggiore": [
+   "2021-01-04",
+   0.0
+  ],
+  "peggiori": [],
+  "migliori": [],
+  "eventi_oltre_0,2%": 0,
+  "monete_piu_lunghe": []
+ },
+ "chiusure | mercato": {
+  "coppie_giorno_di_polvere": 0,
+  "al_giorno": 0.0,
+  "valore_medio_in_frazione_del_conto": 0.0,
+  "valore_massimo": 0.0,
+  "giorno_valore_massimo": "2021-01-04",
+  "effetto_annuo": 0.0,
+  "giorno_peggiore": [
+   "2021-01-04",
+   0.0
+  ],
+  "peggiori": [],
+  "migliori": [],
+  "eventi_oltre_0,2%": 0,
+  "monete_piu_lunghe": []
+ }
+}

@@ -6,7 +6,7 @@ Aggiornato: 2026-11-27. Leggere all'inizio di ogni invocazione questo file e `KN
 | Prova 168: Q4, G1 + G11 + G1 neutra + F5 insieme (A e B) | 2026-11-27 | PASS tecnico A e B | rifatta identica (1e-16), taglio pulito; Alti: «sì» solo con la regola del 27 nov (scritta prima: 0,70/0,72), tutto a mercato 0,79, famiglia in V 0,81/0,82; concentrazione 44,8% |
 | Prova 28: K2, F5 + M7 + K2 (riesame) | 2026-11-11 | PASS tecnico | Alti: Sharpe corretto 0,75/0,47 con N = conto, 0,89/0,69 con N = gruppi; regole: «non candidate» |
 | Prova 113: N3G, monete gratis (riesame) | 2026-11-11 | PASS tecnico del «no» | corretta p 0,0268 (serve 0,01); Alto: eventi della 32 da rifare (19 persi); tocca anche N3 nel paper |
-| G1 (demo, candidata ai soldi veri; configurazione 280 USDT) | 2026-11-12 | PASS tecnico | Alti: esame 0,80 solo con il limite della ricerca (A 0,81, a mercato 0,77); GTC al mark; soglia cambiata dopo; moneta fino al 44% |
+| G1 (demo a 1.000; conto vero a 250 USDT dal 28 nov) | 2026-11-28 | PASS tecnico | Alti: esame alla 57 0,82-0,93 (famiglia in V 0,82-0,89), oggi 0,57-0,77, soglia scritta 0,95; demo a 1.000 non prova i 250 (scarto 45% del conto, netta −45/+40%); Medi: stop a 4-5 punti, polvere, blocco oltre 600 |
 | Prova 96: G22, deriva del Bitcoin dopo la Fed (riesame) | 2026-11-12 | PASS tecnico del «no» | p 0,0205 rifatta identica; nessun errore la porta a 0,01; Medi: controllo a caso esagera, limite macro di 2 ore |
 | Prova 55: C3, punteggio unico F5 + K2 + M7 (riesame) | 2026-11-12 | FAIL del calcolo, «no» confermato | settimana oltre il periodo; «peggio di F5» falso sulle stesse settimane (1,87 contro 1,61); corretto oggi 0,75 |
 | Mazzo dello Sharpe corretto (`asticella.py`, `78235da`) | 2026-11-12 | FAIL del mazzo | numeri rifatti identici; 27 varianti senza serie tolte, 81-82 senza filtro, conferme dentro; corretti G1 0,733, miscela 0,797/0,802 |
@@ -27,6 +27,7 @@ Aggiornato: 2026-11-27. Leggere all'inizio di ogni invocazione questo file e `KN
   `tasso_base`, `limiti_bot`); `f5_conto_vero_2026-11-27.py` (F5 sul conto vero: `--codice`, `--pannello`; `base` e `ore` prima).
 
 ## Decisioni aperte per Alessio
+- (28 nov) G1 a 250 USDT: quale esame (alla 57 o oggi; 0,95 o 0,80), demo a 250, chiusure «solo riduzione», cosa fare oltre 600 USDT, stop a −35% con margine di 4-5 punti, commissioni vere.
 - (7 nov) Minimo di anni e di operazioni; perdita giornaliera del 5% da simulare o no. (11 nov) Riesame che rende candidata una
   «costruzione» esclusa; famiglia del funding nelle miscele; minimo di eventi; esame in avanti delle monete gratis scritto prima.
 - (12 nov) G1 sul conto vero: soglia (0,95 scritta, 0,80 di oggi), costo dei limiti, tetto per moneta, capitale minimo.

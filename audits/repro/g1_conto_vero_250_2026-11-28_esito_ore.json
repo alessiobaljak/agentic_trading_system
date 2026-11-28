@@ -1,0 +1,25 @@
+{
+ "O00": {
+  "coppie_tenute_senza": 96,
+  "coppie_tenute": 110783
+ },
+ "H00": {
+  "coppie_tenute_senza": 96,
+  "coppie_tenute": 110783
+ },
+ "L00": {
+  "coppie_tenute_senza": 96,
+  "coppie_tenute": 110783
+ },
+ "O01": {
+  "coppie_tenute_senza": 96,
+  "coppie_tenute": 110783
+ },
+ "apertura_ora_contro_giorno": {
+  "coppie": 110687,
+  "oltre_0,1%": 0,
+  "massimo": 0.0
+ },
+ "monete_con_ore_fuori_ordine": 0,
+ "monete_senza_ore": []
+}

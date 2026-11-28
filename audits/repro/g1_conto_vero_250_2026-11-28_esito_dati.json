@@ -1,0 +1,670 @@
+{
+ "coppie_tenute_senza_apertura": 96,
+ "buchi_con_la_moneta_tenuta": [
+  {
+   "simbolo": "BNXUSDT_prima_del_2023-02-22",
+   "giorni_mancanti_tenuti": [
+    "2023-02-01",
+    "2023-02-02",
+    "2023-02-03",
+    "2023-02-04",
+    "2023-02-05"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "FILUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "GRTUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "GTCUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "HBARUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "HOTUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "IOTAUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "KNCUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "KSMUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "LINAUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-02"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "LITUSDT_prima_del_2025-12-23",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "LRCUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "LUNAUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "MANAUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "MASKUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "MKRUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "OCEANUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-02"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "OGNUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "OMGUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-02"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "ONEUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "RLCUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "RSRUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "RVNUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "SANDUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "SKLUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "STORJUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "SUSHIUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "TRXUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "UNFIUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "VETUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "WAVESUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  },
+  {
+   "simbolo": "XEMUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "XLMUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28"
+   ],
+   "n": 3
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "YFIUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 2
+  },
+  {
+   "simbolo": "ZECUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01"
+   ],
+   "n": 4
+  },
+  {
+   "simbolo": "ZENUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-04-01"
+   ],
+   "n": 1
+  },
+  {
+   "simbolo": "ZILUSDT",
+   "giorni_mancanti_tenuti": [
+    "2022-02-26",
+    "2022-02-27",
+    "2022-02-28",
+    "2022-04-01",
+    "2022-04-02"
+   ],
+   "n": 5
+  }
+ ],
+ "coppie_tenute_ferme": 89,
+ "rendimenti_tenuti_estremi": {
+  "sopra_+100%": 19,
+  "sotto_-60%": 21,
+  "massimo": 4.500439238653001,
+  "minimo": -0.9926605504587156,
+  "dove_massimo": [
+   "UNFIUSDT",
+   "2022-06-07",
+   0.01975104269833482
+  ]
+ },
+ "candele_incoerenti_tenute": 0,
+ "funding_stimato_tenuto": {
+  "coppie": 216,
+  "peso_lordo_giorni": 7.685096128803756,
+  "giorni": [
+   "2021-11-29",
+   "2021-11-30",
+   "2021-12-01",
+   "2021-12-02",
+   "2021-12-03",
+   "2021-12-04",
+   "2021-12-05",
+   "2021-12-06",
+   "2021-12-07",
+   "2021-12-08",
+   "2021-12-09",
+   "2021-12-10",
+   "2021-12-11",
+   "2021-12-12",
+   "2021-12-13",
+   "2021-12-14",
+   "2021-12-15",
+   "2021-12-16",
+   "2021-12-17",
+   "2021-12-18",
+   "2021-12-19",
+   "2021-12-20",
+   "2021-12-21",
+   "2021-12-22",
+   "2021-12-23",
+   "2021-12-24",
+   "2021-12-25",
+   "2021-12-26",
+   "2021-12-27",
+   "2021-12-28",
+   "2021-12-29",
+   "2021-12-30",
+   "2021-12-31",
+   "2022-01-01",
+   "2022-01-02",
+   "2022-01-03",
+   "2022-01-04",
+   "2022-01-05",
+   "2022-01-06",
+   "2022-01-07"
+  ]
+ },
+ "segnale_con_funding_stimato": {
+  "giorni": 265,
+  "monete_giorno": 397
+ },
+ "funding_zero_tenuto": {
+  "coppie": 746,
+  "quota": 0.006733885162886003
+ },
+ "intervalli_del_funding_campione": {
+  "AGLDUSDT": {
+   "intervalli_ore": {
+    "8": 3492
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "BERAUSDT": {
+   "intervalli_ore": {
+    "4": 3629
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "TRUMPUSDT": {
+   "intervalli_ore": {
+    "4": 3743
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "CAKEUSDT": {
+   "intervalli_ore": {
+    "4": 6401
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "RAYUSDT": {
+   "intervalli_ore": {
+    "4": 1144,
+    "8": 3628
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "XEMUSDT": {
+   "intervalli_ore": {
+    "8": 4707
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "WOOUSDT": {
+   "intervalli_ore": {
+    "8": 4923
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "USUSDT": {
+   "intervalli_ore": {
+    "4": 1776
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "ONTUSDT": {
+   "intervalli_ore": {
+    "1": 628,
+    "4": 1527,
+    "8": 5457
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "LITUSDT": {
+   "intervalli_ore": {
+    "4": 1708,
+    "8": 4747
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "ASTERUSDT": {
+   "intervalli_ore": {
+    "4": 2280
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "SUIUSDT": {
+   "intervalli_ore": {
+    "8": 3750
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "IOTXUSDT": {
+   "intervalli_ore": {
+    "8": 5640
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "HIGHUSDT": {
+   "intervalli_ore": {
+    "8": 3672
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "CTSIUSDT": {
+   "intervalli_ore": {
+    "8": 5413
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "1000000MOGUSDT": {
+   "intervalli_ore": {
+    "4": 4175
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "CYBERUSDT": {
+   "intervalli_ore": {
+    "2": 24,
+    "4": 6541,
+    "8": 159
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "BALUSDT": {
+   "intervalli_ore": {
+    "8": 4882
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "JTOUSDT": {
+   "intervalli_ore": {
+    "4": 6186
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "AEVOUSDT": {
+   "intervalli_ore": {
+    "4": 5609
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "MYROUSDT": {
+   "intervalli_ore": {
+    "4": 3714
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "COTIUSDT": {
+   "intervalli_ore": {
+    "1": 836,
+    "4": 204,
+    "8": 5897
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "BLESSUSDT": {
+   "intervalli_ore": {
+    "4": 2256
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "ORDIUSDT": {
+   "intervalli_ore": {
+    "4": 6371
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "PUMPUSDT": {
+   "intervalli_ore": {
+    "4": 3113
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "ATOMUSDT": {
+   "intervalli_ore": {
+    "8": 6299
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "GALUSDT": {
+   "intervalli_ore": {
+    "8": 2498
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "AIOTUSDT": {
+   "intervalli_ore": {
+    "4": 3131
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "HBARUSDT": {
+   "intervalli_ore": {
+    "8": 6082
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "REDUSDT": {
+   "intervalli_ore": {
+    "1": 532,
+    "4": 3328
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "AKEUSDT": {
+   "intervalli_ore": {
+    "1": 36,
+    "4": 2229
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "FIDAUSDT": {
+   "intervalli_ore": {
+    "1": 54,
+    "4": 4455
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "1INCHUSDT": {
+   "intervalli_ore": {
+    "8": 6299
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "MEWUSDT": {
+   "intervalli_ore": {
+    "4": 5033
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "SEIUSDT": {
+   "intervalli_ore": {
+    "8": 3435
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "GALAUSDT": {
+   "intervalli_ore": {
+    "8": 5529
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "CRVUSDT": {
+   "intervalli_ore": {
+    "8": 6299
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "NEIROUSDT": {
+   "intervalli_ore": {
+    "4": 4488
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "NFPUSDT": {
+   "intervalli_ore": {
+    "1": 20,
+    "4": 5499
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  },
+  "ONUSDT": {
+   "intervalli_ore": {
+    "4": 2079
+   },
+   "regolamenti_non_all_ora_tonda": 0
+  }
+ },
+ "giorni_universo_sotto_100": 287
+}

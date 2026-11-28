@@ -1,0 +1,326 @@
+{
+ "mazzo alla prova 57": {
+  "G1 250 bot oggi (limite al tocco)": {
+   "sharpe": 1.9081827057231946,
+   "annuo": 0.55901112965369,
+   "settimane": 300.0,
+   "probabilita": 0.9186177935689562,
+   "t_robusto": 3.893305881424579,
+   "t_semplice": 4.583306606853765,
+   "rapporto": 0.7215712644749743,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.9124177832286225,
+    "t": 4.583306606853765,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 solo riduzione (limite al tocco)": {
+   "sharpe": 1.9449182232958209,
+   "annuo": 0.5711976793497882,
+   "settimane": 300.0,
+   "probabilita": 0.9278708579505544,
+   "t_robusto": 3.956629631365315,
+   "t_semplice": 4.67154246597345,
+   "rapporto": 0.717348502540337,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.924599466674322,
+    "t": 4.67154246597345,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 bot oggi (tutto a mercato)": {
+   "sharpe": 1.8851690021045728,
+   "annuo": 0.5512607918689592,
+   "settimane": 300.0,
+   "probabilita": 0.9140431006795624,
+   "t_robusto": 3.889773687480372,
+   "t_semplice": 4.528029478763755,
+   "rapporto": 0.7379555056915369,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.9036340476481552,
+    "t": 4.528029478763755,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 solo riduzione (tutto a mercato)": {
+   "sharpe": 1.8511696179698447,
+   "annuo": 0.5388238903507138,
+   "settimane": 300.0,
+   "probabilita": 0.8964019688860878,
+   "t_robusto": 3.728505407801385,
+   "t_semplice": 4.446365599583695,
+   "rapporto": 0.7031681899423611,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.8881509821122215,
+    "t": 4.446365599583695,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 bot oggi (limite oltre 0,05%)": {
+   "sharpe": 1.8147351818500423,
+   "annuo": 0.5309953253557275,
+   "settimane": 300.0,
+   "probabilita": 0.8787365143863601,
+   "t_robusto": 3.632632108428015,
+   "t_semplice": 4.358852914721795,
+   "rapporto": 0.6945418280246478,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.8686367676345967,
+    "t": 4.358852914721795,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 solo riduzione (limite oltre 0,05%)": {
+   "sharpe": 1.8335609951734024,
+   "annuo": 0.5274098846845383,
+   "settimane": 300.0,
+   "probabilita": 0.8844662153221056,
+   "t_robusto": 3.6396192450999774,
+   "t_semplice": 4.404071055692028,
+   "rapporto": 0.6829725846637809,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.8779221851958116,
+    "t": 4.404071055692028,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 250 bot oggi (27% a mercato)": {
+   "sharpe": 1.9331793240278101,
+   "annuo": 0.5659563156021882,
+   "settimane": 300.0,
+   "probabilita": 0.9275594535219142,
+   "t_robusto": 3.9693115533957237,
+   "t_semplice": 4.643346541961093,
+   "rapporto": 0.7307489201729078,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.9216917272507288,
+    "t": 4.643346541961093,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  },
+  "G1 ricerca senza minimi (limite al tocco)": {
+   "sharpe": 1.9839812355927033,
+   "annuo": 0.5435754426158255,
+   "settimane": 300.0,
+   "probabilita": 0.9316235140768957,
+   "t_robusto": 3.728682609418138,
+   "t_semplice": 4.765368786590928,
+   "rapporto": 0.6122345054132673,
+   "ogni_anno_positivo": true,
+   "esito": "PROMETTENTE",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.9453345686082719,
+    "t": 4.765368786590928,
+    "settimane": 300.0,
+    "esito": "PROMETTENTE",
+    "passerebbe": true
+   },
+   "famiglie": 65,
+   "in_v": 57
+  }
+ },
+ "mazzo di oggi": {
+  "G1 250 bot oggi (limite al tocco)": {
+   "sharpe": 1.9081827057231946,
+   "annuo": 0.55901112965369,
+   "settimane": 300.0,
+   "probabilita": 0.7351139074722197,
+   "t_robusto": 3.893305881424579,
+   "t_semplice": 4.583306606853765,
+   "rapporto": 0.7215712644749743,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.74 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.502159744289886,
+    "t": 4.583306606853765,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.50 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 solo riduzione (limite al tocco)": {
+   "sharpe": 1.9449182232958209,
+   "annuo": 0.5711976793497882,
+   "settimane": 300.0,
+   "probabilita": 0.7576040775447175,
+   "t_robusto": 3.956629631365315,
+   "t_semplice": 4.67154246597345,
+   "rapporto": 0.717348502540337,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.76 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.5375036883616522,
+    "t": 4.67154246597345,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.54 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 bot oggi (tutto a mercato)": {
+   "sharpe": 1.8851690021045728,
+   "annuo": 0.5512607918689592,
+   "settimane": 300.0,
+   "probabilita": 0.721909904543207,
+   "t_robusto": 3.889773687480372,
+   "t_semplice": 4.528029478763755,
+   "rapporto": 0.7379555056915369,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.72 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.4798518761142321,
+    "t": 4.528029478763755,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.48 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 solo riduzione (tutto a mercato)": {
+   "sharpe": 1.8511696179698447,
+   "annuo": 0.5388238903507138,
+   "settimane": 300.0,
+   "probabilita": 0.6928744648368977,
+   "t_robusto": 3.728505407801385,
+   "t_semplice": 4.446365599583695,
+   "rapporto": 0.7031681899423611,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.69 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.44716919772907515,
+    "t": 4.446365599583695,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.45 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 bot oggi (limite oltre 0,05%)": {
+   "sharpe": 1.8147351818500423,
+   "annuo": 0.5309953253557275,
+   "settimane": 300.0,
+   "probabilita": 0.6639210661942354,
+   "t_robusto": 3.632632108428015,
+   "t_semplice": 4.358852914721795,
+   "rapporto": 0.6945418280246478,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.66 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.41322957431912183,
+    "t": 4.358852914721795,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.41 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 solo riduzione (limite oltre 0,05%)": {
+   "sharpe": 1.8335609951734024,
+   "annuo": 0.5274098846845383,
+   "settimane": 300.0,
+   "probabilita": 0.6763580315854902,
+   "t_robusto": 3.6396192450999774,
+   "t_semplice": 4.404071055692028,
+   "rapporto": 0.6829725846637809,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.68 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.43092233830154775,
+    "t": 4.404071055692028,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.43 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 250 bot oggi (27% a mercato)": {
+   "sharpe": 1.9331793240278101,
+   "annuo": 0.5659563156021882,
+   "settimane": 300.0,
+   "probabilita": 0.7532706368696931,
+   "t_robusto": 3.9693115533957237,
+   "t_semplice": 4.643346541961093,
+   "rapporto": 0.7307489201729078,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.75 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.5263722036333638,
+    "t": 4.643346541961093,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.53 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  },
+  "G1 ricerca senza minimi (limite al tocco)": {
+   "sharpe": 1.9839812355927033,
+   "annuo": 0.5435754426158255,
+   "settimane": 300.0,
+   "probabilita": 0.7740428060522879,
+   "t_robusto": 3.728682609418138,
+   "t_semplice": 4.765368786590928,
+   "rapporto": 0.6122345054132673,
+   "ogni_anno_positivo": true,
+   "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.77 sotto 0,80",
+   "regola_fino_al_27_novembre": {
+    "probabilita": 0.5782522102917741,
+    "t": 4.765368786590928,
+    "settimane": 300.0,
+    "esito": "NON PROMETTENTE: probabilita' che non sia fortuna 0.58 sotto 0,80",
+    "passerebbe": false
+   },
+   "famiglie": 200,
+   "in_v": 149
+  }
+ }
+}
