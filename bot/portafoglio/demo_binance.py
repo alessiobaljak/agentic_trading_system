@@ -344,13 +344,15 @@ def riduce_soltanto(attuale: float, obiettivo: float) -> bool:
     return obiettivo == 0.0 or (attuale != 0 and (attuale > 0) == (obiettivo > 0) and abs(obiettivo) < abs(attuale))
 
 
-def ordine_saltato(q: float, p: float, qmin: float, vmin: float, riduce: bool) -> bool:
+def ordine_saltato(q: float, p: float, qmin: float, vmin: float, chiude: bool) -> bool:
     """Se una variazione di ``q`` al prezzo ``p`` non diventa un ordine: sotto la quantità minima (o zero) sempre; sotto il valore
-    minimo solo se apre o aumenta. Una chiusura o una riduzione sotto il valore minimo parte con «solo riduzione» (28 novembre 2026,
-    audit di F5 del 27 novembre, problema Alto 2: prima restava aperta; a 280 USDT circa 7 posizioni a settimana, e TUT il 3 agosto
-    2026 costava il 13,8% del conto in una settimana). Binance esenta la «solo riduzione» dal valore minimo secondo il testo del suo
-    errore -4164 («unless you choose reduce only»): se la rifiutasse, il rifiuto va fra i rifiutati con il suo peso."""
-    return q <= 0 or q < qmin or (q * p < vmin and not riduce)
+    minimo sempre, tranne la **chiusura intera** (obiettivo zero), che parte con «solo riduzione» (28 novembre 2026, audit di F5 del 27
+    novembre, problema Alto 2: prima restava aperta; a 280 USDT circa 7 posizioni a settimana, e TUT il 3 agosto 2026 costava il 13,8%
+    del conto in una settimana). Le riduzioni sotto il valore minimo si saltano come prima (problema 269 di live-path-reviewer, 28
+    novembre: la revisione delle prove di G1 a 250 USDT dà 1,94 di Sharpe con le sole chiusure, 1,92 e +51,8% l'anno contro +57,1% con
+    anche le riduzioni, `audits/reports/2026-11-28-G1_CONTO_VERO_250.md`). Binance esenta la «solo riduzione» dal valore minimo secondo
+    il testo del suo errore -4164 («unless you choose reduce only»): se la rifiutasse, il rifiuto va fra i rifiutati con il suo peso."""
+    return q <= 0 or q < qmin or (q * p < vmin and not chiude)
 
 
 def quantita_che_chiude(attuale: float, lato: str, passo: float, qmin: float) -> Optional[float]:
@@ -365,7 +367,7 @@ def quantita_che_chiude(attuale: float, lato: str, passo: float, qmin: float) ->
 def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> list:
     """Gli ordini per portare le posizioni ai pesi: [(simbolo, lato, quantita', prezzo limite, riduce)]. Le quantita' sono
     arrotondate al passo verso zero; si salta cio' che resta sotto la quantita' minima, e sotto il valore minimo solo se apre o
-    aumenta (`ordine_saltato`: le chiusure e le riduzioni partono con «solo riduzione»)."""
+    aumenta o riduce (`ordine_saltato`: le chiusure intere partono con «solo riduzione», problema 269)."""
     out = []
     for s in sorted(set(pesi) | {k for k, v in posizioni.items() if v}):
         if s not in prezzi or s not in f:
@@ -377,7 +379,7 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
         delta = obiettivo - attuale
         q = arrotonda(abs(delta), passo, "giu")
         riduce = riduce_soltanto(attuale, obiettivo)
-        if ordine_saltato(q, p, qmin, vmin, riduce):
+        if ordine_saltato(q, p, qmin, vmin, obiettivo == 0.0):
             continue
         lato = "BUY" if delta > 0 else "SELL"
         limite = arrotonda(p, tick, "giu" if lato == "BUY" else "su")
@@ -387,7 +389,7 @@ def ordini_del_giorno(pesi: dict, posizioni: dict, prezzi: dict, equity: float, 
 
 def sotto_il_minimo(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f: dict) -> dict:
     """Le variazioni volute che non diventano ordini perché restano sotto la quantità o il valore minimo (le stesse regole di
-    `ordini_del_giorno`: dal 28 novembre 2026 le chiusure e le riduzioni sotto il valore minimo partono e non si contano qui). La
+    `ordini_del_giorno`: dal 28 novembre 2026 le chiusure intere sotto il valore minimo partono e non si contano qui). La
     prova 148 se le aspetta con 280 USDT: circa 9 su 10 (`research/programma7/RISULTATI_OTTANTASEIESIMA.md`). Si contano solo le
     differenze da un centesimo in su."""
     n, valore = 0, 0.0
@@ -402,7 +404,7 @@ def sotto_il_minimo(pesi: dict, posizioni: dict, prezzi: dict, equity: float, f:
         if abs(delta) * p < 0.01:
             continue
         q = arrotonda(abs(delta), passo, "giu")
-        if ordine_saltato(q, p, qmin, vmin, riduce_soltanto(attuale, obiettivo)):
+        if ordine_saltato(q, p, qmin, vmin, obiettivo == 0.0):
             n += 1
             valore += abs(delta) * p
     return {"variazioni": n, "valore_in_frazione_del_conto": round(valore / equity, 4) if equity > 0 else 0.0}
@@ -2048,7 +2050,7 @@ class DemoG1:
                 delta = voluto - attuale
                 q = con_tetto(arrotonda(abs(delta), passo, "giu"), qmax_m, passo)
                 riduce = riduce_soltanto(attuale, voluto)
-                if not ordine_saltato(q, p, qmin, vmin, riduce):   # una chiusura o una riduzione anche sotto il valore minimo
+                if not ordine_saltato(q, p, qmin, vmin, voluto == 0.0):   # la chiusura intera anche sotto il valore minimo (269)
                     cid = id_mercato(chiave, s, giro)
                     if not self._ordine_esiste(c, s, cid):
                         par = {"symbol": s, "side": "BUY" if delta > 0 else "SELL", "type": "MARKET", "quantity": testo(q),

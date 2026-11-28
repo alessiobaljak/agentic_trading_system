@@ -71,8 +71,10 @@ La sessione non può: niente accesso a Binance, a Firebase e alla macchina.
    k. le scelte della fase 1 già in funzione sul demo e mai confermate una per una: stop anche al 65% del capitale, «riparti» solo a
       conto vuoto con la riapertura alla mezzanotte, una moneta oltre il 60% fa saltare la decisione del giorno, il blocco di Binance
       rispettato per intero;
-   l. dal 28 novembre 2026 (demo e conto vero): le chiusure e le riduzioni sotto il valore minimo di Binance partono con «solo
-      riduzione» (prima restavano aperte: audit di F5 del 27 novembre, TUT −13,8% del conto in una settimana); che Binance le accetti
+   l. dal 28 novembre 2026 (demo e conto vero): la **chiusura intera** sotto il valore minimo di Binance parte con «solo riduzione»
+      (prima restava aperta: audit di F5 del 27 novembre, TUT −13,8% del conto in una settimana); le **riduzioni** sotto il minimo si
+      saltano come le aperture (problema 269: con G1 a 250 USDT le sole chiusure danno 1,94 di Sharpe e +57,1% l'anno, anche le riduzioni
+      1,92 e +51,8%, saltare tutto 1,91; `audits/reports/2026-11-28-G1_CONTO_VERO_250.md`); che Binance accetti la chiusura
       sotto i 5 USDT lo dice solo il testo del suo errore -4164: da vedere sul demo alla prima mezzanotte dopo il riavvio
       (`/demo_binance/ribilanciamenti/{giorno}/rifiutati`). L'inversione su una moneta che si può solo ridurre manda solo la chiusura.
       Gli avvisi al telefono: il segno «telefono» solo a invio riuscito, il 429 che dura oltre 30 minuti una volta, il fermo sempre.

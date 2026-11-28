@@ -897,6 +897,10 @@ scrivono con e senza le serie a incasso quasi fisso.
   Per il riavvio servono quattro letture che lo «stato» non fa: `/commands/bot_state` (atteso «emergency»), `/commands/kill_switch`
   (atteso falso), `/positions` e `/ordini_limite` (attesi vuoti): una voce nuova di sola lettura nello stato, da far rivedere, oppure la
   console di Firebase del proprietario.
+* **28 novembre 2026, conto vero su G1** (`reviews/reports/2026-11-28-conto-vero-G1.md` e `-bis.md`): commit approvato; per l'accensione
+  restano 54 (ii) Alto, 70 Medio, 78, 271-273, 275 (testi in testa a `demo_binance.py`), 217 e 221 Bassi, le cose del proprietario di
+  `docs/conto_vero.md` e le verifiche vere (lettura del saldo, rifare S1b, S2b, S4 e `mutazioni2.py`, revisione nuova). Da vedere sul demo alla
+  prima mezzanotte dopo il riavvio: se Binance accetta la chiusura «solo riduzione» sotto i 5 USDT (`-4164` fra i rifiutati).
 * **28 novembre 2026, il conto vero torna a G1 e il capitale si legge da Binance** (decisioni del proprietario del 28 novembre): nel
   codice (non ancora committato né rivisto) G1 al posto di F5 (file del paper di G1, 26 ore, testi, `/conto_vero/versione` con la
   strategia, il giro subito dopo il paper di G1), il capitale = il saldo USDT del portafoglio dei future a ogni fase nuova (al massimo

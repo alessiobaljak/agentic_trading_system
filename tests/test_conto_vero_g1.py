@@ -3,7 +3,8 @@ e revisioni del 27 novembre: `reviews/reports/2026-11-27-bot.md`, `2026-11-27-bo
 
 * il conto vero esegue di nuovo G1: il file del paper di G1, l'età della decisione di 26 ore, i testi (problema 183);
 * il capitale non si scrive più a mano: il saldo USDT del portafoglio dei future letto da Binance, al massimo il tetto del codice;
-* le chiusure e le riduzioni sotto il valore minimo partono con «solo riduzione» (audit di F5, problema Alto 2);
+* le chiusure intere sotto il valore minimo partono con «solo riduzione» (audit di F5, problema Alto 2); le riduzioni sotto il minimo
+  si saltano come le aperture (problema 269, 28 novembre);
 * 211 (`telefono` solo a invio riuscito), 213 (l'inversione su una moneta che si può solo ridurre), 219 (il 429 che dura), 220 (il
   limite di uno all'ora per tipo, e mai per il fermo), nel bot e nel monitor.
 
@@ -220,14 +221,16 @@ def test_capitale_dopo_chiudi_tutto_e_riparti_la_fase_resta_e_non_si_rilegge(tmp
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
-# le chiusure e le riduzioni sotto il valore minimo: «solo riduzione» (audit di F5 del 27 novembre, problema Alto 2)
+# le chiusure intere sotto il valore minimo: «solo riduzione» (audit di F5 del 27 novembre, problema Alto 2); le riduzioni no (269)
 # ---------------------------------------------------------------------------------------------------------------------------------
 F = {"A": (0.01, 0.001, 0.001, 5.0)}
 
 
-def test_minimo_ordini_del_giorno_chiusure_e_riduzioni_partono_aperture_e_aumenti_no():
+def test_minimo_ordini_del_giorno_le_chiusure_partono_riduzioni_aperture_e_aumenti_no():
     assert dm.ordini_del_giorno({}, {"A": 0.03}, {"A": 100.0}, 280.0, F) == [("A", "SELL", 0.03, 100.0, True)]   # 3 USDT: chiude
-    assert dm.ordini_del_giorno({"A": 0.025}, {"A": 0.1}, {"A": 100.0}, 280.0, F) == [("A", "SELL", 0.03, 100.0, True)]   # riduce
+    assert dm.ordini_del_giorno({"A": 0.025}, {"A": 0.1}, {"A": 100.0}, 280.0, F) == []            # riduce per 2,8 USDT: no (269)
+    assert dm.ordini_del_giorno({"A": 0.01}, {"A": 0.1}, {"A": 100.0}, 280.0, F) == [("A", "SELL", 0.072, 100.0, True)]   # riduce per 7,2 USDT: sì
+    assert dm.sotto_il_minimo({"A": 0.025}, {"A": 0.1}, {"A": 100.0}, 280.0, F)["variazioni"] == 1   # la riduzione piccola resta «sotto»
     assert dm.ordini_del_giorno({"A": 0.01}, {}, {"A": 100.0}, 280.0, F) == []                     # apre per 2,8 USDT: no
     assert dm.ordini_del_giorno({"A": 0.03}, {"A": 0.06}, {"A": 100.0}, 280.0, F) == []            # aumenta per 2,4 USDT: no
     assert dm.ordini_del_giorno({}, {"A": 0.0004}, {"A": 100.0}, 280.0, F) == []                   # sotto la quantità minima: no
@@ -582,3 +585,20 @@ def test_b_saldo_tornato_alla_decisione_niente_fase_nuova(tmp_path, monkeypatch)
     st = d.carica()
     assert "capitale_in_attesa" not in st and "fase_nuova" not in st
     assert fb.get_rtdb("/conto_vero/conto_ridotto")["capitale"] == 280.0
+
+
+# 274 (riesame del 28 novembre, reviews/reports/2026-11-28-conto-vero-G1-bis.md): il resto a mercato segue la regola delle sole
+# chiusure intere; cade se `demo_binance.py` torna a esentare anche le riduzioni.
+def test_minimo_il_resto_a_mercato_di_una_riduzione_sotto_il_minimo_si_salta(tmp_path):
+    """269: la riduzione da circa 2.000 a circa 1.000 USDT corti parte a limite; se dopo l'ora ne mancano 2,6 USDT (sotto i 5), il
+    resto a mercato si salta come all'apertura: parte a mercato solo la chiusura intera."""
+    finto = _Demo()
+    finto.posizioni = {"AUSDT": 0.0, "BUSDT": -40.0}
+    d, fb = _demo_semplice(tmp_path, finto, pesi={"BUSDT": -0.1})          # obiettivo −19,997: si compra 20,002 «solo riduzione»
+    d.tick(T0)
+    o = _ordini_di(finto, "BUSDT")
+    assert [(q["side"], q["type"], q["quantity"], q.get("reduceOnly")) for q in o] == [("BUY", "LIMIT", "20.002", "true")]
+    finto.posizioni["BUSDT"] = -20.05                                      # eseguito in parte: ne mancano 0,052 (2,6 USDT)
+    n = len(finto.chiamate)
+    d.tick(T0 + 3601)
+    assert not [q for q in _ordini_di(finto, "BUSDT", n) if q["type"] == "MARKET"]

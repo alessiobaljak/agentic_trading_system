@@ -132,8 +132,8 @@ Binance riletta una volta (`:470`), errori senza firma (`senza_firma` `:123-127`
 7 giorni; chiusure e riduzioni partono, `demo_binance.py:1608`; conto vero mai); allarme `ordini_rifiutati`; `/demo_binance/ore`; telefono.
 Telefono: per tipo, uno all'ora; **28 nov (non committato)**: `telefono` solo a invio riuscito, segnato dal giro (`demo_binance.py:790-869`),
 fermo e stop sempre (`:156`), 429 oltre 30 minuti una volta (`:1281-1311`); monitor per tipo, 429 dopo 30 minuti (`monitor.py:135-224`).
-**28 nov, minimi (demo e conto vero)**: chiusure **e riduzioni** sotto il valore minimo partono «solo riduzione» (`ordine_saltato` `:347-353`,
-`:380`, resto `:2050-2051`; la prova ha giudicato solo le chiusure: 269); inversione su moneta in sola riduzione → solo la chiusura (`:1804-1858`).
+**28 nov, minimi (demo e conto vero)**: sotto il valore minimo parte «solo riduzione» solo la **chiusura intera** (`ordine_saltato` `:347-355`,
+`:382`, `:407`, resto `:2053`; riduzioni saltate, 269 chiuso, 3cac1aeb); inversione su moneta in sola riduzione → solo la chiusura (`:1813-1860`).
 **Conto ridotto**: valore = `totalMarginBalance` − scarto (`_conto` `:1146-1153`). Chi legge i rami del demo: dashboard `PaperBot.tsx`
 (fermo, confronto, stato, allarmi per tipo), fotografia `scripts/state_snapshot.py`.
 
