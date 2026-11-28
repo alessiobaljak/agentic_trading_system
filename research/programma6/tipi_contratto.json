@@ -1,6 +1,6 @@
 {
  "fonte": "https://www.binance.com/fapi/v1/exchangeInfo",
- "aggiornato": "2026-11-27",
+ "aggiornato": "2026-11-28",
  "nota": "underlyingType, contractType, underlyingSubType e onboardDate (ms) da exchangeInfo; un simbolo tolto dal listino resta com'era (research/programma6/tipi_contratto.py)",
  "simboli": {
  "0GUSDT": {"underlyingType": "COIN", "contractType": "PERPETUAL", "underlyingSubType": ["Layer-1", "Crypto"], "onboardDate": 1758123900000},
