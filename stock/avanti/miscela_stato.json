@@ -1,9 +1,11 @@
 {
  "fed": 0.0,
  "calma": {
-  "SPY": 0.7239,
-  "QQQ": 0.4474
+  "SPY": 0.5065,
+  "QQQ": 0.3342
  },
  "ampiezza": 0.98,
- "ultima_sera": "2026-11-25"
+ "ultima_sera": "2026-11-27",
+ "settimana_calma": "2026-W49",
+ "mese_ampiezza": "2026-11"
 }
