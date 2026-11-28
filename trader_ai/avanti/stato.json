@@ -930,7 +930,6 @@
   }
  ],
  "note": [
-  "28/11 03:45 Tengo il lungo da 60000 con stop a 59790 e obiettivo a 60220. La 15m delle 03:30 ha fatto un minimo a 59864, appena sotto 59870, ma ha chiuso a 59948 con il 59% di acquisti. È un rifiuto chiuso del supporto e non una chiusura sotto: l'invalidazione non è scattata e lo sweep 59803 regge. Sul 5m l'istogramma MACD migliora da quattro candele (-21 → -9,5), l'RSI sale da 36 a 45 e le ultime due 5m hanno il 70-74% di acquisti, anche se con volume basso. Restano come tetto il VWAP (60026) e le EMA21/50 5m (59980); l'istogramma MACD 30m cala ancora (67,6), ma resta positivo e la 30m in corso ha il 59% di acquisti. Non stringo lo stop, che finirebbe nel rumore. Se il prezzo riconquista il VWAP con u…",
   "28/11 04:00 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il supporto ha retto. La 15m delle 03:45 ha fatto un minimo crescente a 59904, sopra 59864, e chiude a 60000 con il 74% di acquisti. La 30m delle 03:30 chiude a 60000 con il 68% di acquisti. Sul 5m la 03:55 sale con volume 2,19x e l'86% di acquisti, e l'istogramma MACD 5m torna positivo dopo quattro candele in miglioramento. Il prezzo ha riconquistato le EMA21/50 5m (59975) e l'EMA21 15m (59973). Resta come tetto il VWAP (60023), poi l'EMA21 30m (60040) e il doppio rifiuto 60236-60243. Il pareggio netto è a 60048. Non sposto lo stop: lo sweep 59803 è ancora l'invalidazione. Se una 15m chiude sopra 60100 con acquisti, alzo lo sto…",
   "28/11 04:15 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il prezzo mark è 60018, quasi al pareggio netto (60048). La 15m delle 04:00 chiude a 60017 con il 48% di acquisti: tiene sopra il livello rotto 60000 e sopra le EMA21 15m (59977), ma è ancora sotto l'EMA50 15m (60096) e non ha chiuso sopra 60100, quindi non alzo lo stop. Sul 5m l'istogramma MACD cresce da quattro candele (0,6→11,3) e le EMA si stanno girando, ma il volume cala (0,35x): è una pausa tipica dell'Asia di sabato, non un rifiuto. Il VWAP (60023) e l'EMA21 30m (60040) sono il tetto da superare. L'invalidazione resta lo sweep 59803. Se una 15m chiude sopra 60100 con acquisti, porto lo stop sotto il minimo crescente 5990…",
   "28/11 04:30 Tengo il lungo da 60000, con stop a 59790 e obiettivo a 60220. Il prezzo mark è 60006, appena sotto il VWAP (60023) e il pareggio netto (60048). La 15m delle 04:15 chiude a 60006 con il 45% di acquisti e volume 0,42x. Il minimo 59988 sta sopra le EMA21 15m (59979) e sopra il livello rotto: è una pausa a basso volume del sabato asiatico, non un rifiuto. Il MACD 15m è appena sopra il segnale. Sul 5m l'istogramma resta positivo ma cala (13,4→10,7) e le EMA sono in ordine rialzista. Il tetto resta l'EMA21 30m (60037) e poi l'EMA50 15m (60092). L'invalidazione è ancora lo sweep 59803: stringere lo stop lo metterebbe nel rumore. Se una 15m chiude sopra 60100 con acquisti, alzo lo stop sotto 59900…",
@@ -939,14 +938,15 @@
   "28/11 05:09 . Lo stop del lungo è scattato e la compressione 59864-60060 si è rotta al ribasso. La 5m in corso ha volume circa 7x e il 39% di acquisti, ha rotto lo sweep 59803 e ha fatto un nuovo minimo del giorno a 59712. Il 30m resta sotto EMA21 (60031) ed EMA50 (60305) e il MACD 15m è girato negativo. Non vendo a mercato sul minimo. Metto un limite corto a 59860, sul ritest del livello rotto 59864. Lo stop è a 60010, sopra le EMA 5m/15m (59980) e il tetto 60000. L'obiettivo è 59580, sopra il minimo di ieri sera 59553 e la zona 59678-59692. Il valore è di circa 2400. Alla 15m delle 05:15 controllo la chiusura: se rientra sopra 59803 con acquisti, annullo.",
   "28/11 05:15 . La 15m delle 05:00 conferma la rottura: chiude a 59757 sotto lo sweep 59803, con volume 3,25x e il 43% di acquisti. Il MACD 15m è sotto il segnale (-16 di istogramma) e l'RSI scende a 38. Il 30m resta sotto EMA21 (60031) ed EMA50 (60305). Sul 5m l'RSI è a 29 e la 05:10 ha il 55% di acquisti: un rimbalzo tecnico verso il livello rotto 59860 è plausibile, ed è lì che voglio vendere, non qui sul minimo. Tengo il limite corto a 59860 con stop 60010 sopra il tetto 60000 e le EMA 5m/15m, e obiettivo 59580 sopra la zona 59553-59580. Allargare lo stop sopra 60060 porterebbe il rapporto sotto 1, quindi lo lascio. Se una 15m richiude sopra 59900 con acquisti, annullo l'ordine.",
   "28/11 05:30 . Tengo il limite corto a 59860, con stop 60010 e obiettivo 59580. La 15m delle 05:15 chiude a 59800, con il 53% di acquisti e volume 1,2x. È un rimbalzo tecnico dopo la rottura e resta sotto lo sweep rotto 59803-59864. Sul 5m i minimi salgono (59731, 59744, 59766) e i massimi pure (59809, 59828, 59844): il rimbalzo punta proprio verso il livello rotto, dove voglio vendere. L'EMA9 5m è a 59846 e l'EMA21 a 59906. Il MACD 15m si allarga sotto il segnale (-22) e il 30m resta sotto EMA21 (60010) ed EMA50 (60286). La 5m in corso parte con vendite. Non vendo a mercato a 59770, vicino al minimo. Annullo se una 15m chiude sopra 59900 con acquisti.",
-  "28/11 05:45 Tengo il limite corto a 59860, con stop 60010 e obiettivo 59580. La 15m delle 05:30 conferma la debolezza. Chiude a 59705, sul minimo, con volume 2,37x e il 38% di acquisti. Fa anche un nuovo minimo del giorno a 59666. Il rimbalzo si è fermato a 59844, sotto il livello rotto 59864. Ora i massimi 5m scendono: 59844, 59800, 59781, 59771. Il MACD 15m si allarga sotto il segnale (-30,7) e il 30m resta sotto EMA21 (60010) ed EMA50 (60286). Sul 5m però l'RSI è a 29 e il prezzo tocca la banda bassa (59666): vendere qui a mercato sarebbe vendere sul minimo. Il limite sta sull'EMA21 5m (59864) e sul livello rotto, cioè il ritracciamento profondo dove ha senso vendere. Se resta lontano e la struttura…"
+  "28/11 05:45 Tengo il limite corto a 59860, con stop 60010 e obiettivo 59580. La 15m delle 05:30 conferma la debolezza. Chiude a 59705, sul minimo, con volume 2,37x e il 38% di acquisti. Fa anche un nuovo minimo del giorno a 59666. Il rimbalzo si è fermato a 59844, sotto il livello rotto 59864. Ora i massimi 5m scendono: 59844, 59800, 59781, 59771. Il MACD 15m si allarga sotto il segnale (-30,7) e il 30m resta sotto EMA21 (60010) ed EMA50 (60286). Sul 5m però l'RSI è a 29 e il prezzo tocca la banda bassa (59666): vendere qui a mercato sarebbe vendere sul minimo. Il limite sta sull'EMA21 5m (59864) e sul livello rotto, cioè il ritracciamento profondo dove ha senso vendere. Se resta lontano e la struttura…",
+  "28/11 06:00 . Tengo il limite corto a 59860, con stop 60010 e obiettivo 59580. La 15m delle 05:45 ha fatto uno sweep a 59575, vicino al minimo di ieri sera (59553), e ha chiuso a 59713 con il 46% di acquisti. La coda lunga mostra domanda sul minimo, quindi vendere qui a 59760 sarebbe vendere sul supporto appena difeso. La struttura 15m resta però ribassista. I massimi scendono (59844, 59809, 59798), l'istogramma MACD 15m si allarga (-33,8) e il prezzo sta sotto EMA21 15m (59904) e sotto EMA21/50 30m (59983/60263). Il limite a 59860 è il ritest del livello rotto 59864, sopra l'EMA21 5m (59832). Se il rimbalzo dallo sweep arriva lì, è il punto giusto per vendere. Annullo l'ordine se una 15m chiude sopra…"
  ],
  "estraneo": null,
  "giorno": "2026-11-28",
  "conto_mezzanotte": 942.4995047474505,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-28T05:45:00.491436+00:00",
+ "ultima": "2026-11-28T06:00:23.609913+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
  "approccio": "Seguo la struttura 15m: dopo la rottura di un range con volume vendo con un limite il ritest del livello rotto o della EMA21, con lo stop sopra il tetto e le EMA; non vendo sui minimi e non inseguo.",
@@ -1152,16 +1152,16 @@
  "discesa_dalle": "2026-11-28T00:00:01.980971+00:00",
  "massimo_giorno": 944.5638665954405,
  "discesa_max_giorno": 21.014562992940114,
- "ultimo_costo_massimo": 0.4974,
+ "ultimo_costo_massimo": 0.4973,
  "stat_giorno": {
-  "chiamate": 26,
-  "costo": 1.62825,
+  "chiamate": 27,
+  "costo": 1.686458,
   "esiti": {
-   "ok": 26
+   "ok": 27
   },
-  "durata_tot": 291.3,
+  "durata_tot": 303.6,
   "durata_max": 21.1,
-  "uscita_tot": 24160
+  "uscita_tot": 25201
  },
  "costo_medio_ieri": 0.06043974666666667,
  "prezzo_inizio_giorno": 59893.96962319,
