@@ -471,3 +471,33 @@ def test_registra_guarda_la_seduta_prima_del_calendario(monkeypatch, tmp_path):
     monkeypatch.setattr(av, "_richiesta", lambda m, p, **k: [])
     monkeypatch.setattr(ga, "riga_mancante", lambda g: False)
     assert "righe aperte" in conto.registra("2026-11-27", prima="2026-11-25")
+
+
+# ---- la scheda delle operazioni per tutte le strategie (28 novembre 2026) ---------------------------------------------
+
+def test_le_operazioni_della_miscela_per_la_scheda():
+    from stock.avanti import miscela as mi
+    ordini = [
+        {"client_order_id": "miscela-sera-2026-11-25-g-SPY", "symbol": "SPY", "side": "buy", "qty": "3", "filled_qty": "3",
+         "filled_avg_price": "660.5", "filled_at": "2026-11-26T14:30:01Z", "submitted_at": "2026-11-26T00:12:00Z", "status": "filled"},
+        {"client_order_id": "miscela-sera-2026-11-27-g-QQQ", "symbol": "QQQ", "side": "sell", "qty": "5", "filled_qty": "0",
+         "submitted_at": "2026-11-28T00:12:00Z", "status": "accepted"},
+        {"client_order_id": "miscela-fed-vigilia-2026-12-08-SPY", "symbol": "SPY", "side": "buy", "qty": "14", "filled_qty": "0",
+         "submitted_at": "2026-12-08T19:00:00Z", "status": "expired"},
+        {"client_order_id": "candela15-2026-11-25-AAA", "symbol": "AAA", "side": "buy", "qty": "1", "filled_qty": "1",
+         "filled_avg_price": "1", "filled_at": "2026-11-25T14:45:00Z", "status": "filled"},
+    ]
+    op = mi.operazioni(ordini)
+    assert sorted(op) == ["2026-11-26", "2026-11-27", "2026-12-08"]          # giorno di New York dell'esecuzione o dell'invio
+    spy = op["2026-11-26"][0]
+    assert spy["genere"] == "ordine" and spy["ingresso"] == 660.5 and spy["nota"] == "decisa la sera del 2026-11-25"
+    assert op["2026-11-27"][0]["nota"].endswith("in attesa dell'apertura") and "ingresso" not in op["2026-11-27"][0]
+    assert op["2026-12-08"][0]["nota"] == "banca centrale, la vigilia (comprare); non eseguito (expired)"
+
+
+def test_la_prova_45_pubblica_anche_i_giorni_senza_ingresso():
+    from stock.avanti import plancia
+    d = pd.DataFrame([{"giorno": D, "simbolo": "VOO", "copertura": "sopra zero", "nota": "niente: copertura sopra zero"}],
+                     columns=ga.COLONNE)
+    op = plancia.operazioni_recenti(d)
+    assert op[D] == [{"simbolo": "VOO", "nota": "niente: copertura sopra zero"}]
