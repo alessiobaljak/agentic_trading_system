@@ -3,6 +3,15 @@
 Aggiornato a ogni tappa dalla sessione principale (regole dei token in `CLAUDE.md`). Corto: il resto sta nel diario
 (`docs/andremo_live.md`) e nei piani.
 
+## Compito in corso (28 novembre 2026, 10:50 UTC): il conto vero su G1
+- Decisioni del proprietario del 28 novembre: G1 al posto di F5, capitale = saldo dei future letto da Binance (circa 250 USDT).
+- Fatto: revisione delle prove di G1 a 250 (PASS tecnico, `audits/reports/2026-11-28-G1_CONTO_VERO_250.md`); codice del conto vero su G1
+  salvato (spento) dopo due giri di live-path-reviewer (`reviews/reports/2026-11-28-conto-vero-G1.md`, `-bis.md`).
+- Aspetta il proprietario: (1) il sì al demo a 250 USDT (`ops/demo_binance_capitale`); (2) l'ok al riavvio (letture prima: battito,
+  HEAD, DRY_RUN, `ops/conto_vero_acceso` e `ops/conto_vero_capitale` assenti, demo senza fermo, mai fra 00:05 e 01:15 UTC); (3) per
+  l'accensione le cose di `docs/conto_vero.md` (Firebase, chiave di Binance senza prelievo e legata all'indirizzo, impostazioni dei
+  future, decisioni a-l) e la sua richiesta esplicita. Lunedì 30: gate2-reconciler e portfolio-allocator con il modello più potente.
+
 ## Compito in corso (27 novembre 2026, 13:30 UTC)
 - **Audit del 26 novembre: correzioni finite e salvate.** Commit: stato e agente (`e824f22`, attivo, controllato sulla risposta 0779),
   esame in una funzione sola (`research/programma6/ESAME_NUMERI_2026-11-27.md`), bot/demo/monitor (`16c5712`, APPROVE al secondo giro,

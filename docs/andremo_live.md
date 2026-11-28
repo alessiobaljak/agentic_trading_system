@@ -1229,3 +1229,9 @@ del 45% del conto al giorno, settimana peggiore −13,0% contro −7,5%): propos
 G1 (saldo letto da Binance sotto il tetto di 300, chiusure «solo riduzione», 211, 213, 219, 220) è dal revisore del percorso degli ordini,
 non committato. Cercatore di idee del giro delle 08:17 lanciato. **Capito**: con 250 USDT G1 non è più neutra al mercato (esposizione netta
 fra −45% e +40%): il rischio del conto piccolo non è il rendimento medio ma la forma del portafoglio.
+**28 novembre, 10:50 UTC, conto vero su G1 salvato (spento)**: il codice del conto vero esegue G1 con il capitale letto dal saldo dei
+future di Binance (sotto il tetto di 300), le chiusure intere sotto il minimo con «solo riduzione» (le riduzioni no: 1,94 contro 1,92
+nella revisione delle prove), e i problemi 211, 213, 219, 220 chiusi; due giri di live-path-reviewer (APPROVE per il commit; per
+l'accensione mancano 54 ii, 70 e le cose del proprietario). La dashboard dice G1 sul conto vero. Niente riavvio: lo approva il
+proprietario. **Capito**: con 250 USDT conviene chiudere le posizioni piccole rimaste, non ridurle: ridurle sotto il minimo costa più delle
+spese che fa risparmiare (+57,1% l'anno contro +51,8%).
