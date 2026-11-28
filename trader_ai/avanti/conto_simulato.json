@@ -1,41 +1,11 @@
 {
- "portafoglio": 923.2259895012505,
- "posizione": {
-  "lato": "corto",
-  "quantita": 0.05,
-  "entrata": 59640.0,
-  "leva": 5,
-  "margine": 596.4,
-  "liquidazione": 71269.8,
-  "aperta_ms": 1795858200000,
-  "da_limite": true,
-  "cid": "taio1795856489271",
-  "spese_entrata": 0.5964,
-  "spese": 0.5964,
-  "funding": 0.0
- },
+ "portafoglio": 932.4432409512505,
+ "posizione": null,
  "ordini": [],
- "algo": [
-  {
-   "algoId": 116,
-   "cid": "tais1795859128864",
-   "tipo": "STOP_MARKET",
-   "prezzo": 59660.0,
-   "lato": "corto",
-   "messo_ms": 1795859146100
-  },
-  {
-   "algoId": 117,
-   "cid": "tait1795859128864",
-   "tipo": "TAKE_PROFIT_MARKET",
-   "prezzo": 59420.0,
-   "lato": "corto",
-   "messo_ms": 1795859147424
-  }
- ],
+ "algo": [],
  "leva": 5,
- "ultimo_minuto_ms": 1795860060000,
- "ultimo_funding_ms": 1795860118463,
+ "ultimo_minuto_ms": 1795860660000,
+ "ultimo_funding_ms": 1795860713315,
  "movimenti": [
   {
    "ora_ms": 1795592831364,
@@ -524,21 +494,23 @@
    "cosa": "commissione",
    "importo": -0.5964,
    "come": "limite eseguito"
+  },
+  {
+   "ora_ms": 1795860566673,
+   "cosa": "risultato",
+   "importo": 10.7029,
+   "prezzo": 59425.942,
+   "come": "obiettivo"
+  },
+  {
+   "ora_ms": 1795860566673,
+   "cosa": "commissione",
+   "importo": -1.485649,
+   "come": "obiettivo"
   }
  ],
  "prossimo_id": 118,
  "chiuse": [
-  {
-   "lato": "corto",
-   "quantita": 0.04,
-   "entrata": 58420.0,
-   "leva": 3,
-   "margine": 778.9333333333334,
-   "liquidazione": 77601.23333333334,
-   "aperta_ms": 1795614420000,
-   "da_limite": true,
-   "chiusa_ms": 1795615680000
-  },
   {
    "lato": "corto",
    "quantita": 0.04,
@@ -817,6 +789,24 @@
    "uscita": 59772.47665,
    "come": "chiusa a mercato",
    "chiusa_ms": 1795851948749
+  },
+  {
+   "lato": "corto",
+   "quantita": 0.05,
+   "entrata": 59640.0,
+   "leva": 5,
+   "margine": 596.4,
+   "liquidazione": 71269.8,
+   "aperta_ms": 1795858200000,
+   "da_limite": true,
+   "cid": "taio1795856489271",
+   "spese_entrata": 0.5964,
+   "spese": 2.08204855,
+   "funding": 0.0,
+   "risultato_prezzo": 10.702899999999865,
+   "uscita": 59425.942,
+   "come": "obiettivo",
+   "chiusa_ms": 1795860480000
   }
  ],
  "funding_applicati": [

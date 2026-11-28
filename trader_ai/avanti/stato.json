@@ -1011,10 +1011,62 @@
    "r": -0.89,
    "favore_r": 0.54,
    "contro_r": 0.66
+  },
+  {
+   "n": 25,
+   "aperta": "2026-11-28T09:01:29.271289+00:00",
+   "tipo": "limite",
+   "eseguita": "2026-11-28T09:30:00+00:00",
+   "chiusa": "2026-11-28T10:08:00+00:00",
+   "lato": "corto",
+   "leva": 5,
+   "quantita": 0.05,
+   "entrata": 59640.0,
+   "uscita": 59425.942,
+   "uscita_stimata": false,
+   "come": "obiettivo",
+   "stop_iniziale": 59765.0,
+   "obiettivo_iniziale": 59420.0,
+   "spostamenti": [
+    {
+     "ora": "2026-11-28T09:30:14.434119+00:00",
+     "campo": "stop",
+     "da": 59720.0,
+     "a": 59765.0,
+     "prima_dell_esecuzione": true
+    },
+    {
+     "ora": "2026-11-28T09:45:28.864467+00:00",
+     "campo": "stop",
+     "da": 59765.0,
+     "a": 59660.0,
+     "prima_dell_esecuzione": false
+    }
+   ],
+   "atr15": 165.311,
+   "motivo": "09:01, nessuna posizione. La 15m delle 08:45 ha bucato il triplo minimo 59518 fino a 59479 e ha chiuso a 59543 con il 42% di acquisti. La rottura non è confermata, ma i massimi continuano a scendere (59888, 59852, 59836, 59694, 59665, 59599). Il prezzo sta sotto EMA21 15m (59754) e sotto le EMA 30m…",
+   "approccio": "Seguo la struttura 15m: con massimi decrescenti e prezzo sotto EMA21 15m vendo con un limite il ritest dell'EMA21 5m sotto l'ultimo massimo più basso, stop sopra quel massimo, mai a mercato sui minimi né durante uno sweep.",
+   "margine": 600.0,
+   "giorno_prima": -18.68,
+   "mancava": 46.95,
+   "ore_a_mezzanotte": 15.0,
+   "rischio_pct": 0.69,
+   "nota": null,
+   "inviato": "2026-11-28T09:01:50.055621+00:00",
+   "cid": "taio1795856489271",
+   "come_stimato": false,
+   "spese_entrata": 0.5964,
+   "spese": 2.082049,
+   "funding": 0.0,
+   "risultato_prezzo": 10.7029,
+   "risultato": 8.62,
+   "R": 8.6395,
+   "r": 1.0,
+   "favore_r": 1.64,
+   "contro_r": 0.02
   }
  ],
  "note": [
-  "28/11 08:00 nessuna posizione. La 15m delle 07:45 chiude a 59803 con il 58% di acquisti e volume 0,89x. Il massimo è 59852: il prezzo è salito fino all'EMA21 15m (59823) e alla media di Bollinger 15m (59840). Non c'è ancora un rifiuto chiuso con vendite. Contro il corto ci sono il martello delle 07:00 (sweep a 59151), i minimi 5m crescenti, il MACD 5m positivo, l'istogramma 15m che si restringe (-6,6) e quello 30m che risale. Contro il lungo ci sono i massimi decrescenti (60243, 60060, 59970, 59888) e l'EMA21 30m (59911). In più è sabato e i volumi sono bassi. Restano i due casi. Corto: rifiuto chiuso in 15m fra 59850 e 59920, con vendite, stop sopra 60060. Lungo: 15m chiusa sopra 59920 con volume, da…",
   "28/11 08:15 nessuna posizione. La 15m delle 08:00 ha toccato 59836, cioè l'EMA21 15m (59810) e la media di Bollinger (59826), e ha chiuso a 59674 con il 34% di acquisti: è il rifiuto chiuso con vendite che aspettavo. I massimi continuano a scendere (59888, 59852, 59836). L'istogramma MACD 15m torna ad allargarsi (-8,5) e il prezzo sta sotto le EMA 30m. Sul 5m l'istogramma cala da quattro candele e l'RSI è a 44. A 59674 il prezzo è sopra i minimi 59630, quindi non vendo a mercato. Metto un limite a 59760, sul ritest dell'EMA21/50 5m (59734/59785). Lo stop è a 59910, sopra i massimi più bassi 59852-59888 con un margine. L'obiettivo è 59480, sopra i minimi del recupero (59449-59518). Il valore è di circa…",
   "28/11 08:30 . Il limite corto a 59760 è ancora in attesa. La 15m delle 08:15 è scesa a 59518 con il 34% di acquisti e ha chiuso a 59644. I massimi continuano a scendere (59888, 59852, 59836) e il prezzo resta sotto EMA21 15m (59795) e sotto le EMA 30m. L'istogramma MACD 15m si allarga (-10,6). Il minimo 59518 però coincide con quello delle 07:15: è un doppio minimo, e il range va da 59518 a 59852. Il limite a 59760 sta sull'EMA50 5m (59768), nella parte alta del range. Lo stop a 59910 sopra i massimi più bassi resta valido. Alzo l'obiettivo da 59480 a 59535, appena sopra il doppio minimo, così non devo contare sulla sua rottura: netto circa +9. Se una 15m chiude sopra 59850 con acquisti, annullo l'ordi…",
   "28/11 08:45 . Il limite corto a 59760 resta in attesa, con stop a 59910 e obiettivo a 59535; il prezzo mark è 59583. La 15m delle 08:30 ha ritestato 59518 per la terza volta (07:15, 08:15, 08:30) e ha chiuso a 59584 con il 35% di acquisti. I massimi scendono (59888, 59852, 59836, 59694, 59665): è un triangolo discendente, ribassista. Il prezzo è sotto EMA21 15m (59775) e sotto le EMA 30m, e l'istogramma MACD 15m si allarga (-14,7). Il limite sta sull'EMA21 15m e nella parte alta del range, quindi resta valido. Non vendo a mercato sopra un triplo minimo, perché il rapporto è scarso e c'è il rischio di un altro sweep come alle 07:00. Ho due piani. Se una 15m chiude sotto 59518 con vendite, annullo e mett…",
@@ -1023,65 +1075,19 @@
   "28/11 09:15 . Il limite corto a 59640 resta in attesa, con stop a 59720 e obiettivo a 59420; il prezzo mark è 59583. La 15m delle 09:00 è una candela interna (59538-59628) che chiude a 59577 con il 52% di acquisti e volume basso (0,41x): dopo lo sweep a 59479 è una pausa, non un recupero. Sul 5m il massimo è 59628, sull'EMA21 5m (59628) e sotto la Bollinger alta (59648). L'istogramma MACD 5m risale verso lo zero (-1,4), quindi un ritest a 59640 è plausibile. Restano ribassisti il prezzo sotto EMA21 15m (59738) e 30m (59856), il MACD 15m sotto il segnale (-17) e il MACD 30m negativo. Il limite sta sopra il massimo 59628, lo stop sopra i massimi più bassi 59665-59694. Rapporto +8,6 contro -6,4. Annullo s…",
   "28/11 09:30 . Il limite corto a 59640 è ancora in attesa e il mark è a 59627. Le 5m chiudono a 59620, sull'EMA21 5m (59615) e sulla media di Bollinger 5m. Il MACD 5m gira positivo (+4,9) e l'RSI è a 49, quindi l'esecuzione è probabile. Ci sono massimi 5m in cluster a 59619-59628, sotto i massimi più bassi 59665-59694. Il 15m resta ribassista: prezzo sotto EMA21 (59727) e MACD sotto il segnale, anche se l'istogramma si restringe (-12). Anche il 30m è negativo. Lo stop a 59720 però stava sotto l'EMA21 15m (59727), cioè la resistenza vera: è l'errore dell'operazione #24. Lo alzo a 59765, sopra l'EMA21 15m e i massimi 59757-59766. Tengo l'obiettivo a 59420, sotto lo sweep 59479. Perdita allo stop circa -7,…",
   "28/11 09:45 . Il corto da 59640 è stato eseguito alle 09:30. Il mark è a 59495: +0,85 R al massimo, netto ora +4,85. La 15m delle 09:30 ha fatto un nuovo massimo più basso a 59643, poi è scesa a 59499 e ha chiuso al 43% di acquisti. La 5m in corso apre con il 9% di acquisti e scende a 59493. Il 15m resta ribassista: prezzo sotto EMA21 (59709), MACD sotto il segnale con l'istogramma che si riallarga (-13,8). Il 30m è negativo e sta tornando sulla Bollinger bassa. Lo sweep 59479 è il minimo da rompere e l'obiettivo a 59420 sta subito sotto, quindi lo tengo. Abbasso lo stop da 59765 a 59660, sopra il massimo più basso 59643 e sopra l'EMA21 5m (59599), con margine e lontano dal numero tondo. La perdita mas…",
-  "28/11 10:00 . Tengo il corto da 59640: mark 59555, netto ora +1,87, stop a 59660 (-3,39), obiettivo 59420 (+8,62). La 15m delle 09:45 è una pausa (59493-59578), con il 56% di acquisti e volume 0,30x. È sabato, il volume è basso e non c'è un vero recupero. Sul 5m l'istogramma MACD risale (+3,4) e l'RSI è a 46, con il prezzo fra EMA9 (59555) ed EMA21 (59585). Il rimbalzo può tornare verso 59600-59620. I massimi più bassi però restano 59643 e il cluster 59619-59628. Il 15m resta ribassista: prezzo sotto EMA21 (59695), MACD sotto il segnale (-10,8), Bollinger bassa a 59498. Anche il 30m è negativo. Lo stop a 59660 sta sopra il massimo più basso 59643, con margine. Non lo stringo sul cluster 59620, dove ver…"
+  "28/11 10:00 . Tengo il corto da 59640: mark 59555, netto ora +1,87, stop a 59660 (-3,39), obiettivo 59420 (+8,62). La 15m delle 09:45 è una pausa (59493-59578), con il 56% di acquisti e volume 0,30x. È sabato, il volume è basso e non c'è un vero recupero. Sul 5m l'istogramma MACD risale (+3,4) e l'RSI è a 46, con il prezzo fra EMA9 (59555) ed EMA21 (59585). Il rimbalzo può tornare verso 59600-59620. I massimi più bassi però restano 59643 e il cluster 59619-59628. Il 15m resta ribassista: prezzo sotto EMA21 (59695), MACD sotto il segnale (-10,8), Bollinger bassa a 59498. Anche il 30m è negativo. Lo stop a 59660 sta sopra il massimo più basso 59643, con margine. Non lo stringo sul cluster 59620, dove ver…",
+  "28/11 10:09 . Corto chiuso all'obiettivo, +8,62. Giorno a -10,06, mancano 38,33. La 5m in corso rompe lo sweep 59479 e scende a 59357 con volume circa 3x e il 32% di acquisti. Anche la 15m e la 30m in corso sono al 33%. La struttura resta ribassista: i massimi scendono (59643, 59578, 59563), il prezzo sta sotto EMA21 15m (59695) e sotto le EMA 30m, e il MACD 15m e 30m sono negativi. Però il prezzo è a 200 punti dal minimo del giorno 59151, dove alle 07:05 c'è stato uno sweep con volume 15x. Vendere a mercato qui vorrebbe dire vendere sui minimi. Mettere un limite ora, con la 5m di rottura ancora aperta, ripeterebbe l'errore dell'operazione #24. Aspetto la chiusura. Piano per la prossima chiamata: se la…"
  ],
  "estraneo": null,
  "giorno": "2026-11-28",
  "conto_mezzanotte": 942.4995047474505,
  "fermo_fino": null,
  "esaurito": false,
- "ultima": "2026-11-28T10:00:09.100016+00:00",
+ "ultima": "2026-11-28T10:09:26.027125+00:00",
  "ultimo_scarto": null,
  "cambi_approccio": 16,
- "approccio": "Seguo la struttura 15m: con massimi decrescenti e prezzo sotto EMA21 15m vendo con un limite il ritest dell'EMA21 5m. Lo stop va sopra la resistenza dinamica vera e l'ultimo massimo più basso, mai a mercato sui minimi.",
- "aperta": {
-  "aperta": "2026-11-28T09:01:29.271289+00:00",
-  "tipo": "limite",
-  "lato": "corto",
-  "leva": 5,
-  "entrata": 59640.0,
-  "quantita": 0.05,
-  "cid": "taio1795856489271",
-  "stop": 59660.0,
-  "obiettivo": 59420.0,
-  "spostamenti": [
-   {
-    "ora": "2026-11-28T09:30:14.434119+00:00",
-    "campo": "stop",
-    "da": 59720.0,
-    "a": 59765.0,
-    "prima_dell_esecuzione": true
-   },
-   {
-    "ora": "2026-11-28T09:45:28.864467+00:00",
-    "campo": "stop",
-    "da": 59765.0,
-    "a": 59660.0,
-    "prima_dell_esecuzione": false
-   }
-  ],
-  "approccio": "Seguo la struttura 15m: con massimi decrescenti e prezzo sotto EMA21 15m vendo con un limite il ritest dell'EMA21 5m sotto l'ultimo massimo più basso, stop sopra quel massimo, mai a mercato sui minimi né durante uno sweep.",
-  "motivo": "09:01, nessuna posizione. La 15m delle 08:45 ha bucato il triplo minimo 59518 fino a 59479 e ha chiuso a 59543 con il 42% di acquisti. La rottura non è confermata, ma i massimi continuano a scendere (59888, 59852, 59836, 59694, 59665, 59599). Il prezzo sta sotto EMA21 15m (59754) e sotto le EMA 30m…",
-  "atr15": 165.311,
-  "conto_prima": 923.8223895012505,
-  "margine": 600.0,
-  "giorno_prima": -18.68,
-  "mancava": 46.95,
-  "ore_a_mezzanotte": 15.0,
-  "rischio_pct": 0.69,
-  "in_attesa": false,
-  "inviato": "2026-11-28T09:01:50.055621+00:00",
-  "eseguita": "2026-11-28T09:30:00+00:00",
-  "stop_iniziale": 59765.0,
-  "obiettivo_iniziale": 59420.0,
-  "spese_entrata": 0.5964,
-  "R": 8.6395,
-  "escursione": [
-   146.8000000000029,
-   2.8000000000029104
-  ],
-  "funding": 0.0
- },
+ "approccio": "Seguo la struttura 15m: con massimi decrescenti e prezzo sotto EMA21 15m vendo con un limite il ritest dell'EMA21 5m o del livello rotto, con lo stop sopra l'ultimo massimo più basso. Mai a mercato sui minimi e mai limiti mentre una 5m di rottura co…",
+ "aperta": null,
  "inizio": {
   "giorno": "2026-11-25",
   "conto": 1000.0
@@ -1266,25 +1272,32 @@
    "ora": "2026-11-28T07:46:19.396069+00:00",
    "dopo": 24,
    "giorno_netto": -18.68,
-   "fissata": false,
+   "fissata": true,
    "testo": "Prevedevo che la zona rotta 59575-59631 respingesse il ritest e che il prezzo scendesse verso 59380. Il limite però l'avevo messo mentre la 5m delle 07:05 era ancora aperta. Quella candela ha fatto uno sweep a 59151 con volume 15x ed è risalita. Il limite è stato eseguito durante il recupero dello sweep, e la 15m ha chiuso a martello con volume 9,7x. Ho chiuso a -0,89 R. Cambio così: non metto li…"
+  },
+  {
+   "ora": "2026-11-28T10:09:26.027125+00:00",
+   "dopo": 25,
+   "giorno_netto": -10.06,
+   "fissata": false,
+   "testo": "Prevedevo che il massimo più basso tenesse e che il prezzo rompesse lo sweep 59479 fino a 59420. È andata così: entrata con limite sull'EMA21 5m sotto i massimi decrescenti, al massimo -0,02 R contro, obiettivo preso a +1,00 R. Abbassare lo stop sopra il nuovo massimo più basso, lontano dal cluster ovvio, era corretto. Confermo il metodo: limite sul ritest sotto il massimo più basso, obiettivo ap…"
   }
  ],
  "versione_memoria": 7,
- "prossimo_n": 25,
+ "prossimo_n": 26,
  "discesa_dalle": "2026-11-28T00:00:01.980971+00:00",
  "massimo_giorno": 944.5638665954405,
  "discesa_max_giorno": 21.839649169940117,
- "ultimo_costo_massimo": 0.5021,
+ "ultimo_costo_massimo": 0.496,
  "stat_giorno": {
-  "chiamate": 46,
-  "costo": 2.943407,
+  "chiamate": 47,
+  "costo": 3.065594,
   "esiti": {
-   "ok": 46
+   "ok": 47
   },
-  "durata_tot": 572.1,
+  "durata_tot": 591.1,
   "durata_max": 26.7,
-  "uscita_tot": 47737
+  "uscita_tot": 49493
  },
  "costo_medio_ieri": 0.06043974666666667,
  "prezzo_inizio_giorno": 59893.96962319,
