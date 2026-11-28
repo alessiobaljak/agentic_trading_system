@@ -88,4 +88,12 @@ misurato che resta: `fapi.binance.com` risponde 451 dai server degli Stati Uniti
   registrazione), 266 (resoconto dopo una lettura fallita a mezzanotte), 267 (stop rifiutato e servizio fermo nella chiusura).
   Da correggere tutti insieme, con una revisione, prima del conto demo o alla prossima modifica del codice. I numeri nuovi partono
   da 268.
+* Diciannovesima revisione e riesame (28 novembre 2026, `revisioni/2026-11-28-diciannovesima.md`): APPROVE con condizioni sulla
+  versione 9 (`5aaf950`). Corretti 268 e 269. Aperti, bassi: 270 (se il salvataggio dello stato fallisce dopo che il conto è tornato a
+  1.000, o con un secondo «azzera»), 271 (due casi rari in cui un limite eseguito non chiama il modello: la posizione ha sempre lo
+  stop), 272 (tempo e prezzo della sveglia contano dall'inizio del passo, meno di mezzo minuto), 273 (un funding pagato dopo la
+  ripartenza per una posizione chiusa prima entra nel conto nuovo: **non lanciare «azzera» nei 10 minuti dopo le 00:00, 08:00 e 16:00
+  UTC**), 274 (due prove da rendere più strette), 275 (il giorno della ripartenza la riga del prezzo di BTC nel resoconto parte da
+  mezzanotte). Da controllare dopo il riavvio: la prima chiamata deve avere stato «ok» e una sveglia nella risposta (lo schema nuovo
+  si prova solo con il modello vero); se no, «chiudi» e si torna alla versione 8.
 * Le revisioni del trader vanno copiate in `reviews/` dalla sessione delle crypto (`RICHIESTE_CRYPTO.md`, voce 3).
