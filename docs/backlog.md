@@ -871,7 +871,7 @@ scrivono con e senza le serie a incasso quasi fisso.
   circa −0,03. La decisione sul metodo resta al proprietario. Esame-7 non fatto: le quattro serie vecchie restano nel mazzo (effetto al
   massimo 0,0003). Tabella: `research/programma6/ESAME_NUMERI_2026-11-27.md`.
 
-### P36. Prima di accendere il conto vero su F5 — trovata il 25 novembre 2026 (revisioni `reviews/reports/2026-11-25-conto-vero-F5*.md`)
+### P36. Prima di accendere il conto vero (su F5 dal 25 novembre, di nuovo su G1 a 250 USDT dal 28 novembre) — trovata il 25 novembre 2026 (revisioni `reviews/reports/2026-11-25-conto-vero-F5*.md`)
 * **Cosa**: il conto vero esegue F5 (commit del 25 novembre, approvato per il commit, spento). Prima dell'approvazione per l'accensione:
   il 183 (testi «G1» rimasti: allarmi dei pesi `demo_binance.py:139` e `:934`, tre righe del log, il titolo in `scripts/state_snapshot.py`,
   il piano `docs/conto_vero.md`, `/conto_vero/versione` senza la strategia); il 180 (pesi fermi 7 giorni, limiti controllati solo il lunedì:

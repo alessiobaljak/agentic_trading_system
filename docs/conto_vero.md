@@ -6,6 +6,12 @@ non è accendere**: il codice del conto vero nasce spento e si accende solo con 
 proprietario (la regola di `DRY_RUN` in `CLAUDE.md`). Strategia: G1, con 250 euro (280 USDT, prova 148), partenza da conto vuoto alla
 mezzanotte UTC, eventi spenti.
 
+**28 novembre 2026** (decisione del proprietario, `docs/decisioni_del_proprietario.md`): dopo il passaggio a F5 del 25 novembre, il
+conto vero **torna a G1**, con **250 USDT**. In corso: il codice (G1 al posto di F5, le chiusure sotto il minimo con «solo riduzione», i
+problemi 211, 213, 219 e 220 del bot), la revisione di G1 a 250 USDT come la esegue il bot, poi live-path-reviewer, il confronto di paper e
+demo e l'allocatore con il modello più potente. Le cose del proprietario qui sotto (Firebase, l'approvazione della versione, la chiave di
+Binance, le decisioni sì o no) restano da fare; al punto 6, 250 USDT al posto di 280.
+
 ## Le fasi
 
 | Fase | Cosa | Chi | Stato |
