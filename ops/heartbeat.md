@@ -1,6 +1,6 @@
 # agente ops: vivo
 
-_ultimo giro: 2026-11-27 23:03 UTC_
+_ultimo giro: 2026-11-28 00:04 UTC_
 
 - ramo: `claude/brave-albattani-1b12fv`
 - richieste in attesa: 0
